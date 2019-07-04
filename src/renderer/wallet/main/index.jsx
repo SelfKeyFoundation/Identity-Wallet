@@ -15,7 +15,8 @@ import {
 	MarketplaceIncorporationPage,
 	MarketplaceBankAccountsPage,
 	MarketplaceServiceDetailsPage,
-	MarketplaceSelfkeyIdRequired
+	MarketplaceSelfkeyIdRequired,
+	MarketplaceOrdersPage
 } from '../../marketplace';
 
 import { SelfkeyIdContainer, AssociateDID } from '../../selfkey-id/main';
@@ -133,6 +134,10 @@ class Main extends Component {
 					<Route
 						path={`${match.path}/marketplace-bank-accounts`}
 						component={MarketplaceBankAccountsPage}
+					/>
+					<Route
+						path={`${match.path}/marketplace-orders`}
+						component={MarketplaceOrdersPage}
 					/>
 					<Route
 						path={`${match.path}/transfer/:crypto`}

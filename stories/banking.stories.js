@@ -24,7 +24,6 @@ import BankingServicesTab from '../src/renderer/marketplace/bank-accounts/detail
 import BankingAccountOption from '../src/renderer/marketplace/bank-accounts/common/account-option';
 import BankingDetailsPageTabs from '../src/renderer/marketplace/bank-accounts/details/details-tabs';
 import OptionSelection from '../src/renderer/marketplace/bank-accounts/common/option-selection';
-import BankAccountsPaymentComplete from '../src/renderer/marketplace/bank-accounts/checkout/payment-complete';
 
 const KEY_RATE = 1 / 1000;
 const options = [
@@ -237,13 +236,6 @@ storiesOf('Banking/Tabs Selector', module)
 		/>
 	));
 
-storiesOf('Banking/PaymentCompletePage', module).add('default', () => (
-	<BankAccountsPaymentComplete
-		email="support@flagtheory.com"
-		onBackClick={action('banking payment complete back click')}
-		onContinueClick={action('banking payment continue click')}
-	/>
-));
 storiesOf('Banking/BankingDetailsPage', module)
 	.add('default', () => (
 		<BankingDetailsPage
