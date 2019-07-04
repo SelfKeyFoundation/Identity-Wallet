@@ -13,10 +13,9 @@ import { getTokens } from 'common/wallet-tokens/selectors';
 import { getWallet } from 'common/wallet/selectors';
 import { ethGasStationInfoSelectors } from 'common/eth-gas-station';
 import { pricesSelectors } from 'common/prices';
-import { kycSelectors } from 'common/kyc';
+import { kycSelectors, kycOperations } from 'common/kyc';
 import EthUnits from 'common/utils/eth-units';
 import ReactPiwik from 'react-piwik';
-import { kycOperations } from 'common/kyc';
 
 const FIXED_GAS_LIMIT_PRICE = 21000;
 const CRYPTOCURRENCY = config.constants.primaryToken;
@@ -48,11 +47,11 @@ export default class MarketplaceComponent extends Component {
 		};
 	};
 
-  loadRelyingParty = async ({ rp, authenticated = false }) => {
+	loadRelyingParty = async ({ rp, authenticated = false }) => {
 		if (this.props.rpShouldUpdate) {
 			await this.props.dispatch(kycOperations.loadRelyingParty(rp, authenticated));
 		}
-  }
+	};
 
 	getLastApplication = () => {
 		const { rp } = this.props;
@@ -82,9 +81,7 @@ export default class MarketplaceComponent extends Component {
 	getApplicationStatus = () => {
 		if (this.props.rp && this.props.rp.authenticated && this.userHasApplied()) {
 			if (this.applicationCompleted()) return 'completed';
-			if (this.
-          
-          ()) return 'rejected';
+			if (this.applicationWasRejected()) return 'rejected';
 			if (!this.userHasPaid()) return 'unpaid';
 			if (this.applicationRequiresAdditionalDocuments()) return 'additionalRequirements';
 
