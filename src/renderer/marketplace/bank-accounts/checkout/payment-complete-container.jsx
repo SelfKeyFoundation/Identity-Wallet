@@ -6,13 +6,12 @@ import { getWallet } from 'common/wallet/selectors';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { bankAccountsSelectors } from 'common/bank-accounts';
 import { transactionSelectors } from 'common/transaction';
-import { MarketplaceComponent } from '../../common/marketplace-component';
+import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 import { BankAccountsPaymentComplete } from './payment-complete';
 
 const styles = theme => ({});
-const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 
-class BankAccountsPaymentCompleteContainer extends MarketplaceComponent {
+class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsComponent {
 	async componentWillMount() {
 		await this.loadRelyingParty({ rp: 'incorporations', authenticated: true });
 	}
@@ -45,6 +44,9 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceComponent {
 			};
 		}
 
+		console.log(transaction);
+		console.log(this.props);
+
 		if (!this.userHasPaid() && transaction) {
 			await this.props.dispatch(
 				kycOperations.updateRelyingPartyKYCApplicationPayment(
@@ -69,21 +71,16 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceComponent {
 		} else {
 			// TODO: what to do if no transaction or currentApplication exists?
 			console.error('No current application or transaction');
-			this.props.dispatch(push(this.getCancelRoute()));
+			this.props.dispatch(push(this.cancelRoute()));
 		}
 	};
 
-	getCancelRoute = () => {
-		const { accountCode, countryCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/details/${accountCode}/${countryCode}/${templateId}`;
-	};
-
 	getNextRoute = () => {
-		const { accountCode, countryCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/select-bank/${accountCode}/${countryCode}/${templateId}`;
+		// INFO: should we check if bank is already selected ?
+		return this.selectBankRoute();
 	};
 
-	onBackClick = () => this.props.dispatch(push(this.getCancelRoute()));
+	onBackClick = () => this.props.dispatch(push(this.cancelRoute()));
 
 	onContinueClick = () => this.props.dispatch(push(this.getNextRoute()));
 

@@ -20,17 +20,12 @@ class BankAccountsSelectBankContainer extends MarketplaceBankAccountsComponent {
 		}
 	}
 
-	getCancelRoute = () => {
-		const { accountCode, countryCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/details/${accountCode}/${countryCode}/${templateId}`;
-	};
-
 	getNextRoute = () => {
 		const { accountCode, countryCode, templateId } = this.props.match.params;
 		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/process-started/${accountCode}/${countryCode}/${templateId}`;
 	};
 
-	onBackClick = () => this.props.dispatch(push(this.getCancelRoute()));
+	onBackClick = () => this.props.dispatch(push(this.cancelRoute()));
 
 	onStartClick = async selection => {
 		const { templateId } = this.props.match.params;

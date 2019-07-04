@@ -96,7 +96,7 @@ const createOrderOperation = (
 	return order;
 };
 
-const startOrderOperation = (
+const startOrderOperation = ({
 	amount,
 	applicationId,
 	vendorId,
@@ -106,7 +106,7 @@ const startOrderOperation = (
 	vendorName,
 	backUrl,
 	completeUrl
-) => async (dispatch, getState) => {
+}) => async (dispatch, getState) => {
 	const order = await dispatch(
 		ordersOperations.createOrderOperation(
 			amount,
@@ -119,6 +119,7 @@ const startOrderOperation = (
 		)
 	);
 	await dispatch(ordersOperations.showOrderPaymentUIOperation(order.id, backUrl, completeUrl));
+	return order;
 };
 
 const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
@@ -138,6 +139,8 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 	if (!order) {
 		return dispatch(ordersOperations.hideCurrentPaymentUIOperation());
 	}
+
+	console.log(order);
 
 	await dispatch(push(`${MARKETPLACE_ORDERS_ROOT_PATH}/loading`));
 
@@ -542,6 +545,7 @@ const ordersSelectors = {
 			config.constants.primaryToken,
 			fiat.fiatCurrency
 		);
+		console.log(order);
 		return new BN(order.amount).multipliedBy(fiatRate).toString();
 	},
 	getCurrentPaymentFeeUsd: state => {

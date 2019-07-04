@@ -7,9 +7,23 @@ export default class MarketplaceBankAccountsComponent extends MarketplaceCompone
 		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/select-bank/${accountCode}/${countryCode}/${templateId}`;
 	};
 
+	paymentCompleteRoute = () => {
+		const { countryCode, accountCode, templateId } = this.props.match.params;
+		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/payment-complete/${accountCode}/${countryCode}/${templateId}`;
+	};
+
+	payRoute = () => {
+		const { countryCode, accountCode, templateId } = this.props.match.params;
+		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay/${accountCode}/${countryCode}/${templateId}`;
+	};
+
 	cancelRoute = () => {
 		const { countryCode, accountCode, templateId } = this.props.match.params;
 		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/details/${accountCode}/${countryCode}/${templateId}`;
+	};
+
+	listRoute = () => {
+		return MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH;
 	};
 
 	getApplicationStatus = () => {
