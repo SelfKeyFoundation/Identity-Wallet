@@ -39,7 +39,7 @@ const styles = theme => ({
 	}
 });
 class OptionSelectionComponent extends Component {
-	state = { selectedValue: '' };
+	state = { selectedValue: this.props.selected || '' };
 
 	onSelectOption = event => {
 		this.setState({ selectedValue: event.target.value });

@@ -8,12 +8,22 @@ export class SelfkeyService {
 		this.web3Service.web3.transactionConfirmationBlocks = 2;
 	}
 
-	async approve(walletAddress, contractAddress, amount, gas) {
+	async approve(walletAddress, contractAddress, amount, gas, gasPrice, onTransactionHash) {
 		const selfkey = new this.web3Service.web3.eth.Contract(
 			selfkeyABI,
 			await this.getTokenAddress()
 		);
-		return selfkey.methods.approve(contractAddress, amount).send({ from: walletAddress, gas });
+		const nonce = await this.web3Service.web3.eth.getTransactionCount(walletAddress, 'pending');
+		let promise = selfkey.methods
+			.approve(contractAddress, amount)
+			.send({ from: walletAddress, gas, gasPrice, nonce });
+		if (onTransactionHash) {
+			promise.on('transactionHash', onTransactionHash);
+		}
+		return new Promise((resolve, reject) => {
+			promise.on('receipt', receipt => resolve(receipt));
+			promise.on('error', error => reject(error));
+		});
 	}
 
 	async estimateApproveGasLimit(walletAddress, contractAddress, amount) {

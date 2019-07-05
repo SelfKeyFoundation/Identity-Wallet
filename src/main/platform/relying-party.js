@@ -231,11 +231,7 @@ export class RelyingPartyRest {
 	}
 	static createKYCApplication(ctx, templateId, attributes) {
 		let url = ctx.getEndpoint('/applications');
-		log.info(
-			`[createKYCApplication] POST ${url} : auth:${ctx.token.toString()} : ${JSON.stringify(
-				attributes
-			)}`
-		);
+		log.info(`[createKYCApplication] POST ${url}`);
 		return request.post({
 			url,
 			body: { attributes, templateId },
