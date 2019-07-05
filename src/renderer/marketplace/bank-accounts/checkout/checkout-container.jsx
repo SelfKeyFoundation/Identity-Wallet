@@ -11,31 +11,24 @@ import { getWallet } from 'common/wallet/selectors';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
-import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
+import { bankAccountsSelectors } from 'common/bank-accounts';
 import { PaymentCheckout } from '../../common/payment-checkout';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 
 const styles = theme => ({});
 const CRYPTOCURRENCY = config.constants.primaryToken;
 const FIXED_GAS_LIMIT_PRICE = 21000;
+const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 	async componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 
-		const authenticated = true;
+		await this.loadRelyingParty({ rp: 'incorporations', authenticated: true });
 
-		if (this.props.rpShouldUpdate) {
-			await this.props.dispatch(
-				kycOperations.loadRelyingParty('incorporations', authenticated)
-			);
-		} else {
-			await this.checkIfUserCanOpenBankAccount();
-		}
+		this.checkIfUserCanOpenBankAccount();
 
-		if (!this.props.accountType) {
-			await this.props.dispatch(bankAccountsOperations.loadBankAccountsOperation());
-		}
+		await this.loadBankAccounts();
 	}
 
 	checkIfUserCanOpenBankAccount = async () => {
@@ -70,6 +63,7 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 	onStartClick = async () => {
 		const { accountType } = this.props;
 		const { templateId } = this.props.match.params;
+		const { region } = accountType;
 
 		this.props.dispatch(
 			kycOperations.startCurrentApplicationOperation(
@@ -77,15 +71,13 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 				templateId,
 				this.payRoute(),
 				this.cancelRoute(),
-				`Bank Account in ${accountType.region}`,
-				`You are about to begin the application process for a bank account in ${
-					accountType.region
-				}.
+				`Bank Account in ${region}`,
+				`You are about to begin the application process for a bank account in ${region}.
 				Please double check your required documents are Certified True or Notarized where
 				necessary. Failure to do so will result in delays in the process. You may also be
 				asked to provide more information by the service provider`,
 				'conducting KYC',
-				'Far Horizon Capital Inc',
+				VENDOR_NAME,
 				'https://flagtheory.com/privacy-policy',
 				'http://flagtheory.com/terms-and-conditions'
 			)

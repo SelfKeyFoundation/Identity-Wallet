@@ -12,14 +12,15 @@ class MarketplacePaymentContainer extends Component {
 		this.props.dispatch(ordersOperations.payCurrentOrderOperation());
 	};
 	handleLearnHowClick = () => {
-		console.log('XXX learn how click');
+		// TODO: learn how page
+		console.log('TODO: learn how click');
 	};
 	render() {
 		return (
 			<MarketplacePayment
 				onBackClick={this.handleBackClick}
 				onPayClick={this.handlePayClick}
-				priceUsd={this.props.priceUsd}
+				priceUSD={this.props.priceUSD}
 				priceKey={this.props.order.amount}
 				feeETH={this.props.feeETH}
 				feeUSD={this.props.feeUSD}
@@ -33,7 +34,7 @@ class MarketplacePaymentContainer extends Component {
 
 const mapStateToPropes = (state, props) => ({
 	order: ordersSelectors.getOrder(state, props.match.params.orderId),
-	priceUsd: ordersSelectors.getOrderPriceUsd(state, props.match.params.orderId),
+	priceUSD: ordersSelectors.getOrderPriceUsd(state, props.match.params.orderId),
 	feeUSD: ordersSelectors.getCurrentPaymentFeeUsd(state),
 	feeETH: ordersSelectors.getCurrentPaymentFeeEth(state),
 	wallet: walletSelectors.getWallet(state),
