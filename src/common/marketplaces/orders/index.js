@@ -543,12 +543,7 @@ const ordersSelectors = {
 	getOrderPriceUsd: (state, id) => {
 		const order = ordersSelectors.getOrder(state, id);
 		let fiat = fiatCurrencySelectors.getFiatCurrency(state);
-		let fiatRate = pricesSelectors.getRate(
-			state,
-			config.constants.primaryToken,
-			fiat.fiatCurrency
-		);
-		console.log(order);
+		let fiatRate = pricesSelectors.getRate(state, 'KEY', fiat.fiatCurrency);
 		return new BN(order.amount).multipliedBy(fiatRate).toString();
 	},
 	getCurrentPaymentFeeUsd: state => {
@@ -588,13 +583,11 @@ const ordersSelectors = {
 	getOrdersByApplication: (state, applicationId) =>
 		ordersSelectors.getAllOrders(state).filter(order => order.applicationId === applicationId),
 	getLatestActiveOrderForApplication: (state, applicationId) =>
-		ordersSelectors
-			.getLatestActiveOrderForApplication(state, applicationId)
-			.reduce((acc, curr) => {
-				if (curr.status !== orderStatus.CANCELED && curr.updatedAt > acc.updatedAt)
-					return curr;
-				return acc;
-			}, null)
+		ordersSelectors.getOrdersByApplication(state, applicationId).reduce((acc, curr) => {
+			if (curr.status !== orderStatus.CANCELED && curr.updatedAt > (acc ? acc.updatedAt : 0))
+				return curr;
+			return acc;
+		}, null)
 };
 
 export { ordersSelectors, ordersReducers, ordersActions, ordersOperations };

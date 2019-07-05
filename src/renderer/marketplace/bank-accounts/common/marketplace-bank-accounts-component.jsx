@@ -1,4 +1,5 @@
 import { MarketplaceComponent } from '../../common/marketplace-component';
+import { bankAccountsOperations } from 'common/bank-accounts';
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 
 export default class MarketplaceBankAccountsComponent extends MarketplaceComponent {
@@ -63,6 +64,12 @@ export default class MarketplaceBankAccountsComponent extends MarketplaceCompone
 	userHasSelectedBankPreference = () => {
 		const application = this.getLastApplication();
 		return !!this.getExistingBankPreferenceSelection(application);
+	};
+
+	loadBankAccounts = async () => {
+		if (!this.props.accountType) {
+			await this.props.dispatch(bankAccountsOperations.loadBankAccountsOperation());
+		}
 	};
 }
 
