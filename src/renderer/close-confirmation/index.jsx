@@ -52,9 +52,7 @@ export const CloseConfirmation = props => {
 						</Grid>
 
 						<Grid item>
-							<Typography variant="body2" gutterBottom>
-								Are you sure you want to close?
-							</Typography>
+							<Typography variant="body2">Are you sure you want to close?</Typography>
 						</Grid>
 					</Grid>
 
