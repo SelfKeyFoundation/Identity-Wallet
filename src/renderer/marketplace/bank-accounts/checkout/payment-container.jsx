@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import BN from 'bignumber.js';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
@@ -53,7 +53,10 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 		this.props.dispatch(push(this.selectBankRoute()));
 	};
 
-	render() {
+	render = () => null;
+	/*
+	{
+
 		const { accountType } = this.props;
 		console.error('TODO: not implemented gas price for pre-approval');
 		return (
@@ -65,7 +68,9 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 				onPayClick={this.onPayClick}
 			/>
 		);
+
 	}
+	*/
 }
 
 const mapStateToProps = (state, props) => {

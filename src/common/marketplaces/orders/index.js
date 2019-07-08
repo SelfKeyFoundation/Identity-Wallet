@@ -106,7 +106,7 @@ const startOrderOperation = ({
 	vendorName,
 	backUrl,
 	completeUrl
-) => async (dispatch, getState) => {
+}) => async (dispatch, getState) => {
 	let order = ordersSelectors.getLatestActiveOrderForApplication(getState(), applicationId);
 	if (!order) {
 		order = await dispatch(
