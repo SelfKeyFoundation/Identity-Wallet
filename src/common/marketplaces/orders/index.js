@@ -69,7 +69,7 @@ const ordersActions = {
 	})
 };
 
-const createOrderOperation = (
+const createOrderOperation = ({
 	amount,
 	applicationId,
 	vendorId,
@@ -77,7 +77,7 @@ const createOrderOperation = (
 	vendorDID,
 	productInfo,
 	vendorName
-) => async (dispatch, getState) => {
+}) => async (dispatch, getState) => {
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const wallet = walletSelectors.getWallet(getState());
 	const order = await ordersService.createOrder({
@@ -110,7 +110,7 @@ const startOrderOperation = ({
 	let order = ordersSelectors.getLatestActiveOrderForApplication(getState(), applicationId);
 	if (!order) {
 		order = await dispatch(
-			ordersOperations.createOrderOperation(
+			ordersOperations.createOrderOperation({
 				amount,
 				applicationId,
 				vendorId,
@@ -118,7 +118,7 @@ const startOrderOperation = ({
 				vendorDID,
 				productInfo,
 				vendorName
-			)
+			})
 		);
 	}
 	await dispatch(ordersOperations.showOrderPaymentUIOperation(order.id, backUrl, completeUrl));
