@@ -317,7 +317,6 @@ class SelfkeyIdOverviewComponent extends Component {
 														<Typography
 															variant="subtitle2"
 															color="secondary"
-															gutterBottom
 														>
 															Register on the SelfKey Network to get
 															your DID.
@@ -335,7 +334,6 @@ class SelfkeyIdOverviewComponent extends Component {
 													<Typography
 														variant="subtitle2"
 														color="secondary"
-														gutterBottom
 													>
 														Getting a DID requires an Ethereum
 														transaction. This is a one time only
@@ -419,7 +417,6 @@ class SelfkeyIdOverviewComponent extends Component {
 													<Typography
 														variant="subtitle2"
 														color="secondary"
-														gutterBottom
 													>
 														Basic Information about yourself. This can
 														be edited at any time, but not deleted.
@@ -540,11 +537,7 @@ class SelfkeyIdOverviewComponent extends Component {
 												<Grid item>
 													<BookIcon />
 												</Grid>
-												<Typography
-													variant="subtitle2"
-													color="secondary"
-													gutterBottom
-												>
+												<Typography variant="subtitle2" color="secondary">
 													Additional information. This will be used for
 													the KYC processes in the marketplace.
 												</Typography>

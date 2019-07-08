@@ -173,34 +173,22 @@ class IncorporationsTable extends Component {
 							<LargeTableHeadRow>
 								<TableCell className={classes.flagCell} />
 								<TableCell>
-									<Typography variant="overline" gutterBottom>
-										Jurisdiction
-									</Typography>
+									<Typography variant="overline">Jurisdiction</Typography>
 								</TableCell>
 								<TableCell className={classes.regionCell}>
-									<Typography variant="overline" gutterBottom>
-										Entity
-									</Typography>
+									<Typography variant="overline">Entity</Typography>
 								</TableCell>
 								<TableCell className={classes.smallCell}>
-									<Typography variant="overline" gutterBottom>
-										Offsh Tax
-									</Typography>
+									<Typography variant="overline">Offsh Tax</Typography>
 								</TableCell>
 								<TableCell className={classes.smallCell}>
-									<Typography variant="overline" gutterBottom>
-										Corp Tax
-									</Typography>
+									<Typography variant="overline">Corp Tax</Typography>
 								</TableCell>
 								<TableCell className={classes.goodForCell}>
-									<Typography variant="overline" gutterBottom>
-										Good for
-									</Typography>
+									<Typography variant="overline">Good for</Typography>
 								</TableCell>
 								<TableCell className={classes.costCell}>
-									<Typography variant="overline" gutterBottom>
-										Cost
-									</Typography>
+									<Typography variant="overline">Cost</Typography>
 								</TableCell>
 								<TableCell className={classes.detailsCell} />
 							</LargeTableHeadRow>

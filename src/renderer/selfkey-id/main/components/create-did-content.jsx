@@ -1,22 +1,21 @@
 import React, { Component } from 'react';
-import { Grid, withStyles, Typography, Button, IconButton } from '@material-ui/core';
+import { Grid, withStyles, Typography, Button, IconButton, Divider } from '@material-ui/core';
 
 import { KeyTooltip, TooltipArrow, PaymentIcon, InfoTooltip } from 'selfkey-ui';
 
 const styles = theme => ({
 	footer: {
-		marginTop: '30px',
-		paddingTop: '30px',
-		borderTop: '1px solid #475768'
+		paddingTop: '40px'
 	},
 	actions: {
 		'&>button': {
 			marginRight: '20px',
-			marginTop: '30px'
+			marginTop: '40px'
 		}
 	},
-	bold: {
-		fontWeight: 600
+	networkFee: {
+		fontWeight: 600,
+		marginBottom: '4px'
 	},
 	textRight: {
 		textAlign: 'right'
@@ -29,10 +28,18 @@ const styles = theme => ({
 		color: '#00C0D9',
 		textDecoration: 'none'
 	},
-	content: {
-		'& p': {
-			marginBottom: '1em'
+	tooltipIcon: {
+		padding: '0px 0 3px 10px',
+		'& svg': {
+			height: '10px !important',
+			width: '10px !important'
 		}
+	},
+	divider: {
+		marginBottom: '20px'
+	},
+	bottomSpace2: {
+		marginBottom: '20px'
 	}
 });
 
@@ -60,8 +67,8 @@ class CreateDIDContentComponent extends Component {
 								Decentralised ID Required
 							</Typography>
 						</Grid>
-						<Grid item className={classes.content}>
-							<Typography variant="body1" gutterBottom>
+						<Grid item>
+							<Typography variant="body1">
 								Getting your DID (
 								<a
 									className={classes.link}
@@ -75,8 +82,13 @@ class CreateDIDContentComponent extends Component {
 								transaction. This is a one time only transaction.
 							</Typography>
 						</Grid>
-						<Grid item classes={{ item: classes.footer }}>
-							<Grid container justify="space-between">
+						<Grid item className={classes.footer}>
+							<Divider className={classes.divider} />
+							<Grid
+								container
+								justify="space-between"
+								className={classes.bottomSpace2}
+							>
 								<Grid item>
 									<Typography variant="h3" color="secondary">
 										Network Transaction Fee
@@ -86,11 +98,11 @@ class CreateDIDContentComponent extends Component {
 									<Typography
 										variant="body2"
 										color="primary"
-										className={classes.bold}
+										className={classes.networkFee}
 									>
 										${usdNetworkFee.toLocaleString()}
 									</Typography>
-									<Typography variant="subtitle2" color="secondary" gutterBottom>
+									<Typography variant="subtitle2" color="secondary">
 										{ethNetworkFee.toLocaleString()} ETH
 										<KeyTooltip
 											interactive
@@ -102,13 +114,17 @@ class CreateDIDContentComponent extends Component {
 												</React.Fragment>
 											}
 										>
-											<IconButton aria-label="Info">
+											<IconButton
+												aria-label="Info"
+												className={classes.tooltipIcon}
+											>
 												<InfoTooltip />
 											</IconButton>
 										</KeyTooltip>
 									</Typography>
 								</Grid>
 							</Grid>
+							<Divider />
 							<div className={classes.actions}>
 								<Button variant="contained" size="large" onClick={onConfirm}>
 									GET DID

@@ -21,14 +21,14 @@ import QRCode from 'qrcode.react';
 
 const styles = theme => ({
 	modalHeader: {
+		padding: '10px 30px',
 		'@media print': {
 			display: 'none'
 		},
 		'& svg': {
-			width: '1.5em !important',
-			height: '1.5em !important',
+			width: '44px !important',
+			height: '44px !important',
 			position: 'relative',
-			top: '-5px',
 			marginRight: '0.5em'
 		}
 	},
@@ -182,9 +182,7 @@ export class ReceiveTransfer extends React.Component {
 								spacing={0}
 							>
 								{getIconForToken(cryptoCurrency)}
-								<Typography variant="body2" gutterBottom>
-									Receive {cryptoCurrency}
-								</Typography>
+								<Typography variant="body2">Receive {cryptoCurrency}</Typography>
 							</Grid>
 						</ModalHeader>
 

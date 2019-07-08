@@ -182,7 +182,7 @@ class Sidebar extends Component {
 							<ListItemIcon>
 								<DashboardMenuIcon />
 							</ListItemIcon>
-							<Typography variant="body2" color="secondary" gutterBottom>
+							<Typography variant="body2" color="secondary">
 								Dashboard
 							</Typography>
 						</ListItem>
@@ -194,7 +194,7 @@ class Sidebar extends Component {
 							<ListItemIcon>
 								<MarketplaceMenuIcon />
 							</ListItemIcon>
-							<Typography variant="body2" color="secondary" gutterBottom>
+							<Typography variant="body2" color="secondary">
 								Marketplace
 							</Typography>
 						</ListItem>
@@ -207,7 +207,7 @@ class Sidebar extends Component {
 							<ListItemIcon>
 								<SelfkeyIDMenuIcon />
 							</ListItemIcon>
-							<Typography variant="body2" color="secondary" gutterBottom>
+							<Typography variant="body2" color="secondary">
 								SelfKey ID
 							</Typography>
 						</ListItem>
@@ -220,7 +220,7 @@ class Sidebar extends Component {
 							<ListItemIcon>
 								<AddressBookMenuIcon />
 							</ListItemIcon>
-							<Typography variant="body2" color="secondary" gutterBottom>
+							<Typography variant="body2" color="secondary">
 								Address Book
 							</Typography>
 						</ListItem>
@@ -236,7 +236,7 @@ class Sidebar extends Component {
 							}}
 							key="helpAndSupport"
 						>
-							<Typography variant="body2" className={classes.textColor} gutterBottom>
+							<Typography variant="body2" className={classes.textColor}>
 								Help & Support
 							</Typography>
 						</ListItem>
@@ -245,12 +245,12 @@ class Sidebar extends Component {
 							component={switchAccount}
 							key="switchAccount"
 						>
-							<Typography variant="body2" className={classes.textColor} gutterBottom>
+							<Typography variant="body2" className={classes.textColor}>
 								Switch Accounts
 							</Typography>
 						</ListItem>
 						<ListItem className={classes.listItem} key="quit" onClick={window.quit}>
-							<Typography variant="body2" className={classes.textColor} gutterBottom>
+							<Typography variant="body2" className={classes.textColor}>
 								Quit
 							</Typography>
 						</ListItem>
