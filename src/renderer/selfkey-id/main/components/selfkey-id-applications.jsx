@@ -169,7 +169,7 @@ const StatusInfo = withStyles(statusInfoStyle)(
 				message = 'Application started. Missing required documents.';
 				button = (
 					<Button variant="contained" size="large" onClick={onClick} disabled={loading}>
-						{loading ? 'Loading' : 'Add Documents'}
+						{loading ? 'Loading' : 'Complete Application'}
 					</Button>
 				);
 				statusStyle = 'required';
@@ -404,13 +404,23 @@ class SelfkeyIdApplicationsComponent extends Component {
 					);
 
 					// Open add documents modal
-					await self.props.dispatch(
-						kycOperations.loadRelyingParty(
-							rpName,
-							true,
-							`/main/kyc/current-application/${rpName}?applicationId=${id}`
-						)
-					);
+					// (Later on, we will need to improve this to be able to distinguish requirements
+					// that can be fulfilled by the wallet and ones that need redirect to KYCC.)
+					//
+					// await self.props.dispatch(
+					// 	kycOperations.loadRelyingParty(
+					// 		rpName,
+					// 		true,
+					// 		`/main/kyc/current-application/${rpName}?applicationId=${id}`
+					// 	)
+					// );
+
+					// Redirects to KYCC chain on an external browser window with auto-login
+					const instanceUrl = self.props.rp.session.ctx.config.rootEndpoint;
+					const url = `${instanceUrl}/applications/${application.id}?access_token=${
+						self.props.rp.session.access_token.jwt
+					}`;
+					window.openExternal(null, url);
 				}
 			);
 		}
