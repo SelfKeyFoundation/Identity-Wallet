@@ -359,7 +359,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 			let self = this;
 			this.setState(
 				{
-					loading: true,
+					loading: false,
 					addingDocuments: false,
 					applicationId: null,
 					rpName: null
