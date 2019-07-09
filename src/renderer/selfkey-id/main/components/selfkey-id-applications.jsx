@@ -166,7 +166,7 @@ const StatusInfo = withStyles(statusInfoStyle)(
 				break;
 			case 9:
 				icon = <AttributeAlertLargeIcon className={classes.statusIcon} />;
-				message = 'Application started. Missing required documents.';
+				message = 'Application pending. Missing required documents.';
 				button = (
 					<Button variant="contained" size="large" onClick={onClick} disabled={loading}>
 						{loading ? 'Loading' : 'Complete Application'}
@@ -176,8 +176,7 @@ const StatusInfo = withStyles(statusInfoStyle)(
 				break;
 			default:
 				icon = <SimpleHourglassIcon className={classes.statusIcon} />;
-				message =
-					'Application started. Documents submitted. Please check your email for further instructions.';
+				message = 'Application started. Please check your email for further instructions.';
 				statusStyle = 'submitted';
 				break;
 		}
@@ -266,6 +265,10 @@ const HeaderIcon = withStyles(styles)(({ status, classes }) => {
 
 const getRpInfo = (rpName, field) => {
 	return config.relyingPartyInfo[rpName][field];
+};
+
+const getRpName = title => {
+	return title.startsWith('Bank Account') ? 'Bank Accounts' : 'Incorporations';
 };
 
 const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
@@ -587,8 +590,9 @@ class SelfkeyIdApplicationsComponent extends Component {
 										alignItems="baseline"
 									>
 										<Typography variant="h2" className={classes.type}>
-											{item.rpName.charAt(0).toUpperCase() +
-												item.rpName.slice(1)}
+											{/* {item.rpName.charAt(0).toUpperCase() +
+												item.rpName.slice(1)} */}
+											{getRpName(item.title)}
 										</Typography>
 										<Typography variant="subtitle2" color="secondary">
 											-{' '}
