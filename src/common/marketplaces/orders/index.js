@@ -80,8 +80,11 @@ const createOrderOperation = ({
 }) => async (dispatch, getState) => {
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const wallet = walletSelectors.getWallet(getState());
+	// Prepare and format amount
+	const formattedAmount = new BN(amount).times(new BN(10).pow(18)).toFixed(0);
+
 	const order = await ordersService.createOrder({
-		amount: '' + amount,
+		amount: '' + formattedAmount,
 		applicationId,
 		vendorId,
 		itemId,
@@ -108,6 +111,7 @@ const startOrderOperation = ({
 	completeUrl
 }) => async (dispatch, getState) => {
 	let order = ordersSelectors.getLatestActiveOrderForApplication(getState(), applicationId);
+
 	if (!order) {
 		order = await dispatch(
 			ordersOperations.createOrderOperation({
@@ -213,12 +217,10 @@ const checkOrderAllowanceOperation = orderId => async (dispatch, getState) => {
 	const selfkeyService = ctx.selfkeyService;
 	let order = ordersSelectors.getOrder(getState(), orderId);
 	const wallet = walletSelectors.getWallet(getState());
-
 	const allowance = await selfkeyService.getAllowance(
 		wallet.publicKey,
 		config.paymentSplitterAddress
 	);
-
 	let update = null;
 
 	if (allowance.toNumber() < order.amount && order.status === orderStatus.ALLOWANCE_COMPLETE) {
@@ -239,6 +241,7 @@ const checkOrderAllowanceOperation = orderId => async (dispatch, getState) => {
 	if (!update) {
 		return;
 	}
+
 	await dispatch(ordersOperations.ordersUpdateOperation(orderId, update));
 };
 

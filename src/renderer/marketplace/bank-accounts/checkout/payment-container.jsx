@@ -1,4 +1,3 @@
-// import React from 'react';
 import BN from 'bignumber.js';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
@@ -9,7 +8,6 @@ import { pricesSelectors } from 'common/prices';
 import { bankAccountsSelectors } from 'common/bank-accounts';
 import { ordersOperations } from 'common/marketplaces/orders';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
-// import { PaymentPreapprove } from '../../common/payment-preapprove';
 
 const styles = theme => ({});
 const VENDOR_NAME = 'Far Horizon Capital Inc';
@@ -54,23 +52,6 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	render = () => null;
-	/*
-	{
-
-		const { accountType } = this.props;
-		console.error('TODO: not implemented gas price for pre-approval');
-		return (
-			<PaymentPreapprove
-				whyLink={'https://help.selfkey.org/'}
-				price={accountType.price}
-				gas={`Not implemented`}
-				onBackClick={this.onBackClick}
-				onPayClick={this.onPayClick}
-			/>
-		);
-
-	}
-	*/
 }
 
 const mapStateToProps = (state, props) => {
