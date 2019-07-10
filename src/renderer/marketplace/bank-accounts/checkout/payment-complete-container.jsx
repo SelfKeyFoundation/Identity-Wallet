@@ -32,20 +32,8 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 	}
 
 	saveTransactionHash = async () => {
-		// const { transaction, accountType } = this.props;
+		const { transaction, accountType } = this.props;
 		const application = this.getLastApplication();
-		// FIXME: remove this after payment is implemented, for testing purposes only
-		const { accountType } = this.props;
-		let transaction = this.props.transaction;
-		if (!transaction || !transaction.transactionHash) {
-			transaction = {
-				amount: 10,
-				transactionHash: 'test-hash-not-real'
-			};
-		}
-
-		console.log(transaction);
-		console.log(this.props);
 
 		if (!this.userHasPaid() && transaction) {
 			await this.props.dispatch(
