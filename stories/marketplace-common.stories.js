@@ -15,6 +15,7 @@ import PaymentCheckout from '../src/renderer/marketplace/common/payment-checkout
 import MarketplacePaymentPreapprove from '../src/renderer/marketplace/orders/preapprove';
 import MarketplacePayment from '../src/renderer/marketplace/orders/payment';
 import MarketplacePaymentComplete from '../src/renderer/marketplace/orders/payment-complete';
+import MarketplaceDIDRequired from '../src/renderer/marketplace/selfkey-did-required';
 
 const paymentCheckoutData = {
 	title: 'Banking Support Service Fee: US',
@@ -54,7 +55,10 @@ storiesOf('Marketplace Common', module)
 			<br />
 		</div>
 	))
-	.add('PaymentCheckout', () => <PaymentCheckout {...paymentCheckoutData} />);
+	.add('PaymentCheckout', () => <PaymentCheckout {...paymentCheckoutData} />)
+	.add('DIDRequired', () => (
+		<MarketplaceDIDRequired onConfirm={action('did confirm')} onClose={action('did close')} />
+	));
 
 const resumeItemSets = [
 	[

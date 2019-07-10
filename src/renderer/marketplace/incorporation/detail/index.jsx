@@ -279,6 +279,7 @@ class IncorporationsDetailView extends Component {
 		const { rp, wallet } = this.props;
 		const { countryCode, companyCode, templateId } = this.props.match.params;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
+		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
 		const payRoute = `/main/marketplace-incorporation/pay/${companyCode}/${countryCode}/${templateId}`;
 		const cancelRoute = `/main/marketplace-incorporation/details/${companyCode}/${countryCode}/${templateId}`;
 		const authenticated = true;
@@ -288,6 +289,9 @@ class IncorporationsDetailView extends Component {
 		this.setState({ loading: true }, async () => {
 			if (!wallet.isSetupFinished) {
 				return this.props.dispatch(push(selfkeyIdRequiredRoute));
+			}
+			if (!wallet.did) {
+				return this.props.dispatch(push(selfkeyDIDRequiredRoute));
 			}
 			if (!rp || !rp.authenticated) {
 				await this.props.dispatch(
