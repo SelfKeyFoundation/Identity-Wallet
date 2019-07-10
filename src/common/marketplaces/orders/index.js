@@ -541,7 +541,11 @@ const ordersSelectors = {
 	getOrderPriceUsd: (state, id) => {
 		const order = ordersSelectors.getOrder(state, id);
 		let fiat = fiatCurrencySelectors.getFiatCurrency(state);
-		let fiatRate = pricesSelectors.getRate(state, 'KEY', fiat.fiatCurrency);
+		let fiatRate = pricesSelectors.getRate(
+			state,
+			config.constants.primaryToken,
+			fiat.fiatCurrency
+		);
 		return new BN(order.amount).multipliedBy(fiatRate).toString();
 	},
 	getCurrentPaymentFeeUsd: state => {

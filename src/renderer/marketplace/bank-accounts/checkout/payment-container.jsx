@@ -1,4 +1,5 @@
 import BN from 'bignumber.js';
+import config from 'common/config';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
@@ -12,6 +13,7 @@ import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-acc
 const styles = theme => ({});
 const VENDOR_NAME = 'Far Horizon Capital Inc';
 const VENDOR_DID = '0xee10a3335f48e10b444e299cf017d57879109c1e32cec3e31103ceca7718d0ec';
+const CRYPTOCURRENCY = config.constants.primaryToken;
 
 class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 	async componentDidMount() {
@@ -47,9 +49,7 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 
 	onBackClick = () => this.props.dispatch(push(this.cancelRoute()));
 
-	onPayClick = () => {
-		this.props.dispatch(push(this.selectBankRoute()));
-	};
+	onPayClick = () => this.props.dispatch(push(this.selectBankRoute()));
 
 	render = () => null;
 }
@@ -57,11 +57,12 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 const mapStateToProps = (state, props) => {
 	const { accountCode } = props.match.params;
 	const authenticated = true;
+
 	return {
 		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
 		banks: bankAccountsSelectors.getDetailsByAccountCode(state, accountCode),
 		publicKey: getWallet(state).publicKey,
-		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
+		keyRate: pricesSelectors.getRate(state, CRYPTOCURRENCY, 'USD'),
 		currentApplication: kycSelectors.selectCurrentApplication(state),
 		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
