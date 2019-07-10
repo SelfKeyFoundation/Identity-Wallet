@@ -126,7 +126,6 @@ const startOrderOperation = ({
 		);
 	}
 	await dispatch(ordersOperations.showOrderPaymentUIOperation(order.id, backUrl, completeUrl));
-	return order;
 };
 
 const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
@@ -134,7 +133,6 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 	getState
 ) => {
 	log.info('[showOrderPaymentUIOperation] %d %s %s', orderId, backUrl, completeUrl);
-
 	await dispatch(
 		ordersActions.setCurrentOrderAction({
 			orderId,
@@ -146,8 +144,6 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 	if (!order) {
 		return dispatch(ordersOperations.hideCurrentPaymentUIOperation());
 	}
-
-	console.log(order);
 
 	await dispatch(push(`${MARKETPLACE_ORDERS_ROOT_PATH}/loading`));
 
@@ -241,7 +237,6 @@ const checkOrderAllowanceOperation = orderId => async (dispatch, getState) => {
 	if (!update) {
 		return;
 	}
-
 	await dispatch(ordersOperations.ordersUpdateOperation(orderId, update));
 };
 
