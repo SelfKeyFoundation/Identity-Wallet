@@ -268,7 +268,7 @@ const getRpInfo = (rpName, field) => {
 };
 
 const getRpName = title => {
-	return title.startsWith('Bank Account') ? 'Bank Accounts' : 'Incorporations';
+	return title.toLowerCase().startsWith('bank account') ? 'Bank Accounts' : 'Incorporations';
 };
 
 const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
@@ -590,6 +590,8 @@ class SelfkeyIdApplicationsComponent extends Component {
 										alignItems="baseline"
 									>
 										<Typography variant="h2" className={classes.type}>
+											{/* Until the scheduler (and associate vendor airtable) is released, we are going to use
+											  the application's title because we are using the same rpName for BAM and Incorporations. */}
 											{/* {item.rpName.charAt(0).toUpperCase() +
 												item.rpName.slice(1)} */}
 											{getRpName(item.title)}
