@@ -69,7 +69,7 @@ const ordersActions = {
 	})
 };
 
-const createOrderOperation = (
+const createOrderOperation = ({
 	amount,
 	applicationId,
 	vendorId,
@@ -77,11 +77,14 @@ const createOrderOperation = (
 	vendorDID,
 	productInfo,
 	vendorName
-) => async (dispatch, getState) => {
+}) => async (dispatch, getState) => {
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const wallet = walletSelectors.getWallet(getState());
+	// Prepare and format amount
+	const formattedAmount = new BN(amount).times(new BN(10).pow(18)).toFixed(0);
+
 	const order = await ordersService.createOrder({
-		amount: '' + amount,
+		amount: '' + formattedAmount,
 		applicationId,
 		vendorId,
 		itemId,
@@ -96,7 +99,7 @@ const createOrderOperation = (
 	return order;
 };
 
-const startOrderOperation = (
+const startOrderOperation = ({
 	amount,
 	applicationId,
 	vendorId,
@@ -106,11 +109,12 @@ const startOrderOperation = (
 	vendorName,
 	backUrl,
 	completeUrl
-) => async (dispatch, getState) => {
+}) => async (dispatch, getState) => {
 	let order = ordersSelectors.getLatestActiveOrderForApplication(getState(), applicationId);
+
 	if (!order) {
 		order = await dispatch(
-			ordersOperations.createOrderOperation(
+			ordersOperations.createOrderOperation({
 				amount,
 				applicationId,
 				vendorId,
@@ -118,7 +122,7 @@ const startOrderOperation = (
 				vendorDID,
 				productInfo,
 				vendorName
-			)
+			})
 		);
 	}
 	await dispatch(ordersOperations.showOrderPaymentUIOperation(order.id, backUrl, completeUrl));
@@ -129,7 +133,6 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 	getState
 ) => {
 	log.info('[showOrderPaymentUIOperation] %d %s %s', orderId, backUrl, completeUrl);
-
 	await dispatch(
 		ordersActions.setCurrentOrderAction({
 			orderId,
@@ -210,12 +213,10 @@ const checkOrderAllowanceOperation = orderId => async (dispatch, getState) => {
 	const selfkeyService = ctx.selfkeyService;
 	let order = ordersSelectors.getOrder(getState(), orderId);
 	const wallet = walletSelectors.getWallet(getState());
-
 	const allowance = await selfkeyService.getAllowance(
 		wallet.publicKey,
 		config.paymentSplitterAddress
 	);
-
 	let update = null;
 
 	if (allowance.toNumber() < order.amount && order.status === orderStatus.ALLOWANCE_COMPLETE) {
@@ -584,13 +585,11 @@ const ordersSelectors = {
 	getOrdersByApplication: (state, applicationId) =>
 		ordersSelectors.getAllOrders(state).filter(order => order.applicationId === applicationId),
 	getLatestActiveOrderForApplication: (state, applicationId) =>
-		ordersSelectors
-			.getLatestActiveOrderForApplication(state, applicationId)
-			.reduce((acc, curr) => {
-				if (curr.status !== orderStatus.CANCELED && curr.updatedAt > acc.updatedAt)
-					return curr;
-				return acc;
-			}, null)
+		ordersSelectors.getOrdersByApplication(state, applicationId).reduce((acc, curr) => {
+			if (curr.status !== orderStatus.CANCELED && curr.updatedAt > (acc ? acc.updatedAt : 0))
+				return curr;
+			return acc;
+		}, null)
 };
 
 export { ordersSelectors, ordersReducers, ordersActions, ordersOperations };
