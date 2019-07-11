@@ -31,7 +31,13 @@ class CreateAttributePopupComponent extends Component {
 		}
 
 		return (
-			<Popup open={open} closeAction={this.handleCancel} text={text}>
+			<Popup
+				open={open}
+				closeAction={this.handleCancel}
+				text={text}
+				style={{ backgroundColor: 'red', marginTop: '400px' }}
+				disableTranparency={true}
+			>
 				<CreateAttribute
 					subtitle={subtitle}
 					onSave={this.handleSave}
