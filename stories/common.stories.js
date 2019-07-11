@@ -1,7 +1,15 @@
 import React from 'react';
 import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
-import { Popup, Accordion, Alert, AlertIcon, AttributesTable } from '../src/renderer/common';
+import {
+	Popup,
+	Accordion,
+	Alert,
+	AlertIcon,
+	AttributesTable,
+	TransactionErrorPopup,
+	TransactionProcessingPopup
+} from '../src/renderer/common';
 
 const data = {
 	basic: {
@@ -69,18 +77,21 @@ storiesOf('Common/Alert', module)
 	.add('danger', () => <Alert type="danger">Hello</Alert>)
 	.add('info', () => <Alert type="info">Hello</Alert>);
 
-storiesOf('Common', module).add('AttributesTable', () => (
-	<div style={{ width: '450px', height: '450px' }}>
-		<AttributesTable
-			title="Test Table"
-			attributes={[
-				{ name: 'Test Attribute 1', value: 'Test value 1' },
-				{ name: 'Test Attribute 2', value: 'Test value 2' },
-				{ name: 'Test Attribute 3', value: 'Test value 3' },
-				{ name: 'Test Attribute 4', value: 'Test value 4' },
-				{ name: 'Test Attribute 5', value: 'Test value 5' },
-				{ name: 'Test Attribute 6', value: 'Test value 6' }
-			]}
-		/>
-	</div>
-));
+storiesOf('Common', module)
+	.add('AttributesTable', () => (
+		<div style={{ width: '450px', height: '450px' }}>
+			<AttributesTable
+				title="Test Table"
+				attributes={[
+					{ name: 'Test Attribute 1', value: 'Test value 1' },
+					{ name: 'Test Attribute 2', value: 'Test value 2' },
+					{ name: 'Test Attribute 3', value: 'Test value 3' },
+					{ name: 'Test Attribute 4', value: 'Test value 4' },
+					{ name: 'Test Attribute 5', value: 'Test value 5' },
+					{ name: 'Test Attribute 6', value: 'Test value 6' }
+				]}
+			/>
+		</div>
+	))
+	.add('TransactionProcessingPopup', () => <TransactionProcessingPopup title="Processing" />)
+	.add('TransactionErrorPopup', () => <TransactionErrorPopup title="Error" />);

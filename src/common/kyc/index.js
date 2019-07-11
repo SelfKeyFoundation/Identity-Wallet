@@ -29,6 +29,7 @@ export const kycTypes = {
 	KYC_RP_CLEAR: 'kyc/rp/clear',
 	KYC_RP_APPLICATION_ADD: 'kyc/rp/application/add',
 	KYC_RP_APPLICATION_CREATE: 'kyc/rp/application/create',
+	KYC_RP_APPLICATION_UPDATE: 'kyc/rp/application/update',
 	KYC_RP_APPLICATION_PAYMENT_UPDATE: 'kyc/rp/application/payment/update',
 	KYC_APPLICATION_CURRENT_START: 'kyc/application/current/start',
 	KYC_APPLICATION_CURRENT_SET: 'kyc/application/current/set',
@@ -50,7 +51,7 @@ const incorporationsRPDetails = {
 	description: 'Incorporations',
 	relying_party_config: {
 		rootEndpoint: config.incorporationsInstance,
-		did: config.incorporationsInstance.indexOf('apiv2') !== -1, // TODO, remove it when updating the production incorporation instance to accept DID
+		did: config.incorporationsInstance.indexOf('dev') !== -1, // TODO, remove it when updating the production incorporation instance to accept DID
 		endpoints: {
 			'/templates/:id': `${config.incorporationsInstance}templates/:id?format=minimum`
 		}
@@ -361,6 +362,9 @@ const loadRelyingPartyOperation = (
 					})
 				);
 			}
+
+			// Access Token only exists for existing KYCC users
+			if (applications.length) session.access_token = await session.getAccessToken();
 		}
 
 		await dispatch(
@@ -437,6 +441,59 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 	}
 };
 
+const updateRelyingPartyKYCApplication = (
+	rpName,
+	templateId,
+	applicationId,
+	attributes = false,
+	questions = false
+) => async (dispatch, getState) => {
+	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
+	if (!rp || !rp.session) throw new Error('relying party does not exist');
+	if (!rp.templates.find(tpl => tpl.id === templateId)) {
+		throw new Error('template does not exist');
+	}
+
+	const wallet = walletSelectors.getWallet(getState());
+	if (!wallet) return;
+
+	if (!rp.session.isActive()) {
+		await rp.session.establish();
+	}
+
+	const updatedApplication = { id: applicationId, templateId };
+
+	if (attributes) {
+		attributes = kycSelectors.selectKYCAttributes(getState(), wallet.id, attributes);
+		updatedApplication.attributes = attributes;
+	}
+	if (questions) {
+		updatedApplication.questions = questions;
+	}
+
+	try {
+		let application = await rp.session.updateKYCApplication(updatedApplication);
+		application = await rp.session.getKYCApplication(application.id);
+		await dispatch(kycActions.addKYCApplication(rpName, application));
+
+		await dispatch(
+			kycOperations.updateApplicationsOperation({
+				id: application.id,
+				walletId: wallet.id,
+				rpName: rpName,
+				currentStatus: application.currentStatus,
+				currentStatusName: application.statusName,
+				owner: application.owner,
+				scope: application.scope,
+				applicationDate: application.createdAt
+			})
+		);
+	} catch (error) {
+		log.error('updatedKycApplication %s', error);
+		throw error;
+	}
+};
+
 const updateRelyingPartyKYCApplicationPayment = (rpName, applicationId, transactionHash) => async (
 	dispatch,
 	getState
@@ -494,6 +551,9 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 		title,
 		description,
 		agreement,
+		vendor,
+		privacyPolicy,
+		termsOfService,
 		attributes
 	} = currentApplication;
 	const requirements = kycSelectors.selectRequirementsForTemplate(
@@ -523,6 +583,9 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 				title,
 				description,
 				agreement,
+				vendor,
+				privacyPolicy,
+				termsOfService,
 				attributes
 			)
 		);
@@ -550,6 +613,9 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 				title,
 				description,
 				agreement,
+				vendor,
+				privacyPolicy,
+				termsOfService,
 				attributes,
 				applicationError
 			)
@@ -576,8 +642,13 @@ const loadApplicationsOperation = () => async (dispatch, getState) => {
 	let kycApplicationService = getGlobalContext().kycApplicationService;
 	await dispatch(kycActions.setProcessingAction(true));
 	let applications = await kycApplicationService.load(wallet.id);
+	let sortedApplications = applications.sort((d1, d2) => {
+		d1 = d1.createdAt ? new Date(d1.createdAt).getTime() : 0;
+		d2 = d2.createdAt ? new Date(d2.createdAt).getTime() : 0;
+		return d2 - d1; // descending order
+	});
 	await dispatch(kycActions.setProcessingAction(false));
-	await dispatch(kycActions.setApplicationsAction(applications));
+	await dispatch(kycActions.setApplicationsAction(sortedApplications));
 };
 
 const updateApplicationsOperation = application => async (dispatch, getState) => {
@@ -600,6 +671,10 @@ export const kycOperations = {
 	createRelyingPartyKYCApplication: createAliasedAction(
 		kycTypes.KYC_RP_APPLICATION_CREATE,
 		createRelyingPartyKYCApplication
+	),
+	updateRelyingPartyKYCApplication: createAliasedAction(
+		kycTypes.KYC_RP_APPLICATION_UPDATE,
+		updateRelyingPartyKYCApplication
 	),
 	updateRelyingPartyKYCApplicationPayment: createAliasedAction(
 		kycTypes.KYC_RP_APPLICATION_PAYMENT_UPDATE,

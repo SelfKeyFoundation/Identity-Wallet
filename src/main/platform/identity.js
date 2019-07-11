@@ -3,6 +3,7 @@ import { getPrivateKey } from '../keystorage';
 import { IdAttribute } from '../identity/id-attribute';
 import { getGlobalContext } from 'common/context';
 import { Logger } from 'common/logger';
+import { isDevMode } from 'common/utils/common';
 import AppEth from '@ledgerhq/hw-app-eth';
 
 const log = new Logger('Identity');
@@ -18,7 +19,7 @@ export class Identity {
 			: `did:eth:${this.address ? this.address.toLowerCase() : ''}`;
 		this.wid = wallet.id;
 		this.path = wallet.path;
-
+		this.wallet = wallet;
 		if (this.profile === 'local' && this.privateKey) {
 			this.publicKey = ethUtil
 				.privateToPublic(Buffer.from(this.privateKey, 'hex'))
@@ -40,7 +41,13 @@ export class Identity {
 		}
 	}
 	getKeyId() {
-		return `${this.did}#keys-1`;
+		return `${this.getDidWithParams()}#keys-1`;
+	}
+	getDidWithParams() {
+		if (!this.wallet.did || !isDevMode()) {
+			return this.did;
+		}
+		return `${this.did};selfkey:chain=ropsten`;
 	}
 	async getPublicKeyFromHardwareWallet() {
 		if (this.profile === 'ledger') {
@@ -48,7 +55,7 @@ export class Identity {
 			try {
 				const appEth = new AppEth(transport);
 				const address = await appEth.getAddress(this.path);
-				return address.publicKey;
+				return ethUtil.addHexPrefix(address.publicKey);
 			} finally {
 				transport.close();
 			}
@@ -56,7 +63,7 @@ export class Identity {
 			const publicKey = await getGlobalContext().web3Service.trezorWalletSubProvider.getPublicKey(
 				this.address
 			);
-			return publicKey;
+			return ethUtil.addHexPrefix(publicKey);
 		}
 	}
 

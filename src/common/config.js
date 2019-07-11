@@ -18,12 +18,18 @@ const PRIMARY_TOKEN = process.env.PRIMARY_TOKEN_OVERRIDE
 	? process.env.PRIMARY_TOKEN_OVERRIDE.toUpperCase()
 	: null;
 
+// Incorporations ENV variables
 const INCORPORATIONS_TEMPLATE_OVERRIDE = process.env.INCORPORATIONS_TEMPLATE_OVERRIDE;
 const INCORPORATIONS_PRICE_OVERRIDE = process.env.INCORPORATIONS_PRICE_OVERRIDE;
 const INCORPORATION_KYCC_INSTANCE = process.env.INCORPORATION_KYCC_INSTANCE;
 const INCORPORATION_API_URL = process.env.INCORPORATION_API_URL;
 const INCORPORATION_TREATIES_URL = process.env.INCORPORATION_TREATIES_URL;
+// Bank Accounts ENV variables
+const BANKACCOUNTS_TEMPLATE_OVERRIDE = process.env.BANKACCOUNTS_TEMPLATE_OVERRIDE;
+const BANKACCOUNTS_PRICE_OVERRIDE = process.env.BANKACCOUNTS_PRICE_OVERRIDE;
+const BANKACCOUNTS_KYCC_INSTANCE = process.env.BANKACCOUNTS_KYCC_INSTANCE;
 const BANKACCOUNTS_API_URL = process.env.BANKACCOUNTS_API_URL;
+
 const COUNTRY_INFO_URL = process.env.COUNTRY_INFO_URL;
 const MATOMO_SITE = process.env.MATOMO_SITE;
 const DEPOSIT_PRICE_OVERRIDE = process.env.DEPOSIT_PRICE_OVERRIDE;
@@ -39,14 +45,18 @@ const common = {
 	defaultLanguage: 'en',
 	forceUpdateAttributes: process.env.FORCE_UPDATE_ATTRIBUTES === 'true' && !isTestMode(),
 	userAgent: `SelfKeyIDW/${pkg.version}`,
-
+	airtableBaseUrl: 'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=',
 	incorporationsInstance:
-		INCORPORATION_KYCC_INSTANCE || 'https://apiv2.instance.kyc-chain.com/api/v2/',
+		INCORPORATION_KYCC_INSTANCE || 'https://dev.instance.kyc-chain.com/api/v2/',
 	incorporationsPriceOverride: INCORPORATIONS_PRICE_OVERRIDE,
 	incorporationsTemplateOverride: INCORPORATIONS_TEMPLATE_OVERRIDE,
 	incorporationApiUrl: INCORPORATION_API_URL || 'https://passports.io/api/incorporations',
 	incorporationTreatiesUrl: INCORPORATION_TREATIES_URL || 'https://passports.io/api/tax-treaties',
 	countryInfoUrl: COUNTRY_INFO_URL || 'https://passports.io/api/country',
+	bankAccountsInstance:
+		BANKACCOUNTS_KYCC_INSTANCE || 'https://dev.instance.kyc-chain.com/api/v2/',
+	bankAccountsPriceOverride: BANKACCOUNTS_PRICE_OVERRIDE,
+	bankAccountsTemplateOverride: BANKACCOUNTS_TEMPLATE_OVERRIDE,
 	bankAccountsApiUrl: BANKACCOUNTS_API_URL || 'https://api.bankaccounts.io/api/bank-accounts',
 	depositPriceOverride: DEPOSIT_PRICE_OVERRIDE,
 
@@ -114,13 +124,14 @@ const dev = {
 	chainId: 3,
 	node: 'infura',
 	incorporationsInstance:
-		INCORPORATION_KYCC_INSTANCE || 'https://apiv2.instance.kyc-chain.com/api/v2/',
+		INCORPORATION_KYCC_INSTANCE || 'https://dev.instance.kyc-chain.com/api/v2/',
 
 	constants: {
 		primaryToken: PRIMARY_TOKEN || 'KI'
 	},
 	matomoSite: 2,
-	ledgerAddress: '0x24512422cf6ad1c0c465cbf0bbd5155eaa3da634'
+	ledgerAddress: '0x27332286A2CEaE458b82A1235f7E2a3Aa8945cAB',
+	paymentSplitterAddress: '0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5'
 };
 
 const prod = {
@@ -137,7 +148,8 @@ const prod = {
 		primaryToken: PRIMARY_TOKEN || 'KEY'
 	},
 	matomoSite: 1,
-	ledgerAddress: '0x0cb853331293d689c95187190e09bb46cb4e533e'
+	ledgerAddress: '0x0cb853331293d689c95187190e09bb46cb4e533e',
+	paymentSplitterAddress: '0xC3f1fbe8f4BE283426F913f0F2BE8329fC6BE041'
 };
 
 const setupFilesPath = getSetupFilePath();

@@ -15,6 +15,7 @@ import { LargeTableHeadRow, TagTableCell, Tag, IncorporationsIcon } from 'selfke
 import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
 import { getIncorporationPrice, getTemplateID } from '../common';
 import { ProgramPrice, FlagCountryName } from '../../common';
+import NoConnection from 'renderer/no-connection';
 
 const styles = theme => ({
 	header: {
@@ -135,9 +136,13 @@ class IncorporationsTable extends Component {
 	onBackClick = _ => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
 
 	render() {
-		const { classes, isLoading, incorporations, keyRate } = this.props;
+		const { classes, isLoading, incorporations, keyRate, isError } = this.props;
 		if (isLoading) {
 			return this.renderLoadingScreen();
+		}
+
+		if (!isLoading && isError) {
+			return <NoConnection onBackClick={this.onBackClick} />;
 		}
 
 		const data = incorporations.filter(program => program.show_in_wallet);
@@ -168,34 +173,22 @@ class IncorporationsTable extends Component {
 							<LargeTableHeadRow>
 								<TableCell className={classes.flagCell} />
 								<TableCell>
-									<Typography variant="overline" gutterBottom>
-										Jurisdiction
-									</Typography>
+									<Typography variant="overline">Jurisdiction</Typography>
 								</TableCell>
 								<TableCell className={classes.regionCell}>
-									<Typography variant="overline" gutterBottom>
-										Entity
-									</Typography>
+									<Typography variant="overline">Entity</Typography>
 								</TableCell>
 								<TableCell className={classes.smallCell}>
-									<Typography variant="overline" gutterBottom>
-										Offsh Tax
-									</Typography>
+									<Typography variant="overline">Offsh Tax</Typography>
 								</TableCell>
 								<TableCell className={classes.smallCell}>
-									<Typography variant="overline" gutterBottom>
-										Corp Tax
-									</Typography>
+									<Typography variant="overline">Corp Tax</Typography>
 								</TableCell>
 								<TableCell className={classes.goodForCell}>
-									<Typography variant="overline" gutterBottom>
-										Good for
-									</Typography>
+									<Typography variant="overline">Good for</Typography>
 								</TableCell>
 								<TableCell className={classes.costCell}>
-									<Typography variant="overline" gutterBottom>
-										Cost
-									</Typography>
+									<Typography variant="overline">Cost</Typography>
 								</TableCell>
 								<TableCell className={classes.detailsCell} />
 							</LargeTableHeadRow>
@@ -217,8 +210,12 @@ class IncorporationsTable extends Component {
 										{inc.tax['Corporate Tax Rate']}
 									</TableCell>
 									<TagTableCell className={classes.goodForCell}>
-										{inc['Good for'] &&
-											inc['Good for'].map(tag => <Tag key={tag}>{tag}</Tag>)}
+										<Grid container>
+											{inc['Good for'] &&
+												inc['Good for'].map(tag => (
+													<Tag key={tag}>{tag}</Tag>
+												))}
+										</Grid>
 									</TagTableCell>
 									<TableCell className={classes.costCell}>
 										<ProgramPrice
@@ -252,13 +249,16 @@ class IncorporationsTable extends Component {
 
 IncorporationsTable.propTypes = {
 	incorporations: PropTypes.array,
-	isLoading: PropTypes.bool
+	isLoading: PropTypes.bool,
+	isError: PropTypes.any,
+	keyRate: PropTypes.number
 };
 
 const mapStateToProps = (state, props) => {
 	return {
 		incorporations: incorporationsSelectors.getMainIncorporationsWithTaxes(state),
 		isLoading: incorporationsSelectors.getLoading(state),
+		isError: incorporationsSelectors.getError(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
 	};
 };

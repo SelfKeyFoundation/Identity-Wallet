@@ -11,7 +11,6 @@ import {
 	TrezorBridgeIcon
 } from 'selfkey-ui';
 import { connect } from 'react-redux';
-import HelpStepsSection from './help-steps-section';
 import { appOperations, appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
 
@@ -56,11 +55,9 @@ class ConnectingToTrezor extends Component {
 								spacing={40}
 							>
 								<Grid item>
-									<Typography variant="h1">
+									<Typography variant="h1" style={{ marginBottom: '0.75em' }}>
 										Please Install Trezor Bridge
 									</Typography>
-								</Grid>
-								<Grid item>
 									<Typography variant="body1">
 										Trezor Bridge is required so that the SelfKey Identity
 										Wallet can communicate with your device. It is an official
@@ -155,11 +152,9 @@ class ConnectingToTrezor extends Component {
 								spacing={40}
 							>
 								<Grid item>
-									<Typography variant="h2">
+									<Typography variant="h1" style={{ marginBottom: '0.75em' }}>
 										Error: Can&#39;t Connect To Trezor
 									</Typography>
-								</Grid>
-								<Grid item>
 									<Typography variant="body1">
 										To ensure a successful connection, please make sure your
 										device is plugged in properly via USB. If you need more
@@ -220,16 +215,13 @@ class ConnectingToTrezor extends Component {
 							spacing={40}
 						>
 							<Grid item>
-								<Typography variant="h1">Connecting To Trezor</Typography>
-							</Grid>
-							<Grid item>
+								<Typography variant="h1" style={{ marginBottom: '0.75em' }}>
+									Connecting To Trezor
+								</Typography>
 								<Typography variant="body1">
 									To ensure a successful connection, please make sure your device
 									is plugged in properly via USB.
 								</Typography>
-							</Grid>
-							<Grid item>
-								<HelpStepsSection />
 							</Grid>
 							<Grid item>
 								<Button
@@ -254,7 +246,7 @@ class ConnectingToTrezor extends Component {
 				<Modal open={true}>
 					<ModalWrap>
 						<ModalCloseButton onClick={this.handleClose}>
-							<ModalCloseIcon />
+							<ModalCloseIcon style={{ marginTop: '20px' }} />
 						</ModalCloseButton>
 						<ModalHeader>
 							<Grid

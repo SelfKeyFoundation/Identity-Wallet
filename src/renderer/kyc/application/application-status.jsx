@@ -32,32 +32,45 @@ const styles = theme => ({
 	},
 	checkIcon: {
 		fill: success
+	},
+	payment: {
+		textAlign: 'right'
 	}
 });
 
-export const ApplicationStatusCompleted = withStyles(styles)(({ classes }) => (
+export const ApplicationStatusCompleted = withStyles(styles)(({ classes, statusAction }) => (
 	<React.Fragment>
-		<Grid item xs={12}>
+		<Grid item xs={9}>
 			<CheckOutlined className={classes.checkIcon} />
 			<Typography variant="body2" color="secondary">
 				Your application was successful
 			</Typography>
 		</Grid>
+		<Grid item xs={3} className={classes.payment}>
+			<Button variant="contained" onClick={statusAction}>
+				Manage Applications
+			</Button>
+		</Grid>
 	</React.Fragment>
 ));
 
-export const ApplicationStatusRejected = withStyles(styles)(({ classes }) => (
+export const ApplicationStatusRejected = withStyles(styles)(({ classes, statusAction }) => (
 	<React.Fragment>
-		<Grid item xs={12}>
+		<Grid item xs={9}>
 			<AttributeAlertIcon />
 			<Typography variant="body2" color="secondary">
 				Your previous application was rejected
 			</Typography>
 		</Grid>
+		<Grid item xs={3} className={classes.payment}>
+			<Button variant="contained" onClick={statusAction}>
+				Manage Applications
+			</Button>
+		</Grid>
 	</React.Fragment>
 ));
 
-export const ApplicationStatusUnpaid = withStyles(styles)(({ classes, paymentAction }) => (
+export const ApplicationStatusUnpaid = withStyles(styles)(({ classes, statusAction }) => (
 	<React.Fragment>
 		<Grid item xs={9}>
 			<AttributeAlertIcon />
@@ -66,12 +79,30 @@ export const ApplicationStatusUnpaid = withStyles(styles)(({ classes, paymentAct
 			</Typography>
 		</Grid>
 		<Grid item xs={3} className={classes.payment}>
-			<Button variant="contained" onClick={paymentAction}>
+			<Button variant="contained" onClick={statusAction}>
 				Pay
 			</Button>
 		</Grid>
 	</React.Fragment>
 ));
+
+export const ApplicationStatusAdditionalRequirements = withStyles(styles)(
+	({ classes, statusAction }) => (
+		<React.Fragment>
+			<Grid item xs={9}>
+				<AttributeAlertIcon />
+				<Typography variant="body2" color="secondary">
+					Your existing application requires additional information
+				</Typography>
+			</Grid>
+			<Grid item xs={3} className={classes.payment}>
+				<Button variant="contained" onClick={statusAction}>
+					Complete Application
+				</Button>
+			</Grid>
+		</React.Fragment>
+	)
+);
 
 export const ApplicationStatusInProgress = withStyles(styles)(({ classes, contact }) => (
 	<React.Fragment>
@@ -89,12 +120,16 @@ const statusComponent = {
 	completed: { StatusComponent: ApplicationStatusCompleted, statusType: 'success' },
 	progress: { StatusComponent: ApplicationStatusInProgress, statusType: 'warning' },
 	unpaid: { StatusComponent: ApplicationStatusUnpaid, statusType: 'warning' },
-	rejected: { StatusComponent: ApplicationStatusRejected, statusType: 'warning' }
+	rejected: { StatusComponent: ApplicationStatusRejected, statusType: 'warning' },
+	additionalRequirements: {
+		StatusComponent: ApplicationStatusAdditionalRequirements,
+		statusType: 'warning'
+	}
 };
 
 export const ApplicationStatusBar = withStyles(styles)(
-	({ classes, status, contact, paymentAction }) => {
-		if (!statusComponent.hasOwnProperty(status)) {
+	({ classes, status, contact, statusAction, loading = false }) => {
+		if (!statusComponent.hasOwnProperty(status) || loading) {
 			return null;
 		}
 		const { StatusComponent, statusType } = statusComponent[status];
@@ -106,7 +141,7 @@ export const ApplicationStatusBar = withStyles(styles)(
 				alignItems="flex-start"
 				className={statusType === 'success' ? classes.successBar : classes.warningBar}
 			>
-				<StatusComponent contact={contact} paymentAction={paymentAction} />
+				<StatusComponent contact={contact} statusAction={statusAction} />
 			</Grid>
 		);
 	}

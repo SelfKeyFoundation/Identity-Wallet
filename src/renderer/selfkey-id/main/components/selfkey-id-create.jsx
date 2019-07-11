@@ -29,8 +29,8 @@ const styles = theme => ({
 		marginRight: '50px'
 	},
 	create: {
-		marginTop: '30px',
-		marginBottom: '20px'
+		marginTop: '15px',
+		marginBottom: '10px'
 	}
 });
 
@@ -65,7 +65,7 @@ class SelfKeyIdCreateComponent extends Component {
 								<Typography variant="h1">Setup your Selfkey Identity</Typography>
 							</Grid>
 							<Grid item>
-								<Typography variant="body1" color="secondary" gutterBottom>
+								<Typography variant="body1" color="secondary">
 									Create a new Selfkey ID to start building your identity profile.
 								</Typography>
 							</Grid>
@@ -129,59 +129,6 @@ class SelfKeyIdCreateComponent extends Component {
 											</Grid>
 										</Grid>
 									</CardContent>
-									{/* <hr className={classes.hr} />
-									<CardContent>
-										<Grid
-											container
-											direction="column"
-											justify="center"
-											alignItems="center"
-											spacing={32}
-										>
-											<Grid container item spacing={0} justify="space-between">
-												<Grid
-													container
-													xs={3}
-													justify="end"
-													alignItems="center"
-													direction="column"
-													wrap="nowrap"
-													spacing={32}
-													className={classes.info}
-												>
-													<Grid item>
-														<BookIcon />
-													</Grid>
-												</Grid>
-												<Grid item xs={9}>
-													<Grid item>
-														<Typography variant="body1" gutterBottom>
-															I was approved in the Selfkey token sale KYC
-														</Typography>
-														<Typography
-															variant="subtitle2"
-															color="secondary"
-															gutterBottom
-														>
-															If you were whitelisted for the Selfkey token sale,{' '}
-															you can download a zip file and import to complete{' '}
-															your Selfkey ID.
-														</Typography>
-													</Grid>
-													<Grid item>
-														<Button
-															variant="outlined"
-															size="large"
-															className={classes.create}
-															onClick={this.handleAddAttribute}
-														>
-															Import KYC File
-														</Button>
-													</Grid>
-												</Grid>
-											</Grid>
-										</Grid>
-									</CardContent> */}
 								</Card>
 							</Grid>
 						</Grid>

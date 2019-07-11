@@ -6,14 +6,15 @@ import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
 import { BankingOffersPage } from './offers-page';
+import NoConnection from 'renderer/no-connection';
 
 const styles = theme => ({});
 const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
-const MARKETPLACE_JURISDICTION_DETAIL_PATH = '/main/marketplace-bank-accounts/details';
+const BANK_ACCOUNTS_DETAIL_PATH = '/main/marketplace-bank-accounts/details';
 
 class BankAccountsTableContainer extends Component {
 	state = {
-		accountType: 'personal'
+		accountType: 'business'
 	};
 
 	componentDidMount() {
@@ -29,22 +30,30 @@ class BankAccountsTableContainer extends Component {
 	onDetailsClick = bank =>
 		this.props.dispatch(
 			push(
-				`${MARKETPLACE_JURISDICTION_DETAIL_PATH}/${bank.accountCode}/${bank.countryCode}/${
-					bank.Template_ID
+				`${BANK_ACCOUNTS_DETAIL_PATH}/${bank.accountCode}/${bank.countryCode}/${
+					bank.templateId
 				}`
 			)
 		);
 
+	activeBank = bank => bank.accountType === this.state.accountType && bank.showWallet === true;
+
 	render() {
-		const { isLoading, bankAccounts, keyRate } = this.props;
-		const data = bankAccounts.filter(bank => bank.type === this.state.accountType);
+		const { isLoading, bankAccounts, keyRate, isError } = this.props;
+		const { accountType } = this.state;
+
+		if (!isLoading && isError) {
+			return <NoConnection onBackClick={this.onBackClick} />;
+		}
+
+		const data = bankAccounts.filter(this.activeBank);
 
 		return (
 			<BankingOffersPage
 				keyRate={keyRate}
 				data={data}
 				onBackClick={this.onBackClick}
-				accountType={this.state.accountType}
+				accountType={accountType}
 				onAccountTypeChange={this.onAccountTypeChange}
 				onDetails={this.onDetailsClick}
 				loading={isLoading}
@@ -56,16 +65,20 @@ class BankAccountsTableContainer extends Component {
 BankAccountsTableContainer.propTypes = {
 	bankAccounts: PropTypes.array,
 	isLoading: PropTypes.bool,
-	keyRate: PropTypes.number
+	keyRate: PropTypes.number,
+	isError: PropTypes.any
 };
 
 const mapStateToProps = (state, props) => {
 	return {
 		bankAccounts: bankAccountsSelectors.getMainBankAccounts(state),
 		isLoading: bankAccountsSelectors.getLoading(state),
-		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
+		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
+		isError: bankAccountsSelectors.getError(state)
 	};
 };
 
 const styledComponent = withStyles(styles)(BankAccountsTableContainer);
-export default connect(mapStateToProps)(styledComponent);
+const connectedComponent = connect(mapStateToProps)(styledComponent);
+export default connectedComponent;
+export { connectedComponent as BankAccountsTableContainer };

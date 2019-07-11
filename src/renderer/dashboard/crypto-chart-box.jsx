@@ -112,8 +112,7 @@ const styles = () => ({
 			boxShadow: 'none',
 			top: '40px !important',
 			'& .google-visualization-tooltip-item span': {
-				fontSize: '13px !important',
-				fontWeight: 400
+				fontSize: '13px !important'
 			},
 			'& .google-visualization-tooltip-item-list li:first-child span': {
 				color: '#93B0C1 !important'
@@ -172,6 +171,7 @@ class ChartContainerComponent extends React.Component {
 						legend: {
 							position: 'none'
 						},
+						fontSize: 13,
 						pieSliceText: 'none',
 						tooltip: tooltip,
 						animation: {

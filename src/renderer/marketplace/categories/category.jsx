@@ -45,7 +45,10 @@ const styles = theme => ({
 	},
 
 	footer: {
-		margin: '20px'
+		margin: '20px',
+		'& button': {
+			fontSize: '10px'
+		}
 	}
 });
 
@@ -78,7 +81,7 @@ export const MarketplaceCategory = withStyles(styles)(
 						disabled={!active}
 						onClick={learnMoreAction}
 					>
-						{active ? 'Learn More' : 'Coming Soon'}
+						{active ? 'Access Marketplace' : 'Coming Soon'}
 					</Button>
 				</Grid>
 			</Grid>

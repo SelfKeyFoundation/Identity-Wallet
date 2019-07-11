@@ -1,6 +1,8 @@
 import React from 'react';
 // import { action } from '@storybook/addon-actions';
 import { storiesOf } from '@storybook/react';
+import { linkTo } from '@storybook/addon-links';
+import { action } from '@storybook/addon-actions';
 import {
 	FlagCountryName,
 	ProgramPrice,
@@ -10,10 +12,16 @@ import {
 	ResumeBox
 } from '../src/renderer/marketplace/common';
 import PaymentCheckout from '../src/renderer/marketplace/common/payment-checkout';
+import MarketplacePaymentPreapprove from '../src/renderer/marketplace/orders/preapprove';
+import MarketplacePayment from '../src/renderer/marketplace/orders/payment';
+import MarketplacePaymentComplete from '../src/renderer/marketplace/orders/payment-complete';
+import MarketplaceDIDRequired from '../src/renderer/marketplace/selfkey-did-required';
 
 const paymentCheckoutData = {
 	title: 'Banking Support Service Fee: US',
 	program: { Region: 'US' },
+	description: 'This is a checkout description',
+	timeToForm: '2 to 4 week(s)',
 	countryCode: 'US',
 	price: 4000,
 	keyAmount: 100000,
@@ -47,7 +55,10 @@ storiesOf('Marketplace Common', module)
 			<br />
 		</div>
 	))
-	.add('PaymentCheckout', () => <PaymentCheckout {...paymentCheckoutData} />);
+	.add('PaymentCheckout', () => <PaymentCheckout {...paymentCheckoutData} />)
+	.add('DIDRequired', () => (
+		<MarketplaceDIDRequired onConfirm={action('did confirm')} onClose={action('did close')} />
+	));
 
 const resumeItemSets = [
 	[
@@ -86,3 +97,32 @@ storiesOf('Marketplace Common/Resume Table', module)
 	.add('Single highlited', () => <ResumeTableEntry {...resumeItemSets[0][1]} />)
 	.add('Table', () => <ResumeTable items={resumeItemSets[0]} />)
 	.add('Resume Box', () => <ResumeBox itemSets={resumeItemSets} />);
+
+storiesOf('Marketplace Common/Orders', module)
+	.add('Preapprove', () => (
+		<MarketplacePaymentPreapprove
+			feeETH={0.00001}
+			feeUSD={0.0000000000131}
+			onPayClick={linkTo('Payment Contract')}
+			onWhyLinkClick={action('preapprove why click')}
+			onBackClick={action('preaprove back click')}
+		/>
+	))
+	.add('Payment', () => (
+		<MarketplacePayment
+			priceUSD={123456}
+			priceKey={12312312312321321321312}
+			feeETH={0.0000001}
+			feeUSD={0.0000000000131}
+			did={'did:selfkey:sadjkhasnnkdjlqw123121kl'}
+			vendorName="Horizon Capital Inc"
+			onLearnHowClick={action('payment contract learn how clicked')}
+		/>
+	))
+	.add('Payment complete', () => (
+		<MarketplacePaymentComplete
+			email="support@flagtheory.com"
+			onBackClick={action('banking payment complete back click')}
+			onContinueClick={action('banking payment continue click')}
+		/>
+	));

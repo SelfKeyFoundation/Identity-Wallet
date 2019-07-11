@@ -25,6 +25,8 @@ import createWallet from '../create-wallet';
 import transactionHistory from '../transaction-history';
 import app from '../app';
 import gas from '../gas';
+import scheduler from '../scheduler';
+import orders from '../marketplaces/orders';
 // eslint-disable-next-line
 import { closeOperations } from '../close';
 
@@ -82,6 +84,8 @@ export default (initialState, scope = 'main') => {
 		gas,
 		kyc,
 		tokens,
+		scheduler,
+		orders,
 		...scopedReducers
 	});
 	const enhancer = compose(...enhanced);

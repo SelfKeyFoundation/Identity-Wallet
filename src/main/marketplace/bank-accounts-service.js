@@ -8,6 +8,13 @@ const log = new Logger('marketplace-bank-accounts-service');
 
 const URL = config.bankAccountsApiUrl;
 
+const fieldMap = corp => {
+	const fields = corp.data.fields;
+	const newCorp = { ...fields, id: corp.data.id };
+
+	return newCorp;
+};
+
 export class BankAccountsService {
 	loadBankAccounts() {
 		return new Promise((resolve, reject) => {
@@ -16,47 +23,13 @@ export class BankAccountsService {
 				if (error) {
 					log.error(error);
 					return reject(error);
+				} else {
+					const payload = {};
+					payload.main = response.Main.map(fieldMap);
+					payload.jurisdictions = response.Jurisdictions.map(fieldMap);
+					payload.details = response.Account_Details.map(fieldMap);
+					resolve(payload);
 				}
-				const payload = {};
-
-				const fieldMap = corp => {
-					const fields = corp.data.fields;
-					const newCorp = { ...fields, id: corp.data.id };
-
-					return newCorp;
-				};
-
-				const transformMachineReadable = (obj, key, machineKey) => {
-					obj[machineKey] = obj[machineKey] ? obj[machineKey] : obj[key];
-					return obj;
-				};
-
-				payload.main = response.Main.map(fieldMap);
-				payload.main.map(bank => {
-					// Transform into Machine readable fields
-					bank.type = bank['Type of Account']
-						? bank['Type of Account'][0].toLowerCase()
-						: undefined;
-
-					bank = transformMachineReadable(bank, 'Region', 'region');
-					bank = transformMachineReadable(bank, 'Country Code', 'countryCode');
-					bank = transformMachineReadable(bank, 'Eligibility', 'eligibility');
-					bank = transformMachineReadable(bank, 'Min Deposit', 'minDeposit');
-					bank = transformMachineReadable(bank, 'Good For', 'goodFor');
-					bank = transformMachineReadable(bank, 'Bank Code', 'bankCode');
-					bank = transformMachineReadable(bank, 'AccountCode', 'accountCode');
-					return bank;
-				});
-				payload.jurisdictions = response.Jurisdictions.map(fieldMap);
-				payload.details = response.Account_Details.map(fieldMap);
-				payload.details.map(bank => {
-					// Transform into Machine readable fields
-					bank = transformMachineReadable(bank, 'Country Code', 'countryCode');
-					bank = transformMachineReadable(bank, 'AccountCode', 'accountCode');
-					return bank;
-				});
-
-				resolve(payload);
 			});
 		});
 	}

@@ -196,7 +196,7 @@ class IncorporationPaymentConfirmationComponent extends Component {
 						usdNetworkFee={usdFee}
 						ethNetworkFee={ethFee}
 						tooltipNetworkFee={
-							'The fee will be payed in ETH, at the day’s exchange rate.'
+							'The fee will be paid in ETH, at the day’s exchange rate.'
 						}
 						learnHowURL={'https://help.selfkey.org/'}
 						onConfirm={this.handleTransferAction}

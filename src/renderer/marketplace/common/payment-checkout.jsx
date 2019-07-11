@@ -156,11 +156,13 @@ const styles = theme => ({
 	}
 });
 
-export const PaymentCheckout = withStyles(styles)(
+const PaymentCheckout = withStyles(styles)(
 	({
 		classes,
 		title,
 		program,
+		description,
+		timeToForm,
 		countryCode,
 		price,
 		keyAmount,
@@ -210,11 +212,11 @@ export const PaymentCheckout = withStyles(styles)(
 							<div
 								className={classes.description}
 								dangerouslySetInnerHTML={{
-									__html: sanitize(program.wallet_description)
+									__html: sanitize(description)
 								}}
 							/>
 							<div className={classes.descriptionHelp}>
-								<p>Time to form: {program['Time to form (weeks)']} week(s).</p>
+								<p>Time to form: {timeToForm} week(s).</p>
 								<p>
 									All our incorporation services include a yearly consulting
 									session, a dedicated account manager and access to our global
@@ -354,4 +356,5 @@ export const PaymentCheckout = withStyles(styles)(
 	)
 );
 
+export { PaymentCheckout };
 export default PaymentCheckout;

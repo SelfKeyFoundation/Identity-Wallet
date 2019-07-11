@@ -9,13 +9,14 @@ const styles = theme => ({
 	root: {
 		flexGrow: 1
 	},
-
 	input: {
 		width: '500px'
 	},
-
 	pointer: {
 		cursor: 'pointer'
+	},
+	bottomSpace: {
+		marginBottom: '1em'
 	}
 });
 
@@ -100,7 +101,10 @@ class PrivateKey extends Component {
 									alignItems="flex-start"
 								>
 									<Grid item>
-										<Typography variant="overline" gutterBottom>
+										<Typography
+											variant="overline"
+											className={classes.bottomSpace}
+										>
 											ENTER YOUR PRIVATE KEY
 										</Typography>
 									</Grid>
