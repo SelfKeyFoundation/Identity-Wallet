@@ -80,11 +80,8 @@ const createOrderOperation = ({
 }) => async (dispatch, getState) => {
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const wallet = walletSelectors.getWallet(getState());
-	// Prepare and format amount
-	const formattedAmount = new BN(amount).times(new BN(10).pow(18)).toFixed(0);
-
 	const order = await ordersService.createOrder({
-		amount: '' + formattedAmount,
+		amount: '' + amount,
 		applicationId,
 		vendorId,
 		itemId,
@@ -111,7 +108,6 @@ const startOrderOperation = ({
 	completeUrl
 }) => async (dispatch, getState) => {
 	let order = ordersSelectors.getLatestActiveOrderForApplication(getState(), applicationId);
-
 	if (!order) {
 		order = await dispatch(
 			ordersOperations.createOrderOperation({
@@ -213,18 +209,22 @@ const checkOrderAllowanceOperation = orderId => async (dispatch, getState) => {
 	const selfkeyService = ctx.selfkeyService;
 	let order = ordersSelectors.getOrder(getState(), orderId);
 	const wallet = walletSelectors.getWallet(getState());
-	const allowance = await selfkeyService.getAllowance(
+	const amount = ordersSelectors.getContractFormattedAmount(getState(), orderId);
+
+	let allowance = await selfkeyService.getAllowance(
 		wallet.publicKey,
 		config.paymentSplitterAddress
 	);
 	let update = null;
 
-	if (allowance.toNumber() < order.amount && order.status === orderStatus.ALLOWANCE_COMPLETE) {
+	allowance = new BN(allowance);
+
+	if (allowance.lt(amount) && order.status === orderStatus.ALLOWANCE_COMPLETE) {
 		update = { status: orderStatus.PENDING };
 	}
 
 	if (
-		allowance.toNumber() >= order.amount &&
+		allowance.gte(amount) &&
 		[
 			orderStatus.ALLOWANCE_IN_PROGRESS,
 			orderStatus.ALLOWANCE_ERROR,
@@ -291,10 +291,12 @@ const preapproveCurrentOrderOperation = () => async (dispatch, getState) => {
 		await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
 	};
 	try {
+		const amount = ordersSelectors.getContractFormattedAmount(getState(), orderId);
+
 		const receipt = await selfkeyService.approve(
 			wallet.publicKey,
 			config.paymentSplitterAddress,
-			order.amount,
+			amount,
 			allowanceGas,
 			gasPriceEstimates.average,
 			onTransactionHash
@@ -360,11 +362,12 @@ const payCurrentOrderOperation = () => async (dispatch, getState) => {
 		await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
 	};
 	try {
+		const amount = ordersSelectors.getContractFormattedAmount(getState(), orderId);
 		const receipt = await paymentService.makePayment(
 			wallet.publicKey,
 			order.did,
 			order.vendorDID,
-			order.amount,
+			amount,
 			order.productInfo,
 			0,
 			0,
@@ -412,12 +415,12 @@ const estimateCurrentPaymentGasOperation = () => async (dispatch, getState) => {
 
 const estimateCurrentPreapproveGasOperation = () => async (dispatch, getState) => {
 	const { orderId } = ordersSelectors.getCurrentOrder(getState());
-	const order = ordersSelectors.getOrder(getState(), orderId);
 	const wallet = walletSelectors.getWallet(getState());
+	const amount = ordersSelectors.getContractFormattedAmount(getState(), orderId);
 	const gasLimit = await getGlobalContext().selfkeyService.estimateApproveGasLimit(
 		wallet.publicKey,
 		config.paymentSplitterAddress,
-		order.amount
+		amount
 	);
 	await dispatch(ordersActions.setCurrentOrderAction({ allowanceGas: gasLimit }));
 };
@@ -538,15 +541,15 @@ const ordersSelectors = {
 	getRoot: state => state.orders,
 	getOrder: (state, id) => ordersSelectors.getRoot(state).byId[id],
 	getCurrentOrder: state => ordersSelectors.getRoot(state).currentOrder,
+	getContractFormattedAmount: (state, id) => {
+		const order = ordersSelectors.getOrder(state, id);
+		return order.amount ? new BN(order.amount).times(new BN(10).pow(18)).toFixed(0) : 0;
+	},
 	getOrderPriceUsd: (state, id) => {
 		const order = ordersSelectors.getOrder(state, id);
 		let fiat = fiatCurrencySelectors.getFiatCurrency(state);
-		let fiatRate = pricesSelectors.getRate(
-			state,
-			config.constants.primaryToken,
-			fiat.fiatCurrency
-		);
-		return new BN(order.amount).multipliedBy(fiatRate).toString();
+		let fiatRate = pricesSelectors.getRate(state, 'KEY', fiat.fiatCurrency);
+		return new BN(order.amount).multipliedBy(fiatRate).toFixed(2);
 	},
 	getCurrentPaymentFeeUsd: state => {
 		let fiat = fiatCurrencySelectors.getFiatCurrency(state);

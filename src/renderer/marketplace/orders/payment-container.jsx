@@ -32,7 +32,7 @@ class MarketplacePaymentContainer extends Component {
 	}
 }
 
-const mapStateToPropes = (state, props) => ({
+const mapStateToProps = (state, props) => ({
 	order: ordersSelectors.getOrder(state, props.match.params.orderId),
 	priceUSD: ordersSelectors.getOrderPriceUsd(state, props.match.params.orderId),
 	feeUSD: ordersSelectors.getCurrentPaymentFeeUsd(state),
@@ -41,7 +41,7 @@ const mapStateToPropes = (state, props) => ({
 	currentOrder: ordersSelectors.getCurrentOrder(state)
 });
 
-const connectedComponent = connect(mapStateToPropes)(MarketplacePaymentContainer);
+const connectedComponent = connect(mapStateToProps)(MarketplacePaymentContainer);
 
 export { connectedComponent as MarketplacePaymentContainer };
 
