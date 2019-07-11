@@ -217,19 +217,14 @@ const checkOrderAllowanceOperation = orderId => async (dispatch, getState) => {
 	);
 	let update = null;
 
-	try {
-		allowance = allowance.toNumber();
-	} catch (error) {
-		// toNumber triggers a 53bit storage error for very large values of KEY
-		allowance = parseInt(allowance.toString());
-	}
+	allowance = new BN(allowance);
 
-	if (allowance < amount && order.status === orderStatus.ALLOWANCE_COMPLETE) {
+	if (allowance.lt(amount) && order.status === orderStatus.ALLOWANCE_COMPLETE) {
 		update = { status: orderStatus.PENDING };
 	}
 
 	if (
-		allowance >= amount &&
+		allowance.gte(amount) &&
 		[
 			orderStatus.ALLOWANCE_IN_PROGRESS,
 			orderStatus.ALLOWANCE_ERROR,
