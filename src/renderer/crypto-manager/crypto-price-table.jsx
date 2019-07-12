@@ -30,6 +30,18 @@ export const styles = theme => ({
 	},
 	pointer: {
 		cursor: 'pointer'
+	},
+	popup: {
+		'& > div:nth-child(2)': {
+			left: 'calc(50% - 250px)',
+			top: '275px',
+			width: '500px'
+		},
+		'& button': {
+			'& div': {
+				marginLeft: '499px !important'
+			}
+		}
 	}
 });
 
@@ -58,11 +70,13 @@ class CryptoPriceTableComponent extends Component {
 
 	renderConfirmation() {
 		const { classes } = this.props;
+		const popup = classes.popup;
 		return (
 			<Popup
 				open={true}
 				text={'Are you sure?'}
 				closeAction={this.handleCloseConfirmationModal}
+				xtraClass={popup}
 			>
 				<Grid
 					container
