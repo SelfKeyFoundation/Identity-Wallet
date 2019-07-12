@@ -1,8 +1,14 @@
 import config from './config';
 
 const featureIsEnabled = featureName => {
-	if (process.env.hasOwnProperty('FEATURE_PAYMENT_CONTRACT')) {
-		return !!process.env.FEATURE_PAYMENT_CONTRACT;
+	const snakeCase = featureName
+		.split(/(?=[A-Z])/)
+		.join('_')
+		.toUpperCase();
+
+	// env variables format for features is FEATURE_NAME_IN_SNAKE_CASE
+	if (process.env.hasOwnProperty(`FEATURE_${snakeCase}`)) {
+		return !!process.env[`FEATURE_${snakeCase}`];
 	}
 	return !!config.features[featureName];
 };
