@@ -35,8 +35,7 @@ class CreateAttributePopupComponent extends Component {
 				open={open}
 				closeAction={this.handleCancel}
 				text={text}
-				style={{ backgroundColor: 'red', marginTop: '400px' }}
-				disableTranparency={true}
+				disableTransparency={true}
 			>
 				<CreateAttribute
 					subtitle={subtitle}
