@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Button, Typography, withStyles } from '@material-ui/core';
+import { Grid, Button, Typography, withStyles, List } from '@material-ui/core';
 import { connect } from 'react-redux';
 import CryptoPriceTableContainer from './crypto-price-table-container';
 import { push } from 'connected-react-router';
@@ -28,6 +28,31 @@ const styles = theme => ({
 	},
 	topSpace: {
 		marginTop: '30px'
+	},
+	popup: {
+		'& > div:nth-child(2)': {
+			left: 'calc(50% - 250px)',
+			top: '275px',
+			width: '500px'
+		},
+		'& button': {
+			'& div': {
+				marginLeft: '499px !important'
+			}
+		}
+	},
+	label: {
+		width: '100px'
+	},
+	listBottomSpace: {
+		marginBottom: '30px',
+		paddingLeft: '16px'
+	},
+	listContainer: {
+		marginBottom: '10px'
+	},
+	summary: {
+		marginTop: 0
 	}
 });
 
@@ -76,12 +101,14 @@ class CryptoManagerContainerComponent extends Component {
 
 	renderTokenAddedModal() {
 		const { classes, locale } = this.props;
+		const popup = classes.popup;
 		const { tokenAdded } = this.state;
 		return (
 			<Popup
 				open={true}
 				text={'New ERC-20 Token Added'}
 				closeAction={this.handleCloseTokenAddedModal}
+				xtraClass={popup}
 			>
 				<Grid
 					container
@@ -91,30 +118,55 @@ class CryptoManagerContainerComponent extends Component {
 					justify="flex-start"
 					alignItems="stretch"
 				>
-					<Grid item>
-						<Typography variant="overline">Name</Typography>
-						<Typography variant="h6">{tokenAdded.name}</Typography>
-					</Grid>
-					<Grid item>
-						<Typography variant="overline">Symbol</Typography>
-						<Typography variant="h6">{tokenAdded.symbol}</Typography>
-					</Grid>
-					<Grid item>
-						<Typography variant="overline">Balance</Typography>
-						<PriceSummary
-							locale={locale}
-							style="decimal"
-							currency={tokenAdded.symbol}
-							value={tokenAdded.balance}
-							className={classes.summary}
-						/>
-					</Grid>
+					<List component="dl" className={classes.listBottomSpace}>
+						<Grid container className={classes.listContainer} wrap="nowrap">
+							<dt className={classes.label}>
+								<Typography variant="body2" color="secondary">
+									Name
+								</Typography>
+							</dt>
+							<dd data-akarmi={tokenAdded.name}>
+								<Typography variant="body2" className={classes.bold}>
+									{tokenAdded.name}
+								</Typography>
+							</dd>
+						</Grid>
+						<Grid container className={classes.listContainer} wrap="nowrap">
+							<dt className={classes.label}>
+								<Typography variant="body2" color="secondary">
+									Symbol
+								</Typography>
+							</dt>
+							<dd>
+								<Typography variant="body2" className={classes.bold}>
+									{tokenAdded.symbol}
+								</Typography>
+							</dd>
+						</Grid>
+						<Grid container className={classes.listContainer} wrap="nowrap">
+							<dt className={classes.label}>
+								<Typography variant="body2" color="secondary">
+									Balance
+								</Typography>
+							</dt>
+							<dd>
+								<PriceSummary
+									locale={locale}
+									style="decimal"
+									currency={tokenAdded.symbol}
+									value={tokenAdded.balance}
+									className={`${classes.summary} ${classes.bold}`}
+								/>
+							</dd>
+						</Grid>
+					</List>
 					<Grid item>
 						<Grid container spacing={24}>
 							<Grid item>
 								<Button
 									variant="outlined"
 									size="large"
+									color="secondary"
 									onClick={this.handleCloseTokenAddedModal}
 								>
 									Close
@@ -129,11 +181,13 @@ class CryptoManagerContainerComponent extends Component {
 
 	renderTokenRemovedModal() {
 		const { classes } = this.props;
+		const popup = classes.popup;
 		return (
 			<Popup
 				open={true}
 				text={'Token Removed'}
 				closeAction={this.handleCloseTokenRemovedModal}
+				xtraClass={popup}
 			>
 				<Grid
 					container
@@ -155,6 +209,7 @@ class CryptoManagerContainerComponent extends Component {
 								<Button
 									variant="outlined"
 									size="large"
+									color="secondary"
 									onClick={this.handleCloseTokenRemovedModal}
 								>
 									Close
