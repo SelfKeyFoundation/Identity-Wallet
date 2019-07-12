@@ -112,7 +112,10 @@ const common = {
 		'https://blog.selfkey.org/',
 		'https://selfkey.org/wp-content/uploads/2017/11/selfkey-whitepaper-en.pdf',
 		'https://t.me/selfkeyfoundation'
-	]
+	],
+	features: {
+		paymentContract: true
+	}
 };
 
 const dev = {
