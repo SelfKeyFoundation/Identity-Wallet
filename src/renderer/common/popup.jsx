@@ -15,24 +15,26 @@ const styles = theme => ({
 	}
 });
 
-export const Popup = withStyles(styles)(({ classes, children, closeAction, text, open = true }) => (
-	<Modal open={open} className={classes.modal}>
-		<ModalWrap>
-			<ModalCloseButton onClick={closeAction} className={classes.closeButton}>
-				<ModalCloseIcon />
-			</ModalCloseButton>
-			<ModalHeader>
-				{typeof text === 'string' ? (
-					<Typography variant="body1" className={classes.title}>
-						{text}
-					</Typography>
-				) : (
-					text
-				)}
-			</ModalHeader>
-			<ModalBody>{children}</ModalBody>
-		</ModalWrap>
-	</Modal>
-));
+export const Popup = withStyles(styles)(
+	({ classes, xtraClass, children, closeAction, text, open = true }) => (
+		<Modal open={open} className={`${classes.modal} ${xtraClass}`}>
+			<ModalWrap>
+				<ModalCloseButton onClick={closeAction} className={classes.closeButton}>
+					<ModalCloseIcon />
+				</ModalCloseButton>
+				<ModalHeader>
+					{typeof text === 'string' ? (
+						<Typography variant="body1" className={classes.title}>
+							{text}
+						</Typography>
+					) : (
+						text
+					)}
+				</ModalHeader>
+				<ModalBody>{children}</ModalBody>
+			</ModalWrap>
+		</Modal>
+	)
+);
 
 export default Popup;
