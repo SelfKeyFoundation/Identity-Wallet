@@ -5,7 +5,7 @@ import { ordersOperations } from '../../../common/marketplaces/orders';
 
 class MarketplaceOrderTxErrorContainer extends Component {
 	handleCloseAction = _ => {
-		this.props.dispatch(ordersOperations.hideCurrentPaymentUIOperation());
+		this.props.dispatch(ordersOperations.cancelCurrentOrderOperation());
 	};
 
 	render() {

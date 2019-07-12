@@ -77,6 +77,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	onApplyClick = () => {
 		const { rp, wallet } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
+		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
 		const authenticated = true;
 
 		// When clicking the start process,
@@ -87,6 +88,9 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 		this.setState({ loading: true }, async () => {
 			if (!wallet.isSetupFinished) {
 				return this.props.dispatch(push(selfkeyIdRequiredRoute));
+			}
+			if (!wallet.did) {
+				return this.props.dispatch(push(selfkeyDIDRequiredRoute));
 			}
 			if (!rp || !rp.authenticated) {
 				await this.props.dispatch(

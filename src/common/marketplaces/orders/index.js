@@ -69,7 +69,7 @@ const ordersActions = {
 	})
 };
 
-const createOrderOperation = (
+const createOrderOperation = ({
 	amount,
 	applicationId,
 	vendorId,
@@ -77,7 +77,7 @@ const createOrderOperation = (
 	vendorDID,
 	productInfo,
 	vendorName
-) => async (dispatch, getState) => {
+}) => async (dispatch, getState) => {
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const wallet = walletSelectors.getWallet(getState());
 	const order = await ordersService.createOrder({
@@ -96,7 +96,7 @@ const createOrderOperation = (
 	return order;
 };
 
-const startOrderOperation = (
+const startOrderOperation = ({
 	amount,
 	applicationId,
 	vendorId,
@@ -106,11 +106,11 @@ const startOrderOperation = (
 	vendorName,
 	backUrl,
 	completeUrl
-) => async (dispatch, getState) => {
+}) => async (dispatch, getState) => {
 	let order = ordersSelectors.getLatestActiveOrderForApplication(getState(), applicationId);
 	if (!order) {
 		order = await dispatch(
-			ordersOperations.createOrderOperation(
+			ordersOperations.createOrderOperation({
 				amount,
 				applicationId,
 				vendorId,
@@ -118,7 +118,7 @@ const startOrderOperation = (
 				vendorDID,
 				productInfo,
 				vendorName
-			)
+			})
 		);
 	}
 	await dispatch(ordersOperations.showOrderPaymentUIOperation(order.id, backUrl, completeUrl));
@@ -129,7 +129,6 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 	getState
 ) => {
 	log.info('[showOrderPaymentUIOperation] %d %s %s', orderId, backUrl, completeUrl);
-
 	await dispatch(
 		ordersActions.setCurrentOrderAction({
 			orderId,
@@ -210,20 +209,22 @@ const checkOrderAllowanceOperation = orderId => async (dispatch, getState) => {
 	const selfkeyService = ctx.selfkeyService;
 	let order = ordersSelectors.getOrder(getState(), orderId);
 	const wallet = walletSelectors.getWallet(getState());
+	const amount = ordersSelectors.getContractFormattedAmount(getState(), orderId);
 
-	const allowance = await selfkeyService.getAllowance(
+	let allowance = await selfkeyService.getAllowance(
 		wallet.publicKey,
 		config.paymentSplitterAddress
 	);
-
 	let update = null;
 
-	if (allowance.toNumber() < order.amount && order.status === orderStatus.ALLOWANCE_COMPLETE) {
+	allowance = new BN(allowance);
+
+	if (allowance.lt(amount) && order.status === orderStatus.ALLOWANCE_COMPLETE) {
 		update = { status: orderStatus.PENDING };
 	}
 
 	if (
-		allowance.toNumber() >= order.amount &&
+		allowance.gte(amount) &&
 		[
 			orderStatus.ALLOWANCE_IN_PROGRESS,
 			orderStatus.ALLOWANCE_ERROR,
@@ -290,10 +291,12 @@ const preapproveCurrentOrderOperation = () => async (dispatch, getState) => {
 		await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
 	};
 	try {
+		const amount = ordersSelectors.getContractFormattedAmount(getState(), orderId);
+
 		const receipt = await selfkeyService.approve(
 			wallet.publicKey,
 			config.paymentSplitterAddress,
-			order.amount,
+			amount,
 			allowanceGas,
 			gasPriceEstimates.average,
 			onTransactionHash
@@ -359,11 +362,12 @@ const payCurrentOrderOperation = () => async (dispatch, getState) => {
 		await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
 	};
 	try {
+		const amount = ordersSelectors.getContractFormattedAmount(getState(), orderId);
 		const receipt = await paymentService.makePayment(
 			wallet.publicKey,
 			order.did,
 			order.vendorDID,
-			order.amount,
+			amount,
 			order.productInfo,
 			0,
 			0,
@@ -411,12 +415,12 @@ const estimateCurrentPaymentGasOperation = () => async (dispatch, getState) => {
 
 const estimateCurrentPreapproveGasOperation = () => async (dispatch, getState) => {
 	const { orderId } = ordersSelectors.getCurrentOrder(getState());
-	const order = ordersSelectors.getOrder(getState(), orderId);
 	const wallet = walletSelectors.getWallet(getState());
+	const amount = ordersSelectors.getContractFormattedAmount(getState(), orderId);
 	const gasLimit = await getGlobalContext().selfkeyService.estimateApproveGasLimit(
 		wallet.publicKey,
 		config.paymentSplitterAddress,
-		order.amount
+		amount
 	);
 	await dispatch(ordersActions.setCurrentOrderAction({ allowanceGas: gasLimit }));
 };
@@ -537,15 +541,15 @@ const ordersSelectors = {
 	getRoot: state => state.orders,
 	getOrder: (state, id) => ordersSelectors.getRoot(state).byId[id],
 	getCurrentOrder: state => ordersSelectors.getRoot(state).currentOrder,
+	getContractFormattedAmount: (state, id) => {
+		const order = ordersSelectors.getOrder(state, id);
+		return order.amount ? new BN(order.amount).times(new BN(10).pow(18)).toFixed(0) : 0;
+	},
 	getOrderPriceUsd: (state, id) => {
 		const order = ordersSelectors.getOrder(state, id);
 		let fiat = fiatCurrencySelectors.getFiatCurrency(state);
-		let fiatRate = pricesSelectors.getRate(
-			state,
-			config.constants.primaryToken,
-			fiat.fiatCurrency
-		);
-		return new BN(order.amount).multipliedBy(fiatRate).toString();
+		let fiatRate = pricesSelectors.getRate(state, 'KEY', fiat.fiatCurrency);
+		return new BN(order.amount).multipliedBy(fiatRate).toFixed(2);
 	},
 	getCurrentPaymentFeeUsd: state => {
 		let fiat = fiatCurrencySelectors.getFiatCurrency(state);
@@ -584,13 +588,11 @@ const ordersSelectors = {
 	getOrdersByApplication: (state, applicationId) =>
 		ordersSelectors.getAllOrders(state).filter(order => order.applicationId === applicationId),
 	getLatestActiveOrderForApplication: (state, applicationId) =>
-		ordersSelectors
-			.getLatestActiveOrderForApplication(state, applicationId)
-			.reduce((acc, curr) => {
-				if (curr.status !== orderStatus.CANCELED && curr.updatedAt > acc.updatedAt)
-					return curr;
-				return acc;
-			}, null)
+		ordersSelectors.getOrdersByApplication(state, applicationId).reduce((acc, curr) => {
+			if (curr.status !== orderStatus.CANCELED && curr.updatedAt > (acc ? acc.updatedAt : 0))
+				return curr;
+			return acc;
+		}, null)
 };
 
 export { ordersSelectors, ordersReducers, ordersActions, ordersOperations };

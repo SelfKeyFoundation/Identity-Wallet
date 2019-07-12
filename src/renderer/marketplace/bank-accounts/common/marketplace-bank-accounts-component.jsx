@@ -1,4 +1,5 @@
 import { MarketplaceComponent } from '../../common/marketplace-component';
+import { bankAccountsOperations } from 'common/bank-accounts';
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 
 export default class MarketplaceBankAccountsComponent extends MarketplaceComponent {
@@ -7,9 +8,23 @@ export default class MarketplaceBankAccountsComponent extends MarketplaceCompone
 		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/select-bank/${accountCode}/${countryCode}/${templateId}`;
 	};
 
+	paymentCompleteRoute = () => {
+		const { countryCode, accountCode, templateId } = this.props.match.params;
+		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/payment-complete/${accountCode}/${countryCode}/${templateId}`;
+	};
+
+	payRoute = () => {
+		const { countryCode, accountCode, templateId } = this.props.match.params;
+		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay/${accountCode}/${countryCode}/${templateId}`;
+	};
+
 	cancelRoute = () => {
 		const { countryCode, accountCode, templateId } = this.props.match.params;
 		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/details/${accountCode}/${countryCode}/${templateId}`;
+	};
+
+	listRoute = () => {
+		return MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH;
 	};
 
 	getApplicationStatus = () => {
@@ -49,6 +64,12 @@ export default class MarketplaceBankAccountsComponent extends MarketplaceCompone
 	userHasSelectedBankPreference = () => {
 		const application = this.getLastApplication();
 		return !!this.getExistingBankPreferenceSelection(application);
+	};
+
+	loadBankAccounts = async () => {
+		if (!this.props.accountType) {
+			await this.props.dispatch(bankAccountsOperations.loadBankAccountsOperation());
+		}
 	};
 }
 
