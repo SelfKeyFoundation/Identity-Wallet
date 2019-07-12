@@ -103,7 +103,7 @@ const ExtraKYCRequirements = withStyles(styles)(({ classes, text }) => (
 					<span style={{ fontWeight: 700 }}>
 						Bank Specific KYC Requirements might apply.
 					</span>{' '}
-					If this is the case you will be asked for additional documents tp fill, after
+					If this is the case you will be asked for additional documents to fill, after
 					the basic KYC information and documents have been validated.
 				</Typography>
 			)}
@@ -288,7 +288,7 @@ export const BankingAccountOption = withStyles(styles)(
 								<Divider />
 							</Grid>
 							<Grid item>
-								<ExtraKYCRequirements />
+								<ExtraKYCRequirements text={account.kyc} />
 							</Grid>
 						</ExpansionPanelDetails>
 					</ExpansionPanel>
