@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Typography, Grid, withStyles, Button } from '@material-ui/core';
 import { ModalWrap, ModalBody, WarningShieldIcon } from 'selfkey-ui';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	closeModal: {
@@ -27,7 +28,8 @@ const styles = theme => ({
 });
 
 export const NoConnection = withStyles(styles)(props => {
-	const { classes, onBackClick = false } = props;
+	const { classes, onBackClick = false, dispatch } = props;
+	const backToDashboard = () => dispatch(push(`/main/dashboard`));
 	return (
 		<Modal open={true}>
 			<ModalWrap className={classes.closeModal}>
@@ -48,16 +50,14 @@ export const NoConnection = withStyles(styles)(props => {
 								An internet connection is required to use the SelfKey Vault. Please
 								check your connection and reopen the application.
 							</Typography>
-							{onBackClick && (
-								<Button
-									variant="outlined"
-									size="large"
-									color="secondary"
-									onClick={onBackClick}
-								>
-									OK
-								</Button>
-							)}
+							<Button
+								variant="outlined"
+								size="large"
+								color="secondary"
+								onClick={onBackClick || backToDashboard}
+							>
+								OK
+							</Button>
 						</Grid>
 					</Grid>
 				</ModalBody>
