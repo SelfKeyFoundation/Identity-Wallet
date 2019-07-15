@@ -131,6 +131,9 @@ const styles = theme => ({
 		}
 	},
 	modal: {
+		'& > div:first-of-type': {
+			opacity: '1 !important'
+		},
 		'@media print': {
 			border: '0'
 		}
