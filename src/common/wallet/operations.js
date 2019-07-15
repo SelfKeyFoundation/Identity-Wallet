@@ -1,5 +1,5 @@
 import * as actions from './actions';
-import { getWallet } from './selectors';
+import { getWallet, getDidOriginUrl } from './selectors';
 
 import { getGlobalContext } from 'common/context';
 import * as types from './types';
@@ -54,10 +54,10 @@ const updateWalletName = (name, walletId) => async (dispatch, getState) => {
 
 const createWalletDID = () => async (dispatch, getState) => {
 	const walletFromStore = getWallet(getState());
+	const didOriginUrl = getDidOriginUrl(getState());
 	try {
 		let hardwalletConfirmationTimeout = null;
 		const walletType = appSelectors.selectWalletType(getState());
-
 		if (walletType === 'ledger' || walletType === 'trezor') {
 			await dispatch(push('/main/hd-transaction-timer'));
 			hardwalletConfirmationTimeout = setTimeout(async () => {
@@ -81,7 +81,7 @@ const createWalletDID = () => async (dispatch, getState) => {
 					didPending: false
 				})
 			);
-			await dispatch(push('/main/selfkeyId'));
+			await dispatch(push(didOriginUrl));
 		});
 		transaction.on('transactionHash', async hash => {
 			clearTimeout(hardwalletConfirmationTimeout);
@@ -108,6 +108,16 @@ const createWalletDID = () => async (dispatch, getState) => {
 		await dispatch(updateWalletWithBalance({ ...walletFromStore, didPending: false }));
 		console.error(error);
 	}
+};
+
+const startCreateDidFlow = didOriginUrl => async (dispatch, getState) => {
+	await dispatch(actions.setDidOriginUrl(didOriginUrl));
+	await dispatch(push('/main/get-did'));
+};
+
+const startAssociateDidFlow = didOriginUrl => async (dispatch, getState) => {
+	await dispatch(actions.setDidOriginUrl(didOriginUrl));
+	await dispatch(push('/main/enter-did'));
 };
 
 const updateWalletDID = (walletId, did) => async (dispatch, getState) => {
@@ -155,5 +165,10 @@ export default {
 	updateWalletName: createAliasedAction(types.WALLET_NAME_UPDATE, updateWalletName),
 	updateWalletSetup: createAliasedAction(types.WALLET_SETUP_UPDATE, updateWalletSetup),
 	createWalletDID: createAliasedAction(types.WALLET_DID_CREATE, createWalletDID),
-	updateWalletDID: createAliasedAction(types.WALLET_DID_UPDATE, updateWalletDID)
+	updateWalletDID: createAliasedAction(types.WALLET_DID_UPDATE, updateWalletDID),
+	startCreateDidFlow: createAliasedAction(types.WALLET_START_DID_FLOW, startCreateDidFlow),
+	startAssociateDidFlow: createAliasedAction(
+		types.WALLET_START_ACCOSIATE_DID_FLOW,
+		startAssociateDidFlow
+	)
 };

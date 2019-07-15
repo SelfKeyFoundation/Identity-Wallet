@@ -14,7 +14,7 @@ const styles = theme => ({
 
 class MarketplaceSelfkeyDIDRequiredComponent extends Component {
 	render() {
-		const { classes, onConfirm, onClose } = this.props;
+		const { classes, onConfirm, onClose, onEnterDid } = this.props;
 		return (
 			<Popup open={true} text="SelfKey DID Required" closeAction={onClose}>
 				<Grid container direction="row" justify="flex-start" alignItems="stretch">
@@ -39,9 +39,26 @@ class MarketplaceSelfkeyDIDRequiredComponent extends Component {
 								</Typography>
 							</Grid>
 							<Grid item className={classes.buttonContainer}>
-								<Button variant="contained" size="large" onClick={onConfirm}>
-									Set up my DID
-								</Button>
+								<Grid container direction="row" spacing={16}>
+									<Grid item>
+										<Button
+											variant="contained"
+											size="large"
+											onClick={onConfirm}
+										>
+											Set up my DID
+										</Button>
+									</Grid>
+									<Grid item>
+										<Button
+											variant="outlined"
+											size="large"
+											onClick={onEnterDid}
+										>
+											I have one
+										</Button>
+									</Grid>
+								</Grid>
 							</Grid>
 						</Grid>
 					</Grid>

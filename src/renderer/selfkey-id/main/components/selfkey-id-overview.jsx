@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { push } from 'connected-react-router';
+import { walletOperations } from 'common/wallet';
 import {
 	Grid,
 	CardHeader,
@@ -101,8 +102,7 @@ const styles = theme => ({
 });
 
 const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
-const GET_DID_PATH = '/main/get-did';
-const ENTER_DID_PATH = '/main/enter-did';
+const SELFKEY_ID_PATH = '/main/selfkeyId';
 
 class SelfkeyIdOverviewComponent extends Component {
 	state = {
@@ -133,8 +133,9 @@ class SelfkeyIdOverviewComponent extends Component {
 		this.setState({ popup: 'edit-avatar' });
 	};
 	handleAccessClick = _ => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
-	handleGetDid = _ => this.props.dispatch(push(GET_DID_PATH));
-	handleEnterDid = _ => this.props.dispatch(push(ENTER_DID_PATH));
+	handleGetDid = _ => this.props.dispatch(walletOperations.startCreateDidFlow(SELFKEY_ID_PATH));
+	handleEnterDid = _ =>
+		this.props.dispatch(walletOperations.startAssociateDidFlow(SELFKEY_ID_PATH));
 	renderLastUpdateDate({ updatedAt }) {
 		return moment(updatedAt).format('DD MMM YYYY, hh:mm a');
 	}

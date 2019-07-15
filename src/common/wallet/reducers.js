@@ -17,6 +17,11 @@ const walletReducer = (state = initialState, action) => {
 				...state,
 				associateError: action.payload
 			};
+		case types.WALLET_DID_ORIGIN_URL_SET:
+			return {
+				...state,
+				didOriginUrl: action.payload
+			};
 		default:
 			return state;
 	}
