@@ -3,6 +3,7 @@ import { getGlobalContext } from 'common/context';
 import { createAliasedAction } from 'electron-redux';
 import { walletSelectors } from '../../wallet';
 import { appSelectors } from '../../app';
+import { transactionOperations } from 'common/transaction';
 import { push } from 'connected-react-router';
 import config from '../../config';
 import { Logger } from 'common/logger';
@@ -50,6 +51,7 @@ export const ordersTypes = {
 	ORDERS_FINISH_CURRENT_OPERATION: 'orders/operations/current/FINISH',
 	ORDERS_PREAPPROVE_CURRENT_OPERATION: 'orders/operations/current/PREAPPROVE',
 	ORDERS_PAY_CURRENT_OPERATION: 'orders/operations/current/PAY',
+	ORDERS_DIRECT_PAY_CURRENT_OPERATION: 'orders/operations/current/DIRECT_PAY',
 	ORDERS_PREAPPROVE_ESTIMATE_CURRENT_OPERATION: 'orders/operations/current/PREAPPROVE_ESTIMATE',
 	ORDERS_PAY_ESTIMATE_CURRENT_OPERATION: 'orders/operations/current/PAY_ESTIMATE'
 };
@@ -333,6 +335,63 @@ const preapproveCurrentOrderOperation = () => async (dispatch, getState) => {
 	throw new Error('operation canceled');
 };
 
+const directPayCurrentOrderOperation = ({ walletAddress, trezorAccountIndex }) => async (
+	dispatch,
+	getState
+) => {
+	const { orderId, backUrl, completeUrl, paymentGas } = ordersSelectors.getCurrentOrder(
+		getState()
+	);
+	const cryptoCurrency = config.constants.primaryToken;
+	let order = ordersSelectors.getOrder(getState(), orderId);
+
+	await dispatch(transactionOperations.init({ trezorAccountIndex, cryptoCurrency }));
+	await dispatch(transactionOperations.setAddress(walletAddress));
+	await dispatch(transactionOperations.setAmount(order.amount));
+	await dispatch(transactionOperations.setGasPrice(paymentGas));
+	await dispatch(transactionOperations.setLimitPrice(37680));
+
+	await dispatch(
+		ordersOperations.ordersUpdateOperation(orderId, { status: orderStatus.PAYMENT_IN_PROGRESS })
+	);
+
+	let hardwalletConfirmationTimeout = null;
+	const walletType = appSelectors.selectWalletType(getState());
+
+	const transactionEventEmitter = transactionOperations.walletSend(walletAddress);
+
+	if (walletType === 'ledger' || walletType === 'trezor') {
+		await dispatch(push('/main/hd-transaction-timer'));
+		hardwalletConfirmationTimeout = setTimeout(async () => {
+			clearTimeout(hardwalletConfirmationTimeout);
+			await dispatch(push('/main/transaction-timeout'));
+		}, hardwalletConfirmationTime);
+	}
+
+	transactionEventEmitter.on('transactionHash', async paymentHash => {
+		clearTimeout(hardwalletConfirmationTimeout);
+		await dispatch(ordersOperations.ordersUpdateOperation(orderId, { paymentHash }));
+		await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
+	});
+
+	transactionEventEmitter.on('error', async error => {
+		clearTimeout(hardwalletConfirmationTimeout);
+		log.error(error);
+		await dispatch(
+			ordersOperations.ordersUpdateOperation(orderId, {
+				status: orderStatus.PAYMENT_ERROR,
+				statusMessage: error.message
+			})
+		);
+		if (orderId === ordersSelectors.getCurrentOrder(getState()).orderId) {
+			await dispatch(
+				ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl)
+			);
+		}
+		throw error;
+	});
+};
+
 const payCurrentOrderOperation = () => async (dispatch, getState) => {
 	const paymentService = getGlobalContext().paymentService;
 	const { orderId, backUrl, completeUrl, paymentGas } = ordersSelectors.getCurrentOrder(
@@ -435,6 +494,7 @@ const operations = {
 	estimateCurrentPreapproveGasOperation,
 	estimateCurrentPaymentGasOperation,
 	payCurrentOrderOperation,
+	directPayCurrentOrderOperation,
 	preapproveCurrentOrderOperation,
 	createOrderOperation,
 	finishCurrentOrderOperation,
@@ -479,6 +539,10 @@ const ordersOperations = {
 	payCurrentOrderOperation: createAliasedAction(
 		ordersTypes.ORDERS_PAY_CURRENT_OPERATION,
 		operations.payCurrentOrderOperation
+	),
+	directPayCurrentOrderOperation: createAliasedAction(
+		ordersTypes.ORDERS_DIRECT_PAY_CURRENT_OPERATION,
+		operations.directPayCurrentOrderOperation
 	),
 	preapproveCurrentOrderOperation: createAliasedAction(
 		ordersTypes.ORDERS_PREAPPROVE_CURRENT_OPERATION,

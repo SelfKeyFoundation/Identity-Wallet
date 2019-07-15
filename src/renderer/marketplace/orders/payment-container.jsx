@@ -9,6 +9,7 @@ class MarketplacePaymentContainer extends Component {
 		this.props.dispatch(ordersOperations.hideCurrentPaymentUIOperation());
 	};
 	handlePayClick = () => {
+		// TODO: redirect to direct payment
 		this.props.dispatch(ordersOperations.payCurrentOrderOperation());
 	};
 	handleLearnHowClick = () => {
