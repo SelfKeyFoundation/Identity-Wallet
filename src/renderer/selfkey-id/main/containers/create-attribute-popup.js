@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withStyles } from '@material-ui/core';
 import { identitySelectors, identityOperations } from 'common/identity';
 import { Popup } from '../../../common/popup';
 import CreateAttribute from '../components/create-attribute';
+
+export const styles = theme => ({
+	disableTransparency: {
+		'& > div:first-of-type': {
+			background: 'linear-gradient(135deg, rgba(43,53,64,1) 0%, rgba(30,38,46,1) 100%)',
+			opacity: '1 !important'
+		}
+	}
+});
 
 class CreateAttributePopupComponent extends Component {
 	handleSave = attribute => {
@@ -12,7 +22,16 @@ class CreateAttributePopupComponent extends Component {
 		if (this.props.onClose) return this.props.onClose();
 	};
 	render() {
-		let { types, open = true, text, subtitle, uiSchemas, typeId, isDocument } = this.props;
+		let {
+			classes,
+			types,
+			open = true,
+			text,
+			subtitle,
+			uiSchemas,
+			typeId,
+			isDocument
+		} = this.props;
 
 		if (!text) {
 			if (isDocument) {
@@ -31,7 +50,12 @@ class CreateAttributePopupComponent extends Component {
 		}
 
 		return (
-			<Popup open={open} closeAction={this.handleCancel} text={text}>
+			<Popup
+				open={open}
+				closeAction={this.handleCancel}
+				text={text}
+				className={classes.disableTransparency}
+			>
 				<CreateAttribute
 					subtitle={subtitle}
 					onSave={this.handleSave}
@@ -52,6 +76,8 @@ const mapStateToProps = (state, props) => {
 		uiSchemas: identitySelectors.selectUiSchemas(state)
 	};
 };
-export const CreateAttributePopup = connect(mapStateToProps)(CreateAttributePopupComponent);
+
+const styledComponent = withStyles(styles)(CreateAttributePopupComponent);
+export const CreateAttributePopup = connect(mapStateToProps)(styledComponent);
 
 export default CreateAttributePopup;

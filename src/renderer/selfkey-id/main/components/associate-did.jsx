@@ -101,7 +101,7 @@ class AssociateDIDComponent extends Component {
 
 	handleBackClick = evt => {
 		evt && evt.preventDefault();
-		this.props.dispatch(push('/main/selfkeyId'));
+		this.props.dispatch(push(this.props.didOriginUrl));
 	};
 
 	handleFieldChange = async event => {
@@ -246,7 +246,8 @@ class AssociateDIDComponent extends Component {
 const mapStateToProps = (state, props) => {
 	return {
 		wallet: walletSelectors.getWallet(state),
-		associateError: walletSelectors.getAssociateError(state)
+		associateError: walletSelectors.getAssociateError(state),
+		didOriginUrl: walletSelectors.getDidOriginUrl(state)
 	};
 };
 

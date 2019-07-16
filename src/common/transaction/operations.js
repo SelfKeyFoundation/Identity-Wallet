@@ -282,6 +282,53 @@ const confirmSend = () => async (dispatch, getState) => {
 	});
 };
 
+const marketplaceSend = ({ onReceipt, onTransactionHash, onTransactionError }) => async (
+	dispatch,
+	getState
+) => {
+	const walletService = getGlobalContext().walletService;
+	const state = getState();
+	const transaction = getTransaction(state);
+	const { cryptoCurrency } = transaction;
+
+	const transactionObject = {
+		nonce: transaction.nonce,
+		gasPrice: EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei'),
+		gas: transaction.gasLimit
+	};
+
+	if (cryptoCurrency === 'ETH') {
+		transactionObject.to = EthUtils.sanitizeHex(transaction.address);
+		transactionObject.value = EthUnits.unitToUnit(transaction.amount, 'ether', 'wei');
+	} else {
+		transactionObject.to = EthUtils.sanitizeHex(transaction.contractAddress);
+		transactionObject.value = 0;
+		const data = generateContractData(
+			transaction.address,
+			transaction.amount,
+			transaction.tokenDecimal
+		);
+		transactionObject.data = EthUtils.sanitizeHex(data);
+	}
+
+	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
+
+	transactionEventEmitter.on('receipt', async receipt => {
+		dispatch(updateBalances());
+		onReceipt(receipt);
+	});
+	transactionEventEmitter.on('transactionHash', async transactionHash => {
+		await dispatch(actions.updateTransaction({ status: 'Pending', transactionHash }));
+		dispatch(createTxHistry(transactionHash));
+		onTransactionHash(transactionHash);
+	});
+	transactionEventEmitter.on('error', async error => {
+		onTransactionError(error);
+	});
+
+	return transactionEventEmitter;
+};
+
 const incorporationSend = (companyCode, countryCode) => async (dispatch, getState) => {
 	const walletService = getGlobalContext().walletService;
 	const state = getState();
@@ -421,6 +468,7 @@ export default {
 	setTransactionFee: createAliasedAction(types.TRANSACTION_FEE_SET, setTransactionFee),
 	confirmSend: createAliasedAction(types.CONFIRM_SEND, confirmSend),
 	incorporationSend: createAliasedAction(types.INCORPORATION_SEND, incorporationSend),
+	marketplaceSend: createAliasedAction(types.MARKETPLACE_SEND, marketplaceSend),
 	setCryptoCurrency: createAliasedAction(types.CRYPTO_CURRENCY_SET, setCryptoCurrency),
 	setLocked: createAliasedAction(types.LOCKED_SET, setLocked)
 };

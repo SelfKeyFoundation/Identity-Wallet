@@ -28,6 +28,9 @@ const styles = theme => ({
 
 export const NoConnection = withStyles(styles)(props => {
 	const { classes, onBackClick = false } = props;
+	const handleClose = () => {
+		window.quit();
+	};
 	return (
 		<Modal open={true}>
 			<ModalWrap className={classes.closeModal}>
@@ -48,16 +51,14 @@ export const NoConnection = withStyles(styles)(props => {
 								An internet connection is required to use the SelfKey Vault. Please
 								check your connection and reopen the application.
 							</Typography>
-							{onBackClick && (
-								<Button
-									variant="outlined"
-									size="large"
-									color="secondary"
-									onClick={onBackClick}
-								>
-									OK
-								</Button>
-							)}
+							<Button
+								variant="outlined"
+								size="large"
+								color="secondary"
+								onClick={onBackClick || handleClose}
+							>
+								OK
+							</Button>
 						</Grid>
 					</Grid>
 				</ModalBody>

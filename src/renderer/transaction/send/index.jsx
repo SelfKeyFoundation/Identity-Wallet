@@ -163,7 +163,7 @@ export class Transfer extends React.Component {
 							<ModalCloseIcon />
 						</ModalCloseButton>
 
-						<ModalBody>
+						<ModalBody style={{ boxShadow: 'none' }}>
 							<Grid
 								container
 								direction="row"

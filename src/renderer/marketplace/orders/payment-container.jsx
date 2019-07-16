@@ -3,17 +3,27 @@ import { connect } from 'react-redux';
 import { MarketplacePayment } from './payment';
 import { ordersSelectors, ordersOperations } from '../../../common/marketplaces/orders';
 import { walletSelectors } from '../../../common/wallet';
+import { featureIsEnabled } from 'common/feature-flags';
+
+const LEARN_HOW_URL = 'https://help.selfkey.org';
 
 class MarketplacePaymentContainer extends Component {
 	handleBackClick = () => {
 		this.props.dispatch(ordersOperations.hideCurrentPaymentUIOperation());
 	};
 	handlePayClick = () => {
-		this.props.dispatch(ordersOperations.payCurrentOrderOperation());
+		if (featureIsEnabled('paymentContract'))
+			this.props.dispatch(ordersOperations.payCurrentOrderOperation());
+		else {
+			const { trezorAccountIndex } = this.props;
+
+			this.props.dispatch(
+				ordersOperations.directPayCurrentOrderOperation({ trezorAccountIndex })
+			);
+		}
 	};
-	handleLearnHowClick = () => {
-		// TODO: learn how page
-		console.log('TODO: learn how click');
+	handleLearnHowClick = e => {
+		window.openExternal(e, LEARN_HOW_URL);
 	};
 	render() {
 		return (
