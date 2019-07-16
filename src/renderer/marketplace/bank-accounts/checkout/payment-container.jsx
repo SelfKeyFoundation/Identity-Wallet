@@ -1,4 +1,5 @@
 import BN from 'bignumber.js';
+import config from 'common/config';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
@@ -31,6 +32,12 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 		const { accountCode } = this.props.match.params;
 		const application = this.getLastApplication();
 		const price = this.priceInKEY(accountType.price);
+		const walletAddress = config.dev
+			? accountType.testWalletAddress || VENDOR_WALLET
+			: accountType.walletAddress;
+		const vendorDID = config.dev
+			? accountType.testDidAddress || VENDOR_DID
+			: accountType.didAddress;
 
 		this.props.dispatch(
 			ordersOperations.startOrderOperation({
@@ -38,12 +45,12 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 				amount: price,
 				vendorId: 'FlagTheory',
 				itemId: accountCode,
-				vendorDID: VENDOR_DID,
+				vendorDID,
 				productInfo: `Bank account in ${accountType.region}`,
 				vendorName: VENDOR_NAME,
 				backUrl: this.cancelRoute(),
 				completeUrl: this.paymentCompleteRoute(),
-				vendorWallet: featureIsEnabled('paymentContract') ? '' : VENDOR_WALLET
+				vendorWallet: featureIsEnabled('paymentContract') ? '' : walletAddress
 			})
 		);
 	}
