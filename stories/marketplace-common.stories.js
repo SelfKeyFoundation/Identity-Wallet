@@ -57,7 +57,11 @@ storiesOf('Marketplace Common', module)
 	))
 	.add('PaymentCheckout', () => <PaymentCheckout {...paymentCheckoutData} />)
 	.add('DIDRequired', () => (
-		<MarketplaceDIDRequired onConfirm={action('did confirm')} onClose={action('did close')} />
+		<MarketplaceDIDRequired
+			onConfirm={action('did confirm')}
+			onEnterDid={action('did associate')}
+			onClose={action('did close')}
+		/>
 	));
 
 const resumeItemSets = [

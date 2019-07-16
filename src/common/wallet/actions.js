@@ -11,4 +11,9 @@ const setAssociateError = error => ({
 	payload: error
 });
 
-export { updateWallet, setAssociateError };
+const setDidOriginUrl = didOriginUrl => ({
+	type: types.WALLET_DID_ORIGIN_URL_SET,
+	payload: didOriginUrl
+});
+
+export { updateWallet, setAssociateError, setDidOriginUrl };

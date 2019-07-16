@@ -10,7 +10,7 @@ import { pricesSelectors } from 'common/prices';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { appOperations, appSelectors } from 'common/app';
 import { gasSelectors, gasOperations } from 'common/gas';
-import { walletOperations } from 'common/wallet';
+import { walletOperations, walletSelectors } from 'common/wallet';
 import EthUnits from 'common/utils/eth-units';
 import { push } from 'connected-react-router';
 
@@ -51,7 +51,7 @@ class CreateDIDComponent extends Component {
 	};
 
 	handleCloseAction = _ => {
-		this.props.dispatch(push('/main/selfkeyId'));
+		this.props.dispatch(push(this.props.didOriginUrl));
 	};
 
 	render() {
@@ -90,7 +90,8 @@ const mapStateToProps = (state, props) => {
 		...getLocale(state),
 		...getFiatCurrency(state),
 		walletType: appSelectors.selectWalletType(state),
-		gasLimit: gasSelectors.selectGas(state).didGasLimit
+		gasLimit: gasSelectors.selectGas(state).didGasLimit,
+		didOriginUrl: walletSelectors.getDidOriginUrl(state)
 	};
 };
 
