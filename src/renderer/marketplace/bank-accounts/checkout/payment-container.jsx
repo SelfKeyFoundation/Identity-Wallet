@@ -1,7 +1,9 @@
 import BN from 'bignumber.js';
+import config from 'common/config';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
+import { featureIsEnabled } from 'common/feature-flags';
 import { getWallet } from 'common/wallet/selectors';
 import { kycSelectors } from 'common/kyc';
 import { pricesSelectors } from 'common/prices';
@@ -12,6 +14,7 @@ import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-acc
 const styles = theme => ({});
 const VENDOR_NAME = 'Far Horizon Capital Inc';
 const VENDOR_DID = '0xee10a3335f48e10b444e299cf017d57879109c1e32cec3e31103ceca7718d0ec';
+const VENDOR_WALLET = '0x23d233933c86f93b74705cf0d236b39f474249f8';
 
 class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 	async componentDidMount() {
@@ -29,6 +32,12 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 		const { accountCode } = this.props.match.params;
 		const application = this.getLastApplication();
 		const price = this.priceInKEY(accountType.price);
+		const walletAddress = config.dev
+			? accountType.testWalletAddress || VENDOR_WALLET
+			: accountType.walletAddress;
+		const vendorDID = config.dev
+			? accountType.testDidAddress || VENDOR_DID
+			: accountType.didAddress;
 
 		this.props.dispatch(
 			ordersOperations.startOrderOperation({
@@ -36,11 +45,12 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 				amount: price,
 				vendorId: 'FlagTheory',
 				itemId: accountCode,
-				vendorDID: VENDOR_DID,
+				vendorDID,
 				productInfo: `Bank account in ${accountType.region}`,
 				vendorName: VENDOR_NAME,
 				backUrl: this.cancelRoute(),
-				completeUrl: this.paymentCompleteRoute()
+				completeUrl: this.paymentCompleteRoute(),
+				vendorWallet: featureIsEnabled('paymentContract') ? '' : walletAddress
 			})
 		);
 	}

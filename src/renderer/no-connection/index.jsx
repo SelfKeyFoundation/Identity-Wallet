@@ -2,7 +2,6 @@ import React from 'react';
 import { Modal, Typography, Grid, withStyles, Button } from '@material-ui/core';
 import { ModalWrap, ModalBody, WarningShieldIcon } from 'selfkey-ui';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	closeModal: {

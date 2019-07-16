@@ -3,8 +3,10 @@ import { getGlobalContext } from 'common/context';
 import { createAliasedAction } from 'electron-redux';
 import { walletSelectors } from '../../wallet';
 import { appSelectors } from '../../app';
+import { transactionOperations } from 'common/transaction';
 import { push } from 'connected-react-router';
 import config from '../../config';
+import { featureIsEnabled } from 'common/feature-flags';
 import { Logger } from 'common/logger';
 import { pricesSelectors } from '../../prices';
 import { ethGasStationInfoSelectors } from '../../eth-gas-station';
@@ -50,6 +52,7 @@ export const ordersTypes = {
 	ORDERS_FINISH_CURRENT_OPERATION: 'orders/operations/current/FINISH',
 	ORDERS_PREAPPROVE_CURRENT_OPERATION: 'orders/operations/current/PREAPPROVE',
 	ORDERS_PAY_CURRENT_OPERATION: 'orders/operations/current/PAY',
+	ORDERS_DIRECT_PAY_CURRENT_OPERATION: 'orders/operations/current/DIRECT_PAY',
 	ORDERS_PREAPPROVE_ESTIMATE_CURRENT_OPERATION: 'orders/operations/current/PREAPPROVE_ESTIMATE',
 	ORDERS_PAY_ESTIMATE_CURRENT_OPERATION: 'orders/operations/current/PAY_ESTIMATE'
 };
@@ -76,7 +79,8 @@ const createOrderOperation = ({
 	itemId,
 	vendorDID,
 	productInfo,
-	vendorName
+	vendorName,
+	vendorWallet
 }) => async (dispatch, getState) => {
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const wallet = walletSelectors.getWallet(getState());
@@ -90,7 +94,11 @@ const createOrderOperation = ({
 		vendorName,
 		did: wallet.did,
 		walletId: wallet.id,
-		status: orderStatus.PENDING
+		vendorWallet,
+		// On marketplace direct payment orders, allowance is considered complete as initial state
+		status: featureIsEnabled('paymentContract')
+			? orderStatus.PENDING
+			: orderStatus.ALLOWANCE_COMPLETE
 	});
 	await dispatch(ordersActions.setOneOrderAction(order));
 	return order;
@@ -105,7 +113,8 @@ const startOrderOperation = ({
 	productInfo,
 	vendorName,
 	backUrl,
-	completeUrl
+	completeUrl,
+	vendorWallet
 }) => async (dispatch, getState) => {
 	let order = ordersSelectors.getLatestActiveOrderForApplication(getState(), applicationId);
 	if (!order) {
@@ -117,7 +126,8 @@ const startOrderOperation = ({
 				itemId,
 				vendorDID,
 				productInfo,
-				vendorName
+				vendorName,
+				vendorWallet
 			})
 		);
 	}
@@ -167,7 +177,9 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 		return dispatch(push(`${MARKETPLACE_ORDERS_ROOT_PATH}/${orderId}/payment/error`));
 	}
 
-	await dispatch(ordersOperations.checkOrderAllowanceOperation(orderId));
+	if (featureIsEnabled('paymentContract')) {
+		await dispatch(ordersOperations.checkOrderAllowanceOperation(orderId));
+	}
 
 	order = ordersSelectors.getOrder(getState(), orderId);
 
@@ -333,6 +345,75 @@ const preapproveCurrentOrderOperation = () => async (dispatch, getState) => {
 	throw new Error('operation canceled');
 };
 
+const directPayCurrentOrderOperation = ({ trezorAccountIndex }) => async (dispatch, getState) => {
+	const { orderId, backUrl, completeUrl, paymentGas } = ordersSelectors.getCurrentOrder(
+		getState()
+	);
+	const cryptoCurrency = config.constants.primaryToken;
+	let order = ordersSelectors.getOrder(getState(), orderId);
+	const { ethGasStationInfo } = ethGasStationInfoSelectors.getEthGasStationInfo(getState());
+	const amount = new BN(order.amount).toFixed(18);
+
+	await dispatch(
+		ordersOperations.ordersUpdateOperation(orderId, { status: orderStatus.PAYMENT_IN_PROGRESS })
+	);
+
+	await dispatch(transactionOperations.init({ trezorAccountIndex, cryptoCurrency }));
+	await dispatch(transactionOperations.setAddress(order.vendorWallet));
+	await dispatch(transactionOperations.setAmount(amount));
+	await dispatch(transactionOperations.setGasPrice(ethGasStationInfo.fast));
+	await dispatch(transactionOperations.setLimitPrice(paymentGas));
+
+	let hardwalletConfirmationTimeout = null;
+	const walletType = appSelectors.selectWalletType(getState());
+
+	if (walletType === 'ledger' || walletType === 'trezor') {
+		await dispatch(push('/main/hd-transaction-timer'));
+		hardwalletConfirmationTimeout = setTimeout(async () => {
+			clearTimeout(hardwalletConfirmationTimeout);
+			await dispatch(push('/main/transaction-timeout'));
+		}, hardwalletConfirmationTime);
+	}
+
+	const onReceipt = async receipt => {
+		await dispatch(
+			ordersOperations.ordersUpdateOperation(orderId, {
+				status: orderStatus.PAYMENT_COMPLETE
+			})
+		);
+		await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
+	};
+	const onTransactionHash = async paymentHash => {
+		clearTimeout(hardwalletConfirmationTimeout);
+		await dispatch(ordersOperations.ordersUpdateOperation(orderId, { paymentHash }));
+		await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
+	};
+	const onTransactionError = async error => {
+		clearTimeout(hardwalletConfirmationTimeout);
+		log.error(error);
+		await dispatch(
+			ordersOperations.ordersUpdateOperation(orderId, {
+				status: orderStatus.PAYMENT_ERROR,
+				statusMessage: error.message
+			})
+		);
+		if (orderId === ordersSelectors.getCurrentOrder(getState()).orderId) {
+			await dispatch(
+				ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl)
+			);
+		}
+		throw error;
+	};
+
+	await dispatch(
+		transactionOperations.marketplaceSend({
+			onTransactionHash,
+			onTransactionError,
+			onReceipt
+		})
+	);
+};
+
 const payCurrentOrderOperation = () => async (dispatch, getState) => {
 	const paymentService = getGlobalContext().paymentService;
 	const { orderId, backUrl, completeUrl, paymentGas } = ordersSelectors.getCurrentOrder(
@@ -435,6 +516,7 @@ const operations = {
 	estimateCurrentPreapproveGasOperation,
 	estimateCurrentPaymentGasOperation,
 	payCurrentOrderOperation,
+	directPayCurrentOrderOperation,
 	preapproveCurrentOrderOperation,
 	createOrderOperation,
 	finishCurrentOrderOperation,
@@ -479,6 +561,10 @@ const ordersOperations = {
 	payCurrentOrderOperation: createAliasedAction(
 		ordersTypes.ORDERS_PAY_CURRENT_OPERATION,
 		operations.payCurrentOrderOperation
+	),
+	directPayCurrentOrderOperation: createAliasedAction(
+		ordersTypes.ORDERS_DIRECT_PAY_CURRENT_OPERATION,
+		operations.directPayCurrentOrderOperation
 	),
 	preapproveCurrentOrderOperation: createAliasedAction(
 		ordersTypes.ORDERS_PREAPPROVE_CURRENT_OPERATION,
