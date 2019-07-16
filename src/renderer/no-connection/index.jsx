@@ -28,8 +28,10 @@ const styles = theme => ({
 });
 
 export const NoConnection = withStyles(styles)(props => {
-	const { classes, onBackClick = false, dispatch } = props;
-	const backToDashboard = () => dispatch(push(`/main/dashboard`));
+	const { classes, onBackClick = false } = props;
+	const handleClose = () => {
+		window.quit();
+	};
 	return (
 		<Modal open={true}>
 			<ModalWrap className={classes.closeModal}>
@@ -54,7 +56,7 @@ export const NoConnection = withStyles(styles)(props => {
 								variant="outlined"
 								size="large"
 								color="secondary"
-								onClick={onBackClick || backToDashboard}
+								onClick={onBackClick || handleClose}
 							>
 								OK
 							</Button>
