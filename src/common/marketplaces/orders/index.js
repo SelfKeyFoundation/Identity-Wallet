@@ -84,7 +84,6 @@ const createOrderOperation = ({
 }) => async (dispatch, getState) => {
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const wallet = walletSelectors.getWallet(getState());
-	// On marketplace direct payment orders, allowance is considered complete
 	const order = await ordersService.createOrder({
 		amount: '' + amount,
 		applicationId,
@@ -96,6 +95,7 @@ const createOrderOperation = ({
 		did: wallet.did,
 		walletId: wallet.id,
 		vendorWallet,
+		// On marketplace direct payment orders, allowance is considered complete as initial state
 		status: featureIsEnabled('paymentContract')
 			? orderStatus.PENDING
 			: orderStatus.ALLOWANCE_COMPLETE
