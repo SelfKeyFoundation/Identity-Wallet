@@ -282,7 +282,10 @@ const confirmSend = () => async (dispatch, getState) => {
 	});
 };
 
-const marketplaceSend = walletAddress => async (dispatch, getState) => {
+const marketplaceSend = ({ onReceipt, onTransactionHash, onTransactionError }) => async (
+	dispatch,
+	getState
+) => {
 	const walletService = getGlobalContext().walletService;
 	const state = getState();
 	const transaction = getTransaction(state);
@@ -311,7 +314,16 @@ const marketplaceSend = walletAddress => async (dispatch, getState) => {
 	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
 
 	transactionEventEmitter.on('receipt', async receipt => {
-		await dispatch(updateBalances());
+		dispatch(updateBalances());
+		onReceipt(receipt);
+	});
+	transactionEventEmitter.on('transactionHash', async transactionHash => {
+		await dispatch(actions.updateTransaction({ status: 'Pending', transactionHash }));
+		dispatch(createTxHistry(transactionHash));
+		onTransactionHash(transactionHash);
+	});
+	transactionEventEmitter.on('error', async error => {
+		onTransactionError(error);
 	});
 
 	return transactionEventEmitter;

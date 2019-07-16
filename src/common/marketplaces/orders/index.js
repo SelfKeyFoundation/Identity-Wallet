@@ -6,6 +6,7 @@ import { appSelectors } from '../../app';
 import { transactionOperations } from 'common/transaction';
 import { push } from 'connected-react-router';
 import config from '../../config';
+import { featureIsEnabled } from 'common/feature-flags';
 import { Logger } from 'common/logger';
 import { pricesSelectors } from '../../prices';
 import { ethGasStationInfoSelectors } from '../../eth-gas-station';
@@ -78,10 +79,12 @@ const createOrderOperation = ({
 	itemId,
 	vendorDID,
 	productInfo,
-	vendorName
+	vendorName,
+	vendorWallet
 }) => async (dispatch, getState) => {
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const wallet = walletSelectors.getWallet(getState());
+	// On marketplace direct payment orders, allowance is considered complete
 	const order = await ordersService.createOrder({
 		amount: '' + amount,
 		applicationId,
@@ -92,7 +95,10 @@ const createOrderOperation = ({
 		vendorName,
 		did: wallet.did,
 		walletId: wallet.id,
-		status: orderStatus.PENDING
+		vendorWallet,
+		status: featureIsEnabled('paymentContract')
+			? orderStatus.PENDING
+			: orderStatus.ALLOWANCE_COMPLETE
 	});
 	await dispatch(ordersActions.setOneOrderAction(order));
 	return order;
@@ -107,7 +113,8 @@ const startOrderOperation = ({
 	productInfo,
 	vendorName,
 	backUrl,
-	completeUrl
+	completeUrl,
+	vendorWallet
 }) => async (dispatch, getState) => {
 	let order = ordersSelectors.getLatestActiveOrderForApplication(getState(), applicationId);
 	if (!order) {
@@ -119,7 +126,8 @@ const startOrderOperation = ({
 				itemId,
 				vendorDID,
 				productInfo,
-				vendorName
+				vendorName,
+				vendorWallet
 			})
 		);
 	}
@@ -169,7 +177,9 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 		return dispatch(push(`${MARKETPLACE_ORDERS_ROOT_PATH}/${orderId}/payment/error`));
 	}
 
-	await dispatch(ordersOperations.checkOrderAllowanceOperation(orderId));
+	if (featureIsEnabled('paymentContract')) {
+		await dispatch(ordersOperations.checkOrderAllowanceOperation(orderId));
+	}
 
 	order = ordersSelectors.getOrder(getState(), orderId);
 
@@ -335,30 +345,27 @@ const preapproveCurrentOrderOperation = () => async (dispatch, getState) => {
 	throw new Error('operation canceled');
 };
 
-const directPayCurrentOrderOperation = ({ walletAddress, trezorAccountIndex }) => async (
-	dispatch,
-	getState
-) => {
+const directPayCurrentOrderOperation = ({ trezorAccountIndex }) => async (dispatch, getState) => {
 	const { orderId, backUrl, completeUrl, paymentGas } = ordersSelectors.getCurrentOrder(
 		getState()
 	);
 	const cryptoCurrency = config.constants.primaryToken;
 	let order = ordersSelectors.getOrder(getState(), orderId);
-
-	await dispatch(transactionOperations.init({ trezorAccountIndex, cryptoCurrency }));
-	await dispatch(transactionOperations.setAddress(walletAddress));
-	await dispatch(transactionOperations.setAmount(order.amount));
-	await dispatch(transactionOperations.setGasPrice(paymentGas));
-	await dispatch(transactionOperations.setLimitPrice(37680));
+	const { ethGasStationInfo } = ethGasStationInfoSelectors.getEthGasStationInfo(getState());
+	const amount = new BN(order.amount).toFixed(18);
 
 	await dispatch(
 		ordersOperations.ordersUpdateOperation(orderId, { status: orderStatus.PAYMENT_IN_PROGRESS })
 	);
 
+	await dispatch(transactionOperations.init({ trezorAccountIndex, cryptoCurrency }));
+	await dispatch(transactionOperations.setAddress(order.vendorWallet));
+	await dispatch(transactionOperations.setAmount(amount));
+	await dispatch(transactionOperations.setGasPrice(ethGasStationInfo.fast));
+	await dispatch(transactionOperations.setLimitPrice(paymentGas));
+
 	let hardwalletConfirmationTimeout = null;
 	const walletType = appSelectors.selectWalletType(getState());
-
-	const transactionEventEmitter = transactionOperations.walletSend(walletAddress);
 
 	if (walletType === 'ledger' || walletType === 'trezor') {
 		await dispatch(push('/main/hd-transaction-timer'));
@@ -368,13 +375,20 @@ const directPayCurrentOrderOperation = ({ walletAddress, trezorAccountIndex }) =
 		}, hardwalletConfirmationTime);
 	}
 
-	transactionEventEmitter.on('transactionHash', async paymentHash => {
+	const onReceipt = async receipt => {
+		await dispatch(
+			ordersOperations.ordersUpdateOperation(orderId, {
+				status: orderStatus.PAYMENT_COMPLETE
+			})
+		);
+		await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
+	};
+	const onTransactionHash = async paymentHash => {
 		clearTimeout(hardwalletConfirmationTimeout);
 		await dispatch(ordersOperations.ordersUpdateOperation(orderId, { paymentHash }));
 		await dispatch(ordersOperations.showOrderPaymentUIOperation(orderId, backUrl, completeUrl));
-	});
-
-	transactionEventEmitter.on('error', async error => {
+	};
+	const onTransactionError = async error => {
 		clearTimeout(hardwalletConfirmationTimeout);
 		log.error(error);
 		await dispatch(
@@ -389,7 +403,15 @@ const directPayCurrentOrderOperation = ({ walletAddress, trezorAccountIndex }) =
 			);
 		}
 		throw error;
-	});
+	};
+
+	await dispatch(
+		transactionOperations.marketplaceSend({
+			onTransactionHash,
+			onTransactionError,
+			onReceipt
+		})
+	);
 };
 
 const payCurrentOrderOperation = () => async (dispatch, getState) => {

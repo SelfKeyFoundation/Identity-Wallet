@@ -32,7 +32,8 @@ export class MarketplaceOrder extends BaseModel {
 				affiliate1DID: { type: 'string' },
 				affiliate2DID: { type: 'string' },
 				allowanceHash: { type: 'string' },
-				paymentHash: { type: 'string' }
+				paymentHash: { type: 'string' },
+				vendorWallet: { type: 'string' }
 			}
 		};
 	}

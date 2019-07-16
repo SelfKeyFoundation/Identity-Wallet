@@ -114,7 +114,7 @@ const common = {
 		'https://t.me/selfkeyfoundation'
 	],
 	features: {
-		paymentContract: true
+		paymentContract: false
 	}
 };
 

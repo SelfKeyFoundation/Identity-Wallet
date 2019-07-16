@@ -115,10 +115,10 @@ export const MarketplacePayment = withStyles(styles)(
 											color="primary"
 											className={classes.bold}
 										>
-											Total: $ {priceUSD}
+											Total: $ {priceUSD.toLocaleString()}
 										</Typography>
 										<Typography variant="subtitle2" color="secondary">
-											{priceKey} KEY
+											{Number.parseFloat(priceKey).toLocaleString()} KEY
 											<KeyTooltip
 												interactive
 												placement="top-start"
@@ -164,7 +164,7 @@ export const MarketplacePayment = withStyles(styles)(
 											color="primary"
 											className={classes.bold}
 										>
-											$ {feeUSD}
+											$ {Number.parseFloat(feeUSD).toLocaleString()}
 										</Typography>
 										<Typography variant="subtitle2" color="secondary">
 											{feeETH} ETH
