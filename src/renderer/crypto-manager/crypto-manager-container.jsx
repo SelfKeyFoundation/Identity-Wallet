@@ -101,14 +101,13 @@ class CryptoManagerContainerComponent extends Component {
 
 	renderTokenAddedModal() {
 		const { classes, locale } = this.props;
-		const popup = classes.popup;
 		const { tokenAdded } = this.state;
 		return (
 			<Popup
 				open={true}
 				text={'New ERC-20 Token Added'}
 				closeAction={this.handleCloseTokenAddedModal}
-				xtraClass={popup}
+				className={classes.popup}
 			>
 				<Grid
 					container
@@ -181,13 +180,12 @@ class CryptoManagerContainerComponent extends Component {
 
 	renderTokenRemovedModal() {
 		const { classes } = this.props;
-		const popup = classes.popup;
 		return (
 			<Popup
 				open={true}
 				text={'Token Removed'}
 				closeAction={this.handleCloseTokenRemovedModal}
-				xtraClass={popup}
+				className={classes.popup}
 			>
 				<Grid
 					container

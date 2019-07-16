@@ -6,30 +6,15 @@ const styles = theme => ({
 	modal: {
 		overflow: 'auto'
 	},
-	disableTransparency: {
-		'& > div:first-of-type': {
-			background: 'linear-gradient(135deg, rgba(43,53,64,1) 0%, rgba(30,38,46,1) 100%)',
-			opacity: '1 !important'
-		}
-	},
 	closeButton: {
 		top: '20px'
 	}
 });
 
 const PopupWrap = props => {
-	const {
-		classes,
-		children,
-		disableTransparency = false,
-		closeAction,
-		xtraClass,
-		text,
-		open = true
-	} = props;
-	const extraClass = disableTransparency ? `${classes.disableTransparency}` : '';
+	const { classes, children, closeAction, text, open = true } = props;
 	return (
-		<Modal open={open} className={`${classes.modal} ${extraClass} ${xtraClass}`}>
+		<Modal open={open} className={`${classes.modal} ${props.className}`}>
 			<ModalWrap>
 				<ModalCloseButton onClick={closeAction} className={classes.closeButton}>
 					<ModalCloseIcon />

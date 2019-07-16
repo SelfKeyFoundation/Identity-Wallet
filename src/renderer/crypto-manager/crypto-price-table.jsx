@@ -70,13 +70,12 @@ class CryptoPriceTableComponent extends Component {
 
 	renderConfirmation() {
 		const { classes } = this.props;
-		const popup = classes.popup;
 		return (
 			<Popup
 				open={true}
 				text={'Are you sure?'}
 				closeAction={this.handleCloseConfirmationModal}
-				xtraClass={popup}
+				className={classes.popup}
 			>
 				<Grid
 					container
