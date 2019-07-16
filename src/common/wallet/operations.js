@@ -168,7 +168,7 @@ export default {
 	updateWalletDID: createAliasedAction(types.WALLET_DID_UPDATE, updateWalletDID),
 	startCreateDidFlow: createAliasedAction(types.WALLET_START_DID_FLOW, startCreateDidFlow),
 	startAssociateDidFlow: createAliasedAction(
-		types.WALLET_START_ACCOSIATE_DID_FLOW,
+		types.WALLET_START_ASSOCIATE_DID_FLOW,
 		startAssociateDidFlow
 	)
 };
