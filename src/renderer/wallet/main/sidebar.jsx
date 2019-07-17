@@ -182,6 +182,7 @@ class Sidebar extends Component {
 							</Typography>
 						</ListItem>
 						<ListItem
+							id="marketplaceButton"
 							className={classes.listItem}
 							component={marketplace}
 							key="marketplace"

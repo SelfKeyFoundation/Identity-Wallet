@@ -194,7 +194,12 @@ const BankingOffersTable = withStyles(styles)(
 								<ProgramPrice label="$" price={bank.price} rate={keyRate} />
 							</TableCell>
 							<TableCell className={classes.detailsCell}>
-								<span onClick={() => onDetails(bank)}>Details</span>
+								<span
+									id={`details${bank.countryCode}`}
+									onClick={() => onDetails(bank)}
+								>
+									Details
+								</span>
 							</TableCell>
 						</TableRow>
 					))}

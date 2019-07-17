@@ -51,6 +51,7 @@ const BankingOffersPage = withStyles(styles)(
 				<Grid item>
 					<div className={classes.backButtonContainer}>
 						<Button
+							id="backToMarketplace"
 							variant="outlined"
 							color="secondary"
 							size="small"
@@ -70,6 +71,7 @@ const BankingOffersPage = withStyles(styles)(
 				{!loading && (
 					<Grid item>
 						<Grid
+							id="bankAccounts"
 							container
 							direction="column"
 							justify="flex-start"
