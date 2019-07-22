@@ -54,18 +54,18 @@ export class PriceService extends EventEmitter {
 
 		// These should be the first two rows returned,
 		// but we'll use "find" in case the order changes
-		const btcPriceUsd = +data.find(row => row.short === 'BTC').price;
-		const ethPriceUsd = +data.find(row => row.short === 'ETH').price;
+		const btcPriceUsd = +data.find(row => row.symbol === 'BTC').price;
+		const ethPriceUsd = +data.find(row => row.symbol === 'ETH').price;
 
 		// TODO: We should filter out non-ERC-20/Ethereum
 		// coins at some point, but that's low priority
 		const dataToInsert = data.map(row => ({
-			name: row.long,
-			symbol: row.short,
+			name: row.name,
+			symbol: row.symbol,
 			source: 'https://coincap.io',
-			priceUSD: +row.price,
-			priceBTC: +row.price / btcPriceUsd,
-			priceETH: +row.price / ethPriceUsd
+			priceUSD: +row.priceUsd,
+			priceBTC: +row.priceUsd / btcPriceUsd,
+			priceETH: +row.priceUsd / ethPriceUsd
 		}));
 
 		this.existing = (await TokenPrice.findAll()).reduce(
