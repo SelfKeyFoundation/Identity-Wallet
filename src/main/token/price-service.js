@@ -21,11 +21,35 @@ export class PriceService extends EventEmitter {
 	}
 	async loadPriceData() {
 		log.info('fetching price data');
-		const response = await fetch('https://coincap.io/front');
-		const data = await response.json();
-
-		if (!data.length) {
+		const response = await fetch('https://api.coincap.io/v2/assets?limit=500');
+		const json = await response.json();
+		if (!json) {
+			log.error('Unable to fetch price data');
 			return;
+		}
+
+		const data = json.data;
+		if (!data.length) {
+			log.error('Unable to fetch price data');
+			return;
+		}
+
+		// KEY is mandatory, if doesn't get fetch in global list
+		// it needs to get fetched individually
+		if (!data.find(row => row.symbol === 'KEY')) {
+			const responseKey = await fetch('https://api.coincap.io/v2/assets/key');
+			const jsonKey = await responseKey.json();
+			if (!jsonKey) {
+				log.error('Unable to fetch KEY price data');
+				return;
+			}
+
+			const dataKey = jsonKey.data;
+			if (!dataKey.length) {
+				log.error('Unable to fetch KEY price data');
+				return;
+			}
+			data.push(dataKey[0]);
 		}
 
 		// These should be the first two rows returned,
