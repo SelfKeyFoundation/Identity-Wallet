@@ -21,27 +21,52 @@ export class PriceService extends EventEmitter {
 	}
 	async loadPriceData() {
 		log.info('fetching price data');
-		const response = await fetch('https://coincap.io/front');
-		const data = await response.json();
+		const response = await fetch('https://api.coincap.io/v2/assets?limit=500');
+		const json = await response.json();
 
-		if (!data.length) {
+		if (!json) {
+			log.error('Unable to fetch price data');
 			return;
+		}
+
+		const data = json.data;
+		if (!data || !data.length) {
+			log.error('Unable to fetch price data');
+			return;
+		}
+
+		// KEY is mandatory, if doesn't get fetch in global list
+		// it needs to get fetched individually
+		if (!data.find(row => row.symbol === 'KEY')) {
+			const responseKey = await fetch('https://api.coincap.io/v2/assets/key');
+			const jsonKey = await responseKey.json();
+			if (!jsonKey) {
+				log.error('Unable to fetch KEY price data');
+				return;
+			}
+
+			const dataKey = jsonKey.data;
+			if (!dataKey || !dataKey.length) {
+				log.error('Unable to fetch KEY price data');
+				return;
+			}
+			data.push(dataKey[0]);
 		}
 
 		// These should be the first two rows returned,
 		// but we'll use "find" in case the order changes
-		const btcPriceUsd = +data.find(row => row.short === 'BTC').price;
-		const ethPriceUsd = +data.find(row => row.short === 'ETH').price;
+		const btcPriceUsd = +data.find(row => row.symbol === 'BTC').priceUsd;
+		const ethPriceUsd = +data.find(row => row.symbol === 'ETH').priceUsd;
 
 		// TODO: We should filter out non-ERC-20/Ethereum
 		// coins at some point, but that's low priority
 		const dataToInsert = data.map(row => ({
-			name: row.long,
-			symbol: row.short,
+			name: row.name,
+			symbol: row.symbol,
 			source: 'https://coincap.io',
-			priceUSD: +row.price,
-			priceBTC: +row.price / btcPriceUsd,
-			priceETH: +row.price / ethPriceUsd
+			priceUSD: +row.priceUsd,
+			priceBTC: +row.priceUsd / btcPriceUsd,
+			priceETH: +row.priceUsd / ethPriceUsd
 		}));
 
 		this.existing = (await TokenPrice.findAll()).reduce(
