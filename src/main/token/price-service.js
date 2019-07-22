@@ -54,8 +54,8 @@ export class PriceService extends EventEmitter {
 
 		// These should be the first two rows returned,
 		// but we'll use "find" in case the order changes
-		const btcPriceUsd = +data.find(row => row.symbol === 'BTC').price;
-		const ethPriceUsd = +data.find(row => row.symbol === 'ETH').price;
+		const btcPriceUsd = +data.find(row => row.symbol === 'BTC').priceUsd;
+		const ethPriceUsd = +data.find(row => row.symbol === 'ETH').priceUsd;
 
 		// TODO: We should filter out non-ERC-20/Ethereum
 		// coins at some point, but that's low priority
