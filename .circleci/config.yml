@@ -263,9 +263,9 @@ workflows:
             - 'build-linux':
                   requires:
                       - unit-test
-            - 'e2e-linux':
-                  requires:
-                      - build-linux
+            # - 'e2e-linux':
+            #       requires:
+            #           - build-linux
             - 'stage-linux':
                   requires:
                       # - e2e-linux
