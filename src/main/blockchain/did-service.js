@@ -18,7 +18,7 @@ export class DIDService {
 
 	async getControllerAddress(did) {
 		const ledger = new this.web3Service.web3.eth.Contract(ledgerABI, config.ledgerAddress);
-		return ledger.methods.getController(did).call();
+		return ledger.methods.getController(did.replace('did:selfkey:', '')).call();
 	}
 
 	async getGasLimit(from) {

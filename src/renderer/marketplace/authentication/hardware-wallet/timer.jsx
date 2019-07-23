@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Typography, Button, Grid, withStyles } from '@material-ui/core';
+import { Typography, Grid, withStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
 import Popup from '../../../common/popup';
 import { kycSelectors } from 'common/kyc';
@@ -45,15 +45,6 @@ class HardwareWalletTimer extends Component {
 									You have 30 seconds to confirm this authentication on {typeText}{' '}
 									or it will time out and automatically cancel.
 								</Typography>
-							</Grid>
-							<Grid item>
-								<Button
-									color="secondary"
-									variant="outlined"
-									onClick={this.handleClose}
-								>
-									BACK
-								</Button>
 							</Grid>
 						</Grid>
 					</Grid>
