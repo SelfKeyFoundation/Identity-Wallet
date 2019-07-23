@@ -28,7 +28,12 @@ export const initialState = {
 	settings: {},
 	isOnline: true,
 	goBackPath: '',
-	goNextPath: ''
+	goNextPath: '',
+	autoUpdate: {
+		info: {},
+		progress: {},
+		downloaded: false
+	}
 };
 
 export const appTypes = {
@@ -53,7 +58,13 @@ export const appTypes = {
 	APP_UPDATE_NETWORK_STATUS: 'app/network/status/UPDATE',
 	APP_SET_NETWORK_STATUS: 'app/network/status/SET',
 	APP_SET_GO_NEXT_PATH: 'app/go/next/path/SET',
-	APP_SET_GO_BACK_PATH: 'app/go/back/path/SET'
+	APP_SET_GO_BACK_PATH: 'app/go/back/path/SET',
+	APP_START_AUTO_UPDATE: 'app/auto/update/START',
+	APP_SET_AUTO_UPDATE_INFO: 'app/auto/update/info/SET',
+	APP_SET_AUTO_UPDATE_PROGRESS: 'app/auto/update/progress/SET',
+	APP_SET_AUTO_UPDATE_DOWNLOADED: 'app/auto/update/downloaded/SET',
+	APP_DOWNLOAD_UPDATE: 'app/update/DOWNLOAD',
+	APP_INSTALL_UPDATE: 'app/update/INSTALL'
 };
 
 const appActions = {
@@ -92,6 +103,18 @@ const appActions = {
 	setGoNextPath: path => ({
 		type: appTypes.APP_SET_GO_NEXT_PATH,
 		payload: path
+	}),
+	setAutoUpdateInfoAction: info => ({
+		type: appTypes.APP_SET_AUTO_UPDATE_INFO,
+		payload: info
+	}),
+	setAutoUpdateProgressAction: progress => ({
+		type: appTypes.APP_SET_AUTO_UPDATE_PROGRESS,
+		payload: progress
+	}),
+	setAutoUpdateDownloadedAction: downloaded => ({
+		type: appTypes.APP_SET_AUTO_UPDATE_DOWNLOADED,
+		payload: downloaded
 	})
 };
 
@@ -287,6 +310,36 @@ const setTermsAccepted = (isTermsAccepted, crashReportAgreement) => async (dispa
 	await dispatch(push('/home'));
 };
 
+const startAutoUpdate = () => async dispatch => {
+	const autoUpdateService = getGlobalContext().autoUpdateService;
+
+	autoUpdateService.on('update-available', async info => {
+		await dispatch(appActions.setAutoUpdateInfoAction(info));
+		await dispatch(push('/auto-update'));
+	});
+
+	autoUpdateService.on('download-progress', async progress => {
+		await dispatch(appActions.setAutoUpdateProgressAction(progress));
+	});
+
+	autoUpdateService.on('update-downloaded', async () => {
+		await dispatch(appActions.setAutoUpdateDownloadedAction(true));
+	});
+
+	await autoUpdateService.checkForUpdatesAndNotify();
+};
+
+const downloadUpdate = () => async dispatch => {
+	const autoUpdateService = getGlobalContext().autoUpdateService;
+	await dispatch(push('/auto-update-progress'));
+	await autoUpdateService.downloadUpdate();
+};
+
+const installUpdate = () => async () => {
+	const autoUpdateService = getGlobalContext().autoUpdateService;
+	await autoUpdateService.quitAndInstall();
+};
+
 const operations = {
 	loadWallets,
 	unlockWalletWithPassword,
@@ -300,7 +353,10 @@ const operations = {
 	loadOtherHardwareWallets,
 	loading,
 	setTermsAccepted,
-	networkStatusUpdateOperation
+	networkStatusUpdateOperation,
+	startAutoUpdate,
+	downloadUpdate,
+	installUpdate
 };
 
 const appOperations = {
@@ -350,6 +406,18 @@ const appOperations = {
 	networkStatusUpdateOperation: createAliasedAction(
 		appTypes.APP_SET_NETWORK_STATUS,
 		operations.networkStatusUpdateOperation
+	),
+	startAutoUpdateOperation: createAliasedAction(
+		appTypes.APP_START_AUTO_UPDATE,
+		operations.startAutoUpdate
+	),
+	downloadUpdateOperation: createAliasedAction(
+		appTypes.APP_DOWNLOAD_UPDATE,
+		operations.downloadUpdate
+	),
+	installUpdateOperation: createAliasedAction(
+		appTypes.APP_INSTALL_UPDATE,
+		operations.installUpdate
 	)
 };
 
@@ -389,6 +457,18 @@ const setGoNextPathReducer = (state, action) => {
 	return { ...state, goNextPath: action.payload };
 };
 
+const setAutoUpdateInfoReducer = (state, action) => {
+	return { ...state, autoUpdate: { ...state.autoUpdate, info: action.payload } };
+};
+
+const setAutoUpdateProgressReducer = (state, action) => {
+	return { ...state, autoUpdate: { ...state.autoUpdate, progress: action.payload } };
+};
+
+const setAutoUpdateDownloadedReducer = (state, action) => {
+	return { ...state, autoUpdate: { ...state.autoUpdate, downloaded: action.payload } };
+};
+
 const appReducers = {
 	setWalletsReducer,
 	setWalletsLoadingReducer,
@@ -398,7 +478,10 @@ const appReducers = {
 	setWalletTypeReducer,
 	setNetworkStatusReducer,
 	setGoNextPathReducer,
-	setGoBackPathReducer
+	setGoBackPathReducer,
+	setAutoUpdateInfoReducer,
+	setAutoUpdateProgressReducer,
+	setAutoUpdateDownloadedReducer
 };
 
 const reducer = (state = initialState, action) => {
@@ -421,6 +504,12 @@ const reducer = (state = initialState, action) => {
 			return appReducers.setGoBackPathReducer(state, action);
 		case appTypes.APP_SET_GO_NEXT_PATH:
 			return appReducers.setGoNextPathReducer(state, action);
+		case appTypes.APP_SET_AUTO_UPDATE_INFO:
+			return appReducers.setAutoUpdateInfoReducer(state, action);
+		case appTypes.APP_SET_AUTO_UPDATE_PROGRESS:
+			return appReducers.setAutoUpdateProgressReducer(state, action);
+		case appTypes.APP_SET_AUTO_UPDATE_DOWNLOADED:
+			return appReducers.setAutoUpdateDownloadedReducer(state, action);
 	}
 	return state;
 };
@@ -449,13 +538,28 @@ const selectWalletType = state => {
 	return selectApp(state).walletType;
 };
 
+const selectAutoUpdateInfo = state => {
+	return selectApp(state).autoUpdate.info;
+};
+
+const selectAutoUpdateProgress = state => {
+	return selectApp(state).autoUpdate.progress;
+};
+
+const selectAutoUpdateDownloaded = state => {
+	return selectApp(state).autoUpdate.downloaded;
+};
+
 const appSelectors = {
 	selectApp,
 	hasConnected,
 	hasAcceptedTracking,
 	selectGoBackPath,
 	selectGoNextPath,
-	selectWalletType
+	selectWalletType,
+	selectAutoUpdateInfo,
+	selectAutoUpdateProgress,
+	selectAutoUpdateDownloaded
 };
 
 export { appSelectors, appReducers, appActions, appOperations };

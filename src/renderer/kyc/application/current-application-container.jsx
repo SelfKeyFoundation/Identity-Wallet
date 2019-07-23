@@ -5,6 +5,8 @@ import { CurrentApplicationPopup } from './current-application-popup';
 import { CreateAttributePopup } from '../../selfkey-id/main/containers/create-attribute-popup';
 import { EditAttributePopup } from '../../selfkey-id/main/containers/edit-attribute-popup';
 import { jsonSchema } from 'common/identity/utils';
+import { push } from 'connected-react-router';
+import qs from 'query-string';
 
 class CurrentApplicationComponent extends Component {
 	state = {
@@ -54,13 +56,20 @@ class CurrentApplicationComponent extends Component {
 			this.setState({ error });
 			return;
 		}
-
-		await this.props.dispatch(
-			kycOperations.submitCurrentApplicationOperation(this.state.selected)
-		);
+		if (this.props.existingApplicationId) {
+			this.props.dispatch(push('/main/selfkeyIdApplications'));
+		} else {
+			await this.props.dispatch(
+				kycOperations.submitCurrentApplicationOperation(this.state.selected)
+			);
+		}
 	};
 	handleClose = () => {
-		this.props.dispatch(kycOperations.cancelCurrentApplicationOperation());
+		if (this.props.existingApplicationId) {
+			this.props.dispatch(push('/main/selfkeyIdApplications'));
+		} else {
+			this.props.dispatch(kycOperations.cancelCurrentApplicationOperation());
+		}
 	};
 	handleSelected = (uiId, item) => {
 		const { selected } = this.state;
@@ -68,29 +77,36 @@ class CurrentApplicationComponent extends Component {
 		this.setState({ selected: { ...selected, [uiId]: item } });
 	};
 	handleEdit = item => {
-		if (item.options && item.options.length) {
-			this.setState({
-				showEditAttribute: true,
-				editAttribute: this.state.selected[item.id] || item.options[0]
-			});
-		} else {
-			this.setState({
-				showCreateAttribute: true,
-				typeId: item.type.id,
-				isDocument: jsonSchema.containsFile(item.type.content)
-			});
-		}
+		this.setState({
+			showEditAttribute: true,
+			editAttribute: this.state.selected[item.id] || item.options[0]
+		});
+	};
+	handleAdd = item => {
+		this.setState({
+			showCreateAttribute: true,
+			typeId: item.type.id,
+			isDocument: jsonSchema.containsFile(item.type.content)
+		});
 	};
 	handlePopupClose = () => {
 		this.setState({ showEditAttribute: false, showCreateAttribute: false });
 	};
 	render() {
-		const { currentApplication, relyingParty, requirements } = this.props;
+		const {
+			currentApplication,
+			relyingParty,
+			requirements,
+			existingApplicationId
+		} = this.props;
 		return (
 			<div>
 				<CurrentApplicationPopup
 					currentApplication={currentApplication}
 					agreement={currentApplication.agreement}
+					vendor={currentApplication.vendor}
+					privacyPolicy={currentApplication.privacyPolicy}
+					termsOfService={currentApplication.termsOfService}
 					agreementValue={this.state.agreementValue}
 					agreementError={this.state.agreementError}
 					onAgreementChange={this.handleAgreementChange}
@@ -102,6 +118,8 @@ class CurrentApplicationComponent extends Component {
 					selectedAttributes={this.state.selected}
 					onSelected={this.handleSelected}
 					editItem={this.handleEdit}
+					addItem={this.handleAdd}
+					existingApplicationId={existingApplicationId}
 				/>
 				{this.state.showCreateAttribute && (
 					<CreateAttributePopup
@@ -128,6 +146,8 @@ const mapStateToProps = (state, props) => {
 	if (!currentApplication) return {};
 	const relyingPartyName = props.match.params.rpName;
 	const authenticated = true;
+	const existingApplicationId =
+		qs.parse(props.location.search, { ignoreQueryPrefix: true }).applicationId || undefined;
 	return {
 		relyingParty: kycSelectors.relyingPartySelector(state, relyingPartyName),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
@@ -140,7 +160,8 @@ const mapStateToProps = (state, props) => {
 			state,
 			relyingPartyName,
 			currentApplication.templateId
-		)
+		),
+		existingApplicationId
 	};
 };
 

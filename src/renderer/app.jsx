@@ -32,6 +32,8 @@ import { SelfKeyIdCreate } from './selfkey-id/main/components/selfkey-id-create'
 import { SelfKeyIdCreateAbout } from './selfkey-id/main/components/selfkey-id-create-about';
 import { SelfKeyIdCreateDisclaimer } from './selfkey-id/main/components/selfkey-id-create-disclaimer';
 import { SelfKeyIdCreateForm } from './selfkey-id/main/components/selfkey-id-create-form';
+import AutoUpdate from './auto-update/auto-update-contatiner';
+import AutoUpdateProgress from './auto-update/auto-update-progress-contatiner';
 
 const log = new Logger('AppComponent');
 
@@ -69,12 +71,7 @@ class AppContainerComponent extends Component {
 		return (
 			<ConnectedRouter history={piwik.connectToHistory(this.props.history.getHistory())}>
 				<HashRouter>
-					<div
-						style={{
-							background:
-								'linear-gradient(135deg, rgba(43,53,64,1) 0%, rgba(30,38,46,1) 100%)'
-						}}
-					>
+					<div>
 						<Route exact path="/" component={Loading} />
 						<Route exact path="/home" component={Home} />
 						<Route path="/closeConfirmation" component={CloseConfirmation} />
@@ -103,6 +100,8 @@ class AppContainerComponent extends Component {
 						/>
 						<Route path="/selfKeyIdCreate" component={SelfKeyIdCreate} />
 						<Route path="/selfkeyIdForm" component={SelfKeyIdCreateForm} />
+						<Route path="/auto-update" component={AutoUpdate} />
+						<Route path="/auto-update-progress" component={AutoUpdateProgress} />
 					</div>
 				</HashRouter>
 			</ConnectedRouter>

@@ -23,8 +23,10 @@ const INCORPORATIONS_PRICE_OVERRIDE = process.env.INCORPORATIONS_PRICE_OVERRIDE;
 const INCORPORATION_KYCC_INSTANCE = process.env.INCORPORATION_KYCC_INSTANCE;
 const INCORPORATION_API_URL = process.env.INCORPORATION_API_URL;
 const INCORPORATION_TREATIES_URL = process.env.INCORPORATION_TREATIES_URL;
+const BANKACCOUNTS_API_URL = process.env.BANKACCOUNTS_API_URL;
 const COUNTRY_INFO_URL = process.env.COUNTRY_INFO_URL;
 const MATOMO_SITE = process.env.MATOMO_SITE;
+const DEPOSIT_PRICE_OVERRIDE = process.env.DEPOSIT_PRICE_OVERRIDE;
 
 let userDataDirectoryPath = '';
 let walletsDirectoryPath = '';
@@ -45,6 +47,16 @@ const common = {
 	incorporationApiUrl: INCORPORATION_API_URL || 'https://passports.io/api/incorporations',
 	incorporationTreatiesUrl: INCORPORATION_TREATIES_URL || 'https://passports.io/api/tax-treaties',
 	countryInfoUrl: COUNTRY_INFO_URL || 'https://passports.io/api/country',
+	bankAccountsApiUrl: BANKACCOUNTS_API_URL || 'https://api.bankaccounts.io/api/bank-accounts',
+	depositPriceOverride: DEPOSIT_PRICE_OVERRIDE,
+
+	relyingPartyInfo: {
+		incorporations: {
+			name: 'Far Horizon Capital Inc',
+			email: 'support@flagtheory.com',
+			address: '10 Anson Road International Plaza #27-15 Singapore 079903'
+		}
+	},
 
 	constants: {
 		initialIdAttributes: {
@@ -107,7 +119,8 @@ const dev = {
 	constants: {
 		primaryToken: PRIMARY_TOKEN || 'KI'
 	},
-	matomoSite: 2
+	matomoSite: 2,
+	ledgerAddress: '0x27332286A2CEaE458b82A1235f7E2a3Aa8945cAB'
 };
 
 const prod = {
@@ -123,7 +136,8 @@ const prod = {
 	constants: {
 		primaryToken: PRIMARY_TOKEN || 'KEY'
 	},
-	matomoSite: 1
+	matomoSite: 1,
+	ledgerAddress: '0x0cb853331293d689c95187190e09bb46cb4e533e'
 };
 
 const setupFilesPath = getSetupFilePath();

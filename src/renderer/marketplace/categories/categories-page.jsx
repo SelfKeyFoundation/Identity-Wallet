@@ -22,6 +22,9 @@ class MarketplaceCategoriesPageComponent extends Component {
 		},
 		incorporation: () => {
 			this.props.dispatch(push('/main/marketplace-incorporation'));
+		},
+		bank_accounts: () => {
+			this.props.dispatch(push('/main/marketplace-bank-accounts'));
 		}
 	};
 

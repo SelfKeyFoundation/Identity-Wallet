@@ -109,7 +109,7 @@ class Terms extends Component {
 								className={classes.flexSection}
 								spacing={40}
 							>
-								<Grid item className={classes.flexColScroll}>
+								<Grid id="terms" item className={classes.flexColScroll}>
 									<Typography variant="h3" paragraph>
 										1) ACCEPTANCE OF TERMS
 									</Typography>
@@ -574,6 +574,7 @@ class Terms extends Component {
 									>
 										<Grid item>
 											<Button
+												id="agree"
 												variant="contained"
 												size="large"
 												onClick={this.handleAgree}

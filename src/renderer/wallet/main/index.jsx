@@ -13,11 +13,12 @@ import {
 	MarketplaceCategoriesPage,
 	MarketplaceExchangesPage,
 	MarketplaceIncorporationPage,
+	MarketplaceBankAccountsPage,
 	MarketplaceServiceDetailsPage,
 	MarketplaceSelfkeyIdRequired
 } from '../../marketplace';
 
-import { SelfkeyIdContainer } from '../../selfkey-id/main';
+import { SelfkeyIdContainer, AssociateDID } from '../../selfkey-id/main';
 import Transfer from '../../transaction/send';
 import AdvancedTransaction from '../../transaction/send/advanced-transaction';
 import ReceiveTransfer from '../../transaction/receive';
@@ -43,6 +44,9 @@ import { CurrentApplication, ApplicationInProgress } from '../../kyc';
 
 import md5 from 'md5';
 import ReactPiwik from 'react-piwik';
+import CreateDID from '../../selfkey-id/main/components/create-did';
+import CreateDIDProcessing from '../../selfkey-id/main/components/create-did-processing';
+import HardwareWalletTransactionTimer from '../../transaction/send/timer';
 
 const styles = theme => ({
 	headerSection: {
@@ -95,7 +99,15 @@ class Main extends Component {
 					/>
 					<Route path={`${match.path}/add-token`} component={AddTokenContainer} />
 					<Route path={`${match.path}/addressBook`} component={AddressBook} />
-					<Route path={`${match.path}/selfkeyId`} component={SelfkeyIdContainer} />
+					<Route
+						path={`${match.path}/selfkeyId`}
+						render={props => <SelfkeyIdContainer tabValue={0} />}
+					/>
+					<Route
+						path={`${match.path}/selfkeyIdApplications`}
+						render={props => <SelfkeyIdContainer tabValue={1} />}
+					/>
+					<Route path={`${match.path}/enter-did`} component={AssociateDID} />
 					<Route path={`${match.path}/addressBookAdd`} component={AddressBookAdd} />
 					<Route path={`${match.path}/addressBookEdit/:id`} component={AddressBookEdit} />
 					<Route
@@ -117,6 +129,10 @@ class Main extends Component {
 					<Route
 						path={`${match.path}/marketplace-incorporation`}
 						component={MarketplaceIncorporationPage}
+					/>
+					<Route
+						path={`${match.path}/marketplace-bank-accounts`}
+						component={MarketplaceBankAccountsPage}
 					/>
 					<Route
 						path={`${match.path}/transfer/:crypto`}
@@ -150,7 +166,11 @@ class Main extends Component {
 						component={TransactionTimeout}
 					/>
 					<Route
-						path={`${match.path}/advancedTransaction/:cryptoCurrency/:confirmation?`}
+						path={`${match.path}/hd-transaction-timer`}
+						component={HardwareWalletTransactionTimer}
+					/>
+					<Route
+						path={`${match.path}/advancedTransaction/:cryptoCurrency`}
 						component={AdvancedTransaction}
 					/>
 					<Route
@@ -175,6 +195,12 @@ class Main extends Component {
 					<Route path={`${match.path}/hd-unlock`} component={HardwareWalletUnlock} />
 					<Route path={`${match.path}/hd-error`} component={HardwareWalletError} />
 					<Route path={`${match.path}/auth-error`} component={AuthenticationError} />
+
+					<Route path={`${match.path}/get-did`} component={CreateDID} />
+					<Route
+						path={`${match.path}/create-did-processing`}
+						component={CreateDIDProcessing}
+					/>
 				</Grid>
 			</Grid>
 		);

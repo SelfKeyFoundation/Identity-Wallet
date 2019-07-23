@@ -192,7 +192,7 @@ const confirmSend = () => async (dispatch, getState) => {
 	const transactionObject = {
 		nonce: transaction.nonce,
 		gasPrice: EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei'),
-		gasLimit: transaction.gasLimit
+		gas: transaction.gasLimit
 	};
 
 	if (cryptoCurrency === 'ETH') {
@@ -213,7 +213,7 @@ const confirmSend = () => async (dispatch, getState) => {
 
 	let hardwalletConfirmationTimeout = null;
 	const walletType = appSelectors.selectWalletType(state);
-	if (walletType === 'ledget' || walletType === 'trezor') {
+	if (walletType === 'ledger' || walletType === 'trezor') {
 		hardwalletConfirmationTimeout = setTimeout(async () => {
 			clearTimeout(hardwalletConfirmationTimeout);
 			transactionEventEmitter.removeAllListeners('transactionHash');
@@ -276,7 +276,7 @@ const incorporationSend = (companyCode, countryCode) => async (dispatch, getStat
 	const transactionObject = {
 		nonce: transaction.nonce,
 		gasPrice: EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei'),
-		gasLimit: transaction.gasLimit
+		gas: transaction.gasLimit
 	};
 
 	if (cryptoCurrency === 'ETH') {

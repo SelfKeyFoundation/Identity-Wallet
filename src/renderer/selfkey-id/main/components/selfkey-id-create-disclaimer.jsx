@@ -85,7 +85,12 @@ class SelfKeyIdCreateDisclaimerComponent extends Component {
 									<br />
 								</Grid>
 								<Grid item>
-									<Button variant="contained" size="large" component={selfkeyId}>
+									<Button
+										id="selfkeyIdDisclaimerButton"
+										variant="contained"
+										size="large"
+										component={selfkeyId}
+									>
 										Continue
 									</Button>
 								</Grid>

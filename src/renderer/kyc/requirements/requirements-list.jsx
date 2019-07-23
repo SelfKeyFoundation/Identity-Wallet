@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, List, ListItem, CircularProgress } from '@material-ui/core';
-import { CheckedIcon } from 'selfkey-ui';
+import { CheckedIcon, StepIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	kyc: {
@@ -9,58 +9,69 @@ const styles = theme => ({
 		paddingTop: '40px',
 		borderTop: '2px solid #475768',
 		marginTop: '40px'
+	},
+	list: {
+		columns: 2,
+		width: '100%'
+	},
+	listItem: {
+		breakInside: 'avoid',
+		pageBreakInside: 'avoid',
+		'& p': {
+			fontWeight: 'bold'
+		}
+	},
+	documentType: {
+		display: 'flex'
+	},
+	documentIcon: {
+		marginLeft: '10px'
 	}
 });
 
-const KycRequirementListItem = withStyles(styles)(({ requirement }) => (
-	<ListItem>
-		<CheckedIcon
-			item={requirement.options && requirement.options.length ? 'verified' : 'unverified'}
-		/>
-		<Typography variant="body2" color="textSecondary" gutterBottom>
-			{requirement.type ? requirement.type.content.title : requirement.schemaId}
-		</Typography>
-	</ListItem>
-));
+const KycRequirementListItem = withStyles(styles)(({ requirement, classes, index }) => {
+	const type = requirement.title
+		? requirement.title
+		: requirement.type && requirement.type.content
+		? requirement.type.content.title
+		: requirement.schemaId;
+
+	const warning = !requirement.options || !requirement.options.length;
+	const icon = warning ? <StepIcon step={index + 1} /> : <CheckedIcon item="verified" />;
+
+	return (
+		<ListItem className={classes.listItem}>
+			{icon}
+			<Typography variant="body2" color="textSecondary" className={classes.documentType}>
+				{type}
+			</Typography>
+		</ListItem>
+	);
+});
 
 const KycRequirementsListComponent = props => {
-	const {
-		classes,
-		requirements,
-		title = 'KYC Requirements:',
-		subtitle,
-		cols = 3,
-		loading
-	} = props;
-
-	if (loading) {
-		return <CircularProgress />;
-	}
-
-	const requirementsPerCol = (requirements || []).reduce((acc, curr, indx) => {
-		const col = indx % cols;
-		if (!acc[col]) acc[col] = [];
-		acc[col].push(curr);
-		return acc;
-	}, []);
+	const { classes, requirements, title = 'KYC Requirements:', subtitle, loading } = props;
 
 	return (
 		<div className={classes.kyc}>
 			<Typography variant="h2" gutterBottom>
-				{title}
+				KYC checklist for {title}
 			</Typography>
 			{subtitle ? <Typography variant="body2">{subtitle}</Typography> : ''}
-			<Grid container justify="left" alignItems="left">
-				{requirementsPerCol.map((col, ind) => (
-					<Grid key={ind} item>
-						<List>
-							{col.map((item, ind) => (
-								<KycRequirementListItem key={ind} requirement={item} />
-							))}
-						</List>
-					</Grid>
-				))}
-			</Grid>
+			{loading && <CircularProgress size={50} />}
+			{!loading && (
+				<Grid container justify="flex-start" alignItems="flex-start" direction="column">
+					<List className={classes.list}>
+						{requirements.map((item, index) => (
+							<KycRequirementListItem
+								key={item.id}
+								requirement={item}
+								index={index}
+							/>
+						))}
+					</List>
+				</Grid>
+			)}
 		</div>
 	);
 };

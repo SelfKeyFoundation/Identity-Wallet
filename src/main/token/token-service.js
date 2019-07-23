@@ -2,6 +2,7 @@
 import Token from './token';
 import { getGlobalContext } from 'common/context';
 import { BigNumber } from 'bignumber.js';
+import { abi as customSymbolABI } from '../assets/data/abi-custom-symbol.json';
 
 export class TokenService {
 	constructor() {
@@ -23,13 +24,26 @@ export class TokenService {
 	}
 
 	async getTokenInfo(contractAddress) {
-		const tokenContract = new this.web3Service.web3.eth.Contract(
+		let tokenContract = new this.web3Service.web3.eth.Contract(
 			this.contractABI,
 			contractAddress
 		);
 		const decimal = parseInt(await tokenContract.methods.decimals().call());
-		const symbol = await tokenContract.methods.symbol().call();
-
+		let symbol = '';
+		// This try catch is a workaround for this issue https://stackoverflow.com/questions/55916175/web3-how-to-call-method-which-return-bytes-32
+		try {
+			symbol = await tokenContract.methods.symbol().call();
+		} catch (error) {
+			if (error.message.indexOf('Number can only safely store up to 53 bits') !== -1) {
+				tokenContract = new this.web3Service.web3.eth.Contract(
+					customSymbolABI,
+					contractAddress
+				);
+				symbol = this.web3Service.web3.utils.hexToAscii(
+					await tokenContract.methods.symbol().call()
+				);
+			}
+		}
 		return {
 			address: contractAddress,
 			symbol,
@@ -37,16 +51,17 @@ export class TokenService {
 		};
 	}
 
-	async getGasLimit(contractAddress, address, amount, walletAddress) {
+	async getGasLimit(contractAddress, address, amount, from) {
 		const tokenContract = new this.web3Service.web3.eth.Contract(
 			this.contractABI,
 			contractAddress
 		);
 		const MAX_GAS = 4500000;
 		const amountInWei = this.web3Service.web3.utils.toWei(new BigNumber(amount).toString());
-		return tokenContract.methods
+		const estimate = await tokenContract.methods
 			.transfer(address, amountInWei)
-			.estimateGas(walletAddress, MAX_GAS);
+			.estimateGas({ from });
+		return Math.round(Math.min(estimate * 1.1, MAX_GAS));
 	}
 }
 

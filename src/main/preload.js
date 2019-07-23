@@ -6,18 +6,14 @@ const common = require('../common/utils/common');
 const appPackage = require(`${__dirname}'/../../package.json`);
 const config = require('../common/config');
 const defaultWindowOpen = window.open;
-const async = require('async');
 const electron = require('electron');
+const PDFWindow = require('electron-pdf-window');
 
 window.electron = electron;
 window.appName = appPackage.productName;
 window.appVersion = appPackage.version;
 window.isTestMode = common.isTestMode();
 window.machineId = nodeMachineId.machineIdSync();
-
-process.once('loaded', function() {
-	window.setImmediate = async.setImmediate;
-});
 
 window.open = function(url, ...args) {
 	for (let i in config.common.allowedUrls) {
@@ -83,4 +79,11 @@ window.openFileSelectDialog = event => {
 			reject(e);
 		}
 	});
+};
+
+window.openPDF = href => {
+	const { BrowserWindow } = electron.remote;
+	const win = new BrowserWindow({ width: 800, height: 600 });
+	PDFWindow.addSupport(win);
+	win.loadURL(href);
 };

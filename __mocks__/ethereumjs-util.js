@@ -10,5 +10,17 @@ module.exports = {
 	},
 	privateToPublic(b) {
 		return b;
+	},
+	isValidPrivate() {
+		return true;
+	},
+	addHexPrefix(str) {
+		if (typeof str !== 'string') {
+			throw new Error('should be string');
+		}
+		if (str.indexOf('0x') === 0) {
+			return str;
+		}
+		return `0x${str}`;
 	}
 };

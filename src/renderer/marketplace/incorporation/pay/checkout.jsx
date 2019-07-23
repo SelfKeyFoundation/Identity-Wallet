@@ -9,7 +9,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { CloseButtonIcon } from 'selfkey-ui';
 import { pricesSelectors } from 'common/prices';
-import { FlagCountryName, sanitize, getIncorporationPrice } from '../common';
+import { getIncorporationPrice } from '../common';
+import { sanitize, FlagCountryName } from '../../common';
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
@@ -335,14 +336,17 @@ export class IncorporationCheckout extends React.Component {
 				templateId,
 				this.getPayRoute(),
 				this.getCancelRoute(),
-				`Incorporation Checklist: ${program.Region}`,
+				program.Region,
 				`You are about to begin the incorporation process in ${
 					program.Region
 				}. Please double check your
 				required documents are Certified True or Notarized where necessary. Failure to do so
 				will result in delays in the incorporation process. You may also be asked to provide
 				more information by the service provider`,
-				'conducting KYC'
+				'conducting KYC',
+				'Far Horizon Capital Inc',
+				'https://flagtheory.com/privacy-policy',
+				'http://flagtheory.com/terms-and-conditions'
 			)
 		);
 	};

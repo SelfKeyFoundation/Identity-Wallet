@@ -24,10 +24,29 @@ function init() {
 
 function appStart() {
 	return new Promise((resolve, reject) => {
-		if (process.env.OSENV === 'windows' || process.env.OSENV === 'linux') {
-			resolve(app.start());
+		if (
+			process.env.OSENV === 'windows' ||
+			process.env.OSENV === 'linux' ||
+			process.env.OSENV === 'circle-linux'
+		) {
+			app.start()
+				.then(
+					delay(15000)
+						.then(() => app.client.switchTab())
+						.then(resolve)
+				)
+				.catch(reject);
 		} else {
-			init().then(() => resolve(app.start()));
+			init().then(() =>
+				app
+					.start()
+					.then(
+						delay(15000)
+							.then(() => app.client.switchTab())
+							.then(resolve)
+					)
+					.catch(reject)
+			);
 		}
 	});
 }

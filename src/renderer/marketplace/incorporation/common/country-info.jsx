@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, List, ListItem } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
-import { sanitize } from '../common';
+import { sanitize } from '../../common';
 import 'flag-icon-css/css/flag-icon.css';
 
 const styles = theme => ({

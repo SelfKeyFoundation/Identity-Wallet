@@ -7,6 +7,7 @@ import { abi as ABI } from 'main/assets/data/abi.json';
 import { Logger } from 'common/logger';
 import ProviderEngine from 'web3-provider-engine';
 import FetchSubprovider from 'web3-provider-engine/subproviders/fetch';
+import HookedWalletEthTxSubprovider from 'web3-provider-engine/subproviders/hooked-wallet-ethtx';
 import SubscriptionSubprovider from 'web3-provider-engine/subproviders/subscriptions';
 import HWTransportNodeHid from '@ledgerhq/hw-transport-node-hid';
 import Web3SubProvider from '@ledgerhq/web3-subprovider';
@@ -31,13 +32,43 @@ export const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].ur
 
 export class Web3Service {
 	constructor(ctx = {}) {
-		this.web3 = new Web3();
+		this.defaultWallet();
 		this.store = ctx.store;
-		const { HttpProvider } = this.web3.providers;
-		this.web3.setProvider(new HttpProvider(SELECTED_SERVER_URL));
 		this.q = new AsyncTaskQueue(this.handleTicket.bind(this), REQUEST_INTERVAL_DELAY);
 		this.nonce = 0;
 		this.abi = ABI;
+	}
+
+	getWalletEthTxSubprovider() {
+		return new HookedWalletEthTxSubprovider({
+			getAccounts: callback => {
+				callback(null, [this.web3.eth.defaultAccount]);
+			},
+			getPrivateKey: (address, callback) => {
+				if (address.toLowerCase() === this.web3.eth.defaultAccount.toLowerCase()) {
+					return callback(
+						null,
+						Buffer.from(
+							this.web3.eth.accounts.wallet[address].privateKey.replace('0x', ''),
+							'hex'
+						)
+					);
+				}
+				return callback(new Error('not private key supplied for that account'));
+			}
+		});
+	}
+
+	async defaultWallet() {
+		const engine = new ProviderEngine();
+
+		engine.addProvider(this.getWalletEthTxSubprovider());
+		engine.addProvider(new FetchSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
+
+		engine.start();
+
+		this.web3 = new Web3(engine);
+		this.web3.transactionConfirmationBlocks = 1;
 	}
 
 	async switchToLedgerWallet(accountsOffset = 0, accountsQuantity = 6) {
@@ -59,6 +90,7 @@ export class Web3Service {
 		engine.start();
 
 		this.web3 = new Web3(engine);
+		this.web3.transactionConfirmationBlocks = 1;
 	}
 
 	async switchToTrezorWallet(accountsOffset = 0, accountsQuantity = 6, eventEmitter) {
@@ -81,6 +113,7 @@ export class Web3Service {
 		engine.start();
 
 		this.web3 = new Web3(engine);
+		this.web3.transactionConfirmationBlocks = 1;
 	}
 
 	async handleTicket(data) {

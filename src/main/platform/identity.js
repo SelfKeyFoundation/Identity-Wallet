@@ -1,9 +1,10 @@
-import ethUtil from 'ethereumjs-util';
+import * as ethUtil from 'ethereumjs-util';
 import { getPrivateKey } from '../keystorage';
 import { IdAttribute } from '../identity/id-attribute';
 import { getGlobalContext } from 'common/context';
 import { Logger } from 'common/logger';
 import AppEth from '@ledgerhq/hw-app-eth';
+import config from 'common/config';
 
 const log = new Logger('Identity');
 export class Identity {
@@ -13,6 +14,9 @@ export class Identity {
 		this.profile = wallet.profile;
 		this.privateKey = wallet.privateKey ? wallet.privateKey.replace('0x', '') : null;
 		this.keystorePath = wallet.keystoreFilePath;
+		this.did = wallet.did
+			? `did:selfkey:${wallet.did}${config.chainId === 3 ? ';selfkey:chain=ropsten' : ''}`
+			: `did:eth:${this.address ? this.address.toLowerCase() : ''}`;
 		this.wid = wallet.id;
 		this.path = wallet.path;
 
@@ -23,6 +27,21 @@ export class Identity {
 		} else {
 			this.publicKey = this.getPublicKeyFromHardwareWallet();
 		}
+		if (typeof this.publicKey === 'string') {
+			this.publicKey = ethUtil.addHexPrefix(this.publicKey);
+		}
+		if (this.publicKey && this.publicKey.then) {
+			this.publicKey.then(publicKey => {
+				if (typeof publicKey !== 'string') {
+					return publicKey;
+				}
+				this.publicKey = ethUtil.addHexPrefix(publicKey);
+				return this.publicKey;
+			});
+		}
+	}
+	getKeyId() {
+		return `${this.did}#keys-1`;
 	}
 	async getPublicKeyFromHardwareWallet() {
 		if (this.profile === 'ledger') {
@@ -30,7 +49,7 @@ export class Identity {
 			try {
 				const appEth = new AppEth(transport);
 				const address = await appEth.getAddress(this.path);
-				return address.publicKey;
+				return ethUtil.addHexPrefix(address.publicKey);
 			} finally {
 				transport.close();
 			}
@@ -38,7 +57,7 @@ export class Identity {
 			const publicKey = await getGlobalContext().web3Service.trezorWalletSubProvider.getPublicKey(
 				this.address
 			);
-			return publicKey;
+			return ethUtil.addHexPrefix(publicKey);
 		}
 	}
 
@@ -77,16 +96,17 @@ export class Identity {
 
 	async unlock(config) {
 		if (this.profile !== 'local') {
-			throw new Error('NOT_SUPPORTED');
-		}
-		try {
-			this.privateKey = getPrivateKey(this.keystorePath, config.password).toString('hex');
-			this.publicKey = ethUtil
-				.privateToPublic(Buffer.from(this.privateKey, 'hex'))
-				.toString('hex');
-		} catch (error) {
-			log.error(error);
-			throw new Error('INVALID_PASSWORD');
+			this.publicKey = this.getPublicKeyFromHardwareWallet();
+		} else {
+			try {
+				this.privateKey = getPrivateKey(this.keystorePath, config.password).toString('hex');
+				this.publicKey = ethUtil.addHexPrefix(
+					ethUtil.privateToPublic(Buffer.from(this.privateKey, 'hex')).toString('hex')
+				);
+			} catch (error) {
+				log.error(error);
+				throw new Error('INVALID_PASSWORD');
+			}
 		}
 	}
 
