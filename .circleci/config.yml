@@ -279,12 +279,13 @@ workflows:
             - 'build-mac':
                   requires:
                       - unit-test
-            - 'e2e-mac':
-                  requires:
-                      - build-mac
+            # - 'e2e-mac':
+            #       requires:
+            #           - build-mac
             - 'stage-mac':
                   requires:
-                      - e2e-mac
+                      # - e2e-mac
+                      - build-mac
                   filters:
                       branches:
                           only:
