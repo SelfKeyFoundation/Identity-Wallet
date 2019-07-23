@@ -263,12 +263,13 @@ workflows:
             - 'build-linux':
                   requires:
                       - unit-test
-            - 'e2e-linux':
-                  requires:
-                      - build-linux
+            # - 'e2e-linux':
+            #       requires:
+            #           - build-linux
             - 'stage-linux':
                   requires:
-                      - e2e-linux
+                      # - e2e-linux
+                      - build-linux
                   filters:
                       branches:
                           only:
@@ -279,12 +280,13 @@ workflows:
             - 'build-mac':
                   requires:
                       - unit-test
-            - 'e2e-mac':
-                  requires:
-                      - build-mac
+            # - 'e2e-mac':
+            #       requires:
+            #           - build-mac
             - 'stage-mac':
                   requires:
-                      - e2e-mac
+                      # - e2e-mac
+                      - build-mac
                   filters:
                       branches:
                           only:
@@ -294,14 +296,15 @@ workflows:
                               - /staging.*/
             - 'publish-mac':
                   requires:
-                      - e2e-mac
+                      - build-mac
                   filters:
                       branches:
                           only:
                               - master
             - 'publish-linux':
                   requires:
-                      - e2e-linux
+                      # - e2e-linux
+                      - build-linux
                   filters:
                       branches:
                           only:
