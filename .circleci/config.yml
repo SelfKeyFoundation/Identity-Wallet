@@ -268,7 +268,8 @@ workflows:
                       - build-linux
             - 'stage-linux':
                   requires:
-                      - e2e-linux
+                      # - e2e-linux
+                      - build-linux
                   filters:
                       branches:
                           only:
@@ -302,7 +303,8 @@ workflows:
                               - master
             - 'publish-linux':
                   requires:
-                      - e2e-linux
+                      # - e2e-linux
+                      - build-linux
                   filters:
                       branches:
                           only:
