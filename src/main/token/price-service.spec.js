@@ -61,10 +61,10 @@ const externalPrices = {
 			vwap24Hr: '0.4625421164150076'
 		},
 		{
-			id: 'key',
+			id: 'selfkey',
 			rank: '400',
 			symbol: 'KEY',
-			name: 'KEY',
+			name: 'Selfkey',
 			supply: '42832704971.0000000000000000',
 			maxSupply: '100000000000.0000000000000000',
 			marketCapUsd: '13953109840.5378012077011001',
@@ -122,7 +122,7 @@ const toInsert = [
 		symbol: 'FIC'
 	},
 	{
-		name: 'KEY',
+		name: 'Selfkey',
 		priceBTC: 0.000030855360999413036,
 		priceETH: 0.0014599934407722227,
 		priceUSD: 0.3257583159873931,
