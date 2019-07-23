@@ -115,7 +115,7 @@ const updateWalletDID = (walletId, did) => async (dispatch, getState) => {
 		const walletFromStore = getWallet(getState());
 		const DIDService = getGlobalContext().didService;
 		const controllerAddress = await DIDService.getControllerAddress(did);
-		if (walletFromStore.publicKey === controllerAddress.toLowerCase()) {
+		if (walletFromStore.publicKey.toLowerCase() === controllerAddress.toLowerCase()) {
 			const walletService = getGlobalContext().walletService;
 			const wallet = await walletService.updateDID(walletId, did);
 			await dispatch(updateWalletWithBalance({ ...walletFromStore, did: wallet.did }));
