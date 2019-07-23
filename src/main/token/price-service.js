@@ -29,16 +29,23 @@ export class PriceService extends EventEmitter {
 			return;
 		}
 
-		const data = json.data;
+		let data = json.data;
 		if (!data || !data.length) {
 			log.error('Unable to fetch price data');
 			return;
 		}
 
+		// FIXME: this doesn't look good
+		// Remove the other KEY, this one shows up as well:
+		// https://coinmarketcap.com/currencies/key/
+		// this is the correct one:
+		// https://coinmarketcap.com/currencies/selfkey/
+		data = data.filter(token => token.id !== 'key');
+
 		// KEY is mandatory, if doesn't get fetch in global list
 		// it needs to get fetched individually
 		if (!data.find(row => row.symbol === 'KEY')) {
-			const responseKey = await fetch('https://api.coincap.io/v2/assets/key');
+			const responseKey = await fetch('https://api.coincap.io/v2/assets/selfkey');
 			const jsonKey = await responseKey.json();
 			if (!jsonKey) {
 				log.error('Unable to fetch KEY price data');
