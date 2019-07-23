@@ -12,7 +12,7 @@ export const BankingDetailsPageTabs = withStyles(styles)(
 		return (
 			<React.Fragment>
 				<Tabs value={tab} onChange={(evt, value) => onTabChange(value)}>
-					<Tab id="accountButton" value="account" label="Account Types" />
+					<Tab id="accountButton" value="types" label="Account Types" />
 					<Tab id="descriptionButton" value="description" label="Description" />
 					<Tab id="countryButton" value="country" label="Country Details" />
 					<Tab id="servicesButton" value="services" label="Services" />
