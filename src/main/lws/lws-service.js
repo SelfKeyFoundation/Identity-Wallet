@@ -23,7 +23,7 @@ export const WS_ORIGINS_WHITELIST = process.env.WS_ORIGINS_WHITELIST
 
 export const WS_IP_WHITELIST = process.env.WS_IP_WHITELIST
 	? process.env.WS_IP_WHITELIST.split(',')
-	: ['127.0.0.1', '::1'];
+	: ['127.0.0.1', '::1', '::ffff:127.0.0.1'];
 
 export const WS_PORT = process.env.LWS_WS_PORT || 8898;
 
