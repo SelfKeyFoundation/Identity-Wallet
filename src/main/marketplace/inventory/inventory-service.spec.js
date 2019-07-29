@@ -2,8 +2,10 @@ import sinon from 'sinon';
 import {
 	InventoryService,
 	INVENTORY_API_ENDPOINT,
+	FT_INCORPORATIONS_ENDPOINT,
 	InventoryFetcher,
 	SelfkeyInventoryFetcher,
+	FlagtheoryIncorporationsInventoryFetcher,
 	dataEndpoints
 } from './inventory-service';
 import { Inventory } from './inventory';
@@ -14,6 +16,8 @@ import inventoryDb from './__fixtures__/inventory-db';
 import exchangesData from './__fixtures__/exchanges-airtable-data';
 import exchangesDataFetched from './__fixtures__/exchanges-data-fetched';
 import inventoryWithData from './__fixtures__/inventory-with-exchanges-data';
+import ftIncResponseFixture from './__fixtures__/ft-incorporations-response';
+import ftIncFetched from './__fixtures__/ft-incorporations-fetched';
 
 describe('InventoryService', () => {
 	let schedulerService = {};
@@ -83,5 +87,24 @@ describe('SelfkeyInventoryFetcher', () => {
 			{ url: dataEndpoints['exchanges'], json: true }
 		]);
 		expect(resp).toEqual(exchangesDataFetched());
+	});
+});
+
+describe('FlagtheoryIncorporationsInventoryFetcher', () => {
+	let fetcher;
+
+	beforeEach(() => {
+		fetcher = new FlagtheoryIncorporationsInventoryFetcher();
+	});
+	afterEach(() => {
+		sinon.restore();
+	});
+	it('should fetch', async () => {
+		sinon.stub(request, 'get').resolves(ftIncResponseFixture());
+		const resp = await fetcher.fetch();
+		expect(request.get.getCall(0).args).toEqual([
+			{ url: FT_INCORPORATIONS_ENDPOINT, json: true }
+		]);
+		expect(resp).toEqual(ftIncFetched());
 	});
 });

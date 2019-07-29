@@ -17,6 +17,8 @@ export const dataEndpoints = {
 	banking: `${config.airtableBaseUrl}Banking${isDevMode() ? 'Dev' : ''}`
 };
 
+export const FT_INCORPORATIONS_ENDPOINT = config.incorporationApiUrl;
+
 export class InventoryService {
 	constructor() {
 		this.fetchers = {};
@@ -121,8 +123,47 @@ export class SelfkeyInventoryFetcher extends InventoryFetcher {
 }
 
 export class FlagtheoryIncorporationsInventoryFetcher extends InventoryFetcher {
-	constructor() {
-		super('flagtheory_incorporations');
+	async fetch() {
+		try {
+			let fetched = await request.get({ url: FT_INCORPORATIONS_ENDPOINT, json: true });
+			const mapCorpDetails = (corps, curr) => {
+				const corpDetails = _.mapKeys(curr.data.fields, (value, key) => _.camelCase(key));
+				return { ...corps, [corpDetails.companyCode]: corpDetails };
+			};
+			let corpDetails = fetched.Corporations.reduce(mapCorpDetails, {});
+			corpDetails = fetched.LLCs.reduce(mapCorpDetails, corpDetails);
+			corpDetails = fetched.Foundations.reduce(mapCorpDetails, corpDetails);
+			corpDetails = fetched.Trusts.reduce(mapCorpDetails, corpDetails);
+			const enTranslations = fetched.EN.reduce(mapCorpDetails, {});
+			const taxes = fetched.Taxes.reduce(mapCorpDetails, {});
+
+			let items = fetched.Main.map(itm => {
+				const data = _.mapKeys(itm.data.fields, (value, key) => _.camelCase(key));
+				const sku = `FT-INC-${data.companyCode}`;
+				let name = data.region;
+				if (data.acronym && data.acronym.length) {
+					name += ` (${data.acronym.join(', ')})`;
+				}
+				return {
+					sku,
+					name,
+					status: data.templateId ? 'active' : 'inactive',
+					price: data.walletPrice || null,
+					priceCurrency: 'USD',
+					category: 'incorporations',
+					vendorId: 'flagtheory_incorporations',
+					data: {
+						...data,
+						...(corpDetails[data.companyCode] || {}),
+						...(taxes[data.companyCode] || {}),
+						en: { ...(enTranslations[data.companyCode] || {}) }
+					}
+				};
+			});
+			return items;
+		} catch (error) {
+			return [];
+		}
 	}
 }
 
