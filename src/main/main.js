@@ -17,6 +17,8 @@ import { configureContext, setGlobalContext, getGlobalContext } from '../common/
 import { handleSquirrelEvent } from './squirrelevent';
 import { createMainWindow } from './main-window';
 import { asValue } from 'awilix';
+import { featureIsEnabled } from 'common/feature-flags';
+
 const log = new Logger('main');
 
 log.info('starting: %s', electron.app.getName());
@@ -111,8 +113,10 @@ function onReady() {
 					ctx.tokenService.loadTokens(),
 					loadIdentity(ctx)
 				]);
-				registerJobHandlers(ctx);
-				scheduleInitialJobs(ctx);
+				if (featureIsEnabled('scheduler')) {
+					registerJobHandlers(ctx);
+					scheduleInitialJobs(ctx);
+				}
 				ctx.txHistoryService.startSyncingJob();
 				mainWindow.webContents.send('APP_SUCCESS_LOADING');
 			} catch (error) {
