@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-
-import IncorporationsTable from './table';
+import { IncorporationsListContainer } from './list/incorporations-list-container';
 import IncorporationsDetailView from './detail';
 import {
 	IncorporationCheckout,
@@ -15,7 +14,7 @@ class MarketplaceIncorporationComponent extends Component {
 
 		return (
 			<div>
-				<Route exact path={`${path}`} component={IncorporationsTable} />
+				<Route exact path={`${path}`} component={IncorporationsListContainer} />
 				<Route
 					path={`${path}/details/:companyCode/:countryCode/:templateId?`}
 					component={IncorporationsDetailView}

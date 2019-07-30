@@ -13,7 +13,8 @@ const getIncorporationPrice = program => {
 			price = program['test_price'];
 		}
 	}
-	return parseFloat(price.replace(/\$/, '').replace(/,/, ''));
+
+	return price ? parseFloat(price.replace(/\$/, '').replace(/,/, '')) : false;
 };
 
 const getTemplateID = program => {
