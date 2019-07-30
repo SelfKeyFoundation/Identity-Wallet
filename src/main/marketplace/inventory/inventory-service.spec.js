@@ -3,9 +3,11 @@ import {
 	InventoryService,
 	INVENTORY_API_ENDPOINT,
 	FT_INCORPORATIONS_ENDPOINT,
+	FT_BANKING_ENDPOINT,
 	InventoryFetcher,
 	SelfkeyInventoryFetcher,
 	FlagtheoryIncorporationsInventoryFetcher,
+	FlagtheoryBankingInventoryFetcher,
 	dataEndpoints
 } from './inventory-service';
 import { Inventory } from './inventory';
@@ -18,6 +20,8 @@ import exchangesDataFetched from './__fixtures__/exchanges-data-fetched';
 import inventoryWithData from './__fixtures__/inventory-with-exchanges-data';
 import ftIncResponseFixture from './__fixtures__/ft-incorporations-response';
 import ftIncFetched from './__fixtures__/ft-incorporations-fetched';
+import ftBankResponseFixture from './__fixtures__/ft-banking-response';
+import ftBankFetched from './__fixtures__/ft-banking-fetched';
 
 describe('InventoryService', () => {
 	let schedulerService = {};
@@ -106,5 +110,22 @@ describe('FlagtheoryIncorporationsInventoryFetcher', () => {
 			{ url: FT_INCORPORATIONS_ENDPOINT, json: true }
 		]);
 		expect(resp).toEqual(ftIncFetched());
+	});
+});
+
+describe('FlagtheoryBankingInventoryFetcher', () => {
+	let fetcher;
+
+	beforeEach(() => {
+		fetcher = new FlagtheoryBankingInventoryFetcher();
+	});
+	afterEach(() => {
+		sinon.restore();
+	});
+	it('should fetch', async () => {
+		sinon.stub(request, 'get').resolves(ftBankResponseFixture());
+		const resp = await fetcher.fetch();
+		expect(request.get.getCall(0).args).toEqual([{ url: FT_BANKING_ENDPOINT, json: true }]);
+		expect(resp).toEqual(ftBankFetched());
 	});
 });

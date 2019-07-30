@@ -43,8 +43,8 @@ export class Logger {
 			try {
 				msg = vsprintf(msg, args);
 			} catch (error) {
-				this.error(error);
-				this.error(`could not format msg ${msg}`);
+				this.error(`could not format log msg`);
+				console.error('LOGGER FORMAT ERROR:', msg);
 			}
 		}
 		return `${this.processName} ${this.name} ${level}: ${msg}`;

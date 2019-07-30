@@ -18,6 +18,7 @@ export const dataEndpoints = {
 };
 
 export const FT_INCORPORATIONS_ENDPOINT = config.incorporationApiUrl;
+export const FT_BANKING_ENDPOINT = config.bankAccountsApiUrl;
 
 export class InventoryService {
 	constructor() {
@@ -162,14 +163,48 @@ export class FlagtheoryIncorporationsInventoryFetcher extends InventoryFetcher {
 			});
 			return items;
 		} catch (error) {
+			log.error(error);
 			return [];
 		}
 	}
 }
 
 export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
-	constructor() {
-		super('flagtheory_banking');
+	async fetch() {
+		try {
+			const fetched = await request.get({ url: FT_BANKING_ENDPOINT, json: true });
+			const mapData = field => (acc, curr) => {
+				const details = _.mapKeys(curr.data.fields, (value, key) => _.camelCase(key));
+				return { ...acc, [details[field]]: details };
+			};
+			const jurisdictions = fetched.Jurisdictions.reduce(mapData('countryCode'), {});
+			const accDetails = fetched.Account_Details.reduce(mapData('accountCode'), {});
+
+			const items = fetched.Main.map(itm => {
+				const data = _.mapKeys(itm.data.fields, (value, key) => _.camelCase(key));
+				const sku = `FT-BNK-${data.accountCode}`;
+				const name = `${data.region} ${data.accountCode}`;
+				let price = data.activeTestPrice ? data.testPrice : data.price;
+				return {
+					sku,
+					name,
+					status: data.templateId ? 'active' : 'inactive',
+					price,
+					priceCurrency: 'USD',
+					category: 'banking',
+					vendorId: 'flagtheory_banking',
+					data: {
+						...data,
+						jurisdiction: jurisdictions[data.countryCode] || {},
+						...(accDetails[data.accountCode] || {})
+					}
+				};
+			});
+			return items;
+		} catch (error) {
+			log.error(error);
+			return [];
+		}
 	}
 }
 
