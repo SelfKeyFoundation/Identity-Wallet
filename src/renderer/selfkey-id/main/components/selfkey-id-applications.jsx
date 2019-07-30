@@ -710,85 +710,87 @@ class SelfkeyIdApplicationsComponent extends Component {
 												</CardContent>
 											</Card>
 										</Grid>
-										<Grid item xs>
-											<Card>
-												<Typography variant="h2" className={classes.title}>
-													Payment Details
-												</Typography>
-												<Divider variant="middle" />
-												<CardContent>
-													<List className={classes.list}>
-														<ListItem
-															key="transactionId"
-															className={classes.listItem}
-														>
-															<Typography
-																variant="body2"
-																color="secondary"
-																className={classes.label}
+										{item.payments && Object.keys(item.payments).length > 0 && (
+											<Grid item xs>
+												<Card>
+													<Typography
+														variant="h2"
+														className={classes.title}
+													>
+														Payment Details
+													</Typography>
+													<Divider variant="middle" />
+													<CardContent>
+														<List className={classes.list}>
+															<ListItem
+																key="transactionId"
+																className={classes.listItem}
 															>
-																Transaction ID
-															</Typography>
-															<Typography variant="body2">
-																{item.payments &&
-																	item.payments.transactionHash}
-															</Typography>
-														</ListItem>
-														<ListItem
-															key="transactionDate"
-															className={classes.listItem}
-														>
-															<Typography
-																variant="body2"
-																color="secondary"
-																className={classes.label}
+																<Typography
+																	variant="body2"
+																	color="secondary"
+																	className={classes.label}
+																>
+																	Transaction ID
+																</Typography>
+																<Typography variant="body2">
+																	{item.payments.transactionHash}
+																</Typography>
+															</ListItem>
+															<ListItem
+																key="transactionDate"
+																className={classes.listItem}
 															>
-																Transaction Date
-															</Typography>
-															<Typography variant="body2">
-																{item.payments &&
-																	moment(
-																		item.payments
-																			.transactionDate
-																	).format('DD MMM YYYY')}
-															</Typography>
-														</ListItem>
-														<ListItem
-															key="amount"
-															className={classes.listItem}
-														>
-															<Typography
-																variant="body2"
-																color="secondary"
-																className={classes.label}
+																<Typography
+																	variant="body2"
+																	color="secondary"
+																	className={classes.label}
+																>
+																	Transaction Date
+																</Typography>
+																<Typography variant="body2">
+																	{item.payments &&
+																		moment(
+																			item.payments
+																				.transactionDate
+																		).format('DD MMM YYYY')}
+																</Typography>
+															</ListItem>
+															<ListItem
+																key="amount"
+																className={classes.listItem}
 															>
-																Amount
-															</Typography>
-															<Typography variant="body2">
-																{item.payments &&
-																	item.payments.amountKey}
-															</Typography>
-														</ListItem>
-														<ListItem
-															key="paymentStatus"
-															className={classes.listItem}
-														>
-															<Typography
-																variant="body2"
-																color="secondary"
-																className={classes.label}
+																<Typography
+																	variant="body2"
+																	color="secondary"
+																	className={classes.label}
+																>
+																	Amount
+																</Typography>
+																<Typography variant="body2">
+																	{item.payments.amountKey}
+																</Typography>
+															</ListItem>
+															<ListItem
+																key="paymentStatus"
+																className={classes.listItem}
 															>
-																Payment Status
-															</Typography>
-															<Typography variant="body2">
-																{item.payments &&
-																	item.payments.status}
-															</Typography>
-														</ListItem>
-													</List>
-												</CardContent>
-											</Card>
-										</Grid>
+																<Typography
+																	variant="body2"
+																	color="secondary"
+																	className={classes.label}
+																>
+																	Payment Status
+																</Typography>
+																<Typography variant="body2">
+																	{item.payments.status}
+																</Typography>
+															</ListItem>
+														</List>
+													</CardContent>
+												</Card>
+											</Grid>
+										)}
 									</Grid>
 								</ExpansionPanelDetails>
 							</ExpansionPanel>
