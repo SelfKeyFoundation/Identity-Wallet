@@ -100,7 +100,8 @@ export class SelfkeyInventoryFetcher extends InventoryFetcher {
 				return item;
 			});
 		} catch (error) {
-			return [];
+			log.error(error);
+			throw error;
 		}
 	}
 	async fetchData(category) {
@@ -118,12 +119,15 @@ export class SelfkeyInventoryFetcher extends InventoryFetcher {
 				}, {});
 		} catch (error) {
 			log.error(error);
-			return {};
+			throw error;
 		}
 	}
 }
 
 export class FlagtheoryIncorporationsInventoryFetcher extends InventoryFetcher {
+	constructor() {
+		super('flagtheory_incorporations');
+	}
 	async fetch() {
 		try {
 			let fetched = await request.get({ url: FT_INCORPORATIONS_ENDPOINT, json: true });
@@ -164,12 +168,15 @@ export class FlagtheoryIncorporationsInventoryFetcher extends InventoryFetcher {
 			return items;
 		} catch (error) {
 			log.error(error);
-			return [];
+			throw error;
 		}
 	}
 }
 
 export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
+	constructor() {
+		super('flagtheory_banking');
+	}
 	async fetch() {
 		try {
 			const fetched = await request.get({ url: FT_BANKING_ENDPOINT, json: true });
@@ -180,30 +187,33 @@ export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
 			const jurisdictions = fetched.Jurisdictions.reduce(mapData('countryCode'), {});
 			const accDetails = fetched.Account_Details.reduce(mapData('accountCode'), {});
 
-			const items = fetched.Main.map(itm => {
-				const data = _.mapKeys(itm.data.fields, (value, key) => _.camelCase(key));
-				const sku = `FT-BNK-${data.accountCode}`;
-				const name = `${data.region} ${data.accountCode}`;
-				let price = data.activeTestPrice ? data.testPrice : data.price;
-				return {
-					sku,
-					name,
-					status: data.templateId ? 'active' : 'inactive',
-					price,
-					priceCurrency: 'USD',
-					category: 'banking',
-					vendorId: 'flagtheory_banking',
-					data: {
-						...data,
-						jurisdiction: jurisdictions[data.countryCode] || {},
-						...(accDetails[data.accountCode] || {})
-					}
-				};
-			});
+			const items = fetched.Main.map(itm =>
+				_.mapKeys(itm.data.fields, (value, key) => _.camelCase(key))
+			)
+				.filter(itm => itm.region && (itm.accountCode || itm.countryCode))
+				.map(itm => {
+					const sku = `FT-BNK-${itm.accountCode || itm.countryCode}`;
+					const name = `${itm.region} ${itm.accountCode || itm.countryCode}`;
+					let price = itm.activeTestPrice ? itm.testPrice : itm.price;
+					return {
+						sku,
+						name,
+						status: itm.templateId ? 'active' : 'inactive',
+						price,
+						priceCurrency: 'USD',
+						category: 'banking',
+						vendorId: 'flagtheory_banking',
+						data: {
+							...itm,
+							jurisdiction: jurisdictions[itm.countryCode] || {},
+							...(accDetails[itm.accountCode] || {})
+						}
+					};
+				});
 			return items;
 		} catch (error) {
 			log.error(error);
-			return [];
+			throw error;
 		}
 	}
 }

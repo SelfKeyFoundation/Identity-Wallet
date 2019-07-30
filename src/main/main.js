@@ -111,7 +111,6 @@ function onReady() {
 					ctx.tokenService.loadTokens(),
 					loadIdentity(ctx)
 				]);
-
 				registerJobHandlers(ctx);
 				scheduleInitialJobs(ctx);
 				ctx.txHistoryService.startSyncingJob();
