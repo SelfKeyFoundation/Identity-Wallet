@@ -358,7 +358,12 @@ const loadRelyingPartyOperation = (
 						currentStatusName: application.statusName,
 						owner: application.owner,
 						scope: application.scope,
-						applicationDate: application.createdAt
+						applicationDate: application.createdAt,
+						// TODO: this is only a workaround for now, we must change this in the future
+						title:
+							Object.keys(application.questions).length > 0
+								? 'Bank Account'
+								: 'Incorporation'
 					})
 				);
 			}
