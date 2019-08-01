@@ -65,7 +65,7 @@ export class TaxTreaties extends BaseModel {
 		all = all.concat(await this.bulkEdit(update));
 
 		let found = await this.findAll();
-		return found.filter(x => x[this.idColumn] === all[this.idColumn]);
+		return found.filter(x => all.find(t => t[this.idColumn] === x[this.idColumn]));
 	}
 }
 
