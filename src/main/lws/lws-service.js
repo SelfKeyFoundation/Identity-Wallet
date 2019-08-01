@@ -49,6 +49,7 @@ export class LWSService {
 					unlocked,
 					profile: w.profile,
 					name: w.name,
+					did: w.did ? `did:selfkey:${w.did.replace('did:selfkey:', '')}` : null,
 					signedUp
 				};
 			})
