@@ -1,9 +1,10 @@
 export const INVENTORY_SYNC_JOB = 'inventory-sync-job';
 
 export class InventorySyncJobHandler {
-	constructor({ schedulerService, inventoryService }) {
+	constructor({ schedulerService, inventoryService, vendorService }) {
 		this.schedulerService = schedulerService;
 		this.inventoryService = inventoryService;
+		this.vendorService = vendorService;
 	}
 
 	registerHandler() {
@@ -19,8 +20,12 @@ export class InventorySyncJobHandler {
 
 		job.emitProgress(25, { message: 'load db inventory' });
 		const dbInventory = await this.inventoryService.loadInventory();
-		job.emitProgress(50, { message: 'load db inventory' });
-
+		job.emitProgress(50, { message: 'load db vendors' });
+		const dbVendors = await this.vendorService.loadVendors();
+		const vendorsById = dbVendors.reduce((acc, curr) => {
+			acc[curr.vendorId] = curr;
+			return acc;
+		}, {});
 		job.emitProgress(50, { message: 'Merging remote and local data' });
 
 		let inventoryBySKU = remoteInventory.reduce((acc, curr) => {
@@ -32,7 +37,14 @@ export class InventorySyncJobHandler {
 			(acc, curr) => {
 				acc.dbInventoryBySKU[curr.sku] = curr;
 				if (!inventoryBySKU[curr.sku]) {
-					acc.toRemove.push(curr.id);
+					const vendor = vendorsById[curr.vendorId];
+					if (
+						vendor.inventorySource === data.fetcherName ||
+						curr.vendorId === data.fetcherName
+					) {
+						console.log('XXX remove', curr.sku);
+						acc.toRemove.push(curr.id);
+					}
 				}
 				return acc;
 			},
@@ -50,7 +62,7 @@ export class InventorySyncJobHandler {
 		job.emitProgress(25, { message: 'Removing obsolete inventory' });
 		await this.inventoryService.deleteMany(toRemove);
 		job.emitProgress(95, { message: 'Fetching updated inventory list' });
-		const inventory = this.inventoryService.loadInventory();
+		const inventory = await this.inventoryService.loadInventory();
 		job.emitProgress(100, { message: 'Done!' });
 		return inventory;
 	}
