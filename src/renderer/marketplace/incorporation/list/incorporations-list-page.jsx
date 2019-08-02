@@ -35,7 +35,7 @@ const styles = theme => ({
 });
 
 const IncorporationsListPage = withStyles(styles)(
-	({ classes, loading, data, keyRate, onDetails, onBackClick }) => {
+	({ classes, loading, data, keyRate, onDetailsClick, onBackClick }) => {
 		return (
 			<Grid container>
 				<Grid item>
@@ -78,7 +78,7 @@ const IncorporationsListPage = withStyles(styles)(
 								<IncorporationsListTable
 									keyRate={keyRate}
 									data={data}
-									onDetails={onDetails}
+									onDetailsClick={onDetailsClick}
 								/>
 							</Grid>
 						</Grid>

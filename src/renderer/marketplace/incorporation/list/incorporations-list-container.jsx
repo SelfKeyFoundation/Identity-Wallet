@@ -10,7 +10,7 @@ import NoConnection from 'renderer/no-connection';
 
 const styles = theme => ({});
 const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
-const INCORPORATIONS_DETAIL_PATH = '/main/marketplace-incorporations/details';
+const INCORPORATIONS_DETAIL_PATH = '/main/marketplace-incorporation/details';
 
 class IncorporationsListContainer extends Component {
 	componentDidMount() {
@@ -21,7 +21,7 @@ class IncorporationsListContainer extends Component {
 
 	onBackClick = () => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
 
-	onDetailsClick = jurisdiction =>
+	onDetailsClick = jurisdiction => {
 		this.props.dispatch(
 			push(
 				`${INCORPORATIONS_DETAIL_PATH}/${jurisdiction['Company code']}/${
@@ -29,6 +29,7 @@ class IncorporationsListContainer extends Component {
 				}/${jurisdiction.templateId}`
 			)
 		);
+	};
 
 	activeJurisdiction = jurisdiction => jurisdiction.show_in_wallet;
 
@@ -46,7 +47,7 @@ class IncorporationsListContainer extends Component {
 				keyRate={keyRate}
 				data={data}
 				onBackClick={this.onBackClick}
-				onDetails={this.onDetailsClick}
+				onDetailsClick={this.onDetailsClick}
 				loading={isLoading}
 			/>
 		);

@@ -9,7 +9,6 @@ import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
 import { LargeTableHeadRow, TagTableCell, Tag } from 'selfkey-ui';
 import { ProgramPrice, FlagCountryName } from '../../common';
-import { getIncorporationPrice } from '../common';
 
 const styles = theme => ({
 	/*
@@ -106,7 +105,7 @@ const styles = theme => ({
 });
 
 const IncorporationsListTable = withStyles(styles)(
-	({ classes, keyRate, data = [], onDetails, className }) => {
+	({ classes, keyRate, data = [], onDetailsClick, className }) => {
 		return (
 			<Table className={classNames(classes.table, className)}>
 				<TableHead>
@@ -154,14 +153,10 @@ const IncorporationsListTable = withStyles(styles)(
 								</Grid>
 							</TagTableCell>
 							<TableCell className={classes.costCell}>
-								<ProgramPrice
-									label="$"
-									price={getIncorporationPrice(inc)}
-									rate={keyRate}
-								/>
+								<ProgramPrice label="$" price={inc.price} rate={keyRate} />
 							</TableCell>
 							<TableCell className={classes.detailsCell}>
-								<span onClick={() => this.onDetailsClick(inc)}>Details</span>
+								<span onClick={() => onDetailsClick(inc)}>Details</span>
 							</TableCell>
 						</TableRow>
 					))}
