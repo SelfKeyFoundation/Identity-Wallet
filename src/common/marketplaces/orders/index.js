@@ -675,7 +675,11 @@ const ordersSelectors = {
 		ordersSelectors.getAllOrders(state).filter(order => order.applicationId === applicationId),
 	getLatestActiveOrderForApplication: (state, applicationId) =>
 		ordersSelectors.getOrdersByApplication(state, applicationId).reduce((acc, curr) => {
-			if (curr.status !== orderStatus.CANCELED && curr.updatedAt > (acc ? acc.updatedAt : 0))
+			if (
+				curr.status !== orderStatus.CANCELED &&
+				curr.status !== orderStatus.COMPLETE &&
+				curr.updatedAt > (acc ? acc.updatedAt : 0)
+			)
 				return curr;
 			return acc;
 		}, null)
