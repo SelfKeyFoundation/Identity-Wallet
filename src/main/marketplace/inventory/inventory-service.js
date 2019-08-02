@@ -17,6 +17,9 @@ export const dataEndpoints = {
 	banking: `${config.airtableBaseUrl}Banking${isDevMode() ? 'Dev' : ''}`
 };
 
+export const FT_INCORPORATIONS_ENDPOINT = config.incorporationApiUrl;
+export const FT_BANKING_ENDPOINT = config.bankAccountsApiUrl;
+
 export class InventoryService {
 	constructor() {
 		this.fetchers = {};
@@ -97,7 +100,8 @@ export class SelfkeyInventoryFetcher extends InventoryFetcher {
 				return item;
 			});
 		} catch (error) {
-			return [];
+			log.error(error);
+			throw error;
 		}
 	}
 	async fetchData(category) {
@@ -115,7 +119,7 @@ export class SelfkeyInventoryFetcher extends InventoryFetcher {
 				}, {});
 		} catch (error) {
 			log.error(error);
-			return {};
+			throw error;
 		}
 	}
 }
@@ -124,11 +128,93 @@ export class FlagtheoryIncorporationsInventoryFetcher extends InventoryFetcher {
 	constructor() {
 		super('flagtheory_incorporations');
 	}
+	async fetch() {
+		try {
+			let fetched = await request.get({ url: FT_INCORPORATIONS_ENDPOINT, json: true });
+			const mapCorpDetails = (corps, curr) => {
+				const corpDetails = _.mapKeys(curr.data.fields, (value, key) => _.camelCase(key));
+				return { ...corps, [corpDetails.companyCode]: corpDetails };
+			};
+			let corpDetails = fetched.Corporations.reduce(mapCorpDetails, {});
+			corpDetails = fetched.LLCs.reduce(mapCorpDetails, corpDetails);
+			corpDetails = fetched.Foundations.reduce(mapCorpDetails, corpDetails);
+			corpDetails = fetched.Trusts.reduce(mapCorpDetails, corpDetails);
+			const enTranslations = fetched.EN.reduce(mapCorpDetails, {});
+			const taxes = fetched.Taxes.reduce(mapCorpDetails, {});
+
+			let items = fetched.Main.map(itm => {
+				const data = _.mapKeys(itm.data.fields, (value, key) => _.camelCase(key));
+				const sku = `FT-INC-${data.companyCode}`;
+				let name = data.region;
+				if (data.acronym && data.acronym.length) {
+					name += ` (${data.acronym.join(', ')})`;
+				}
+				return {
+					sku,
+					name,
+					status: data.templateId ? 'active' : 'inactive',
+					price: data.walletPrice || null,
+					priceCurrency: 'USD',
+					category: 'incorporations',
+					vendorId: 'flagtheory_incorporations',
+					data: {
+						...data,
+						...(corpDetails[data.companyCode] || {}),
+						...(taxes[data.companyCode] || {}),
+						en: { ...(enTranslations[data.companyCode] || {}) }
+					}
+				};
+			});
+			return items;
+		} catch (error) {
+			log.error(error);
+			throw error;
+		}
+	}
 }
 
 export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
 	constructor() {
 		super('flagtheory_banking');
+	}
+	async fetch() {
+		try {
+			const fetched = await request.get({ url: FT_BANKING_ENDPOINT, json: true });
+			const mapData = field => (acc, curr) => {
+				const details = _.mapKeys(curr.data.fields, (value, key) => _.camelCase(key));
+				return { ...acc, [details[field]]: details };
+			};
+			const jurisdictions = fetched.Jurisdictions.reduce(mapData('countryCode'), {});
+			const accDetails = fetched.Account_Details.reduce(mapData('accountCode'), {});
+
+			const items = fetched.Main.map(itm =>
+				_.mapKeys(itm.data.fields, (value, key) => _.camelCase(key))
+			)
+				.filter(itm => itm.region && (itm.accountCode || itm.countryCode))
+				.map(itm => {
+					const sku = `FT-BNK-${itm.accountCode || itm.countryCode}`;
+					const name = `${itm.region} ${itm.accountCode || itm.countryCode}`;
+					let price = itm.activeTestPrice ? itm.testPrice : itm.price;
+					return {
+						sku,
+						name,
+						status: itm.templateId ? 'active' : 'inactive',
+						price,
+						priceCurrency: 'USD',
+						category: 'banking',
+						vendorId: 'flagtheory_banking',
+						data: {
+							...itm,
+							jurisdiction: jurisdictions[itm.countryCode] || {},
+							...(accDetails[itm.accountCode] || {})
+						}
+					};
+				});
+			return items;
+		} catch (error) {
+			log.error(error);
+			throw error;
+		}
 	}
 }
 

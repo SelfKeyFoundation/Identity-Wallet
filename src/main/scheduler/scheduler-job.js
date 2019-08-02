@@ -12,7 +12,7 @@ export class SchedulerJob extends EventEmitter {
 		this.additionalJobs = [];
 	}
 	async execute() {
-		log.info('%s: starting job %s', this.config.id, this.config.category);
+		log.info('%s: starting job %s %2j', this.config.id, this.config.category, this.config.data);
 		try {
 			const results = await this.jobHandler.execute(this.config.data, this);
 			return results;
