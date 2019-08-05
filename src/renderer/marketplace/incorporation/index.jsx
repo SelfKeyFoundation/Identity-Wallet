@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-
+import { connect } from 'react-redux';
+import { marketplaceOperations } from 'common/marketplace';
 import IncorporationsTable from './table';
 import IncorporationsDetailView from './detail';
 import {
@@ -10,6 +11,9 @@ import {
 } from './pay';
 
 class MarketplaceIncorporationComponent extends Component {
+	async componentDidMount() {
+		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
+	}
 	render() {
 		const { path } = this.props.match;
 
@@ -37,5 +41,5 @@ class MarketplaceIncorporationComponent extends Component {
 	}
 }
 
-const MarketplaceIncorporationPage = MarketplaceIncorporationComponent;
+const MarketplaceIncorporationPage = connect()(MarketplaceIncorporationComponent);
 export { MarketplaceIncorporationPage };

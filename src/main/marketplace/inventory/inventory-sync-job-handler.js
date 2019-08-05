@@ -42,7 +42,6 @@ export class InventorySyncJobHandler {
 						vendor.inventorySource === data.fetcherName ||
 						curr.vendorId === data.fetcherName
 					) {
-						console.log('XXX remove', curr.sku);
 						acc.toRemove.push(curr.id);
 					}
 				}
