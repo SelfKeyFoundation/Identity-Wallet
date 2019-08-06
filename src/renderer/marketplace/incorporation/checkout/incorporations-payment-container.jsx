@@ -8,7 +8,7 @@ import { getWallet } from 'common/wallet/selectors';
 import { kycSelectors } from 'common/kyc';
 import { pricesSelectors } from 'common/prices';
 import { incorporationsSelectors } from 'common/incorporations';
-import { ordersOperations } from 'common/marketplaces/orders';
+import { ordersOperations } from 'common/marketplace/orders';
 import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorporations-component';
 
 const styles = theme => ({});
