@@ -38,19 +38,28 @@ export class LWSService {
 	}
 
 	async reqWallets(msg, conn) {
-		const { website } = msg.payload.config;
+		const { website, did } = msg.payload.config;
 		let payload = await Wallet.findAll();
 		payload = await Promise.all(
 			payload.map(async w => {
 				let unlocked = !!conn.getIdentity(w.publicKey);
 				let signedUp = unlocked && (await w.hasSignedUpTo(website.url));
-				return {
+				const retWallet = {
 					publicKey: w.publicKey,
 					unlocked,
 					profile: w.profile,
 					name: w.name,
 					signedUp
 				};
+				if (unlocked) {
+					retWallet.hasSelfkeyId = w.isSetupFinished;
+					if (did) {
+						retWallet.did = w.did
+							? `did:selfkey:${w.did.replace('did:selfkey:', '')}`
+							: null;
+					}
+				}
+				return retWallet;
 			})
 		);
 		conn.send(
@@ -183,6 +192,13 @@ export class LWSService {
 			await identity.unlock({ password });
 			conn.addIdentity(publicKey, identity);
 			payload.unlocked = true;
+			payload.hasSelfkeyId = wallet.isSetupFinished;
+			if (config.did) {
+				payload.did = wallet.did
+					? `did:selfkey:${wallet.did.replace('did:selfkey:', '')}`
+					: null;
+			}
+			payload.name = wallet.name;
 			payload.signedUp = await wallet.hasSignedUpTo(config.website.url);
 		} catch (error) {
 			log.error(error);

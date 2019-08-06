@@ -62,7 +62,7 @@ export const MarketplacePayment = withStyles(styles)(
 		onLearnHowClick
 	}) => {
 		return (
-			<Popup closeAction={onBackClick} open text="Bank Account Opening Payment">
+			<Popup closeAction={onBackClick} open text="Payment Required">
 				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 					<Grid item xs={2} className={classes.iconWrap}>
 						<PaymentIcon className={classes.paymentIcon} />

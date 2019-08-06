@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { TransactionProcessingPopup } from '../../common/transaction-processing-popup';
-import { ordersOperations } from '../../../common/marketplaces/orders';
+import { ordersOperations } from '../../../common/marketplace/orders';
 
 class MarketplaceOrderTxInProgressContainer extends Component {
 	handleCloseAction = _ => {

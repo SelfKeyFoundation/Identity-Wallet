@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { MarketplacePaymentComplete } from './payment-complete';
-import { ordersOperations } from '../../../common/marketplaces/orders';
+import { ordersOperations } from '../../../common/marketplace/orders';
 
 class MarketplacePaymentCompleteContainer extends Component {
 	handleBackClick = () => {
