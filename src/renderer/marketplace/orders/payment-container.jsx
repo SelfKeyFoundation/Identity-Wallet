@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { MarketplacePayment } from './payment';
-import { ordersSelectors, ordersOperations } from '../../../common/marketplaces/orders';
+import { ordersSelectors, ordersOperations } from '../../../common/marketplace/orders';
 import { walletSelectors } from '../../../common/wallet';
 import { featureIsEnabled } from 'common/feature-flags';
 

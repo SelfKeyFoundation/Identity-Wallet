@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { TransactionErrorPopup } from '../../common/transaction-error-popup';
-import { ordersOperations } from '../../../common/marketplaces/orders';
+import { ordersOperations } from '../../../common/marketplace/orders';
 
 class MarketplaceOrderTxErrorContainer extends Component {
 	handleCloseAction = _ => {

@@ -5,8 +5,14 @@ import { IncorporationsDetailsContainer } from './details/incorporations-details
 import { IncorporationsCheckoutContainer } from './checkout/incorporations-checkout-container';
 import { IncorporationsPaymentContainer } from './checkout/incorporations-payment-container';
 import { IncorporationsPaymentCompleteContainer } from './checkout/incorporations-payment-complete-container';
+import { connect } from 'react-redux';
+import { marketplaceOperations } from 'common/marketplace';
+
 
 class MarketplaceIncorporationComponent extends Component {
+	async componentDidMount() {
+		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
+	}
 	render() {
 		const { path } = this.props.match;
 
@@ -34,5 +40,5 @@ class MarketplaceIncorporationComponent extends Component {
 	}
 }
 
-const MarketplaceIncorporationPage = MarketplaceIncorporationComponent;
+const MarketplaceIncorporationPage = connect()(MarketplaceIncorporationComponent);
 export { MarketplaceIncorporationPage };

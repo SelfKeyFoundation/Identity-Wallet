@@ -4,7 +4,7 @@ import { ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { marketplacesOperations, marketplacesSelectors } from 'common/marketplaces';
 import { MarketplaceCategoriesList } from './categories-list';
 import { push } from 'connected-react-router';
-import { ordersOperations } from '../../../common/marketplaces/orders';
+import { ordersOperations } from '../../../common/marketplace/orders';
 
 const mapStateToProps = state => ({
 	categories: marketplacesSelectors.categoriesSelectors(state)

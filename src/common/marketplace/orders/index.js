@@ -611,7 +611,7 @@ const ordersReducers = {
 	}
 };
 
-const reducer = (state = initialState, action) => {
+export const reducer = (state = initialState, action) => {
 	switch (action.type) {
 		case ordersTypes.ORDERS_SET_ACTION:
 			return ordersReducers.ordersSetReducer(state, action);
