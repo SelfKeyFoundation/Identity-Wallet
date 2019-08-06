@@ -10,6 +10,7 @@ import { MARKETPLACE_COUNTRY_SYNC_JOB } from './marketplace-country-sync-job-han
 const log = new Logger('TaxTreatiesService');
 
 export const FLAGTHEORY_COUNTRY_ENDPOINT = config.countryInfoUrl;
+export const FLAGTHEORY_ALL_COUNTRIES_ENDPOINT = config.allCountriesInfoUrl;
 
 export const COUNTRY_API_ENDPOINT = `${config.airtableBaseUrl}Countries${isDevMode() ? 'Dev' : ''}`;
 
@@ -38,24 +39,15 @@ export class MarketplaceCountryService {
 		}
 	}
 	async fetchMarketplaceCountriesFlagtheory(filter = []) {
-		try {
-			let fetched = await this.taxTreatiesService.fetchTaxTreaties();
-			fetched = [
-				...new Set(
-					fetched.reduce((acc, curr) => {
-						acc.push(curr.countryCode);
-						acc.push(curr.jurisdictionCountryCode);
-						return acc;
-					}, [])
-				)
-			].filter(c => !filter.includes(c));
+		const fetched = await this.fetchAllFlagtheoryCountries();
 
-			return this.populateCountryListFlagtheory(fetched);
-		} catch (error) {
-			log.error(error);
-			console.log(error);
-			return [];
-		}
+		const countries = Object.keys(fetched)
+			.filter(countryCode => !filter.includes(countryCode))
+			.map(countryCode => {
+				return this.parseCountry(fetched[countryCode]);
+			});
+
+		return countries;
 	}
 
 	async populateCountryListFlagtheory(countries) {
@@ -64,21 +56,38 @@ export class MarketplaceCountryService {
 		);
 	}
 
+	async fetchAllFlagtheoryCountries() {
+		try {
+			let countries = await request.get({
+				url: FLAGTHEORY_ALL_COUNTRIES_ENDPOINT,
+				json: true
+			});
+			return countries;
+		} catch (error) {
+			log.error(error);
+			return {};
+		}
+	}
+
 	async fetchOneFlagtheoryCountry(code) {
 		try {
 			let country = await request.get({
 				url: urljoin(FLAGTHEORY_COUNTRY_ENDPOINT, code),
 				json: true
 			});
-			country = _.mapKeys(_.omit(country[0], 'id'), (value, key) => _.camelCase(key));
-			country.languages = (country.languages || '').split(',').filter(l => !!l);
-			country.population = +country.population || 0;
-			country.geonameId = '' + country.geonameId || null;
-			return country;
+			return this.parseCountry(country[0]);
 		} catch (error) {
 			log.error(error);
 			return null;
 		}
+	}
+
+	parseCountry(country) {
+		country = _.mapKeys(_.omit(country, 'id'), (value, key) => _.camelCase(key));
+		country.languages = (country.languages || '').split(',').filter(l => !!l);
+		country.population = +country.population || 0;
+		country.geonameId = '' + country.geonameId || null;
+		return country;
 	}
 
 	start() {
