@@ -3,11 +3,6 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
-/*
-import { getWallet } from 'common/wallet/selectors';
-import { kycSelectors, kycOperations } from 'common/kyc';
-import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
-*/
 import { MarketplaceProcessStarted } from '../../common/marketplace-process-started';
 
 const styles = theme => ({});
