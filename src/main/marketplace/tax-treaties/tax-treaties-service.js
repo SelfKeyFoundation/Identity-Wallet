@@ -51,7 +51,7 @@ export class TaxTreatiesService {
 				_.mapKeys(entity.data, (value, key) => _.camelCase(key))
 			);
 		} catch (error) {
-			log.error(error);
+			log.error(`fetchTaxTreatiesSelfkey: ${error}`);
 			return [];
 		}
 	}
@@ -62,7 +62,7 @@ export class TaxTreatiesService {
 				_.mapKeys(_.omit(entity, 'id'), (value, key) => _.camelCase(key))
 			);
 		} catch (error) {
-			log.error(error);
+			log.error(`fetchTaxTreatiesFlagtheory: ${error}`);
 			return [];
 		}
 	}

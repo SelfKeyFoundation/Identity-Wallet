@@ -31,6 +31,7 @@ const BANKACCOUNTS_KYCC_INSTANCE = process.env.BANKACCOUNTS_KYCC_INSTANCE;
 const BANKACCOUNTS_API_URL = process.env.BANKACCOUNTS_API_URL;
 
 const COUNTRY_INFO_URL = process.env.COUNTRY_INFO_URL;
+const ALL_COUNTRIES_INFO_URL = process.env.ALL_COUNTRIES_INFO_URL;
 const MATOMO_SITE = process.env.MATOMO_SITE;
 const DEPOSIT_PRICE_OVERRIDE = process.env.DEPOSIT_PRICE_OVERRIDE;
 
@@ -53,6 +54,7 @@ const common = {
 	incorporationApiUrl: INCORPORATION_API_URL || 'https://passports.io/api/incorporations',
 	incorporationTreatiesUrl: INCORPORATION_TREATIES_URL || 'https://passports.io/api/tax-treaties',
 	countryInfoUrl: COUNTRY_INFO_URL || 'https://passports.io/api/country',
+	allCountriesInfoUrl: ALL_COUNTRIES_INFO_URL || 'https://passports.io/api/countries',
 	bankAccountsInstance:
 		BANKACCOUNTS_KYCC_INSTANCE || 'https://dev.instance.kyc-chain.com/api/v2/',
 	bankAccountsPriceOverride: BANKACCOUNTS_PRICE_OVERRIDE,
