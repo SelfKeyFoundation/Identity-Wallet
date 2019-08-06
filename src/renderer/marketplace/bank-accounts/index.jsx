@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-
+import { connect } from 'react-redux';
+import { marketplaceOperations } from 'common/marketplace';
 import { BankAccountsTableContainer } from './list/offers-container';
 import { BankAccountsDetailContainer } from './details/details-container';
 import { BankAccountsCheckoutContainer } from './checkout/checkout-container';
@@ -10,6 +11,9 @@ import { BankAccountsSelectBankContainer } from './select-bank/select-bank-conta
 import { BankAccountsProcessStartedContainer } from './process-started/process-started-container';
 
 class MarketplaceBankAccountsPage extends Component {
+	async componentDidMount() {
+		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
+	}
 	render() {
 		const { path } = this.props.match;
 		return (
@@ -44,5 +48,7 @@ class MarketplaceBankAccountsPage extends Component {
 	}
 }
 
-export default MarketplaceBankAccountsPage;
-export { MarketplaceBankAccountsPage };
+const connected = connect()(MarketplaceBankAccountsPage);
+
+export default connected;
+export { connected as MarketplaceBankAccountsPage };

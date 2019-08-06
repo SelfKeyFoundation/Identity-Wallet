@@ -6,6 +6,7 @@ import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
 import { BankingOffersPage } from './offers-page';
+import { marketplaceSelectors } from 'common/marketplace';
 import NoConnection from 'renderer/no-connection';
 
 const styles = theme => ({});
@@ -36,22 +37,23 @@ class BankAccountsTableContainer extends Component {
 			)
 		);
 
-	activeBank = bank => bank.accountType === this.state.accountType && bank.showWallet === true;
+	activeBank = bank => bank.data.type === this.state.accountType;
 
 	render() {
-		const { isLoading, bankAccounts, keyRate, isError } = this.props;
+		const { isLoading, keyRate, isError, vendors, inventory } = this.props;
 		const { accountType } = this.state;
 
 		if (!isLoading && isError) {
 			return <NoConnection onBackClick={this.onBackClick} />;
 		}
-
-		const data = bankAccounts.filter(this.activeBank);
+		console.log('XXX', JSON.stringify(vendors), JSON.stringify(inventory));
+		const data = inventory.filter(this.activeBank);
 
 		return (
 			<BankingOffersPage
 				keyRate={keyRate}
-				data={data}
+				vendors={vendors}
+				inventory={data}
 				onBackClick={this.onBackClick}
 				accountType={accountType}
 				onAccountTypeChange={this.onAccountTypeChange}
@@ -63,7 +65,8 @@ class BankAccountsTableContainer extends Component {
 }
 
 BankAccountsTableContainer.propTypes = {
-	bankAccounts: PropTypes.array,
+	inventory: PropTypes.array,
+	vendors: PropTypes.array,
 	isLoading: PropTypes.bool,
 	keyRate: PropTypes.number,
 	isError: PropTypes.any
@@ -71,7 +74,8 @@ BankAccountsTableContainer.propTypes = {
 
 const mapStateToProps = (state, props) => {
 	return {
-		bankAccounts: bankAccountsSelectors.getMainBankAccounts(state),
+		vendors: marketplaceSelectors.selectVendorsForCategory(state, 'banking'),
+		inventory: marketplaceSelectors.selectInventoryForCategory(state, 'banking'),
 		isLoading: bankAccountsSelectors.getLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		isError: bankAccountsSelectors.getError(state)

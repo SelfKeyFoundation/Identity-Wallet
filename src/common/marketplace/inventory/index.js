@@ -57,7 +57,11 @@ export const inventorySelectors = {
 	selectInventory: state =>
 		inventorySelectors
 			.selectInventoryRoot(state)
-			.all.map(id => inventorySelectors.selectInventoryRoot(state).byId[id])
+			.all.map(id => inventorySelectors.selectInventoryRoot(state).byId[id]),
+	selectInventoryForCategory: (state, category, status = 'active') =>
+		inventorySelectors
+			.selectInventory(state)
+			.filter(i => i.category === category && i.status === status)
 };
 
 export default reducer;

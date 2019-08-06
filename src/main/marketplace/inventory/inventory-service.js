@@ -195,10 +195,10 @@ export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
 					const sku = `FT-BNK-${itm.accountCode || itm.countryCode}`;
 					const name = `${itm.region} ${itm.accountCode || itm.countryCode}`;
 					let price = itm.activeTestPrice ? itm.testPrice : itm.price;
-					return {
+					itm = {
 						sku,
 						name,
-						status: itm.templateId ? 'active' : 'inactive',
+						status: itm.showWallet ? 'active' : 'inactive',
 						price,
 						priceCurrency: 'USD',
 						category: 'banking',
@@ -206,9 +206,16 @@ export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
 						data: {
 							...itm,
 							jurisdiction: jurisdictions[itm.countryCode] || {},
-							...(accDetails[itm.accountCode] || {})
+							account: accDetails[itm.accountCode] || {}
 						}
 					};
+
+					itm.data.type =
+						itm.data.type && itm.data.type.length
+							? itm.data.type[0].toLowerCase()
+							: 'private';
+
+					return itm;
 				});
 			return items;
 		} catch (error) {

@@ -57,7 +57,11 @@ export const vendorSelectors = {
 	selectVendors: state =>
 		vendorSelectors
 			.selectVendorRoot(state)
-			.all.map(id => vendorSelectors.selectVendorRoot(state).byId[id])
+			.all.map(id => vendorSelectors.selectVendorRoot(state).byId[id]),
+	selectVendorsForCategory: (state, category, status = 'active') =>
+		vendorSelectors
+			.selectVendors(state)
+			.filter(v => v.categories.includes(category) && v.status === status)
 };
 
 export default reducer;

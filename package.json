@@ -46,7 +46,6 @@
 		"check-deps": "npm-check -i common",
 		"coveralls": "cat dist/coverage/lcov.info | coveralls",
 		"snyk-protect": "snyk protect",
-		"prepare": "npm run snyk-protect",
 		"postinstall": "rm -rf node_modules/.cache && electron-webpack dll",
 		"build-dev-dll": "rm -rf node_modules/.cache && electron-webpack dll --env.production=false",
 		"storybook": "start-storybook -p 6007",

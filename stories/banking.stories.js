@@ -36,7 +36,7 @@ storiesOf('Banking', module)
 		<div style={{ width: '1140px' }}>
 			<BankingOffersTable
 				keyRate={KEY_RATE}
-				data={bankingOffers}
+				inventory={bankingOffers}
 				onDetails={linkTo('Banking/BankingDetailsPage', 'default')}
 			/>
 		</div>
