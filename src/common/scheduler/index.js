@@ -2,7 +2,7 @@ import { getGlobalContext } from '../context';
 import { createAliasedAction } from 'electron-redux';
 import uuidv1 from 'uuid/v1';
 
-export const SCHEDULER_INTERVAL = 5000;
+export const SCHEDULER_INTERVAL = 10000;
 export const SCHEDULER_CLEANUP_DELAY = 60000;
 
 export const schedulerInitialState = {

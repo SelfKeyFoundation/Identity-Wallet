@@ -8,7 +8,6 @@ import { IncorporationsPaymentCompleteContainer } from './checkout/incorporation
 import { connect } from 'react-redux';
 import { marketplaceOperations } from 'common/marketplace';
 
-
 class MarketplaceIncorporationComponent extends Component {
 	async componentDidMount() {
 		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
