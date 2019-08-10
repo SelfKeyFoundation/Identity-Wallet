@@ -93,9 +93,11 @@ jobs:
                   command: |
                       sudo mkdir -p ~/.config
                       sudo chown -R $USER:$GROUP ~/.config
+
             - run:
                   name: Install Node Packages
                   command: yarn install-all
+                  no_output_timeout: 30m
 
             - run:
                   name: Set Sentry
