@@ -624,7 +624,7 @@ export const reducer = (state = initialState, action) => {
 };
 
 const ordersSelectors = {
-	getRoot: state => state.orders,
+	getRoot: state => state.marketplace.orders,
 	getOrder: (state, id) => ordersSelectors.getRoot(state).byId[id],
 	getCurrentOrder: state => ordersSelectors.getRoot(state).currentOrder,
 	getContractFormattedAmount: (state, id) => {

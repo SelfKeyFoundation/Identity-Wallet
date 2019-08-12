@@ -100,7 +100,7 @@ class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsCo
 				title={`KYC Process Started`}
 				body={body}
 				onBackClick={this.onBackClick}
-				onSelfKeyClick={this.onSelfKeyClick}
+				onSelfKeyClick={this.onContinueClick}
 			/>
 		);
 	}
