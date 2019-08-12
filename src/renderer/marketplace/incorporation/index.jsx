@@ -1,16 +1,22 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { featureIsEnabled } from 'common/feature-flags';
+import { ordersOperations } from 'common/marketplace/orders';
+import { marketplaceOperations } from 'common/marketplace';
 import { IncorporationsListContainer } from './list/incorporations-list-container';
 import { IncorporationsDetailsContainer } from './details/incorporations-details-container';
 import { IncorporationsCheckoutContainer } from './checkout/incorporations-checkout-container';
 import { IncorporationsPaymentContainer } from './checkout/incorporations-payment-container';
 import { IncorporationsPaymentCompleteContainer } from './checkout/incorporations-payment-complete-container';
-import { connect } from 'react-redux';
-import { marketplaceOperations } from 'common/marketplace';
 
 class MarketplaceIncorporationComponent extends Component {
 	async componentDidMount() {
-		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
+		if (featureIsEnabled('scheduler')) {
+			await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
+		} else {
+			await this.props.dispatch(ordersOperations.ordersLoadOperation());
+		}
 	}
 	render() {
 		const { path } = this.props.match;
