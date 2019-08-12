@@ -141,7 +141,6 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 		const countryCode = program['Country code'];
 		const region = program['Region'];
 		const price = program.price;
-
 		return (
 			<IncorporationsDetailsPage
 				applicationStatus={this.getApplicationStatus()}

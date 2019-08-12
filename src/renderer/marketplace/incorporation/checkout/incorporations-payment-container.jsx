@@ -1,5 +1,4 @@
 import BN from 'bignumber.js';
-import config from 'common/config';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
@@ -14,8 +13,6 @@ import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorp
 const styles = theme => ({});
 // TODO: future improvement load from rp config
 const VENDOR_NAME = 'Far Horizon Capital Inc';
-const VENDOR_DID = '0xee10a3335f48e10b444e299cf017d57879109c1e32cec3e31103ceca7718d0ec';
-const VENDOR_WALLET = '0x23d233933c86f93b74705cf0d236b39f474249f8';
 
 class IncorporationsPaymentContainer extends MarketplaceIncorporationsComponent {
 	async componentDidMount() {
@@ -32,10 +29,8 @@ class IncorporationsPaymentContainer extends MarketplaceIncorporationsComponent 
 		const { companyCode } = this.props.match.params;
 		const application = this.getLastApplication();
 		const price = this.priceInKEY(program.price);
-		const walletAddress = config.dev
-			? program.testWalletAddress || VENDOR_WALLET
-			: program.walletAddress;
-		const vendorDID = config.dev ? program.testDidAddress || VENDOR_DID : program.didAddress;
+		const walletAddress = program.walletAddress;
+		const vendorDID = program.didAddress;
 
 		this.props.dispatch(
 			ordersOperations.startOrderOperation({

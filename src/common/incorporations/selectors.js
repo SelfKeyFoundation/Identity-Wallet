@@ -22,6 +22,24 @@ const selectTemplate = program => {
 	return templateId;
 };
 
+const selectVendorWalletAddress = program => {
+	if (config.dev) {
+		return program['testWalletAddress']
+			? program['testWalletAddress']
+			: config.testWalletAddress;
+	} else {
+		return program['walletAddress'];
+	}
+};
+
+const selectVendorDidAddress = program => {
+	if (config.dev) {
+		return program['testDidAddress'] ? program['testDidAddress'] : config.testDidAddress;
+	} else {
+		return program['didAddress'];
+	}
+};
+
 const parseOptions = program => {
 	if (!program.wallet_options) {
 		return [];
@@ -66,6 +84,8 @@ export const incorporationsSelectors = {
 			i.price = selectPrice(i);
 			i.templateId = selectTemplate(i);
 			i.checkoutOptions = parseOptions(i);
+			i.walletAddress = selectVendorWalletAddress(i);
+			i.didAddress = selectVendorDidAddress(i);
 			return i;
 		});
 	},
