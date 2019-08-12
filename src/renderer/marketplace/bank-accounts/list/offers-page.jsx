@@ -39,7 +39,7 @@ const BankingOffersPage = withStyles(styles)(
 	({
 		classes,
 		loading,
-		data,
+		inventory,
 		keyRate,
 		onDetails,
 		accountType,
@@ -93,7 +93,7 @@ const BankingOffersPage = withStyles(styles)(
 							<Grid item>
 								<BankingOffersTable
 									keyRate={keyRate}
-									data={data}
+									inventory={inventory}
 									onDetails={onDetails}
 								/>
 							</Grid>
