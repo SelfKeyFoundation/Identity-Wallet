@@ -31,6 +31,7 @@ const BANKACCOUNTS_KYCC_INSTANCE = process.env.BANKACCOUNTS_KYCC_INSTANCE;
 const BANKACCOUNTS_API_URL = process.env.BANKACCOUNTS_API_URL;
 
 const COUNTRY_INFO_URL = process.env.COUNTRY_INFO_URL;
+const ALL_COUNTRIES_INFO_URL = process.env.ALL_COUNTRIES_INFO_URL;
 const MATOMO_SITE = process.env.MATOMO_SITE;
 const DEPOSIT_PRICE_OVERRIDE = process.env.DEPOSIT_PRICE_OVERRIDE;
 
@@ -53,6 +54,7 @@ const common = {
 	incorporationApiUrl: INCORPORATION_API_URL || 'https://passports.io/api/incorporations',
 	incorporationTreatiesUrl: INCORPORATION_TREATIES_URL || 'https://passports.io/api/tax-treaties',
 	countryInfoUrl: COUNTRY_INFO_URL || 'https://passports.io/api/country',
+	allCountriesInfoUrl: ALL_COUNTRIES_INFO_URL || 'https://passports.io/api/countries',
 	bankAccountsInstance:
 		BANKACCOUNTS_KYCC_INSTANCE || 'https://dev.instance.kyc-chain.com/api/v2/',
 	bankAccountsPriceOverride: BANKACCOUNTS_PRICE_OVERRIDE,
@@ -114,7 +116,8 @@ const common = {
 		'https://t.me/selfkeyfoundation'
 	],
 	features: {
-		paymentContract: false
+		paymentContract: false,
+		scheduler: false
 	}
 };
 
@@ -134,7 +137,11 @@ const dev = {
 	},
 	matomoSite: 2,
 	ledgerAddress: '0x27332286A2CEaE458b82A1235f7E2a3Aa8945cAB',
-	paymentSplitterAddress: '0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5'
+	paymentSplitterAddress: '0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5',
+	features: {
+		paymentContract: false,
+		scheduler: true
+	}
 };
 
 const prod = {

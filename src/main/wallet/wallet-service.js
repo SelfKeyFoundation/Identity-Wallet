@@ -229,6 +229,7 @@ export class WalletService {
 	}
 
 	async updateDID(id, did) {
+		did = did.replace('did:selfkey:', '');
 		return Wallet.updateDID({
 			id,
 			did

@@ -56,12 +56,12 @@ describe('MarketplaceCountryService', () => {
 	});
 	it('should fetch countries from flagtheory', async () => {
 		sinon.stub(taxTreatiesService, 'fetchTaxTreaties').resolves(flagtheoryCountries());
+		sinon
+			.stub(marketplaceCountriesService, 'fetchAllFlagtheoryCountries')
+			.resolves(flagtheoryCountries());
 		sinon.stub(marketplaceCountriesService, 'populateCountryListFlagtheory').resolves(['ok']);
-		const resp = await marketplaceCountriesService.fetchMarketplaceCountriesFlagtheory(['AT']);
-		expect(marketplaceCountriesService.populateCountryListFlagtheory.getCall(0).args).toEqual([
-			flagtheoryCountriesFetched(['AT'])
-		]);
-		expect(resp).toEqual(['ok']);
+		await marketplaceCountriesService.fetchMarketplaceCountriesFlagtheory(['AT']);
+		expect(marketplaceCountriesService.fetchAllFlagtheoryCountries.calledOnce).toBe(true);
 	});
 	it('should load countries from db', async () => {
 		sinon.stub(MarketplaceCountry, 'findAll').resolves(countriesDb);

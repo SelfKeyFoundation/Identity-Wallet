@@ -37,6 +37,7 @@ export default class MarketplaceComponent extends Component {
 				break;
 			}
 		}
+
 		return application;
 	};
 
@@ -138,6 +139,8 @@ export default class MarketplaceComponent extends Component {
 	clearRelyingParty = async () => {
 		await this.props.dispatch(kycOperations.clearRelyingPartyOperation());
 	};
+
+	selfKeyIdRoute = () => `/main/selfkeyId`;
 }
 
 export { MarketplaceComponent };

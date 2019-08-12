@@ -18,7 +18,7 @@ const styles = theme => ({
 	}
 });
 
-export const FlagCountryName = withStyles(styles)(({ classes, size, code, name }) => (
+const FlagCountryName = withStyles(styles)(({ classes, size, code, name }) => (
 	<div className={classes.container}>
 		<span
 			className={`${
@@ -30,3 +30,4 @@ export const FlagCountryName = withStyles(styles)(({ classes, size, code, name }
 ));
 
 export default FlagCountryName;
+export { FlagCountryName };
