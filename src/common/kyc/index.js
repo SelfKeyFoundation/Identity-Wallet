@@ -349,6 +349,7 @@ const loadRelyingPartyOperation = (
 		if (authenticate) {
 			applications = await session.listKYCApplications();
 			for (const application of applications) {
+				console.log('application: ', application);
 				await dispatch(
 					kycOperations.updateApplicationsOperation({
 						id: application.id,

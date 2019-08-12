@@ -12,11 +12,9 @@ const DEBUG_REQUEST = process.env.DEBUG_REQUEST === '1';
 if (DEBUG_REQUEST) {
 	require('request').debug = true;
 }
-const CHAIN_ID = process.env.CHAIN_ID_OVERRIDE;
+const CHAIN_ID = 3;
 const NODE = process.env.NODE_OVERRIDE;
-const PRIMARY_TOKEN = process.env.PRIMARY_TOKEN_OVERRIDE
-	? process.env.PRIMARY_TOKEN_OVERRIDE.toUpperCase()
-	: null;
+const PRIMARY_TOKEN = 'KI';
 
 // Incorporations ENV variables
 const INCORPORATIONS_TEMPLATE_OVERRIDE = process.env.INCORPORATIONS_TEMPLATE_OVERRIDE;

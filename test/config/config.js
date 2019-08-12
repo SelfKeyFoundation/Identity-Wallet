@@ -37,7 +37,7 @@ if (osEnv === 'docker') {
 	appPath = pwd + '/dist/' + appBuildName + '-' + appVersion + '-x86_64.AppImage';
 }
 
-if (osEnv === 'windows') {
+if (osEnv === 'windows' || process.platform === 'win32' || process.platform === 'win64') {
 	appPath = path.join(pwd, 'dist', 'win-unpacked', 'Selfkey Identity Wallet.exe');
 }
 

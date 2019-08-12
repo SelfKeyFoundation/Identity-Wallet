@@ -33,7 +33,11 @@ function appStart() {
 				.then(
 					delay(15000)
 						.then(() => app.client.switchTab())
-						.then(resolve)
+						.then(async () => {
+							await app.browserWindow.focus();
+							await app.browserWindow.setAlwaysOnTop(true);
+							resolve();
+						})
 				)
 				.catch(reject);
 		} else {
