@@ -84,7 +84,7 @@ class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsCo
 					Thank you for payment!
 				</Typography>
 				<Typography variant="body2" gutterBottom>
-					One of our our managers is reviewing the information you submitted and{' '}
+					One of our managers is reviewing the information you submitted and{' '}
 					<strong>will contact you shortly on the e-mail you provided </strong>, to
 					continue the process. If you have any questions in the meantime, you can reach
 					us at:
@@ -100,7 +100,7 @@ class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsCo
 				title={`KYC Process Started`}
 				body={body}
 				onBackClick={this.onBackClick}
-				onSelfKeyClick={this.onSelfKeyClick}
+				onSelfKeyClick={this.onContinueClick}
 			/>
 		);
 	}

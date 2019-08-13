@@ -69,9 +69,9 @@ jobs:
             - run:
                   name: Unit Tests
                   command: yarn test:unit:coverage
-            - run:
-                  name: Coveralls
-                  command: yarn coveralls
+            # - run:
+            #       name: Coveralls
+            #       command: yarn coveralls
             - store_artifacts:
                   path: dist
             - *step_save_cache
@@ -93,9 +93,11 @@ jobs:
                   command: |
                       sudo mkdir -p ~/.config
                       sudo chown -R $USER:$GROUP ~/.config
+
             - run:
                   name: Install Node Packages
                   command: yarn install-all
+                  no_output_timeout: 30m
 
             - run:
                   name: Set Sentry
