@@ -116,8 +116,8 @@ class ApplicationInProgressComponent extends Component {
 									Application Process Started
 								</Typography>
 								<Typography variant="body2" gutterBottom>
-									One of our our managers is reviewing the information you
-									submitted and{' '}
+									One of our managers is reviewing the information you submitted
+									and{' '}
 									<strong>
 										will contact you shortly on the e-mail you provided
 									</strong>
