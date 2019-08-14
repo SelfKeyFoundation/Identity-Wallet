@@ -45,8 +45,8 @@
 		"check-deps-precommit": "npm-check -i eslint -i redux -s || true",
 		"check-deps": "npm-check -i common",
 		"coveralls": "cat dist/coverage/lcov.info | coveralls",
-		"snyk-protect": "snyk protect",
-		"postinstall": "yarn snyk-protect && rm -rf node_modules/.cache && electron-webpack dll",
+		"snyk-protect": "NODE_OPTIONS=--max-old-space-size=8192 snyk protect",
+		"postinstall": "rm -rf node_modules/.cache && electron-webpack dll",
 		"build-dev-dll": "rm -rf node_modules/.cache && electron-webpack dll --env.production=false",
 		"storybook": "start-storybook -p 6007",
 		"build-storybook": "build-storybook"
@@ -127,7 +127,7 @@
 		"trezor-wallet-provider": "https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#94f3b88",
 		"trezor.js": "8.1.0",
 		"url-join": "4.0.0",
-		"web3": "1.2.0",
+		"web3": "1.0.0-beta.55",
 		"web3-provider-engine": "14.1.0",
 		"ws": "7.0.0",
 		"zxcvbn": "4.4.2"
