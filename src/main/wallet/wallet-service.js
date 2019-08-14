@@ -93,6 +93,7 @@ export class WalletService {
 		if (!account) {
 			throw new Error('Wrong Password!');
 		}
+		// testPaymentContract(wallet);
 		return {
 			...wallet,
 			profilePicture: formatDataUrl(wallet.profilePicture),
@@ -228,6 +229,7 @@ export class WalletService {
 	}
 
 	async updateDID(id, did) {
+		did = did.replace('did:selfkey:', '');
 		return Wallet.updateDID({
 			id,
 			did
@@ -250,3 +252,61 @@ export class WalletService {
 }
 
 export default WalletService;
+
+// async function testPaymentContract(wallet) {
+// 	const ctx = getGlobalContext();
+// 	console.log('XXX', wallet);
+// 	let res = await ctx.selfkeyService.getAllowance(
+// 		wallet.publicKey,
+// 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5'
+// 	);
+// 	const amount = 20000000000000;
+// 	let gas = await ctx.selfkeyService.estimateApproveGasLimit(
+// 		wallet.publicKey,
+// 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5',
+// 		amount
+// 	);
+
+// 	console.log('XXX pre allow', res.toString());
+// 	res = await ctx.selfkeyService.approve(
+// 		wallet.publicKey,
+// 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5',
+// 		amount,
+// 		gas
+// 	);
+// 	console.log('XXX approve res', res.events.Approval.returnValues);
+// 	res = await ctx.selfkeyService.getAllowance(
+// 		wallet.publicKey,
+// 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5'
+// 	);
+// 	console.log('XXX post approve', res.toString());
+// 	const did = wallet.did;
+// 	// gas = await ctx.paymentService.getGasLimit(
+// 	// 	wallet.publicKey,
+// 	// 	did,
+// 	// 	did,
+// 	// 	10000,
+// 	// 	ctx.web3Service.ensureStrHex('test'),
+// 	// 	0,
+// 	// 	0
+// 	// );
+// 	// console.log('XXX payment gas', gas);
+
+// 	res = await ctx.paymentService.makePayment(
+// 		wallet.publicKey,
+// 		did,
+// 		did,
+// 		10000,
+// 		ctx.web3Service.ensureStrHex('test'),
+// 		0,
+// 		0,
+// 		4500000
+// 	);
+// 	console.log('XXX payment res', res);
+
+// 	res = await ctx.selfkeyService.getAllowance(
+// 		wallet.publicKey,
+// 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5'
+// 	);
+// 	console.log('XXX post payment', res.toString());
+// }

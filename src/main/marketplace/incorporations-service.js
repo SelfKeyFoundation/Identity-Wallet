@@ -18,51 +18,52 @@ export class IncorporationsService {
 				if (error) {
 					log.error(error);
 					return reject(error);
+				} else {
+					const {
+						Main,
+						Corporations,
+						LLCs,
+						Taxes,
+						Foundations,
+						Trusts,
+						EN
+						// Guarantee
+					} = response;
+					const payload = {};
+
+					payload.incorporations = Main.map(inc => {
+						const fields = inc.data.fields;
+						const newInc = { ...fields, id: inc.data.id };
+
+						return newInc;
+					});
+
+					const corpMap = corp => {
+						const fields = corp.data.fields;
+						const newCorp = { ...fields, id: corp.data.id };
+
+						return newCorp;
+					};
+
+					payload.corporations = Corporations.map(corpMap);
+					payload.llcs = LLCs.map(corpMap);
+					payload.foundations = Foundations.map(corpMap);
+					payload.trusts = Trusts.map(corpMap);
+
+					payload.translation = EN.map(translation => {
+						const fields = translation.data.fields;
+						const newTranslation = { ...fields, id: translation.data.id };
+						return newTranslation;
+					});
+
+					payload.taxes = Taxes.map(tax => {
+						const fields = tax.data.fields;
+						const newTax = { ...fields, id: tax.data.id };
+
+						return newTax;
+					});
+					resolve(payload);
 				}
-				const {
-					Main,
-					Corporations,
-					LLCs,
-					Taxes,
-					Foundations,
-					Trusts,
-					EN
-					// Guarantee
-				} = response;
-				const payload = {};
-
-				payload.incorporations = Main.map(inc => {
-					const fields = inc.data.fields;
-					const newInc = { ...fields, id: inc.data.id };
-
-					return newInc;
-				});
-
-				const corpMap = corp => {
-					const fields = corp.data.fields;
-					const newCorp = { ...fields, id: corp.data.id };
-
-					return newCorp;
-				};
-
-				payload.corporations = Corporations.map(corpMap);
-				payload.llcs = LLCs.map(corpMap);
-				payload.foundations = Foundations.map(corpMap);
-				payload.trusts = Trusts.map(corpMap);
-
-				payload.translation = EN.map(translation => {
-					const fields = translation.data.fields;
-					const newTranslation = { ...fields, id: translation.data.id };
-					return newTranslation;
-				});
-
-				payload.taxes = Taxes.map(tax => {
-					const fields = tax.data.fields;
-					const newTax = { ...fields, id: tax.data.id };
-
-					return newTax;
-				});
-				resolve(payload);
 			});
 		});
 	}
@@ -78,18 +79,18 @@ export class IncorporationsService {
 					if (error) {
 						log.error(error);
 						reject(error);
+					} else {
+						const payload = {};
+						const treaties = response[0];
+
+						payload.treaties = treaties.map(t => {
+							const newTreaties = { ...t };
+							return newTreaties;
+						});
+						payload.countryCode = countryCode;
+
+						resolve(payload);
 					}
-					const payload = {};
-					const treaties = response[0];
-
-					payload.treaties = treaties.map(t => {
-						const newTreaties = { ...t };
-						return newTreaties;
-					});
-
-					payload.countryCode = countryCode;
-
-					resolve(payload);
 				}
 			);
 		});
@@ -106,19 +107,18 @@ export class IncorporationsService {
 					if (error) {
 						log.error(error);
 						reject(error);
+					} else {
+						const payload = {};
+						const country = response;
+
+						payload.country = country.map(c => {
+							const newCountry = { ...c };
+							return newCountry;
+						});
+
+						payload.countryCode = countryCode;
+						resolve(payload);
 					}
-
-					const payload = {};
-					const country = response;
-
-					payload.country = country.map(c => {
-						const newCountry = { ...c };
-						return newCountry;
-					});
-
-					payload.countryCode = countryCode;
-
-					resolve(payload);
 				}
 			);
 		});

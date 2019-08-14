@@ -4,6 +4,7 @@ import { ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { marketplacesOperations, marketplacesSelectors } from 'common/marketplaces';
 import { MarketplaceCategoriesList } from './categories-list';
 import { push } from 'connected-react-router';
+import { ordersOperations } from '../../../common/marketplace/orders';
 
 const mapStateToProps = state => ({
 	categories: marketplacesSelectors.categoriesSelectors(state)
@@ -14,6 +15,7 @@ class MarketplaceCategoriesPageComponent extends Component {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 		this.props.dispatch(marketplacesOperations.loadTransactions());
 		this.props.dispatch(marketplacesOperations.loadStakes());
+		this.props.dispatch(ordersOperations.ordersLoadOperation());
 	}
 
 	actions = {

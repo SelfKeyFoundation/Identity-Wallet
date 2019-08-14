@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { push } from 'connected-react-router';
+import { walletOperations } from 'common/wallet';
 import {
 	Grid,
 	CardHeader,
@@ -94,12 +95,14 @@ const styles = theme => ({
 	transaction: {
 		alignItems: 'center',
 		display: 'flex'
+	},
+	extraSpace: {
+		marginRight: '4px'
 	}
 });
 
 const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
-const GET_DID_PATH = '/main/get-did';
-const ENTER_DID_PATH = '/main/enter-did';
+const SELFKEY_ID_PATH = '/main/selfkeyId';
 
 class SelfkeyIdOverviewComponent extends Component {
 	state = {
@@ -130,8 +133,9 @@ class SelfkeyIdOverviewComponent extends Component {
 		this.setState({ popup: 'edit-avatar' });
 	};
 	handleAccessClick = _ => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
-	handleGetDid = _ => this.props.dispatch(push(GET_DID_PATH));
-	handleEnterDid = _ => this.props.dispatch(push(ENTER_DID_PATH));
+	handleGetDid = _ => this.props.dispatch(walletOperations.startCreateDidFlow(SELFKEY_ID_PATH));
+	handleEnterDid = _ =>
+		this.props.dispatch(walletOperations.startAssociateDidFlow(SELFKEY_ID_PATH));
 	renderLastUpdateDate({ updatedAt }) {
 		return moment(updatedAt).format('DD MMM YYYY, hh:mm a');
 	}
@@ -314,7 +318,6 @@ class SelfkeyIdOverviewComponent extends Component {
 														<Typography
 															variant="subtitle2"
 															color="secondary"
-															gutterBottom
 														>
 															Register on the SelfKey Network to get
 															your DID.
@@ -332,7 +335,6 @@ class SelfkeyIdOverviewComponent extends Component {
 													<Typography
 														variant="subtitle2"
 														color="secondary"
-														gutterBottom
 													>
 														Getting a DID requires an Ethereum
 														transaction. This is a one time only
@@ -340,14 +342,15 @@ class SelfkeyIdOverviewComponent extends Component {
 													</Typography>
 													<Grid
 														container
-														spacing={32}
+														spacing={16}
 														className={classes.didButtons}
 													>
-														<Grid item>
+														<Grid item className={classes.extraSpace}>
 															<Button
 																disabled={wallet.didPending}
 																variant="contained"
 																onClick={this.handleGetDid}
+																size="large"
 															>
 																GET DID
 															</Button>
@@ -357,6 +360,7 @@ class SelfkeyIdOverviewComponent extends Component {
 																disabled={wallet.didPending}
 																variant="outlined"
 																onClick={this.handleEnterDid}
+																size="large"
 															>
 																I HAVE ONE
 															</Button>
@@ -414,7 +418,6 @@ class SelfkeyIdOverviewComponent extends Component {
 													<Typography
 														variant="subtitle2"
 														color="secondary"
-														gutterBottom
 													>
 														Basic Information about yourself. This can
 														be edited at any time, but not deleted.
@@ -535,11 +538,7 @@ class SelfkeyIdOverviewComponent extends Component {
 												<Grid item>
 													<BookIcon />
 												</Grid>
-												<Typography
-													variant="subtitle2"
-													color="secondary"
-													gutterBottom
-												>
+												<Typography variant="subtitle2" color="secondary">
 													Additional information. This will be used for
 													the KYC processes in the marketplace.
 												</Typography>

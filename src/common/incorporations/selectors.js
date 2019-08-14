@@ -1,3 +1,72 @@
+import config from 'common/config';
+
+const selectPrice = program => {
+	// Check for override ENV variables
+	if (config.incorporationsPriceOverride) return config.incorporationsPriceOverride;
+	if (!program['Wallet Price'] && !program.test_price) return null;
+
+	let price = `${program['Wallet Price']}`;
+	if (config.dev || program.active_test_price) {
+		price = `${program.test_price}`;
+	}
+
+	return parseFloat(price.replace(/\$/, '').replace(/,/, ''));
+};
+
+const selectTemplate = program => {
+	// Check for override ENV variables
+	if (config.incorporationsTemplateOverride) return config.incorporationsTemplateOverride;
+	if (!program.template_id && !program.test_template_id) return null;
+
+	const templateId = config.dev ? program.test_template_id : program.template_id;
+	return templateId;
+};
+
+const selectVendorWalletAddress = program => {
+	if (config.dev) {
+		return program['testWalletAddress']
+			? program['testWalletAddress']
+			: config.testWalletAddress;
+	} else {
+		return program['walletAddress'];
+	}
+};
+
+const selectVendorDidAddress = program => {
+	if (config.dev) {
+		return program['testDidAddress'] ? program['testDidAddress'] : config.testDidAddress;
+	} else {
+		return program['didAddress'];
+	}
+};
+
+const parseOptions = program => {
+	if (!program.wallet_options) {
+		return [];
+	}
+	const options = program.wallet_options;
+
+	const strArray = options.split('-');
+
+	const optionsArray = strArray.map((text, idx) => {
+		if (!text) return false;
+		let price = text.match(/\(.*\)/);
+		let notes = text.match(/\[.*\]/);
+		const id = `options-${idx}`;
+		price = price ? price[0].replace('(', '').replace(')', '') : '';
+		price = price ? parseInt(price) : '';
+		notes = notes ? notes[0].replace('[', '').replace(']', '') : '';
+		const description = text
+			.replace(/\(.*\)/, '')
+			.replace(/\[.*\]/, '')
+			.trim();
+
+		return { price, notes, description, id };
+	});
+
+	return optionsArray.filter(el => el !== false);
+};
+
 export const incorporationsSelectors = {
 	getIncorporations(state) {
 		return state.incorporations;
@@ -10,7 +79,15 @@ export const incorporationsSelectors = {
 	},
 	getMainIncorporations(state) {
 		const tree = this.getIncorporations(state);
-		return tree.incorporations.map(incId => tree.incorporationsById[incId]);
+		const data = tree.incorporations.map(incId => tree.incorporationsById[incId]);
+		return data.map(i => {
+			i.price = selectPrice(i);
+			i.templateId = selectTemplate(i);
+			i.checkoutOptions = parseOptions(i);
+			i.walletAddress = selectVendorWalletAddress(i);
+			i.didAddress = selectVendorDidAddress(i);
+			return i;
+		});
 	},
 	getTaxes(state) {
 		const tree = this.getIncorporations(state);
@@ -81,7 +158,6 @@ export const incorporationsSelectors = {
 		inc.tax = this.getTaxByCompanyCode(state, companyCode);
 		inc.translation = this.getTranslationByCompanyCode(state, companyCode);
 		inc.details = this.getDetailsForCompanyCode(state, companyCode);
-
 		return inc;
 	},
 	getTaxTreaties(state, countryCode) {
@@ -108,7 +184,7 @@ export const incorporationsSelectors = {
 			return false;
 		}
 
-		return tree[`country-${countryCode}`].map(id => tree[`countryById-${countryCode}`][id]);
+		return tree[`countryById-${countryCode}`][countryCode];
 	}
 };
 

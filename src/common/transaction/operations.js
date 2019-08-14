@@ -24,6 +24,8 @@ const transferHex = '0xa9059cbb';
 
 const hardwalletConfirmationTime = '30000';
 
+export const DEFAULT_ETH_GAS_LIMIT = 21000;
+
 const init = args => async dispatch => {
 	await dispatch(
 		actions.updateTransaction({
@@ -39,6 +41,7 @@ const init = args => async dispatch => {
 			addressError: false,
 			sending: false,
 			status: '',
+			locked: false,
 			...args
 		})
 	);
@@ -61,7 +64,7 @@ const setAddress = address => async dispatch => {
 	}
 };
 
-const getGasLimit = async (
+export const getGasLimit = async (
 	cryptoCurrency,
 	address,
 	amount,
@@ -71,7 +74,7 @@ const getGasLimit = async (
 ) => {
 	// Return default gas limit for Ethereum
 	if (cryptoCurrency === 'ETH') {
-		return 21000;
+		return DEFAULT_ETH_GAS_LIMIT;
 	}
 
 	const tokenService = getGlobalContext().tokenService;
@@ -87,7 +90,7 @@ const getTransactionCount = async publicKey => {
 	return (getGlobalContext() || {}).web3Service.waitForTicket(params);
 };
 
-const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => async (
+export const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => async (
 	dispatch,
 	getState
 ) => {
@@ -97,6 +100,8 @@ const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => a
 		const address = !newAddress ? transaction.address : newAddress;
 		const amount = !newAmount ? transaction.amount : newAmount;
 		const walletAddress = state.wallet.publicKey;
+
+		dispatch(setLocked(true));
 
 		let gasPrice = state.ethGasStationInfo.ethGasStationInfo.average;
 		if (newGasPrice) {
@@ -109,11 +114,13 @@ const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => a
 			const tokenContract = transaction.contractAddress;
 			const nonce = await getTransactionCount(walletAddress);
 			const cryptoCurrency = transaction.cryptoCurrency;
+			let gasLimit = DEFAULT_ETH_GAS_LIMIT;
+			let gasLimitUpdated = transaction.gasLimitUpdated;
 
-			let gasLimit = 21000;
 			if (newGasLimit) {
 				gasLimit = newGasLimit;
-			} else if (transaction.gasLimit) {
+				gasLimitUpdated = true;
+			} else if (transaction.gasLimitUpdated && transaction.gasLimit) {
 				gasLimit = transaction.gasLimit;
 			} else {
 				gasLimit = await getGasLimit(
@@ -138,10 +145,13 @@ const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimit) => a
 					ethFee: feeInEth,
 					gasPrice: gasPrice,
 					gasLimit,
+					gasLimitUpdated,
 					nonce
 				})
 			);
 		}
+
+		dispatch(setLocked(false));
 	} catch (e) {
 		log.error(e);
 	}
@@ -155,6 +165,11 @@ const setAmount = amount => async dispatch => {
 	);
 	await dispatch(setTransactionFee(undefined, amount, undefined, undefined));
 };
+
+export const setLocked = locked =>
+	actions.updateTransaction({
+		locked: locked
+	});
 
 const setGasPrice = gasPrice => async dispatch => {
 	await dispatch(
@@ -265,6 +280,53 @@ const confirmSend = () => async (dispatch, getState) => {
 			await dispatch(push('/main/transaction-error'));
 		}
 	});
+};
+
+const marketplaceSend = ({ onReceipt, onTransactionHash, onTransactionError }) => async (
+	dispatch,
+	getState
+) => {
+	const walletService = getGlobalContext().walletService;
+	const state = getState();
+	const transaction = getTransaction(state);
+	const { cryptoCurrency } = transaction;
+
+	const transactionObject = {
+		nonce: transaction.nonce,
+		gasPrice: EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei'),
+		gas: transaction.gasLimit
+	};
+
+	if (cryptoCurrency === 'ETH') {
+		transactionObject.to = EthUtils.sanitizeHex(transaction.address);
+		transactionObject.value = EthUnits.unitToUnit(transaction.amount, 'ether', 'wei');
+	} else {
+		transactionObject.to = EthUtils.sanitizeHex(transaction.contractAddress);
+		transactionObject.value = 0;
+		const data = generateContractData(
+			transaction.address,
+			transaction.amount,
+			transaction.tokenDecimal
+		);
+		transactionObject.data = EthUtils.sanitizeHex(data);
+	}
+
+	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
+
+	transactionEventEmitter.on('receipt', async receipt => {
+		dispatch(updateBalances());
+		onReceipt(receipt);
+	});
+	transactionEventEmitter.on('transactionHash', async transactionHash => {
+		await dispatch(actions.updateTransaction({ status: 'Pending', transactionHash }));
+		dispatch(createTxHistry(transactionHash));
+		onTransactionHash(transactionHash);
+	});
+	transactionEventEmitter.on('error', async error => {
+		onTransactionError(error);
+	});
+
+	return transactionEventEmitter;
 };
 
 const incorporationSend = (companyCode, countryCode) => async (dispatch, getState) => {
@@ -406,5 +468,7 @@ export default {
 	setTransactionFee: createAliasedAction(types.TRANSACTION_FEE_SET, setTransactionFee),
 	confirmSend: createAliasedAction(types.CONFIRM_SEND, confirmSend),
 	incorporationSend: createAliasedAction(types.INCORPORATION_SEND, incorporationSend),
-	setCryptoCurrency: createAliasedAction(types.CRYPTO_CURRENCY_SET, setCryptoCurrency)
+	marketplaceSend: createAliasedAction(types.MARKETPLACE_SEND, marketplaceSend),
+	setCryptoCurrency: createAliasedAction(types.CRYPTO_CURRENCY_SET, setCryptoCurrency),
+	setLocked: createAliasedAction(types.LOCKED_SET, setLocked)
 };

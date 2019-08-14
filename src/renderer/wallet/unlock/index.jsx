@@ -12,7 +12,8 @@ import {
 	NewAddressIcon,
 	KeyIcon,
 	LedgerIcon,
-	TrezorIcon
+	TrezorIcon,
+	SelfkeyLogoTemp
 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { Link, Route, Redirect, Switch } from 'react-router-dom';
@@ -37,10 +38,11 @@ const styles = theme => ({
 	},
 	modalWrap: {
 		border: 'none',
-		backgroundColor: 'transparent'
+		backgroundColor: 'transparent',
+		top: '100px'
 	},
 	logoSection: {
-		paddingBottom: '50px'
+		paddingBottom: '70px'
 	},
 	passwordScore: {
 		width: '100%'
@@ -168,7 +170,7 @@ class Unlock extends Component {
 						spacing={8}
 						className={classes.logoSection}
 					>
-						<Grid item />
+						<SelfkeyLogoTemp />
 					</Grid>
 					<Paper className={classes.modalContentWrapper}>
 						<ModalCloseButton component={gotBackHome}>

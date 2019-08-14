@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
 import { withStyles, Typography, Grid } from '@material-ui/core';
-import { BankingAccountOption } from './account-option';
+import { BankingAccountOption } from '../common/account-option';
 
 const styles = theme => ({
 	tabContainer: {
 		width: '100%',
-		padding: '2em 0',
-		color: '#FFFFFF',
-		'& p': {
-			marginBottom: '1.5em',
-			lineHeight: '1.4em'
-		},
+		padding: '30px 0',
 		'& strong': {
 			fontWeight: 'bold',
 			color: theme.palette.secondary.main,
@@ -33,6 +28,9 @@ const styles = theme => ({
 		'& a': {
 			color: theme.palette.secondary.main
 		}
+	},
+	gridPadding: {
+		padding: '15px 20px !important'
 	}
 });
 
@@ -48,7 +46,7 @@ class BankingTypesTabComponent extends Component {
 		}
 	};
 	render() {
-		const { classes, options = [], region } = this.props;
+		const { classes, region, banks = [], accountType } = this.props;
 		const { option } = this.state;
 		return (
 			<div className={classes.tabContainer}>
@@ -59,20 +57,21 @@ class BankingTypesTabComponent extends Component {
 					alignItems="stretch"
 					spacing={40}
 				>
-					<Grid item>
-						<Typography variant="body2" color="secondary">
-							We work with {options.length} different banks in {region}. Each bank has
+					<Grid item className={classes.gridPadding}>
+						<Typography variant="body1" color="secondary">
+							We work with {banks.length} different banks in {region}. Each bank has
 							different eligibility requirements, types of accounts available and
 							onboarding processes. We invite you to carefully review each banks
 							requirements and services to better understand if their banking services
 							meet your needs:
 						</Typography>
 					</Grid>
-					{options.map((opt, idx) => (
-						<Grid item key={idx}>
+					{banks.map((opt, idx) => (
+						<Grid item key={idx} className={classes.gridPadding}>
 							<BankingAccountOption
 								account={opt}
-								title={`option ${idx + 1}`}
+								accountType={accountType}
+								title={`Option ${idx + 1}`}
 								isOpen={option === idx}
 								toggleOpen={this.toggleOption(idx)}
 							/>

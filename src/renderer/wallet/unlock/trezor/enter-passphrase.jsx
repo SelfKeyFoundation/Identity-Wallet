@@ -18,6 +18,16 @@ import { push } from 'connected-react-router';
 const styles = theme => ({
 	pointer: {
 		cursor: 'pointer'
+	},
+	inputWidth: {
+		width: '380px'
+	},
+	header: {
+		marginBottom: '20px',
+		marginTop: '30px'
+	},
+	h1: {
+		marginBottom: '0.5em'
 	}
 });
 
@@ -92,15 +102,21 @@ class EnterPassphrase extends Component {
 		const { classes } = this.props;
 		return (
 			<Grid container direction="column" justify="center" alignItems="center" spacing={40}>
-				<Grid item>
-					<Typography variant="h1">Please Enter Your Passphrase.</Typography>
-				</Grid>
-				<Grid item>
-					<Typography variant="h3">
+				<Grid
+					container
+					direction="column"
+					justify="center"
+					alignItems="center"
+					className={classes.header}
+				>
+					<Typography variant="h1" className={classes.h1}>
+						Please enter your passphrase.
+					</Typography>
+					<Typography variant="body1" color="secondary">
 						Note that your passphrase is case-sensitive.
 					</Typography>
 				</Grid>
-				<Grid item>
+				<Grid item className={classes.inputWidth}>
 					<Grid
 						container
 						direction="column"
@@ -113,7 +129,7 @@ class EnterPassphrase extends Component {
 								PASSPHRASE
 							</Typography>
 						</Grid>
-						<Grid item>
+						<Grid item style={{ width: '100%' }}>
 							<Input
 								fullWidth
 								error={this.state.error !== ''}
@@ -126,11 +142,12 @@ class EnterPassphrase extends Component {
 								}
 								type={this.state.inputType}
 								onChange={this.handlePassphraseChange}
+								placeholder="Enter Passphrase"
 							/>
 						</Grid>
 					</Grid>
 				</Grid>
-				<Grid item>
+				<Grid item className={classes.inputWidth}>
 					<Grid
 						container
 						direction="column"
@@ -143,7 +160,7 @@ class EnterPassphrase extends Component {
 								RECONFIRM PASSPHRASE
 							</Typography>
 						</Grid>
-						<Grid item>
+						<Grid item style={{ width: '100%' }}>
 							<Input
 								fullWidth
 								error={this.state.error !== ''}
@@ -156,17 +173,18 @@ class EnterPassphrase extends Component {
 								}
 								type={this.state.inputType}
 								onChange={this.handleRePassphraseChange}
+								placeholder="Reconfirm Passphrase"
 							/>
 						</Grid>
 					</Grid>
 				</Grid>
-				<Grid item>
-					{this.state.error !== '' && (
+				{this.state.error !== '' && (
+					<Grid item>
 						<Typography variant="subtitle2" color="error" gutterBottom>
 							{this.state.error}
 						</Typography>
-					)}
-				</Grid>
+					</Grid>
+				)}
 				<Grid item>
 					<Grid
 						container
@@ -197,7 +215,7 @@ class EnterPassphrase extends Component {
 				<Modal open={true}>
 					<ModalWrap>
 						<ModalCloseButton onClick={this.handleCancel}>
-							<ModalCloseIcon />
+							<ModalCloseIcon style={{ marginTop: '20px' }} />
 						</ModalCloseButton>
 						<ModalHeader>
 							<Grid
@@ -207,7 +225,7 @@ class EnterPassphrase extends Component {
 								alignItems="center"
 							>
 								<Grid item>
-									<Typography variant="h6">Trezor PASSPHRASE</Typography>
+									<Typography variant="body1">Trezor PASSPHRASE</Typography>
 								</Grid>
 							</Grid>
 						</ModalHeader>

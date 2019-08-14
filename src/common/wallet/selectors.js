@@ -17,3 +17,7 @@ export const getWallet = state => {
 export const getAssociateError = state => {
 	return state.wallet.associateError;
 };
+
+export const getDidOriginUrl = state => {
+	return state.wallet.didOriginUrl;
+};

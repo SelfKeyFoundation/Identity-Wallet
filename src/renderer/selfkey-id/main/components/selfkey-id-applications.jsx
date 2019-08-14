@@ -166,18 +166,17 @@ const StatusInfo = withStyles(statusInfoStyle)(
 				break;
 			case 9:
 				icon = <AttributeAlertLargeIcon className={classes.statusIcon} />;
-				message = 'Application started. Missing required documents.';
+				message = 'Application pending. Missing required documents.';
 				button = (
 					<Button variant="contained" size="large" onClick={onClick} disabled={loading}>
-						{loading ? 'Loading' : 'Add Documents'}
+						{loading ? 'Loading' : 'Complete Application'}
 					</Button>
 				);
 				statusStyle = 'required';
 				break;
 			default:
 				icon = <SimpleHourglassIcon className={classes.statusIcon} />;
-				message =
-					'Application started. Documents submitted. Please check your email for further instructions.';
+				message = 'Application started. Please check your email for further instructions.';
 				statusStyle = 'submitted';
 				break;
 		}
@@ -266,6 +265,10 @@ const HeaderIcon = withStyles(styles)(({ status, classes }) => {
 
 const getRpInfo = (rpName, field) => {
 	return config.relyingPartyInfo[rpName][field];
+};
+
+const getRpName = title => {
+	return title.toLowerCase().startsWith('bank account') ? 'Bank Accounts' : 'Incorporations';
 };
 
 const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
@@ -359,7 +362,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 			let self = this;
 			this.setState(
 				{
-					loading: true,
+					loading: false,
 					addingDocuments: false,
 					applicationId: null,
 					rpName: null
@@ -404,13 +407,23 @@ class SelfkeyIdApplicationsComponent extends Component {
 					);
 
 					// Open add documents modal
-					await self.props.dispatch(
-						kycOperations.loadRelyingParty(
-							rpName,
-							true,
-							`/main/kyc/current-application/${rpName}?applicationId=${id}`
-						)
-					);
+					// (Later on, we will need to improve this to be able to distinguish requirements
+					// that can be fulfilled by the wallet and ones that need redirect to KYCC.)
+					//
+					// await self.props.dispatch(
+					// 	kycOperations.loadRelyingParty(
+					// 		rpName,
+					// 		true,
+					// 		`/main/kyc/current-application/${rpName}?applicationId=${id}`
+					// 	)
+					// );
+
+					// Redirects to KYCC chain on an external browser window with auto-login
+					const instanceUrl = self.props.rp.session.ctx.config.rootEndpoint;
+					const url = `${instanceUrl}/applications/${application.id}?access_token=${
+						self.props.rp.session.access_token.jwt
+					}`;
+					window.openExternal(null, url);
 				}
 			);
 		}
@@ -577,8 +590,11 @@ class SelfkeyIdApplicationsComponent extends Component {
 										alignItems="baseline"
 									>
 										<Typography variant="h2" className={classes.type}>
-											{item.rpName.charAt(0).toUpperCase() +
-												item.rpName.slice(1)}
+											{/* Until the scheduler (and associate vendor airtable) is released, we are going to use
+											  the application's title because we are using the same rpName for BAM and Incorporations. */}
+											{/* {item.rpName.charAt(0).toUpperCase() +
+												item.rpName.slice(1)} */}
+											{getRpName(item.title)}
 										</Typography>
 										<Typography variant="subtitle2" color="secondary">
 											-{' '}
@@ -694,85 +710,87 @@ class SelfkeyIdApplicationsComponent extends Component {
 												</CardContent>
 											</Card>
 										</Grid>
-										<Grid item xs>
-											<Card>
-												<Typography variant="h2" className={classes.title}>
-													Payment Details
-												</Typography>
-												<Divider variant="middle" />
-												<CardContent>
-													<List className={classes.list}>
-														<ListItem
-															key="transactionId"
-															className={classes.listItem}
-														>
-															<Typography
-																variant="body2"
-																color="secondary"
-																className={classes.label}
+										{item.payments && Object.keys(item.payments).length > 0 && (
+											<Grid item xs>
+												<Card>
+													<Typography
+														variant="h2"
+														className={classes.title}
+													>
+														Payment Details
+													</Typography>
+													<Divider variant="middle" />
+													<CardContent>
+														<List className={classes.list}>
+															<ListItem
+																key="transactionId"
+																className={classes.listItem}
 															>
-																Transaction ID
-															</Typography>
-															<Typography variant="body2">
-																{item.payments &&
-																	item.payments.transactionHash}
-															</Typography>
-														</ListItem>
-														<ListItem
-															key="transactionDate"
-															className={classes.listItem}
-														>
-															<Typography
-																variant="body2"
-																color="secondary"
-																className={classes.label}
+																<Typography
+																	variant="body2"
+																	color="secondary"
+																	className={classes.label}
+																>
+																	Transaction ID
+																</Typography>
+																<Typography variant="body2">
+																	{item.payments.transactionHash}
+																</Typography>
+															</ListItem>
+															<ListItem
+																key="transactionDate"
+																className={classes.listItem}
 															>
-																Transaction Date
-															</Typography>
-															<Typography variant="body2">
-																{item.payments &&
-																	moment(
-																		item.payments
-																			.transactionDate
-																	).format('DD MMM YYYY')}
-															</Typography>
-														</ListItem>
-														<ListItem
-															key="amount"
-															className={classes.listItem}
-														>
-															<Typography
-																variant="body2"
-																color="secondary"
-																className={classes.label}
+																<Typography
+																	variant="body2"
+																	color="secondary"
+																	className={classes.label}
+																>
+																	Transaction Date
+																</Typography>
+																<Typography variant="body2">
+																	{item.payments &&
+																		moment(
+																			item.payments
+																				.transactionDate
+																		).format('DD MMM YYYY')}
+																</Typography>
+															</ListItem>
+															<ListItem
+																key="amount"
+																className={classes.listItem}
 															>
-																Amount
-															</Typography>
-															<Typography variant="body2">
-																{item.payments &&
-																	item.payments.amountKey}
-															</Typography>
-														</ListItem>
-														<ListItem
-															key="paymentStatus"
-															className={classes.listItem}
-														>
-															<Typography
-																variant="body2"
-																color="secondary"
-																className={classes.label}
+																<Typography
+																	variant="body2"
+																	color="secondary"
+																	className={classes.label}
+																>
+																	Amount
+																</Typography>
+																<Typography variant="body2">
+																	{item.payments.amountKey}
+																</Typography>
+															</ListItem>
+															<ListItem
+																key="paymentStatus"
+																className={classes.listItem}
 															>
-																Payment Status
-															</Typography>
-															<Typography variant="body2">
-																{item.payments &&
-																	item.payments.status}
-															</Typography>
-														</ListItem>
-													</List>
-												</CardContent>
-											</Card>
-										</Grid>
+																<Typography
+																	variant="body2"
+																	color="secondary"
+																	className={classes.label}
+																>
+																	Payment Status
+																</Typography>
+																<Typography variant="body2">
+																	{item.payments.status}
+																</Typography>
+															</ListItem>
+														</List>
+													</CardContent>
+												</Card>
+											</Grid>
+										)}
 									</Grid>
 								</ExpansionPanelDetails>
 							</ExpansionPanel>

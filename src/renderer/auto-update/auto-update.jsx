@@ -52,7 +52,7 @@ export const AutoUpdate = withStyles(styles)(
 							</Grid>
 							<Grid item>
 								<Typography variant="body1" gutterBottom>
-									Selfkey Wallet {info && info.releaseName} is avalable now for
+									Selfkey Wallet {info && info.releaseName} is available now for
 									download. For security reasons please update to latest version!
 								</Typography>
 							</Grid>

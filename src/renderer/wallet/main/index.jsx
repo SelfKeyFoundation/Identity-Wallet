@@ -15,7 +15,9 @@ import {
 	MarketplaceIncorporationPage,
 	MarketplaceBankAccountsPage,
 	MarketplaceServiceDetailsPage,
-	MarketplaceSelfkeyIdRequired
+	MarketplaceSelfkeyIdRequired,
+	MarketplaceSelfkeyDIDRequiredContainer,
+	MarketplaceOrdersPage
 } from '../../marketplace';
 
 import { SelfkeyIdContainer, AssociateDID } from '../../selfkey-id/main';
@@ -115,6 +117,10 @@ class Main extends Component {
 						component={MarketplaceSelfkeyIdRequired}
 					/>
 					<Route
+						path={`${match.path}/marketplace-selfkey-did-required`}
+						component={MarketplaceSelfkeyDIDRequiredContainer}
+					/>
+					<Route
 						path={`${match.path}/marketplace-categories`}
 						component={MarketplaceCategoriesPage}
 					/>
@@ -133,6 +139,10 @@ class Main extends Component {
 					<Route
 						path={`${match.path}/marketplace-bank-accounts`}
 						component={MarketplaceBankAccountsPage}
+					/>
+					<Route
+						path={`${match.path}/marketplace-orders`}
+						component={MarketplaceOrdersPage}
 					/>
 					<Route
 						path={`${match.path}/transfer/:crypto`}

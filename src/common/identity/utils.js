@@ -167,6 +167,18 @@ identityAttributes.validate = (schema, attribute, documents) => {
 	}
 };
 
+identityAttributes.getDocumentsErrors = documents => {
+	if (!documents) {
+		return;
+	}
+
+	const invalidDoc = documents.find(d => d.size === 0);
+
+	if (invalidDoc) {
+		return `The file ${invalidDoc.name} is empty, please provide a valid one.`;
+	}
+};
+
 export const jsonSchema = {};
 
 jsonSchema.containsFile = (schema, maxDepth = 10) => {

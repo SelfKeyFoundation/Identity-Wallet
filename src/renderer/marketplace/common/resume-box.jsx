@@ -5,6 +5,7 @@ import { primary } from 'selfkey-ui';
 const styles = theme => ({
 	resumeTable: {},
 	resumeEntry: {
+		maxWidth: '200px',
 		padding: '10px 15px',
 		'& label': {
 			fontSize: '13px',
@@ -21,17 +22,19 @@ const styles = theme => ({
 		background: '#2A3540'
 	},
 	gridWithBorder: {
+		borderImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.12) 3%, ${primary} 100%)`,
+		borderImageSlice: 1,
 		borderLeft: `1px solid ${primary}`
 	},
 	normalText: {
 		color: '#fff'
 	},
-	highlitedText: {
+	highlightedText: {
 		color: primary
 	}
 });
 
-export const ResumeTableEntry = withStyles(styles)(({ classes, name, value = [], highlited }) => {
+export const ResumeTableEntry = withStyles(styles)(({ classes, name, value = [], highlighted }) => {
 	if (!Array.isArray(value)) {
 		value = [value];
 	}
@@ -43,7 +46,7 @@ export const ResumeTableEntry = withStyles(styles)(({ classes, name, value = [],
 					key={idx}
 					variant="h4"
 					color="secondary"
-					className={highlited ? classes.highlitedText : classes.normalText}
+					className={highlighted ? classes.highlightedText : classes.normalText}
 					gutterBottom
 				>
 					{v || '--'}

@@ -45,7 +45,10 @@ const styles = theme => ({
 	},
 
 	footer: {
-		margin: '20px'
+		margin: '20px',
+		'& button': {
+			fontSize: '10px'
+		}
 	}
 });
 
@@ -72,8 +75,13 @@ export const MarketplaceCategory = withStyles(styles)(
 					<Typography variant="body2">{description}</Typography>
 				</Grid>
 				<Grid item id="footer" className={classes.footer}>
-					<Button variant="outlined" disabled={!active} onClick={learnMoreAction}>
-						{active ? 'Learn More' : 'Coming Soon'}
+					<Button
+						id={`#marketplace${title.replace(/\s+/g, '')}Button`}
+						variant="outlined"
+						disabled={!active}
+						onClick={learnMoreAction}
+					>
+						{active ? 'Access Marketplace' : 'Coming Soon'}
 					</Button>
 				</Grid>
 			</Grid>

@@ -64,6 +64,14 @@ const styles = theme => ({
 	},
 	bold: {
 		fontWeight: 600
+	},
+	tooltip: {
+		padding: '7px 0 0 10px'
+	},
+	idNickname: {
+		alignItems: 'baseline',
+		display: 'flex',
+		flexDirection: 'row'
 	}
 });
 
@@ -219,11 +227,17 @@ class SelfKeyIdCreateFormComponent extends Component {
 																			<Typography
 																				variant="overline"
 																				gutterBottom
+																				className={
+																					classes.idNickname
+																				}
 																			>
 																				SELFKEY ID NICKNAME*
 																				<KeyTooltip
 																					interactive
 																					placement="top-start"
+																					className={
+																						classes.tooltip
+																					}
 																					title={
 																						<React.Fragment>
 																							<span>

@@ -23,7 +23,7 @@ export const WS_ORIGINS_WHITELIST = process.env.WS_ORIGINS_WHITELIST
 
 export const WS_IP_WHITELIST = process.env.WS_IP_WHITELIST
 	? process.env.WS_IP_WHITELIST.split(',')
-	: ['127.0.0.1', '::1'];
+	: ['127.0.0.1', '::1', '::ffff:127.0.0.1'];
 
 export const WS_PORT = process.env.LWS_WS_PORT || 8898;
 
@@ -38,18 +38,28 @@ export class LWSService {
 	}
 
 	async reqWallets(msg, conn) {
-		const { website } = msg.payload.config;
+		const { website, did } = msg.payload.config;
 		let payload = await Wallet.findAll();
 		payload = await Promise.all(
 			payload.map(async w => {
 				let unlocked = !!conn.getIdentity(w.publicKey);
 				let signedUp = unlocked && (await w.hasSignedUpTo(website.url));
-				return {
+				const retWallet = {
 					publicKey: w.publicKey,
 					unlocked,
 					profile: w.profile,
+					name: w.name,
 					signedUp
 				};
+				if (unlocked) {
+					retWallet.hasSelfkeyId = w.isSetupFinished;
+					if (did) {
+						retWallet.did = w.did
+							? `did:selfkey:${w.did.replace('did:selfkey:', '')}`
+							: null;
+					}
+				}
+				return retWallet;
 			})
 		);
 		conn.send(
@@ -182,6 +192,13 @@ export class LWSService {
 			await identity.unlock({ password });
 			conn.addIdentity(publicKey, identity);
 			payload.unlocked = true;
+			payload.hasSelfkeyId = wallet.isSetupFinished;
+			if (config.did) {
+				payload.did = wallet.did
+					? `did:selfkey:${wallet.did.replace('did:selfkey:', '')}`
+					: null;
+			}
+			payload.name = wallet.name;
 			payload.signedUp = await wallet.hasSignedUpTo(config.website.url);
 		} catch (error) {
 			log.error(error);
@@ -213,25 +230,48 @@ export class LWSService {
 		}
 		try {
 			let fetchedAttrs = await identity.getAttributesByTypes(
-				requestedAttributes.map(attr => attr.id || attr.attribute || attr)
+				requestedAttributes.map(attr => attr.schemaId || attr.attribute || attr)
 			);
-			let payload = fetchedAttrs.map(attr => {
-				let schema = attr.attributeType.content;
-				let value = attr.data.value;
-				let documents = attr.documents.map(doc => {
-					doc.buffer = doc.buffer.toString('base64');
-					return doc;
-				});
+			fetchedAttrs = fetchedAttrs.reduce((acc, curr) => {
+				acc[curr.attributeType.url] = acc[curr.attributeType.url] || [];
+				acc[curr.attributeType.url].push(curr);
+				return acc;
+			}, {});
+
+			let payload = requestedAttributes.map(attr => {
+				const schemaId = attr.schemaId || attr.attribute || attr;
+				const fetched = fetchedAttrs[schemaId];
+				const attributeType = fetched ? fetched[0].attributeType : null;
+				const schema = attributeType ? attributeType.content : null;
+
+				const options = fetched
+					? fetched.map(f => {
+							let value = f.data.value;
+							let documents = f.documents.map(doc => {
+								doc.buffer = doc.buffer.toString('base64');
+								return doc;
+							});
+							return {
+								id: f.id,
+								name: f.name,
+								value: identityUtils.identityAttributes.denormalizeDocumentsSchema(
+									schema,
+									value,
+									documents
+								).value
+							};
+					  })
+					: null;
+
 				return {
-					url: attr.attributeType.url,
-					name: attr.name,
-					value: identityUtils.identityAttributes.denormalizeDocumentsSchema(
-						schema,
-						value,
-						documents
-					).value,
-					schema: schema,
-					id: attr.id
+					uiId: attr.uiId,
+					id: attr.id,
+					title: attr.title || attr.label || (schema && schema.title),
+					options,
+					schemaId,
+					schema,
+					selected: 0,
+					required: attr.required
 				};
 			});
 
@@ -338,22 +378,29 @@ export class LWSService {
 		}
 
 		try {
-			let rpAttributes = (attributes || []).map(attr => {
-				let normalized = identityUtils.identityAttributes.normalizeDocumentsSchema(
-					attr.schema,
-					attr.value
-				);
-				return {
-					id: attr.id,
-					schemaId: attr.url,
-					schema: attr.schema,
-					data: normalized.value,
-					documents: normalized.documents.map(doc => {
-						doc.buffer = Buffer.from(doc.buffer, 'base64');
-						return doc;
-					})
-				};
-			});
+			let rpAttributes = (attributes || [])
+				.filter(attr => {
+					if (!attr.options || attr.options.length === 0) {
+						return false;
+					}
+					return !!attr.options[attr.selected];
+				})
+				.map(attr => {
+					let normalized = identityUtils.identityAttributes.normalizeDocumentsSchema(
+						attr.schema,
+						attr.options[attr.selected].value
+					);
+					return {
+						id: attr.id,
+						schemaId: attr.schemaId,
+						schema: attr.schema,
+						data: normalized.value,
+						documents: normalized.documents.map(doc => {
+							doc.buffer = Buffer.from(doc.buffer, 'base64');
+							return doc;
+						})
+					};
+				});
 			await session.createUser(rpAttributes, config.meta || {});
 			return this.authResp(
 				{

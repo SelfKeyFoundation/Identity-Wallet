@@ -27,18 +27,15 @@ const styles = theme => ({
 		overflow: 'auto',
 		width: 300
 	},
-
 	logoSection: {
 		marginBottom: '30px',
 		marginTop: '-30px',
 		paddingLeft: '16px'
 	},
-
 	logo: {
 		width: '38px',
 		height: '44px'
 	},
-
 	logoText: {
 		fontFamily: 'Orbitron, arial, sans-serif',
 		fontSize: '18px',
@@ -46,15 +43,12 @@ const styles = theme => ({
 		lineHeight: '22px',
 		paddingTop: '3px'
 	},
-
 	closeSection: {
 		width: '100%'
 	},
-
 	pointer: {
 		cursor: 'pointer'
 	},
-
 	listItem: {
 		alignItems: 'end',
 		cursor: 'pointer',
@@ -72,22 +66,18 @@ const styles = theme => ({
 			}
 		}
 	},
-
 	secondaryButtons: {
 		alignItems: 'flex-end',
 		display: 'flex',
 		flexGrow: 2,
 		width: 'inherit'
 	},
-
 	inheritWidth: {
 		width: 'inherit'
 	},
-
 	inheritHeight: {
 		height: 'inherit'
 	},
-
 	textColor: {
 		color: '#fff',
 		opacity: 0.8,
@@ -95,7 +85,6 @@ const styles = theme => ({
 			opacity: 1
 		}
 	},
-
 	version: {
 		color: '#fff',
 		fontSize: '10px',
@@ -103,6 +92,12 @@ const styles = theme => ({
 		position: 'absolute',
 		right: 0,
 		width: 'auto'
+	},
+	drawer: {
+		transition: 'all 3s',
+		'& > div:first-of-type': {
+			opacity: '1 !important'
+		}
 	}
 });
 
@@ -182,11 +177,12 @@ class Sidebar extends Component {
 							<ListItemIcon>
 								<DashboardMenuIcon />
 							</ListItemIcon>
-							<Typography variant="body2" color="secondary" gutterBottom>
+							<Typography variant="body2" color="secondary">
 								Dashboard
 							</Typography>
 						</ListItem>
 						<ListItem
+							id="marketplaceButton"
 							className={classes.listItem}
 							component={marketplace}
 							key="marketplace"
@@ -194,7 +190,7 @@ class Sidebar extends Component {
 							<ListItemIcon>
 								<MarketplaceMenuIcon />
 							</ListItemIcon>
-							<Typography variant="body2" color="secondary" gutterBottom>
+							<Typography variant="body2" color="secondary">
 								Marketplace
 							</Typography>
 						</ListItem>
@@ -207,7 +203,7 @@ class Sidebar extends Component {
 							<ListItemIcon>
 								<SelfkeyIDMenuIcon />
 							</ListItemIcon>
-							<Typography variant="body2" color="secondary" gutterBottom>
+							<Typography variant="body2" color="secondary">
 								SelfKey ID
 							</Typography>
 						</ListItem>
@@ -220,7 +216,7 @@ class Sidebar extends Component {
 							<ListItemIcon>
 								<AddressBookMenuIcon />
 							</ListItemIcon>
-							<Typography variant="body2" color="secondary" gutterBottom>
+							<Typography variant="body2" color="secondary">
 								Address Book
 							</Typography>
 						</ListItem>
@@ -236,7 +232,7 @@ class Sidebar extends Component {
 							}}
 							key="helpAndSupport"
 						>
-							<Typography variant="body2" className={classes.textColor} gutterBottom>
+							<Typography variant="body2" className={classes.textColor}>
 								Help & Support
 							</Typography>
 						</ListItem>
@@ -245,12 +241,12 @@ class Sidebar extends Component {
 							component={switchAccount}
 							key="switchAccount"
 						>
-							<Typography variant="body2" className={classes.textColor} gutterBottom>
+							<Typography variant="body2" className={classes.textColor}>
 								Switch Accounts
 							</Typography>
 						</ListItem>
 						<ListItem className={classes.listItem} key="quit" onClick={window.quit}>
-							<Typography variant="body2" className={classes.textColor} gutterBottom>
+							<Typography variant="body2" className={classes.textColor}>
 								Quit
 							</Typography>
 						</ListItem>
@@ -265,7 +261,12 @@ class Sidebar extends Component {
 		);
 
 		return (
-			<Drawer anchor="right" open={this.state.open} onClose={() => this.toggleDrawer(false)}>
+			<Drawer
+				anchor="right"
+				open={this.state.open}
+				onClose={() => this.toggleDrawer(false)}
+				className={classes.drawer}
+			>
 				<div
 					tabIndex={0}
 					role="button"

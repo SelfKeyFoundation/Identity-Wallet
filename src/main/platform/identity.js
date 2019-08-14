@@ -3,8 +3,8 @@ import { getPrivateKey } from '../keystorage';
 import { IdAttribute } from '../identity/id-attribute';
 import { getGlobalContext } from 'common/context';
 import { Logger } from 'common/logger';
+import { isDevMode } from 'common/utils/common';
 import AppEth from '@ledgerhq/hw-app-eth';
-import config from 'common/config';
 
 const log = new Logger('Identity');
 export class Identity {
@@ -15,11 +15,11 @@ export class Identity {
 		this.privateKey = wallet.privateKey ? wallet.privateKey.replace('0x', '') : null;
 		this.keystorePath = wallet.keystoreFilePath;
 		this.did = wallet.did
-			? `did:selfkey:${wallet.did}${config.chainId === 3 ? ';selfkey:chain=ropsten' : ''}`
+			? `did:selfkey:${wallet.did.replace('did:selfkey:', '')}`
 			: `did:eth:${this.address ? this.address.toLowerCase() : ''}`;
 		this.wid = wallet.id;
 		this.path = wallet.path;
-
+		this.wallet = wallet;
 		if (this.profile === 'local' && this.privateKey) {
 			this.publicKey = ethUtil
 				.privateToPublic(Buffer.from(this.privateKey, 'hex'))
@@ -41,7 +41,13 @@ export class Identity {
 		}
 	}
 	getKeyId() {
-		return `${this.did}#keys-1`;
+		return `${this.getDidWithParams()}#keys-1`;
+	}
+	getDidWithParams() {
+		if (!this.wallet.did || !isDevMode()) {
+			return this.did;
+		}
+		return `${this.did};selfkey:chain=ropsten`;
 	}
 	async getPublicKeyFromHardwareWallet() {
 		if (this.profile === 'ledger') {
