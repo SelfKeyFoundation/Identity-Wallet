@@ -51,7 +51,7 @@ const incorporationsRPDetails = {
 	description: 'Incorporations',
 	relying_party_config: {
 		rootEndpoint: config.incorporationsInstance,
-		did: config.incorporationsInstance.indexOf('dev') !== -1, // TODO, remove it when updating the production incorporation instance to accept DID
+		did: true,
 		endpoints: {
 			'/templates/:id': `${config.incorporationsInstance}templates/:id?format=minimum`
 		}
