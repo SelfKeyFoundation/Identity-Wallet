@@ -37,6 +37,12 @@ const styles = theme => ({
 	}
 });
 
+function removeDuplicates(myArr, prop) {
+	return myArr.filter((obj, pos, arr) => {
+		return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
+	});
+}
+
 class AddressBookContainer extends Component {
 	state = {
 		addresses: []
@@ -69,7 +75,7 @@ class AddressBookContainer extends Component {
 
 	render() {
 		const { classes } = this.props;
-		const { addresses } = this.state;
+		const addresses = removeDuplicates(this.state.addresses, 'address');
 		return (
 			<Grid
 				id="viewAddressBook"
