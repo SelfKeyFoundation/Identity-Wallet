@@ -9,14 +9,21 @@ import { walletSelectors } from 'common/wallet';
 import { withStyles } from '@material-ui/core/styles';
 import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
 import { IncorporationsDetailsPage } from './incorporations-details-page';
+import config from 'common/config';
 
 const styles = theme => ({});
 
 class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent {
 	state = {
 		tab: 'description',
-		loading: false
+		loading: false,
+		cryptoValue: 0
 	};
+
+	constructor() {
+		super();
+		this.handleCryptoValueChange = this.handleCryptoValueChange.bind(this);
+	}
 
 	async componentDidMount() {
 		const { program } = this.props;
@@ -103,11 +110,12 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 	};
 
 	onApplyClick = () => {
-		const { rp, wallet } = this.props;
+		const { rp, wallet, program } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
+		const transactionNoKeyError = '/main/transaction-no-key-error';
 		const authenticated = true;
-
+		const price = program.price;
 		// When clicking the start process,
 		// we check if an authenticated kyc-chain session exists
 		// If it doesn't we trigger a new authenticated rp session
@@ -119,6 +127,9 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 			}
 			if (!wallet.did) {
 				return this.props.dispatch(push(selfkeyDIDRequiredRoute));
+			}
+			if (price > this.state.cryptoValue) {
+				return this.props.dispatch(push(transactionNoKeyError));
 			}
 			if (!rp || !rp.authenticated) {
 				await this.props.dispatch(
@@ -133,6 +144,10 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 				await this.props.dispatch(push(this.checkoutRoute()));
 			}
 		});
+	};
+
+	handleCryptoValueChange = cryptoValue => {
+		this.setState({ cryptoValue: Number(cryptoValue) });
 	};
 
 	render() {
@@ -161,6 +176,8 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 				templateId={templateId}
 				onBack={this.onBackClick}
 				onStatusAction={this.onStatusActionClick}
+				cryptoCurrency={config.constants.primaryToken}
+				cryptoValueChange={this.handleCryptoValueChange}
 			/>
 		);
 	}
