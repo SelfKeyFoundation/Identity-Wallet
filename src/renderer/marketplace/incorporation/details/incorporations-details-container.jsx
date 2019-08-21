@@ -110,12 +110,13 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 	};
 
 	onApplyClick = () => {
-		const { rp, wallet, program } = this.props;
+		const { rp, wallet, program, keyRate } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
 		const transactionNoKeyError = '/main/transaction-no-key-error';
 		const authenticated = true;
-		const price = program.price;
+		const keyPrice = program.price / keyRate;
+		const keyAvailable = this.state.cryptoValue;
 		// When clicking the start process,
 		// we check if an authenticated kyc-chain session exists
 		// If it doesn't we trigger a new authenticated rp session
@@ -128,7 +129,7 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 			if (!wallet.did) {
 				return this.props.dispatch(push(selfkeyDIDRequiredRoute));
 			}
-			if (price > this.state.cryptoValue) {
+			if (keyPrice > keyAvailable) {
 				return this.props.dispatch(push(transactionNoKeyError));
 			}
 			if (!rp || !rp.authenticated) {
