@@ -3,11 +3,6 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
-/*
-import { getWallet } from 'common/wallet/selectors';
-import { kycSelectors, kycOperations } from 'common/kyc';
-import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
-*/
 import { MarketplaceProcessStarted } from '../../common/marketplace-process-started';
 
 const styles = theme => ({});
@@ -31,7 +26,7 @@ class BankAccountsProcessStartedContainer extends Component {
 					Thank you for payment!
 				</Typography>
 				<Typography variant="body2" gutterBottom>
-					One of our our managers is reviewing the information you submitted and{' '}
+					One of our managers is reviewing the information you submitted and{' '}
 					<strong>will contact you shortly on the e-mail you provided</strong>, to
 					continue the process. If you have any questions in the meantime, you can reach
 					us at:

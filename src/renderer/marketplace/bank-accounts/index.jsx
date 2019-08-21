@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { featureIsEnabled } from 'common/feature-flags';
+import { ordersOperations } from 'common/marketplace/orders';
 import { marketplaceOperations } from 'common/marketplace';
 import { BankAccountsTableContainer } from './list/offers-container';
 import { BankAccountsDetailContainer } from './details/details-container';
@@ -10,9 +12,13 @@ import { BankAccountsPaymentCompleteContainer } from './checkout/payment-complet
 import { BankAccountsSelectBankContainer } from './select-bank/select-bank-container';
 import { BankAccountsProcessStartedContainer } from './process-started/process-started-container';
 
-class MarketplaceBankAccountsPage extends Component {
+class MarketplaceBankAccountsComponent extends Component {
 	async componentDidMount() {
-		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
+		if (featureIsEnabled('scheduler')) {
+			await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
+		} else {
+			await this.props.dispatch(ordersOperations.ordersLoadOperation());
+		}
 	}
 	render() {
 		const { path } = this.props.match;
@@ -48,7 +54,5 @@ class MarketplaceBankAccountsPage extends Component {
 	}
 }
 
-const connected = connect()(MarketplaceBankAccountsPage);
-
-export default connected;
-export { connected as MarketplaceBankAccountsPage };
+const MarketplaceBankAccountsPage = connect()(MarketplaceBankAccountsComponent);
+export { MarketplaceBankAccountsPage };

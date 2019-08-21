@@ -146,7 +146,6 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	render() {
 		const { accountType, banks, keyRate, jurisdiction, kycRequirements, country } = this.props;
 		const { price, countryCode, region } = accountType;
-
 		return (
 			<BankingDetailsPage
 				applicationStatus={this.getApplicationStatus()}
@@ -184,7 +183,6 @@ BankAccountsDetailContainer.propTypes = {
 const mapStateToProps = (state, props) => {
 	const { accountCode, countryCode, templateId } = props.match.params;
 	const authenticated = true;
-
 	return {
 		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
 		banks: bankAccountsSelectors.getDetailsByAccountCode(state, accountCode),

@@ -430,12 +430,12 @@ class SelfkeyIdApplicationsComponent extends Component {
 	};
 
 	handleApplicationRefresh = id => {
-		const { rp, afterAuthRoute } = this.props;
+		const { afterAuthRoute } = this.props;
 		const cancelRoute = `/main/selfkeyId`;
 		const authenticate = true;
 
 		// if relying party not loaded, try again
-		if (!rp || !rp.authenticated) {
+		if (!this.state.refreshing) {
 			this.setState({ loading: true, refreshing: true, applicationId: id }, async () => {
 				await this.props.dispatch(
 					kycOperations.loadRelyingParty(

@@ -96,15 +96,11 @@ export const MarketplacePaymentComplete = withStyles(styles)(props => {
 					<div className={classes.content}>
 						<div className={classes.description}>
 							<Typography variant="h1" gutterBottom>
-								Bank Account KYC Process Started
-							</Typography>
-							<Typography variant="body1" gutterBottom>
-								Thank you for payment!
+								Payment complete!
 							</Typography>
 							<Typography variant="body2" gutterBottom>
-								Please click the continue button and select your preferred Bank to
-								continue the process. If you have any questions in the meantime, you
-								can reach us at:
+								Please click the continue button to continue the process. If you
+								have any questions in the meantime, you can reach us at:
 							</Typography>
 							<Typography
 								variant="body2"
