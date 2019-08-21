@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Button, Typography } from '@material-ui/core';
 import { ApplicationStatusBar } from '../../../kyc/application/application-status';
 import { MoneyIcon } from 'selfkey-ui';
 import { FlagCountryName, ResumeBox, ProgramPrice, MarketplaceKycRequirements } from '../../common';
 import { BankingDetailsPageTabs } from './details-tabs';
+import { connect } from 'react-redux';
+import { getLocale } from 'common/locale/selectors';
+import { getFiatCurrency } from 'common/fiatCurrency/selectors';
+import { getCryptoValue, getToValue } from '../../../common/price-utils';
 
 const styles = theme => ({
 	container: {
@@ -91,114 +95,135 @@ export const BankingApplicationButton = withStyles(styles)(
 	)
 );
 
-export const BankingDetailsPage = withStyles(styles)(props => {
-	const {
-		classes,
-		applicationStatus,
-		countryCode,
-		region,
-		contact,
-		onStatusAction,
-		onBack,
-		loading,
-		canOpenBankAccount,
-		resume = [],
-		startApplication,
-		keyRate,
-		price,
-		tab,
-		kycRequirements,
-		templateId,
-		onTabChange
-	} = props;
-	return (
-		<Grid container>
-			<Grid item>
-				<div className={classes.backButtonContainer}>
-					<Button variant="outlined" color="secondary" size="small" onClick={onBack}>
-						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
-							‹ Back
-						</Typography>
-					</Button>
-				</div>
-			</Grid>
-			<Grid item className={classes.container}>
-				<Grid
-					id="bankAccountDetails"
-					container
-					justify="flex-start"
-					alignItems="flex-start"
-					className={classes.title}
-				>
-					<div>
-						<FlagCountryName code={countryCode} />
-					</div>
-					<Typography variant="body2" gutterBottom className="region">
-						{region}
-					</Typography>
-				</Grid>
-				<Grid container className={classes.contentContainer}>
-					<ApplicationStatusBar
-						status={applicationStatus}
-						contact={contact}
-						statusAction={onStatusAction}
-						loading={loading}
-					/>
-					<Grid
-						container
-						direction="column"
-						justify="flex-start"
-						alignItems="stretch"
-						spacing={40}
-						className={classes.content}
-					>
-						<Grid item>
-							<Grid
-								container
-								direction="row"
-								justify="space-between"
-								alignItems="flex-start"
+class BankingDetails extends Component {
+	componentDidMount() {
+		this.props.cryptoValueChange(this.props.cryptoValue);
+	}
+
+	render() {
+		const {
+			classes,
+			applicationStatus,
+			countryCode,
+			region,
+			contact,
+			onStatusAction,
+			onBack,
+			loading,
+			canOpenBankAccount,
+			resume = [],
+			startApplication,
+			keyRate,
+			price,
+			tab,
+			kycRequirements,
+			templateId,
+			onTabChange
+		} = this.props;
+		return (
+			<Grid container>
+				<Grid item>
+					<div className={classes.backButtonContainer}>
+						<Button variant="outlined" color="secondary" size="small" onClick={onBack}>
+							<Typography
+								variant="subtitle2"
+								color="secondary"
+								className={classes.bold}
 							>
-								<Grid item>
-									<ResumeBox itemSets={resume} />
-								</Grid>
-								<Grid item className={classes.applyButton}>
-									<BankingApplicationButton
-										canOpenBankAccount={canOpenBankAccount}
-										price={price}
-										loading={loading}
-										startApplication={startApplication}
-										keyRate={keyRate}
-									/>
-									<ProgramPrice
-										id="fees"
-										price={price}
-										rate={keyRate}
-										label="Pricing: $"
-									/>
+								‹ Back
+							</Typography>
+						</Button>
+					</div>
+				</Grid>
+				<Grid item className={classes.container}>
+					<Grid
+						id="bankAccountDetails"
+						container
+						justify="flex-start"
+						alignItems="flex-start"
+						className={classes.title}
+					>
+						<div>
+							<FlagCountryName code={countryCode} />
+						</div>
+						<Typography variant="body2" gutterBottom className="region">
+							{region}
+						</Typography>
+					</Grid>
+					<Grid container className={classes.contentContainer}>
+						<ApplicationStatusBar
+							status={applicationStatus}
+							contact={contact}
+							statusAction={onStatusAction}
+							loading={loading}
+						/>
+						<Grid
+							container
+							direction="column"
+							justify="flex-start"
+							alignItems="stretch"
+							spacing={40}
+							className={classes.content}
+						>
+							<Grid item>
+								<Grid
+									container
+									direction="row"
+									justify="space-between"
+									alignItems="flex-start"
+								>
+									<Grid item>
+										<ResumeBox itemSets={resume} />
+									</Grid>
+									<Grid item className={classes.applyButton}>
+										<BankingApplicationButton
+											canOpenBankAccount={canOpenBankAccount}
+											price={price}
+											loading={loading}
+											startApplication={startApplication}
+											keyRate={keyRate}
+										/>
+										<ProgramPrice
+											id="fees"
+											price={price}
+											rate={keyRate}
+											label="Pricing: $"
+										/>
+									</Grid>
 								</Grid>
 							</Grid>
-						</Grid>
-						<Grid item>
-							<BankingDetailsPageTabs
-								{...props}
-								tab={tab}
-								onTabChange={onTabChange}
-							/>
-						</Grid>
-						<Grid item>
-							<MarketplaceKycRequirements
-								requirements={kycRequirements}
-								loading={loading}
-								templateId={templateId}
-								title="KYC Requirements and Forms"
-							/>
+							<Grid item>
+								<BankingDetailsPageTabs
+									{...this.props}
+									tab={tab}
+									onTabChange={onTabChange}
+								/>
+							</Grid>
+							<Grid item>
+								<MarketplaceKycRequirements
+									requirements={kycRequirements}
+									loading={loading}
+									templateId={templateId}
+									title="KYC Requirements and Forms"
+								/>
+							</Grid>
 						</Grid>
 					</Grid>
 				</Grid>
 			</Grid>
-		</Grid>
-	);
-});
+		);
+	}
+}
+
+const mapStateToProps = (state, props) => {
+	return {
+		...getLocale(state),
+		toCurrency: getFiatCurrency(state).fiatCurrency,
+		cryptoValue: getCryptoValue(state, props),
+		toValue: getToValue(state, props)
+	};
+};
+
+export const BankingDetailsPage = connect(mapStateToProps)(withStyles(styles)(BankingDetails));
 
 export default BankingDetailsPage;

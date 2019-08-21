@@ -10,6 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
 import { BankingDetailsPage } from './details-page';
 import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
+import config from 'common/config';
 
 const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
@@ -17,8 +18,14 @@ const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	state = {
 		tab: 'types',
-		loading: false
+		loading: false,
+		cryptoValue: 0
 	};
+
+	constructor() {
+		super();
+		this.handleCryptoValueChange = this.handleCryptoValueChange.bind(this);
+	}
 
 	async componentDidMount() {
 		const { accountType, country } = this.props;
@@ -75,11 +82,13 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	onApplyClick = () => {
-		const { rp, wallet } = this.props;
+		const { rp, wallet, accountType, keyRate } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
+		const transactionNoKeyError = '/main/transaction-no-key-error';
 		const authenticated = true;
-
+		const keyPrice = accountType.price / keyRate;
+		const keyAvailable = this.state.cryptoValue;
 		// When clicking the start process,
 		// we check if an authenticated kyc-chain session exists
 		// If it doesn't we trigger a new authenticated rp session
@@ -91,6 +100,9 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 			}
 			if (!wallet.did) {
 				return this.props.dispatch(push(selfkeyDIDRequiredRoute));
+			}
+			if (keyPrice > keyAvailable) {
+				return this.props.dispatch(push(transactionNoKeyError));
 			}
 			if (!rp || !rp.authenticated) {
 				await this.props.dispatch(
@@ -143,6 +155,10 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 		];
 	};
 
+	handleCryptoValueChange = cryptoValue => {
+		this.setState({ cryptoValue: Number(cryptoValue) });
+	};
+
 	render() {
 		const { accountType, banks, keyRate, jurisdiction, kycRequirements, country } = this.props;
 		const { price, countryCode, region } = accountType;
@@ -167,6 +183,8 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 				templateId={this.props.match.params.templateId}
 				onBack={this.onBackClick}
 				onStatusAction={this.onStatusActionClick}
+				cryptoCurrency={config.constants.primaryToken}
+				cryptoValueChange={this.handleCryptoValueChange}
 			/>
 		);
 	}
