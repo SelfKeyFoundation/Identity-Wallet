@@ -257,19 +257,19 @@ class Sidebar extends Component {
 								My Profile
 							</Typography>
 						</ListItem>
-						<ListItem
-							id="addressBookButton"
+						{/* <ListItem
+							id="affiliate"
 							className={classes.listItem}
-							component={addressBook}
-							key="addressBook"
+							component={affiliate}
+							key="affiliate"
 						>
-							<ListItemIcon>
-								<AddressBookMenuIcon />
+							<ListItemIcon className={classes.listItemIcon}>
+								<AffiliateIcon />
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
-								Address Book
+								Affiliate Program
 							</Typography>
-						</ListItem>
+						</ListItem> */}
 					</List>
 				</Grid>
 				<Divider />
