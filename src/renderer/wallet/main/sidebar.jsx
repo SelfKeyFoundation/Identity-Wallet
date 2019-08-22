@@ -99,8 +99,33 @@ const styles = theme => ({
 	drawer: {
 		transition: 'all 3s',
 		'& > div:first-of-type': {
-			opacity: '1 !important'
+			left: 0,
+			opacity: '1 !important',
+			right: 'auto'
 		}
+	},
+	openedDrawer: {
+		'& > div:first-of-type': {
+			minWidth: 200,
+			transition: 'all 0.2s ease-out'
+		},
+		'& .sidebarContainer': {
+			transition: 'all 0.2s ease-out',
+			width: 200
+		}
+	},
+	closedDrawer: {
+		'& > div:first-of-type': {
+			minWidth: 56,
+			transition: 'all 0.2s ease-out'
+		},
+		'& .sidebarContainer': {
+			transition: 'all 0.2s ease-out',
+			width: 56
+		}
+	},
+	listItemIcon: {
+		marginRight: '22px'
 	}
 });
 
@@ -276,7 +301,10 @@ class Sidebar extends Component {
 				anchor="right"
 				open={this.state.open}
 				onClose={() => this.toggleDrawer(false)}
-				className={classes.drawer}
+				className={`${classes.drawer} ${
+					this.state.open ? classes.openedDrawer : classes.closedDrawer
+				}`}
+				variant="permanent"
 			>
 				<div
 					tabIndex={0}
