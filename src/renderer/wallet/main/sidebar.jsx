@@ -36,15 +36,16 @@ const styles = theme => ({
 		paddingLeft: '16px'
 	},
 	logo: {
-		width: '38px',
-		height: '44px'
+		width: '30px',
+		height: '34px'
 	},
 	logoText: {
 		fontFamily: 'Orbitron, arial, sans-serif',
-		fontSize: '18px',
+		fontSize: '16px',
 		letterSpacing: '2.77px',
 		lineHeight: '22px',
-		paddingTop: '3px'
+		marginLeft: '13px',
+		marginTop: '3px'
 	},
 	closeSection: {
 		width: '100%'
