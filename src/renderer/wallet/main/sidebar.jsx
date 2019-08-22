@@ -16,7 +16,10 @@ import {
 	MarketplaceMenuIcon,
 	SelfkeyIDMenuIcon,
 	AddressBookMenuIcon,
-	SelfkeyLogo
+	SelfkeyLogo,
+	MenuHelpIcon,
+	SwitchAccountsIcon,
+	PowerIcon
 } from 'selfkey-ui';
 
 const styles = theme => ({
