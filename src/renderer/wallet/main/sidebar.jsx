@@ -234,6 +234,9 @@ class Sidebar extends Component {
 							}}
 							key="helpAndSupport"
 						>
+							<ListItemIcon className={classes.listItemIcon}>
+								<MenuHelpIcon />
+							</ListItemIcon>
 							<Typography variant="body2" className={classes.textColor}>
 								Help & Support
 							</Typography>
@@ -243,11 +246,17 @@ class Sidebar extends Component {
 							component={switchAccount}
 							key="switchAccount"
 						>
+							<ListItemIcon className={classes.listItemIcon}>
+								<SwitchAccountsIcon />
+							</ListItemIcon>
 							<Typography variant="body2" className={classes.textColor}>
 								Switch Accounts
 							</Typography>
 						</ListItem>
 						<ListItem className={classes.listItem} key="quit" onClick={window.quit}>
+							<ListItemIcon className={classes.listItemIcon}>
+								<PowerIcon />
+							</ListItemIcon>
 							<Typography variant="body2" className={classes.textColor}>
 								Quit
 							</Typography>
