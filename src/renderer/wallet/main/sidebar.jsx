@@ -10,7 +10,6 @@ import {
 	Divider
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import Close from '@material-ui/icons/Close';
 import {
 	DashboardMenuIcon,
 	MarketplaceMenuIcon,
@@ -28,12 +27,11 @@ const styles = theme => ({
 		margin: 0,
 		minHeight: '100%',
 		overflow: 'auto',
-		width: 300
+		width: '100%'
 	},
 	logoSection: {
 		marginBottom: '30px',
-		marginTop: '-30px',
-		paddingLeft: '16px'
+		marginTop: '-30px'
 	},
 	logo: {
 		width: '30px',
@@ -53,12 +51,22 @@ const styles = theme => ({
 	pointer: {
 		cursor: 'pointer'
 	},
+	link: {
+		outline: 'none',
+		'&:focus': {
+			outline: 'none'
+		}
+	},
 	listItem: {
-		alignItems: 'end',
 		cursor: 'pointer',
 		display: 'flex',
 		marginBottom: '30px',
 		paddingLeft: '10px',
+		'& p': {
+			overflow: 'hidden',
+			textOverflow: 'ellipsis',
+			whiteSpace: 'nowrap'
+		},
 		'&:hover': {
 			color: '#ffffff',
 			'& p': {
@@ -167,24 +175,16 @@ class Sidebar extends Component {
 				direction="column"
 				justify="flex-start"
 				alignItems="flex-start"
-				className={classes.list}
+				className={`${classes.list} sidebarContainer`}
 				spacing={40}
 			>
-				<Grid item className={classes.closeSection}>
-					<Grid container direction="row" justify="flex-end" alignItems="flex-start">
-						<Grid item>
-							<Close color="secondary" className={classes.pointer} />
-						</Grid>
-					</Grid>
-				</Grid>
-				<Grid item>
+				<Grid item style={{ padding: '20px 0', flexGrow: 0 }}>
 					<Grid
 						container
 						direction="row"
-						justify="flex-start"
 						alignItems="center"
-						spacing={16}
-						className={classes.logoSection}
+						wrap="nowrap"
+						style={{ paddingLeft: '13px' }}
 					>
 						<Link to="/main/dashboard" className={classes.link}>
 							<SelfkeyLogo className={classes.logo} />
@@ -194,16 +194,16 @@ class Sidebar extends Component {
 						</Typography>
 					</Grid>
 				</Grid>
-				</Grid>
-				<Grid item>
-					<List>
+				<Divider style={{ width: '100%', backgroundColor: '#475768', flexGrow: 0 }} />
+				<Grid item style={{ padding: '50px 0 20px', flexGrow: 1 }}>
+					<List style={{ paddingLeft: '10px' }}>
 						<ListItem
 							className={classes.listItem}
 							component={dashboard}
 							key="dashboard"
 						>
-							<ListItemIcon>
-								<DashboardMenuIcon />
+							<ListItemIcon className={classes.listItemIcon}>
+								<DashboardMenuIcon width="16px" height="16px" viewBox="0 0 16 16" />
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
 								Dashboard
@@ -215,24 +215,46 @@ class Sidebar extends Component {
 							component={marketplace}
 							key="marketplace"
 						>
-							<ListItemIcon>
-								<MarketplaceMenuIcon />
+							<ListItemIcon className={classes.listItemIcon}>
+								<MarketplaceMenuIcon
+									width="15px"
+									height="16px"
+									viewBox="0 0 15 16"
+								/>
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
 								Marketplace
 							</Typography>
 						</ListItem>
 						<ListItem
+							id="addressBookButton"
+							className={classes.listItem}
+							component={addressBook}
+							key="addressBook"
+						>
+							<ListItemIcon className={classes.listItemIcon}>
+								<AddressBookMenuIcon
+									width="15px"
+									height="16px"
+									viewBox="0 0 15 16"
+								/>
+							</ListItemIcon>
+							<Typography variant="body2" color="secondary">
+								Address Book
+							</Typography>
+						</ListItem>
+						<Divider style={{ marginBottom: '30px' }} />
+						<ListItem
 							id="selfkeyIdButton"
 							className={classes.listItem}
 							component={selfkeyId}
 							key="selfkeyId"
 						>
-							<ListItemIcon>
-								<SelfkeyIDMenuIcon />
+							<ListItemIcon className={classes.listItemIcon}>
+								<SelfkeyIDMenuIcon width="14px" height="20px" viewBox="0 0 14 20" />
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
-								SelfKey ID
+								My Profile
 							</Typography>
 						</ListItem>
 						<ListItem
@@ -251,8 +273,8 @@ class Sidebar extends Component {
 					</List>
 				</Grid>
 				<Divider />
-				<Grid item className={classes.secondaryButtons}>
-					<List className={classes.inheritWidth}>
+				<Grid item style={{ padding: '50px 0 20px' }}>
+					<List style={{ paddingLeft: '10px' }}>
 						<ListItem
 							className={classes.listItem}
 							onClick={e => {
