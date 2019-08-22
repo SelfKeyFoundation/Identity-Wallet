@@ -160,15 +160,14 @@ class Sidebar extends Component {
 						spacing={16}
 						className={classes.logoSection}
 					>
-						<Grid item>
+						<Link to="/main/dashboard" className={classes.link}>
 							<SelfkeyLogo className={classes.logo} />
-						</Grid>
-						<Grid item>
-							<Typography variant="h1" className={classes.logoText}>
-								SELFKEY
-							</Typography>
-						</Grid>
+						</Link>
+						<Typography variant="h1" className={classes.logoText}>
+							SELFKEY
+						</Typography>
 					</Grid>
+				</Grid>
 				</Grid>
 				<Grid item>
 					<List>
