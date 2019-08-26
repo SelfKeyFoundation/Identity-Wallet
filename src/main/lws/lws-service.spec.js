@@ -87,8 +87,8 @@ describe('lws-service', () => {
 				};
 				setGlobalContext({ walletService });
 				sinon.stub(walletService, 'getLedgerWallets').returns([{ address: 'test' }]);
-				sinon.stub(Wallet, 'findByPublicKey');
-				Wallet.findByPublicKey.resolves({
+				sinon.stub(Wallet, 'findByAddress');
+				Wallet.findByAddress.resolves({
 					address: 'test',
 					profile: 'ledger',
 					hasSignedUpTo() {
@@ -129,8 +129,8 @@ describe('lws-service', () => {
 				};
 				setGlobalContext({ walletService });
 				sinon.stub(walletService, 'getTrezorWallets').returns([{ address: 'test' }]);
-				sinon.stub(Wallet, 'findByPublicKey');
-				Wallet.findByPublicKey.resolves({
+				sinon.stub(Wallet, 'findByAddress');
+				Wallet.findByAddress.resolves({
 					address: 'test',
 					profile: 'trezor',
 					hasSignedUpTo() {
@@ -179,7 +179,7 @@ describe('lws-service', () => {
 					sinon.stub(web3Service, 'getLedgerTransport').returns(transport);
 					sinon.stub(transport, 'send').resolves('true');
 
-					sinon.stub(Wallet, 'findByPublicKey').resolves(wallet);
+					sinon.stub(Wallet, 'findByAddress').resolves(wallet);
 					const conn = connMock(wallet);
 					sinon.stub(conn, 'send');
 					sinon.stub(conn, 'addIdentity');
@@ -353,7 +353,7 @@ describe('lws-service', () => {
 				let msg = { payload: { address: 'test' } };
 				let conn = { send: sinon.fake() };
 				sinon
-					.stub(Wallet, 'findByPublicKey')
+					.stub(Wallet, 'findByAddress')
 					.resolves({ addLoginAttempt: sinon.stub().resolves({}) });
 				sinon.stub(service, 'formatActionLog').returns({});
 				sinon.stub(service.rpcHandler, 'actionLogs_add').resolves('ok');
@@ -483,7 +483,7 @@ describe('lws-service', () => {
 
 		describe('reqAuth', () => {
 			it('send wait_hw_confirmation when profile is ledger', async () => {
-				const identity = { getPublicKeyFromHardwareWallet: async () => 'test' };
+				const identity = { getAddressFromHardwareWallet: async () => 'test' };
 				const conn = {
 					send: () => {},
 					getIdentity: address => identity
@@ -564,7 +564,7 @@ describe('lws-service', () => {
 		describe('reqSignUp', () => {
 			it('send wait_hw_confirmation when profile is ledger', async () => {
 				setGlobalContext({});
-				const identity = { getPublicKeyFromHardwareWallet: async () => 'test' };
+				const identity = { getAddressFromHardwareWallet: async () => 'test' };
 				const conn = {
 					send: () => {},
 					getIdentity: address => identity

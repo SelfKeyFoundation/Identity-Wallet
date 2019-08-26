@@ -118,7 +118,7 @@ export class Wallet extends BaseModel {
 		return this.query();
 	}
 
-	static findByPublicKey(address) {
+	static findByAddress(address) {
 		return this.query().findOne({ address: address.toLowerCase() });
 	}
 

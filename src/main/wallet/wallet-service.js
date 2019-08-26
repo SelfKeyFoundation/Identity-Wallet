@@ -123,7 +123,7 @@ export class WalletService {
 
 		await fs.promises.copyFile(filePath, keystoreFileFullPath);
 
-		let wallet = await Wallet.findByPublicKey(account.address);
+		let wallet = await Wallet.findByAddress(account.address);
 
 		wallet = !wallet
 			? await Wallet.create({
@@ -152,7 +152,7 @@ export class WalletService {
 		this.web3Service.web3.eth.accounts.wallet.add(account);
 		this.web3Service.web3.eth.defaultAccount = account.address;
 
-		let wallet = await Wallet.findByPublicKey(account.address);
+		let wallet = await Wallet.findByAddress(account.address);
 
 		wallet = !wallet
 			? await Wallet.create({
@@ -171,8 +171,8 @@ export class WalletService {
 		return newWallet;
 	}
 
-	async unlockWalletWithPublicKey(address, path, profile) {
-		let wallet = await Wallet.findByPublicKey(address);
+	async unlockWalletWithAddress(address, path, profile) {
+		let wallet = await Wallet.findByAddress(address);
 		this.web3Service.web3.eth.defaultAccount = address;
 
 		wallet = !wallet

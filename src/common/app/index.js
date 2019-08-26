@@ -181,11 +181,11 @@ const unlockWalletWithPrivateKey = privateKey => async dispatch => {
 	}
 };
 
-const unlockWalletWithPublicKey = (publicKey, path) => async (dispatch, getState) => {
+const unlockWalletWithAddress = (address, path) => async (dispatch, getState) => {
 	const walletService = getGlobalContext().walletService;
 	const walletType = selectApp(getState()).walletType;
 	try {
-		const wallet = await walletService.unlockWalletWithPublicKey(publicKey, path, walletType);
+		const wallet = await walletService.unlockWalletWithAddress(address, path, walletType);
 		await dispatch(walletOperations.updateWalletWithBalance(wallet));
 		await dispatch(identityOperations.unlockIdentityOperation(wallet.id));
 		await dispatch(push('/main/dashboard'));
@@ -348,7 +348,7 @@ const operations = {
 	unlockWalletWithPassword,
 	unlockWalletWithNewFile,
 	unlockWalletWithPrivateKey,
-	unlockWalletWithPublicKey,
+	unlockWalletWithAddress,
 	loadLedgerWallets,
 	loadTrezorWallets,
 	enterTrezorPin,
@@ -377,9 +377,9 @@ const appOperations = {
 		appTypes.APP_UNLOCK_WALLET_WITH_PRIVATE_KEY,
 		operations.unlockWalletWithPrivateKey
 	),
-	unlockWalletWithPublicKeyOperation: createAliasedAction(
+	unlockWalletWithAddressOperation: createAliasedAction(
 		appTypes.APP_UNLOCK_WALLET_WITH_PUBLIC_KEY,
-		operations.unlockWalletWithPublicKey
+		operations.unlockWalletWithAddress
 	),
 	loadLedgerWalletsOperation: createAliasedAction(
 		appTypes.APP_LOAD_LEDGER_WALLETS,

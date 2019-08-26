@@ -118,7 +118,7 @@ export const givenUserHasOpenedTheJurisdictionDetailedScreen = given => {
 	});
 };
 
-export const getPublicKey = () => {
+export const getAddress = () => {
 	return address;
 };
 

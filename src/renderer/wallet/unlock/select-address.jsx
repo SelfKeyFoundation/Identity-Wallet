@@ -134,7 +134,7 @@ class SelectAddress extends Component {
 
 	handleSelectedAddress = async () => {
 		await this.props.dispatch(
-			appOperations.unlockWalletWithPublicKeyOperation(
+			appOperations.unlockWalletWithAddressOperation(
 				this.state.selectedAddress,
 				this.state.path
 			)

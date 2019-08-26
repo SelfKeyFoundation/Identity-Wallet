@@ -316,7 +316,7 @@ export class TxHistoryService {
 		}
 	}
 	async removeNotMinedPendingTxs(address) {
-		return TxHistory.updatePendingTxsByPublicKey(address);
+		return TxHistory.updatePendingTxsByAddress(address);
 	}
 
 	startSyncingJob() {
@@ -335,7 +335,7 @@ export class TxHistoryService {
 	}
 
 	async getTransactions(address) {
-		return TxHistory.findByPublicKey(address);
+		return TxHistory.findByAddress(address);
 	}
 
 	async reload(wallet) {

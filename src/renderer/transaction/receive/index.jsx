@@ -53,7 +53,7 @@ const styles = theme => ({
 			top: '20px'
 		}
 	},
-	tokenPublicKey: {
+	tokenAddress: {
 		alignItems: 'center',
 		display: 'flex',
 		justifyContent: 'center',
@@ -201,7 +201,7 @@ export class ReceiveTransfer extends React.Component {
 								>
 									Your Ethereum address to receive {cryptoCurrency}
 								</Typography>
-								<div className={classes.tokenPublicKey}>
+								<div className={classes.tokenAddress}>
 									<Typography
 										variant="body2"
 										className={classes.address}

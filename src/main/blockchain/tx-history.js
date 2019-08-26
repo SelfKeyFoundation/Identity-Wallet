@@ -96,7 +96,7 @@ export class TxHistory extends BaseModel {
 		return this.query().insertAndFetch(data);
 	}
 
-	static findByPublicKey(address) {
+	static findByAddress(address) {
 		address = address.toLowerCase();
 		return this.query()
 			.where({ from: address })
@@ -104,7 +104,7 @@ export class TxHistory extends BaseModel {
 			.orderBy('timeStamp', 'desc');
 	}
 
-	static findByPublicKeyAndTokenSymbol(address, tokenSymbol, pager) {
+	static findByAddressAndTokenSymbol(address, tokenSymbol, pager) {
 		address = address.toLowerCase();
 		let query = this.query()
 			.where({ from: address, tokenSymbol })
@@ -113,7 +113,7 @@ export class TxHistory extends BaseModel {
 		return paginator(this.knex())(query, pager);
 	}
 
-	static findByPublicKeyAndContractAddress(address, contractAddress, pager) {
+	static findByAddressAndContractAddress(address, contractAddress, pager) {
 		address = address.toLowerCase();
 		let query = this.query()
 			.where({ from: address, contractAddress })
@@ -140,7 +140,7 @@ export class TxHistory extends BaseModel {
 	 * @param {string} address
 	 * @return {Promise}
 	 */
-	static async updatePendingTxsByPublicKey(address) {
+	static async updatePendingTxsByAddress(address) {
 		address = address.toLowerCase();
 		const query = await this.query()
 			.whereNull('blockNumber')

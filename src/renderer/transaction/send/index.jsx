@@ -72,7 +72,7 @@ const styles = theme => ({
 			fill: '#09a8ba'
 		}
 	},
-	tokenPublicKey: {
+	tokenAddress: {
 		'& > p': {
 			display: 'inline'
 		},
@@ -191,7 +191,7 @@ export class Transfer extends React.Component {
 								<Typography variant="body2" gutterBottom>
 									Your Address
 								</Typography>
-								<div className={classes.tokenPublicKey}>
+								<div className={classes.tokenAddress}>
 									<Typography variant="body2" color="secondary" gutterBottom>
 										{address}
 									</Typography>

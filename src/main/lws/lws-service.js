@@ -74,7 +74,7 @@ export class LWSService {
 		return Promise.all(
 			wallets.map(async w => {
 				let unlocked = !!conn.getIdentity(w.address);
-				const wallet = Wallet.findByPublicKey(w.address);
+				const wallet = Wallet.findByAddress(w.address);
 				let signedUp = unlocked && wallet && (await wallet.hasSignedUpTo(website.url));
 				return {
 					address: w.address,
@@ -178,7 +178,7 @@ export class LWSService {
 	async reqUnlock(msg, conn) {
 		const { address, password, config, profile, path } = msg.payload;
 		let payload = { address, unlocked: false };
-		let wallet = await Wallet.findByPublicKey(address);
+		let wallet = await Wallet.findByAddress(address);
 		wallet = !wallet
 			? await Wallet.create({
 					address,
@@ -428,7 +428,7 @@ export class LWSService {
 	async authResp(resp, msg, conn) {
 		try {
 			let { address } = msg.payload || {};
-			let wallet = await Wallet.findByPublicKey(address);
+			let wallet = await Wallet.findByAddress(address);
 			let attempt = this.formatLoginAttempt(msg, resp);
 			await wallet.addLoginAttempt(attempt);
 			if (this.rpcHandler) {

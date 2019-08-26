@@ -61,10 +61,10 @@ describe('Wallet model', () => {
 		expect(found.length).toBe(1);
 	});
 
-	it('findByPublicKey', async () => {
+	it('findByAddress', async () => {
 		await Wallet.query().insert(testItm);
 		await Wallet.query().insert(testItm2);
-		let found = await Wallet.findByPublicKey(testItm.address);
+		let found = await Wallet.findByAddress(testItm.address);
 		expect(found).toMatchObject(testItm);
 	});
 

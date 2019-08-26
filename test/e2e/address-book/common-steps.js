@@ -87,6 +87,6 @@ export const whenUserClicksOnAddAddressButton = when => {
 	});
 };
 
-export const getPublicKey = () => {
+export const getAddress = () => {
 	return address;
 };

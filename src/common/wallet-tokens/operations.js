@@ -15,15 +15,12 @@ const loadWalletTokens = createAliasedAction(
 	}
 );
 
-const getWalletTokensWithBalance = (walletTokens, walletPublicKey) => {
+const getWalletTokensWithBalance = (walletTokens, walletAddress) => {
 	const promises = walletTokens.map(async walletToken => {
 		const walletTokenService = getGlobalContext().walletTokenService;
 		let balance = 0;
 		try {
-			balance = await walletTokenService.getTokenBalance(
-				walletToken.address,
-				walletPublicKey
-			);
+			balance = await walletTokenService.getTokenBalance(walletToken.address, walletAddress);
 		} catch (error) {
 			console.error(error);
 		}
@@ -38,8 +35,8 @@ const getWalletTokensWithBalance = (walletTokens, walletPublicKey) => {
 	return Promise.all(promises);
 };
 
-const updateWalletTokensWithBalance = (walletTokens, walletPublicKey) => async dispatch => {
-	const tokens = await getWalletTokensWithBalance(walletTokens, walletPublicKey);
+const updateWalletTokensWithBalance = (walletTokens, walletAddress) => async dispatch => {
+	const tokens = await getWalletTokensWithBalance(walletTokens, walletAddress);
 	await dispatch(actions.setWalletTokens(tokens));
 };
 

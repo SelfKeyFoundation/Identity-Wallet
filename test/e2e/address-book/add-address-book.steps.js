@@ -4,7 +4,7 @@ import {
 	givenUserHasOpenedAddressBookScreenWithAPrivateKey,
 	givenThereIsAlreadyAnAddressAddedWithLabelTest,
 	whenUserClicksOnAddAddressButton,
-	getPublicKey
+	getAddress
 } from './common-steps';
 const tools = require('../../utils/tools.js');
 const data = require('../../data/data.json');
@@ -42,7 +42,7 @@ defineFeature(feature, test => {
 		when('enters current wallet ETH address', () => {
 			return tools.app.client
 				.waitForVisible('#addressInput')
-				.then(tools.app.client.setValue('#addressInput', getPublicKey()))
+				.then(tools.app.client.setValue('#addressInput', getAddress()))
 				.then(() => delay(5000));
 		});
 
