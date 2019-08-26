@@ -10,14 +10,14 @@ jest.mock('node-fetch');
 
 describe('lws-service', () => {
 	const connMock = wallet => ({
-		getIdentity(publicKey) {
-			if (publicKey === wallet.publicKey) {
+		getIdentity(address) {
+			if (address === wallet.address) {
 				return wallet;
 			}
 			return null;
 		},
 		send(msg, req) {},
-		addIdentity(publicKey, identity) {}
+		addIdentity(address, identity) {}
 	});
 	describe('LWSService', () => {
 		let service = null;
@@ -36,14 +36,14 @@ describe('lws-service', () => {
 				sinon.stub(Wallet, 'findAll');
 				Wallet.findAll.resolves([
 					{
-						publicKey: 'unlocked',
+						address: 'unlocked',
 						profile: 'local',
 						hasSignedUpTo() {
 							return true;
 						}
 					},
 					{
-						publicKey: 'locked',
+						address: 'locked',
 						profile: 'local',
 						hasSignedUpTo() {
 							return true;
@@ -51,7 +51,7 @@ describe('lws-service', () => {
 					}
 				]);
 
-				const conn = connMock({ publicKey: 'unlocked', privateKey: 'private' });
+				const conn = connMock({ address: 'unlocked', privateKey: 'private' });
 				sinon.stub(conn, 'send');
 
 				const msg = { type: 'test', payload: { config: { website: { url: 'test' } } } };
@@ -62,13 +62,13 @@ describe('lws-service', () => {
 					{
 						payload: [
 							{
-								publicKey: 'unlocked',
+								address: 'unlocked',
 								profile: 'local',
 								unlocked: true,
 								signedUp: true
 							},
 							{
-								publicKey: 'locked',
+								address: 'locked',
 								profile: 'local',
 								unlocked: false,
 								signedUp: false
@@ -86,17 +86,17 @@ describe('lws-service', () => {
 					getLedgerWallets: () => {}
 				};
 				setGlobalContext({ walletService });
-				sinon.stub(walletService, 'getLedgerWallets').returns([{ publicKey: 'test' }]);
+				sinon.stub(walletService, 'getLedgerWallets').returns([{ address: 'test' }]);
 				sinon.stub(Wallet, 'findByPublicKey');
 				Wallet.findByPublicKey.resolves({
-					publicKey: 'test',
+					address: 'test',
 					profile: 'ledger',
 					hasSignedUpTo() {
 						return false;
 					}
 				});
 
-				const conn = connMock({ publicKey: 'unlocked', privateKey: 'private' });
+				const conn = connMock({ address: 'unlocked', privateKey: 'private' });
 				sinon.stub(conn, 'send');
 
 				const msg = {
@@ -110,7 +110,7 @@ describe('lws-service', () => {
 					{
 						payload: [
 							{
-								publicKey: 'test',
+								address: 'test',
 								profile: 'ledger',
 								unlocked: false,
 								signedUp: false
@@ -128,17 +128,17 @@ describe('lws-service', () => {
 					getTrezorWallets: () => {}
 				};
 				setGlobalContext({ walletService });
-				sinon.stub(walletService, 'getTrezorWallets').returns([{ publicKey: 'test' }]);
+				sinon.stub(walletService, 'getTrezorWallets').returns([{ address: 'test' }]);
 				sinon.stub(Wallet, 'findByPublicKey');
 				Wallet.findByPublicKey.resolves({
-					publicKey: 'test',
+					address: 'test',
 					profile: 'trezor',
 					hasSignedUpTo() {
 						return false;
 					}
 				});
 
-				const conn = connMock({ publicKey: 'unlocked', privateKey: 'private' });
+				const conn = connMock({ address: 'unlocked', privateKey: 'private' });
 				sinon.stub(conn, 'send');
 
 				const msg = {
@@ -152,7 +152,7 @@ describe('lws-service', () => {
 					{
 						payload: [
 							{
-								publicKey: 'test',
+								address: 'test',
 								profile: 'trezor',
 								unlocked: false,
 								signedUp: false
@@ -191,7 +191,7 @@ describe('lws-service', () => {
 					await service.reqUnlock(
 						{
 							payload: {
-								publicKey: wallet.publicKey,
+								address: wallet.address,
 								config: { website: { url: 'test' } },
 								profile
 							}
@@ -207,14 +207,14 @@ describe('lws-service', () => {
 						conn.send.calledWithMatch(
 							{
 								payload: {
-									publicKey: wallet.publicKey,
+									address: wallet.address,
 									profile: wallet.profile,
 									unlocked: expected
 								}
 							},
 							{
 								payload: {
-									publicKey: wallet.publicKey,
+									address: wallet.address,
 									config: { website: { url: 'test' } }
 								}
 							}
@@ -225,7 +225,7 @@ describe('lws-service', () => {
 				'sends unlocked if password correct',
 				'local',
 				{
-					publicKey: 'unlocked',
+					address: 'unlocked',
 					privateKey: 'ok',
 					profile: 'local',
 					hasSignedUpTo: sinon.stub().resolves(true)
@@ -236,7 +236,7 @@ describe('lws-service', () => {
 				'sends locked if password incorrect',
 				'local',
 				{
-					publicKey: 'locked',
+					address: 'locked',
 					profile: 'local',
 					hasSignedUpTo: sinon.stub().resolves(true)
 				},
@@ -246,7 +246,7 @@ describe('lws-service', () => {
 				'sends unlocked if ledger wallet',
 				'ledger',
 				{
-					publicKey: 'unlocked',
+					address: 'unlocked',
 					profile: 'ledger',
 					hasSignedUpTo: sinon.stub().resolves(true),
 					path: `44'/60'/0'/0`
@@ -257,7 +257,7 @@ describe('lws-service', () => {
 		describe('reqAttributes', () => {
 			it('send auth error if wallet is locked', async () => {
 				const conn = {};
-				const msg = { payload: { publicKey: 'test' } };
+				const msg = { payload: { address: 'test' } };
 				conn.getIdentity = sinon.stub().returns(null);
 				conn.send = sinon.stub().returns(null);
 				await service.reqAttributes(msg, conn);
@@ -277,7 +277,7 @@ describe('lws-service', () => {
 				const conn = {};
 				const msg = {
 					payload: {
-						publicKey: 'test',
+						address: 'test',
 						requestedAttributes: [
 							'test1',
 							'test2',
@@ -312,7 +312,7 @@ describe('lws-service', () => {
 				expect(conn.send.getCall(0).args).toEqual([
 					{
 						payload: {
-							publicKey: 'test',
+							address: 'test',
 							attributes: [
 								{
 									id: undefined,
@@ -350,7 +350,7 @@ describe('lws-service', () => {
 		describe('authResp', () => {
 			it('sends resp via conn', async () => {
 				let resp = { test: 'test resp' };
-				let msg = { payload: { publicKey: 'test' } };
+				let msg = { payload: { address: 'test' } };
 				let conn = { send: sinon.fake() };
 				sinon
 					.stub(Wallet, 'findByPublicKey')
@@ -486,16 +486,16 @@ describe('lws-service', () => {
 				const identity = { getPublicKeyFromHardwareWallet: async () => 'test' };
 				const conn = {
 					send: () => {},
-					getIdentity: publicKey => identity
+					getIdentity: address => identity
 				};
-				const msg = { payload: { publicKey: 'test', profile: 'ledger' } };
+				const msg = { payload: { address: 'test', profile: 'ledger' } };
 				await service.reqAuth(msg, conn);
 				expect({ type: 'wait_hw_confirmation' }).toBeTruthy();
 			});
 
 			it('send auth error if wallet is locked', async () => {
 				const conn = {};
-				const msg = { payload: { publicKey: 'test' } };
+				const msg = { payload: { address: 'test' } };
 				conn.getIdentity = sinon.stub().returns(null);
 				sinon.stub(service, 'authResp');
 				await service.reqAuth(msg, conn);
@@ -515,7 +515,7 @@ describe('lws-service', () => {
 			});
 			it('send session_establish error if challange failed', async () => {
 				const conn = { send: () => {} };
-				const msg = { payload: { publicKey: 'test', config: { website: {} } } };
+				const msg = { payload: { address: 'test', config: { website: {} } } };
 				const error = new Error('Session Establish Error');
 				sinon.stub(RelyingPartySession.prototype, 'establish').throws(error);
 				sinon.stub(service, 'authResp');
@@ -538,7 +538,7 @@ describe('lws-service', () => {
 			it('send token_error on token fetch error', async () => {
 				const conn = { send: () => {} };
 				const msg = {
-					payload: { publicKey: 'test', config: { website: {} } }
+					payload: { address: 'test', config: { website: {} } }
 				};
 				sinon.stub(RelyingPartySession.prototype, 'establish').resolves('ok');
 				conn.getIdentity = sinon.stub().returns({});
@@ -567,9 +567,9 @@ describe('lws-service', () => {
 				const identity = { getPublicKeyFromHardwareWallet: async () => 'test' };
 				const conn = {
 					send: () => {},
-					getIdentity: publicKey => identity
+					getIdentity: address => identity
 				};
-				const msg = { payload: { publicKey: 'test', profile: 'ledger' } };
+				const msg = { payload: { address: 'test', profile: 'ledger' } };
 				sinon.stub(conn, 'send');
 				await service.reqSignup(msg, conn);
 				expect({ type: 'wait_hw_confirmation' }).toBeTruthy();
@@ -578,7 +578,7 @@ describe('lws-service', () => {
 			it('send user create error if could not create user', async () => {
 				const conn = { send: () => {} };
 				const msg = {
-					payload: { publicKey: 'test', attributes: [], config: { website: {} } }
+					payload: { address: 'test', attributes: [], config: { website: {} } }
 				};
 				sinon.stub(RelyingPartySession.prototype, 'establish').resolves('ok');
 				conn.getIdentity = sinon.stub().returns({});
@@ -687,12 +687,12 @@ describe('lws-service', () => {
 		});
 
 		it('unlockWallet', () => {
-			const publicKey = 'public';
+			const address = 'public';
 			const privateKey = 'private';
 
-			expect(wsconn.getIdentity(publicKey)).toBeNull();
-			wsconn.addIdentity(publicKey, privateKey);
-			expect(wsconn.getIdentity(publicKey)).toBe(privateKey);
+			expect(wsconn.getIdentity(address)).toBeNull();
+			wsconn.addIdentity(address, privateKey);
+			expect(wsconn.getIdentity(address)).toBe(privateKey);
 		});
 		describe('handleMessage', () => {
 			it('sends error on invalalid json msg', async () => {

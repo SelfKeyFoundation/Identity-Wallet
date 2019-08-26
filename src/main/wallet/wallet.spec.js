@@ -2,16 +2,16 @@ import Wallet from './wallet';
 import TestDb from '../db/test-db';
 
 describe('Wallet model', () => {
-	const testItm = { publicKey: 'abc', keystoreFilePath: 'abcd' };
+	const testItm = { address: 'abc', keystoreFilePath: 'abcd' };
 
 	const testItm2 = {
-		publicKey: 'active',
+		address: 'active',
 		keystoreFilePath: 'active keystore',
 		isSetupFinished: 1
 	};
 
 	const testItm3 = {
-		publicKey: 'public-key-1',
+		address: 'public-key-1',
 		isSetupFinished: 1
 	};
 
@@ -64,7 +64,7 @@ describe('Wallet model', () => {
 	it('findByPublicKey', async () => {
 		await Wallet.query().insert(testItm);
 		await Wallet.query().insert(testItm2);
-		let found = await Wallet.findByPublicKey(testItm.publicKey);
+		let found = await Wallet.findByPublicKey(testItm.address);
 		expect(found).toMatchObject(testItm);
 	});
 
@@ -124,7 +124,7 @@ describe('Wallet model', () => {
 			success: true,
 			signup: true
 		};
-		const testWallet = { id: 10, publicKey: 'public' };
+		const testWallet = { id: 10, address: 'public' };
 		let wallet = null;
 		beforeEach(async () => {
 			wallet = await Wallet.query().insertAndFetch(testWallet);
@@ -184,7 +184,7 @@ describe('Wallet model', () => {
 			success: true,
 			signup: true
 		};
-		const testWallet = { id: 10, publicKey: 'public' };
+		const testWallet = { id: 10, address: 'public' };
 		it('adds a new login attempt', async () => {
 			let wallet = await Wallet.query().insertAndFetch(testWallet);
 			await wallet.addLoginAttempt({ ...testLoginAttempt });

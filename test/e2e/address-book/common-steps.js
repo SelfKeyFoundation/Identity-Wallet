@@ -2,7 +2,7 @@ const tools = require('../../utils/tools.js');
 const data = require('../../data/data.json');
 const delay = require('delay');
 
-let publicKey;
+let address;
 let privateKey;
 
 export const givenUserHasOpenedAddressBookScreen = given => {
@@ -20,9 +20,9 @@ export const givenUserHasOpenedAddressBookScreen = given => {
 			.then(() => tools.app.client.setValue('#pwd2', data[0].strongPass))
 			.then(() => tools.app.client.click('#pwd2Next'))
 			.then(() => delay(2000))
-			.then(() => tools.app.client.getValue('#publicKey'))
+			.then(() => tools.app.client.getValue('#address'))
 			.then(pubKey => {
-				publicKey = pubKey;
+				address = pubKey;
 				return tools.regStep(tools.app, '#keystoreNext');
 			})
 			.then(() => tools.app.client.getValue('#privateKey'))
@@ -88,5 +88,5 @@ export const whenUserClicksOnAddAddressButton = when => {
 };
 
 export const getPublicKey = () => {
-	return publicKey;
+	return address;
 };

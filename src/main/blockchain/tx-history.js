@@ -96,28 +96,28 @@ export class TxHistory extends BaseModel {
 		return this.query().insertAndFetch(data);
 	}
 
-	static findByPublicKey(publicKey) {
-		publicKey = publicKey.toLowerCase();
+	static findByPublicKey(address) {
+		address = address.toLowerCase();
 		return this.query()
-			.where({ from: publicKey })
-			.orWhere({ to: publicKey })
+			.where({ from: address })
+			.orWhere({ to: address })
 			.orderBy('timeStamp', 'desc');
 	}
 
-	static findByPublicKeyAndTokenSymbol(publicKey, tokenSymbol, pager) {
-		publicKey = publicKey.toLowerCase();
+	static findByPublicKeyAndTokenSymbol(address, tokenSymbol, pager) {
+		address = address.toLowerCase();
 		let query = this.query()
-			.where({ from: publicKey, tokenSymbol })
-			.orWhere({ to: publicKey, tokenSymbol })
+			.where({ from: address, tokenSymbol })
+			.orWhere({ to: address, tokenSymbol })
 			.orderBy('timeStamp', 'desc');
 		return paginator(this.knex())(query, pager);
 	}
 
-	static findByPublicKeyAndContractAddress(publicKey, contractAddress, pager) {
-		publicKey = publicKey.toLowerCase();
+	static findByPublicKeyAndContractAddress(address, contractAddress, pager) {
+		address = address.toLowerCase();
 		let query = this.query()
-			.where({ from: publicKey, contractAddress })
-			.orWhere({ to: publicKey, contractAddress })
+			.where({ from: address, contractAddress })
+			.orWhere({ to: address, contractAddress })
 			.orderBy('timeStamp', 'desc');
 		return paginator(this.knex())(query, pager);
 	}
@@ -137,15 +137,15 @@ export class TxHistory extends BaseModel {
 	/**
 	 * Find pending transactions and get updated information from the blockchain
 	 *
-	 * @param {string} publicKey
+	 * @param {string} address
 	 * @return {Promise}
 	 */
-	static async updatePendingTxsByPublicKey(publicKey) {
-		publicKey = publicKey.toLowerCase();
+	static async updatePendingTxsByPublicKey(address) {
+		address = address.toLowerCase();
 		const query = await this.query()
 			.whereNull('blockNumber')
 			.andWhere(function() {
-				this.where({ from: publicKey }).orWhere({ to: publicKey });
+				this.where({ from: address }).orWhere({ to: address });
 			});
 
 		await Promise.all(query.map(this.syncTx.bind(this)));

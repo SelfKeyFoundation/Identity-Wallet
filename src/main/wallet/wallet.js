@@ -21,7 +21,7 @@ export class Wallet extends BaseModel {
 			properties: {
 				id: { type: 'integer' },
 				name: { type: 'string' },
-				publicKey: { type: 'string' },
+				address: { type: 'string' },
 				privateKey: { type: 'string' },
 				keystoreFilePath: { type: 'string' },
 				profilePicture: { type: 'binary' },
@@ -76,7 +76,7 @@ export class Wallet extends BaseModel {
 	}
 
 	static async create(itm) {
-		itm.publicKey = itm.publicKey.toLowerCase();
+		itm.address = itm.address.toLowerCase();
 		const tx = await transaction.start(this.knex());
 		try {
 			let insertedItm = await this.query(tx).insertGraphAndFetch(
@@ -118,8 +118,8 @@ export class Wallet extends BaseModel {
 		return this.query();
 	}
 
-	static findByPublicKey(publicKey) {
-		return this.query().findOne({ publicKey: publicKey.toLowerCase() });
+	static findByPublicKey(address) {
+		return this.query().findOne({ address: address.toLowerCase() });
 	}
 
 	static async updateProfilePicture({ id, profilePicture }) {

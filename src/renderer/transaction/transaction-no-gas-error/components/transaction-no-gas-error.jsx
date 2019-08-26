@@ -19,7 +19,7 @@ const styles = theme => ({
 });
 
 export const TransactionNoGasError = withStyles(styles)(
-	({ classes, children, publicKey, openLink, closeAction }) => {
+	({ classes, children, address, openLink, closeAction }) => {
 		const gasExplanationUrl =
 			'https://help.selfkey.org/article/87-how-does-gas-impact-transaction-speed';
 		const handleLinkClick = event => {
@@ -30,7 +30,7 @@ export const TransactionNoGasError = withStyles(styles)(
 			openLink(gasExplanationUrl);
 		};
 		return (
-			<TransactionErrorBox publicKey={publicKey} closeAction={closeAction}>
+			<TransactionErrorBox address={address} closeAction={closeAction}>
 				<div className={classes.bodyText}>
 					<Typography variant="body1">
 						You do not have enough Ethereum (ETH) to pay for the network transaction

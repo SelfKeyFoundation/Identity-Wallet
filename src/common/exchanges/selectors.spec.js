@@ -99,7 +99,7 @@ describe('selectors', () => {
 		price: 210.32,
 		privateKey: 'fdsfdsfdsfds4231321dasdf21ed3',
 		profile: 'local',
-		publicKey: '4184288c556524df9cb9e58b73265ee66dca4efe',
+		address: '4184288c556524df9cb9e58b73265ee66dca4efe',
 		symbol: 'ETH'
 	};
 

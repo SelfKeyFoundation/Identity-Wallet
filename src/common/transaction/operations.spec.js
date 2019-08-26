@@ -53,7 +53,7 @@ const getStoreMock = (transaction = {}) =>
 			]
 		},
 		wallet: {
-			publicKey: 'dasdsa'
+			address: 'dasdsa'
 		},
 		walletTokens: {
 			tokens: []
@@ -320,7 +320,7 @@ describe('operations', () => {
 				cryptoCurrency: undefined
 			},
 			wallet: {
-				publicKey: 'dasdsa'
+				address: 'dasdsa'
 			},
 			ethGasStationInfo: {
 				ethGasStationInfo: {
@@ -375,7 +375,7 @@ describe('operations', () => {
 				cryptoCurrency: undefined
 			},
 			wallet: {
-				publicKey: 'dasdsa'
+				address: 'dasdsa'
 			},
 			ethGasStationInfo: {
 				ethGasStationInfo: {
@@ -430,7 +430,7 @@ describe('operations', () => {
 				cryptoCurrency: undefined
 			},
 			wallet: {
-				publicKey: 'dasdsa'
+				address: 'dasdsa'
 			},
 			ethGasStationInfo: {
 				ethGasStationInfo: {

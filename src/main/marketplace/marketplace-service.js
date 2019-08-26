@@ -16,8 +16,8 @@ export class MarketplaceService {
 		return getWallet(this.store.getState());
 	}
 	get walletAddress() {
-		if (!this.wallet || !this.wallet.publicKey) return null;
-		return this.wallet.publicKey;
+		if (!this.wallet || !this.wallet.address) return null;
+		return this.wallet.address;
 	}
 	loadTransactions(serviceOwner, serviceId) {
 		return MarketplaceTransactions.find({ serviceOwner, serviceId });

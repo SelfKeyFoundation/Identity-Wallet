@@ -9,10 +9,10 @@ const styles = theme => ({
 });
 
 export const TransactionDeclined = withStyles(styles)(
-	({ classes, publicKey, closeAction, match }) => {
+	({ classes, address, closeAction, match }) => {
 		return (
 			<TransactionErrorBox
-				publicKey={publicKey}
+				address={address}
 				closeAction={closeAction}
 				subtitle="Transaction Declined"
 			>

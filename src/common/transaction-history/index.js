@@ -28,7 +28,7 @@ const transactionHistoryActions = {
 const loadTransactions = () => async (dispatch, getState) => {
 	const wallet = walletSelectors.getWallet(getState());
 	const txHistoryService = getGlobalContext().txHistoryService;
-	const transactions = await txHistoryService.getTransactions(wallet.publicKey);
+	const transactions = await txHistoryService.getTransactions(wallet.address);
 	await dispatch(transactionHistoryActions.setTransactionsAction(transactions));
 };
 
@@ -38,7 +38,7 @@ const reloadTransactions = () => async (dispatch, getState) => {
 	await dispatch(transactionHistoryActions.setProcessingAction(true));
 	await txHistoryService.reload(wallet);
 	await dispatch(transactionHistoryActions.setProcessingAction(false));
-	const transactions = await txHistoryService.getTransactions(wallet.publicKey);
+	const transactions = await txHistoryService.getTransactions(wallet.address);
 	await dispatch(transactionHistoryActions.setTransactionsAction(transactions));
 };
 

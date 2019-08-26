@@ -23,7 +23,7 @@ class TransactionErrorContainer extends Component {
 
 const mapStateToProps = state => {
 	return {
-		publicKey: getWallet(state).publicKey
+		address: getWallet(state).address
 	};
 };
 

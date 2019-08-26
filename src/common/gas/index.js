@@ -25,7 +25,7 @@ const loadDIDGasLimit = () => async (dispatch, getState) => {
 	const wallet = walletSelectors.getWallet(getState());
 	try {
 		const didService = getGlobalContext().didService;
-		const gasLimit = await didService.getGasLimit(wallet.publicKey);
+		const gasLimit = await didService.getGasLimit(wallet.address);
 		await dispatch(gasActions.setDIDGasLimitAction(gasLimit));
 	} catch (e) {
 		log.error(e);

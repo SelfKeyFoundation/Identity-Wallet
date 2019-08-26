@@ -18,7 +18,7 @@ describe('operations', () => {
 				address: ''
 			},
 			wallet: {
-				publicKey: 'dasdsa'
+				address: 'dasdsa'
 			},
 			ethGasStationInfo: {
 				ethGasStationInfo: {

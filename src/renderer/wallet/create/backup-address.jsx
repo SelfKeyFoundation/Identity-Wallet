@@ -119,13 +119,13 @@ class BackupAddress extends Component {
 										Your Public Key
 									</Typography>
 									<Input
-										id="publicKey"
+										id="address"
 										fullWidth
 										disableUnderline={true}
-										value={this.props.publicKey}
+										value={this.props.address}
 										endAdornment={
 											<InputAdornment position="start">
-												<Copy text={this.props.publicKey} />
+												<Copy text={this.props.address} />
 											</InputAdornment>
 										}
 										disabled
@@ -165,7 +165,7 @@ class BackupAddress extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		publicKey: walletSelectors.getWallet(state).publicKey,
+		address: walletSelectors.getWallet(state).address,
 		fileDownloaded: createWalletSelectors.selectCreateWallet(state).fileDownloaded
 	};
 };

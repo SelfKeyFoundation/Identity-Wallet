@@ -77,7 +77,7 @@ const styles = theme => ({
 			padding: '10px'
 		}
 	},
-	publicKey: {
+	address: {
 		fontSize: '20px',
 		'@media print': {
 			color: '#000000',
@@ -159,8 +159,8 @@ const getIconForToken = token => {
 
 export class ReceiveTransfer extends React.Component {
 	render() {
-		const { classes, cryptoCurrency, publicKey } = this.props;
-		let link = `mailto:?body=${publicKey}`;
+		const { classes, cryptoCurrency, address } = this.props;
+		let link = `mailto:?body=${address}`;
 
 		let printDiv = () => {
 			window.print();
@@ -192,7 +192,7 @@ export class ReceiveTransfer extends React.Component {
 						<ModalBody className={classes.modalBody}>
 							<div className={classes.tokenAddress}>
 								<div className={classes.qrCode}>
-									<QRCode value={publicKey} />
+									<QRCode value={address} />
 								</div>
 								<Typography
 									variant="h1"
@@ -204,15 +204,15 @@ export class ReceiveTransfer extends React.Component {
 								<div className={classes.tokenPublicKey}>
 									<Typography
 										variant="body2"
-										className={classes.publicKey}
+										className={classes.address}
 										id="printableArea"
 									>
-										{publicKey}
+										{address}
 									</Typography>
 								</div>
 								<div className={classes.iconWrap}>
 									<div className={classes.space}>
-										<CopyWithIcon text={publicKey} />
+										<CopyWithIcon text={address} />
 									</div>
 									<a
 										href={link}
@@ -259,7 +259,7 @@ export class ReceiveTransfer extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		publicKey: getWallet(state).publicKey
+		address: getWallet(state).address
 	};
 };
 

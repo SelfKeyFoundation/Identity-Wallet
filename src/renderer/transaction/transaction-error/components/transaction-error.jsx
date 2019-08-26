@@ -8,20 +8,18 @@ const styles = theme => ({
 	}
 });
 
-export const TransactionError = withStyles(styles)(
-	({ classes, message, publicKey, closeAction }) => {
-		return (
-			<TransactionErrorBox
-				publicKey={publicKey}
-				closeAction={closeAction}
-				subtitle="Transaction Failed"
-			>
-				<Typography variant="body1" className={classes.bodyText}>
-					{message}
-				</Typography>
-			</TransactionErrorBox>
-		);
-	}
-);
+export const TransactionError = withStyles(styles)(({ classes, message, address, closeAction }) => {
+	return (
+		<TransactionErrorBox
+			address={address}
+			closeAction={closeAction}
+			subtitle="Transaction Failed"
+		>
+			<Typography variant="body1" className={classes.bodyText}>
+				{message}
+			</Typography>
+		</TransactionErrorBox>
+	);
+});
 
 export default TransactionError;

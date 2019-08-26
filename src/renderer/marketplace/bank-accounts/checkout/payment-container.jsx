@@ -62,7 +62,7 @@ const mapStateToProps = (state, props) => {
 	return {
 		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
 		banks: bankAccountsSelectors.getDetailsByAccountCode(state, accountCode),
-		publicKey: getWallet(state).publicKey,
+		address: getWallet(state).address,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		currentApplication: kycSelectors.selectCurrentApplication(state),
 		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),

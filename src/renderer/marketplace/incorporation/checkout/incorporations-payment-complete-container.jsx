@@ -112,7 +112,7 @@ const mapStateToProps = (state, props) => {
 	return {
 		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
 		transaction: transactionSelectors.getTransaction(state),
-		publicKey: getWallet(state).publicKey,
+		address: getWallet(state).address,
 		currentApplication: kycSelectors.selectCurrentApplication(state),
 		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(

@@ -68,8 +68,8 @@ const createWalletDID = () => async (dispatch, getState) => {
 
 		const didService = getGlobalContext().didService;
 		await dispatch(updateWalletWithBalance({ ...walletFromStore, didPending: true }));
-		const gasLimit = await didService.getGasLimit(walletFromStore.publicKey);
-		const transaction = didService.createDID(walletFromStore.publicKey, gasLimit);
+		const gasLimit = await didService.getGasLimit(walletFromStore.address);
+		const transaction = didService.createDID(walletFromStore.address, gasLimit);
 		transaction.on('receipt', async receipt => {
 			const did = receipt.events.CreatedDID.returnValues.id;
 			const walletService = getGlobalContext().walletService;
@@ -125,7 +125,7 @@ const updateWalletDID = (walletId, did) => async (dispatch, getState) => {
 		const walletFromStore = getWallet(getState());
 		const DIDService = getGlobalContext().didService;
 		const controllerAddress = await DIDService.getControllerAddress(did);
-		if (walletFromStore.publicKey.toLowerCase() === controllerAddress.toLowerCase()) {
+		if (walletFromStore.address.toLowerCase() === controllerAddress.toLowerCase()) {
 			const walletService = getGlobalContext().walletService;
 			const wallet = await walletService.updateDID(walletId, did);
 			await dispatch(updateWalletWithBalance({ ...walletFromStore, did: wallet.did }));

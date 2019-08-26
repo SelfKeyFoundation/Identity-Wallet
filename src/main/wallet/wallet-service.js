@@ -29,7 +29,7 @@ export class WalletService {
 			log.error(error);
 		}
 		const wallet = await Wallet.create({
-			publicKey: address,
+			address: address,
 			keystoreFilePath: keystoreFileFullPath,
 			profile: 'local'
 		});
@@ -37,7 +37,7 @@ export class WalletService {
 		const newWallet = {
 			...wallet,
 			profilePicture: formatDataUrl(wallet.profilePicture),
-			publicKey: address,
+			address: address,
 			privateKey: privateKey,
 			keystoreFilePath: keystoreFileFullPath
 		};
@@ -50,7 +50,7 @@ export class WalletService {
 		try {
 			await fs.promises.copyFile(
 				wallet.keystoreFilePath,
-				path.resolve(toPath, wallet.publicKey)
+				path.resolve(toPath, wallet.address)
 			);
 			return true;
 		} catch (error) {
@@ -61,7 +61,7 @@ export class WalletService {
 
 	async getBalance(id) {
 		const wallet = await Wallet.findById(id);
-		const balanceInWei = await this.web3Service.web3.eth.getBalance(wallet.publicKey);
+		const balanceInWei = await this.web3Service.web3.eth.getBalance(wallet.address);
 		return EthUnits.toEther(balanceInWei, 'wei');
 	}
 
@@ -97,7 +97,7 @@ export class WalletService {
 		return {
 			...wallet,
 			profilePicture: formatDataUrl(wallet.profilePicture),
-			publicKey: account.address,
+			address: account.address,
 			privateKey: account.privateKey
 		};
 	}
@@ -127,7 +127,7 @@ export class WalletService {
 
 		wallet = !wallet
 			? await Wallet.create({
-					publicKey: account.address,
+					address: account.address,
 					keystoreFilePath: keystoreFileFullPath,
 					profile: 'local'
 			  })
@@ -136,7 +136,7 @@ export class WalletService {
 		const newWallet = {
 			...wallet,
 			profilePicture: formatDataUrl(wallet.profilePicture),
-			publicKey: account.address,
+			address: account.address,
 			privateKey: account.privateKey,
 			keystoreFilePath: keystoreFileFullPath
 		};
@@ -156,7 +156,7 @@ export class WalletService {
 
 		wallet = !wallet
 			? await Wallet.create({
-					publicKey: account.address,
+					address: account.address,
 					profile: 'local'
 			  })
 			: wallet;
@@ -164,20 +164,20 @@ export class WalletService {
 		const newWallet = {
 			...wallet,
 			profilePicture: formatDataUrl(wallet.profilePicture),
-			publicKey: account.address,
+			address: account.address,
 			privateKey: account.privateKey
 		};
 
 		return newWallet;
 	}
 
-	async unlockWalletWithPublicKey(publicKey, path, profile) {
-		let wallet = await Wallet.findByPublicKey(publicKey);
-		this.web3Service.web3.eth.defaultAccount = publicKey;
+	async unlockWalletWithPublicKey(address, path, profile) {
+		let wallet = await Wallet.findByPublicKey(address);
+		this.web3Service.web3.eth.defaultAccount = address;
 
 		wallet = !wallet
 			? await Wallet.create({
-					publicKey,
+					address,
 					profile,
 					path
 			  })
@@ -257,32 +257,32 @@ export default WalletService;
 // 	const ctx = getGlobalContext();
 // 	console.log('XXX', wallet);
 // 	let res = await ctx.selfkeyService.getAllowance(
-// 		wallet.publicKey,
+// 		wallet.address,
 // 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5'
 // 	);
 // 	const amount = 20000000000000;
 // 	let gas = await ctx.selfkeyService.estimateApproveGasLimit(
-// 		wallet.publicKey,
+// 		wallet.address,
 // 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5',
 // 		amount
 // 	);
 
 // 	console.log('XXX pre allow', res.toString());
 // 	res = await ctx.selfkeyService.approve(
-// 		wallet.publicKey,
+// 		wallet.address,
 // 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5',
 // 		amount,
 // 		gas
 // 	);
 // 	console.log('XXX approve res', res.events.Approval.returnValues);
 // 	res = await ctx.selfkeyService.getAllowance(
-// 		wallet.publicKey,
+// 		wallet.address,
 // 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5'
 // 	);
 // 	console.log('XXX post approve', res.toString());
 // 	const did = wallet.did;
 // 	// gas = await ctx.paymentService.getGasLimit(
-// 	// 	wallet.publicKey,
+// 	// 	wallet.address,
 // 	// 	did,
 // 	// 	did,
 // 	// 	10000,
@@ -293,7 +293,7 @@ export default WalletService;
 // 	// console.log('XXX payment gas', gas);
 
 // 	res = await ctx.paymentService.makePayment(
-// 		wallet.publicKey,
+// 		wallet.address,
 // 		did,
 // 		did,
 // 		10000,
@@ -305,7 +305,7 @@ export default WalletService;
 // 	console.log('XXX payment res', res);
 
 // 	res = await ctx.selfkeyService.getAllowance(
-// 		wallet.publicKey,
+// 		wallet.address,
 // 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5'
 // 	);
 // 	console.log('XXX post payment', res.toString());

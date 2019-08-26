@@ -42,7 +42,7 @@ describe('RelyingPartyRest', () => {
 	beforeEach(() => {
 		config = { origin: 'test', did: true };
 		ctx = new RelyingPartyCtx(config, {
-			publicKey: 'test',
+			address: 'test',
 			did: 'did:eth:0xtest',
 			getDidWithParams() {
 				return this.did;
