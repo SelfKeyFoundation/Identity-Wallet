@@ -7,6 +7,9 @@ import {
 	ListItemIcon,
 	Grid,
 	Typography,
+	// Input,
+	// MenuItem,
+	// Select,
 	Divider
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
@@ -22,6 +25,7 @@ import {
 	// MenuAffiliateIcon,
 	// MenuExportIcon
 } from 'selfkey-ui';
+// import { KeyboardArrowDown } from '@material-ui/icons';
 
 const styles = theme => ({
 	list: {
@@ -147,6 +151,13 @@ const styles = theme => ({
 	},
 	listItemIcon: {
 		marginRight: '22px'
+	},
+	select: {
+		width: '160px'
+	},
+	network: {
+		marginBottom: '30px',
+		paddingLeft: '20px'
 	}
 });
 
@@ -287,6 +298,28 @@ class Sidebar extends Component {
 				</Grid>
 				<Divider />
 				<Grid item style={{ padding: '50px 0 20px' }}>
+					{/* <Grid item className={classes.network}>
+						<Typography variant="overline" gutterBottom>
+							Network
+						</Typography>
+						<Select
+							displayEmpty
+							name="country"
+							disableUnderline
+							className={classes.select}
+							IconComponent={KeyboardArrowDown}
+							input={<Input disableUnderline />}
+						>
+							<MenuItem value="">
+								<em>Choose...</em>
+							</MenuItem>
+							{['Selfkey Mainnet', 'Testnet'].map(item => (
+								<MenuItem key={item} value={item}>
+									{item}
+								</MenuItem>
+							))}
+						</Select>
+					</Grid> */}
 					<List style={{ paddingLeft: '10px' }}>
 						<ListItem
 							className={classes.listItem}
