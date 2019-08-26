@@ -40,7 +40,7 @@ const styles = theme => ({
 		left: '220px'
 	},
 	closedDrawer: {
-		left: '77px'
+		left: '73px'
 	},
 	nameRole: {
 		display: 'flex',
@@ -88,11 +88,11 @@ class Toolbar extends Component {
 				<Grid
 					container
 					direction="row"
-					justify="space-between"
+					justify="flex-end"
 					alignItems="center"
 					className={classes.wrapper}
 				>
-					<Grid item xs={10} style={{ paddingRight: '60px' }}>
+					<Grid item xs={9} style={{ paddingRight: '10px' }}>
 						<Grid container direction="row" justify="flex-end" alignItems="center">
 							<Grid item>
 								<PriceBox cryptoCurrency={config.constants.primaryToken} />
@@ -101,31 +101,36 @@ class Toolbar extends Component {
 								<PriceBox cryptoCurrency="ETH" />
 							</Grid>
 						</Grid>
-						{/* <Grid item className={classes.sepVertContainer}>
-							<div className={classes.sepVert} />
-						</Grid> */}
 					</Grid>
-					<Grid item xs={2}>
-						<Grid
-							container
-							direction="row"
-							justify="flex-start"
-							alignItems="center"
-							spacing={0}
-						>
-							<Grid item style={{ width: '222px' }}>
-								<Grid container wrap="nowrap">
-									<Grid item>
-										<PersonIcon />
-									</Grid>
-									<Grid item className={classes.nameRole}>
-										<Typography variant="h6">Name</Typography>
-										<Typography variant="subtitle1" color="secondary">
-											Personal Profile
-										</Typography>
-									</Grid>
-									<Grid item style={{ marginTop: '18px', paddingRight: '15px' }}>
-										<DropdownIcon />
+					<Grid item xs={2} style={{ minWidth: '240px' }}>
+						<Grid container wrap="nowrap">
+							<Grid item className={classes.sepVertContainer}>
+								<div className={classes.sepVert} />
+							</Grid>
+							<Grid
+								container
+								direction="row"
+								justify="flex-start"
+								alignItems="center"
+								spacing={0}
+							>
+								<Grid item style={{ width: '222px' }}>
+									<Grid container wrap="nowrap">
+										<Grid item>
+											<PersonIcon />
+										</Grid>
+										<Grid item className={classes.nameRole}>
+											<Typography variant="h6">Name</Typography>
+											<Typography variant="subtitle1" color="secondary">
+												Personal Profile
+											</Typography>
+										</Grid>
+										<Grid
+											item
+											style={{ marginTop: '18px', paddingRight: '15px' }}
+										>
+											<DropdownIcon />
+										</Grid>
 									</Grid>
 								</Grid>
 							</Grid>
