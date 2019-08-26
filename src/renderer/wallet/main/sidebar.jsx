@@ -76,6 +76,7 @@ const styles = theme => ({
 			},
 			'& svg': {
 				color: '#ffffff',
+				fill: '#ffffff',
 				stroke: '#ffffff'
 			}
 		}
