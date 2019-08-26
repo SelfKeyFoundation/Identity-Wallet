@@ -119,6 +119,13 @@ const styles = theme => ({
 		'& .sidebarContainer': {
 			transition: 'all 0.2s ease-out',
 			width: 200
+		},
+		'& .divider': {
+			marginBottom: '30px',
+			marginLeft: 9,
+			paddingLeft: 0,
+			transition: 'all 0.2s ease-out',
+			width: 160
 		}
 	},
 	closedDrawer: {
@@ -129,6 +136,13 @@ const styles = theme => ({
 		'& .sidebarContainer': {
 			transition: 'all 0.2s ease-out',
 			width: 56
+		},
+		'& .divider': {
+			marginBottom: '30px',
+			marginLeft: 9,
+			paddingLeft: 0,
+			transition: 'all 0.2s ease-out',
+			width: 16
 		}
 	},
 	listItemIcon: {
@@ -241,7 +255,7 @@ class Sidebar extends Component {
 								Address Book
 							</Typography>
 						</ListItem>
-						<Divider style={{ marginBottom: '30px' }} />
+						<Divider className={`divider`} />
 						<ListItem
 							id="selfkeyIdButton"
 							className={classes.listItem}
@@ -268,6 +282,7 @@ class Sidebar extends Component {
 								Affiliate Program
 							</Typography>
 						</ListItem> */}
+						<Divider className={`divider`} />
 					</List>
 				</Grid>
 				<Divider />
