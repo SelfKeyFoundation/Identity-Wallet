@@ -95,8 +95,10 @@ const styles = theme => ({
 		fontSize: '10px',
 		opacity: 0.6,
 		position: 'absolute',
-		right: 0,
 		width: 'auto'
+	},
+	versionWrap: {
+		paddingLeft: '50px'
 	},
 	drawer: {
 		transition: 'all 3s',
@@ -302,7 +304,7 @@ class Sidebar extends Component {
 								Quit
 							</Typography>
 						</ListItem>
-						<ListItem key="version">
+						<ListItem key="version" className={classes.versionWrap}>
 							<Typography variant="subtitle2" className={classes.version}>
 								V {window.appVersion}
 							</Typography>
