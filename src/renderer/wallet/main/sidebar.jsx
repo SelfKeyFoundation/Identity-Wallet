@@ -90,13 +90,6 @@ const styles = theme => ({
 	inheritHeight: {
 		height: 'inherit'
 	},
-	textColor: {
-		color: '#fff',
-		opacity: 0.8,
-		'&:hover': {
-			opacity: 1
-		}
-	},
 	version: {
 		color: '#fff',
 		fontSize: '10px',
@@ -285,7 +278,7 @@ class Sidebar extends Component {
 							<ListItemIcon className={classes.listItemIcon}>
 								<MenuHelpIcon />
 							</ListItemIcon>
-							<Typography variant="body2" className={classes.textColor}>
+							<Typography variant="body2" color="secondary">
 								Help & Support
 							</Typography>
 						</ListItem>
@@ -297,15 +290,15 @@ class Sidebar extends Component {
 							<ListItemIcon className={classes.listItemIcon}>
 								<SwitchAccountsIcon />
 							</ListItemIcon>
-							<Typography variant="body2" className={classes.textColor}>
-								Switch Accounts
+							<Typography variant="body2" color="secondary">
+								Switch Wallet
 							</Typography>
 						</ListItem>
 						<ListItem className={classes.listItem} key="quit" onClick={window.quit}>
 							<ListItemIcon className={classes.listItemIcon}>
 								<PowerIcon />
 							</ListItemIcon>
-							<Typography variant="body2" className={classes.textColor}>
+							<Typography variant="body2" color="secondary">
 								Quit
 							</Typography>
 						</ListItem>
