@@ -19,6 +19,8 @@ import {
 	MenuHelpIcon,
 	SwitchAccountsIcon,
 	PowerIcon
+	// MenuAffiliateIcon,
+	// MenuExportIcon
 } from 'selfkey-ui';
 
 const styles = theme => ({
@@ -259,7 +261,7 @@ class Sidebar extends Component {
 							key="affiliate"
 						>
 							<ListItemIcon className={classes.listItemIcon}>
-								<AffiliateIcon />
+								<MenuAffiliateIcon />
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
 								Affiliate Program
@@ -284,6 +286,18 @@ class Sidebar extends Component {
 								Help & Support
 							</Typography>
 						</ListItem>
+						{/* <ListItem
+							className={classes.listItem}
+							component={switchAccount}
+							key="switchAccount"
+						>
+							<ListItemIcon className={classes.listItemIcon}>
+								<MenuExportIcon />
+							</ListItemIcon>
+							<Typography variant="body2" color="secondary">
+								Export Wallet
+							</Typography>
+						</ListItem> */}
 						<ListItem
 							className={classes.listItem}
 							component={switchAccount}
