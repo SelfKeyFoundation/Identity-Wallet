@@ -10,6 +10,7 @@ import {
 	// Input,
 	// MenuItem,
 	// Select,
+	// IconButton
 	Divider
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
@@ -21,9 +22,13 @@ import {
 	SelfkeyLogo,
 	MenuHelpIcon,
 	SwitchAccountsIcon,
-	PowerIcon
+	PowerIcon,
+	// KeyTooltip,
+	// TooltipArrow,
 	// MenuAffiliateIcon,
 	// MenuExportIcon
+	// InfoTooltip,
+	primary
 } from 'selfkey-ui';
 // import { KeyboardArrowDown } from '@material-ui/icons';
 
@@ -158,6 +163,17 @@ const styles = theme => ({
 	network: {
 		marginBottom: '30px',
 		paddingLeft: '20px'
+	},
+	tooltip: {
+		marginTop: '-2px',
+		padding: '0 0 0 10px'
+	},
+	customWidth: {
+		maxWidth: '168px'
+	},
+	tooltipLink: {
+		color: primary,
+		textDecoration: 'none'
 	}
 });
 
@@ -301,6 +317,33 @@ class Sidebar extends Component {
 					{/* <Grid item className={classes.network}>
 						<Typography variant="overline" gutterBottom>
 							Network
+							<KeyTooltip
+								interactive
+								placement="top-start"
+								className={classes.tooltip}
+								classes={{ tooltip: classes.customWidth }}
+								title={
+									<React.Fragment>
+										<span>
+											Modify the network settings to go from Ethereum Mainnet
+											to Ropsten testnet.{' '}
+											<a
+												className={classes.tooltipLink}
+												href="link"
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												What is a testnet?
+											</a>
+										</span>
+										<TooltipArrow />
+									</React.Fragment>
+								}
+							>
+								<IconButton aria-label="Info">
+									<InfoTooltip />
+								</IconButton>
+							</KeyTooltip>
 						</Typography>
 						<Select
 							displayEmpty
