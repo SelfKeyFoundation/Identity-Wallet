@@ -430,13 +430,7 @@ class Sidebar extends Component {
 				}`}
 				variant="permanent"
 			>
-				<div
-					tabIndex={0}
-					role="button"
-					onClick={() => this.toggleDrawer(false)}
-					onKeyDown={() => this.toggleDrawer(false)}
-					className={classes.inheritHeight}
-				>
+				<div tabIndex={0} role="button" className={classes.inheritHeight}>
 					{sideList}
 				</div>
 			</Drawer>

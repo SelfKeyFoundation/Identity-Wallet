@@ -64,7 +64,7 @@ const styles = theme => ({
 
 class Toolbar extends Component {
 	state = {
-		isSidebarOpen: false
+		isSidebarOpen: true
 	};
 
 	toggleDrawer = isSidebarOpen => {
