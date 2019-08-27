@@ -6,13 +6,11 @@ describe('Wallet model', () => {
 
 	const testItm2 = {
 		address: 'active',
-		keystoreFilePath: 'active keystore',
-		isSetupFinished: 1
+		keystoreFilePath: 'active keystore'
 	};
 
 	const testItm3 = {
-		address: 'public-key-1',
-		isSetupFinished: 1
+		address: 'public-key-1'
 	};
 
 	beforeEach(async () => {
@@ -36,10 +34,12 @@ describe('Wallet model', () => {
 
 	it('findActive', async () => {
 		await Wallet.query().insert(testItm);
-		await Wallet.query().insert(testItm2);
+		let w2 = await Wallet.query().insert(testItm2);
+		await w2
+			.$relatedQuery('identities')
+			.insert({ walletId: w2.id, name: 'test2', type: 'individual', isSetupFinished: true });
 		let found = await Wallet.findActive();
 		expect(found.length).toBe(1);
-		expect(found[0].isSetupFinished).toBe(1);
 	});
 
 	it('findAll', async () => {
@@ -68,26 +68,6 @@ describe('Wallet model', () => {
 		expect(found).toMatchObject(testItm);
 	});
 
-	it('updateProfilePicture', async () => {
-		let itm = await Wallet.query().insertAndFetch(testItm);
-		expect(itm.profilePicture).toBeNull();
-		itm.profilePicture = 'supertest';
-		itm.keystoreFilePath = 'change keystore';
-		await Wallet.updateProfilePicture(itm);
-		let check = await Wallet.query().findById(itm.id);
-		expect(check.profilePicture).toBe(itm.profilePicture);
-		expect(check.keystoreFilePath).not.toBe(itm.keystoreFilePath);
-	});
-
-	it('updateSetup', async () => {
-		let itm = await Wallet.query().insertAndFetch(testItm);
-		expect(itm.isSetupFinished).toEqual(0);
-		itm.setup = 1;
-		await Wallet.updateSetup(itm);
-		let check = await Wallet.query().findById(itm.id);
-		expect(check.isSetupFinished).toBe(itm.setup);
-	});
-
 	it('updateName', async () => {
 		let itm = await Wallet.query().insertAndFetch(testItm);
 		expect(itm.name).toBeNull();
@@ -95,24 +75,6 @@ describe('Wallet model', () => {
 		await Wallet.updateName(itm);
 		let check = await Wallet.query().findById(itm.id);
 		expect(check.name).toBe(itm.name);
-	});
-
-	it('updateDID', async () => {
-		let itm = await Wallet.query().insertAndFetch(testItm);
-		expect(itm.did).toBeNull();
-		itm.did = 'did';
-		await Wallet.updateDID(itm);
-		let check = await Wallet.query().findById(itm.id);
-		expect(check.did).toBe(itm.did);
-	});
-
-	it('selectProfilePictureById', async () => {
-		let itm = await Wallet.query().insertAndFetch({
-			...testItm,
-			profilePicture: 'test_profile_picture'
-		});
-		let selectedProfilePicture = await Wallet.selectProfilePictureById(itm.id);
-		expect(selectedProfilePicture).toBe('test_profile_picture');
 	});
 
 	describe('hasSignedUpTo', () => {

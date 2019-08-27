@@ -24,11 +24,8 @@ export class Wallet extends BaseModel {
 				address: { type: 'string' },
 				privateKey: { type: 'string' },
 				keystoreFilePath: { type: 'string' },
-				profilePicture: { type: 'binary' },
-				isSetupFinished: { type: 'integer' },
 				profile: { type: 'string' },
-				path: { type: 'string' },
-				did: { type: 'string' }
+				path: { type: 'string' }
 			}
 		};
 	}
@@ -38,6 +35,7 @@ export class Wallet extends BaseModel {
 		const WalletToken = require('./wallet-token').default;
 		const IdAttribute = require('../identity/id-attribute').default;
 		const LoginAttempt = require('../lws/login-attempt').default;
+		const Identity = require('../identity/identity').default;
 
 		return {
 			setting: {
@@ -71,6 +69,14 @@ export class Wallet extends BaseModel {
 					from: `${this.tableName}.id`,
 					to: `${LoginAttempt.tableName}.walletId`
 				}
+			},
+			identities: {
+				relation: Model.HasManyRelation,
+				modelClass: Identity,
+				join: {
+					from: `${this.tableName}.id`,
+					to: `${Identity.tableName}.walletId`
+				}
 			}
 		};
 	}
@@ -102,8 +108,14 @@ export class Wallet extends BaseModel {
 		}
 	}
 
-	static findActive() {
-		return this.findAllWithKeyStoreFile().where({ isSetupFinished: 1 });
+	static async findActive() {
+		const wallets = await this.query()
+			.select()
+			.eager('identities');
+		return wallets.filter(w => {
+			const identities = w.identities.filter(idnt => idnt.isSetupFinished);
+			return !!identities.length;
+		});
 	}
 
 	static findById(id) {
@@ -122,30 +134,9 @@ export class Wallet extends BaseModel {
 		return this.query().findOne({ address: address.toLowerCase() });
 	}
 
-	static async updateProfilePicture({ id, profilePicture }) {
-		let wallet = await this.query().patchAndFetchById(id, { profilePicture });
-		return wallet;
-	}
-
 	static async updateName({ id, name }) {
 		let wallet = await this.query().patchAndFetchById(id, { name });
 		return wallet;
-	}
-
-	static async updateSetup({ id, setup }) {
-		let wallet = await this.query().patchAndFetchById(id, { isSetupFinished: setup ? 1 : 0 });
-		return wallet;
-	}
-
-	static async updateDID({ id, did }) {
-		let wallet = await this.query().patchAndFetchById(id, { did });
-		return wallet;
-	}
-
-	static async selectProfilePictureById(id) {
-		let itm = await this.query().findById(id);
-		if (!itm) return null;
-		return itm.profilePicture;
 	}
 
 	async hasSignedUpTo(websiteUrl) {

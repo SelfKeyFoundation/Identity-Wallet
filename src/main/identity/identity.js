@@ -52,6 +52,32 @@ export class Identity extends BaseModel {
 	static delete(id, tx) {
 		return this.query(tx).deleteById(id);
 	}
+
+	static async selectProfilePictureById(id) {
+		let itm = await this.query().findById(id);
+		if (!itm) return null;
+		return itm.profilePicture;
+	}
+
+	static async updateProfilePicture({ id, profilePicture }) {
+		let identity = await this.query().patchAndFetchById(id, { profilePicture });
+		return identity;
+	}
+
+	static async updateName({ id, name }) {
+		let identity = await this.query().patchAndFetchById(id, { name });
+		return identity;
+	}
+
+	static async updateSetup({ id, setup }) {
+		let identity = await this.query().patchAndFetchById(id, { isSetupFinished: !!setup });
+		return identity;
+	}
+
+	static async updateDID({ id, did }) {
+		let identity = await this.query().patchAndFetchById(id, { did });
+		return identity;
+	}
 }
 
 export default Identity;

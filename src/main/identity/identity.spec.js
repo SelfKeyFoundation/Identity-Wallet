@@ -25,12 +25,48 @@ describe('Identity model', () => {
 		expect(idnt.name).toEqual(found.name);
 	});
 
+	it('updateProfilePicture', async () => {
+		let itm = await Identity.query().insertAndFetch(testIdentity);
+		expect(itm.profilePicture).toBeNull();
+		itm.profilePicture = 'supertest';
+		itm.keystoreFilePath = 'change keystore';
+		await Identity.updateProfilePicture(itm);
+		let check = await Identity.query().findById(itm.id);
+		expect(check.profilePicture).toBe(itm.profilePicture);
+	});
+
+	it('updateSetup', async () => {
+		let itm = await Identity.query().insertAndFetch(testIdentity);
+		expect(itm.isSetupFinished).toEqual(false);
+		await Identity.updateSetup(itm.id, true);
+		let check = await Identity.query().findById(itm.id);
+		expect(check.isSetupFinished).toBe(true);
+	});
+
+	it('selectProfilePictureById', async () => {
+		let itm = await Identity.query().insertAndFetch({
+			...testIdentity,
+			profilePicture: 'test_profile_picture'
+		});
+		let selectedProfilePicture = await Identity.selectProfilePictureById(itm.id);
+		expect(selectedProfilePicture).toBe('test_profile_picture');
+	});
+
 	it('create', async () => {
 		const idnt = await Identity.create(testIdentity);
 		const idnt2 = await Identity.create(testIdentity);
 		expect(idnt.id).toBeGreaterThan(0);
 		expect(idnt2.id).toBeGreaterThan(0);
 		expect(idnt.id).not.toBe(idnt2.id);
+	});
+
+	it('updateDID', async () => {
+		let itm = await Identity.query().insertAndFetch(testIdentity);
+		expect(itm.did).toBeNull();
+		itm.did = 'did';
+		await Identity.updateDID(itm);
+		let check = await Identity.query().findById(itm.id);
+		expect(check.did).toBe(itm.did);
 	});
 
 	it('delete', async () => {
