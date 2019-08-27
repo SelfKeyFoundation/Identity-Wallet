@@ -84,7 +84,6 @@ export const incorporationsSelectors = {
 	},
 	getMainIncorporations(state) {
 		const inventoryIds = this.getIncorporations(state);
-		console.log(inventoryIds);
 		const parsedData = inventoryIds.map(id => {
 			const i = state.marketplaces.inventoryById[id];
 			i.price = selectPrice(i);
@@ -94,7 +93,6 @@ export const incorporationsSelectors = {
 			i.didAddress = selectVendorDidAddress(i);
 			return i;
 		});
-		console.log(parsedData);
 		return parsedData;
 	},
 	getTaxes(state) {
@@ -172,6 +170,10 @@ export const incorporationsSelectors = {
 		return inc;
 	},
 	getTaxTreaties(state, countryCode) {
+		const root = state.marketplace.taxTreaties;
+		const ids = Object.keys(root.byId).filter(i => root.byId[i].countryCode === countryCode);
+		return ids.map(id => root.byId[id]);
+		/*
 		if (!countryCode) {
 			return false;
 		}
@@ -183,19 +185,13 @@ export const incorporationsSelectors = {
 		}
 
 		return tree[`treaties-${countryCode}`].map(id => tree[`treatiesById-${countryCode}`][id]);
+		*/
 	},
 	getCountry(state, countryCode) {
-		if (!countryCode) {
-			return false;
-		}
-		const tree = this.getIncorporations(state);
-
-		// Dynamic property, created after API call, might not exist at runtime
-		if (!tree[`country-${countryCode}`]) {
-			return false;
-		}
-
-		return tree[`countryById-${countryCode}`][countryCode];
+		const root = state.marketplace.countries;
+		// TODO: move to specific selector file
+		const id = Object.keys(root.byId).find(i => root.byId[i].code === countryCode);
+		return root.byId[id];
 	}
 };
 

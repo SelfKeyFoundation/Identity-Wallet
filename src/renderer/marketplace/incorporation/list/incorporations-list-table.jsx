@@ -135,7 +135,6 @@ const IncorporationsListTable = withStyles(styles)(
 				<TableBody className={classes.tableBodyRow}>
 					{data.map(inc => (
 						<TableRow key={inc.id}>
-							{console.log(inc)}
 							<TableCell className={classes.flagCell}>
 								<FlagCountryName code={inc.data.countryCode} size="small" />
 							</TableCell>

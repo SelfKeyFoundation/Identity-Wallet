@@ -133,7 +133,6 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 	render() {
 		const { program, keyRate, kycRequirements, country, treaties } = this.props;
 		const { templateId } = this.props.match.params;
-		console.log(program);
 		const countryCode = program.data.countryCode;
 		const region = program.data.region;
 		const price = program.price;

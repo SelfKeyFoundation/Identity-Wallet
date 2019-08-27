@@ -44,8 +44,6 @@ class IncorporationsListContainer extends Component {
 
 		const data = incorporations.filter(this.activeJurisdiction);
 
-		console.log(data);
-
 		return (
 			<IncorporationsListPage
 				keyRate={keyRate}
