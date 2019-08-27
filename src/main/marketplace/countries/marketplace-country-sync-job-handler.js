@@ -1,5 +1,9 @@
 export const MARKETPLACE_COUNTRY_SYNC_JOB = 'marketplace-country-sync-job';
 
+function sleep(millis) {
+	return new Promise(resolve => setTimeout(resolve, millis));
+}
+
 export class MarketplaceCountrySyncJobHandler {
 	constructor({ schedulerService, marketplaceCountryService }) {
 		this.schedulerService = schedulerService;
@@ -16,11 +20,11 @@ export class MarketplaceCountrySyncJobHandler {
 		job.emitProgress(0, { message: 'fetching remote countries' });
 		const remoteCountries = await this.marketplaceCountryService.fetchMarketplaceCountries();
 		job.emitProgress(25, { message: 'remote countries fetched' });
-
+		await sleep(500);
 		job.emitProgress(25, { message: 'load db countries' });
 		const dbCountries = await this.marketplaceCountryService.loadCountries();
 		job.emitProgress(50, { message: 'load db countries complete' });
-
+		await sleep(500);
 		job.emitProgress(50, { message: 'Merging remote and local data' });
 
 		let countriesByCode = remoteCountries.reduce((acc, curr) => {
@@ -48,8 +52,10 @@ export class MarketplaceCountrySyncJobHandler {
 		job.emitProgress(75, { message: 'Updating db data' });
 		await this.marketplaceCountryService.upsert(upsert);
 		job.emitProgress(25, { message: 'Removing obsolete countries' });
+		await sleep(500);
 		await this.marketplaceCountryService.deleteMany(toRemove);
 		job.emitProgress(95, { message: 'Fetching updated country list' });
+		await sleep(500);
 		const inventory = this.marketplaceCountryService.loadCountries();
 		job.emitProgress(100, { message: 'Done!' });
 		return inventory;

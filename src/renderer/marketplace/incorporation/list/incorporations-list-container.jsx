@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
-import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
+import { incorporationsSelectors } from 'common/incorporations';
 import { IncorporationsListPage } from './incorporations-list-page';
 import NoConnection from 'renderer/no-connection';
 
@@ -14,9 +14,11 @@ const INCORPORATIONS_DETAIL_PATH = '/main/marketplace-incorporation/details';
 
 class IncorporationsListContainer extends Component {
 	componentDidMount() {
+		/*
 		if (!this.props.incorporations || !this.props.incorporations.length) {
 			this.props.dispatch(incorporationsOperations.loadIncorporationsOperation());
 		}
+		*/
 	}
 
 	onBackClick = () => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
@@ -24,14 +26,14 @@ class IncorporationsListContainer extends Component {
 	onDetailsClick = jurisdiction => {
 		this.props.dispatch(
 			push(
-				`${INCORPORATIONS_DETAIL_PATH}/${jurisdiction['Company code']}/${
-					jurisdiction['Country code']
+				`${INCORPORATIONS_DETAIL_PATH}/${jurisdiction.data.companyCode}/${
+					jurisdiction.data.countryCode
 				}/${jurisdiction.templateId}`
 			)
 		);
 	};
 
-	activeJurisdiction = jurisdiction => jurisdiction.show_in_wallet;
+	activeJurisdiction = jurisdiction => jurisdiction.status === 'active';
 
 	render() {
 		const { isLoading, incorporations, keyRate, isError } = this.props;
@@ -41,6 +43,8 @@ class IncorporationsListContainer extends Component {
 		}
 
 		const data = incorporations.filter(this.activeJurisdiction);
+
+		console.log(data);
 
 		return (
 			<IncorporationsListPage

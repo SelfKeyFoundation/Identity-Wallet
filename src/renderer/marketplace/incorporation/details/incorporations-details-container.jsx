@@ -7,7 +7,8 @@ import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { walletSelectors } from 'common/wallet';
 import { withStyles } from '@material-ui/core/styles';
-import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
+// import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
+import { incorporationsSelectors } from 'common/incorporations';
 import { IncorporationsDetailsPage } from './incorporations-details-page';
 
 const styles = theme => ({});
@@ -19,12 +20,6 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 	};
 
 	async componentDidMount() {
-		const { program } = this.props;
-
-		if (!program) {
-			this.props.dispatch(incorporationsOperations.loadIncorporationsOperation());
-		}
-
 		this.loadRelyingParty({ rp: 'incorporations', authenticated: false });
 
 		this.loadTreaties();
@@ -38,48 +33,48 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 
 	onTabChange = tab => this.setState({ tab });
 
-	buildResumeData = tax => {
+	buildResumeData = data => {
 		return [
 			[
 				{
 					name: 'Offshore Tax',
-					value: tax['Offshore Income Tax Rate'],
+					value: data.offshoreIncomeTaxRate,
 					highlighted: true
 				},
 				{
 					name: 'Dividends Received',
-					value: tax['Dividends Received'],
+					value: data.dividendsReceived,
 					highlighted: true
 				}
 			],
 			[
 				{
 					name: 'Corp Income',
-					value: tax['Corporate Tax Rate'],
+					value: data.corporateTaxRate,
 					highlighted: true
 				},
 				{
 					name: 'Dividends paid',
-					value: tax['Dividends Withholding Tax Rate'],
+					value: data.dividendsWithholdingTaxRate,
 					highlighted: true
 				}
 			],
 			[
 				{
 					name: 'Capital Gains',
-					value: tax['Capital Gains Tax Rate'],
+					value: data.capitalGainsTaxRate,
 					highlighted: true
 				},
 				{
 					name: 'Royalties paid',
-					value: tax['Royalties Withholding Tax Rate'],
+					value: data.royaltiesWithholdingTaxRate,
 					highlighted: true
 				}
 			],
 			[
 				{
 					name: 'Interests paid',
-					value: tax['Interests Withholding Tax Rate'],
+					value: data.interestsWithholdingTaxRate,
 					highlighted: true
 				}
 			]
@@ -138,8 +133,9 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 	render() {
 		const { program, keyRate, kycRequirements, country, treaties } = this.props;
 		const { templateId } = this.props.match.params;
-		const countryCode = program['Country code'];
-		const region = program['Region'];
+		console.log(program);
+		const countryCode = program.data.countryCode;
+		const region = program.data.region;
 		const price = program.price;
 		return (
 			<IncorporationsDetailsPage
@@ -151,7 +147,7 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 				treaties={treaties}
 				price={price}
 				tab={this.state.tab}
-				resume={this.buildResumeData(program.tax)}
+				resume={this.buildResumeData(program.data)}
 				onTabChange={this.onTabChange}
 				keyRate={keyRate}
 				region={region}
