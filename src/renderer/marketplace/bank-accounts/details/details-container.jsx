@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { BigNumber } from 'bignumber.js';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
@@ -21,11 +22,6 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 		loading: false,
 		cryptoValue: 0
 	};
-
-	constructor() {
-		super();
-		this.handleCryptoValueChange = this.handleCryptoValueChange.bind(this);
-	}
 
 	async componentDidMount() {
 		const { accountType, country } = this.props;
@@ -81,13 +77,17 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 		return null;
 	};
 
+	priceInKEY = priceUSD => {
+		return new BigNumber(priceUSD).dividedBy(this.props.keyRate).toString();
+	};
+
 	onApplyClick = () => {
-		const { rp, wallet, accountType, keyRate } = this.props;
+		const { rp, wallet, accountType } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
 		const transactionNoKeyError = '/main/transaction-no-key-error';
 		const authenticated = true;
-		const keyPrice = accountType.price / keyRate;
+		const keyPrice = Number(this.priceInKEY(accountType.price));
 		const keyAvailable = this.state.cryptoValue;
 		// When clicking the start process,
 		// we check if an authenticated kyc-chain session exists

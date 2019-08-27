@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { BigNumber } from 'bignumber.js';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorporations-component';
@@ -19,11 +20,6 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 		loading: false,
 		cryptoValue: 0
 	};
-
-	constructor() {
-		super();
-		this.handleCryptoValueChange = this.handleCryptoValueChange.bind(this);
-	}
 
 	async componentDidMount() {
 		const { program } = this.props;
@@ -109,13 +105,17 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 		return null;
 	};
 
+	priceInKEY = priceUSD => {
+		return new BigNumber(priceUSD).dividedBy(this.props.keyRate).toString();
+	};
+
 	onApplyClick = () => {
-		const { rp, wallet, program, keyRate } = this.props;
+		const { rp, wallet, program } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
 		const transactionNoKeyError = '/main/transaction-no-key-error';
 		const authenticated = true;
-		const keyPrice = program.price / keyRate;
+		const keyPrice = Number(this.priceInKEY(program.price));
 		const keyAvailable = this.state.cryptoValue;
 		// When clicking the start process,
 		// we check if an authenticated kyc-chain session exists
