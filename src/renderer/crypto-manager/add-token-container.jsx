@@ -95,7 +95,7 @@ const styles = theme => ({
 		fontWeight: 600
 	},
 	backButtonContainer: {
-		left: '15px',
+		left: '75px',
 		position: 'absolute',
 		top: '120px'
 	},

@@ -22,7 +22,7 @@ const styles = theme => ({
 		fontWeight: 600
 	},
 	backButtonContainer: {
-		left: '15px',
+		left: '75px',
 		position: 'absolute',
 		top: '120px'
 	},
@@ -230,6 +230,7 @@ class CryptoManagerContainerComponent extends Component {
 				justify="flex-start"
 				alignItems="center"
 				spacing={32}
+				style={{ width: '100%', margin: 0 }}
 			>
 				<div className={classes.backButtonContainer}>
 					<Button
