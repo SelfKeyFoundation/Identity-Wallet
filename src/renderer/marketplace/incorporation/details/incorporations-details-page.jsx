@@ -13,7 +13,7 @@ const styles = theme => ({
 		maxWidth: '960px'
 	},
 	backButtonContainer: {
-		left: '15px',
+		left: '75px',
 		position: 'absolute'
 	},
 	bold: {
