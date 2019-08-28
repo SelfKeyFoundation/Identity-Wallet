@@ -10,6 +10,7 @@ import { walletSelectors } from 'common/wallet';
 import { withStyles } from '@material-ui/core/styles';
 import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
 import { IncorporationsDetailsPage } from './incorporations-details-page';
+import { getCryptoValue } from '../../../common/price-utils';
 import config from 'common/config';
 
 const styles = theme => ({});
@@ -17,8 +18,7 @@ const styles = theme => ({});
 class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent {
 	state = {
 		tab: 'description',
-		loading: false,
-		cryptoValue: 0
+		loading: false
 	};
 
 	async componentDidMount() {
@@ -106,7 +106,7 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 	};
 
 	priceInKEY = priceUSD => {
-		return new BigNumber(priceUSD).dividedBy(this.props.keyRate).toString();
+		return new BigNumber(priceUSD).dividedBy(this.props.keyRate);
 	};
 
 	onApplyClick = () => {
@@ -115,22 +115,22 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
 		const transactionNoKeyError = '/main/transaction-no-key-error';
 		const authenticated = true;
-		const keyPrice = Number(this.priceInKEY(program.price));
-		const keyAvailable = this.state.cryptoValue;
+		const keyPrice = this.priceInKEY(program.price);
+		const keyAvailable = new BigNumber(this.props.cryptoValue);
 		// When clicking the start process,
 		// we check if an authenticated kyc-chain session exists
 		// If it doesn't we trigger a new authenticated rp session
 		// and redirect to checkout route
 		// The loading state is used to disable the button while data is being loaded
 		this.setState({ loading: true }, async () => {
+			if (keyPrice.gt(keyAvailable)) {
+				return this.props.dispatch(push(transactionNoKeyError));
+			}
 			if (!wallet.isSetupFinished) {
 				return this.props.dispatch(push(selfkeyIdRequiredRoute));
 			}
 			if (!wallet.did) {
 				return this.props.dispatch(push(selfkeyDIDRequiredRoute));
-			}
-			if (keyPrice > keyAvailable) {
-				return this.props.dispatch(push(transactionNoKeyError));
 			}
 			if (!rp || !rp.authenticated) {
 				await this.props.dispatch(
@@ -145,10 +145,6 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 				await this.props.dispatch(push(this.checkoutRoute()));
 			}
 		});
-	};
-
-	handleCryptoValueChange = cryptoValue => {
-		this.setState({ cryptoValue: Number(cryptoValue) });
 	};
 
 	render() {
@@ -177,8 +173,6 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 				templateId={templateId}
 				onBack={this.onBackClick}
 				onStatusAction={this.onStatusActionClick}
-				cryptoCurrency={config.constants.primaryToken}
-				cryptoValueChange={this.handleCryptoValueChange}
 			/>
 		);
 	}
@@ -195,6 +189,10 @@ IncorporationsDetailsContainer.propTypes = {
 const mapStateToProps = (state, props) => {
 	const { companyCode, countryCode, templateId } = props.match.params;
 	const notAuthenticated = false;
+	let primaryToken = {
+		...props,
+		cryptoCurrency: config.constants.primaryToken
+	};
 	return {
 		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
 		treaties: incorporationsSelectors.getTaxTreaties(state, countryCode),
@@ -212,7 +210,8 @@ const mapStateToProps = (state, props) => {
 			'incorporations',
 			templateId
 		),
-		wallet: walletSelectors.getWallet(state)
+		wallet: walletSelectors.getWallet(state),
+		cryptoValue: getCryptoValue(state, primaryToken)
 	};
 };
 

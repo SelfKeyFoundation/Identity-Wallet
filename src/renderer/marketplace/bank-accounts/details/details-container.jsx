@@ -11,6 +11,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
 import { BankingDetailsPage } from './details-page';
 import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
+import { getCryptoValue } from '../../../common/price-utils';
 import config from 'common/config';
 
 const styles = theme => ({});
@@ -19,8 +20,7 @@ const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	state = {
 		tab: 'types',
-		loading: false,
-		cryptoValue: 0
+		loading: false
 	};
 
 	async componentDidMount() {
@@ -78,7 +78,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	priceInKEY = priceUSD => {
-		return new BigNumber(priceUSD).dividedBy(this.props.keyRate).toString();
+		return new BigNumber(priceUSD).dividedBy(this.props.keyRate);
 	};
 
 	onApplyClick = () => {
@@ -87,22 +87,22 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
 		const transactionNoKeyError = '/main/transaction-no-key-error';
 		const authenticated = true;
-		const keyPrice = Number(this.priceInKEY(accountType.price));
-		const keyAvailable = this.state.cryptoValue;
+		const keyPrice = this.priceInKEY(accountType.price);
+		const keyAvailable = new BigNumber(this.props.cryptoValue);
 		// When clicking the start process,
 		// we check if an authenticated kyc-chain session exists
 		// If it doesn't we trigger a new authenticated rp session
 		// and redirect to checkout route
 		// The loading state is used to disable the button while data is being loaded
 		this.setState({ loading: true }, async () => {
+			if (keyPrice.gt(keyAvailable)) {
+				return this.props.dispatch(push(transactionNoKeyError));
+			}
 			if (!wallet.isSetupFinished) {
 				return this.props.dispatch(push(selfkeyIdRequiredRoute));
 			}
 			if (!wallet.did) {
 				return this.props.dispatch(push(selfkeyDIDRequiredRoute));
-			}
-			if (keyPrice > keyAvailable) {
-				return this.props.dispatch(push(transactionNoKeyError));
 			}
 			if (!rp || !rp.authenticated) {
 				await this.props.dispatch(
@@ -155,10 +155,6 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 		];
 	};
 
-	handleCryptoValueChange = cryptoValue => {
-		this.setState({ cryptoValue: Number(cryptoValue) });
-	};
-
 	render() {
 		const { accountType, banks, keyRate, jurisdiction, kycRequirements, country } = this.props;
 		const { price, countryCode, region } = accountType;
@@ -183,8 +179,6 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 				templateId={this.props.match.params.templateId}
 				onBack={this.onBackClick}
 				onStatusAction={this.onStatusActionClick}
-				cryptoCurrency={config.constants.primaryToken}
-				cryptoValueChange={this.handleCryptoValueChange}
 			/>
 		);
 	}
@@ -201,6 +195,10 @@ BankAccountsDetailContainer.propTypes = {
 const mapStateToProps = (state, props) => {
 	const { accountCode, countryCode, templateId } = props.match.params;
 	const authenticated = true;
+	let primaryToken = {
+		...props,
+		cryptoCurrency: config.constants.primaryToken
+	};
 	return {
 		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
 		banks: bankAccountsSelectors.getDetailsByAccountCode(state, accountCode),
@@ -219,7 +217,8 @@ const mapStateToProps = (state, props) => {
 			templateId
 		),
 		wallet: walletSelectors.getWallet(state),
-		country: incorporationsSelectors.getCountry(state, countryCode)
+		country: incorporationsSelectors.getCountry(state, countryCode),
+		cryptoValue: getCryptoValue(state, primaryToken)
 	};
 };
 
