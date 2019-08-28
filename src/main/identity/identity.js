@@ -69,8 +69,10 @@ export class Identity extends BaseModel {
 		return identity;
 	}
 
-	static async updateSetup({ id, setup }) {
-		let identity = await this.query().patchAndFetchById(id, { isSetupFinished: !!setup });
+	static async updateSetup({ id, isSetupFinished }) {
+		let identity = await this.query().patchAndFetchById(id, {
+			isSetupFinished: !!isSetupFinished
+		});
 		return identity;
 	}
 

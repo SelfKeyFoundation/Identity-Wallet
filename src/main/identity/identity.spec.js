@@ -38,7 +38,8 @@ describe('Identity model', () => {
 	it('updateSetup', async () => {
 		let itm = await Identity.query().insertAndFetch(testIdentity);
 		expect(itm.isSetupFinished).toEqual(false);
-		await Identity.updateSetup(itm.id, true);
+		itm.isSetupFinished = true;
+		await Identity.updateSetup(itm);
 		let check = await Identity.query().findById(itm.id);
 		expect(check.isSetupFinished).toBe(true);
 	});
