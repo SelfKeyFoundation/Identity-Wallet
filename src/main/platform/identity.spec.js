@@ -13,7 +13,7 @@ describe('identity', () => {
 		id = new Identity({
 			address,
 			privateKey,
-			profile: 'local',
+			type: 'local',
 			wid: 1
 		});
 	});
@@ -30,7 +30,7 @@ describe('identity', () => {
 	describe('unlock', () => {
 		it('should unlock ledger', async () => {
 			let id1 = new Identity({
-				profile: 'ledger'
+				type: 'ledger'
 			});
 			sinon.stub(id1, 'getPublicKeyFromHardwareWallet').returns('test');
 			await id1.unlock();
@@ -39,7 +39,7 @@ describe('identity', () => {
 		it('should throw invalid password if failed to unlock keystore', async () => {
 			let id1 = new Identity({
 				address,
-				profile: 'local'
+				type: 'local'
 			});
 			getPrivateKey.mockImplementation((filePath, password) => {
 				if (password !== 'test') throw new Error('invalid pass');
@@ -54,7 +54,7 @@ describe('identity', () => {
 		it('should unlock keystore', async () => {
 			let id1 = new Identity({
 				address,
-				profile: 'local'
+				type: 'local'
 			});
 			getPrivateKey.mockImplementation((filePath, password) => {
 				if (password !== 'test') throw new Error('invalid pass');

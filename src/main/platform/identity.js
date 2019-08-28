@@ -11,7 +11,7 @@ export class Identity {
 	constructor(wallet) {
 		this.address = wallet.address;
 		this.publicKey = null;
-		this.profile = wallet.profile;
+		this.type = wallet.type;
 		this.privateKey = wallet.privateKey ? wallet.privateKey.replace('0x', '') : null;
 		this.keystorePath = wallet.keystoreFilePath;
 		this.did = wallet.did
@@ -20,7 +20,7 @@ export class Identity {
 		this.wid = wallet.id;
 		this.path = wallet.path;
 		this.wallet = wallet;
-		if (this.profile === 'local' && this.privateKey) {
+		if (this.type === 'local' && this.privateKey) {
 			this.publicKey = ethUtil
 				.privateToPublic(Buffer.from(this.privateKey, 'hex'))
 				.toString('hex');
@@ -50,7 +50,7 @@ export class Identity {
 		return `${this.did};selfkey:chain=ropsten`;
 	}
 	async getPublicKeyFromHardwareWallet() {
-		if (this.profile === 'ledger') {
+		if (this.type === 'ledger') {
 			const transport = await getGlobalContext().web3Service.getLedgerTransport();
 			try {
 				const appEth = new AppEth(transport);
@@ -59,7 +59,7 @@ export class Identity {
 			} finally {
 				transport.close();
 			}
-		} else if (this.profile === 'trezor') {
+		} else if (this.type === 'trezor') {
 			const publicKey = await getGlobalContext().web3Service.trezorWalletSubProvider.getPublicKey(
 				this.address
 			);
@@ -69,7 +69,7 @@ export class Identity {
 
 	async genSignatureForMessage(msg) {
 		let signature = {};
-		switch (this.profile) {
+		switch (this.type) {
 			case 'ledger':
 				const transport = await getGlobalContext().web3Service.getLedgerTransport();
 				try {
@@ -101,7 +101,7 @@ export class Identity {
 	}
 
 	async unlock(config) {
-		if (this.profile !== 'local') {
+		if (this.type !== 'local') {
 			this.publicKey = this.getPublicKeyFromHardwareWallet();
 		} else {
 			try {

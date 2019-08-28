@@ -98,7 +98,7 @@ describe('selectors', () => {
 		name: 'Ethereum',
 		price: 210.32,
 		privateKey: 'fdsfdsfdsfds4231321dasdf21ed3',
-		profile: 'local',
+		type: 'local',
 		address: '4184288c556524df9cb9e58b73265ee66dca4efe',
 		symbol: 'ETH'
 	};

@@ -254,7 +254,7 @@ export class Web3Service {
 		if (!wallet || wallet.address !== opts.from) {
 			throw new Error('provided wallet does not contain requested address');
 		}
-		if ((wallet.profile && wallet.profile !== 'local') || wallet.isHardwareWallet) {
+		if ((wallet.type && wallet.type !== 'local') || wallet.isHardwareWallet) {
 			return contactMethodInstance.send(...args);
 		}
 		if (!wallet.privateKey) {

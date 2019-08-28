@@ -24,7 +24,7 @@ export class Wallet extends BaseModel {
 				address: { type: 'string' },
 				privateKey: { type: 'string' },
 				keystoreFilePath: { type: 'string' },
-				profile: { type: 'string' },
+				type: { type: 'string' },
 				path: { type: 'string' }
 			}
 		};

@@ -47,7 +47,7 @@ export class LWSService {
 				const retWallet = {
 					address: w.address,
 					unlocked,
-					profile: w.profile,
+					type: w.type,
 					name: w.name,
 					signedUp
 				};
@@ -79,7 +79,7 @@ export class LWSService {
 				return {
 					address: w.address,
 					unlocked,
-					profile: type,
+					type: type,
 					signedUp
 				};
 			})
@@ -176,18 +176,18 @@ export class LWSService {
 	}
 
 	async reqUnlock(msg, conn) {
-		const { address, password, config, profile, path } = msg.payload;
+		const { address, password, config, type, path } = msg.payload;
 		let payload = { address, unlocked: false };
 		let wallet = await Wallet.findByAddress(address);
 		wallet = !wallet
 			? await Wallet.create({
 					address,
-					profile,
+					type,
 					path
 			  })
 			: wallet;
 		let identity = new Identity(wallet);
-		payload.profile = identity.profile;
+		payload.type = identity.type;
 		try {
 			await identity.unlock({ password });
 			conn.addIdentity(address, identity);
@@ -292,7 +292,7 @@ export class LWSService {
 	}
 
 	async reqAuth(msg, conn) {
-		const { address, config, profile } = msg.payload;
+		const { address, config, type } = msg.payload;
 		let identity = conn.getIdentity(address);
 		if (!identity) {
 			return this.authResp(
@@ -309,7 +309,7 @@ export class LWSService {
 		}
 		let session = new RelyingPartySession(config, identity);
 		try {
-			if (profile === 'ledger') {
+			if (type === 'ledger') {
 				conn.send({ type: 'wait_hw_confirmation' });
 			}
 			await session.establish();
@@ -341,7 +341,7 @@ export class LWSService {
 	}
 
 	async reqSignup(msg, conn) {
-		const { address, config, attributes, profile } = msg.payload;
+		const { address, config, attributes, type } = msg.payload;
 		let identity = conn.getIdentity(address);
 		if (!identity) {
 			return this.authResp(
@@ -358,7 +358,7 @@ export class LWSService {
 		}
 		let session = new RelyingPartySession(config, identity);
 		try {
-			if (profile === 'ledger') {
+			if (type === 'ledger') {
 				conn.send({ type: 'wait_hw_confirmation' });
 			}
 			await session.establish();

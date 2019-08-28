@@ -31,7 +31,7 @@ export class WalletService {
 		const wallet = await Wallet.create({
 			address: address,
 			keystoreFilePath: keystoreFileFullPath,
-			profile: 'local'
+			type: 'local'
 		});
 
 		const newWallet = {
@@ -129,7 +129,7 @@ export class WalletService {
 			? await Wallet.create({
 					address: account.address,
 					keystoreFilePath: keystoreFileFullPath,
-					profile: 'local'
+					type: 'local'
 			  })
 			: wallet;
 
@@ -157,7 +157,7 @@ export class WalletService {
 		wallet = !wallet
 			? await Wallet.create({
 					address: account.address,
-					profile: 'local'
+					type: 'local'
 			  })
 			: wallet;
 
@@ -171,14 +171,14 @@ export class WalletService {
 		return newWallet;
 	}
 
-	async unlockWalletWithAddress(address, path, profile) {
+	async unlockWalletWithAddress(address, path, type) {
 		let wallet = await Wallet.findByAddress(address);
 		this.web3Service.web3.eth.defaultAccount = address;
 
 		wallet = !wallet
 			? await Wallet.create({
 					address,
-					profile,
+					type,
 					path
 			  })
 			: wallet;

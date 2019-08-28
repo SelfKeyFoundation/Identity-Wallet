@@ -37,14 +37,14 @@ describe('lws-service', () => {
 				Wallet.findAll.resolves([
 					{
 						address: 'unlocked',
-						profile: 'local',
+						type: 'local',
 						hasSignedUpTo() {
 							return true;
 						}
 					},
 					{
 						address: 'locked',
-						profile: 'local',
+						type: 'local',
 						hasSignedUpTo() {
 							return true;
 						}
@@ -63,13 +63,13 @@ describe('lws-service', () => {
 						payload: [
 							{
 								address: 'unlocked',
-								profile: 'local',
+								type: 'local',
 								unlocked: true,
 								signedUp: true
 							},
 							{
 								address: 'locked',
-								profile: 'local',
+								type: 'local',
 								unlocked: false,
 								signedUp: false
 							}
@@ -90,7 +90,7 @@ describe('lws-service', () => {
 				sinon.stub(Wallet, 'findByAddress');
 				Wallet.findByAddress.resolves({
 					address: 'test',
-					profile: 'ledger',
+					type: 'ledger',
 					hasSignedUpTo() {
 						return false;
 					}
@@ -111,7 +111,7 @@ describe('lws-service', () => {
 						payload: [
 							{
 								address: 'test',
-								profile: 'ledger',
+								type: 'ledger',
 								unlocked: false,
 								signedUp: false
 							}
@@ -132,7 +132,7 @@ describe('lws-service', () => {
 				sinon.stub(Wallet, 'findByAddress');
 				Wallet.findByAddress.resolves({
 					address: 'test',
-					profile: 'trezor',
+					type: 'trezor',
 					hasSignedUpTo() {
 						return false;
 					}
@@ -153,7 +153,7 @@ describe('lws-service', () => {
 						payload: [
 							{
 								address: 'test',
-								profile: 'trezor',
+								type: 'trezor',
 								unlocked: false,
 								signedUp: false
 							}
@@ -165,7 +165,7 @@ describe('lws-service', () => {
 		});
 
 		describe('reqUnlock', () => {
-			const t = (msg, profile, wallet, expected) =>
+			const t = (msg, type, wallet, expected) =>
 				it(msg, async () => {
 					const web3Service = {
 						getLedgerTransport: () => {}
@@ -193,7 +193,7 @@ describe('lws-service', () => {
 							payload: {
 								address: wallet.address,
 								config: { website: { url: 'test' } },
-								profile
+								type
 							}
 						},
 						conn
@@ -208,7 +208,7 @@ describe('lws-service', () => {
 							{
 								payload: {
 									address: wallet.address,
-									profile: wallet.profile,
+									type: wallet.type,
 									unlocked: expected
 								}
 							},
@@ -227,7 +227,7 @@ describe('lws-service', () => {
 				{
 					address: 'unlocked',
 					privateKey: 'ok',
-					profile: 'local',
+					type: 'local',
 					hasSignedUpTo: sinon.stub().resolves(true)
 				},
 				true
@@ -237,7 +237,7 @@ describe('lws-service', () => {
 				'local',
 				{
 					address: 'locked',
-					profile: 'local',
+					type: 'local',
 					hasSignedUpTo: sinon.stub().resolves(true)
 				},
 				false
@@ -247,7 +247,7 @@ describe('lws-service', () => {
 				'ledger',
 				{
 					address: 'unlocked',
-					profile: 'ledger',
+					type: 'ledger',
 					hasSignedUpTo: sinon.stub().resolves(true),
 					path: `44'/60'/0'/0`
 				},
@@ -488,7 +488,7 @@ describe('lws-service', () => {
 					send: () => {},
 					getIdentity: address => identity
 				};
-				const msg = { payload: { address: 'test', profile: 'ledger' } };
+				const msg = { payload: { address: 'test', type: 'ledger' } };
 				await service.reqAuth(msg, conn);
 				expect({ type: 'wait_hw_confirmation' }).toBeTruthy();
 			});
@@ -569,7 +569,7 @@ describe('lws-service', () => {
 					send: () => {},
 					getIdentity: address => identity
 				};
-				const msg = { payload: { address: 'test', profile: 'ledger' } };
+				const msg = { payload: { address: 'test', type: 'ledger' } };
 				sinon.stub(conn, 'send');
 				await service.reqSignup(msg, conn);
 				expect({ type: 'wait_hw_confirmation' }).toBeTruthy();

@@ -10,7 +10,7 @@ export const getWallet = state => {
 	wallet.symbol = 'ETH';
 	wallet.price = ethereumPrice.priceUSD;
 	wallet.recordState = 1;
-	wallet.isHardwareWallet = wallet.profile === 'ledger' || wallet.profile === 'trezor';
+	wallet.isHardwareWallet = wallet.type === 'ledger' || wallet.type === 'trezor';
 	return wallet;
 };
 
