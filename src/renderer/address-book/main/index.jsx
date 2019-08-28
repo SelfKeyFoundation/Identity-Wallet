@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -37,12 +38,6 @@ const styles = theme => ({
 	}
 });
 
-function removeDuplicates(myArr, prop) {
-	return myArr.filter((obj, pos, arr) => {
-		return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
-	});
-}
-
 class AddressBookContainer extends Component {
 	state = {
 		addresses: []
@@ -75,7 +70,7 @@ class AddressBookContainer extends Component {
 
 	render() {
 		const { classes } = this.props;
-		const addresses = removeDuplicates(this.state.addresses, 'address');
+		const addresses = _.uniqueBy(this.state.addresses, 'address');
 		return (
 			<Grid
 				id="viewAddressBook"
