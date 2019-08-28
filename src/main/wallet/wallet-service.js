@@ -9,8 +9,9 @@ import * as EthUtil from 'ethereumjs-util';
 
 const log = new Logger('wallet-model');
 export class WalletService {
-	constructor() {
-		this.web3Service = getGlobalContext().web3Service;
+	constructor({ web3Service, config }) {
+		this.web3Service = web3Service;
+		this.config = config;
 	}
 
 	async createWallet(password) {
@@ -19,10 +20,7 @@ export class WalletService {
 		this.web3Service.web3.eth.defaultAccount = account.address;
 		const { address, privateKey } = account;
 		const keystore = this.web3Service.web3.eth.accounts.encrypt(privateKey, password);
-		const keystoreFileFullPath = path.resolve(
-			getGlobalContext().config.walletsDirectoryPath,
-			address
-		);
+		const keystoreFileFullPath = path.resolve(this.config.walletsDirectoryPath, address);
 		try {
 			await fs.promises.writeFile(keystoreFileFullPath, JSON.stringify(keystore), 'utf8');
 		} catch (error) {
@@ -36,7 +34,6 @@ export class WalletService {
 
 		const newWallet = {
 			...wallet,
-			profilePicture: formatDataUrl(wallet.profilePicture),
 			address: address,
 			privateKey: privateKey,
 			keystoreFilePath: keystoreFileFullPath
@@ -67,7 +64,7 @@ export class WalletService {
 
 	async getWallets() {
 		const wallets = await Wallet.findAllWithKeyStoreFile();
-		return wallets.map(w => ({ ...w, profilePicture: formatDataUrl(w.profilePicture) }));
+		return wallets.map(w => ({ ...w }));
 	}
 
 	async unlockWalletWithPassword(id, password) {
@@ -76,10 +73,7 @@ export class WalletService {
 		try {
 			await fs.promises.access(keystoreFilePath, fs.constants.R_OK);
 		} catch (error) {
-			keystoreFilePath = path.resolve(
-				getGlobalContext().config.walletsDirectoryPath,
-				keystoreFilePath
-			);
+			keystoreFilePath = path.resolve(this.config.walletsDirectoryPath, keystoreFilePath);
 		}
 		let keystore = await fs.promises.readFile(keystoreFilePath);
 		const account = this.web3Service.web3.eth.accounts.decrypt(
@@ -96,7 +90,6 @@ export class WalletService {
 		// testPaymentContract(wallet);
 		return {
 			...wallet,
-			profilePicture: formatDataUrl(wallet.profilePicture),
 			address: account.address,
 			privateKey: account.privateKey
 		};
