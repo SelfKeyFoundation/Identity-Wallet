@@ -135,4 +135,13 @@ describe('WalletService', () => {
 			});
 		});
 	});
+
+	xdescribe('unlockWalletWithNewFile');
+	xdescribe('unlockWalletWithPrivateKey');
+	xdescribe('unlockWalletWithAddress');
+	xdescribe('_getWallets');
+	xdescribe('updateWalletName');
+	xdescribe('getLedgerWallets');
+	xdescribe('getTrezorWallets');
+	xdescribe('sendTransaction');
 });
