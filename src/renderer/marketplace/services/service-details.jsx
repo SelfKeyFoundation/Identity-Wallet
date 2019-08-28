@@ -143,7 +143,7 @@ const styles = theme => ({
 	},
 
 	backButtonContainer: {
-		left: '15px',
+		left: '75px',
 		position: 'absolute',
 		top: '120px'
 	},

@@ -15,7 +15,13 @@ import { MarketplaceServicesListItem } from './services-list-item';
 
 const styles = theme => ({
 	wrapper: {
-		width: '1140px'
+		width: '1080px'
+	},
+
+	'@media screen and (min-width: 1230px)': {
+		wrapper: {
+			width: '1140px'
+		}
 	},
 
 	header: {
@@ -56,7 +62,7 @@ const styles = theme => ({
 	},
 
 	backButtonContainer: {
-		left: '15px',
+		left: '75px',
 		position: 'absolute',
 		top: '120px'
 	},
