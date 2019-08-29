@@ -65,13 +65,14 @@ const KycRequirementsListComponent = props => {
 			{!loading && (
 				<Grid container justify="flex-start" alignItems="flex-start" direction="column">
 					<List className={classes.list}>
-						{requirements.map((item, index) => (
-							<KycRequirementListItem
-								key={item.id}
-								requirement={item}
-								index={index}
-							/>
-						))}
+						{requirements &&
+							requirements.map((item, index) => (
+								<KycRequirementListItem
+									key={item.id}
+									requirement={item}
+									index={index}
+								/>
+							))}
 					</List>
 				</Grid>
 			)}

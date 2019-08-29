@@ -61,7 +61,11 @@ export const inventorySelectors = {
 	selectInventoryForCategory: (state, category, status = 'active') =>
 		inventorySelectors
 			.selectInventory(state)
-			.filter(i => i.category === category && i.status === status)
+			.filter(i => i.category === category && i.status === status),
+	selectInventoryItemById: (state, id) => inventorySelectors.selectInventoryRoot(state).byId[id],
+	isLoading: state => inventorySelectors.selectInventoryRoot(state).all.length === 0,
+	selectInventoryItemByFilter: (state, category, filter) =>
+		inventorySelectors.selectInventoryForCategory(state, category).find(filter)
 };
 
 export default reducer;

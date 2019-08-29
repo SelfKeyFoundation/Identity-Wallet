@@ -8,7 +8,7 @@ import { kycSelectors, kycOperations } from 'common/kyc';
 import { walletSelectors } from 'common/wallet';
 import { withStyles } from '@material-ui/core/styles';
 // import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
-import { incorporationsSelectors } from 'common/incorporations';
+import { marketplaceSelectors } from 'common/marketplace';
 import { IncorporationsDetailsPage } from './incorporations-details-page';
 
 const styles = theme => ({});
@@ -173,10 +173,14 @@ const mapStateToProps = (state, props) => {
 	const { companyCode, countryCode, templateId } = props.match.params;
 	const notAuthenticated = false;
 	return {
-		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
-		treaties: incorporationsSelectors.getTaxTreaties(state, countryCode),
-		country: incorporationsSelectors.getCountry(state, countryCode),
-		isLoading: incorporationsSelectors.getLoading(state),
+		program: marketplaceSelectors.selectInventoryItemByFilter(
+			state,
+			'incorporations',
+			c => c.data.companyCode === companyCode
+		),
+		treaties: marketplaceSelectors.selectTaxTreatiesByCountryCode(state, countryCode),
+		country: marketplaceSelectors.selectCountryByCode(state, countryCode),
+		isLoading: marketplaceSelectors.isLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(

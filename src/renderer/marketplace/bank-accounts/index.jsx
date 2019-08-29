@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { featureIsEnabled } from 'common/feature-flags';
-import { ordersOperations } from 'common/marketplace/orders';
+// import { featureIsEnabled } from 'common/feature-flags';
+// import { ordersOperations } from 'common/marketplace/orders';
 import { marketplaceOperations } from 'common/marketplace';
 import { BankAccountsTableContainer } from './list/offers-container';
 import { BankAccountsDetailContainer } from './details/details-container';
@@ -14,11 +14,7 @@ import { BankAccountsProcessStartedContainer } from './process-started/process-s
 
 class MarketplaceBankAccountsComponent extends Component {
 	async componentDidMount() {
-		if (featureIsEnabled('scheduler')) {
-			await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
-		} else {
-			await this.props.dispatch(ordersOperations.ordersLoadOperation());
-		}
+		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
 	}
 	render() {
 		const { path } = this.props.match;

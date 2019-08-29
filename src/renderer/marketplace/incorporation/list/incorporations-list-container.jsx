@@ -3,24 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { pricesSelectors } from 'common/prices';
+import { marketplaceSelectors } from 'common/marketplace';
 import { withStyles } from '@material-ui/core/styles';
-import { incorporationsSelectors } from 'common/incorporations';
 import { IncorporationsListPage } from './incorporations-list-page';
-import NoConnection from 'renderer/no-connection';
 
 const styles = theme => ({});
 const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
 const INCORPORATIONS_DETAIL_PATH = '/main/marketplace-incorporation/details';
 
 class IncorporationsListContainer extends Component {
-	componentDidMount() {
-		/*
-		if (!this.props.incorporations || !this.props.incorporations.length) {
-			this.props.dispatch(incorporationsOperations.loadIncorporationsOperation());
-		}
-		*/
-	}
-
 	onBackClick = () => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
 
 	onDetailsClick = jurisdiction => {
@@ -36,11 +27,7 @@ class IncorporationsListContainer extends Component {
 	activeJurisdiction = jurisdiction => jurisdiction.status === 'active';
 
 	render() {
-		const { isLoading, incorporations, keyRate, isError } = this.props;
-
-		if (!isLoading && isError) {
-			return <NoConnection onBackClick={this.onBackClick} />;
-		}
+		const { isLoading, incorporations, keyRate } = this.props;
 
 		const data = incorporations.filter(this.activeJurisdiction);
 
@@ -59,15 +46,13 @@ class IncorporationsListContainer extends Component {
 IncorporationsListContainer.propTypes = {
 	incorporations: PropTypes.array,
 	isLoading: PropTypes.bool,
-	isError: PropTypes.any,
 	keyRate: PropTypes.number
 };
 
 const mapStateToProps = (state, props) => {
 	return {
-		incorporations: incorporationsSelectors.getMainIncorporationsWithTaxes(state),
-		isLoading: incorporationsSelectors.getLoading(state),
-		isError: incorporationsSelectors.getError(state),
+		incorporations: marketplaceSelectors.selectInventoryForCategory(state, 'incorporations'),
+		isLoading: marketplaceSelectors.isLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
 	};
 };

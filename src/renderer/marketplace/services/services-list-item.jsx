@@ -100,6 +100,7 @@ const styles = theme => ({
 
 export const MarketplaceServicesListItem = withStyles(styles)(
 	({
+		id,
 		classes,
 		children,
 		name,
@@ -197,7 +198,7 @@ export const MarketplaceServicesListItem = withStyles(styles)(
 						variant="text"
 						color={status === 'Inactive' ? 'secondary' : 'primary'}
 						className={classes.button}
-						onClick={() => (viewAction ? viewAction(name) : '')}
+						onClick={() => (viewAction ? viewAction(id) : '')}
 					>
 						{getButtonText(status)}
 					</Button>

@@ -1,4 +1,4 @@
-import * as serviceSelectors from '../exchanges/selectors';
+import { marketplaceSelectors } from '../marketplace';
 import * as walletSelectors from '../wallet/selectors';
 import { appSelectors } from '../app';
 import { identitySelectors } from '../identity';
@@ -76,10 +76,10 @@ export const kycSelectors = {
 		if (rpName === 'incorporations') {
 			service = { ...incorporationsRPDetails };
 		} else {
-			service = serviceSelectors.getServiceDetails(state, rpName);
+			service = marketplaceSelectors.selectRPDetails(state, rpName);
 		}
 
-		const rpConfig = service.relying_party_config;
+		const rpConfig = service.relying_party_config || service.relyingPartyConfig;
 
 		return service.status === 'Active' && rpConfig;
 	},
@@ -328,9 +328,9 @@ const loadRelyingPartyOperation = (
 	if (rpName === 'incorporations') {
 		rp = { ...incorporationsRPDetails };
 	} else {
-		rp = serviceSelectors.getServiceDetails(getState(), rpName);
+		rp = marketplaceSelectors.getRPDetails(getState(), rpName);
 	}
-	const config = rp.relying_party_config;
+	const config = rp.relying_party_config || rp.relyingPartyConfig;
 
 	try {
 		await dispatch(kycActions.setCancelRoute(cancelRoute));
