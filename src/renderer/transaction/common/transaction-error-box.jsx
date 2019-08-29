@@ -7,7 +7,7 @@ const styles = theme => ({});
 
 export const TransactionErrorBox = withStyles(styles)(
 	({ children, publicKey, closeAction, open = true, subtitle }) => (
-		<Popup open={open} closeAction={closeAction} text="Transaction Confirmation">
+		<Popup open={open} closeAction={closeAction} text="Transaction Notice">
 			<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 				<Grid item xs={2}>
 					<WarningShieldIcon />
