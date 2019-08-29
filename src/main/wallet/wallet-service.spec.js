@@ -19,6 +19,7 @@ describe('WalletService', () => {
 						create: () => {},
 						encrypt: () => {},
 						decrypt: () => {},
+						privateKeyToAccount: () => {},
 						wallet: {
 							add: () => {}
 						}
@@ -136,9 +137,65 @@ describe('WalletService', () => {
 		});
 	});
 
-	xdescribe('unlockWalletWithNewFile');
-	xdescribe('unlockWalletWithPrivateKey');
-	xdescribe('unlockWalletWithAddress');
+	describe('unlockWalletWithNewFile', () => {
+		it('should unlock wallet with new file', async () => {
+			sinon.stub(fs.promises, 'readFile').resolves({
+				keystore: 'test',
+				toString() {
+					return 'testKeystore';
+				}
+			});
+			sinon
+				.stub(web3Service.web3.eth.accounts, 'decrypt')
+				.returns({ address: 'testAddress', privateKey: 'testPrivate' });
+			sinon.stub(web3Service.web3.eth.accounts.wallet, 'add');
+			sinon.stub(path, 'resolve').returns('testPath/test');
+			sinon.stub(fs.promises, 'copyFile').resolves('ok');
+			sinon.stub(Wallet, 'findByAddress').resolves({ id: 1 });
+			const ret = await walletService.unlockWalletWithNewFile('testPath1', 'test');
+
+			expect(web3Service.web3.eth.accounts.wallet.add.getCall(0).args).toEqual([
+				{ address: 'testAddress', privateKey: 'testPrivate' }
+			]);
+			expect(web3Service.web3.eth.defaultAccount).toBe('testAddress');
+			expect(ret).toEqual({
+				id: 1,
+				address: 'testAddress',
+				privateKey: 'testPrivate',
+				keystoreFilePath: 'testPath/test'
+			});
+		});
+	});
+	describe('unlockWalletWithPrivateKey', () => {
+		it('should unlock wallet with private key', async () => {
+			sinon
+				.stub(web3Service.web3.eth.accounts, 'privateKeyToAccount')
+				.returns({ address: 'testAddress', privateKey: 'testPrivate' });
+			sinon.stub(web3Service.web3.eth.accounts.wallet, 'add');
+			sinon.stub(Wallet, 'findByAddress').resolves({ id: 1 });
+			const ret = await walletService.unlockWalletWithPrivateKey('testPrivate');
+
+			expect(web3Service.web3.eth.accounts.wallet.add.getCall(0).args).toEqual([
+				{ address: 'testAddress', privateKey: 'testPrivate' }
+			]);
+			expect(web3Service.web3.eth.defaultAccount).toBe('testAddress');
+			expect(ret).toEqual({
+				id: 1,
+				address: 'testAddress',
+				privateKey: 'testPrivate'
+			});
+		});
+	});
+	describe('unlockWalletWithAddress', () => {
+		it('should unlock wallet with address', async () => {
+			sinon.stub(Wallet, 'findByAddress').resolves({ id: 1 });
+			const ret = await walletService.unlockWalletWithAddress('testAddress');
+			expect(web3Service.web3.eth.defaultAccount).toBe('testAddress');
+			expect(ret).toEqual({
+				id: 1
+			});
+		});
+	});
 	xdescribe('_getWallets');
 	xdescribe('updateWalletName');
 	xdescribe('getLedgerWallets');

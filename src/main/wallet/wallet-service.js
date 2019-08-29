@@ -1,9 +1,7 @@
 import { Logger } from 'common/logger';
-import { getGlobalContext } from 'common/context';
 import { Wallet } from './wallet';
 import fs from 'fs';
 import path from 'path';
-import { formatDataUrl, bufferFromDataUrl } from 'common/utils/document';
 import EthUnits from 'common/utils/eth-units';
 import * as EthUtil from 'ethereumjs-util';
 
@@ -110,7 +108,7 @@ export class WalletService {
 		}
 
 		const keystoreFileFullPath = path.resolve(
-			getGlobalContext().config.walletsDirectoryPath,
+			this.config.walletsDirectoryPath,
 			account.address
 		);
 
@@ -128,7 +126,6 @@ export class WalletService {
 
 		const newWallet = {
 			...wallet,
-			profilePicture: formatDataUrl(wallet.profilePicture),
 			address: account.address,
 			privateKey: account.privateKey,
 			keystoreFilePath: keystoreFileFullPath
@@ -156,7 +153,6 @@ export class WalletService {
 
 		const newWallet = {
 			...wallet,
-			profilePicture: formatDataUrl(wallet.profilePicture),
 			address: account.address,
 			privateKey: account.privateKey
 		};
@@ -200,32 +196,10 @@ export class WalletService {
 		});
 	}
 
-	updateWalletAvatar(avatar, id) {
-		return Wallet.updateProfilePicture({
-			id,
-			profilePicture: bufferFromDataUrl(avatar)
-		});
-	}
-
 	updateWalletName(name, id) {
 		return Wallet.updateName({
 			id,
 			name: name
-		});
-	}
-
-	updateWalletSetup(setup, id) {
-		return Wallet.updateSetup({
-			id,
-			setup: setup
-		});
-	}
-
-	async updateDID(id, did) {
-		did = did.replace('did:selfkey:', '');
-		return Wallet.updateDID({
-			id,
-			did
 		});
 	}
 
