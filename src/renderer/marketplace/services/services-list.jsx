@@ -1,8 +1,6 @@
 import React from 'react';
-
 import {
 	Grid,
-	Button,
 	withStyles,
 	Typography,
 	Table,
@@ -10,20 +8,18 @@ import {
 	TableBody,
 	TableCell
 } from '@material-ui/core';
-import { LargeTableHeadRow } from 'selfkey-ui';
+import { LargeTableHeadRow, BackButton } from 'selfkey-ui';
 import { MarketplaceServicesListItem } from './services-list-item';
 
 const styles = theme => ({
 	wrapper: {
 		width: '1080px'
 	},
-
 	'@media screen and (min-width: 1230px)': {
 		wrapper: {
 			width: '1140px'
 		}
 	},
-
 	header: {
 		borderBottom: 'solid 1px #475768',
 		'& h1': {
@@ -32,14 +28,12 @@ const styles = theme => ({
 		width: '100%',
 		height: '120px'
 	},
-
 	headerContent: {
 		marginTop: '50px',
 		display: 'flex',
 		flexDirection: 'row',
 		flexWrap: 'nowrap'
 	},
-
 	content: {
 		marginTop: '30px',
 		margin: 0,
@@ -48,7 +42,6 @@ const styles = theme => ({
 			padding: '0 15px'
 		}
 	},
-
 	button: {
 		color: '#93b0c1',
 		borderColor: '#3b4a5a',
@@ -56,26 +49,16 @@ const styles = theme => ({
 			color: '#48565f'
 		}
 	},
-
-	bold: {
-		fontWeight: 600
-	},
-
 	backButtonContainer: {
-		left: '75px',
-		position: 'absolute',
 		top: '120px'
 	},
-
 	listContent: {
 		margin: 0,
 		width: '100%'
 	},
-
 	icon: {
 		padding: 0
 	},
-
 	unlockIcon: {
 		marginRight: '10px'
 	}
@@ -106,13 +89,7 @@ export const MarketplaceServicesList = withStyles(styles)(
 	({ classes, children, category, items, backAction, viewAction }) => (
 		<Grid container>
 			<Grid item>
-				<div className={classes.backButtonContainer}>
-					<Button variant="outlined" color="secondary" size="small" onClick={backAction}>
-						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
-							‹ Back
-						</Typography>
-					</Button>
-				</div>
+				<BackButton onclick={backAction} />
 			</Grid>
 			<Grid item>
 				<Grid

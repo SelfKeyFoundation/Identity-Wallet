@@ -12,7 +12,14 @@ import {
 	Modal,
 	IconButton
 } from '@material-ui/core';
-import { IdCardIcon, ModalWrap, KeyTooltip, TooltipArrow, InfoTooltip } from 'selfkey-ui';
+import {
+	IdCardIcon,
+	ModalWrap,
+	KeyTooltip,
+	TooltipArrow,
+	InfoTooltip,
+	BackButton
+} from 'selfkey-ui';
 import { connect } from 'react-redux';
 import history from 'common/store/history';
 import { identityOperations } from 'common/identity';
@@ -55,15 +62,6 @@ const styles = theme => ({
 	modalWrap: {
 		border: 'none',
 		backgroundColor: 'transparent'
-	},
-	backButtonContainer: {
-		left: '40px',
-		position: 'absolute',
-		top: '40px',
-		zIndex: '1301'
-	},
-	bold: {
-		fontWeight: 600
 	},
 	tooltip: {
 		padding: '7px 0 0 10px'
@@ -153,18 +151,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 		const { classes } = this.props;
 		return (
 			<>
-				<div className={classes.backButtonContainer}>
-					<Button
-						variant="outlined"
-						color="secondary"
-						size="small"
-						onClick={this.handleBackClick}
-					>
-						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
-							‹ Back
-						</Typography>
-					</Button>
-				</div>
+				<BackButton onclick={this.handleBackClick} />
 				<Modal open={true}>
 					<ModalWrap className={classes.modalWrap}>
 						<Grid
