@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { BigNumber } from 'bignumber.js';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
@@ -10,6 +11,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
 import { BankingDetailsPage } from './details-page';
 import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
+import { getCryptoValue } from '../../../common/price-utils';
+import config from 'common/config';
 
 const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
@@ -74,18 +77,27 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 		return null;
 	};
 
+	priceInKEY = priceUSD => {
+		return new BigNumber(priceUSD).dividedBy(this.props.keyRate);
+	};
+
 	onApplyClick = () => {
-		const { rp, wallet } = this.props;
+		const { rp, wallet, accountType } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
+		const transactionNoKeyError = '/main/transaction-no-key-error';
 		const authenticated = true;
-
+		const keyPrice = this.priceInKEY(accountType.price);
+		const keyAvailable = new BigNumber(this.props.cryptoValue);
 		// When clicking the start process,
 		// we check if an authenticated kyc-chain session exists
 		// If it doesn't we trigger a new authenticated rp session
 		// and redirect to checkout route
 		// The loading state is used to disable the button while data is being loaded
 		this.setState({ loading: true }, async () => {
+			if (keyPrice.gt(keyAvailable)) {
+				return this.props.dispatch(push(transactionNoKeyError));
+			}
 			if (!wallet.isSetupFinished) {
 				return this.props.dispatch(push(selfkeyIdRequiredRoute));
 			}
@@ -183,6 +195,10 @@ BankAccountsDetailContainer.propTypes = {
 const mapStateToProps = (state, props) => {
 	const { accountCode, countryCode, templateId } = props.match.params;
 	const authenticated = true;
+	let primaryToken = {
+		...props,
+		cryptoCurrency: config.constants.primaryToken
+	};
 	return {
 		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
 		banks: bankAccountsSelectors.getDetailsByAccountCode(state, accountCode),
@@ -201,7 +217,8 @@ const mapStateToProps = (state, props) => {
 			templateId
 		),
 		wallet: walletSelectors.getWallet(state),
-		country: incorporationsSelectors.getCountry(state, countryCode)
+		country: incorporationsSelectors.getCountry(state, countryCode),
+		cryptoValue: getCryptoValue(state, primaryToken)
 	};
 };
 
