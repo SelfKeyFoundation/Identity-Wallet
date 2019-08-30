@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
-import { withStyles, Grid, Typography } from '@material-ui/core';
-import { MenuNewIcon, DropdownIcon, PersonIcon } from 'selfkey-ui';
+import {
+	withStyles,
+	Grid
+	// Typography
+} from '@material-ui/core';
+import {
+	MenuNewIcon
+	// DropdownIcon,
+	// PersonIcon
+} from 'selfkey-ui';
 import PriceBox from '../../price-box';
 import Sidebar from './sidebar';
 import config from 'common/config';
@@ -102,6 +110,7 @@ class Toolbar extends Component {
 							</Grid>
 						</Grid>
 					</Grid>
+					{/* PROFILE SWITCH - DROPDOWN
 					<Grid item xs={2} style={{ minWidth: '240px' }}>
 						<Grid container wrap="nowrap">
 							<Grid item className={classes.sepVertContainer}>
@@ -135,7 +144,7 @@ class Toolbar extends Component {
 								</Grid>
 							</Grid>
 						</Grid>
-					</Grid>
+					</Grid> */}
 				</Grid>
 			</div>
 		);
