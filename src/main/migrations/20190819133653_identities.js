@@ -32,14 +32,7 @@ exports.up = async (knex, Promise) => {
 			});
 			return acc;
 		}, []);
-		if (!identities.length) {
-			return;
-		}
-		await knex('identities').insert(identities);
 		await knex.schema.renameTable('id_attributes', 'id_attributes_old');
-
-		let attributesOld = await knex('id_attributes_old').select();
-
 		await knex.schema.createTable('id_attributes', t => {
 			t.increments('id');
 			t.integer('identityId')
@@ -55,6 +48,13 @@ exports.up = async (knex, Promise) => {
 			t.integer('createdAt').notNullable();
 			t.integer('updatedAt');
 		});
+
+		if (!identities.length) {
+			return;
+		}
+		await knex('identities').insert(identities);
+
+		let attributesOld = await knex('id_attributes_old').select();
 
 		identities = await knex('identities').select();
 
