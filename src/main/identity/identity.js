@@ -1,4 +1,5 @@
 import { Model } from 'objection';
+import IdAttribute from './id-attribute';
 import BaseModel from '../common/base-model';
 const TABLE_NAME = 'identities';
 
@@ -23,6 +24,7 @@ export class Identity extends BaseModel {
 
 	static get relationMappings() {
 		const Wallet = require('../wallet/wallet').default;
+		const IdAttribute = require('./id-attribute').default;
 		return {
 			wallet: {
 				relation: Model.BelongsToOneRelation,
@@ -30,6 +32,14 @@ export class Identity extends BaseModel {
 				join: {
 					from: `${this.tableName}.walletId`,
 					to: `${Wallet.tableName}.id`
+				}
+			},
+			attributes: {
+				relation: Model.HasManyRelation,
+				modelClass: IdAttribute,
+				join: {
+					from: `${this.tableName}.id`,
+					to: `${IdAttribute.tableName}.identityId`
 				}
 			}
 		};
@@ -79,6 +89,16 @@ export class Identity extends BaseModel {
 	static async updateDID({ id, did }) {
 		let identity = await this.query().patchAndFetchById(id, { did });
 		return identity;
+	}
+
+	static async addInitialIdAttributesAndActivate(id, initialIdAttributesValues) {
+		for (let key in initialIdAttributesValues) {
+			await IdAttribute.create({
+				identityId: id,
+				typeId: 1,
+				data: { [key]: initialIdAttributesValues[key] }
+			});
+		}
 	}
 }
 

@@ -58,8 +58,8 @@ export class IdentityService {
 		);
 	}
 
-	async loadDocuments(walletId) {
-		let docs = await Document.findAllByWalletId(walletId);
+	async loadDocuments(identityId) {
+		let docs = await Document.findAllByIdentityId(identityId);
 		return docs.map(doc => {
 			doc = doc.toJSON();
 			if (doc.buffer) {
@@ -70,8 +70,8 @@ export class IdentityService {
 		});
 	}
 
-	loadIdAttributes(walletId) {
-		return IdAttribute.findAllByWalletId(walletId);
+	loadIdAttributes(identityId) {
+		return IdAttribute.findAllByIdentityId(identityId);
 	}
 
 	async loadDocumentsForAttribute(attributeId) {

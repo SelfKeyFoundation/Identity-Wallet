@@ -54,16 +54,16 @@ describe('IdentityService', () => {
 	});
 
 	it('loadDocuments', async () => {
-		sinon.stub(Document, 'findAllByWalletId').resolves([]);
+		sinon.stub(Document, 'findAllByIdentityId').resolves([]);
 		let res = await service.loadDocuments(1);
-		expect(Document.findAllByWalletId.calledOnceWith(1)).toBeTruthy();
+		expect(Document.findAllByIdentityId.calledOnceWith(1)).toBeTruthy();
 		expect(res).toEqual([]);
 	});
 
 	it('loadIdAttributes', async () => {
-		sinon.stub(IdAttribute, 'findAllByWalletId').resolves('ok');
+		sinon.stub(IdAttribute, 'findAllByIdentityId').resolves('ok');
 		let res = await service.loadIdAttributes(1);
-		expect(IdAttribute.findAllByWalletId.calledOnceWith(1)).toBeTruthy();
+		expect(IdAttribute.findAllByIdentityId.calledOnceWith(1)).toBeTruthy();
 		expect(res).toEqual('ok');
 	});
 

@@ -53,9 +53,9 @@ describe('Document model', () => {
 		expect(dataUrl).toBe(`data:${testDoc.mimeType};base64,${base64}`);
 	});
 
-	it('findAllByWalletId', async () => {
+	it('findAllByIdentityId', async () => {
 		await IdAttribute.create({
-			walletId: 1,
+			identityId: 1,
 			typeId: 1,
 			documents: [
 				{
@@ -67,7 +67,7 @@ describe('Document model', () => {
 			]
 		});
 		await IdAttribute.create({
-			walletId: 2,
+			identityId: 2,
 			typeId: 1,
 			documents: [
 				{
@@ -79,7 +79,7 @@ describe('Document model', () => {
 			]
 		});
 		await IdAttribute.create({
-			walletId: 1,
+			identityId: 1,
 			typeId: 1,
 			documents: [
 				{
@@ -90,11 +90,11 @@ describe('Document model', () => {
 				}
 			]
 		});
-		let docs = await Document.findAllByWalletId(1);
+		let docs = await Document.findAllByIdentityId(1);
 		expect(docs.length).toBe(2);
 		expect(docs[0].name).toBe('test1');
 		expect(docs[1].name).toBe('test3');
-		docs = await Document.findAllByWalletId(2);
+		docs = await Document.findAllByIdentityId(2);
 		expect(docs.length).toBe(1);
 		expect(docs[0].name).toBe('test2');
 	});
