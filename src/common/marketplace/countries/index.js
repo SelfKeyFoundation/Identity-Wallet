@@ -59,7 +59,7 @@ export const countriesSelectors = {
 			.selectCountriesRoot(state)
 			.all.map(id => countriesSelectors.selectCountriesRoot(state).byId[id]),
 	selectCountryByCode: (state, countryCode) =>
-		countriesSelectors.selectCountries(state).filter(c => c.countryCode === countryCode)
+		countriesSelectors.selectCountries(state).find(c => c.code === countryCode)
 };
 
 export default reducer;

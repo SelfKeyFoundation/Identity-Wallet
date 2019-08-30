@@ -51,7 +51,7 @@ IncorporationsListContainer.propTypes = {
 
 const mapStateToProps = (state, props) => {
 	return {
-		incorporations: marketplaceSelectors.selectInventoryForCategory(state, 'incorporations'),
+		incorporations: marketplaceSelectors.selectIncorporations(state),
 		isLoading: marketplaceSelectors.isLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
 	};

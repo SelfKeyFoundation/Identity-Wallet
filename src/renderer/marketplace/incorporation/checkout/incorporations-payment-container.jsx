@@ -6,7 +6,7 @@ import { featureIsEnabled } from 'common/feature-flags';
 import { getWallet } from 'common/wallet/selectors';
 import { kycSelectors } from 'common/kyc';
 import { pricesSelectors } from 'common/prices';
-import { incorporationsSelectors } from 'common/incorporations';
+import { marketplaceSelectors } from 'common/marketplace';
 import { ordersOperations } from 'common/marketplace/orders';
 import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorporations-component';
 
@@ -59,7 +59,10 @@ const mapStateToProps = (state, props) => {
 	const { companyCode } = props.match.params;
 	const authenticated = true;
 	return {
-		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
+		program: marketplaceSelectors.selectIncorporationByFilter(
+			state,
+			c => c.data.companyCode === companyCode
+		),
 		publicKey: getWallet(state).publicKey,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		currentApplication: kycSelectors.selectCurrentApplication(state),

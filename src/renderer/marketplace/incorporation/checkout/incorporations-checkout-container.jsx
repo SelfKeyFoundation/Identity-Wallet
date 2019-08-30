@@ -11,7 +11,7 @@ import { getWallet } from 'common/wallet/selectors';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
-import { incorporationsSelectors } from 'common/incorporations';
+import { marketplaceSelectors } from 'common/marketplace';
 import { PaymentCheckout } from '../../common/payment-checkout';
 import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorporations-component';
 
@@ -86,6 +86,7 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 	onStartClick = async () => {
 		const { program } = this.props;
 		const { templateId } = this.props.match.params;
+		const { region } = program.data;
 
 		this.props.dispatch(
 			kycOperations.startCurrentApplicationOperation(
@@ -93,10 +94,8 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 				templateId,
 				this.payRoute(),
 				this.cancelRoute(),
-				`Incorporate in ${program.Region}`,
-				`You are about to begin the incorporation process in ${
-					program.Region
-				}. Please double check your
+				`Incorporate in ${region}`,
+				`You are about to begin the incorporation process in ${region}. Please double check your
 				required documents are Certified True or Notarized where necessary. Failure to do so
 				will result in delays in the incorporation process. You may also be asked to provide
 				more information by the service provider`,
@@ -113,13 +112,13 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 		const countryCode = this.props.match.params.countryCode;
 		return (
 			<PaymentCheckout
-				title={`Pay Incorporation Fee: ${program.Region}`}
-				description={program.wallet_description}
-				timeToForm={program['Time to form (weeks)']}
+				title={`Pay Incorporation Fee: ${program.data.region}`}
+				description={program.data.walletDescription}
+				timeToForm={program.data.timeToFormWeeks}
 				program={program}
 				countryCode={countryCode}
 				{...this.getPaymentParameters()}
-				options={program.checkoutOptions}
+				options={program.data.checkoutOptions}
 				price={program.price}
 				onBackClick={this.onBackClick}
 				onStartClick={this.onStartClick}
@@ -142,7 +141,10 @@ const mapStateToProps = (state, props) => {
 	const { companyCode } = props.match.params;
 	const authenticated = true;
 	return {
-		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
+		program: marketplaceSelectors.selectIncorporationByFilter(
+			state,
+			c => c.data.companyCode === companyCode
+		),
 		...getLocale(state),
 		...getFiatCurrency(state),
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),

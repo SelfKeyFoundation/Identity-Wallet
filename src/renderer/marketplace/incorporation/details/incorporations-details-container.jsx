@@ -7,7 +7,6 @@ import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { walletSelectors } from 'common/wallet';
 import { withStyles } from '@material-ui/core/styles';
-// import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
 import { marketplaceSelectors } from 'common/marketplace';
 import { IncorporationsDetailsPage } from './incorporations-details-page';
 
@@ -173,9 +172,8 @@ const mapStateToProps = (state, props) => {
 	const { companyCode, countryCode, templateId } = props.match.params;
 	const notAuthenticated = false;
 	return {
-		program: marketplaceSelectors.selectInventoryItemByFilter(
+		program: marketplaceSelectors.selectIncorporationByFilter(
 			state,
-			'incorporations',
 			c => c.data.companyCode === companyCode
 		),
 		treaties: marketplaceSelectors.selectTaxTreatiesByCountryCode(state, countryCode),
