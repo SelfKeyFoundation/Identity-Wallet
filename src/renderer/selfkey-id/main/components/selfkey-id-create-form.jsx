@@ -17,8 +17,8 @@ import {
 	ModalWrap,
 	KeyTooltip,
 	TooltipArrow,
-	InfoTooltip,
-	BackButton
+	BackButton,
+	InfoTooltip
 } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import history from 'common/store/history';
@@ -31,6 +31,19 @@ const styles = theme => ({
 		position: 'absolute',
 		top: '100px',
 		left: '20px'
+	},
+	backButtonContainer: {
+		left: '40px',
+		position: 'absolute',
+		top: '40px',
+		width: '100%',
+		zIndex: '1301',
+		'& div': {
+			left: '0 !important'
+		}
+	},
+	bold: {
+		fontWeight: 600
 	},
 	create: {
 		marginTop: '10px',
@@ -70,6 +83,14 @@ const styles = theme => ({
 		alignItems: 'baseline',
 		display: 'flex',
 		flexDirection: 'row'
+	},
+	bb: {
+		'& div': {
+			zIndex: 3000
+		},
+		'& button': {
+			zIndex: 3000
+		}
 	}
 });
 
@@ -151,7 +172,19 @@ class SelfKeyIdCreateFormComponent extends Component {
 		const { classes } = this.props;
 		return (
 			<>
-				<BackButton onclick={this.handleBackClick} />
+				<div className={classes.backButtonContainer}>
+					<BackButton onclick={this.handleBackClick} className={classes.bb} />
+					{/* <Button
+						variant="outlined"
+						color="secondary"
+						size="small"
+						onClick={this.handleBackClick}
+					>
+						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
+							‹ Back
+						</Typography>
+					</Button> */}
+				</div>
 				<Modal open={true}>
 					<ModalWrap className={classes.modalWrap}>
 						<Grid
