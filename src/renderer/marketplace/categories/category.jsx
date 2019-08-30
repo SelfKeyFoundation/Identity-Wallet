@@ -34,7 +34,7 @@ const styles = theme => ({
 	},
 
 	body: {
-		width: '320px',
+		width: '300px',
 		textAlign: 'left',
 		margin: '20px',
 		color: '#fff',
