@@ -4,12 +4,16 @@ import { Document } from './document';
 import { IdAttribute } from './id-attribute';
 import { formatDataUrl, bufferFromDataUrl } from 'common/utils/document';
 import { UiSchema } from './ui-schema';
+import { Identity } from './identity';
 
 import { Logger } from 'common/logger';
 
 const log = new Logger('identity-service');
 
 export class IdentityService {
+	loadIdentities(walletId) {
+		return Identity.findAllByWalletId(walletId);
+	}
 	loadRepositories() {
 		return Repository.findAll();
 	}

@@ -82,11 +82,11 @@ const selectDocuments = state =>
 		.selectIdentity(state)
 		.documents.map(docId => identitySelectors.selectIdentity(state).documentsById[docId]);
 
-const selectIdAttributes = (state, walletId) =>
+const selectIdAttributes = (state, identityId) =>
 	identitySelectors
 		.selectIdentity(state)
 		.attributes.map(attrId => identitySelectors.selectIdentity(state).attributesById[attrId])
-		.filter(attr => attr.walletId === walletId);
+		.filter(attr => attr.identityId === identityId);
 
 const selectDocumentsByAttributeIds = (state, attributeIds = null) =>
 	identitySelectors.selectDocuments(state).reduce((acc, curr) => {
@@ -101,13 +101,13 @@ const selectUiSchema = (state, typeId, repositoryId) =>
 		schema => schema.repositoryId === repositoryId && typeId === schema.attributeTypeId
 	);
 
-const selectFullIdAttributesByIds = (state, walletId, attributeIds = null) => {
+const selectFullIdAttributesByIds = (state, identityId, attributeIds = null) => {
 	const identity = identitySelectors.selectIdentity(state);
 	const documents = selectDocumentsByAttributeIds(state, attributeIds);
 	const types = identity.idAtrributeTypesById;
 
 	return identitySelectors
-		.selectIdAttributes(state, walletId)
+		.selectIdAttributes(state, identityId)
 		.filter(attr => !attributeIds || attributeIds.includes(attr.id))
 		.map(attr => {
 			const type = types[attr.typeId];
@@ -133,7 +133,7 @@ const selectFullIdAttributesByIds = (state, walletId, attributeIds = null) => {
 
 const selectSelfkeyId = state => {
 	const wallet = walletSelectors.getWallet(state);
-
+	// TODO: XXX switch wallet to identity
 	const allAttributes = identitySelectors.selectFullIdAttributesByIds(state, wallet.id);
 
 	// FIXME: all base attribute types should be rendered (even if not created yet)

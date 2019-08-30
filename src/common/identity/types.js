@@ -32,7 +32,11 @@ export const identityTypes = {
 	PROFILE_PICTURE_UPDATE: 'identity/profile-picture/update',
 	IDENTITY_COUNTRIES_LOAD: 'identity/countries/load',
 	IDENTITY_COUNTRIES_SET: 'identity/countries/set',
-	IDENTITY_SELFKEY_ID_CREATE: 'identity/selfkey-id/CREATE'
+	IDENTITY_SELFKEY_ID_CREATE: 'identity/selfkey-id/CREATE',
+	IDENTITIES_SET: 'identities/SET',
+	IDENTITY_ADD: 'identity/ADD',
+	IDENTITY_UPDATE: 'identity/UPDATE',
+	IDENTITIES_LOAD: 'identities/LOAD'
 };
 
 export default identityTypes;

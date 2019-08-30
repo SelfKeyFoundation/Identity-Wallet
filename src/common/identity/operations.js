@@ -51,17 +51,17 @@ const updateExpiredUiSchemasOperation = () => async (dispatch, getState) => {
 	await dispatch(operations.loadUiSchemasOperation());
 };
 
-const loadDocumentsOperation = walletId => async (dispatch, getState) => {
+const loadDocumentsOperation = identityId => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
-	let documents = await identityService.loadDocuments(walletId);
-	documents = documents.map(doc => ({ ...doc, walletId }));
-	await dispatch(identityActions.setDocumentsAction(walletId, documents));
+	let documents = await identityService.loadDocuments(identityId);
+	documents = documents.map(doc => ({ ...doc, identityId }));
+	await dispatch(identityActions.setDocumentsAction(identityId, documents));
 };
 
-const loadIdAttributesOperation = walletId => async (dispatch, getState) => {
+const loadIdAttributesOperation = identityId => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
-	let attributes = await identityService.loadIdAttributes(walletId);
-	await dispatch(identityActions.setIdAttributesAction(walletId, attributes));
+	let attributes = await identityService.loadIdAttributes(identityId);
+	await dispatch(identityActions.setIdAttributesAction(identityId, attributes));
 };
 
 const loadDocumentsForAttributeOperation = attrId => async (dispatch, getState) => {
@@ -78,6 +78,7 @@ const removeDocumentOperation = documentId => async (dispatch, getState) => {
 
 const createIdAttributeOperation = attribute => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
+	// TODO: XXX fix wallet selector
 	const wallet = walletSelectors.getWallet(getState());
 	const walletId = attribute.walletId || wallet.id;
 	attribute = { ...attribute, walletId };
@@ -100,17 +101,17 @@ const editIdAttributeOperation = attribute => async (dispatch, getState) => {
 	await dispatch(identityActions.updateIdAttributeAction(attribute));
 };
 
-const updateProfilePictureOperation = (picture, walletId) => (dispatch, getState) => {
-	return dispatch(walletOperations.updateWalletAvatar(picture, walletId));
+const updateProfilePictureOperation = (picture, identityId) => (dispatch, getState) => {
+	return dispatch(walletOperations.updateWalletAvatar(picture, identityId));
 };
 
-const lockIdentityOperation = walletId => async (dispatch, getState) => {
-	await dispatch(identityActions.deleteIdAttributesAction(walletId));
-	await dispatch(identityActions.deleteDocumentsAction(walletId));
+const lockIdentityOperation = identityId => async (dispatch, getState) => {
+	await dispatch(identityActions.deleteIdAttributesAction(identityId));
+	await dispatch(identityActions.deleteDocumentsAction(identityId));
 };
-const unlockIdentityOperation = walletId => async (dispatch, getState) => {
-	await dispatch(identityOperations.loadDocumentsOperation(walletId));
-	await dispatch(identityOperations.loadIdAttributesOperation(walletId));
+const unlockIdentityOperation = identityId => async (dispatch, getState) => {
+	await dispatch(identityOperations.loadDocumentsOperation(identityId));
+	await dispatch(identityOperations.loadIdAttributesOperation(identityId));
 };
 
 const createSelfkeyIdOperation = (walletId, data) => async (dispatch, getState) => {
@@ -118,6 +119,7 @@ const createSelfkeyIdOperation = (walletId, data) => async (dispatch, getState) 
 	const getTypeId = url => {
 		return idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
 	};
+	// TODO: XXX update to entity operations
 	await dispatch(walletOperations.updateWalletName(data.nickName, walletId));
 
 	await dispatch(
@@ -149,6 +151,12 @@ const createSelfkeyIdOperation = (walletId, data) => async (dispatch, getState) 
 	await dispatch(push('/selfkeyIdCreateAbout'));
 };
 
+const loadIdentitiesOperation = walletId => async (dispatch, getState) => {
+	let identityService = getGlobalContext().identityService;
+	let identities = await identityService.loadIdentities(walletId);
+	return dispatch(identityActions.setIdentitiesAction(identities));
+};
+
 export const operations = {
 	loadCountriesOperation,
 	loadRepositoriesOperation,
@@ -167,7 +175,8 @@ export const operations = {
 	unlockIdentityOperation,
 	lockIdentityOperation,
 	updateProfilePictureOperation,
-	createSelfkeyIdOperation
+	createSelfkeyIdOperation,
+	loadIdentitiesOperation
 };
 
 export const identityOperations = {
@@ -243,6 +252,10 @@ export const identityOperations = {
 	createSelfkeyIdOperation: createAliasedAction(
 		identityTypes.IDENTITY_SELFKEY_ID_CREATE,
 		operations.createSelfkeyIdOperation
+	),
+	loadIdentitiesOperation: createAliasedAction(
+		identityTypes.IDENTITIES_LOAD,
+		operations.loadIdentitiesOperation
 	)
 };
 

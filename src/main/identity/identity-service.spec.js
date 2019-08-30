@@ -4,6 +4,7 @@ import { IdentityService } from './identity-service';
 import { IdAttributeType } from './id-attribute-type';
 import { Document } from './document';
 import { IdAttribute } from './id-attribute';
+import { Identity } from './identity';
 
 describe('IdentityService', () => {
 	let service = null;
@@ -12,6 +13,8 @@ describe('IdentityService', () => {
 		service = new IdentityService();
 		sinon.restore();
 	});
+
+	let identities = [{ id: 1, name: 'test1' }, { id: 2, name: 'test2' }, { id: 3, name: 'test3' }];
 
 	let repositories = [
 		{ id: 1, url: 'test', expires: Date.now() - 3000 },
@@ -24,6 +27,12 @@ describe('IdentityService', () => {
 		{ id: 2, url: 'test2', expires: Date.now() + 50000 },
 		{ id: 3, url: 'test3', expires: Date.now() - 3000 }
 	];
+
+	it('loadIdentities', async () => {
+		sinon.stub(Identity, 'findAllByWalletId').resolves(identities);
+		let loaded = await service.loadIdentities(1);
+		expect(loaded).toEqual(identities);
+	});
 
 	it('loadRepositories', async () => {
 		sinon.stub(Repository, 'findAll').resolves(repositories);
