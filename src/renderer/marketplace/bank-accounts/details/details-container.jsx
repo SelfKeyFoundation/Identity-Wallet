@@ -7,9 +7,8 @@ import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { walletSelectors } from 'common/wallet';
 import { withStyles } from '@material-ui/core/styles';
-import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
 import { BankingDetailsPage } from './details-page';
-import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
+import { marketplaceSelectors } from 'common/marketplace';
 
 const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
@@ -21,21 +20,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	async componentDidMount() {
-		const { accountType, country } = this.props;
-
-		if (!accountType) {
-			await this.props.dispatch(bankAccountsOperations.loadBankAccountsOperation());
-		}
-
-		await this.loadRelyingParty({ rp: 'incorporations', authenticated: false });
-
-		if (!country) {
-			this.props.dispatch(
-				incorporationsOperations.loadIncorporationsCountryOperation(
-					this.props.match.params.countryCode
-				)
-			);
-		}
+		await this.loadRelyingParty({ rp: 'banking', authenticated: false });
 	}
 
 	manageApplicationsRoute = () => {
@@ -108,35 +93,36 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	buildResumeData = banks => {
+		const data = banks[0].data;
 		return [
 			[
 				{
 					name: 'Min. Initial Deposit',
-					value: banks[0].minInitialDeposit,
+					value: data.minDeposit,
 					highlighted: true
 				},
 				{
 					name: 'Min. Monthly Balance',
-					value: banks[0].minMonthlyBalance,
+					value: data.minMonthlyBalance,
 					highlighted: true
 				}
 			],
 			[
 				{
 					name: 'Personal Visit Required',
-					value: banks[0].personalVisitRequired ? 'Yes' : 'No',
+					value: data.personalVisitRequired ? 'Yes' : 'No',
 					highlighted: true
 				},
 				{
 					name: 'Time to open',
-					value: banks[0].timeToOpen,
+					value: data.timeToOpen,
 					highlighted: true
 				}
 			],
 			[
 				{
 					name: 'Cards',
-					value: banks[0].cards.join(' '),
+					value: data.cards ? data.cards.join(' ') : '',
 					highlighted: true
 				}
 			]
@@ -144,15 +130,17 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	render() {
-		const { accountType, banks, keyRate, jurisdiction, kycRequirements, country } = this.props;
-		const { price, countryCode, region } = accountType;
+		const { banks, keyRate, kycRequirements, country } = this.props;
+		const bank = banks[0];
+		const { price } = bank;
+		const { region } = bank.data;
+		console.log(bank);
 		return (
 			<BankingDetailsPage
 				applicationStatus={this.getApplicationStatus()}
 				loading={this.state.loading || this.props.isLoading}
-				accountType={accountType}
 				country={country}
-				countryCode={countryCode}
+				countryCode={country.code}
 				price={price}
 				tab={this.state.tab}
 				onTabChange={this.onTabChange}
@@ -160,7 +148,6 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 				region={region}
 				banks={banks}
 				resume={this.buildResumeData(banks)}
-				jurisdiction={jurisdiction}
 				canOpenBankAccount={this.canApply(price)}
 				startApplication={this.onApplyClick}
 				kycRequirements={kycRequirements}
@@ -173,9 +160,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 }
 
 BankAccountsDetailContainer.propTypes = {
-	accountType: PropTypes.object,
 	banks: PropTypes.object,
-	jurisdictions: PropTypes.object,
 	isLoading: PropTypes.bool,
 	keyRate: PropTypes.number
 };
@@ -183,25 +168,24 @@ BankAccountsDetailContainer.propTypes = {
 const mapStateToProps = (state, props) => {
 	const { accountCode, countryCode, templateId } = props.match.params;
 	const authenticated = true;
+	console.log(state);
 	return {
-		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
-		banks: bankAccountsSelectors.getDetailsByAccountCode(state, accountCode),
-		jurisdiction: bankAccountsSelectors.getJurisdictionsByCountryCode(state, countryCode),
-		isLoading: bankAccountsSelectors.getLoading(state),
+		banks: marketplaceSelectors.selectBanksByAccountCode(state, accountCode),
+		country: marketplaceSelectors.selectCountryByCode(state, countryCode),
+		isLoading: marketplaceSelectors.isLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
-		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rp: kycSelectors.relyingPartySelector(state, 'flagtheory_banking'),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
-			'incorporations',
+			'flagtheory_banking',
 			authenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(
 			state,
-			'incorporations',
+			'flagtheory_banking',
 			templateId
 		),
-		wallet: walletSelectors.getWallet(state),
-		country: incorporationsSelectors.getCountry(state, countryCode)
+		wallet: walletSelectors.getWallet(state)
 	};
 };
 

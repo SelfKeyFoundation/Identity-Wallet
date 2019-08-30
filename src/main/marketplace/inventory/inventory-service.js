@@ -185,7 +185,7 @@ export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
 				return { ...acc, [details[field]]: details };
 			};
 			const jurisdictions = fetched.Jurisdictions.reduce(mapData('countryCode'), {});
-			const accDetails = fetched.Account_Details.reduce(mapData('accountCode'), {});
+			const accDetails = fetched.Account_Details.reduce(mapData('bankCode'), {});
 
 			const items = fetched.Main.map(itm =>
 				_.mapKeys(itm.data.fields, (value, key) => _.camelCase(key))
@@ -206,7 +206,12 @@ export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
 						data: {
 							...itm,
 							jurisdiction: jurisdictions[itm.countryCode] || {},
-							account: accDetails[itm.accountCode] || {}
+							accounts: Object.keys(accDetails)
+								.filter(key => accDetails[key].accountCode === itm.accountCode)
+								.reduce((obj, key) => {
+									obj[key] = accDetails[key];
+									return obj;
+								}, {})
 						}
 					};
 

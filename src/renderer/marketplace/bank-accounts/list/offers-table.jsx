@@ -107,9 +107,15 @@ const styles = theme => ({
 	}
 });
 
+const isPersonalVisitRequired = accounts => {
+	return Object.keys(accounts).reduce((required, accountId) => {
+		const account = accounts[accountId];
+		return required && account.personalVisitRequired;
+	}, true);
+};
+
 const BankingOffersRow = withStyles(styles)(({ classes, bank, onDetails, keyRate }) => {
 	const data = bank.data;
-	const account = data.account;
 	return (
 		<TableRow className={classes.tableRow}>
 			<TableCell className={classes.flagCell}>
@@ -138,7 +144,7 @@ const BankingOffersRow = withStyles(styles)(({ classes, bank, onDetails, keyRate
 				</Grid>
 			</TagTableCell>
 			<TableCell className={classes.personalVisitCell}>
-				{account.personalVisitRequired ? (
+				{isPersonalVisitRequired(data.accounts) ? (
 					<Typography variant="h6">Yes</Typography>
 				) : (
 					<Typography variant="h6">No</Typography>
@@ -157,7 +163,7 @@ const BankingOffersRow = withStyles(styles)(({ classes, bank, onDetails, keyRate
 });
 
 const BankingOffersTable = withStyles(styles)(
-	({ classes, keyRate, inventory = [], onDetails, className }) => {
+	({ classes, accountType, keyRate, inventory = [], onDetails, className }) => {
 		return (
 			<Table className={classNames(classes.table, className)}>
 				<TableHead>
@@ -207,6 +213,7 @@ const BankingOffersTable = withStyles(styles)(
 					{inventory.map(bank => (
 						<BankingOffersRow
 							bank={bank}
+							accountType={accountType}
 							key={bank.id}
 							keyRate={keyRate}
 							onDetails={onDetails}

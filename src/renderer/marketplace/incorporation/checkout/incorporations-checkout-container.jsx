@@ -34,32 +34,6 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 		}
 	};
 
-	getProgramOptions = options => {
-		if (!options) return [];
-		const strArray = options.split('-');
-
-		const optionsArray = strArray.map((text, idx) => {
-			if (!text) return false;
-
-			let price = text.match(/\(.*\)/);
-			let notes = text.match(/\[.*\]/);
-			const id = `options-${idx}`;
-
-			price = price ? price[0].replace('(', '').replace(')', '') : '';
-			price = price ? parseInt(price) : '';
-			notes = notes ? notes[0].replace('[', '').replace(']', '') : '';
-
-			let description = text
-				.replace(/\(.*\)/, '')
-				.replace(/\[.*\]/, '')
-				.trim();
-
-			return { price, notes, description, id };
-		});
-
-		return optionsArray.filter(el => el !== false);
-	};
-
 	getPaymentParameters() {
 		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency, program } = this.props;
 		const gasPrice = ethGasStationInfo.fast;
