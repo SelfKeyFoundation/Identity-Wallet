@@ -47,7 +47,7 @@ export const kycTypes = {
 
 const incorporationsRPDetails = {
 	name: 'Incorporations',
-	status: 'Active',
+	status: 'active',
 	description: 'Incorporations',
 	relying_party_config: {
 		rootEndpoint: config.incorporationsInstance,
@@ -80,8 +80,7 @@ export const kycSelectors = {
 		}
 
 		const rpConfig = service.relying_party_config || service.relyingPartyConfig;
-
-		return service.status === 'Active' && rpConfig;
+		return service.status === 'active' && rpConfig;
 	},
 	relyingPartyShouldUpdateSelector(state, rpName, authenticate = true) {
 		if (!this.relyingPartyIsActiveSelector(state, rpName)) return false;
@@ -328,9 +327,10 @@ const loadRelyingPartyOperation = (
 	if (rpName === 'incorporations') {
 		rp = { ...incorporationsRPDetails };
 	} else {
-		rp = marketplaceSelectors.getRPDetails(getState(), rpName);
+		rp = marketplaceSelectors.selectRPDetails(getState(), rpName);
 	}
 	const config = rp.relying_party_config || rp.relyingPartyConfig;
+	console.log(config);
 
 	try {
 		await dispatch(kycActions.setCancelRoute(cancelRoute));

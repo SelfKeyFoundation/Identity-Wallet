@@ -11,7 +11,6 @@ import { BankingDetailsPage } from './details-page';
 import { marketplaceSelectors } from 'common/marketplace';
 
 const styles = theme => ({});
-const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 
 class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	state = {
@@ -20,24 +19,10 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	async componentDidMount() {
-		await this.loadRelyingParty({ rp: 'banking', authenticated: false });
+		await this.loadRelyingParty({ rp: 'flagtheory_banking', authenticated: false });
 	}
 
-	manageApplicationsRoute = () => {
-		return `/main/selfkeyIdApplications`;
-	};
-
-	payRoute = () => {
-		const { countryCode, accountCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay/${accountCode}/${countryCode}/${templateId}`;
-	};
-
-	checkoutRoute = () => {
-		const { countryCode, accountCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/checkout/${accountCode}/${countryCode}/${templateId}`;
-	};
-
-	onBackClick = () => this.props.dispatch(push(MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH));
+	onBackClick = () => this.props.dispatch(push(this.listRoute()));
 
 	onTabChange = tab => this.setState({ tab });
 
@@ -80,7 +65,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 			if (!rp || !rp.authenticated) {
 				await this.props.dispatch(
 					kycOperations.loadRelyingParty(
-						'incorporations',
+						'flagtheory_banking',
 						authenticated,
 						this.checkoutRoute(),
 						this.cancelRoute()
@@ -92,37 +77,65 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 		});
 	};
 
-	buildResumeData = banks => {
-		const data = banks[0].data;
+	buildResumeData = data => {
+		const isPersonalVisitRequired = accounts => {
+			return Object.keys(accounts).reduce((required, accountId) => {
+				const account = accounts[accountId];
+				return required && account.personalVisitRequired;
+			}, true);
+		};
+
+		const maxFromCurrencyString = (accounts, field) => {
+			return Object.keys(accounts).reduce((current, accountId) => {
+				const account = accounts[accountId];
+				const item = Number(account[field].replace(/[^0-9.-]+/g, ''));
+				return current > item ? current : item;
+			}, 0);
+		};
+
+		const timeToOpen = (accounts, field = 'timeToOpen') => {
+			return Object.keys(accounts).reduce((current, accountId) => {
+				const account = accounts[accountId];
+				return current || account[field];
+			}, '');
+		};
+
+		const creditCards = (accounts, field = 'cards') => {
+			return Object.keys(accounts).reduce((current, accountId) => {
+				const account = accounts[accountId];
+				return current || (account[field] ? account[field].join(' ') : false);
+			}, '');
+		};
+
 		return [
 			[
 				{
 					name: 'Min. Initial Deposit',
-					value: data.minDeposit,
+					value: maxFromCurrencyString(data.accounts, 'minInitialDeposit'),
 					highlighted: true
 				},
 				{
 					name: 'Min. Monthly Balance',
-					value: data.minMonthlyBalance,
+					value: maxFromCurrencyString(data.accounts, 'minMonthlyBalance'),
 					highlighted: true
 				}
 			],
 			[
 				{
 					name: 'Personal Visit Required',
-					value: data.personalVisitRequired ? 'Yes' : 'No',
+					value: isPersonalVisitRequired(data.accounts) ? 'Yes' : 'No',
 					highlighted: true
 				},
 				{
 					name: 'Time to open',
-					value: data.timeToOpen,
+					value: timeToOpen(data.accounts),
 					highlighted: true
 				}
 			],
 			[
 				{
 					name: 'Cards',
-					value: data.cards ? data.cards.join(' ') : '',
+					value: creditCards(data.accounts),
 					highlighted: true
 				}
 			]
@@ -130,11 +143,9 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	render() {
-		const { banks, keyRate, kycRequirements, country } = this.props;
-		const bank = banks[0];
-		const { price } = bank;
-		const { region } = bank.data;
-		console.log(bank);
+		const { jurisdiction, keyRate, kycRequirements, country } = this.props;
+		const { price } = jurisdiction;
+		const { region } = jurisdiction.data;
 		return (
 			<BankingDetailsPage
 				applicationStatus={this.getApplicationStatus()}
@@ -146,8 +157,9 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 				onTabChange={this.onTabChange}
 				keyRate={keyRate}
 				region={region}
-				banks={banks}
-				resume={this.buildResumeData(banks)}
+				jurisdiction={jurisdiction}
+				banks={jurisdiction.data.accounts}
+				resume={this.buildResumeData(jurisdiction.data)}
 				canOpenBankAccount={this.canApply(price)}
 				startApplication={this.onApplyClick}
 				kycRequirements={kycRequirements}
@@ -168,9 +180,8 @@ BankAccountsDetailContainer.propTypes = {
 const mapStateToProps = (state, props) => {
 	const { accountCode, countryCode, templateId } = props.match.params;
 	const authenticated = true;
-	console.log(state);
 	return {
-		banks: marketplaceSelectors.selectBanksByAccountCode(state, accountCode),
+		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
 		country: marketplaceSelectors.selectCountryByCode(state, countryCode),
 		isLoading: marketplaceSelectors.isLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),

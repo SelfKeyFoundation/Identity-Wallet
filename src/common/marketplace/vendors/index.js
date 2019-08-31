@@ -75,7 +75,7 @@ export const vendorSelectors = {
 			lockPeriod: 2592000000,
 			amount: CONFIG.depositPriceOverride || 25,
 			name: vendorId,
-			relyingPartyConfig: vendor.relyingPartyConfig
+			...vendor
 		};
 	},
 	hasBalance: (state, vendorId) => {

@@ -1,5 +1,4 @@
 import { MarketplaceComponent } from '../../common/marketplace-component';
-import { incorporationsOperations } from 'common/incorporations';
 
 const MARKETPLACE_INCORPORATIONS_ROOT_PATH = '/main/marketplace-incorporation';
 
@@ -20,21 +19,18 @@ export default class MarketplaceIncorporationsComponent extends MarketplaceCompo
 	};
 
 	cancelRoute = () => {
-		const { countryCode, companyCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_INCORPORATIONS_ROOT_PATH}/details/${companyCode}/${countryCode}/${templateId}`;
+		const { companyCode, countryCode, templateId } = this.props.match.params;
+		return this.detailsRoute({ companyCode, countryCode, templateId });
 	};
 
-	listRoute = () => {
-		return MARKETPLACE_INCORPORATIONS_ROOT_PATH;
-	};
+	detailsRoute = ({ companyCode, countryCode, templateId }) =>
+		`${MARKETPLACE_INCORPORATIONS_ROOT_PATH}/details/${companyCode}/${countryCode}/${templateId}`;
 
-	rootPath = () => {
-		return this.listRoute();
-	};
+	listRoute = () => MARKETPLACE_INCORPORATIONS_ROOT_PATH;
 
-	manageApplicationsRoute = () => {
-		return `/main/selfkeyIdApplications`;
-	};
+	rootPath = () => this.listRoute();
+
+	manageApplicationsRoute = () => `/main/selfkeyIdApplications`;
 
 	getApplicationStatus = () => {
 		if (this.props.rp && this.props.rp.authenticated && this.userHasApplied()) {
@@ -46,34 +42,6 @@ export default class MarketplaceIncorporationsComponent extends MarketplaceCompo
 			return 'progress';
 		}
 		return null;
-	};
-
-	loadIncorporations = async () => {
-		if (!this.props.program) {
-			await this.props.dispatch(incorporationsOperations.loadIncorporationsOperation());
-		}
-	};
-
-	loadTreaties = async () => {
-		const { treaties } = this.props;
-		const { countryCode } = this.props.match.params;
-
-		if (!treaties || !treaties.length) {
-			this.props.dispatch(
-				await incorporationsOperations.loadIncorporationsTaxTreatiesOperation(countryCode)
-			);
-		}
-	};
-
-	loadCountry = async () => {
-		const { country } = this.props;
-		const { countryCode } = this.props.match.params;
-
-		if (!country) {
-			this.props.dispatch(
-				await incorporationsOperations.loadIncorporationsCountryOperation(countryCode)
-			);
-		}
 	};
 }
 

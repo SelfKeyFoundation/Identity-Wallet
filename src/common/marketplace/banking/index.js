@@ -77,14 +77,14 @@ export const bankingSelectors = {
 			b.price = selectPrice(b);
 			b.templateId = selectTemplate(b);
 			b.data.checkoutOptions = parseOptions(b);
-			b.accountType = b.data.type ? b.data.type[0].toLowerCase() : null;
+			b.accountType = b.data.type ? b.data.type.toLowerCase() : null;
 			b.walletAddress = selectVendorWalletAddress(b);
 			b.didAddress = selectVendorDidAddress(b);
 			return b;
 		}),
 	selectBankTypeByFilter: (state, filter) => bankingSelectors.selectBanks(state).find(filter),
-	selectBanksByAccountCode: (state, accountCode) =>
-		bankingSelectors.selectBanks(state).filter(b => b.data.accountCode === accountCode)
+	selectBankJurisdictionByAccountCode: (state, accountCode) =>
+		bankingSelectors.selectBanks(state).find(b => b.data.accountCode === accountCode)
 };
 
 export default bankingSelectors;

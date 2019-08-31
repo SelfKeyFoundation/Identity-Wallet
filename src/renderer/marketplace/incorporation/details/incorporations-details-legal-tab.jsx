@@ -214,7 +214,6 @@ const LLC_COLUMNS = [
 const selectColumns = program => {
 	if (program.data.corpllc) {
 		LEGAL_COLUMNS[0] = LLC_COLUMNS[0];
-		console.log('selecting LLC');
 	}
 	return LEGAL_COLUMNS;
 };

@@ -1,35 +1,28 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { pricesSelectors } from 'common/prices';
 import { marketplaceSelectors } from 'common/marketplace';
-import { withStyles } from '@material-ui/core/styles';
 import { IncorporationsListPage } from './incorporations-list-page';
+import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorporations-component';
 
 const styles = theme => ({});
-const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
-const INCORPORATIONS_DETAIL_PATH = '/main/marketplace-incorporation/details';
 
-class IncorporationsListContainer extends Component {
-	onBackClick = () => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
+class IncorporationsListContainer extends MarketplaceIncorporationsComponent {
+	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
 
 	onDetailsClick = jurisdiction => {
-		this.props.dispatch(
-			push(
-				`${INCORPORATIONS_DETAIL_PATH}/${jurisdiction.data.companyCode}/${
-					jurisdiction.data.countryCode
-				}/${jurisdiction.templateId}`
-			)
-		);
+		const { companyCode, countryCode, templateId } = jurisdiction.data;
+		console.log(jurisdiction);
+		this.props.dispatch(push(this.detailsRoute({ companyCode, countryCode, templateId })));
 	};
-
-	activeJurisdiction = jurisdiction => jurisdiction.status === 'active';
 
 	render() {
 		const { isLoading, incorporations, keyRate } = this.props;
 
-		const data = incorporations.filter(this.activeJurisdiction);
+		const data = incorporations.filter(jurisdiction => jurisdiction.status === 'active');
 
 		return (
 			<IncorporationsListPage

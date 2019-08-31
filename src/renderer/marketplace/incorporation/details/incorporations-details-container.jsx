@@ -20,11 +20,6 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 
 	async componentDidMount() {
 		this.loadRelyingParty({ rp: 'incorporations', authenticated: false });
-
-		this.loadTreaties();
-
-		this.loadCountry();
-
 		window.scrollTo(0, 0);
 	}
 

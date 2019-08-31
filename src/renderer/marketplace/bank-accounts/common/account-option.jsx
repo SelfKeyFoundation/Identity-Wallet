@@ -115,6 +115,7 @@ export const BankingAccountOption = withStyles(styles)(
 	({
 		classes,
 		account,
+		jurisdiction,
 		isOpen,
 		title,
 		toggleOpen,
@@ -125,7 +126,7 @@ export const BankingAccountOption = withStyles(styles)(
 		const accountOptions = [
 			{
 				name: 'Type of Account:',
-				value: account.type
+				value: jurisdiction.data.type
 			},
 			{
 				name: 'Currencies:',

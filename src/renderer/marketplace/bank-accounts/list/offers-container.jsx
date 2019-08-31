@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
@@ -6,35 +6,29 @@ import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { BankingOffersPage } from './offers-page';
 import { marketplaceSelectors } from 'common/marketplace';
+import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 
 const styles = theme => ({});
-const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
-const BANK_ACCOUNTS_DETAIL_PATH = '/main/marketplace-bank-accounts/details';
 
-class BankAccountsTableContainer extends Component {
+class BankAccountsTableContainer extends MarketplaceBankAccountsComponent {
 	state = {
 		accountType: 'business'
 	};
 
-	onBackClick = () => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
+	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
 
 	onAccountTypeChange = accountType => this.setState({ accountType });
 
-	onDetailsClick = bank =>
-		this.props.dispatch(
-			push(
-				`${BANK_ACCOUNTS_DETAIL_PATH}/${bank.data.accountCode}/${bank.data.countryCode}/${
-					bank.templateId
-				}`
-			)
-		);
-
-	activeBank = bank => bank.data.type === this.state.accountType;
+	onDetailsClick = bank => {
+		const { accountCode, countryCode, templateId } = bank.data;
+		this.props.dispatch(push(this.detailsRoute({ accountCode, countryCode, templateId })));
+	};
 
 	render() {
 		const { isLoading, keyRate, vendors, inventory } = this.props;
 		const { accountType } = this.state;
-		const data = inventory.filter(this.activeBank);
+
+		const data = inventory.filter(bank => bank.data.type === this.state.accountType);
 
 		return (
 			<BankingOffersPage
@@ -55,8 +49,7 @@ BankAccountsTableContainer.propTypes = {
 	inventory: PropTypes.array,
 	vendors: PropTypes.array,
 	isLoading: PropTypes.bool,
-	keyRate: PropTypes.number,
-	isError: PropTypes.any
+	keyRate: PropTypes.number
 };
 
 const mapStateToProps = (state, props) => {
