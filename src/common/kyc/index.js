@@ -330,7 +330,6 @@ const loadRelyingPartyOperation = (
 		rp = marketplaceSelectors.selectRPDetails(getState(), rpName);
 	}
 	const config = rp.relying_party_config || rp.relyingPartyConfig;
-	console.log(config);
 
 	try {
 		await dispatch(kycActions.setCancelRoute(cancelRoute));
@@ -391,7 +390,7 @@ const loadRelyingPartyOperation = (
 			await dispatch(push(afterAuthRoute));
 		}
 	} catch (error) {
-		log.error('loadRelyingParty %s', error);
+		log.error('Error loadRelyingParty %s', error);
 		await dispatch(
 			kycActions.updateRelyingParty(
 				{

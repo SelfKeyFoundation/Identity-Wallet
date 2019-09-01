@@ -14,8 +14,8 @@ class IncorporationsListContainer extends MarketplaceIncorporationsComponent {
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
 
 	onDetailsClick = jurisdiction => {
-		const { companyCode, countryCode, templateId } = jurisdiction.data;
-		console.log(jurisdiction);
+		const { companyCode, countryCode } = jurisdiction.data;
+		const { templateId } = jurisdiction;
 		this.props.dispatch(push(this.detailsRoute({ companyCode, countryCode, templateId })));
 	};
 

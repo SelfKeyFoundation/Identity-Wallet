@@ -1,8 +1,13 @@
 import { MarketplaceComponent } from '../../common/marketplace-component';
-import { bankAccountsOperations } from 'common/bank-accounts';
+
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 
 export default class MarketplaceBankAccountsComponent extends MarketplaceComponent {
+	processStartedRoute = () => {
+		const { accountCode, countryCode, templateId } = this.props.match.params;
+		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/process-started/${accountCode}/${countryCode}/${templateId}`;
+	};
+
 	selectBankRoute = () => {
 		const { countryCode, accountCode, templateId } = this.props.match.params;
 		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/select-bank/${accountCode}/${countryCode}/${templateId}`;
@@ -70,12 +75,6 @@ export default class MarketplaceBankAccountsComponent extends MarketplaceCompone
 	userHasSelectedBankPreference = () => {
 		const application = this.getLastApplication();
 		return !!this.getExistingBankPreferenceSelection(application);
-	};
-
-	loadBankAccounts = async () => {
-		if (!this.props.accountType) {
-			await this.props.dispatch(bankAccountsOperations.loadBankAccountsOperation());
-		}
 	};
 }
 

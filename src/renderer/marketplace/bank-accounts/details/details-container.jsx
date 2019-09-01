@@ -146,6 +146,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 		const { jurisdiction, keyRate, kycRequirements, country } = this.props;
 		const { price } = jurisdiction;
 		const { region } = jurisdiction.data;
+		console.log(jurisdiction);
 		return (
 			<BankingDetailsPage
 				applicationStatus={this.getApplicationStatus()}

@@ -27,13 +27,16 @@ export default () => [
 			testTemplateId: '5d09d11c26f7be563f7e0650',
 			activeTestPrice: true,
 			testWalletAddress: '0x23d233933c86f93b74705cf0d236b39f474249f8',
-			account: {
-				templateId: '5d09d11c26f7be563f7e0650',
-				accountCode: 'AD1b',
-				countryCode: 'AD',
-				countryName: 'Andorra',
-				accountTitle: 'Private Banking Account',
-				testTemplateId: '5d09d11c26f7be563f7e0650'
+			accounts: {
+				AD1b1: {
+					templateId: '5d09d11c26f7be563f7e0650',
+					accountCode: 'AD1b',
+					countryCode: 'AD',
+					bankCode: 'AD1b1',
+					countryName: 'Andorra',
+					accountTitle: 'Private Banking Account',
+					testTemplateId: '5d09d11c26f7be563f7e0650'
+				}
 			},
 			jurisdiction: {
 				remote: ['Remote'],

@@ -11,7 +11,7 @@ import { getWallet } from 'common/wallet/selectors';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
-import { bankAccountsSelectors } from 'common/bank-accounts';
+import { marketplaceSelectors } from 'common/marketplace';
 import { PaymentCheckout } from '../../common/payment-checkout';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 
@@ -23,16 +23,12 @@ const VENDOR_NAME = 'Far Horizon Capital Inc';
 class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 	async componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
-
-		await this.loadRelyingParty({ rp: 'incorporations', authenticated: true });
-
+		await this.loadRelyingParty({ rp: 'flagtheory_banking', authenticated: true });
 		this.checkIfUserCanOpenBankAccount();
-
-		await this.loadBankAccounts();
 	}
 
 	checkIfUserCanOpenBankAccount = async () => {
-		if (!this.canApply(this.props.accountType.price)) {
+		if (!this.canApply(this.props.jurisdiction.price)) {
 			this.props.dispatch(push(this.cancelRoute()));
 		}
 	};
@@ -61,13 +57,13 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 	onBackClick = () => this.props.dispatch(push(this.cancelRoute()));
 
 	onStartClick = async () => {
-		const { accountType } = this.props;
+		const { jurisdiction } = this.props;
 		const { templateId } = this.props.match.params;
-		const { region } = accountType;
+		const { region } = jurisdiction.data;
 
 		this.props.dispatch(
 			kycOperations.startCurrentApplicationOperation(
-				'incorporations',
+				'flagtheory_banking',
 				templateId,
 				this.payRoute(),
 				this.cancelRoute(),
@@ -85,18 +81,19 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	render() {
-		const { accountType, banks } = this.props;
+		const { jurisdiction } = this.props;
 		const countryCode = this.props.match.params.countryCode;
+		const { region, walletDescription, checkoutOptions } = jurisdiction.data;
 		return (
 			<PaymentCheckout
-				title={`Banking Application Fee: ${accountType.region}`}
-				description={accountType.walletDescription}
-				timeToForm={banks[0].timeToOpen}
-				program={accountType}
+				title={`Banking Application Fee: ${region}`}
+				description={walletDescription}
+				timeToForm={''}
+				program={jurisdiction}
 				countryCode={countryCode}
 				{...this.getPaymentParameters()}
-				price={accountType.price}
-				options={accountType.checkoutOptions}
+				price={jurisdiction.price}
+				options={checkoutOptions}
 				initialDocsText={`You will be required to provide a few basic informations about yourself like full name and email.
 					This will be done through SelfKey ID Wallet.`}
 				kycProcessText={`You will undergo a standard KYC process and our team will get in touch with you to make sure we
@@ -112,12 +109,10 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 }
 
 const mapStateToProps = (state, props) => {
-	const { accountCode, countryCode } = props.match.params;
+	const { accountCode } = props.match.params;
 	const authenticated = true;
 	return {
-		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
-		banks: bankAccountsSelectors.getDetailsByAccountCode(state, accountCode),
-		jurisdiction: bankAccountsSelectors.getJurisdictionsByCountryCode(state, countryCode),
+		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
 		...getLocale(state),
 		...getFiatCurrency(state),
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
@@ -126,10 +121,10 @@ const mapStateToProps = (state, props) => {
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		ethRate: pricesSelectors.getRate(state, 'ETH', 'USD'),
 		cryptoCurrency: CRYPTOCURRENCY,
-		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rp: kycSelectors.relyingPartySelector(state, 'flagtheory_banking'),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
-			'incorporations',
+			'flagtheory_banking',
 			authenticated
 		)
 	};
