@@ -12,7 +12,14 @@ import {
 	Modal,
 	IconButton
 } from '@material-ui/core';
-import { IdCardIcon, ModalWrap, KeyTooltip, TooltipArrow, InfoTooltip } from 'selfkey-ui';
+import {
+	IdCardIcon,
+	ModalWrap,
+	KeyTooltip,
+	TooltipArrow,
+	BackButton,
+	InfoTooltip
+} from 'selfkey-ui';
 import { connect } from 'react-redux';
 import history from 'common/store/history';
 import { identityOperations } from 'common/identity';
@@ -24,6 +31,19 @@ const styles = theme => ({
 		position: 'absolute',
 		top: '100px',
 		left: '20px'
+	},
+	backButtonContainer: {
+		left: '40px',
+		position: 'absolute',
+		top: '40px',
+		width: '100%',
+		zIndex: '1301',
+		'& div': {
+			left: '0 !important'
+		}
+	},
+	bold: {
+		fontWeight: 600
 	},
 	create: {
 		marginTop: '10px',
@@ -56,15 +76,6 @@ const styles = theme => ({
 		border: 'none',
 		backgroundColor: 'transparent'
 	},
-	backButtonContainer: {
-		left: '40px',
-		position: 'absolute',
-		top: '40px',
-		zIndex: '1301'
-	},
-	bold: {
-		fontWeight: 600
-	},
 	tooltip: {
 		padding: '7px 0 0 10px'
 	},
@@ -72,6 +83,14 @@ const styles = theme => ({
 		alignItems: 'baseline',
 		display: 'flex',
 		flexDirection: 'row'
+	},
+	bb: {
+		'& div': {
+			zIndex: 3000
+		},
+		'& button': {
+			zIndex: 3000
+		}
 	}
 });
 
@@ -154,7 +173,8 @@ class SelfKeyIdCreateFormComponent extends Component {
 		return (
 			<>
 				<div className={classes.backButtonContainer}>
-					<Button
+					<BackButton onclick={this.handleBackClick} className={classes.bb} />
+					{/* <Button
 						variant="outlined"
 						color="secondary"
 						size="small"
@@ -163,7 +183,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
 							‹ Back
 						</Typography>
-					</Button>
+					</Button> */}
 				</div>
 				<Modal open={true}>
 					<ModalWrap className={classes.modalWrap}>
