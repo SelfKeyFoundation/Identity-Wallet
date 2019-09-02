@@ -23,7 +23,7 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 	async componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 
-		await this.loadRelyingParty({ rp: 'incorporations', authenticated: true });
+		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: true });
 
 		this.checkIfUserCanIncorporate();
 	}
@@ -58,13 +58,12 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 	onBackClick = () => this.props.dispatch(push(this.cancelRoute()));
 
 	onStartClick = async () => {
-		const { program } = this.props;
-		const { templateId } = this.props.match.params;
+		const { program, vendorId, templateId } = this.props;
 		const { region } = program.data;
 
 		this.props.dispatch(
 			kycOperations.startCurrentApplicationOperation(
-				'incorporations',
+				vendorId,
 				templateId,
 				this.payRoute(),
 				this.cancelRoute(),
@@ -82,8 +81,7 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 	};
 
 	render() {
-		const { program } = this.props;
-		const countryCode = this.props.match.params.countryCode;
+		const { program, countryCode } = this.props;
 		return (
 			<PaymentCheckout
 				title={`Pay Incorporation Fee: ${program.data.region}`}
@@ -112,9 +110,12 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 }
 
 const mapStateToProps = (state, props) => {
-	const { companyCode } = props.match.params;
+	const { companyCode, vendorId, countryCode, templateId } = props.match.params;
 	const authenticated = true;
 	return {
+		vendorId,
+		countryCode,
+		templateId,
 		program: marketplaceSelectors.selectIncorporationByFilter(
 			state,
 			c => c.data.companyCode === companyCode
@@ -127,10 +128,10 @@ const mapStateToProps = (state, props) => {
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		ethRate: pricesSelectors.getRate(state, 'ETH', 'USD'),
 		cryptoCurrency: CRYPTOCURRENCY,
-		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
-			'incorporations',
+			vendorId,
 			authenticated
 		)
 	};

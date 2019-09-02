@@ -187,8 +187,6 @@ export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
 			const jurisdictions = fetched.Jurisdictions.reduce(mapData('countryCode'), {});
 			const accDetails = fetched.Account_Details.reduce(mapData('bankCode'), {});
 
-			console.log(fetched.Account_Details);
-			console.log(accDetails);
 			const items = fetched.Main.map(itm =>
 				_.mapKeys(itm.data.fields, (value, key) => _.camelCase(key))
 			)

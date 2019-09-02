@@ -434,9 +434,6 @@ class MarketplaceServiceDetailsComponent extends Component {
 			</div>
 		);
 
-		console.log(item);
-		console.log(templates);
-
 		return (
 			<Grid container>
 				<Grid item>

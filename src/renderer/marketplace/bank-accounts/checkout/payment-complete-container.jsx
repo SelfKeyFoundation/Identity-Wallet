@@ -13,7 +13,7 @@ const styles = theme => ({});
 
 class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsComponent {
 	async componentWillMount() {
-		await this.loadRelyingParty({ rp: 'flagtheory_banking', authenticated: true });
+		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: true });
 	}
 
 	async componentDidMount() {
@@ -32,13 +32,13 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 	}
 
 	saveTransactionHash = async () => {
-		const { transaction, jurisdiction } = this.props;
+		const { transaction, jurisdiction, vendorId } = this.props;
 		const application = this.getLastApplication();
 
 		if (!this.userHasPaid() && transaction) {
 			await this.props.dispatch(
 				kycOperations.updateRelyingPartyKYCApplicationPayment(
-					'flagtheory_banking',
+					vendorId,
 					application.id,
 					transaction.transactionHash
 				)
@@ -84,17 +84,17 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 }
 
 const mapStateToProps = (state, props) => {
-	const { accountCode } = props.match.params;
+	const { accountCode, vendorId } = props.match.params;
 	const authenticated = true;
 	return {
 		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
 		transaction: transactionSelectors.getTransaction(state),
 		publicKey: getWallet(state).publicKey,
 		currentApplication: kycSelectors.selectCurrentApplication(state),
-		rp: kycSelectors.relyingPartySelector(state, 'flagtheory_banking'),
+		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
-			'flagtheory_banking',
+			vendorId,
 			authenticated
 		)
 	};

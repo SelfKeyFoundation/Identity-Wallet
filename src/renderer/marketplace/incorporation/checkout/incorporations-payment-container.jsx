@@ -16,7 +16,7 @@ const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class IncorporationsPaymentContainer extends MarketplaceIncorporationsComponent {
 	async componentDidMount() {
-		await this.loadRelyingParty({ rp: 'incorporations', authenticated: true });
+		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: true });
 		await this.createOrder();
 	}
 
@@ -25,20 +25,18 @@ class IncorporationsPaymentContainer extends MarketplaceIncorporationsComponent 
 	};
 
 	async createOrder() {
-		const { program } = this.props;
-		const { companyCode } = this.props.match.params;
+		const { program, companyCode, vendorId } = this.props;
 		const application = this.getLastApplication();
 		const price = this.priceInKEY(program.price);
 		const walletAddress = program.walletAddress;
-		const vendorDID = program.didAddress;
 
 		this.props.dispatch(
 			ordersOperations.startOrderOperation({
 				applicationId: application.id,
 				amount: price,
-				vendorId: 'FlagTheory',
+				vendorId: vendorId,
 				itemId: companyCode,
-				vendorDID,
+				vendorDID: program.didAddress,
 				productInfo: `Incorporate in ${program.Region}`,
 				vendorName: VENDOR_NAME,
 				backUrl: this.cancelRoute(),
@@ -56,9 +54,12 @@ class IncorporationsPaymentContainer extends MarketplaceIncorporationsComponent 
 }
 
 const mapStateToProps = (state, props) => {
-	const { companyCode } = props.match.params;
+	const { companyCode, vendorId, templateId } = props.match.params;
 	const authenticated = true;
 	return {
+		companyCode,
+		vendorId,
+		templateId,
 		program: marketplaceSelectors.selectIncorporationByFilter(
 			state,
 			c => c.data.companyCode === companyCode
@@ -66,10 +67,10 @@ const mapStateToProps = (state, props) => {
 		publicKey: getWallet(state).publicKey,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		currentApplication: kycSelectors.selectCurrentApplication(state),
-		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
-			'incorporations',
+			vendorId,
 			authenticated
 		)
 	};

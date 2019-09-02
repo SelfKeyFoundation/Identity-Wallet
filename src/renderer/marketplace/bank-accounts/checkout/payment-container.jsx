@@ -15,7 +15,7 @@ const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 	async componentDidMount() {
-		await this.loadRelyingParty({ rp: 'flagtheory_banking', authenticated: true });
+		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: true });
 		await this.createOrder();
 	}
 
@@ -24,7 +24,7 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	async createOrder() {
-		const { jurisdiction, accountCode } = this.props;
+		const { jurisdiction, accountCode, vendorId } = this.props;
 		const application = this.getLastApplication();
 		const price = this.priceInKEY(jurisdiction.price);
 		const walletAddress = jurisdiction.walletAddress;
@@ -34,7 +34,7 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 			ordersOperations.startOrderOperation({
 				applicationId: application.id,
 				amount: price,
-				vendorId: 'flagtheory_banking',
+				vendorId: vendorId,
 				itemId: accountCode,
 				vendorDID,
 				productInfo: `Bank account in ${jurisdiction.data.region}`,
@@ -54,19 +54,20 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 }
 
 const mapStateToProps = (state, props) => {
-	const { accountCode } = props.match.params;
+	const { accountCode, vendorId } = props.match.params;
 	const authenticated = true;
 
 	return {
+		vendorId,
 		accountCode,
 		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
 		publicKey: getWallet(state).publicKey,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		currentApplication: kycSelectors.selectCurrentApplication(state),
-		rp: kycSelectors.relyingPartySelector(state, 'flagtheory_banking'),
+		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
-			'flagtheory_banking',
+			vendorId,
 			authenticated
 		)
 	};

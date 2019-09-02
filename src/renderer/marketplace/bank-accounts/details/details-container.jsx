@@ -19,7 +19,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	async componentDidMount() {
-		await this.loadRelyingParty({ rp: 'flagtheory_banking', authenticated: false });
+		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: false });
 	}
 
 	onBackClick = () => this.props.dispatch(push(this.listRoute()));
@@ -45,7 +45,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	onApplyClick = () => {
-		const { rp, wallet } = this.props;
+		const { rp, wallet, vendorId } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
 		const authenticated = true;
@@ -65,7 +65,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 			if (!rp || !rp.authenticated) {
 				await this.props.dispatch(
 					kycOperations.loadRelyingParty(
-						'flagtheory_banking',
+						vendorId,
 						authenticated,
 						this.checkoutRoute(),
 						this.cancelRoute()
@@ -143,10 +143,10 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	render() {
-		const { jurisdiction, keyRate, kycRequirements, country } = this.props;
+		const { jurisdiction, keyRate, kycRequirements, country, templateId } = this.props;
 		const { price } = jurisdiction;
 		const { region } = jurisdiction.data;
-		console.log(jurisdiction);
+
 		return (
 			<BankingDetailsPage
 				applicationStatus={this.getApplicationStatus()}
@@ -164,7 +164,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 				canOpenBankAccount={this.canApply(price)}
 				startApplication={this.onApplyClick}
 				kycRequirements={kycRequirements}
-				templateId={this.props.match.params.templateId}
+				templateId={templateId}
 				onBack={this.onBackClick}
 				onStatusAction={this.onStatusActionClick}
 			/>
@@ -179,24 +179,22 @@ BankAccountsDetailContainer.propTypes = {
 };
 
 const mapStateToProps = (state, props) => {
-	const { accountCode, countryCode, templateId } = props.match.params;
+	const { accountCode, countryCode, templateId, vendorId } = props.match.params;
 	const authenticated = true;
 	return {
+		templateId,
+		vendorId,
 		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
 		country: marketplaceSelectors.selectCountryByCode(state, countryCode),
 		isLoading: marketplaceSelectors.isLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
-		rp: kycSelectors.relyingPartySelector(state, 'flagtheory_banking'),
+		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
-			'flagtheory_banking',
+			vendorId,
 			authenticated
 		),
-		kycRequirements: kycSelectors.selectRequirementsForTemplate(
-			state,
-			'flagtheory_banking',
-			templateId
-		),
+		kycRequirements: kycSelectors.selectRequirementsForTemplate(state, vendorId, templateId),
 		wallet: walletSelectors.getWallet(state)
 	};
 };

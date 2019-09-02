@@ -4,37 +4,37 @@ const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 
 export default class MarketplaceBankAccountsComponent extends MarketplaceComponent {
 	processStartedRoute = () => {
-		const { accountCode, countryCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/process-started/${accountCode}/${countryCode}/${templateId}`;
+		const { accountCode, countryCode, templateId, vendorId } = this.props.match.params;
+		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/process-started/${accountCode}/${countryCode}/${templateId}/${vendorId}`;
 	};
 
 	selectBankRoute = () => {
-		const { countryCode, accountCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/select-bank/${accountCode}/${countryCode}/${templateId}`;
+		const { countryCode, accountCode, templateId, vendorId } = this.props.match.params;
+		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/select-bank/${accountCode}/${countryCode}/${templateId}/${vendorId}`;
 	};
 
 	paymentCompleteRoute = () => {
-		const { countryCode, accountCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/payment-complete/${accountCode}/${countryCode}/${templateId}`;
+		const { countryCode, accountCode, templateId, vendorId } = this.props.match.params;
+		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/payment-complete/${accountCode}/${countryCode}/${templateId}/${vendorId}`;
 	};
 
 	payRoute = () => {
-		const { countryCode, accountCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay/${accountCode}/${countryCode}/${templateId}`;
+		const { countryCode, accountCode, templateId, vendorId } = this.props.match.params;
+		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay/${accountCode}/${countryCode}/${templateId}/${vendorId}`;
 	};
 
 	checkoutRoute = () => {
-		const { countryCode, accountCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/checkout/${accountCode}/${countryCode}/${templateId}`;
+		const { countryCode, accountCode, templateId, vendorId } = this.props.match.params;
+		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/checkout/${accountCode}/${countryCode}/${templateId}/${vendorId}`;
 	};
 
 	cancelRoute = () => {
-		const { countryCode, accountCode, templateId } = this.props.match.params;
-		return this.detailsRoute({ countryCode, accountCode, templateId });
+		const { countryCode, accountCode, templateId, vendorId } = this.props.match.params;
+		return this.detailsRoute({ countryCode, accountCode, templateId, vendorId });
 	};
 
-	detailsRoute = ({ accountCode, countryCode, templateId }) =>
-		`${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/details/${accountCode}/${countryCode}/${templateId}`;
+	detailsRoute = ({ accountCode, countryCode, templateId, vendorId }) =>
+		`${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/details/${accountCode}/${countryCode}/${templateId}/${vendorId}`;
 
 	listRoute = () => MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH;
 

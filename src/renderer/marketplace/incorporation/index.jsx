@@ -20,19 +20,19 @@ class MarketplaceIncorporationComponent extends Component {
 			<div>
 				<Route exact path={`${path}`} component={IncorporationsListContainer} />
 				<Route
-					path={`${path}/details/:companyCode/:countryCode/:templateId?`}
+					path={`${path}/details/:companyCode/:countryCode/:templateId?/:vendorId?`}
 					component={IncorporationsDetailsContainer}
 				/>
 				<Route
-					path={`${path}/checkout/:companyCode/:countryCode/:templateId?`}
+					path={`${path}/checkout/:companyCode/:countryCode/:templateId?/:vendorId?`}
 					component={IncorporationsCheckoutContainer}
 				/>
 				<Route
-					path={`${path}/pay/:companyCode/:countryCode/:templateId?/:confirmation?`}
+					path={`${path}/pay/:companyCode/:countryCode/:templateId?/:vendorId?`}
 					component={IncorporationsPaymentContainer}
 				/>
 				<Route
-					path={`${path}/payment-complete/:companyCode/:countryCode/:templateId?`}
+					path={`${path}/payment-complete/:companyCode/:countryCode/:templateId?/:vendorId?`}
 					component={IncorporationsPaymentCompleteContainer}
 				/>
 			</div>

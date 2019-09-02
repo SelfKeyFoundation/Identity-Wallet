@@ -232,5 +232,5 @@ function scheduleInitialJobs(ctx) {
 	ctx.inventoryService.start();
 	ctx.vendorService.start();
 	ctx.marketplaceCountryService.start();
-	// ctx.taxTreatiesService.start();
+	ctx.taxTreatiesService.start();
 }

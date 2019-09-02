@@ -21,8 +21,10 @@ class BankAccountsTableContainer extends MarketplaceBankAccountsComponent {
 
 	onDetailsClick = jurisdiction => {
 		const { accountCode, countryCode } = jurisdiction.data;
-		const { templateId } = jurisdiction;
-		this.props.dispatch(push(this.detailsRoute({ accountCode, countryCode, templateId })));
+		const { templateId, vendorId } = jurisdiction;
+		this.props.dispatch(
+			push(this.detailsRoute({ accountCode, countryCode, templateId, vendorId }))
+		);
 	};
 
 	render() {

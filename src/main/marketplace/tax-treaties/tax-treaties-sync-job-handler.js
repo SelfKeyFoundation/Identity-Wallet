@@ -1,10 +1,6 @@
 import { Logger } from 'common/logger';
 export const TAX_TREATIES_SYNC_JOB = 'tax-treaties-sync-job';
 
-function sleep(millis) {
-	return new Promise(resolve => setTimeout(resolve, millis));
-}
-
 const log = new Logger(TAX_TREATIES_SYNC_JOB);
 export class TaxTreatiesSyncJobHandler {
 	constructor({ schedulerService, taxTreatiesService }) {
@@ -22,11 +18,11 @@ export class TaxTreatiesSyncJobHandler {
 		job.emitProgress(0, { message: 'fetching remote treaty' });
 		const remoteTreaties = await this.taxTreatiesService.fetchTaxTreaties();
 		job.emitProgress(25, { message: 'remote treaty fetched' });
-		await sleep(500);
+
 		job.emitProgress(25, { message: 'load db treaty' });
 		const dbCountries = await this.taxTreatiesService.loadTaxTreaties();
 		job.emitProgress(50, { message: 'load db treaty' });
-		await sleep(500);
+
 		job.emitProgress(50, { message: 'Merging remote and local data' });
 
 		let treaties = remoteTreaties.reduce((acc, curr) => {
@@ -45,6 +41,7 @@ export class TaxTreatiesSyncJobHandler {
 			},
 			{ dbTreatiesByCode: {}, toRemove: [] }
 		);
+
 		const upsert = remoteTreaties.map(item => {
 			let key = `${item.countryCode}_${item.jurisdictionCountryCode}`;
 			if (dbTreatiesByCode[key]) {
@@ -53,15 +50,17 @@ export class TaxTreatiesSyncJobHandler {
 			return item;
 		});
 		job.emitProgress(75, { message: 'Updating db data' });
+
 		try {
 			await this.taxTreatiesService.upsert(upsert);
 		} catch (error) {
 			log.error(error);
 		}
+
 		job.emitProgress(25, { message: 'Removing obsolete treaties' });
 		await this.taxTreatiesService.deleteMany(toRemove);
 		job.emitProgress(95, { message: 'Fetching updated treaty list' });
-		await sleep(500);
+
 		const taxTreaties = this.taxTreatiesService.loadTaxTreaties();
 		job.emitProgress(100, { message: 'Done!' });
 		return taxTreaties;

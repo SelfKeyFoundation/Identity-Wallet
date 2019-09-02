@@ -23,7 +23,7 @@ const VENDOR_NAME = 'Far Horizon Capital Inc';
 class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 	async componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
-		await this.loadRelyingParty({ rp: 'flagtheory_banking', authenticated: true });
+		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: true });
 		this.checkIfUserCanOpenBankAccount();
 	}
 
@@ -34,9 +34,9 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	getPaymentParameters() {
-		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency, accountType } = this.props;
+		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency, jurisdiction } = this.props;
 		const gasPrice = ethGasStationInfo.fast;
-		const price = accountType.price;
+		const price = jurisdiction.price;
 		const keyAmount = price / keyRate;
 		const gasLimit = FIXED_GAS_LIMIT_PRICE;
 		const ethFee = EthUnits.toEther(gasPrice * gasLimit, 'gwei');
@@ -57,13 +57,12 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 	onBackClick = () => this.props.dispatch(push(this.cancelRoute()));
 
 	onStartClick = async () => {
-		const { jurisdiction } = this.props;
-		const { templateId } = this.props.match.params;
+		const { jurisdiction, templateId, vendorId } = this.props;
 		const { region } = jurisdiction.data;
 
 		this.props.dispatch(
 			kycOperations.startCurrentApplicationOperation(
-				'flagtheory_banking',
+				vendorId,
 				templateId,
 				this.payRoute(),
 				this.cancelRoute(),
@@ -81,14 +80,19 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	render() {
-		const { jurisdiction } = this.props;
-		const countryCode = this.props.match.params.countryCode;
-		const { region, walletDescription, checkoutOptions } = jurisdiction.data;
+		const { jurisdiction, countryCode } = this.props;
+		const { region, walletDescription, checkoutOptions, accounts } = jurisdiction.data;
+
+		const timeToOpen = Object.keys(accounts).reduce((current, accountId) => {
+			const account = accounts[accountId];
+			return current || account.timeToOpen;
+		}, '');
+
 		return (
 			<PaymentCheckout
 				title={`Banking Application Fee: ${region}`}
 				description={walletDescription}
-				timeToForm={''}
+				timeToForm={timeToOpen}
 				program={jurisdiction}
 				countryCode={countryCode}
 				{...this.getPaymentParameters()}
@@ -109,9 +113,12 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 }
 
 const mapStateToProps = (state, props) => {
-	const { accountCode } = props.match.params;
+	const { accountCode, vendorId, countryCode, templateId } = props.match.params;
 	const authenticated = true;
 	return {
+		countryCode,
+		templateId,
+		vendorId,
 		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
 		...getLocale(state),
 		...getFiatCurrency(state),
@@ -121,10 +128,10 @@ const mapStateToProps = (state, props) => {
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		ethRate: pricesSelectors.getRate(state, 'ETH', 'USD'),
 		cryptoCurrency: CRYPTOCURRENCY,
-		rp: kycSelectors.relyingPartySelector(state, 'flagtheory_banking'),
+		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
-			'flagtheory_banking',
+			vendorId,
 			authenticated
 		)
 	};

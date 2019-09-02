@@ -19,7 +19,7 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 	};
 
 	async componentDidMount() {
-		this.loadRelyingParty({ rp: 'incorporations', authenticated: false });
+		this.loadRelyingParty({ rp: this.props.vendorId, authenticated: false });
 		window.scrollTo(0, 0);
 	}
 
@@ -92,7 +92,7 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 	};
 
 	onApplyClick = () => {
-		const { rp, wallet } = this.props;
+		const { rp, wallet, vendorId } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
 		const authenticated = true;
@@ -112,7 +112,7 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 			if (!rp || !rp.authenticated) {
 				await this.props.dispatch(
 					kycOperations.loadRelyingParty(
-						'incorporations',
+						vendorId,
 						authenticated,
 						this.checkoutRoute(),
 						this.cancelRoute()
@@ -125,9 +125,15 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 	};
 
 	render() {
-		const { program, keyRate, kycRequirements, country, treaties } = this.props;
-		const { templateId } = this.props.match.params;
-		const countryCode = program.data.countryCode;
+		const {
+			program,
+			keyRate,
+			kycRequirements,
+			country,
+			treaties,
+			templateId,
+			countryCode
+		} = this.props;
 		const region = program.data.region;
 		const price = program.price;
 		return (
@@ -164,9 +170,12 @@ IncorporationsDetailsContainer.propTypes = {
 };
 
 const mapStateToProps = (state, props) => {
-	const { companyCode, countryCode, templateId } = props.match.params;
+	const { companyCode, countryCode, templateId, vendorId } = props.match.params;
 	const notAuthenticated = false;
 	return {
+		vendorId,
+		templateId,
+		countryCode,
 		program: marketplaceSelectors.selectIncorporationByFilter(
 			state,
 			c => c.data.companyCode === companyCode
@@ -175,17 +184,13 @@ const mapStateToProps = (state, props) => {
 		country: marketplaceSelectors.selectCountryByCode(state, countryCode),
 		isLoading: marketplaceSelectors.isLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
-		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
-			'incorporations',
+			vendorId,
 			notAuthenticated
 		),
-		kycRequirements: kycSelectors.selectRequirementsForTemplate(
-			state,
-			'incorporations',
-			templateId
-		),
+		kycRequirements: kycSelectors.selectRequirementsForTemplate(state, vendorId, templateId),
 		wallet: walletSelectors.getWallet(state)
 	};
 };
