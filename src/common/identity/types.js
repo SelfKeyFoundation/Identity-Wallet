@@ -36,7 +36,8 @@ export const identityTypes = {
 	IDENTITIES_SET: 'identities/SET',
 	IDENTITY_ADD: 'identity/ADD',
 	IDENTITY_UPDATE: 'identity/UPDATE',
-	IDENTITIES_LOAD: 'identities/LOAD'
+	IDENTITIES_LOAD: 'identities/LOAD',
+	IDENTITY_CURRENT_SET: 'identities/current/SET'
 };
 
 export default identityTypes;

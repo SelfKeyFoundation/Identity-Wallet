@@ -106,12 +106,14 @@ const updateProfilePictureOperation = (picture, identityId) => (dispatch, getSta
 };
 
 const lockIdentityOperation = identityId => async (dispatch, getState) => {
+	await dispatch(identityOperations.setCurrentIdentityAction(null));
 	await dispatch(identityActions.deleteIdAttributesAction(identityId));
 	await dispatch(identityActions.deleteDocumentsAction(identityId));
 };
 const unlockIdentityOperation = identityId => async (dispatch, getState) => {
 	await dispatch(identityOperations.loadDocumentsOperation(identityId));
 	await dispatch(identityOperations.loadIdAttributesOperation(identityId));
+	await dispatch(identityOperations.setCurrentIdentityAction(identityId));
 };
 
 const createSelfkeyIdOperation = (walletId, data) => async (dispatch, getState) => {

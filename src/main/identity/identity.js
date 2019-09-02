@@ -17,7 +17,7 @@ export class Identity extends BaseModel {
 			type: { type: 'string' },
 			profilePicture: { type: 'binary' },
 			did: { type: 'string' },
-			isSetupFinished: { type: 'boolean' }
+			isSetupFinished: { type: 'boolean', default: false }
 		},
 		required: ['walletId', 'type']
 	};

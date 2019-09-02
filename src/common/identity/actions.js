@@ -82,6 +82,10 @@ export const identityActions = {
 	updateIdentity: identity => ({
 		type: identityTypes.IDENTITY_UPDATE,
 		payload: identity
+	}),
+	setCurrentIdentityAction: identityId => ({
+		type: identityTypes.IDENTITY_CURRENT_SET,
+		payload: identityId
 	})
 };
 

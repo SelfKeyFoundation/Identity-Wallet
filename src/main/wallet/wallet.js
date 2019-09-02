@@ -36,6 +36,7 @@ export class Wallet extends BaseModel {
 		const WalletSetting = require('./wallet-setting').default;
 		const WalletToken = require('./wallet-token').default;
 		const LoginAttempt = require('../lws/login-attempt').default;
+		const Identity = require('../identity/identity').default;
 
 		return {
 			setting: {
@@ -61,6 +62,14 @@ export class Wallet extends BaseModel {
 					from: `${this.tableName}.id`,
 					to: `${LoginAttempt.tableName}.walletId`
 				}
+			},
+			identities: {
+				relation: Model.HasManyRelation,
+				modelClass: Identity,
+				join: {
+					from: `${this.tableName}.id`,
+					to: `${Identity.tableName}.walletId`
+				}
 			}
 		};
 	}
@@ -78,6 +87,11 @@ export class Wallet extends BaseModel {
 					tokens: [
 						{
 							tokenId: config.constants.primaryToken === 'KEY' ? 1 : 2
+						}
+					],
+					identities: [
+						{
+							type: 'individual'
 						}
 					]
 				},

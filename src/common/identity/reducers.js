@@ -13,7 +13,8 @@ export const initialState = {
 	attributesById: {},
 	countries: [],
 	identities: [],
-	identitiesById: {}
+	identitiesById: {},
+	currentIdentity: null
 };
 
 const setCountries = (state, action) => {
@@ -211,6 +212,10 @@ const updateIdentityReducer = (state, action) => {
 	return { ...state, identities, identitiesById };
 };
 
+const setCurrentIdentityReducer = (state, action) => {
+	return { ...state, currentIdentity: action.payload };
+};
+
 export const identityReducers = {
 	setCountries,
 	setRepositoriesReducer,
@@ -230,7 +235,8 @@ export const identityReducers = {
 	deleteIdAttributeReducer,
 	setIdentitiesReducer,
 	addIdentityReducer,
-	updateIdentityReducer
+	updateIdentityReducer,
+	setCurrentIdentityReducer
 };
 
 const reducer = (state = initialState, action) => {
@@ -273,6 +279,8 @@ const reducer = (state = initialState, action) => {
 			return identityReducers.addIdentityReducer(state, action);
 		case identityTypes.IDENTITY_UPDATE:
 			return identityReducers.updateIdentityReducer(state, action);
+		case identityTypes.IDENTITY_CURRENT_SET:
+			return identityReducers.setCurrentIdentityReducer(state, action);
 	}
 	return state;
 };
