@@ -70,7 +70,7 @@ class AddressBookContainer extends Component {
 
 	render() {
 		const { classes } = this.props;
-		const addresses = _.uniqueBy(this.state.addresses, 'address');
+		const addresses = _.uniqBy(this.state.addresses, 'address');
 		return (
 			<Grid
 				id="viewAddressBook"
