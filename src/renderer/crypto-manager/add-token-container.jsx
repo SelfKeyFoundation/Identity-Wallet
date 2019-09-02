@@ -20,7 +20,8 @@ import {
 	ModalHeader,
 	ModalBody,
 	KeyTooltip,
-	InfoTooltip
+	InfoTooltip,
+	BackButton
 } from 'selfkey-ui';
 
 const styles = theme => ({
@@ -90,14 +91,6 @@ const styles = theme => ({
 		color: '#00C0D9',
 		cursor: 'pointer',
 		textDecoration: 'none'
-	},
-	bold: {
-		fontWeight: 600
-	},
-	backButtonContainer: {
-		left: '15px',
-		position: 'absolute',
-		top: '120px'
 	},
 	topSpace: {
 		marginTop: '30px'
@@ -242,18 +235,7 @@ class AddTokenContainerComponent extends Component {
 				alignItems="center"
 				spacing={32}
 			>
-				<div className={classes.backButtonContainer}>
-					<Button
-						variant="outlined"
-						color="secondary"
-						size="small"
-						onClick={this.handleBackClick}
-					>
-						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
-							‹ Back
-						</Typography>
-					</Button>
-				</div>
+				<BackButton onclick={this.handleBackClick} />
 				<Grid item className={classes.topSpace}>
 					<MyCryptoLargeIcon />
 				</Grid>
