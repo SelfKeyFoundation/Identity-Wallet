@@ -52,12 +52,12 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	onApplyClick = () => {
-		const { rp, wallet, vendorId } = this.props;
+		const { rp, wallet, vendorId, jurisdiction } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
 		const transactionNoKeyError = '/main/transaction-no-key-error';
 		const authenticated = true;
-		const keyPrice = this.priceInKEY(accountType.price);
+		const keyPrice = this.priceInKEY(jurisdiction.price);
 		const keyAvailable = new BigNumber(this.props.cryptoValue);
 		// When clicking the start process,
 		// we check if an authenticated kyc-chain session exists
