@@ -6,7 +6,7 @@ import { IncorporationsIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	pageContent: {
-		width: '1140px',
+		width: '1080px',
 		margin: '0 auto'
 	},
 	header: {
@@ -26,11 +26,16 @@ const styles = theme => ({
 		width: '36px'
 	},
 	backButtonContainer: {
-		left: '15px',
+		left: '75px',
 		position: 'absolute'
 	},
 	tabs: {
 		marginBottom: '15px'
+	},
+	'@media screen and (min-width: 1230px)': {
+		pageContent: {
+			width: '1140px'
+		}
 	}
 });
 

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -69,7 +70,7 @@ class AddressBookContainer extends Component {
 
 	render() {
 		const { classes } = this.props;
-		const { addresses } = this.state;
+		const addresses = _.uniqBy(this.state.addresses, 'address');
 		return (
 			<Grid
 				id="viewAddressBook"

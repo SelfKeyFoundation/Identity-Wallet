@@ -57,14 +57,20 @@ const styles = theme => ({
 		width: '100%'
 	},
 	bodySection: {
-		maxWidth: '1140px',
+		maxWidth: '1080px',
 		width: '100%'
+	},
+	'@media screen and (min-width: 1230px)': {
+		bodySection: {
+			maxWidth: '1140px'
+		}
 	},
 	page: {}
 });
 
 const contentWrapperStyle = {
 	marginBottom: '60px',
+	marginRight: '-55px',
 	marginTop: '50px'
 };
 

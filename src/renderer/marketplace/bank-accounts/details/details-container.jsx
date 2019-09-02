@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { BigNumber } from 'bignumber.js';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
@@ -9,6 +10,8 @@ import { walletSelectors } from 'common/wallet';
 import { withStyles } from '@material-ui/core/styles';
 import { BankingDetailsPage } from './details-page';
 import { marketplaceSelectors } from 'common/marketplace';
+import { getCryptoValue } from '../../../common/price-utils';
+import config from 'common/config';
 
 const styles = theme => ({});
 
@@ -44,18 +47,27 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 		return null;
 	};
 
+	priceInKEY = priceUSD => {
+		return new BigNumber(priceUSD).dividedBy(this.props.keyRate);
+	};
+
 	onApplyClick = () => {
 		const { rp, wallet, vendorId } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
+		const transactionNoKeyError = '/main/transaction-no-key-error';
 		const authenticated = true;
-
+		const keyPrice = this.priceInKEY(accountType.price);
+		const keyAvailable = new BigNumber(this.props.cryptoValue);
 		// When clicking the start process,
 		// we check if an authenticated kyc-chain session exists
 		// If it doesn't we trigger a new authenticated rp session
 		// and redirect to checkout route
 		// The loading state is used to disable the button while data is being loaded
 		this.setState({ loading: true }, async () => {
+			if (keyPrice.gt(keyAvailable)) {
+				return this.props.dispatch(push(transactionNoKeyError));
+			}
 			if (!wallet.isSetupFinished) {
 				return this.props.dispatch(push(selfkeyIdRequiredRoute));
 			}
@@ -181,6 +193,10 @@ BankAccountsDetailContainer.propTypes = {
 const mapStateToProps = (state, props) => {
 	const { accountCode, countryCode, templateId, vendorId } = props.match.params;
 	const authenticated = true;
+	let primaryToken = {
+		...props,
+		cryptoCurrency: config.constants.primaryToken
+	};
 	return {
 		templateId,
 		vendorId,
@@ -195,7 +211,8 @@ const mapStateToProps = (state, props) => {
 			authenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(state, vendorId, templateId),
-		wallet: walletSelectors.getWallet(state)
+		wallet: walletSelectors.getWallet(state),
+		cryptoValue: getCryptoValue(state, primaryToken)
 	};
 };
 

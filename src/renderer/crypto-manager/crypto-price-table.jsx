@@ -42,6 +42,27 @@ export const styles = theme => ({
 				marginLeft: '499px !important'
 			}
 		}
+	},
+	cryptoPriceTable: {
+		bodySection: {
+			maxWidth: '1080px',
+			width: '100%'
+		},
+		'@media screen and (min-width: 1230px)': {
+			bodySection: {
+				maxWidth: '1140px'
+			}
+		}
+	},
+	address: {
+		maxWidth: '270px',
+		overflow: 'hidden',
+		textOverflow: 'ellipsis'
+	},
+	'@media screen and (min-width: 1230px)': {
+		address: {
+			maxWidth: 'initial'
+		}
 	}
 });
 
@@ -174,8 +195,10 @@ class CryptoPriceTableComponent extends Component {
 							className={classes.summary}
 						/>
 					</TableCell>
-					<TableCell>
-						<Typography variant="h6">{token.address}</Typography>
+					<TableCell title={token.address}>
+						<Typography variant="h6" className={classes.address}>
+							{token.address}
+						</Typography>
 					</TableCell>
 					<TableCell>
 						<Typography variant="h6">{visibilityButton}</Typography>
