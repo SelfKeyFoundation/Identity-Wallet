@@ -94,7 +94,14 @@ const profileStyle = theme =>
 			height: '1px',
 			backgroundColor: '#303c49'
 		},
-		profileBox: {
+		profilePersonal: {
+			padding: '20px 0px 4px 6px',
+			display: 'flex',
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center'
+		},
+		profileCorporate: {
 			padding: '20px 0px 14px 6px',
 			display: 'flex',
 			flexDirection: 'row',
@@ -106,44 +113,65 @@ const profileStyle = theme =>
 		},
 		profileName: {
 			paddingLeft: '28px'
+		},
+		button: {
+			width: '189px'
 		}
 	});
 
-const Profile = withStyles(profileStyle)(({ classes, profiles, isOpen, onClick }) => {
-	return (
-		isOpen && (
-			<div className={classes.profile}>
-				{profiles &&
-					profiles.map((el, index) => (
-						<Grid container key={index} className={classes.profileDetail}>
-							<Grid item sm={2}>
-								{el.profileType === 'company' ? <PersonIcon /> : <CorporateIcon />}
+const Profile = withStyles(profileStyle)(
+	({ classes, profiles, isOpen, onClickPersonal, onClickCorporate }) => {
+		return (
+			isOpen && (
+				<div className={classes.profile}>
+					{profiles &&
+						profiles.map((el, index) => (
+							<Grid container key={index} className={classes.profileDetail}>
+								<Grid item sm={2}>
+									{el.profileType === 'company' ? (
+										<PersonIcon />
+									) : (
+										<CorporateIcon />
+									)}
+								</Grid>
+								<Grid item sm={8} className={classes.profileName}>
+									<Typography variant="h6">{`${el.firstName} ${
+										el.lastName
+									}`}</Typography>
+									<Typography variant="subtitle1" color="secondary">
+										{`${el.profileType.charAt(0).toUpperCase() +
+											el.profileType.slice(1)} Profile`}
+									</Typography>
+								</Grid>
 							</Grid>
-							<Grid item sm={8} className={classes.profileName}>
-								<Typography variant="h6">{`${el.firstName} ${
-									el.lastName
-								}`}</Typography>
-								<Typography variant="subtitle1" color="secondary">
-									{`${el.profileType.charAt(0).toUpperCase() +
-										el.profileType.slice(1)} Profile`}
-								</Typography>
-							</Grid>
-						</Grid>
-					))}
-				<Grid className={classes.profileFooter}>
-					<div className={classes.horizontalDivider} />
-				</Grid>
-				<Grid container className={classes.profileBox}>
-					<Grid item xs={12}>
-						<Button variant="outlined" size="small" onClick={onClick}>
-							NEW CORPORATE PROFILE
-						</Button>
+						))}
+					<Grid className={classes.profileFooter}>
+						<div className={classes.horizontalDivider} />
 					</Grid>
-				</Grid>
-			</div>
-		)
-	);
-});
+					<Grid container className={classes.profilePersonal}>
+						<Grid item xs={12}>
+							<Button
+								variant="outlined"
+								size="small"
+								className={classes.button}
+								onClick={onClickPersonal}
+							>
+								NEW PERSONAL PROFILE
+							</Button>
+						</Grid>
+					</Grid>
+					<Grid container className={classes.profileCorporate}>
+						<Grid item xs={12}>
+							<Button variant="outlined" size="small" onClick={onClickCorporate}>
+								NEW CORPORATE PROFILE
+							</Button>
+						</Grid>
+					</Grid>
+				</div>
+			)
+		);
+	}
+);
 
 const dummyProfiles = [
 	{
@@ -178,9 +206,14 @@ class Toolbar extends Component {
 		});
 	};
 
-	createProfile = evt => {
+	createPersonalProfile = evt => {
 		this.toggleProfile(!this.state.isProfileOpen);
-		return this.props.createProfile(evt);
+		return this.props.createPersonalProfile(evt);
+	};
+
+	createCorporateProfile = evt => {
+		this.toggleProfile(!this.state.isProfileOpen);
+		return this.props.createCorporateProfile(evt);
 	};
 
 	render() {
@@ -264,7 +297,8 @@ class Toolbar extends Component {
 					<Profile
 						profiles={dummyProfiles}
 						isOpen={this.state.isProfileOpen}
-						onClick={this.createProfile}
+						onClickPersonal={this.createPersonalProfile}
+						onClickCorporate={this.createCorporateProfile}
 					/>
 				</div>
 			</React.Fragment>

@@ -88,7 +88,12 @@ class Main extends Component {
 		this.setMatomoId();
 	}
 
-	createProfile = evt => {
+	createPersonalProfile = evt => {
+		evt && evt.preventDefault();
+		this.props.dispatch(push('/selfKeyIdCreate'));
+	};
+
+	createCorporateProfile = evt => {
 		evt && evt.preventDefault();
 		this.props.dispatch(push('/main/create-corporate-profile'));
 	};
@@ -104,7 +109,10 @@ class Main extends Component {
 				className={classes.page}
 			>
 				<Grid item className={classes.headerSection}>
-					<Toolbar createProfile={this.createProfile} />
+					<Toolbar
+						createPersonalProfile={this.createPersonalProfile}
+						createCorporateProfile={this.createCorporateProfile}
+					/>
 				</Grid>
 				<Grid item xs={12} className={classes.bodySection} style={contentWrapperStyle}>
 					<Route path={`${match.path}/dashboard`} component={Dashboard} />
