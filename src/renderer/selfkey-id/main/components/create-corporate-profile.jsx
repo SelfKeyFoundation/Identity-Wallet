@@ -68,9 +68,6 @@ const styles = theme => ({
 		marginTop: '10px',
 		marginBottom: '10px'
 	},
-	input: {
-		width: '322px'
-	},
 	dropdown: {
 		width: '322px'
 	},
@@ -78,6 +75,16 @@ const styles = theme => ({
 		alignItems: 'baseline',
 		display: 'flex',
 		flexDirection: 'row'
+	},
+	inputStop: {
+		marginBottom: '35px',
+		width: '47%'
+	},
+	optional: {
+		display: 'inline',
+		fontStyle: 'italic',
+		marginLeft: '5px',
+		textTransform: 'lowercase'
 	}
 });
 
@@ -175,17 +182,31 @@ class CreateCorporateProfileComponent extends Component {
 																direction="column"
 																justify="center"
 																alignItems="center"
-																spacing={32}
+																spacing={0}
+																xs={12}
 															>
-																<Grid item>
+																<Grid
+																	item
+																	spacing={0}
+																	style={{
+																		width: '100%'
+																	}}
+																>
 																	<Grid
 																		container
 																		direction="column"
-																		spacing={40}
+																		spacing={0}
 																		justify="flex-start"
 																		alignItems="flex-start"
+																		xs={12}
 																	>
-																		<Grid item>
+																		<Grid
+																			item
+																			spacing={0}
+																			style={{
+																				width: '100%'
+																			}}
+																		>
 																			<Grid
 																				container
 																				direction="column"
@@ -193,12 +214,19 @@ class CreateCorporateProfileComponent extends Component {
 																				justify="flex-start"
 																				alignItems="flex-start"
 																			>
-																				<Grid item>
+																				<Grid
+																					container
+																					direction="row"
+																					justify="space-between"
+																					wrap="nowrap"
+																					xs={12}
+																				>
 																					<Grid
 																						container
 																						direction="column"
-																						justify="flex-start"
-																						alignItems="flex-start"
+																						className={
+																							classes.inputStop
+																						}
 																					>
 																						<Grid item>
 																							<Typography
@@ -212,12 +240,7 @@ class CreateCorporateProfileComponent extends Component {
 																								Jurisdiction*
 																							</Typography>
 																						</Grid>
-																						<Grid
-																							item
-																							className={
-																								classes.input
-																							}
-																						>
+																						<Grid item>
 																							<Input
 																								id="nickName"
 																								fullWidth
@@ -250,6 +273,14 @@ class CreateCorporateProfileComponent extends Component {
 																								</Typography>
 																							)}
 																						</Grid>
+																					</Grid>
+																					<Grid
+																						container
+																						direction="column"
+																						className={
+																							classes.inputStop
+																						}
+																					>
 																						<Grid item>
 																							<Typography
 																								variant="overline"
@@ -260,12 +291,7 @@ class CreateCorporateProfileComponent extends Component {
 																								Name*
 																							</Typography>
 																						</Grid>
-																						<Grid
-																							item
-																							className={
-																								classes.input
-																							}
-																						>
+																						<Grid item>
 																							<Input
 																								id="firstName"
 																								fullWidth
@@ -279,12 +305,19 @@ class CreateCorporateProfileComponent extends Component {
 																						</Grid>
 																					</Grid>
 																				</Grid>
-																				<Grid item>
+																				<Grid
+																					container
+																					direction="row"
+																					justify="space-between"
+																					wrap="nowrap"
+																					xs={12}
+																				>
 																					<Grid
 																						container
 																						direction="column"
-																						justify="flex-start"
-																						alignItems="flex-start"
+																						className={
+																							classes.inputStop
+																						}
 																					>
 																						<Grid item>
 																							<Typography
@@ -296,12 +329,7 @@ class CreateCorporateProfileComponent extends Component {
 																								Type*
 																							</Typography>
 																						</Grid>
-																						<Grid
-																							item
-																							className={
-																								classes.input
-																							}
-																						>
+																						<Grid item>
 																							<Input
 																								id="lastName"
 																								fullWidth
@@ -314,13 +342,12 @@ class CreateCorporateProfileComponent extends Component {
 																							/>
 																						</Grid>
 																					</Grid>
-																				</Grid>
-																				<Grid item>
 																					<Grid
 																						container
 																						direction="column"
-																						justify="flex-start"
-																						alignItems="flex-start"
+																						className={
+																							classes.inputStop
+																						}
 																					>
 																						<Grid item>
 																							<Typography
@@ -331,12 +358,7 @@ class CreateCorporateProfileComponent extends Component {
 																								Date*
 																							</Typography>
 																						</Grid>
-																						<Grid
-																							item
-																							className={
-																								classes.input
-																							}
-																						>
+																						<Grid item>
 																							<Input
 																								id="lastName"
 																								fullWidth
@@ -345,17 +367,23 @@ class CreateCorporateProfileComponent extends Component {
 																									this
 																										.handleLastNameChange
 																								}
-																								placeholder="DD/MM/YYYY"
 																							/>
 																						</Grid>
 																					</Grid>
 																				</Grid>
-																				<Grid item>
+																				<Grid
+																					container
+																					direction="row"
+																					justify="space-between"
+																					wrap="nowrap"
+																					xs={12}
+																				>
 																					<Grid
 																						container
 																						direction="column"
-																						justify="flex-start"
-																						alignItems="flex-start"
+																						className={
+																							classes.inputStop
+																						}
 																					>
 																						<Grid item>
 																							<Typography
@@ -364,15 +392,17 @@ class CreateCorporateProfileComponent extends Component {
 																							>
 																								Contact
 																								Email
-																								(optional)
+																								<Typography
+																									variant="overline"
+																									className={
+																										classes.optional
+																									}
+																								>
+																									(optional)
+																								</Typography>
 																							</Typography>
 																						</Grid>
-																						<Grid
-																							item
-																							className={
-																								classes.input
-																							}
-																						>
+																						<Grid item>
 																							<Input
 																								id="email"
 																								fullWidth
@@ -404,13 +434,12 @@ class CreateCorporateProfileComponent extends Component {
 																							)}
 																						</Grid>
 																					</Grid>
-																				</Grid>
-																				<Grid item>
 																					<Grid
 																						container
 																						direction="column"
-																						justify="flex-start"
-																						alignItems="flex-start"
+																						className={
+																							classes.inputStop
+																						}
 																					>
 																						<Grid item>
 																							<Typography
@@ -419,15 +448,17 @@ class CreateCorporateProfileComponent extends Component {
 																							>
 																								Tax
 																								ID
-																								(optional)
+																								<Typography
+																									variant="overline"
+																									className={
+																										classes.optional
+																									}
+																								>
+																									(optional)
+																								</Typography>
 																							</Typography>
 																						</Grid>
-																						<Grid
-																							item
-																							className={
-																								classes.input
-																							}
-																						>
+																						<Grid item>
 																							<Input
 																								id="email"
 																								fullWidth
