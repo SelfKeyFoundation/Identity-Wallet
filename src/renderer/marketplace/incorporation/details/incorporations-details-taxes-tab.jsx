@@ -40,72 +40,72 @@ const styles = theme => ({
 const TAX_COLUMNS = [
 	[
 		{
-			id: 'Offshore Income Tax Exemption',
+			id: 'offshoreIncomeTaxExemption',
 			label: 'Offshore Income Tax Exemption',
 			boolean: true
 		},
 		{
-			id: 'Offshore capital gains tax exemption',
+			id: 'offshoreCapitalGainsTaxExemption',
 			label: 'Offshore capital gains tax exemption',
 			boolean: true
 		},
 		{
-			id: 'Offshore dividends tax exemption',
+			id: 'offshoreDividendsTaxExemption',
 			label: 'Offshore dividends tax exemption',
 			boolean: true
 		},
-		{ id: 'CFC Rules', label: 'CFC Rules', boolean: true },
-		{ id: 'Thin Capitalisation Rules', label: 'Thin Capitalisation Rules', boolean: true },
-		{ id: 'Patent Box', label: 'Patent Box', boolean: true },
-		{ id: 'Tax Incentives & Credits', label: 'Tax Incentives & Credits', boolean: true },
-		{ id: 'Property Tax', label: 'Property Tax', boolean: true },
-		{ id: 'Wealth tax', label: 'Wealth Tax', boolean: true },
-		{ id: 'Estate inheritance tax', label: 'Estate inheritance tax', boolean: true },
-		{ id: 'Transfer tax', label: 'Transfer tax', boolean: true },
-		{ id: 'Capital duties', label: 'Capital Duties', boolean: true }
+		{ id: 'cfcRules', label: 'CFC Rules', boolean: true },
+		{ id: 'thinCapitalisationRules', label: 'Thin Capitalisation Rules', boolean: true },
+		{ id: 'patentBox', label: 'Patent Box', boolean: true },
+		{ id: 'taxIncentivesCredits', label: 'Tax Incentives & Credits', boolean: true },
+		{ id: 'propertyTax', label: 'Property Tax', boolean: true },
+		{ id: 'wealthTax', label: 'Wealth Tax', boolean: true },
+		{ id: 'EstateInheritanceTax', label: 'Estate inheritance tax', boolean: true },
+		{ id: 'transferTax', label: 'Transfer tax', boolean: true },
+		{ id: 'capitalDuties', label: 'Capital Duties', boolean: true }
 	],
 	[
-		{ id: 'Offshore Income Tax Rate', label: 'Offshore Income Tax Rate', boolean: false },
+		{ id: 'offshoreIncomeTaxRate', label: 'Offshore Income Tax Rate', boolean: false },
 
-		{ id: 'Corporate Tax Rate', label: 'Corporate Tax Rate', boolean: false },
-		{ id: 'Capital Gains Tax Rate', label: 'Capital Gains Tax Rate', boolean: false },
-		{ id: 'Dividends Received', label: 'Dividends Received', boolean: false },
+		{ id: 'corporateTaxRate', label: 'Corporate Tax Rate', boolean: false },
+		{ id: 'capitalGainsTaxRate', label: 'Capital Gains Tax Rate', boolean: false },
+		{ id: 'dividendsReceived', label: 'Dividends Received', boolean: false },
 		{
-			id: 'Dividends Withholding Tax Rate',
+			id: 'dividendsWithholdingTaxRate',
 			label: 'Dividends Withholding Tax Rate',
 			boolean: false
 		},
 		{
-			id: 'Interests Withholding Tax Rate',
+			id: 'interestsWithholdingTaxRate',
 			label: 'Interests Withholding Tax Rate',
 			boolean: false
 		},
 		{
-			id: 'Royalties Withholding Tax Rate',
+			id: 'royaltiesWithholdingTaxRate',
 			label: 'Royalties Withholding Tax Rate',
 			boolean: false
 		},
-		{ id: 'Losses carryback (years)', label: 'Losses carryback (years)', boolean: false },
-		{ id: 'Losses carryforward (years)', label: 'Losses carryforward (years)', boolean: false }
+		{ id: 'lossesCarrybackYears', label: 'Losses carryback (years)', boolean: false },
+		{ id: 'lossesCarryforwardYears', label: 'Losses carryforward (years)', boolean: false }
 	],
 	[
-		{ id: 'Personal Income Tax Rate', label: 'Personal Income Tax Rate', boolean: false },
-		{ id: 'VAT Rate', label: 'VAT Rate', boolean: false },
-		{ id: 'Inventory methods permitted', label: 'Inventory methods permitted', boolean: false },
-		{ id: 'Tax time (hours)', label: 'Tax time (hours)', boolean: false },
-		{ id: 'Tax payments per year', label: 'Tax payments per year', boolean: false },
-		{ id: 'Total Tax Rate', label: 'Total Corporation Tax Burden', boolean: false },
-		{ id: 'Social Security Employee', label: 'Social Security Employee', boolean: false },
-		{ id: 'Social Security Employer', label: 'Social Security Employer', boolean: false }
+		{ id: 'personalIncomeTaxRate', label: 'Personal Income Tax Rate', boolean: false },
+		{ id: 'vatRate', label: 'VAT Rate', boolean: false },
+		{ id: 'inventoryMethodsPermitted', label: 'Inventory methods permitted', boolean: false },
+		{ id: 'taxTimeHours', label: 'Tax time (hours)', boolean: false },
+		{ id: 'taxPaymentsPerYear', label: 'Tax payments per year', boolean: false },
+		{ id: 'totalTaxRate', label: 'Total Corporation Tax Burden', boolean: false },
+		{ id: 'socialSecurityEmployee', label: 'Social Security Employee', boolean: false },
+		{ id: 'socialSecurityEmployer', label: 'Social Security Employer', boolean: false }
 	]
 ];
 
 const IncorporationsTaxesTab = withStyles(styles)(({ classes, program }) => (
 	<div className={classes.tabContainer}>
-		<IncorporationsDataPanel sections={TAX_COLUMNS} data={program.tax} />
+		<IncorporationsDataPanel sections={TAX_COLUMNS} data={program.data} />
 		<div
 			dangerouslySetInnerHTML={{
-				__html: sanitize(program.translation.taxes_paragraph)
+				__html: sanitize(program.data.en.taxesParagraph)
 			}}
 		/>
 	</div>

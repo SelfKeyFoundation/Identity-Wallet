@@ -135,7 +135,7 @@ class Main extends Component {
 						component={MarketplaceExchangesPage}
 					/>
 					<Route
-						path={`${match.path}/marketplace-services/:name`}
+						path={`${match.path}/marketplace-services/:inventoryId`}
 						component={MarketplaceServiceDetailsPage}
 					/>
 					<Route

@@ -264,7 +264,8 @@ const HeaderIcon = withStyles(styles)(({ status, classes }) => {
 });
 
 const getRpInfo = (rpName, field) => {
-	return config.relyingPartyInfo[rpName][field];
+	// return config.relyingPartyInfo[rpName][field];
+	return config.relyingPartyInfo['incorporations'][field];
 };
 
 const getRpName = title => {

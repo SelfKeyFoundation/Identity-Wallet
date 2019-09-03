@@ -53,11 +53,13 @@ export const reducer = (state = initialState, action) => {
 };
 
 export const countriesSelectors = {
-	selectCountriesRoot: state => state.marketplace.countriess,
+	selectCountriesRoot: state => state.marketplace.countries,
 	selectCountries: state =>
 		countriesSelectors
 			.selectCountriesRoot(state)
-			.all.map(id => countriesSelectors.selectCountriesRoot(state).byId[id])
+			.all.map(id => countriesSelectors.selectCountriesRoot(state).byId[id]),
+	selectCountryByCode: (state, countryCode) =>
+		countriesSelectors.selectCountries(state).find(c => c.code === countryCode)
 };
 
 export default reducer;
