@@ -83,7 +83,7 @@ const profileStyle = theme =>
 			float: 'right',
 			padding: '20px 20px 8px 20px',
 			borderRadius: '4px',
-			backgroundColor: '#262f39',
+			backgroundColor: '#1E262E',
 			border: 'solid 1px #303c49'
 		},
 		profileFooter: {
