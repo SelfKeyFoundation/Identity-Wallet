@@ -16,9 +16,12 @@ import {
 	Typography,
 	Button,
 	Input,
+	MenuItem,
+	Select,
 	withStyles
 } from '@material-ui/core';
-import { EditTransparentIcon, DeleteIcon, SmallTableHeadRow } from 'selfkey-ui';
+import { KeyboardArrowDown } from '@material-ui/icons';
+import { EditTransparentIcon, DeleteIcon, SmallTableHeadRow, KeyPicker } from 'selfkey-ui';
 
 import backgroundImage from '../../../../../static/assets/images/icons/icon-marketplace.png';
 
@@ -76,9 +79,17 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'row'
 	},
-	inputStop: {
+	inputBox: {
 		marginBottom: '35px',
 		width: '47%'
+	},
+	keyBox: {
+		marginBottom: '35px',
+		marginRight: 'calc(47% - 200px)',
+		width: '200px',
+		'& .rdt': {
+			width: '180px'
+		}
 	},
 	optional: {
 		display: 'inline',
@@ -225,7 +236,7 @@ class CreateCorporateProfileComponent extends Component {
 																						container
 																						direction="column"
 																						className={
-																							classes.inputStop
+																							classes.inputBox
 																						}
 																					>
 																						<Grid item>
@@ -237,48 +248,65 @@ class CreateCorporateProfileComponent extends Component {
 																								}
 																							>
 																								Legal
-																								Jurisdiction*
+																								Jurisdiction
 																							</Typography>
 																						</Grid>
 																						<Grid item>
-																							<Input
-																								id="nickName"
-																								fullWidth
-																								error={
-																									this
-																										.state
-																										.error !==
-																									''
+																							<Select
+																								value="Value"
+																								onChange=""
+																								displayEmpty
+																								name="jurisdiction"
+																								disableUnderline
+																								IconComponent={
+																									KeyboardArrowDown
 																								}
-																								onChange={
-																									this
-																										.handleNickNameChange
+																								input={
+																									<Input
+																										disableUnderline
+																										placeholder="Choose..."
+																									/>
 																								}
-																								placeholder="Legal Jurisdiction"
-																							/>
-																							{this
-																								.state
-																								.error !==
-																								'' && (
-																								<Typography
-																									variant="subtitle2"
-																									color="error"
-																									gutterBottom
-																								>
-																									{
-																										this
-																											.state
-																											.error
-																									}
-																								</Typography>
-																							)}
+																								style={{
+																									width:
+																										'100%'
+																								}}
+																							>
+																								<MenuItem value="">
+																									<em>
+																										Choose...
+																									</em>
+																								</MenuItem>
+																								{[
+																									'Jurisdiction 1',
+																									'Jurisdiction 2',
+																									'Jurisdiction 3',
+																									'Jurisdiction 4',
+																									'Jurisdiction 5'
+																								].map(
+																									item => (
+																										<MenuItem
+																											key={
+																												item
+																											}
+																											value={
+																												item
+																											}
+																										>
+																											{
+																												item
+																											}
+																										</MenuItem>
+																									)
+																								)}
+																							</Select>
 																						</Grid>
 																					</Grid>
 																					<Grid
 																						container
 																						direction="column"
 																						className={
-																							classes.inputStop
+																							classes.inputBox
 																						}
 																					>
 																						<Grid item>
@@ -288,7 +316,7 @@ class CreateCorporateProfileComponent extends Component {
 																							>
 																								Legal
 																								Entity
-																								Name*
+																								Name
 																							</Typography>
 																						</Grid>
 																						<Grid item>
@@ -316,7 +344,7 @@ class CreateCorporateProfileComponent extends Component {
 																						container
 																						direction="column"
 																						className={
-																							classes.inputStop
+																							classes.inputBox
 																						}
 																					>
 																						<Grid item>
@@ -326,27 +354,64 @@ class CreateCorporateProfileComponent extends Component {
 																							>
 																								Legal
 																								Entity
-																								Type*
+																								Type
 																							</Typography>
 																						</Grid>
 																						<Grid item>
-																							<Input
-																								id="lastName"
-																								fullWidth
-																								required
-																								onChange={
-																									this
-																										.handleLastNameChange
+																							<Select
+																								value="Entity Type"
+																								onChange=""
+																								displayEmpty
+																								name="entitytype"
+																								disableUnderline
+																								IconComponent={
+																									KeyboardArrowDown
 																								}
-																								placeholder="Legal Entity Type"
-																							/>
+																								input={
+																									<Input
+																										disableUnderline
+																									/>
+																								}
+																								style={{
+																									width:
+																										'100%'
+																								}}
+																							>
+																								<MenuItem value="">
+																									<em>
+																										Choose...
+																									</em>
+																								</MenuItem>
+																								{[
+																									'Entity Type 1',
+																									'Entity Type 2',
+																									'Entity Type 3',
+																									'Entity Type 4',
+																									'Entity Type 5'
+																								].map(
+																									item => (
+																										<MenuItem
+																											key={
+																												item
+																											}
+																											value={
+																												item
+																											}
+																										>
+																											{
+																												item
+																											}
+																										</MenuItem>
+																									)
+																								)}
+																							</Select>
 																						</Grid>
 																					</Grid>
 																					<Grid
 																						container
 																						direction="column"
 																						className={
-																							classes.inputStop
+																							classes.keyBox
 																						}
 																					>
 																						<Grid item>
@@ -355,18 +420,26 @@ class CreateCorporateProfileComponent extends Component {
 																								gutterBottom
 																							>
 																								Creation
-																								Date*
+																								Date
 																							</Typography>
 																						</Grid>
 																						<Grid item>
-																							<Input
-																								id="lastName"
-																								fullWidth
+																							<KeyPicker
+																								id="creationDate"
 																								required
 																								onChange={
 																									this
 																										.handleLastNameChange
 																								}
+																								className={
+																									classes.picker
+																								}
+																								style={{
+																									'& >div': {
+																										width:
+																											'200px !important'
+																									}
+																								}}
 																							/>
 																						</Grid>
 																					</Grid>
@@ -382,7 +455,7 @@ class CreateCorporateProfileComponent extends Component {
 																						container
 																						direction="column"
 																						className={
-																							classes.inputStop
+																							classes.inputBox
 																						}
 																					>
 																						<Grid item>
@@ -438,7 +511,7 @@ class CreateCorporateProfileComponent extends Component {
 																						container
 																						direction="column"
 																						className={
-																							classes.inputStop
+																							classes.inputBox
 																						}
 																					>
 																						<Grid item>
