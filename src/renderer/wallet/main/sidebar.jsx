@@ -63,7 +63,10 @@ const styles = theme => ({
 		cursor: 'pointer'
 	},
 	link: {
+		alignItems: 'center',
+		display: 'flex',
 		outline: 'none',
+		textDecoration: 'none',
 		'&:focus': {
 			outline: 'none'
 		}
@@ -220,7 +223,7 @@ class Sidebar extends Component {
 				className={`${classes.list} sidebarContainer`}
 				spacing={40}
 			>
-				<Grid item style={{ padding: '20px 0', flexGrow: 0 }}>
+				<Grid item style={{ padding: '21px 0', flexGrow: 0 }}>
 					<Grid
 						container
 						direction="row"
@@ -230,10 +233,10 @@ class Sidebar extends Component {
 					>
 						<Link to="/main/dashboard" className={classes.link}>
 							<SelfkeyLogo className={classes.logo} />
+							<Typography variant="h1" className={classes.logoText}>
+								SELFKEY
+							</Typography>
 						</Link>
-						<Typography variant="h1" className={classes.logoText}>
-							SELFKEY
-						</Typography>
 					</Grid>
 				</Grid>
 				<Divider style={{ width: '100%', backgroundColor: '#475768', flexGrow: 0 }} />
