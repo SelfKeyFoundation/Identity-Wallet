@@ -115,6 +115,7 @@ const styles = theme => ({
 	drawer: {
 		transition: 'all 3s',
 		'& > div:first-of-type': {
+			borderBottom: 'none',
 			left: 0,
 			opacity: '1 !important',
 			right: 'auto'
