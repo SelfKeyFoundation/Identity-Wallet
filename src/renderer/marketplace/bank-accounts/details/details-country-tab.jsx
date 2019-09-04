@@ -139,7 +139,7 @@ export const BankingCountryTab = withStyles(styles)(({ classes, country, jurisdi
 					<div className={classes.countryInfo}>
 						<div
 							dangerouslySetInnerHTML={{
-								__html: sanitize(jurisdiction.countryDetails)
+								__html: sanitize(jurisdiction.data.jurisdiction.countryDetails)
 							}}
 						/>
 					</div>

@@ -136,20 +136,22 @@ const IncorporationsListTable = withStyles(styles)(
 					{data.map(inc => (
 						<TableRow key={inc.id}>
 							<TableCell className={classes.flagCell}>
-								<FlagCountryName code={inc['Country code']} size="small" />
+								<FlagCountryName code={inc.data.countryCode} size="small" />
 							</TableCell>
-							<TableCell>{inc.Region}</TableCell>
-							<TableCell className={classes.regionCell}>{inc.Acronym}</TableCell>
-							<TableCell className={classes.smallCell}>
-								{inc.tax['Offshore Income Tax Rate']}
+							<TableCell>{inc.data.region}</TableCell>
+							<TableCell className={classes.regionCell}>
+								{inc.data.acronym && inc.data.acronym[0]}
 							</TableCell>
 							<TableCell className={classes.smallCell}>
-								{inc.tax['Corporate Tax Rate']}
+								{inc.data.offshoreIncomeTaxRate}
+							</TableCell>
+							<TableCell className={classes.smallCell}>
+								{inc.data.corporateTaxRate}
 							</TableCell>
 							<TagTableCell className={classes.goodForCell}>
 								<Grid container>
-									{inc['Good for'] &&
-										inc['Good for'].map(tag => <Tag key={tag}>{tag}</Tag>)}
+									{inc.data.goodFor &&
+										inc.data.goodFor.map(tag => <Tag key={tag}>{tag}</Tag>)}
 								</Grid>
 							</TagTableCell>
 							<TableCell className={classes.costCell}>

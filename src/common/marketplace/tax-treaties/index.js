@@ -57,7 +57,9 @@ export const taxTreatiesSelectors = {
 	selectTaxTreaties: state =>
 		taxTreatiesSelectors
 			.selectTaxTreatiesRoot(state)
-			.all.map(id => taxTreatiesSelectors.selectTaxTreatiesRoot(state).byId[id])
+			.all.map(id => taxTreatiesSelectors.selectTaxTreatiesRoot(state).byId[id]),
+	selectTaxTreatiesByCountryCode: (state, countryCode) =>
+		taxTreatiesSelectors.selectTaxTreaties(state).filter(t => t.countryCode === countryCode)
 };
 
 export default reducer;

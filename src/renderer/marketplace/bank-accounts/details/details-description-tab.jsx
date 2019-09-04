@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core';
 import { sanitize } from '../../common';
+
 const styles = theme => ({
 	tabContainer: {
 		width: '100%',
@@ -35,11 +36,11 @@ const styles = theme => ({
 	}
 });
 
-const BankingDescriptionTab = withStyles(styles)(({ classes, accountType }) => (
+const BankingDescriptionTab = withStyles(styles)(({ classes, jurisdiction }) => (
 	<div className={classes.tabContainer}>
 		<div
 			dangerouslySetInnerHTML={{
-				__html: sanitize(accountType.introText)
+				__html: sanitize(jurisdiction.data.introText)
 			}}
 		/>
 	</div>

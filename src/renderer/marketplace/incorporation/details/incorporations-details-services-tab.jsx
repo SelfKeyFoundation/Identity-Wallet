@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core';
 import { sanitize } from '../../common';
+
 const styles = theme => ({
 	tabContainer: {
 		width: '100%',
@@ -39,7 +40,7 @@ const IncorporationsServicesTab = withStyles(styles)(({ classes, program }) => (
 	<div className={classes.tabContainer}>
 		<div
 			dangerouslySetInnerHTML={{
-				__html: sanitize(program.wallet_description)
+				__html: sanitize(program.data.walletDescription)
 			}}
 		/>
 	</div>

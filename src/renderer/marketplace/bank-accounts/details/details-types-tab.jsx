@@ -46,7 +46,7 @@ class BankingTypesTabComponent extends Component {
 		}
 	};
 	render() {
-		const { classes, region, banks = [], accountType } = this.props;
+		const { classes, region, banks = [], jurisdiction } = this.props;
 		const { option } = this.state;
 		return (
 			<div className={classes.tabContainer}>
@@ -59,18 +59,18 @@ class BankingTypesTabComponent extends Component {
 				>
 					<Grid item className={classes.gridPadding}>
 						<Typography variant="body1" color="secondary">
-							We work with {banks.length} different banks in {region}. Each bank has
-							different eligibility requirements, types of accounts available and
-							onboarding processes. We invite you to carefully review each banks
-							requirements and services to better understand if their banking services
-							meet your needs:
+							We work with {Object.keys(banks).length} different banks in {region}.
+							Each bank has different eligibility requirements, types of accounts
+							available and onboarding processes. We invite you to carefully review
+							each banks requirements and services to better understand if their
+							banking services meet your needs:
 						</Typography>
 					</Grid>
-					{banks.map((opt, idx) => (
+					{Object.keys(banks).map((opt, idx) => (
 						<Grid item key={idx} className={classes.gridPadding}>
 							<BankingAccountOption
-								account={opt}
-								accountType={accountType}
+								account={banks[opt]}
+								jurisdiction={jurisdiction}
 								title={`Option ${idx + 1}`}
 								isOpen={option === idx}
 								toggleOpen={this.toggleOption(idx)}

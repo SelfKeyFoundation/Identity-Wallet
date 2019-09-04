@@ -107,8 +107,63 @@ const styles = theme => ({
 	}
 });
 
+const isPersonalVisitRequired = accounts => {
+	return Object.keys(accounts).reduce((required, accountId) => {
+		const account = accounts[accountId];
+		return required && account.personalVisitRequired;
+	}, true);
+};
+
+const BankingOffersRow = withStyles(styles)(({ classes, bank, onDetails, keyRate }) => {
+	const data = bank.data;
+	return (
+		<TableRow className={classes.tableRow}>
+			<TableCell className={classes.flagCell}>
+				<FlagCountryName code={data.countryCode} size="small" />
+			</TableCell>
+			<TableCell className={classes.regionCell}>
+				<Typography variant="h6">{data.region}</Typography>
+			</TableCell>
+			<TableCell>
+				<div className={classes.eligibilityCellBody}>
+					{data.eligibility &&
+						data.eligibility.map((tag, index) => (
+							<Typography variant="h6" key={tag}>
+								{tag}
+								{index !== data.eligibility.length - 1 ? ',' : ''}
+							</Typography>
+						))}
+				</div>
+			</TableCell>
+			<TableCell className={classes.minDepositCell}>
+				<Typography variant="h6">{data.minDeposit}</Typography>
+			</TableCell>
+			<TagTableCell className={classes.goodForCell}>
+				<Grid container>
+					{data.goodFor && data.goodFor.map(tag => <Tag key={tag}>{tag}</Tag>)}
+				</Grid>
+			</TagTableCell>
+			<TableCell className={classes.personalVisitCell}>
+				{isPersonalVisitRequired(data.accounts) ? (
+					<Typography variant="h6">Yes</Typography>
+				) : (
+					<Typography variant="h6">No</Typography>
+				)}
+			</TableCell>
+			<TableCell className={classes.costCell}>
+				<ProgramPrice label="$" price={bank.price} rate={keyRate} />
+			</TableCell>
+			<TableCell className={classes.detailsCell}>
+				<span id={`details${data.countryCode}`} onClick={() => onDetails(bank)}>
+					Details
+				</span>
+			</TableCell>
+		</TableRow>
+	);
+});
+
 const BankingOffersTable = withStyles(styles)(
-	({ classes, keyRate, data = [], onDetails, className }) => {
+	({ classes, accountType, keyRate, inventory = [], onDetails, className }) => {
 		return (
 			<Table className={classNames(classes.table, className)}>
 				<TableHead>
@@ -155,53 +210,14 @@ const BankingOffersTable = withStyles(styles)(
 					</LargeTableHeadRow>
 				</TableHead>
 				<TableBody className={classes.tableBodyRow}>
-					{data.map(bank => (
-						<TableRow key={bank.id} className={classes.tableRow}>
-							<TableCell className={classes.flagCell}>
-								<FlagCountryName code={bank.countryCode} size="small" />
-							</TableCell>
-							<TableCell className={classes.regionCell}>
-								<Typography variant="h6">{bank.region}</Typography>
-							</TableCell>
-							<TableCell>
-								<div className={classes.eligibilityCellBody}>
-									{bank.eligibility &&
-										bank.eligibility.map((tag, index) => (
-											<Typography variant="h6" key={tag}>
-												{tag}
-												{index !== bank.eligibility.length - 1 ? ',' : ''}
-											</Typography>
-										))}
-								</div>
-							</TableCell>
-							<TableCell className={classes.minDepositCell}>
-								<Typography variant="h6">{bank.minDeposit}</Typography>
-							</TableCell>
-							<TagTableCell className={classes.goodForCell}>
-								<Grid container>
-									{bank.goodFor &&
-										bank.goodFor.map(tag => <Tag key={tag}>{tag}</Tag>)}
-								</Grid>
-							</TagTableCell>
-							<TableCell className={classes.personalVisitCell}>
-								{bank.personalVisitRequired ? (
-									<Typography variant="h6">Yes</Typography>
-								) : (
-									<Typography variant="h6">No</Typography>
-								)}
-							</TableCell>
-							<TableCell className={classes.costCell}>
-								<ProgramPrice label="$" price={bank.price} rate={keyRate} />
-							</TableCell>
-							<TableCell className={classes.detailsCell}>
-								<span
-									id={`details${bank.countryCode}`}
-									onClick={() => onDetails(bank)}
-								>
-									Details
-								</span>
-							</TableCell>
-						</TableRow>
+					{inventory.map(bank => (
+						<BankingOffersRow
+							bank={bank}
+							accountType={accountType}
+							key={bank.id}
+							keyRate={keyRate}
+							onDetails={onDetails}
+						/>
 					))}
 				</TableBody>
 			</Table>

@@ -52,11 +52,11 @@ class OptionSelectionComponent extends Component {
 	render() {
 		const {
 			classes,
-			accountType,
+			jurisdiction,
 			title,
 			description1,
 			description2,
-			options,
+			banks,
 			countryCode,
 			onBackClick,
 			showBankName = true
@@ -102,12 +102,12 @@ class OptionSelectionComponent extends Component {
 								alignItems="stretch"
 								spacing={40}
 							>
-								{options.map((opt, idx) => (
+								{Object.keys(banks).map((opt, idx) => (
 									<Grid item key={idx}>
 										<BankingAccountOption
-											account={opt}
+											account={banks[opt]}
 											title={`Option ${idx + 1}`}
-											accountType={accountType}
+											jurisdiction={jurisdiction}
 											onSelectOption={this.onSelectOption}
 											selectedValue={this.state.selectedValue}
 											showBankName={showBankName}

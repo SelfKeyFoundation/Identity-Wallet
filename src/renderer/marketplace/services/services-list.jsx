@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core';
 import { LargeTableHeadRow, BackButton } from 'selfkey-ui';
 import { MarketplaceServicesListItem } from './services-list-item';
+import { PageLoading } from '../common';
 
 const styles = theme => ({
 	wrapper: {
@@ -71,12 +72,12 @@ const getServices = (items, viewAction) => {
 				<MarketplaceServicesListItem
 					id={item.id || item.name}
 					name={item.name}
-					location={item.location || '-'}
+					location={item.data.location || '-'}
 					fees={item.fees || '-'}
-					fiatSupported={item.fiatSupported || '-'}
-					fiatPayments={item.fiatPayments || '-'}
-					excludedResidents={item.excludedResidents || '-'}
-					logoUrl={item.logoUrl}
+					fiatSupported={item.data.fiatSupported || '-'}
+					fiatPayments={item.data.fiatPayments || '-'}
+					excludedResidents={item.data.excludedResidents || '-'}
+					logoUrl={item.data.logo ? item.data.logo[0].url : false}
 					status={item.status}
 					viewAction={viewAction}
 				/>
@@ -86,7 +87,7 @@ const getServices = (items, viewAction) => {
 };
 
 export const MarketplaceServicesList = withStyles(styles)(
-	({ classes, children, category, items, backAction, viewAction }) => (
+	({ classes, children, category, items, backAction, viewAction, isLoading }) => (
 		<Grid container>
 			<Grid item>
 				<BackButton onclick={backAction} />
@@ -124,40 +125,43 @@ export const MarketplaceServicesList = withStyles(styles)(
 							spacing={24}
 							className={classes.content}
 						>
-							<Table>
-								<TableHead>
-									<LargeTableHeadRow>
-										<TableCell className={classes.icon}>&nbsp;</TableCell>
-										<TableCell>
-											<Typography variant="overline">Exchange</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="overline">Location</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="overline">Fees</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="overline">
-												Fiat Supported
-											</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="overline">
-												Fiat Payments
-											</Typography>
-										</TableCell>
-										<TableCell style={{ padding: '10px' }}>
-											<Typography variant="overline">
-												Excluded Residents
-											</Typography>
-										</TableCell>
-										<TableCell>&nbsp;</TableCell>
-									</LargeTableHeadRow>
-								</TableHead>
+							{isLoading && <PageLoading />}
+							{!isLoading && (
+								<Table>
+									<TableHead>
+										<LargeTableHeadRow>
+											<TableCell className={classes.icon}>&nbsp;</TableCell>
+											<TableCell>
+												<Typography variant="overline">Exchange</Typography>
+											</TableCell>
+											<TableCell>
+												<Typography variant="overline">Location</Typography>
+											</TableCell>
+											<TableCell>
+												<Typography variant="overline">Fees</Typography>
+											</TableCell>
+											<TableCell>
+												<Typography variant="overline">
+													Fiat Supported
+												</Typography>
+											</TableCell>
+											<TableCell>
+												<Typography variant="overline">
+													Fiat Payments
+												</Typography>
+											</TableCell>
+											<TableCell style={{ padding: '10px' }}>
+												<Typography variant="overline">
+													Excluded Residents
+												</Typography>
+											</TableCell>
+											<TableCell>&nbsp;</TableCell>
+										</LargeTableHeadRow>
+									</TableHead>
 
-								<TableBody>{getServices(items, viewAction)}</TableBody>
-							</Table>
+									<TableBody>{getServices(items, viewAction)}</TableBody>
+								</Table>
+							)}
 						</Grid>
 					</Grid>
 				</Grid>

@@ -8,6 +8,7 @@ import { MarketplaceProcessStarted } from '../../common/marketplace-process-star
 const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = `/main/marketplace-bank-accounts`;
 const SELFKEY_PATH = `/main/selfkeyId`;
+
 // TODO: future improvement load from rp config
 const VENDOR_EMAIL = `support@flagtheory.com`;
 
