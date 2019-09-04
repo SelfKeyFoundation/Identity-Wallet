@@ -41,6 +41,7 @@ export class TaxTreatiesSyncJobHandler {
 			},
 			{ dbTreatiesByCode: {}, toRemove: [] }
 		);
+
 		const upsert = remoteTreaties.map(item => {
 			let key = `${item.countryCode}_${item.jurisdictionCountryCode}`;
 			if (dbTreatiesByCode[key]) {
@@ -49,14 +50,17 @@ export class TaxTreatiesSyncJobHandler {
 			return item;
 		});
 		job.emitProgress(75, { message: 'Updating db data' });
+
 		try {
 			await this.taxTreatiesService.upsert(upsert);
 		} catch (error) {
 			log.error(error);
 		}
+
 		job.emitProgress(25, { message: 'Removing obsolete treaties' });
 		await this.taxTreatiesService.deleteMany(toRemove);
 		job.emitProgress(95, { message: 'Fetching updated treaty list' });
+
 		const taxTreaties = this.taxTreatiesService.loadTaxTreaties();
 		job.emitProgress(100, { message: 'Done!' });
 		return taxTreaties;

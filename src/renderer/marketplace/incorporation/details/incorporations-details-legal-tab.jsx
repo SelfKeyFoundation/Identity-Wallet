@@ -40,131 +40,131 @@ const styles = theme => ({
 const LEGAL_COLUMNS = [
 	[
 		{
-			id: 'Shareholders not disclosed in a public registry',
+			id: 'shareholdersNotDisclosedInAPublicRegistry',
 			label: 'Shareholders not disclosed',
 			boolean: true
 		},
 		{
-			id: 'Directors not disclosed in a public registry',
+			id: 'directorsNotDisclosedInAPublicRegistry',
 			label: 'Directors not disclosed',
 			boolean: true
 		},
 		{
-			id: 'Corporate shareholders permitted',
+			id: 'corporateShareholdersPermitted',
 			label: 'Corporate shareholders permitted',
 			boolean: true
 		},
 		{
-			id: 'Corporate directors permitted',
+			id: 'corporateDirectorsPermitted',
 			label: 'Corporate directors permitted',
 			boolean: true
 		},
 		{
-			id: 'Local director required',
+			id: 'localDirectorRequired',
 			label: 'Local director required',
 			boolean: true
 		},
 		{
-			id: 'Secretary required',
+			id: 'secretaryRequired',
 			label: 'Secretary required',
 			boolean: true
 		},
 		{
-			id: 'Local secretary required',
+			id: 'localSecretaryRequired',
 			label: 'Local secretary required',
 			boolean: true
 		},
 		{
-			id: 'Annual general meetings required',
+			id: 'annualGeneralMeetingsRequired',
 			label: 'Annual general meetings required',
 			boolean: true
 		}
 	],
 	[
 		{
-			id: 'Redomiciliation permitted',
+			id: 'redomiciliationPermitted',
 			label: 'Redomiciliation permitted',
 			boolean: true
 		},
 		{
-			id: 'Electronic signature',
+			id: 'electronicSignature',
 			label: 'Electronic signature',
 			boolean: true
 		},
 		{
-			id: 'Annual return',
+			id: 'annualReturn',
 			label: 'Annual return',
 			boolean: true
 		},
 		{
-			id: 'Audited accounts',
+			id: 'auditedAccounts',
 			label: 'Audited accounts',
 			boolean: true
 		},
 		{
-			id: 'Audited accounts exemption',
+			id: 'auditedAccountsExemption',
 			label: 'Audited accounts exemption',
 			boolean: true
 		},
 		{
-			id: 'Exchange controls',
+			id: 'exchangeControls',
 			label: 'Exchange controls',
 			boolean: true
 		}
 	],
 	[
 		{
-			id: 'Legal basis',
+			id: 'legalBasis',
 			label: 'Legal basis',
 			boolean: false
 		},
 		{
-			id: 'Minimum shareholders',
+			id: 'minimumShareholders',
 			label: 'Minimum shareholders',
 			boolean: false
 		},
 		{
-			id: 'Minimum directors',
+			id: 'minimumDirectors',
 			label: 'Minimum directors',
 			boolean: false
 		},
 		{
-			id: 'Minimum members',
+			id: 'minimumMembers',
 			label: 'Minimum members',
 			boolean: false
 		},
 		{
-			id: 'Minimum registered capital',
+			id: 'minimumRegisteredCapital',
 			label: 'Minimum registered capital',
 			boolean: false
 		},
 		{
-			id: 'Minimum issued capital',
+			id: 'minimumIssuedCapital',
 			label: 'Minimum issued capital',
 			boolean: false
 		},
 		{
-			id: 'Minimum paid up capital',
+			id: 'minimumPaidUpCapital',
 			label: 'Minimum paid up capital',
 			boolean: false
 		},
 		{
-			id: 'Capital currency',
+			id: 'capitalCurrency',
 			label: 'Capital currency',
 			boolean: false
 		},
 		{
-			id: 'Foreign-ownership allowed',
+			id: 'foreignOwnershipAllowed',
 			label: 'Foreign-ownership allowed',
 			boolean: false
 		},
 		{
-			id: 'Location of annual general meeting',
+			id: 'locationOfAnnualGeneralMeeting',
 			label: 'Location of annual general meeting',
 			boolean: false
 		},
 		{
-			id: 'AEOI',
+			id: 'aeoi',
 			label: 'AEOI',
 			boolean: false
 		}
@@ -174,37 +174,37 @@ const LEGAL_COLUMNS = [
 const LLC_COLUMNS = [
 	[
 		{
-			id: 'Members not disclosed in a public registry',
+			id: 'membersNotDisclosedInAPublicRegistry',
 			label: 'Members not disclosed',
 			boolean: true
 		},
 		{
-			id: 'Managers not disclosed in a public registry',
+			id: 'managerNotDisclosedInAPublicRegistry',
 			label: 'Managers not disclosed',
 			boolean: true
 		},
 		{
-			id: 'Corporate members permitted',
+			id: 'corporateMembersPermitted',
 			label: 'Corporate members permitted',
 			boolean: true
 		},
 		{
-			id: 'Corporate manager permitted',
+			id: 'corporateManagerPermitted',
 			label: 'Corporate manager permitted',
 			boolean: true
 		},
 		{
-			id: 'Local manager required',
+			id: 'localManagerRequired',
 			label: 'Local manager required',
 			boolean: true
 		},
 		{
-			id: 'Registered office or agent required',
+			id: 'registeredOfficeOrAgentRequired',
 			label: 'Registered office/agent required',
 			boolean: true
 		},
 		{
-			id: 'Annual meeting required',
+			id: 'annualMeetingRequired',
 			label: 'Annual meeting required',
 			boolean: true
 		}
@@ -212,7 +212,7 @@ const LLC_COLUMNS = [
 ];
 
 const selectColumns = program => {
-	if (program.details.LLC) {
+	if (program.data.corpllc) {
 		LEGAL_COLUMNS[0] = LLC_COLUMNS[0];
 	}
 	return LEGAL_COLUMNS;
@@ -220,10 +220,10 @@ const selectColumns = program => {
 
 const IncorporationsLegalTab = withStyles(styles)(({ classes, program }) => (
 	<div className={classes.tabContainer}>
-		<IncorporationsDataPanel sections={selectColumns(program)} data={program.details} />
+		<IncorporationsDataPanel sections={selectColumns(program)} data={program.data} />
 		<div
 			dangerouslySetInnerHTML={{
-				__html: sanitize(program.translation.legal_paragraph)
+				__html: sanitize(program.data.en.legalParagraph)
 			}}
 		/>
 	</div>

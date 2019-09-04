@@ -9,6 +9,10 @@ import { kycOperations } from 'common/kyc';
 import ReactPiwik from 'react-piwik';
 
 export default class MarketplaceComponent extends Component {
+	marketplaceRootPath = () => `/main/marketplace-categories`;
+
+	manageApplicationsRoute = () => `/main/selfkeyIdApplications`;
+
 	loadRelyingParty = async ({ rp, authenticated = false }) => {
 		if (this.props.rpShouldUpdate) {
 			await this.props.dispatch(kycOperations.loadRelyingParty(rp, authenticated));
