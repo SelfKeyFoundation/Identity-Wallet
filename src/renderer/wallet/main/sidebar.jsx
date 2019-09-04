@@ -127,6 +127,7 @@ const styles = theme => ({
 			transition: 'all 0.2s ease-out'
 		},
 		'& .sidebarContainer': {
+			overflow: 'auto',
 			transition: 'all 0.2s ease-out',
 			width: 200
 		},
@@ -144,6 +145,7 @@ const styles = theme => ({
 			transition: 'all 0.2s ease-out'
 		},
 		'& .sidebarContainer': {
+			overflow: 'hidden',
 			transition: 'all 0.2s ease-out',
 			width: 56
 		},
