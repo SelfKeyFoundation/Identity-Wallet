@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { createStyles, withStyles, Button, Grid, Typography } from '@material-ui/core';
-import { MenuNewIcon, DropdownIcon, PersonIcon, CorporateIcon } from 'selfkey-ui';
+import { MenuNewIcon, DropdownIcon, RoundCompany, RoundPerson } from 'selfkey-ui';
 import PriceBox from '../../price-box';
 import Sidebar from './sidebar';
 import config from 'common/config';
@@ -83,7 +83,7 @@ const profileStyle = theme =>
 			float: 'right',
 			padding: '20px 20px 8px 20px',
 			borderRadius: '4px',
-			backgroundColor: '#262f39',
+			backgroundColor: '#1E262E',
 			border: 'solid 1px #303c49'
 		},
 		profileFooter: {
@@ -129,9 +129,9 @@ const Profile = withStyles(profileStyle)(
 							<Grid container key={index} className={classes.profileDetail}>
 								<Grid item sm={2}>
 									{el.profileType === 'company' ? (
-										<PersonIcon />
+										<RoundCompany />
 									) : (
-										<CorporateIcon />
+										<RoundPerson />
 									)}
 								</Grid>
 								<Grid item sm={8} className={classes.profileName}>
@@ -261,7 +261,7 @@ class Toolbar extends Component {
 									<Grid item style={{ width: '222px' }}>
 										<Grid container wrap="nowrap">
 											<Grid item>
-												<PersonIcon />
+												<RoundPerson />
 											</Grid>
 											<Grid item className={classes.nameRole}>
 												<Typography variant="h6">Name Surname</Typography>
