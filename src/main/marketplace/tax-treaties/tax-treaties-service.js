@@ -13,6 +13,17 @@ export const TAX_TREATIES_API_ENDPOINT = `${config.airtableBaseUrl}TaxTreaties${
 	isDevMode() ? 'Dev' : ''
 }`;
 
+// Helper function to evenly distribute in time expensive background processing.
+// This avoids blocking the event loop, and should be used when we are expecting
+// to parse and process a very large number of (non time-critical) items
+const executeAsync = (idx, fx) =>
+	new Promise((resolve, reject) =>
+		setTimeout(() => {
+			const item = fx();
+			resolve(item);
+		}, idx * 10)
+	);
+
 export class TaxTreatiesService {
 	constructor({ schedulerService }) {
 		this.schedulerService = schedulerService;
@@ -47,9 +58,14 @@ export class TaxTreatiesService {
 	async fetchTaxTreatiesSelfkey() {
 		try {
 			let fetched = await request.get({ url: TAX_TREATIES_API_ENDPOINT, json: true });
-			return fetched.entities.map(entity =>
-				_.mapKeys(entity.data, (value, key) => _.camelCase(key))
+			const data = await Promise.all(
+				fetched.entities.map((entity, idx) =>
+					executeAsync(idx, () =>
+						_.mapKeys(entity.data, (value, key) => _.camelCase(key))
+					)
+				)
 			);
+			return data;
 		} catch (error) {
 			log.error(`fetchTaxTreatiesSelfkey: ${error}`);
 			return [];
@@ -58,9 +74,14 @@ export class TaxTreatiesService {
 	async fetchTaxTreatiesFlagtheory() {
 		try {
 			let fetched = await request.get({ url: FLAGTHEORY_TAX_TREATIES_ENDPOINT, json: true });
-			return fetched[0].map(entity =>
-				_.mapKeys(_.omit(entity, 'id'), (value, key) => _.camelCase(key))
+			const data = await Promise.all(
+				fetched[0].map((entity, idx) =>
+					executeAsync(idx, () =>
+						_.mapKeys(_.omit(entity, 'id'), (value, key) => _.camelCase(key))
+					)
+				)
 			);
+			return data;
 		} catch (error) {
 			log.error(`fetchTaxTreatiesFlagtheory: ${error}`);
 			return [];
