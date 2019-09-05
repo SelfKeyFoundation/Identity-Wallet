@@ -63,7 +63,10 @@ const styles = theme => ({
 		cursor: 'pointer'
 	},
 	link: {
+		alignItems: 'center',
+		display: 'flex',
 		outline: 'none',
+		textDecoration: 'none',
 		'&:focus': {
 			outline: 'none'
 		}
@@ -115,6 +118,7 @@ const styles = theme => ({
 	drawer: {
 		transition: 'all 3s',
 		'& > div:first-of-type': {
+			borderBottom: 'none',
 			left: 0,
 			opacity: '1 !important',
 			right: 'auto'
@@ -126,6 +130,7 @@ const styles = theme => ({
 			transition: 'all 0.2s ease-out'
 		},
 		'& .sidebarContainer': {
+			overflow: 'auto',
 			transition: 'all 0.2s ease-out',
 			width: 200
 		},
@@ -143,6 +148,7 @@ const styles = theme => ({
 			transition: 'all 0.2s ease-out'
 		},
 		'& .sidebarContainer': {
+			overflow: 'hidden',
 			transition: 'all 0.2s ease-out',
 			width: 56
 		},
@@ -217,7 +223,7 @@ class Sidebar extends Component {
 				className={`${classes.list} sidebarContainer`}
 				spacing={40}
 			>
-				<Grid item style={{ padding: '20px 0', flexGrow: 0 }}>
+				<Grid item style={{ padding: '21px 0', flexGrow: 0 }}>
 					<Grid
 						container
 						direction="row"
@@ -227,10 +233,10 @@ class Sidebar extends Component {
 					>
 						<Link to="/main/dashboard" className={classes.link}>
 							<SelfkeyLogo className={classes.logo} />
+							<Typography variant="h1" className={classes.logoText}>
+								SELFKEY
+							</Typography>
 						</Link>
-						<Typography variant="h1" className={classes.logoText}>
-							SELFKEY
-						</Typography>
 					</Grid>
 				</Grid>
 				<Divider style={{ width: '100%', backgroundColor: '#475768', flexGrow: 0 }} />
