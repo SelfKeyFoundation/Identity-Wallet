@@ -1,6 +1,6 @@
-import { walletSelectors } from '../wallet';
 import { jsonSchema, identityAttributes } from './utils';
 import { forceUpdateAttributes } from 'common/config';
+import { walletSelectors } from 'common/wallet';
 
 const EMAIL_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/email.json';
 const FIRST_NAME_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/first-name.json';
@@ -132,9 +132,9 @@ const selectFullIdAttributesByIds = (state, identityId, attributeIds = null) => 
 };
 
 const selectSelfkeyId = state => {
+	const identity = identitySelectors.selectCurrentIdentity(state);
 	const wallet = walletSelectors.getWallet(state);
-	// TODO: XXX switch wallet to identity
-	const allAttributes = identitySelectors.selectFullIdAttributesByIds(state, wallet.id);
+	const allAttributes = identitySelectors.selectFullIdAttributesByIds(state, identity.id);
 
 	// FIXME: all base attribute types should be rendered (even if not created yet)
 	const basicAttributes = allAttributes.reduce(
@@ -160,8 +160,9 @@ const selectSelfkeyId = state => {
 		if (!attr || !attr.data || !attr.data.value) return '';
 		return attr.data.value;
 	};
-
+	// TODO max: move profile picture to identity model
 	return {
+		identity,
 		wallet,
 		profilePicture: wallet.profilePicture,
 		allAttributes,
@@ -173,6 +174,16 @@ const selectSelfkeyId = state => {
 		lastName: getBasicInfo(LAST_NAME_ATTRIBUTE, basicAttributes),
 		middleName: getBasicInfo(MIDDLE_NAME_ATTRIBUTE, basicAttributes)
 	};
+};
+
+const selectIdentityById = (state, id) => {
+	const tree = selectIdentity(state);
+	return tree.identitiesById[id];
+};
+
+const selectCurrentIdentity = state => {
+	const tree = selectIdentity(state);
+	return tree.identitiesById[tree.currentIdentity];
 };
 
 export const identitySelectors = {
@@ -190,7 +201,9 @@ export const identitySelectors = {
 	selectDocumentsByAttributeIds,
 	selectFullIdAttributesByIds,
 	selectSelfkeyId,
-	selectUiSchema
+	selectUiSchema,
+	selectCurrentIdentity,
+	selectIdentityById
 };
 
 export default identitySelectors;

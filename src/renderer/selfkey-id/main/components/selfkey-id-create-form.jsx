@@ -117,7 +117,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 	handleSave = evt => {
 		evt.preventDefault();
 		this.props.dispatch(
-			identityOperations.createSelfkeyIdOperation(this.props.wallet.id, { ...this.state })
+			identityOperations.createSelfkeyIdOperation(this.props.identity.id, { ...this.state })
 		);
 	};
 

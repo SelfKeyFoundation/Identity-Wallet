@@ -1,4 +1,4 @@
-import { walletSelectors, walletOperations } from '../wallet';
+import { walletOperations } from '../wallet';
 import { getGlobalContext } from '../context';
 import { createAliasedAction } from 'electron-redux';
 import { push } from 'connected-react-router';
@@ -78,10 +78,9 @@ const removeDocumentOperation = documentId => async (dispatch, getState) => {
 
 const createIdAttributeOperation = attribute => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
-	// TODO: XXX fix wallet selector
-	const wallet = walletSelectors.getWallet(getState());
-	const walletId = attribute.walletId || wallet.id;
-	attribute = { ...attribute, walletId };
+	const identity = identitySelectors.selectCurrentIdentity(getState());
+	const identityId = attribute.identityId || identity.id;
+	attribute = { ...attribute, identityId };
 	attribute = await identityService.createIdAttribute(attribute);
 	await dispatch(operations.loadDocumentsForAttributeOperation(attribute.id));
 	await dispatch(identityActions.addIdAttributeAction(attribute));
@@ -102,6 +101,7 @@ const editIdAttributeOperation = attribute => async (dispatch, getState) => {
 };
 
 const updateProfilePictureOperation = (picture, identityId) => (dispatch, getState) => {
+	// TODO max: move avatar handling to identity module
 	return dispatch(walletOperations.updateWalletAvatar(picture, identityId));
 };
 
@@ -116,13 +116,14 @@ const unlockIdentityOperation = identityId => async (dispatch, getState) => {
 	await dispatch(identityOperations.setCurrentIdentityAction(identityId));
 };
 
-const createSelfkeyIdOperation = (walletId, data) => async (dispatch, getState) => {
+const createSelfkeyIdOperation = (identityId, data) => async (dispatch, getState) => {
 	const idAttributeTypes = identitySelectors.selectIdAttributeTypes(getState());
+	const identity = identitySelectors.selectIdentityById(getState(), identityId);
 	const getTypeId = url => {
 		return idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
 	};
 	// TODO: XXX update to entity operations
-	await dispatch(walletOperations.updateWalletName(data.nickName, walletId));
+	await dispatch(walletOperations.updateWalletName(data.nickName, identity.walletId));
 
 	await dispatch(
 		identityOperations.createIdAttributeOperation({
@@ -148,7 +149,7 @@ const createSelfkeyIdOperation = (walletId, data) => async (dispatch, getState) 
 		})
 	);
 
-	await dispatch(walletOperations.updateWalletSetup(true, walletId));
+	await dispatch(identityOperations.updateIdentitySetup(true, identityId));
 
 	await dispatch(push('/selfkeyIdCreateAbout'));
 };

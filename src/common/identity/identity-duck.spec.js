@@ -58,7 +58,7 @@ describe('Identity Duck', () => {
 				expect(
 					identityActions.deleteDocumentsAction.calledOnceWith(testWalletId)
 				).toBeTruthy();
-				expect(store.dispatch.callCount).toBe(2);
+				expect(store.dispatch.callCount).toBe(3);
 			});
 			it('unlockIdentityOperation', async () => {
 				sinon.stub(identityOperations, 'loadIdAttributesOperation').returns(() => {});
@@ -648,9 +648,7 @@ describe('Identity Duck', () => {
 					store.getState.bind(store)
 				);
 
-				expect(
-					identityService.createIdAttribute.calledOnceWith(testAttribute)
-				).toBeTruthy();
+				expect(identityService.createIdAttribute.getCall(0).args).toEqual(testAttribute);
 				expect(
 					testExports.operations.loadDocumentsForAttributeOperation.calledOnceWith(1)
 				).toBeTruthy();
