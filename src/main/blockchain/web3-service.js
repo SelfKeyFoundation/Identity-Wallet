@@ -99,7 +99,11 @@ export class Web3Service {
 
 	setDefaultAccount(account) {
 		this.web3.eth.accounts.wallet.add(account);
-		this.web3.eth.defaultAccount = account.address;
+		this.setDefaultAddress(account.address);
+	}
+
+	setDefaultAddress(address) {
+		this.web3.eth.defaultAccount = address;
 	}
 
 	encryptAccount(account, password) {

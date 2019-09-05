@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { push } from 'connected-react-router';
-import { walletOperations } from 'common/wallet';
+
 import {
 	Grid,
 	CardHeader,
@@ -32,10 +31,7 @@ import {
 	FileAudioIcon,
 	DIDIcon
 } from 'selfkey-ui';
-import { CreateAttributePopup } from '../containers/create-attribute-popup';
-import { EditAttributePopup } from '../containers/edit-attribute-popup';
-import { DeleteAttributePopup } from '../containers/delete-attribute-popup';
-import { EditAvatarPopup } from '../containers/edit-avatar-popup';
+
 import { HexagonAvatar } from './hexagon-avatar';
 
 import backgroundImage from '../../../../../static/assets/images/icons/icon-marketplace.png';
@@ -101,41 +97,29 @@ const styles = theme => ({
 	}
 });
 
-const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
-const SELFKEY_ID_PATH = '/main/selfkeyId';
+const SelfkeyIdSubheading = ({ email, did }) => (
+	<React.Fragment>
+		<Typography variant="subtitle1">{email}</Typography>
+		<br />
+		{did && (
+			<Typography variant="subtitle1" color="secondary">
+				did:selfkey:{did}
+			</Typography>
+		)}
+	</React.Fragment>
+);
+
+const DocumentExpiryDate = ({ doc }) => {
+	let date;
+	if (!doc || !doc.data || !doc.data.value || !doc.data.value.expires) {
+		date = '-';
+	} else {
+		date = moment(doc.data.value.expires).format('DD MMM YYYY');
+	}
+	return <span>{date}</span>;
+};
 
 class SelfkeyIdOverviewComponent extends Component {
-	state = {
-		popup: null
-	};
-	componentDidMount() {
-		this.props.onRef(this);
-	}
-	componentWillUnmount() {
-		this.props.onRef(undefined);
-	}
-	handleEditAttribute = attribute => {
-		this.setState({ popup: 'edit-attribute', editAttribute: attribute });
-	};
-	handleAddAttribute = () => {
-		this.setState({ popup: 'create-attribute', isDocument: false });
-	};
-	handleAddDocument = () => {
-		this.setState({ popup: 'create-attribute', isDocument: true });
-	};
-	handleDeleteAttribute = attribute => {
-		this.setState({ popup: 'delete-attribute', deleteAttribute: attribute });
-	};
-	handlePopupClose = () => {
-		this.setState({ popup: null });
-	};
-	handleAvatarClick = () => {
-		this.setState({ popup: 'edit-avatar' });
-	};
-	handleAccessClick = _ => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
-	handleGetDid = _ => this.props.dispatch(walletOperations.startCreateDidFlow(SELFKEY_ID_PATH));
-	handleEnterDid = _ =>
-		this.props.dispatch(walletOperations.startAssociateDidFlow(SELFKEY_ID_PATH));
 	renderLastUpdateDate({ updatedAt }) {
 		return moment(updatedAt).format('DD MMM YYYY, hh:mm a');
 	}
@@ -180,24 +164,6 @@ class SelfkeyIdOverviewComponent extends Component {
 		);
 	}
 
-	renderExpiryDate(doc) {
-		if (!doc || !doc.data || !doc.data.value || !doc.data.value.expires) return '-';
-		return moment(doc.data.value.expires).format('DD MMM YYYY');
-	}
-	renderSubheading(email, did) {
-		return (
-			<>
-				<Typography variant="subtitle1">{email}</Typography>
-				<br />
-				{did && (
-					<Typography variant="subtitle1" color="secondary">
-						did:selfkey:{did}
-					</Typography>
-				)}
-			</>
-		);
-	}
-
 	render() {
 		const {
 			classes,
@@ -209,41 +175,12 @@ class SelfkeyIdOverviewComponent extends Component {
 			firstName,
 			lastName,
 			middleName,
-			wallet
+			wallet,
+			identity
 		} = this.props;
-		const { popup } = this.state;
 
 		return (
 			<Grid id="viewOverview" container direction="column" spacing={32}>
-				{popup === 'create-attribute' && (
-					<CreateAttributePopup
-						open={true}
-						onClose={this.handlePopupClose}
-						isDocument={this.state.isDocument}
-					/>
-				)}
-				{popup === 'edit-attribute' && (
-					<EditAttributePopup
-						open={true}
-						onClose={this.handlePopupClose}
-						attribute={this.state.editAttribute}
-					/>
-				)}
-				{popup === 'delete-attribute' && (
-					<DeleteAttributePopup
-						open={true}
-						onClose={this.handlePopupClose}
-						attribute={this.state.deleteAttribute}
-					/>
-				)}
-				{popup === 'edit-avatar' && (
-					<EditAvatarPopup
-						open={true}
-						onClose={this.handlePopupClose}
-						avatar={profilePicture}
-						walletId={wallet.id}
-					/>
-				)}
 				<Grid item>
 					<Grid container direction="row" spacing={32}>
 						<Grid item xs={9}>
@@ -252,11 +189,13 @@ class SelfkeyIdOverviewComponent extends Component {
 									avatar={
 										<HexagonAvatar
 											src={profilePicture}
-											onClick={this.handleAvatarClick}
+											onClick={this.props.onAvatarClick}
 										/>
 									}
 									title={`${firstName} ${middleName} ${lastName}`}
-									subheader={this.renderSubheading(email, wallet.did)}
+									subheader={
+										<SelfkeyIdSubheading email={email} did={identity.did} />
+									}
 									className={classes.cardHeader}
 								/>
 							</Card>
@@ -268,7 +207,10 @@ class SelfkeyIdOverviewComponent extends Component {
 										Selfkey Marketplace is now launched and operational.
 									</Typography>
 									<br />
-									<Button variant="contained" onClick={this.handleAccessClick}>
+									<Button
+										variant="contained"
+										onClick={this.props.onMarketplaceAccessClick}
+									>
 										Access Marketplace
 									</Button>
 								</CardContent>
@@ -349,7 +291,7 @@ class SelfkeyIdOverviewComponent extends Component {
 															<Button
 																disabled={wallet.didPending}
 																variant="contained"
-																onClick={this.handleGetDid}
+																onClick={this.props.onGetDid}
 																size="large"
 															>
 																GET DID
@@ -359,7 +301,7 @@ class SelfkeyIdOverviewComponent extends Component {
 															<Button
 																disabled={wallet.didPending}
 																variant="outlined"
-																onClick={this.handleEnterDid}
+																onClick={this.props.onEnterDid}
 																size="large"
 															>
 																I HAVE ONE
@@ -494,7 +436,7 @@ class SelfkeyIdOverviewComponent extends Component {
 																			<IconButton id="editButton">
 																				<EditTransparentIcon
 																					onClick={() => {
-																						this.handleEditAttribute(
+																						this.props.onEditAttribute(
 																							entry
 																						);
 																					}}
@@ -613,7 +555,7 @@ class SelfkeyIdOverviewComponent extends Component {
 																			<IconButton id="editButton">
 																				<EditTransparentIcon
 																					onClick={() => {
-																						this.handleEditAttribute(
+																						this.props.onEditAttribute(
 																							entry
 																						);
 																					}}
@@ -622,7 +564,7 @@ class SelfkeyIdOverviewComponent extends Component {
 																			<IconButton
 																				id="deleteButton"
 																				onClick={() => {
-																					this.handleDeleteAttribute(
+																					this.props.onDeleteAttribute(
 																						entry
 																					);
 																				}}
@@ -644,7 +586,7 @@ class SelfkeyIdOverviewComponent extends Component {
 													variant="outlined"
 													size="large"
 													color="secondary"
-													onClick={this.handleAddAttribute}
+													onClick={this.props.onAddAttribute}
 													className={classes.button}
 												>
 													Add Information
@@ -728,9 +670,9 @@ class SelfkeyIdOverviewComponent extends Component {
 																		</TableCell>
 																		<TableCell>
 																			{' '}
-																			{this.renderExpiryDate(
-																				entry
-																			)}{' '}
+																			<DocumentExpiryDate
+																				doc={entry}
+																			/>{' '}
 																		</TableCell>
 																		<TableCell>
 																			<Typography variant="h6">
@@ -743,7 +685,7 @@ class SelfkeyIdOverviewComponent extends Component {
 																			<IconButton id="editButton">
 																				<EditTransparentIcon
 																					onClick={() => {
-																						this.handleEditAttribute(
+																						this.props.onEditAttribute(
 																							entry
 																						);
 																					}}
@@ -752,7 +694,7 @@ class SelfkeyIdOverviewComponent extends Component {
 																			<IconButton
 																				id="deleteButton"
 																				onClick={() => {
-																					this.handleDeleteAttribute(
+																					this.props.onDeleteAttribute(
 																						entry
 																					);
 																				}}
@@ -774,7 +716,7 @@ class SelfkeyIdOverviewComponent extends Component {
 													variant="outlined"
 													size="large"
 													color="secondary"
-													onClick={this.handleAddDocument}
+													onClick={this.props.onAddDocument}
 													className={classes.button}
 												>
 													Add Documents
