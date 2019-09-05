@@ -13,7 +13,8 @@ const styles = theme => ({
 			marginLeft: 0
 		},
 		width: '100%',
-		height: '120px'
+		height: '40px',
+		marginBottom: '20px'
 	},
 	headerIcon: {
 		marginLeft: '30px'
