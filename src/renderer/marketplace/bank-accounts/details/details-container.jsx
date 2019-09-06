@@ -6,7 +6,7 @@ import { push } from 'connected-react-router';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
-import { walletSelectors } from 'common/wallet';
+import { identitySelectors } from 'common/identity';
 import { withStyles } from '@material-ui/core/styles';
 import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
 import { BankingDetailsPage } from './details-page';
@@ -82,7 +82,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	onApplyClick = () => {
-		const { rp, wallet, accountType } = this.props;
+		const { rp, identity, accountType } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
 		const transactionNoKeyError = '/main/transaction-no-key-error';
@@ -98,10 +98,10 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 			if (keyPrice.gt(keyAvailable)) {
 				return this.props.dispatch(push(transactionNoKeyError));
 			}
-			if (!wallet.isSetupFinished) {
+			if (!identity.isSetupFinished) {
 				return this.props.dispatch(push(selfkeyIdRequiredRoute));
 			}
-			if (!wallet.did) {
+			if (!identity.did) {
 				return this.props.dispatch(push(selfkeyDIDRequiredRoute));
 			}
 			if (!rp || !rp.authenticated) {
@@ -216,7 +216,7 @@ const mapStateToProps = (state, props) => {
 			'incorporations',
 			templateId
 		),
-		wallet: walletSelectors.getWallet(state),
+		identity: identitySelectors.selectCurrentIdentity(state),
 		country: incorporationsSelectors.getCountry(state, countryCode),
 		cryptoValue: getCryptoValue(state, primaryToken)
 	};

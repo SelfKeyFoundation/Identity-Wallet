@@ -220,7 +220,7 @@ class SelfkeyIdOverviewComponent extends Component {
 				</Grid>
 				<Grid item>
 					<Grid container direction="column" spacing={32}>
-						{!wallet.did && (
+						{!identity.did && (
 							<Grid item>
 								<Card>
 									<CardHeader

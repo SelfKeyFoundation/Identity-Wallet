@@ -18,6 +18,7 @@ export class MarketplaceOrder extends BaseModel {
 			properties: {
 				id: { type: 'integer' },
 				walletId: { type: 'integer' },
+				identityId: { type: 'integer' },
 				vendorId: { type: 'string' },
 				itemId: { type: 'string' },
 				applicationId: { type: 'string' },

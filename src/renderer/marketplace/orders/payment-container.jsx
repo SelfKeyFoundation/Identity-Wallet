@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { MarketplacePayment } from './payment';
 import { ordersSelectors, ordersOperations } from '../../../common/marketplace/orders';
-import { walletSelectors } from '../../../common/wallet';
+import { identitySelectors } from '../../../common/identity';
 import { featureIsEnabled } from 'common/feature-flags';
 
 const LEARN_HOW_URL = 'https://help.selfkey.org';
@@ -34,7 +34,7 @@ class MarketplacePaymentContainer extends Component {
 				priceKey={this.props.order.amount}
 				feeETH={this.props.feeETH}
 				feeUSD={this.props.feeUSD}
-				did={this.props.wallet.did}
+				did={this.props.identity.did}
 				vendorName={this.props.order.vendorName}
 				onLearnHowClick={this.handleLearnHowClick}
 			/>
@@ -47,7 +47,7 @@ const mapStateToProps = (state, props) => ({
 	priceUSD: ordersSelectors.getOrderPriceUsd(state, props.match.params.orderId),
 	feeUSD: ordersSelectors.getCurrentPaymentFeeUsd(state),
 	feeETH: ordersSelectors.getCurrentPaymentFeeEth(state),
-	wallet: walletSelectors.getWallet(state),
+	identity: identitySelectors.selectCurrentIdentity(state),
 	currentOrder: ordersSelectors.getCurrentOrder(state)
 });
 

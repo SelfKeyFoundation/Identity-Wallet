@@ -75,6 +75,16 @@ exports.up = async (knex, Promise) => {
 		await knex('id_attributes').insert(attributes);
 
 		await knex.schema.dropTable('id_attributes_old');
+
+		await knex.schema.table('orders', t => {
+			t.string('identityId');
+		});
+
+		for (let wallet of walletsOld) {
+			await knex('orders')
+				.where({ walletId: wallet.id })
+				.update({ identityId: walletIdentities[wallet.id] });
+		}
 	} catch (error) {
 		console.error(error.stack);
 		throw error;
