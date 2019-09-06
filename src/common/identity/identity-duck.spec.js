@@ -642,13 +642,14 @@ describe('Identity Duck', () => {
 				sinon
 					.stub(testExports.operations, 'loadDocumentsForAttributeOperation')
 					.returns(() => {});
+				sinon.stub(identitySelectors, 'selectCurrentIdentity').returns({ id: 1 });
 
 				await testExports.operations.createIdAttributeOperation(testAttribute)(
 					store.dispatch,
 					store.getState.bind(store)
 				);
 
-				expect(identityService.createIdAttribute.getCall(0).args).toEqual(testAttribute);
+				expect(identityService.createIdAttribute.getCall(0).args).toEqual([testAttribute]);
 				expect(
 					testExports.operations.loadDocumentsForAttributeOperation.calledOnceWith(1)
 				).toBeTruthy();

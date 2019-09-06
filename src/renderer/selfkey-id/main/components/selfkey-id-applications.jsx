@@ -303,7 +303,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 	}
 
 	render() {
-		const { classes, showApplicationRefreshModal, loading, config } = this.props;
+		const { classes, showApplicationRefreshModal, loading, config, applications } = this.props;
 
 		if (loading) {
 			return this.renderLoadingScreen();
@@ -319,7 +319,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 				: 'Incorporations';
 		};
 
-		if (!loading && this.props.applications && this.props.applications.length === 0) {
+		if (!loading && applications && applications.length === 0) {
 			return (
 				<Grid container spacing={32}>
 					<Grid item xs={12}>
