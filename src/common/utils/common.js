@@ -24,6 +24,18 @@ const getWalletsDir = () => {
 	return path.resolve(getUserDataPath(), 'wallets');
 };
 
+const setImmediatePromise = () => new Promise(resolve => setImmediate(resolve()));
+
+const mapKeysAsync = async (obj, fn) => {
+	const newObj = {};
+	for (const key in newObj) {
+		if (!obj.hasOwnProperty(key)) continue;
+		newObj[fn(obj[key], key)] = obj[key];
+		await setImmediatePromise();
+	}
+	return newObj;
+};
+
 module.exports = {
 	isDevMode,
 	isTestMode,
@@ -31,5 +43,6 @@ module.exports = {
 	isElectronApp,
 	getUserDataPath,
 	getSetupFilePath,
-	getWalletsDir
+	getWalletsDir,
+	mapKeysAsync
 };
