@@ -1,7 +1,7 @@
 import config from 'common/config';
 import { TaxTreaties } from './tax-treaties';
 import request from 'request-promise-native';
-import { isDevMode, mapKeysAsync, setImmediatePromise } from 'common/utils/common';
+import { isDevMode, mapKeysAsync, setImmediatePromise, arrayChunks } from 'common/utils/common';
 import _ from 'lodash';
 import { Logger } from '../../../common/logger';
 import { TAX_TREATIES_SYNC_JOB } from './tax-treaties-sync-job-handler';
@@ -77,17 +77,25 @@ export class TaxTreatiesService {
 		}
 	}
 	start() {
-		this.schedulerService.queueJob(null, TAX_TREATIES_SYNC_JOB);
+		const now = new Date();
+		this.schedulerService.queueJob(
+			null,
+			TAX_TREATIES_SYNC_JOB,
+			now.setMinutes(now.getMinutes() + 1)
+		);
 	}
-
 	loadTaxTreaties() {
 		return TaxTreaties.findAll();
 	}
-	upsert(upsert) {
-		return TaxTreaties.bulkUpsert(upsert);
+	async upsert(upsert) {
+		const chunks = arrayChunks(upsert, 100);
+		for (const c of chunks) {
+			TaxTreaties.bulkUpsert(c);
+			await setImmediatePromise();
+		}
 	}
-	deleteMany(ids) {
-		return TaxTreaties.deleteMany(ids);
+	async deleteMany(ids) {
+		TaxTreaties.deleteMany(ids);
 	}
 }
 
