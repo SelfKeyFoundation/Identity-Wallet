@@ -3,7 +3,7 @@ export const bankingOffers = [
 		category: 'banking',
 		createdAt: 1564997439862,
 		data: {
-			account: {
+			accounts: {
 				accountCode: 'SG1b',
 				accountTitle: 'Business Priority Account',
 				bankCode: 'SG1bG',
@@ -119,7 +119,7 @@ export const bankingOffers = [
 		category: 'banking',
 		createdAt: 1564997439862,
 		data: {
-			account: {
+			accounts: {
 				accountCode: 'SG2b',
 				accountTitle: 'Personal Account',
 				bankCode: 'SG2bA',
@@ -230,7 +230,7 @@ export const bankingOffers = [
 		category: 'banking',
 		createdAt: 1564997439862,
 		data: {
-			account: {
+			accounts: {
 				accountCode: 'SG3b',
 				accountTitle: 'Wealth Management Account',
 				bankCode: 'SG3bC',
@@ -337,7 +337,7 @@ export const bankingOffers = [
 		category: 'banking',
 		createdAt: 1564997439862,
 		data: {
-			account: {
+			accounts: {
 				accountCode: 'HK2b',
 				accountTitle: 'Personal Savings Account',
 				bankCode: 'HK2bA',
@@ -434,7 +434,7 @@ export const bankingOffers = [
 		category: 'banking',
 		createdAt: 1564997439862,
 		data: {
-			account: {
+			accounts: {
 				accountCode: 'HK3b',
 				accountTitle: 'Wealth Management Account',
 				bankCode: 'HK3bA',
@@ -544,7 +544,7 @@ export const bankingOffers = [
 		category: 'banking',
 		createdAt: 1564997439862,
 		data: {
-			account: {
+			accounts: {
 				accountCode: 'HK1b',
 				accountTitle: 'Business Account',
 				bankCode: 'HK1bE',
