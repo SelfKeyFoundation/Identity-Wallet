@@ -1,64 +1,33 @@
 import { getTokens } from 'common/wallet-tokens/selectors';
 import CONFIG from 'common/config.js';
-import { featureIsEnabled } from 'common/feature-flags';
-import { isTestMode } from 'common/utils/common';
 
 const getExchangesStore = state => {
-	if (featureIsEnabled('scheduler') && !isTestMode()) {
-		return Object.keys(state.marketplaces.inventoryById).filter(
-			i => state.marketplaces.inventoryById[i].category === 'exchanges'
-		);
-	} else {
-		return state.exchanges.allIds;
-	}
+	return state.exchanges.allIds;
 };
 
 const parseExchange = data => {
-	if (featureIsEnabled('scheduler') && !isTestMode()) {
-		return {
-			name: data.name,
-			status: data.status,
-			description: data.description,
-			logoUrl: data.logo && data.logo[0] ? data.logo[0].url : false,
-			serviceOwner: data.serviceOwner || '0x0000000000000000000000000000000000000000',
-			serviceId: data.serviceId || 'global',
-			lockPeriod: data.lockPeriod || 2592000000, // 30 days
-			amount: data.requiredBalance || CONFIG.depositPriceOverride || 25,
-			location:
-				data.location && data.location[0] ? data.location.join(', ') : data.location || '',
-			fees: data.makerFee || '',
-			fiatSupported: data.fiatSupported ? data.fiatSupported : [],
-			fiatPayments: data.fiatPayments ? data.fiatPayments : [],
-			excludedResidents: data.excludedResidents ? data.excludedResidents : []
-		};
-	} else {
-		return {
-			name: data.name,
-			status: data.status,
-			description: data.description,
-			logoUrl: data.logo && data.logo[0] ? data.logo[0].url : false,
-			serviceOwner: data.serviceOwner || '0x0000000000000000000000000000000000000000',
-			serviceId: data.serviceId || 'global',
-			lockPeriod: data.lockPeriod || 2592000000, // 30 days
-			amount: data.requiredBalance || CONFIG.depositPriceOverride || 25,
-			location: data.location || '',
-			fees: data['maker_fee'] || '',
-			fiatSupported: data['fiat_supported'] || [],
-			fiatPayments: data['fiat_payments'] || [],
-			excludedResidents: data['excluded_residents'] || []
-		};
-	}
+	return {
+		name: data.name,
+		status: data.status,
+		description: data.description,
+		logoUrl: data.logo && data.logo[0] ? data.logo[0].url : false,
+		serviceOwner: data.serviceOwner || '0x0000000000000000000000000000000000000000',
+		serviceId: data.serviceId || 'global',
+		lockPeriod: data.lockPeriod || 2592000000, // 30 days
+		amount: data.requiredBalance || CONFIG.depositPriceOverride || 25,
+		location: data.location || '',
+		fees: data['maker_fee'] || '',
+		fiatSupported: data['fiat_supported'] || [],
+		fiatPayments: data['fiat_payments'] || [],
+		excludedResidents: data['excluded_residents'] || []
+	};
 };
 
 export const getExchanges = state => {
 	const exchanges = getExchangesStore(state);
 
 	return exchanges.map(item => {
-		let { data } =
-			featureIsEnabled('scheduler') && !isTestMode()
-				? state.marketplaces.inventoryById[item]
-				: state.exchanges.byId[item];
-
+		let { data } = state.exchanges.byId[item];
 		return parseExchange(data);
 	});
 };
@@ -66,17 +35,10 @@ export const getExchanges = state => {
 export const getExchangeLinks = state => {
 	const exchanges = getExchangesStore(state);
 	return exchanges.map(item => {
-		if (featureIsEnabled('scheduler') && !isTestMode()) {
-			return {
-				name: exchanges.byId[item].data.name,
-				url: exchanges.byId[item].data.url
-			};
-		} else {
-			return {
-				name: state.exchanges.byId[item].data.name,
-				url: state.exchanges.byId[item].data.URL
-			};
-		}
+		return {
+			name: state.exchanges.byId[item].data.name,
+			url: state.exchanges.byId[item].data.URL
+		};
 	});
 };
 
