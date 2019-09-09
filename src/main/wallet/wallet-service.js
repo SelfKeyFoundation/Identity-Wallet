@@ -237,12 +237,6 @@ export class WalletService {
 	sendTransaction(transactionObject) {
 		return this.web3Service.web3.eth.sendTransaction(transactionObject);
 	}
-
-	async loadDefaultIdentity(walletId) {
-		const wallet = await Wallet.findById(walletId).eager('identities');
-		const defaultIdentity = wallet.identities.find(idnt => idnt.type === 'individual');
-		return defaultIdentity;
-	}
 }
 
 export default WalletService;

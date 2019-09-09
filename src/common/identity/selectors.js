@@ -181,6 +181,11 @@ const selectIdentityById = (state, id) => {
 	return tree.identitiesById[id];
 };
 
+const selectAllIdentities = state => {
+	const tree = selectIdentity(state);
+	return tree.identities.map(id => tree.identitiesById[id]);
+};
+
 const selectCurrentIdentity = state => {
 	const tree = selectIdentity(state);
 	return tree.identitiesById[tree.currentIdentity];
@@ -203,7 +208,8 @@ export const identitySelectors = {
 	selectSelfkeyId,
 	selectUiSchema,
 	selectCurrentIdentity,
-	selectIdentityById
+	selectIdentityById,
+	selectAllIdentities
 };
 
 export default identitySelectors;

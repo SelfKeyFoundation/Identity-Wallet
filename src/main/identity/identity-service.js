@@ -124,6 +124,13 @@ export class IdentityService {
 		attribute = { ...attribute, documents };
 		return IdAttribute.update(attribute);
 	}
+	updateIdentitySetup(isSetupFinished, id) {
+		return Identity.updateSetup({ id, isSetupFinished });
+	}
+
+	updateIdentityDID(did, id) {
+		return Identity.updateDID({ did, id });
+	}
 }
 
 export default IdentityService;

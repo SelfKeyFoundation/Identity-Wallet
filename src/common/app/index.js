@@ -139,10 +139,9 @@ const loadWallets = () => async dispatch => {
 };
 
 const unlockWalletOperation = (wallet, type) => async dispatch => {
-	const walletService = getGlobalContext().walletService;
 	await dispatch(walletOperations.updateWalletWithBalance(wallet));
-	let identity = await walletService.loadDefaultIdentity(wallet.id);
-	await dispatch(identityOperations.unlockIdentityOperation(identity.id));
+	await dispatch(identityOperations.loadIdentitiesOperation(wallet.id));
+	await dispatch(identityOperations.unlockIdentityOperation());
 	if (type) {
 		await dispatch(appActions.setWalletType(type));
 	}

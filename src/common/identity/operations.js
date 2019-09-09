@@ -111,6 +111,19 @@ const lockIdentityOperation = identityId => async (dispatch, getState) => {
 	await dispatch(identityActions.deleteDocumentsAction(identityId));
 };
 const unlockIdentityOperation = identityId => async (dispatch, getState) => {
+	if (!identityId) {
+		const identities = identitySelectors.selectAllIdentities(getState());
+		const defaultIdentity =
+			identities.find(ident => ident.default || ident.type === 'individual') || identities[0];
+
+		if (defaultIdentity) {
+			identityId = defaultIdentity.id;
+		}
+	}
+
+	if (!identityId) {
+		throw new Error('could not unlock identity');
+	}
 	await dispatch(identityOperations.loadDocumentsOperation(identityId));
 	await dispatch(identityOperations.loadIdAttributesOperation(identityId));
 	await dispatch(identityOperations.setCurrentIdentityAction(identityId));
@@ -149,15 +162,21 @@ const createSelfkeyIdOperation = (identityId, data) => async (dispatch, getState
 		})
 	);
 
-	await dispatch(identityOperations.updateIdentitySetup(true, identityId));
+	await dispatch(identityOperations.updateIdentitySetupOperation(true, identityId));
 
 	await dispatch(push('/selfkeyIdCreateAbout'));
+};
+
+const updateIdentitySetupOperation = (isSetupFinished, id) => async (dispatch, getState) => {
+	const identityService = getGlobalContext().identityService;
+	const identity = await identityService.updateIdentitySetup(isSetupFinished, id);
+	await dispatch(identityActions.updateIdentity(identity));
 };
 
 const loadIdentitiesOperation = walletId => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
 	let identities = await identityService.loadIdentities(walletId);
-	return dispatch(identityActions.setIdentitiesAction(identities));
+	await dispatch(identityActions.setIdentitiesAction(identities));
 };
 
 export const operations = {
@@ -179,7 +198,8 @@ export const operations = {
 	lockIdentityOperation,
 	updateProfilePictureOperation,
 	createSelfkeyIdOperation,
-	loadIdentitiesOperation
+	loadIdentitiesOperation,
+	updateIdentitySetupOperation
 };
 
 export const identityOperations = {
@@ -259,6 +279,10 @@ export const identityOperations = {
 	loadIdentitiesOperation: createAliasedAction(
 		identityTypes.IDENTITIES_LOAD,
 		operations.loadIdentitiesOperation
+	),
+	updateIdentitySetupOperation: createAliasedAction(
+		identityTypes.IDENTITIES_UPDATE_SETUP_OPERATION,
+		operations.updateIdentitySetupOperation
 	)
 };
 

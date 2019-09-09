@@ -22,8 +22,7 @@ import {
 } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import history from 'common/store/history';
-import { identityOperations } from 'common/identity';
-import { walletSelectors } from 'common/wallet';
+import { identityOperations, identitySelectors } from 'common/identity';
 import { matomoGoalTracking, matomoGoals } from 'common/matomo';
 
 const styles = theme => ({
@@ -481,7 +480,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		wallet: walletSelectors.getWallet(state)
+		identity: identitySelectors.selectCurrentIdentity(state)
 	};
 };
 
