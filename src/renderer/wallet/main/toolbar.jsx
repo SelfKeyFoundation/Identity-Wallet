@@ -17,7 +17,10 @@ const styles = theme => ({
 	wrapper: {
 		backgroundColor: '#27333D',
 		boxShadow:
-			'inset 0 -1px 0 0 #475768, 1px 0 0 0 rgba(118,128,147,0.2), 2px 0 2px 0 rgba(0,0,0,0.2)'
+			'inset 0 -1px 0 0 #475768, 1px 0 0 0 rgba(118,128,147,0.2), 2px 0 2px 0 rgba(0,0,0,0.2)',
+		padding: '0 2%',
+		position: 'fixed',
+		zIndex: 1
 	},
 	logo: {
 		width: '38px',
@@ -72,7 +75,7 @@ const styles = theme => ({
 
 class Toolbar extends Component {
 	state = {
-		isSidebarOpen: true
+		isSidebarOpen: false
 	};
 
 	toggleDrawer = isSidebarOpen => {
@@ -86,13 +89,6 @@ class Toolbar extends Component {
 		return (
 			<div>
 				<Sidebar isOpen={this.state.isSidebarOpen} onClose={this.toggleDrawer} />
-				<MenuNewIcon
-					style={{ position: 'absolute', marginTop: '27px' }}
-					className={`${classes.menuIcon} ${
-						this.state.isSidebarOpen ? classes.openedDrawer : classes.closedDrawer
-					}`}
-					onClick={() => this.toggleDrawer(!this.state.isSidebarOpen)}
-				/>
 				<Grid
 					container
 					direction="row"
@@ -100,6 +96,13 @@ class Toolbar extends Component {
 					alignItems="center"
 					className={classes.wrapper}
 				>
+					<MenuNewIcon
+						style={{ position: 'absolute' }}
+						className={`${classes.menuIcon} ${
+							this.state.isSidebarOpen ? classes.openedDrawer : classes.closedDrawer
+						}`}
+						onClick={() => this.toggleDrawer(!this.state.isSidebarOpen)}
+					/>
 					<Grid item xs={9} style={{ paddingRight: '10px' }}>
 						<Grid container direction="row" justify="flex-end" alignItems="center">
 							<Grid item>

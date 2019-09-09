@@ -115,7 +115,7 @@ export const BankingAccountOption = withStyles(styles)(
 	({
 		classes,
 		account,
-		accountType,
+		jurisdiction,
 		isOpen,
 		title,
 		toggleOpen,
@@ -126,7 +126,7 @@ export const BankingAccountOption = withStyles(styles)(
 		const accountOptions = [
 			{
 				name: 'Type of Account:',
-				value: accountType.accountType
+				value: jurisdiction.data.type
 			},
 			{
 				name: 'Currencies:',
@@ -146,7 +146,7 @@ export const BankingAccountOption = withStyles(styles)(
 			},
 			{
 				name: 'Good for:',
-				value: accountType.goodFor ? accountType.goodFor.join(', ') : ''
+				value: account.goodFor ? account.goodFor.join(', ') : ''
 			}
 		];
 		const openingOptions = [

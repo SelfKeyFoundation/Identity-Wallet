@@ -8,14 +8,12 @@ import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { identitySelectors } from 'common/identity';
 import { withStyles } from '@material-ui/core/styles';
-import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
 import { BankingDetailsPage } from './details-page';
-import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
+import { marketplaceSelectors } from 'common/marketplace';
 import { getCryptoValue } from '../../../common/price-utils';
 import config from 'common/config';
 
 const styles = theme => ({});
-const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
 
 class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	state = {
@@ -24,38 +22,10 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	async componentDidMount() {
-		const { accountType, country } = this.props;
-
-		if (!accountType) {
-			await this.props.dispatch(bankAccountsOperations.loadBankAccountsOperation());
-		}
-
-		await this.loadRelyingParty({ rp: 'incorporations', authenticated: false });
-
-		if (!country) {
-			this.props.dispatch(
-				incorporationsOperations.loadIncorporationsCountryOperation(
-					this.props.match.params.countryCode
-				)
-			);
-		}
+		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: false });
 	}
 
-	manageApplicationsRoute = () => {
-		return `/main/selfkeyIdApplications`;
-	};
-
-	payRoute = () => {
-		const { countryCode, accountCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/pay/${accountCode}/${countryCode}/${templateId}`;
-	};
-
-	checkoutRoute = () => {
-		const { countryCode, accountCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH}/checkout/${accountCode}/${countryCode}/${templateId}`;
-	};
-
-	onBackClick = () => this.props.dispatch(push(MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH));
+	onBackClick = () => this.props.dispatch(push(this.listRoute()));
 
 	onTabChange = tab => this.setState({ tab });
 
@@ -82,12 +52,12 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	onApplyClick = () => {
-		const { rp, identity, accountType } = this.props;
+		const { rp, identity, vendorId, jurisdiction } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
 		const transactionNoKeyError = '/main/transaction-no-key-error';
 		const authenticated = true;
-		const keyPrice = this.priceInKEY(accountType.price);
+		const keyPrice = this.priceInKEY(jurisdiction.price);
 		const keyAvailable = new BigNumber(this.props.cryptoValue);
 		// When clicking the start process,
 		// we check if an authenticated kyc-chain session exists
@@ -107,7 +77,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 			if (!rp || !rp.authenticated) {
 				await this.props.dispatch(
 					kycOperations.loadRelyingParty(
-						'incorporations',
+						vendorId,
 						authenticated,
 						this.checkoutRoute(),
 						this.cancelRoute()
@@ -119,36 +89,65 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 		});
 	};
 
-	buildResumeData = banks => {
+	buildResumeData = data => {
+		const isPersonalVisitRequired = accounts => {
+			return Object.keys(accounts).reduce((required, accountId) => {
+				const account = accounts[accountId];
+				return required && account.personalVisitRequired;
+			}, true);
+		};
+
+		const maxFromCurrencyString = (accounts, field) => {
+			return Object.keys(accounts).reduce((current, accountId) => {
+				const account = accounts[accountId];
+				const item = Number(account[field].replace(/[^0-9.-]+/g, ''));
+				return current > item ? current : item;
+			}, 0);
+		};
+
+		const timeToOpen = (accounts, field = 'timeToOpen') => {
+			return Object.keys(accounts).reduce((current, accountId) => {
+				const account = accounts[accountId];
+				return current || account[field];
+			}, '');
+		};
+
+		const creditCards = (accounts, field = 'cards') => {
+			return Object.keys(accounts).reduce((current, accountId) => {
+				const account = accounts[accountId];
+				return current || (account[field] ? account[field].join(' ') : false);
+			}, '');
+		};
+
 		return [
 			[
 				{
 					name: 'Min. Initial Deposit',
-					value: banks[0].minInitialDeposit,
+					value: maxFromCurrencyString(data.accounts, 'minInitialDeposit'),
 					highlighted: true
 				},
 				{
 					name: 'Min. Monthly Balance',
-					value: banks[0].minMonthlyBalance,
+					value: maxFromCurrencyString(data.accounts, 'minMonthlyBalance'),
 					highlighted: true
 				}
 			],
 			[
 				{
 					name: 'Personal Visit Required',
-					value: banks[0].personalVisitRequired ? 'Yes' : 'No',
+					value: isPersonalVisitRequired(data.accounts) ? 'Yes' : 'No',
 					highlighted: true
 				},
 				{
 					name: 'Time to open',
-					value: banks[0].timeToOpen,
+					value: timeToOpen(data.accounts),
 					highlighted: true
 				}
 			],
 			[
 				{
 					name: 'Cards',
-					value: banks[0].cards.join(' '),
+					value: creditCards(data.accounts),
 					highlighted: true
 				}
 			]
@@ -156,27 +155,28 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	render() {
-		const { accountType, banks, keyRate, jurisdiction, kycRequirements, country } = this.props;
-		const { price, countryCode, region } = accountType;
+		const { jurisdiction, keyRate, kycRequirements, country, templateId } = this.props;
+		const { price } = jurisdiction;
+		const { region } = jurisdiction.data;
+
 		return (
 			<BankingDetailsPage
 				applicationStatus={this.getApplicationStatus()}
 				loading={this.state.loading || this.props.isLoading}
-				accountType={accountType}
 				country={country}
-				countryCode={countryCode}
+				countryCode={country.code}
 				price={price}
 				tab={this.state.tab}
 				onTabChange={this.onTabChange}
 				keyRate={keyRate}
 				region={region}
-				banks={banks}
-				resume={this.buildResumeData(banks)}
 				jurisdiction={jurisdiction}
+				banks={jurisdiction.data.accounts}
+				resume={this.buildResumeData(jurisdiction.data)}
 				canOpenBankAccount={this.canApply(price)}
 				startApplication={this.onApplyClick}
 				kycRequirements={kycRequirements}
-				templateId={this.props.match.params.templateId}
+				templateId={templateId}
 				onBack={this.onBackClick}
 				onStatusAction={this.onStatusActionClick}
 			/>
@@ -185,39 +185,33 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 }
 
 BankAccountsDetailContainer.propTypes = {
-	accountType: PropTypes.object,
 	banks: PropTypes.object,
-	jurisdictions: PropTypes.object,
 	isLoading: PropTypes.bool,
 	keyRate: PropTypes.number
 };
 
 const mapStateToProps = (state, props) => {
-	const { accountCode, countryCode, templateId } = props.match.params;
+	const { accountCode, countryCode, templateId, vendorId } = props.match.params;
 	const authenticated = true;
 	let primaryToken = {
 		...props,
 		cryptoCurrency: config.constants.primaryToken
 	};
 	return {
-		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
-		banks: bankAccountsSelectors.getDetailsByAccountCode(state, accountCode),
-		jurisdiction: bankAccountsSelectors.getJurisdictionsByCountryCode(state, countryCode),
-		isLoading: bankAccountsSelectors.getLoading(state),
+		templateId,
+		vendorId,
+		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
+		country: marketplaceSelectors.selectCountryByCode(state, countryCode),
+		isLoading: marketplaceSelectors.isLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
-		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
-			'incorporations',
+			vendorId,
 			authenticated
 		),
-		kycRequirements: kycSelectors.selectRequirementsForTemplate(
-			state,
-			'incorporations',
-			templateId
-		),
+		kycRequirements: kycSelectors.selectRequirementsForTemplate(state, vendorId, templateId),
 		identity: identitySelectors.selectCurrentIdentity(state),
-		country: incorporationsSelectors.getCountry(state, countryCode),
 		cryptoValue: getCryptoValue(state, primaryToken)
 	};
 };

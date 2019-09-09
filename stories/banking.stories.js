@@ -36,7 +36,7 @@ storiesOf('Banking', module)
 		<div style={{ width: '1140px' }}>
 			<BankingOffersTable
 				keyRate={KEY_RATE}
-				data={bankingOffers}
+				inventory={bankingOffers}
 				onDetails={linkTo('Banking/BankingDetailsPage', 'default')}
 			/>
 		</div>
@@ -97,7 +97,7 @@ storiesOf('Banking/OffersPage', module)
 	.add('loading', () => (
 		<BankingOffersPage
 			keyRate={KEY_RATE}
-			data={bankingOffers}
+			inventory={bankingOffers}
 			onDetails={linkTo('Banking/BankingDetailsPage', 'default')}
 			onBackClick={action('banking offers page back')}
 			loading
@@ -106,7 +106,7 @@ storiesOf('Banking/OffersPage', module)
 	.add('personal', () => (
 		<BankingOffersPage
 			keyRate={KEY_RATE}
-			data={bankingOffers.filter(bank => bank.accountType === 'personal')}
+			inventory={bankingOffers.filter(bank => bank.data.type === 'personal')}
 			accountType="personal"
 			onAccountTypeChange={linkTo('Banking/OffersPage', accountType => accountType)}
 			onDetails={linkTo('Banking/BankingDetailsPage', 'default')}
@@ -116,8 +116,8 @@ storiesOf('Banking/OffersPage', module)
 	.add('corporate', () => (
 		<BankingOffersPage
 			keyRate={KEY_RATE}
-			data={bankingOffers.filter(bank => bank.accountType === 'business')}
-			accountType="corporate"
+			inventory={bankingOffers.filter(bank => bank.data.type === 'business')}
+			accountType="business"
 			onAccountTypeChange={linkTo('Banking/OffersPage', accountType => accountType)}
 			onDetails={linkTo('Banking/BankingDetailsPage', 'default')}
 			onBackClick={action('banking offers page back')}
@@ -126,7 +126,7 @@ storiesOf('Banking/OffersPage', module)
 	.add('private', () => (
 		<BankingOffersPage
 			keyRate={KEY_RATE}
-			data={bankingOffers.filter(bank => bank.accountType === 'private')}
+			inventory={bankingOffers.filter(bank => bank.data.type === 'private')}
 			accountType="private"
 			onAccountTypeChange={linkTo('Banking/OffersPage', accountType => accountType)}
 			onDetails={linkTo('Banking/BankingDetailsPage', 'default')}

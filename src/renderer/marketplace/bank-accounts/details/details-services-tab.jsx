@@ -39,7 +39,7 @@ const BankingServicesTab = withStyles(styles)(({ classes, banks }) => (
 	<div className={classes.tabContainer}>
 		<div
 			dangerouslySetInnerHTML={{
-				__html: sanitize(banks[0].onboarding)
+				__html: sanitize(banks[Object.keys(banks)[0]].onboarding)
 			}}
 		/>
 	</div>

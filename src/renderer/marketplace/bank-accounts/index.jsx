@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { featureIsEnabled } from 'common/feature-flags';
-import { ordersOperations } from 'common/marketplace/orders';
 import { marketplaceOperations } from 'common/marketplace';
 import { BankAccountsTableContainer } from './list/offers-container';
 import { BankAccountsDetailContainer } from './details/details-container';
@@ -14,11 +12,7 @@ import { BankAccountsProcessStartedContainer } from './process-started/process-s
 
 class MarketplaceBankAccountsComponent extends Component {
 	async componentDidMount() {
-		if (featureIsEnabled('scheduler')) {
-			await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
-		} else {
-			await this.props.dispatch(ordersOperations.ordersLoadOperation());
-		}
+		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
 	}
 	render() {
 		const { path } = this.props.match;
@@ -26,27 +20,27 @@ class MarketplaceBankAccountsComponent extends Component {
 			<div>
 				<Route exact path={`${path}`} component={BankAccountsTableContainer} />
 				<Route
-					path={`${path}/details/:accountCode/:countryCode/:templateId?`}
+					path={`${path}/details/:accountCode/:countryCode/:templateId?/:vendorId?`}
 					component={BankAccountsDetailContainer}
 				/>
 				<Route
-					path={`${path}/checkout/:accountCode/:countryCode/:templateId?`}
+					path={`${path}/checkout/:accountCode/:countryCode/:templateId/:vendorId`}
 					component={BankAccountsCheckoutContainer}
 				/>
 				<Route
-					path={`${path}/pay/:accountCode/:countryCode/:templateId?`}
+					path={`${path}/pay/:accountCode/:countryCode/:templateId/:vendorId`}
 					component={BankAccountsPaymentContainer}
 				/>
 				<Route
-					path={`${path}/payment-complete/:accountCode/:countryCode/:templateId?`}
+					path={`${path}/payment-complete/:accountCode/:countryCode/:templateId/:vendorId`}
 					component={BankAccountsPaymentCompleteContainer}
 				/>
 				<Route
-					path={`${path}/select-bank/:accountCode/:countryCode/:templateId?`}
+					path={`${path}/select-bank/:accountCode/:countryCode/:templateId/:vendorId`}
 					component={BankAccountsSelectBankContainer}
 				/>
 				<Route
-					path={`${path}/process-started/:accountCode/:countryCode/:templateId?`}
+					path={`${path}/process-started/:accountCode/:countryCode/:templateId/:vendorId`}
 					component={BankAccountsProcessStartedContainer}
 				/>
 			</div>

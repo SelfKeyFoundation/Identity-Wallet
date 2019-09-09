@@ -71,7 +71,7 @@ const styles = theme => ({
 const contentWrapperStyle = {
 	marginBottom: '60px',
 	marginRight: '-55px',
-	marginTop: '50px'
+	marginTop: '128px'
 };
 
 class Main extends Component {
@@ -135,7 +135,7 @@ class Main extends Component {
 						component={MarketplaceExchangesPage}
 					/>
 					<Route
-						path={`${match.path}/marketplace-services/:name`}
+						path={`${match.path}/marketplace-services/:inventoryId`}
 						component={MarketplaceServiceDetailsPage}
 					/>
 					<Route

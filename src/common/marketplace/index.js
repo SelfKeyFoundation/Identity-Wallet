@@ -3,6 +3,8 @@ import { inventorySelectors, inventoryOperations, reducer as inventory } from '.
 import { vendorSelectors, vendorOperations, reducer as vendors } from './vendors';
 import { ordersSelectors, ordersOperations, reducer as orders } from './orders';
 import { countriesSelectors, countriesOperations, reducer as countries } from './countries';
+import { incorporationsSelectors } from './incorporations';
+import { bankingSelectors } from './banking';
 import {
 	taxTreatiesSelectors,
 	taxTreatiesOperations,
@@ -19,7 +21,9 @@ export const marketplaceSelectors = {
 	...vendorSelectors,
 	...ordersSelectors,
 	...countriesSelectors,
-	...taxTreatiesSelectors
+	...taxTreatiesSelectors,
+	...incorporationsSelectors,
+	...bankingSelectors
 };
 
 const loadMarketplaceOperation = () => async (dispatch, getState) => {

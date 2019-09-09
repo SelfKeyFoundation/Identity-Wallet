@@ -185,7 +185,7 @@ export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
 				return { ...acc, [details[field]]: details };
 			};
 			const jurisdictions = fetched.Jurisdictions.reduce(mapData('countryCode'), {});
-			const accDetails = fetched.Account_Details.reduce(mapData('accountCode'), {});
+			const accDetails = fetched.Account_Details.reduce(mapData('bankCode'), {});
 
 			const items = fetched.Main.map(itm =>
 				_.mapKeys(itm.data.fields, (value, key) => _.camelCase(key))
@@ -195,10 +195,10 @@ export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
 					const sku = `FT-BNK-${itm.accountCode || itm.countryCode}`;
 					const name = `${itm.region} ${itm.accountCode || itm.countryCode}`;
 					let price = itm.activeTestPrice ? itm.testPrice : itm.price;
-					return {
+					itm = {
 						sku,
 						name,
-						status: itm.templateId ? 'active' : 'inactive',
+						status: itm.showWallet ? 'active' : 'inactive',
 						price,
 						priceCurrency: 'USD',
 						category: 'banking',
@@ -206,9 +206,21 @@ export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
 						data: {
 							...itm,
 							jurisdiction: jurisdictions[itm.countryCode] || {},
-							...(accDetails[itm.accountCode] || {})
+							accounts: Object.keys(accDetails)
+								.filter(key => accDetails[key].accountCode === itm.accountCode)
+								.reduce((obj, key) => {
+									obj[key] = accDetails[key];
+									return obj;
+								}, {})
 						}
 					};
+
+					itm.data.type =
+						itm.data.type && itm.data.type.length
+							? itm.data.type[0].toLowerCase()
+							: 'private';
+
+					return itm;
 				});
 			return items;
 		} catch (error) {

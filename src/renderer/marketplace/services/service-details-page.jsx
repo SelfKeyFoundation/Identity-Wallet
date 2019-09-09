@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getServiceDetails, hasBalance } from 'common/exchanges/selectors';
+// import { getServiceDetails, hasBalance } from 'common/exchanges/selectors';
 import { marketplacesSelectors } from 'common/marketplaces';
+import { marketplaceSelectors } from 'common/marketplace';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { Logger } from 'common/logger';
 import { push } from 'connected-react-router';
@@ -12,28 +13,34 @@ import { MarketplaceServiceDetails } from './service-details';
 const log = new Logger('marketplace-item-container');
 
 const mapStateToProps = (state, props) => {
-	const name = props.match.params.name;
-	let item = getServiceDetails(state, name);
-	let serviceId = `${item.serviceOwner}_${item.serviceId}`;
+	const id = props.match.params.inventoryId;
+	const item = marketplaceSelectors.selectInventoryItemById(state, id);
+
+	let rpDetails = marketplaceSelectors.selectRPDetails(state, item.vendorId);
+	let serviceId = `${rpDetails.serviceOwner}_${rpDetails.serviceId}`;
+
 	let templates = [];
-	if (item.relying_party_config && item.relying_party_config.templates) {
-		templates = item.relying_party_config.templates;
+	if (rpDetails.relyingPartyConfig && rpDetails.relyingPartyConfig.templates) {
+		templates = rpDetails.relyingPartyConfig.templates;
 	}
 	return {
 		wallet: walletSelectors.getWallet(state),
 		item,
-		hasBalance: hasBalance(state, name),
+		hasBalance: marketplaceSelectors.hasBalance(state, item.vendorId),
 		stake: marketplacesSelectors.stakeSelector(state, serviceId),
 		pendingTransaction: marketplacesSelectors.pendingTransactionSelector(
 			state,
 			item.serviceOwner,
 			item.serviceId
 		),
-		relyingPartyName: name,
+		relyingPartyName: item.vendorId,
 		templates,
-		relyingParty: kycSelectors.relyingPartySelector(state, name),
-		relyingPartyIsActive: kycSelectors.relyingPartyIsActiveSelector(state, name),
-		relyingPartyShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(state, name)
+		relyingParty: kycSelectors.relyingPartySelector(state, rpDetails.name),
+		relyingPartyIsActive: kycSelectors.relyingPartyIsActiveSelector(state, rpDetails.name),
+		relyingPartyShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
+			state,
+			rpDetails.name
+		)
 	};
 };
 

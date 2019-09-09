@@ -1,5 +1,8 @@
 import { getGlobalContext } from 'common/context';
 import { createAliasedAction } from 'electron-redux';
+import { getTokens } from 'common/wallet-tokens/selectors';
+import CONFIG from 'common/config.js';
+
 export const initialState = {
 	all: [],
 	byId: {}
@@ -57,7 +60,33 @@ export const vendorSelectors = {
 	selectVendors: state =>
 		vendorSelectors
 			.selectVendorRoot(state)
-			.all.map(id => vendorSelectors.selectVendorRoot(state).byId[id])
+			.all.map(id => vendorSelectors.selectVendorRoot(state).byId[id]),
+	selectVendorsForCategory: (state, category, status = 'active') =>
+		vendorSelectors
+			.selectVendors(state)
+			.filter(v => v.categories.includes(category) && v.status === status),
+	selectVendorById: (state, vendorId) =>
+		vendorSelectors.selectVendors(state).find(v => v.vendorId === vendorId),
+	selectRPDetails: (state, vendorId) => {
+		const vendor = vendorSelectors.selectVendorById(state, vendorId);
+		return {
+			serviceOwner: '0x0000000000000000000000000000000000000000',
+			serviceId: 'global',
+			lockPeriod: 2592000000,
+			amount: CONFIG.depositPriceOverride || 25,
+			name: vendorId,
+			...vendor
+		};
+	},
+	hasBalance: (state, vendorId) => {
+		const service = vendorSelectors.selectRPDetails(state, vendorId);
+		const keyToken = getTokens(state).find(token => {
+			return token.symbol === CONFIG.constants.primaryToken.toUpperCase();
+		}) || { balance: 0 };
+
+		const requiredBalance = service.requiredBalance;
+		return keyToken.balance >= requiredBalance;
+	}
 };
 
 export default reducer;

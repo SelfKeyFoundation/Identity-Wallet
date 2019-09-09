@@ -6,7 +6,7 @@ import { featureIsEnabled } from 'common/feature-flags';
 import { getWallet } from 'common/wallet/selectors';
 import { kycSelectors } from 'common/kyc';
 import { pricesSelectors } from 'common/prices';
-import { bankAccountsSelectors } from 'common/bank-accounts';
+import { marketplaceSelectors } from 'common/marketplace';
 import { ordersOperations } from 'common/marketplace/orders';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 
@@ -15,8 +15,7 @@ const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 	async componentDidMount() {
-		await this.loadRelyingParty({ rp: 'incorporations', authenticated: true });
-		await this.loadBankAccounts();
+		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: true });
 		await this.createOrder();
 	}
 
@@ -25,21 +24,20 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	async createOrder() {
-		const { accountType } = this.props;
-		const { accountCode } = this.props.match.params;
+		const { jurisdiction, accountCode, vendorId } = this.props;
 		const application = this.getLastApplication();
-		const price = this.priceInKEY(accountType.price);
-		const walletAddress = accountType.walletAddress;
-		const vendorDID = accountType.didAddress;
+		const price = this.priceInKEY(jurisdiction.price);
+		const walletAddress = jurisdiction.walletAddress;
+		const vendorDID = jurisdiction.didAddress;
 
 		this.props.dispatch(
 			ordersOperations.startOrderOperation({
 				applicationId: application.id,
 				amount: price,
-				vendorId: 'FlagTheory',
+				vendorId: vendorId,
 				itemId: accountCode,
 				vendorDID,
-				productInfo: `Bank account in ${accountType.region}`,
+				productInfo: `Bank account in ${jurisdiction.data.region}`,
 				vendorName: VENDOR_NAME,
 				backUrl: this.cancelRoute(),
 				completeUrl: this.paymentCompleteRoute(),
@@ -56,19 +54,20 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 }
 
 const mapStateToProps = (state, props) => {
-	const { accountCode } = props.match.params;
+	const { accountCode, vendorId } = props.match.params;
 	const authenticated = true;
 
 	return {
-		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
-		banks: bankAccountsSelectors.getDetailsByAccountCode(state, accountCode),
+		vendorId,
+		accountCode,
+		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
 		publicKey: getWallet(state).publicKey,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		currentApplication: kycSelectors.selectCurrentApplication(state),
-		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
-			'incorporations',
+			vendorId,
 			authenticated
 		)
 	};

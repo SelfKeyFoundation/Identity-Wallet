@@ -1,4 +1,4 @@
-import * as serviceSelectors from '../exchanges/selectors';
+import { marketplaceSelectors } from '../marketplace';
 import * as walletSelectors from '../wallet/selectors';
 import { appSelectors } from '../app';
 import { identitySelectors } from '../identity';
@@ -47,7 +47,7 @@ export const kycTypes = {
 
 const incorporationsRPDetails = {
 	name: 'Incorporations',
-	status: 'Active',
+	status: 'active',
 	description: 'Incorporations',
 	relying_party_config: {
 		rootEndpoint: config.incorporationsInstance,
@@ -76,12 +76,11 @@ export const kycSelectors = {
 		if (rpName === 'incorporations') {
 			service = { ...incorporationsRPDetails };
 		} else {
-			service = serviceSelectors.getServiceDetails(state, rpName);
+			service = marketplaceSelectors.selectRPDetails(state, rpName);
 		}
 
-		const rpConfig = service.relying_party_config;
-
-		return service.status === 'Active' && rpConfig;
+		const rpConfig = service.relying_party_config || service.relyingPartyConfig;
+		return service.status === 'active' && rpConfig;
 	},
 	relyingPartyShouldUpdateSelector(state, rpName, authenticate = true) {
 		if (!this.relyingPartyIsActiveSelector(state, rpName)) return false;
@@ -328,9 +327,9 @@ const loadRelyingPartyOperation = (
 	if (rpName === 'incorporations') {
 		rp = { ...incorporationsRPDetails };
 	} else {
-		rp = serviceSelectors.getServiceDetails(getState(), rpName);
+		rp = marketplaceSelectors.selectRPDetails(getState(), rpName);
 	}
-	const config = rp.relying_party_config;
+	const config = rp.relying_party_config || rp.relyingPartyConfig;
 
 	try {
 		await dispatch(kycActions.setCancelRoute(cancelRoute));
@@ -391,7 +390,7 @@ const loadRelyingPartyOperation = (
 			await dispatch(push(afterAuthRoute));
 		}
 	} catch (error) {
-		log.error('loadRelyingParty %s', error);
+		log.error('Error loadRelyingParty %s', error);
 		await dispatch(
 			kycActions.updateRelyingParty(
 				{

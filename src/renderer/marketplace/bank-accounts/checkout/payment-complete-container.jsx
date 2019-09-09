@@ -4,7 +4,7 @@ import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import { getWallet } from 'common/wallet/selectors';
 import { kycSelectors, kycOperations } from 'common/kyc';
-import { bankAccountsSelectors } from 'common/bank-accounts';
+import { marketplaceSelectors } from 'common/marketplace';
 import { transactionSelectors } from 'common/transaction';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 import { BankAccountsPaymentComplete } from './payment-complete';
@@ -13,32 +13,32 @@ const styles = theme => ({});
 
 class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsComponent {
 	async componentWillMount() {
-		await this.loadRelyingParty({ rp: 'incorporations', authenticated: true });
+		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: true });
 	}
 
 	async componentDidMount() {
-		const { transaction, accountType } = this.props;
+		const { transaction, jurisdiction } = this.props;
 
 		this.saveTransactionHash();
 		this.clearRelyingParty();
 
 		this.trackEcommerceTransaction({
 			transactionHash: transaction.transactionHash,
-			price: accountType.price,
-			code: accountType.accountCode,
-			jurisdiction: accountType.region,
+			price: jurisdiction.price,
+			code: jurisdiction.data.accountCode,
+			jurisdiction: jurisdiction.data.region,
 			rpName: 'Bank Accounts'
 		});
 	}
 
 	saveTransactionHash = async () => {
-		const { transaction, accountType } = this.props;
+		const { transaction, jurisdiction, vendorId } = this.props;
 		const application = this.getLastApplication();
 
 		if (!this.userHasPaid() && transaction) {
 			await this.props.dispatch(
 				kycOperations.updateRelyingPartyKYCApplicationPayment(
-					'incorporations',
+					vendorId,
 					application.id,
 					transaction.transactionHash
 				)
@@ -48,7 +48,7 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 				kycOperations.updateApplicationsOperation({
 					id: application.id,
 					payments: {
-						amount: accountType.price,
+						amount: jurisdiction.price,
 						amountKey: transaction.amount,
 						transactionHash: transaction.transactionHash,
 						date: Date.now(),
@@ -84,18 +84,17 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 }
 
 const mapStateToProps = (state, props) => {
-	const { accountCode } = props.match.params;
+	const { accountCode, vendorId } = props.match.params;
 	const authenticated = true;
 	return {
-		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
-		banks: bankAccountsSelectors.getDetailsByAccountCode(state, accountCode),
+		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
 		transaction: transactionSelectors.getTransaction(state),
 		publicKey: getWallet(state).publicKey,
 		currentApplication: kycSelectors.selectCurrentApplication(state),
-		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
-			'incorporations',
+			vendorId,
 			authenticated
 		)
 	};
