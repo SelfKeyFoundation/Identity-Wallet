@@ -1,9 +1,10 @@
 import { getTokens } from 'common/wallet-tokens/selectors';
 import CONFIG from 'common/config.js';
 import { featureIsEnabled } from 'common/feature-flags';
+import { isTestMode } from 'common/utils/common';
 
 const getExchangesStore = state => {
-	if (featureIsEnabled('scheduler')) {
+	if (featureIsEnabled('scheduler') && !isTestMode()) {
 		return Object.keys(state.marketplaces.inventoryById).filter(
 			i => state.marketplaces.inventoryById[i].category === 'exchanges'
 		);
@@ -13,7 +14,7 @@ const getExchangesStore = state => {
 };
 
 const parseExchange = data => {
-	if (featureIsEnabled('scheduler')) {
+	if (featureIsEnabled('scheduler') && !isTestMode()) {
 		return {
 			name: data.name,
 			status: data.status,
@@ -53,9 +54,10 @@ export const getExchanges = state => {
 	const exchanges = getExchangesStore(state);
 
 	return exchanges.map(item => {
-		let { data } = featureIsEnabled('scheduler')
-			? state.marketplaces.inventoryById[item]
-			: state.exchanges.byId[item];
+		let { data } =
+			featureIsEnabled('scheduler') && !isTestMode()
+				? state.marketplaces.inventoryById[item]
+				: state.exchanges.byId[item];
 
 		return parseExchange(data);
 	});
@@ -64,7 +66,7 @@ export const getExchanges = state => {
 export const getExchangeLinks = state => {
 	const exchanges = getExchangesStore(state);
 	return exchanges.map(item => {
-		if (featureIsEnabled('scheduler')) {
+		if (featureIsEnabled('scheduler') && !isTestMode()) {
 			return {
 				name: exchanges.byId[item].data.name,
 				url: exchanges.byId[item].data.url
