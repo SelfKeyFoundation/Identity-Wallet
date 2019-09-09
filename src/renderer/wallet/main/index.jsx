@@ -71,7 +71,7 @@ const styles = theme => ({
 const contentWrapperStyle = {
 	marginBottom: '60px',
 	marginRight: '-55px',
-	marginTop: '50px'
+	marginTop: '128px'
 };
 
 class Main extends Component {
