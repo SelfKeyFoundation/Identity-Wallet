@@ -24,8 +24,9 @@ const styles = theme => ({
 
 	header: {
 		backgroundColor: '#2a3540',
+		borderRadius: '3px 3px 0 0',
 		height: '76px',
-		width: '340px'
+		width: '338px'
 	},
 
 	svgIcon: {
@@ -58,7 +59,7 @@ const styles = theme => ({
 		},
 
 		header: {
-			width: '360px'
+			width: '358px'
 		}
 	}
 });
