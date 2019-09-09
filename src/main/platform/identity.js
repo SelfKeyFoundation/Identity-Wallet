@@ -45,7 +45,7 @@ export class Identity {
 		return `${this.getDidWithParams()}#keys-1`;
 	}
 	getDidWithParams() {
-		if (!this.wallet.did || !isDevMode()) {
+		if (!this.ident.did || !isDevMode()) {
 			return this.did;
 		}
 		return `${this.did};selfkey:chain=ropsten`;
