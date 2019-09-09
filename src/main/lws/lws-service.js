@@ -179,6 +179,8 @@ export class LWSService {
 		const { publicKey, password, config, profile, path } = msg.payload;
 		let payload = { publicKey, unlocked: false };
 		let wallet = await Wallet.findByPublicKey(publicKey);
+		// TODO max: addd identity
+		const ident = {};
 		wallet = !wallet
 			? await Wallet.create({
 					publicKey,
@@ -186,7 +188,7 @@ export class LWSService {
 					path
 			  })
 			: wallet;
-		let identity = new Identity(wallet);
+		let identity = new Identity(wallet, ident);
 		payload.profile = identity.profile;
 		try {
 			await identity.unlock({ password });

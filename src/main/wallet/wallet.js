@@ -26,8 +26,7 @@ export class Wallet extends BaseModel {
 				profilePicture: { type: 'binary' },
 				isSetupFinished: { type: 'integer' },
 				profile: { type: 'string' },
-				path: { type: 'string' },
-				did: { type: 'string' }
+				path: { type: 'string' }
 			}
 		};
 	}
@@ -138,11 +137,6 @@ export class Wallet extends BaseModel {
 
 	static async updateSetup({ id, setup }) {
 		let wallet = await this.query().patchAndFetchById(id, { isSetupFinished: setup ? 1 : 0 });
-		return wallet;
-	}
-
-	static async updateDID({ id, did }) {
-		let wallet = await this.query().patchAndFetchById(id, { did });
 		return wallet;
 	}
 
