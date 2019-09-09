@@ -65,7 +65,9 @@ const styles = theme => ({
 	},
 	profileContainer: {
 		width: '100%',
-		position: 'absolute',
+		position: 'fixed',
+		right: '2%',
+		top: '78px',
 		zIndex: '999'
 	},
 	openedProfile: {
@@ -165,7 +167,7 @@ const dummyProfiles = [
 
 class Toolbar extends Component {
 	state = {
-		isSidebarOpen: true,
+		isSidebarOpen: false,
 		isProfileOpen: false
 	};
 
@@ -214,60 +216,58 @@ class Toolbar extends Component {
 								<PriceBox cryptoCurrency="ETH" />
 							</Grid>
 						</Grid>
-						<Grid item xs={2} style={{ minWidth: '240px' }}>
-							<Grid container wrap="nowrap">
-								<Grid item className={classes.sepVertContainer}>
-									<div className={classes.sepVert} />
-								</Grid>
-								<Grid
-									container
-									direction="row"
-									justify="flex-start"
-									alignItems="center"
-									spacing={0}
-								>
-									<Grid item style={{ width: '222px' }}>
-										<Grid container wrap="nowrap">
-											<Grid item>
-												<RoundPerson />
-											</Grid>
-											<Grid item className={classes.nameRole}>
-												<Typography variant="h6">Name Surname</Typography>
-												<Typography variant="subtitle1" color="secondary">
-													Personal Profile
-												</Typography>
-											</Grid>
-											<Grid
-												item
-												style={{ marginTop: '18px', paddingRight: '15px' }}
-											>
-												<DropdownIcon
-													className={`${classes.menuIcon} ${
-														this.state.isProfileOpen
-															? classes.openedProfile
-															: classes.closedProfile
-													}`}
-													onClick={() =>
-														this.toggleProfile(
-															!this.state.isProfileOpen
-														)
-													}
-												/>
-											</Grid>
+					</Grid>
+					<Grid item xs={2} style={{ minWidth: '240px' }}>
+						<Grid container wrap="nowrap">
+							<Grid item className={classes.sepVertContainer}>
+								<div className={classes.sepVert} />
+							</Grid>
+							<Grid
+								container
+								direction="row"
+								justify="flex-start"
+								alignItems="center"
+								spacing={0}
+							>
+								<Grid item style={{ width: '222px' }}>
+									<Grid container wrap="nowrap">
+										<Grid item>
+											<RoundPerson />
+										</Grid>
+										<Grid item className={classes.nameRole}>
+											<Typography variant="h6">Name Surname</Typography>
+											<Typography variant="subtitle1" color="secondary">
+												Personal Profile
+											</Typography>
+										</Grid>
+										<Grid
+											item
+											style={{ marginTop: '18px', paddingRight: '15px' }}
+										>
+											<DropdownIcon
+												className={`${classes.menuIcon} ${
+													this.state.isProfileOpen
+														? classes.openedProfile
+														: classes.closedProfile
+												}`}
+												onClick={() =>
+													this.toggleProfile(!this.state.isProfileOpen)
+												}
+											/>
 										</Grid>
 									</Grid>
 								</Grid>
 							</Grid>
 						</Grid>
 					</Grid>
-				</div>
-				<div id="profile" className={classes.profileContainer}>
+				</Grid>
+				<Grid id="profile" className={classes.profileContainer}>
 					<Profile
 						profiles={dummyProfiles}
 						isOpen={this.state.isProfileOpen}
 						onClick={this.createProfile}
 					/>
-				</div>
+				</Grid>
 			</div>
 		);
 	}
