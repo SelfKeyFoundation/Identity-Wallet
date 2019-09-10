@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
+import { push } from 'connected-react-router';
 import Dashboard from '../../dashboard';
 import { CryptoMangerContainer, AddTokenContainer } from '../../crypto-manager';
 import AddressBook from '../../address-book/main';
@@ -49,6 +50,7 @@ import ReactPiwik from 'react-piwik';
 import CreateDID from '../../selfkey-id/main/components/create-did';
 import CreateDIDProcessing from '../../selfkey-id/main/components/create-did-processing';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
+import CreateCorporateProfile from '../../selfkey-id/main/components/create-corporate-profile';
 
 const styles = theme => ({
 	headerSection: {
@@ -86,6 +88,16 @@ class Main extends Component {
 		this.setMatomoId();
 	}
 
+	createPersonalProfile = evt => {
+		evt && evt.preventDefault();
+		this.props.dispatch(push('/selfKeyIdCreate'));
+	};
+
+	createCorporateProfile = evt => {
+		evt && evt.preventDefault();
+		this.props.dispatch(push('/main/create-corporate-profile'));
+	};
+
 	render() {
 		const { match, classes } = this.props;
 		return (
@@ -97,7 +109,10 @@ class Main extends Component {
 				className={classes.page}
 			>
 				<Grid item className={classes.headerSection}>
-					<Toolbar />
+					<Toolbar
+						createPersonalProfile={this.createPersonalProfile}
+						createCorporateProfile={this.createCorporateProfile}
+					/>
 				</Grid>
 				<Grid item xs={12} className={classes.bodySection} style={contentWrapperStyle}>
 					<Route path={`${match.path}/dashboard`} component={Dashboard} />
@@ -216,6 +231,10 @@ class Main extends Component {
 					<Route
 						path={`${match.path}/create-did-processing`}
 						component={CreateDIDProcessing}
+					/>
+					<Route
+						path={`${match.path}/create-corporate-profile`}
+						component={CreateCorporateProfile}
 					/>
 				</Grid>
 			</Grid>
