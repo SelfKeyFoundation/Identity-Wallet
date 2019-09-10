@@ -31,7 +31,6 @@ export class MarketplaceCountryService {
 			return fetched.entities
 				.filter(e => Object.keys(e.data).length)
 				.map(entity => {
-					console.log(entity);
 					entity = _.mapKeys(entity.data, (value, key) => _.camelCase(key));
 					entity.languages = entity.languages.split(',');
 					return entity;
