@@ -5,7 +5,8 @@ import { storiesOf } from '@storybook/react';
 
 import { CorporateDashboardPage } from '../src/renderer/corporate';
 import { CorporateDashboardTabs } from '../src/renderer/corporate/dashboard/dashboard-tabs';
-import { CorporateDetails } from '../src/renderer/corporate/common/corporate_details';
+import { CorporateDetails } from '../src/renderer/corporate/common/corporate-details';
+import { CorporateApplicationsSummary } from '../src/renderer/corporate/common/corporate-applications';
 
 storiesOf('Corporate', module).add('Dashboard', () => (
 	<div style={{ width: '1140px' }}>
@@ -66,4 +67,5 @@ storiesOf('Corporate/Summary Blocks', module)
 			date="08/08/2018"
 			onEdit={action('corporate details edit click')}
 		/>
-	));
+	))
+	.add('Corporate Applications', () => <CorporateApplicationsSummary />);
