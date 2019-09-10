@@ -28,11 +28,14 @@ export class MarketplaceCountryService {
 	async fetchMarketplaceCountriesSelfkey() {
 		try {
 			let fetched = await request.get({ url: COUNTRY_API_ENDPOINT, json: true });
-			return fetched.entities.map(entity => {
-				entity = _.mapKeys(entity.data, (value, key) => _.camelCase(key));
-				entity.languages = entity.languages.split(',');
-				return entity;
-			});
+			return fetched.entities
+				.filter(e => Object.keys(e.data).length)
+				.map(entity => {
+					console.log(entity);
+					entity = _.mapKeys(entity.data, (value, key) => _.camelCase(key));
+					entity.languages = entity.languages.split(',');
+					return entity;
+				});
 		} catch (error) {
 			log.error(error);
 			return [];
