@@ -159,6 +159,11 @@ class CreateCorporateProfileComponent extends Component {
 		this.props.dispatch(push('/main/dashboard'));
 	};
 
+	handleAddCompanyMember = evt => {
+		evt && evt.preventDefault();
+		this.props.dispatch(push('/main/add-company-member'));
+	};
+
 	render() {
 		const { classes, members } = this.props;
 		return (
@@ -708,7 +713,7 @@ class CreateCorporateProfileComponent extends Component {
 															variant="outlined"
 															size="large"
 															color="secondary"
-															onClick={this.handleAddDocument}
+															onClick={this.handleAddCompanyMember}
 															className={classes.button}
 														>
 															Add New Member

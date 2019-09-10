@@ -51,6 +51,7 @@ import CreateDID from '../../selfkey-id/main/components/create-did';
 import CreateDIDProcessing from '../../selfkey-id/main/components/create-did-processing';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
 import CreateCorporateProfile from '../../selfkey-id/main/components/create-corporate-profile';
+import AddCompanyMemberContainer from '../../selfkey-id/main/components/add-company-member';
 
 const styles = theme => ({
 	headerSection: {
@@ -235,6 +236,10 @@ class Main extends Component {
 					<Route
 						path={`${match.path}/create-corporate-profile`}
 						component={CreateCorporateProfile}
+					/>
+					<Route
+						path={`${match.path}/add-company-member`}
+						component={AddCompanyMemberContainer}
 					/>
 				</Grid>
 			</Grid>
