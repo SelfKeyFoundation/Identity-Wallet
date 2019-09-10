@@ -159,6 +159,10 @@ export class Wallet extends BaseModel {
 	async addLoginAttempt(attempt) {
 		return this.$relatedQuery('loginAttempts').insert({ ...attempt, walletId: this.id });
 	}
+
+	getDefaultIdentity() {
+		return this.identities.find(ident => ident.type === 'individual') || this.identities[0];
+	}
 }
 
 export default Wallet;
