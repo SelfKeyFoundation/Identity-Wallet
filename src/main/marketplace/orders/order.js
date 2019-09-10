@@ -14,7 +14,7 @@ export class MarketplaceOrder extends BaseModel {
 	static get jsonSchema() {
 		return {
 			type: 'object',
-			required: ['walletId', 'vendorId', 'itemId'],
+			required: ['identityId', 'vendorId', 'itemId'],
 			properties: {
 				id: { type: 'integer' },
 				walletId: { type: 'integer' },

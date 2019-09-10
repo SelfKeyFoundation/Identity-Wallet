@@ -112,7 +112,7 @@ export class WalletService {
 		if (!account) {
 			throw new Error('Wrong Password!');
 		}
-
+		await this.web3Service.setDefaultAccount(account);
 		const keystoreFileFullPath = await this.saveAccountToKeystore(account, password);
 
 		let wallet = await Wallet.findByPublicKey(account.address);

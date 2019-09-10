@@ -15,6 +15,10 @@ exports.up = async (knex, Promise) => {
 			t.integer('updatedAt');
 		});
 
+		await knex.schema.table('marketplace_orders', t => {
+			t.integer('identityId');
+		});
+
 		let walletsOld = await knex('wallets').select();
 
 		let identities = walletsOld.reduce((acc, curr) => {
@@ -76,12 +80,8 @@ exports.up = async (knex, Promise) => {
 
 		await knex.schema.dropTable('id_attributes_old');
 
-		await knex.schema.table('orders', t => {
-			t.string('identityId');
-		});
-
 		for (let wallet of walletsOld) {
-			await knex('orders')
+			await knex('marketplace_orders')
 				.where({ walletId: wallet.id })
 				.update({ identityId: walletIdentities[wallet.id] });
 		}
