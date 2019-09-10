@@ -1,10 +1,11 @@
 import React from 'react';
-// import { action } from '@storybook/addon-actions';
+import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 import { storiesOf } from '@storybook/react';
 
 import { CorporateDashboardPage } from '../src/renderer/corporate';
 import { CorporateDashboardTabs } from '../src/renderer/corporate/dashboard/dashboard-tabs';
+import { CorporateDetails } from '../src/renderer/corporate/common/corporate_details';
 
 storiesOf('Corporate', module).add('Dashboard', () => (
 	<div style={{ width: '1140px' }}>
@@ -44,5 +45,25 @@ storiesOf('Corporate/Dashboard Tabs', module)
 		<CorporateDashboardTabs
 			tab="history"
 			onTabChange={linkTo('Corporate/Dashboard Tabs', tab => tab)}
+		/>
+	));
+
+storiesOf('Corporate/Summary Blocks', module)
+	.add('Company', () => (
+		<CorporateDetails
+			name="Company Name"
+			jurisdiction="United States"
+			type="LLC"
+			date="08/08/2018"
+			address="Address"
+			onEdit={action('corporate details edit click')}
+		/>
+	))
+	.add('Company with missing attributes', () => (
+		<CorporateDetails
+			name="Company Name"
+			type="LLC"
+			date="08/08/2018"
+			onEdit={action('corporate details edit click')}
 		/>
 	));
