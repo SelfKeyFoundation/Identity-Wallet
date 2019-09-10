@@ -1,14 +1,6 @@
 import React, { Component } from 'react';
-import {
-	withStyles,
-	Grid
-	// Typography
-} from '@material-ui/core';
-import {
-	MenuNewIcon
-	// DropdownIcon,
-	// PersonIcon
-} from 'selfkey-ui';
+import { createStyles, withStyles, Button, Grid, Typography } from '@material-ui/core';
+import { MenuNewIcon, DropdownIcon, RoundCompany, RoundPerson } from 'selfkey-ui';
 import PriceBox from '../../price-box';
 import Sidebar from './sidebar';
 import config from 'common/config';
@@ -70,18 +62,163 @@ const styles = theme => ({
 		height: '59px',
 		marginTop: '16px',
 		width: '1px'
+	},
+	profileContainer: {
+		width: '100%',
+		position: 'fixed',
+		right: '2%',
+		top: '78px',
+		zIndex: '999'
+	},
+	openedProfile: {
+		transform: 'scaleY(-1)',
+		'-webkit-transform': 'scaleY(-1)'
+	},
+	closedProfile: {
+		transform: 'scaleY(1)',
+		'-webkit-transform': 'scaleY(1)'
 	}
 });
 
+const profileStyle = theme =>
+	createStyles({
+		profile: {
+			minWidth: '201px',
+			maxWidth: '201px',
+			float: 'right',
+			padding: '20px 20px 8px 20px',
+			borderRadius: '4px',
+			backgroundColor: '#1E262E',
+			border: 'solid 1px #303c49'
+		},
+		profileFooter: {
+			bottom: '7px',
+			marginTop: '10px'
+		},
+		horizontalDivider: {
+			height: '1px',
+			backgroundColor: '#303c49'
+		},
+		profilePersonal: {
+			padding: '20px 0px 4px 6px',
+			display: 'flex',
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center'
+		},
+		profileCorporate: {
+			padding: '20px 0px 14px 6px',
+			display: 'flex',
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center'
+		},
+		profileDetail: {
+			paddingBottom: '20px'
+		},
+		profileName: {
+			paddingLeft: '28px'
+		},
+		button: {
+			width: '189px'
+		}
+	});
+
+const Profile = withStyles(profileStyle)(
+	({ classes, profiles, isOpen, onClickPersonal, onClickCorporate }) => {
+		return (
+			isOpen && (
+				<div className={classes.profile}>
+					{profiles &&
+						profiles.map((el, index) => (
+							<Grid container key={index} className={classes.profileDetail}>
+								<Grid item sm={2}>
+									{el.profileType === 'company' ? (
+										<RoundCompany />
+									) : (
+										<RoundPerson />
+									)}
+								</Grid>
+								<Grid item sm={8} className={classes.profileName}>
+									<Typography variant="h6">{`${el.firstName} ${
+										el.lastName
+									}`}</Typography>
+									<Typography variant="subtitle1" color="secondary">
+										{`${el.profileType.charAt(0).toUpperCase() +
+											el.profileType.slice(1)} Profile`}
+									</Typography>
+								</Grid>
+							</Grid>
+						))}
+					<Grid className={classes.profileFooter}>
+						<div className={classes.horizontalDivider} />
+					</Grid>
+					<Grid container className={classes.profilePersonal}>
+						<Grid item xs={12}>
+							<Button
+								variant="outlined"
+								size="small"
+								className={classes.button}
+								onClick={onClickPersonal}
+							>
+								NEW PERSONAL PROFILE
+							</Button>
+						</Grid>
+					</Grid>
+					<Grid container className={classes.profileCorporate}>
+						<Grid item xs={12}>
+							<Button variant="outlined" size="small" onClick={onClickCorporate}>
+								NEW CORPORATE PROFILE
+							</Button>
+						</Grid>
+					</Grid>
+				</div>
+			)
+		);
+	}
+);
+
+const dummyProfiles = [
+	{
+		id: '1',
+		firstName: 'Acme',
+		lastName: 'Corp',
+		profileType: 'company'
+	},
+	{
+		id: '2',
+		firstName: 'Standard United',
+		lastName: 'Bank',
+		profileType: 'company'
+	}
+];
+
 class Toolbar extends Component {
 	state = {
-		isSidebarOpen: false
+		isSidebarOpen: false,
+		isProfileOpen: false
 	};
 
 	toggleDrawer = isSidebarOpen => {
 		this.setState({
 			isSidebarOpen
 		});
+	};
+
+	toggleProfile = isProfileOpen => {
+		this.setState({
+			isProfileOpen
+		});
+	};
+
+	createPersonalProfile = evt => {
+		this.toggleProfile(!this.state.isProfileOpen);
+		return this.props.createPersonalProfile(evt);
+	};
+
+	createCorporateProfile = evt => {
+		this.toggleProfile(!this.state.isProfileOpen);
+		return this.props.createCorporateProfile(evt);
 	};
 
 	render() {
@@ -113,7 +250,6 @@ class Toolbar extends Component {
 							</Grid>
 						</Grid>
 					</Grid>
-					{/* PROFILE SWITCH - DROPDOWN
 					<Grid item xs={2} style={{ minWidth: '240px' }}>
 						<Grid container wrap="nowrap">
 							<Grid item className={classes.sepVertContainer}>
@@ -129,10 +265,10 @@ class Toolbar extends Component {
 								<Grid item style={{ width: '222px' }}>
 									<Grid container wrap="nowrap">
 										<Grid item>
-											<PersonIcon />
+											<RoundPerson />
 										</Grid>
 										<Grid item className={classes.nameRole}>
-											<Typography variant="h6">Name</Typography>
+											<Typography variant="h6">Name Surname</Typography>
 											<Typography variant="subtitle1" color="secondary">
 												Personal Profile
 											</Typography>
@@ -141,13 +277,30 @@ class Toolbar extends Component {
 											item
 											style={{ marginTop: '18px', paddingRight: '15px' }}
 										>
-											<DropdownIcon />
+											<DropdownIcon
+												className={`${classes.menuIcon} ${
+													this.state.isProfileOpen
+														? classes.openedProfile
+														: classes.closedProfile
+												}`}
+												onClick={() =>
+													this.toggleProfile(!this.state.isProfileOpen)
+												}
+											/>
 										</Grid>
 									</Grid>
 								</Grid>
 							</Grid>
 						</Grid>
-					</Grid> */}
+					</Grid>
+				</Grid>
+				<Grid id="profile" className={classes.profileContainer}>
+					<Profile
+						profiles={dummyProfiles}
+						isOpen={this.state.isProfileOpen}
+						onClickPersonal={this.createPersonalProfile}
+						onClickCorporate={this.createCorporateProfile}
+					/>
 				</Grid>
 			</div>
 		);
