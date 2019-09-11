@@ -89,19 +89,17 @@ const CorporateApplicationsSummary = withStyles(styles)(props => {
 								</TableHead>
 								<TableBody>
 									{applications &&
-										applications.map(application => (
-											<TableRow id={application.id} key={application.id}>
+										applications.map(a => (
+											<TableRow id={a.id} key={a.id}>
 												<TableCell>
-													<Typography variant="h6">
-														Incorporation
-													</Typography>
+													<Typography variant="h6">{a.title}</Typography>
 												</TableCell>
 												<TableCell>
-													<Typography variant="h6">
-														Flag Theory
-													</Typography>
+													<Typography variant="h6">{a.rpName}</Typography>
 												</TableCell>
-												<TableCell>{renderStatus('denied')}</TableCell>
+												<TableCell>
+													{renderStatus(a.currentStatusName)}
+												</TableCell>
 											</TableRow>
 										))}
 								</TableBody>

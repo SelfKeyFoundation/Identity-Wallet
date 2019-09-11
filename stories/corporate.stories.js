@@ -8,6 +8,8 @@ import { CorporateDashboardTabs } from '../src/renderer/corporate/dashboard/dash
 import { CorporateDetails } from '../src/renderer/corporate/common/corporate-details';
 import { CorporateApplicationsSummary } from '../src/renderer/corporate/common/corporate-applications';
 
+import { corporateApplications } from './corporate-data';
+
 storiesOf('Corporate', module).add('Dashboard', () => (
 	<div style={{ width: '1140px' }}>
 		<CorporateDashboardPage />
@@ -68,4 +70,6 @@ storiesOf('Corporate/Summary Blocks', module)
 			onEdit={action('corporate details edit click')}
 		/>
 	))
-	.add('Corporate Applications', () => <CorporateApplicationsSummary />);
+	.add('Corporate Applications', () => (
+		<CorporateApplicationsSummary applications={corporateApplications} />
+	));
