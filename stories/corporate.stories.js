@@ -8,6 +8,7 @@ import { CorporateDashboardTabs } from '../src/renderer/corporate/dashboard/dash
 import { CorporateDetails } from '../src/renderer/corporate/common/corporate-details';
 import { CorporateApplicationsSummary } from '../src/renderer/corporate/common/corporate-applications';
 import { CorporateCapTable } from '../src/renderer/corporate/common/corporate-cap-table';
+import { CorporateShareholding } from '../src/renderer/corporate/common/corporate-shareholding';
 
 import { corporateApplications, corporateCapTable } from './corporate-data';
 
@@ -76,4 +77,5 @@ storiesOf('Corporate/Blocks', module)
 	))
 	.add('Corporate Cap Table', () => (
 		<CorporateCapTable cap={corporateCapTable} onEdit={action('corporate cap edit click')} />
-	));
+	))
+	.add('Corporate Shareholding', () => <CorporateShareholding cap={corporateCapTable} />);

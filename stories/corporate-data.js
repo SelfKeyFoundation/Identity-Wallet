@@ -24,7 +24,7 @@ export const corporateCapTable = [
 		email: 'john.doe@email.com',
 		citizenship: 'Italy',
 		residency: 'Singapore',
-		shares: '50%'
+		shares: 0.5
 	},
 	{
 		type: 'Corporate',
@@ -33,7 +33,7 @@ export const corporateCapTable = [
 		email: null,
 		citizenship: 'Hong Kong',
 		residency: 'Hong Kong',
-		shares: '9%'
+		shares: 0.09
 	},
 	{
 		type: 'Corporate',
@@ -42,6 +42,6 @@ export const corporateCapTable = [
 		email: null,
 		citizenship: 'U.S.A.',
 		residency: 'U.S.A.',
-		shares: '41%'
+		shares: 0.41
 	}
 ];
