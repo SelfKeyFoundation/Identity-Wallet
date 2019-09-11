@@ -230,6 +230,7 @@ class AddCompanyMemberContainer extends Component {
 														<Grid
 															container
 															className={classes.radiobox}
+															style={{ minHeight: '158px' }}
 														>
 															<Grid
 																container
@@ -261,6 +262,7 @@ class AddCompanyMemberContainer extends Component {
 														<Grid
 															container
 															className={classes.radiobox}
+															style={{ minHeight: '158px' }}
 														>
 															<Grid
 																container
