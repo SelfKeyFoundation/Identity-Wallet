@@ -19,7 +19,7 @@ describe('TxHistoryService', () => {
 	afterEach(() => {
 		sinon.restore();
 	});
-	describe('requests', async () => {
+	describe('requests', () => {
 		const t = (name, data) =>
 			it(name, async () => {
 				let stub = sinon.stub(TxHistoryService.prototype, 'makeRequest');

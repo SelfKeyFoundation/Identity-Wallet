@@ -1,5 +1,6 @@
 import * as actions from './actions';
 import { getWallet, getDidOriginUrl } from './selectors';
+import { identitySelectors, identityOperations } from '../identity';
 
 import { getGlobalContext } from 'common/context';
 import * as types from './types';
@@ -54,6 +55,7 @@ const updateWalletName = (name, walletId) => async (dispatch, getState) => {
 
 const createWalletDID = () => async (dispatch, getState) => {
 	const walletFromStore = getWallet(getState());
+	let identity = identitySelectors.selectCurrentIdentity(getState());
 	const didOriginUrl = getDidOriginUrl(getState());
 	try {
 		let hardwalletConfirmationTimeout = null;
@@ -72,15 +74,15 @@ const createWalletDID = () => async (dispatch, getState) => {
 		const transaction = didService.createDID(walletFromStore.publicKey, gasLimit);
 		transaction.on('receipt', async receipt => {
 			const did = receipt.events.CreatedDID.returnValues.id;
-			const walletService = getGlobalContext().walletService;
-			const wallet = await walletService.updateDID(walletFromStore.id, did);
+			const identityService = getGlobalContext().identityService;
+			identity = await identityService.updateIdentityDID(did, identity.id);
 			await dispatch(
 				updateWalletWithBalance({
 					...walletFromStore,
-					did: wallet.did,
 					didPending: false
 				})
 			);
+			await dispatch(identityOperations.updateIdentity(identity));
 			await dispatch(push(didOriginUrl));
 		});
 		transaction.on('transactionHash', async hash => {
@@ -123,12 +125,13 @@ const startAssociateDidFlow = didOriginUrl => async (dispatch, getState) => {
 const updateWalletDID = (walletId, did) => async (dispatch, getState) => {
 	try {
 		const walletFromStore = getWallet(getState());
+		let identity = identitySelectors.selectCurrentIdentity(getState());
 		const DIDService = getGlobalContext().didService;
 		const controllerAddress = await DIDService.getControllerAddress(did);
 		if (walletFromStore.publicKey.toLowerCase() === controllerAddress.toLowerCase()) {
-			const walletService = getGlobalContext().walletService;
-			const wallet = await walletService.updateDID(walletId, did);
-			await dispatch(updateWalletWithBalance({ ...walletFromStore, did: wallet.did }));
+			const identityService = getGlobalContext().identityService;
+			identity = await identityService.updateIdentityDID(did, identity.id);
+			await dispatch(identityOperations.updateIdentity(identity));
 			await dispatch(actions.setAssociateError('none'));
 		} else {
 			await dispatch(
