@@ -47,9 +47,9 @@ export class TaxTreatiesService {
 	async fetchTaxTreatiesSelfkey() {
 		try {
 			let fetched = await request.get({ url: TAX_TREATIES_API_ENDPOINT, json: true });
-			return fetched.entities.map(entity =>
-				_.mapKeys(entity.data, (value, key) => _.camelCase(key))
-			);
+			return fetched.entities
+				.filter(e => Object.keys(e.data).length)
+				.map(entity => _.mapKeys(entity.data, (value, key) => _.camelCase(key)));
 		} catch (error) {
 			log.error(`fetchTaxTreatiesSelfkey: ${error}`);
 			return [];
