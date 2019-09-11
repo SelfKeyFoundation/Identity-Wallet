@@ -129,6 +129,12 @@ const unlockIdentityOperation = identityId => async (dispatch, getState) => {
 	await dispatch(identityOperations.setCurrentIdentityAction(identityId));
 };
 
+const createIdentityOperation = (walletId, type) => async (dispatch, getState) => {
+	let identityService = getGlobalContext().identityService;
+	await identityService.createIdentity(walletId, type);
+	await dispatch(identityOperations.loadIdentitiesOperation());
+};
+
 const createSelfkeyIdOperation = (identityId, data) => async (dispatch, getState) => {
 	const idAttributeTypes = identitySelectors.selectIdAttributeTypes(getState());
 	const identity = identitySelectors.selectIdentityById(getState(), identityId);
@@ -199,7 +205,8 @@ export const operations = {
 	updateProfilePictureOperation,
 	createSelfkeyIdOperation,
 	loadIdentitiesOperation,
-	updateIdentitySetupOperation
+	updateIdentitySetupOperation,
+	createIdentityOperation
 };
 
 export const identityOperations = {
@@ -283,6 +290,10 @@ export const identityOperations = {
 	updateIdentitySetupOperation: createAliasedAction(
 		identityTypes.IDENTITIES_UPDATE_SETUP_OPERATION,
 		operations.updateIdentitySetupOperation
+	),
+	createIdentityOperation: createAliasedAction(
+		identityTypes.IDENTITIES_CREATE_OPERATION,
+		operations.createIdentityOperation
 	)
 };
 
