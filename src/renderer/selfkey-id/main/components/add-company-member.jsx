@@ -85,6 +85,7 @@ const styles = theme => ({
 		borderRadius: '4px',
 		boxSizing: 'border-box',
 		maxWidth: '280px',
+		minWidth: '215px',
 		padding: '25px'
 	},
 	radioBoxContainer: {
@@ -230,12 +231,18 @@ class AddCompanyMemberContainer extends Component {
 															container
 															className={classes.radiobox}
 														>
-															<DirectorIcon
-																className={classes.icon}
-															/>
-															<Typography variant="body2">
-																Director
-															</Typography>
+															<Grid
+																container
+																alignItems="center"
+																style={{ border: 'none' }}
+															>
+																<DirectorIcon
+																	className={classes.icon}
+																/>
+																<Typography variant="body2">
+																	Director
+																</Typography>
+															</Grid>
 															<Typography
 																variant="subtitle2"
 																color="secondary"
@@ -255,10 +262,18 @@ class AddCompanyMemberContainer extends Component {
 															container
 															className={classes.radiobox}
 														>
-															<ChartIcon className={classes.icon} />
-															<Typography variant="body2">
-																Shareholder
-															</Typography>
+															<Grid
+																container
+																alignItems="center"
+																style={{ border: 'none' }}
+															>
+																<ChartIcon
+																	className={classes.icon}
+																/>
+																<Typography variant="body2">
+																	Shareholder
+																</Typography>
+															</Grid>
 															<Typography
 																variant="subtitle2"
 																color="secondary"
@@ -298,12 +313,13 @@ class AddCompanyMemberContainer extends Component {
 													<label htmlFor="radio_3">
 														<Grid
 															container
+															alignItems="center"
 															className={classes.radiobox}
 														>
 															<ProfileIcon
-																height="29px"
-																width="33px"
-																viewBox="0 0 29 33"
+																height="35px"
+																width="40px"
+																viewBox="0 0 35 40"
 																className={classes.icon}
 															/>
 															<Typography variant="body2">
@@ -317,6 +333,7 @@ class AddCompanyMemberContainer extends Component {
 													<label htmlFor="radio_4">
 														<Grid
 															container
+															alignItems="center"
 															className={classes.radiobox}
 														>
 															<CompanyIcon className={classes.icon} />
