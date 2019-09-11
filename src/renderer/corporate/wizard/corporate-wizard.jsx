@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { push } from 'connected-react-router';
-import { connect } from 'react-redux';
-import { appSelectors } from 'common/app';
 import {
 	Grid,
 	CardHeader,
@@ -23,7 +21,7 @@ import {
 import { KeyboardArrowDown } from '@material-ui/icons';
 import { EditTransparentIcon, DeleteIcon, SmallTableHeadRow, KeyPicker } from 'selfkey-ui';
 
-import backgroundImage from '../../../../../static/assets/images/icons/icon-marketplace.png';
+import backgroundImage from '../../../../static/assets/images/icons/icon-marketplace.png';
 
 const styles = theme => ({
 	hr: {
@@ -99,46 +97,7 @@ const styles = theme => ({
 	}
 });
 
-const dummyMembers = [
-	{
-		id: '1',
-		name: 'Giacomo Guilizzoni',
-		type: 'Person',
-		role: 'Director, Shareholder',
-		citizenship: 'Italy',
-		residency: 'Singapore',
-		shares: '45%'
-	},
-	{
-		id: '2',
-		name: 'Marco Botton Ltd',
-		type: 'Corporate',
-		role: 'Shareholder',
-		citizenship: 'Hong Kong',
-		residency: 'Hong Kong',
-		shares: '9%'
-	},
-	{
-		id: '3',
-		name: 'Big Things Ltd',
-		type: 'Corporate',
-		role: 'Shareholder',
-		citizenship: 'Hong Kong',
-		residency: 'Hong Kong',
-		shares: '41%'
-	},
-	{
-		id: '4',
-		name: 'John Dafoe',
-		type: 'Person',
-		role: 'Director',
-		citizenship: 'France',
-		residency: 'France',
-		shares: '5%'
-	}
-];
-
-class CreateCorporateProfileComponent extends Component {
+class CorporateWizardComponent extends Component {
 	state = {
 		error: '',
 		errorEmail: false,
@@ -746,15 +705,6 @@ class CreateCorporateProfileComponent extends Component {
 	}
 }
 
-const mapStateToProps = (state, props) => {
-	return {
-		walletType: appSelectors.selectWalletType(state),
-		members: dummyMembers
-	};
-};
+export const CorporateWizard = withStyles(styles)(CorporateWizardComponent);
 
-export const CreateCorporateProfile = connect(mapStateToProps)(
-	withStyles(styles)(CreateCorporateProfileComponent)
-);
-
-export default CreateCorporateProfile;
+export default CorporateWizard;
