@@ -57,7 +57,7 @@ const styles = theme => ({
 		display: 'inline',
 		fontStyle: 'italic',
 		marginLeft: '5px',
-		textTransform: 'lowarcase'
+		textTransform: 'lowercase'
 	},
 	shareInput: {
 		maxWidth: '160px',
