@@ -23,13 +23,11 @@ const styles = theme => ({
 		fontSize: '13px',
 		lineHeight: '19px'
 	},
-
 	errorColor: {
 		color: '#FE4B61 !important',
 		border: '2px solid #FE4B61 !important',
 		backgroundColor: 'rgba(255,46,99,0.09) !important'
 	},
-
 	input: {
 		height: '46px',
 		width: '722px',
@@ -38,11 +36,9 @@ const styles = theme => ({
 			color: '#93B0C1'
 		}
 	},
-
 	inputError: {
 		borderBottom: '2px solid #FE4B61 !important'
 	},
-
 	label: {
 		color: '#93A4AF',
 		fontSize: '12px',
@@ -146,386 +142,412 @@ class AddCompanyMemberContainer extends Component {
 														xs={12}
 													>
 														<Grid
-															item
-															spacing={0}
-															style={{
-																width: '100%'
-															}}
-														>
-															<Grid
-																container
-																direction="column"
-																spacing={0}
-																justify="flex-start"
-																alignItems="flex-start"
-																xs={12}
+									item
+									spacing={0}
+									style={{
+										width: '100%'
+									}}
+								>
+									<Grid
+										container
+										direction="column"
+										spacing={0}
+										justify="flex-start"
+										alignItems="flex-start"
+										xs={12}
+									>
+										<Grid
+											item
+											spacing={0}
+											style={{
+												width: '100%'
+											}}
+										>
+											<Grid
+												container
+												direction="column"
+												spacing={0}
+												justify="flex-start"
+												alignItems="flex-start"
+											>
+												<Grid
+													container
+													direction="row"
+													justify="space-between"
+													wrap="nowrap"
+													xs={12}
+												>
+													<Grid
+														container
+														direction="column"
+														className={classes.inputBox}
+													>
+														<Grid item>
+															<Typography
+																variant="overline"
+																gutterBottom
 															>
-																<Grid
-																	item
-																	spacing={0}
-																	style={{
-																		width: '100%'
-																	}}
-																>
-																	<Grid
-																		container
-																		direction="column"
-																		spacing={0}
-																		justify="flex-start"
-																		alignItems="flex-start"
-																	>
-																		<Grid
-																			container
-																			direction="row"
-																			justify="space-between"
-																			wrap="nowrap"
-																			xs={12}
-																		>
-																			<Grid
-																				container
-																				direction="column"
-																				className={
-																					classes.inputBox
-																				}
-																			>
-																				<Grid item>
-																					<Typography
-																						variant="overline"
-																						gutterBottom
-																					>
-																						First Name
-																					</Typography>
-																				</Grid>
-																				<Grid item>
-																					<Input
-																						id="firstName"
-																						fullWidth
-																						required
-																						onChange={
-																							this
-																								.handleFirstNameChange
-																						}
-																						placeholder="First Name"
-																					/>
-																				</Grid>
-																			</Grid>
-																			<Grid
-																				container
-																				direction="column"
-																				className={
-																					classes.inputBox
-																				}
-																			>
-																				<Grid item>
-																					<Typography
-																						variant="overline"
-																						gutterBottom
-																					>
-																						Last Name
-																					</Typography>
-																				</Grid>
-																				<Grid item>
-																					<Input
-																						id="lastName"
-																						fullWidth
-																						required
-																						onChange={
-																							this
-																								.handleFirstNameChange
-																						}
-																						placeholder="Family Name"
-																					/>
-																				</Grid>
-																			</Grid>
-																		</Grid>
-																		<Grid
-																			container
-																			direction="row"
-																			justify="space-between"
-																			wrap="nowrap"
-																			xs={12}
-																		>
-																			<Grid
-																				container
-																				direction="column"
-																				className={
-																					classes.inputBox
-																				}
-																			>
-																				<Grid item>
-																					<Typography
-																						variant="overline"
-																						gutterBottom
-																					>
-																						Citizenship
-																					</Typography>
-																				</Grid>
-																				<Grid item>
-																					<Select
-																						value="Entity Type"
-																						onChange=""
-																						displayEmpty
-																						name="entitytype"
-																						disableUnderline
-																						IconComponent={
-																							KeyboardArrowDown
-																						}
-																						input={
-																							<Input
-																								disableUnderline
-																							/>
-																						}
-																						style={{
-																							width:
-																								'100%'
-																						}}
-																					>
-																						<MenuItem value="">
-																							<em>
-																								Choose...
-																							</em>
-																						</MenuItem>
-																						{[
-																							'Entity Type 1',
-																							'Entity Type 2',
-																							'Entity Type 3',
-																							'Entity Type 4',
-																							'Entity Type 5'
-																						].map(
-																							item => (
-																								<MenuItem
-																									key={
-																										item
-																									}
-																									value={
-																										item
-																									}
-																								>
-																									{
-																										item
-																									}
-																								</MenuItem>
-																							)
-																						)}
-																					</Select>
-																				</Grid>
-																			</Grid>
-																			<Grid
-																				container
-																				direction="column"
-																				className={
-																					classes.inputBox
-																				}
-																			>
-																				<Grid item>
-																					<Typography
-																						variant="overline"
-																						gutterBottom
-																						className={
-																							classes.idNickname
-																						}
-																					>
-																						Residency
-																					</Typography>
-																				</Grid>
-																				<Grid item>
-																					<Select
-																						value="Value"
-																						onChange=""
-																						displayEmpty
-																						name="jurisdiction"
-																						disableUnderline
-																						IconComponent={
-																							KeyboardArrowDown
-																						}
-																						input={
-																							<Input
-																								disableUnderline
-																								placeholder="Choose..."
-																							/>
-																						}
-																						style={{
-																							width:
-																								'100%'
-																						}}
-																					>
-																						<MenuItem value="">
-																							<em>
-																								Choose...
-																							</em>
-																						</MenuItem>
-																						{[
-																							'Jurisdiction 1',
-																							'Jurisdiction 2',
-																							'Jurisdiction 3',
-																							'Jurisdiction 4',
-																							'Jurisdiction 5'
-																						].map(
-																							item => (
-																								<MenuItem
-																									key={
-																										item
-																									}
-																									value={
-																										item
-																									}
-																								>
-																									{
-																										item
-																									}
-																								</MenuItem>
-																							)
-																						)}
-																					</Select>
-																				</Grid>
-																			</Grid>
-																		</Grid>
-																		<Grid
-																			container
-																			direction="row"
-																			justify="space-between"
-																			wrap="nowrap"
-																			xs={12}
-																		>
-																			<Grid
-																				container
-																				direction="column"
-																				className={
-																					classes.inputBox
-																				}
-																			>
-																				<Grid item>
-																					<Typography
-																						variant="overline"
-																						gutterBottom
-																					>
-																						Email
-																					</Typography>
-																				</Grid>
-																				<Grid item>
-																					<Input
-																						id="email"
-																						fullWidth
-																						type="email"
-																						error={
-																							this
-																								.state
-																								.errorEmail
-																						}
-																						required
-																						onChange={
-																							this
-																								.handleEmailChange
-																						}
-																						placeholder="Email"
-																					/>
-																					{this.state
-																						.errorEmail && (
-																						<Typography
-																							variant="subtitle2"
-																							color="error"
-																							gutterBottom
-																						>
-																							{
-																								'Email provided is invalid'
-																							}
-																						</Typography>
-																					)}
-																				</Grid>
-																			</Grid>
-																			<Grid
-																				container
-																				direction="column"
-																				className={
-																					classes.inputBox
-																				}
-																			>
-																				<Grid item>
-																					<Typography
-																						variant="overline"
-																						gutterBottom
-																					>
-																						Phone
-																						<Typography
-																							variant="overline"
-																							className={
-																								classes.optional
-																							}
-																						>
-																							(optional)
-																						</Typography>
-																					</Typography>
-																				</Grid>
-																				<Grid item>
-																					<Input
-																						id="email"
-																						fullWidth
-																						type="email"
-																						error={
-																							this
-																								.state
-																								.errorEmail
-																						}
-																						required
-																						onChange={
-																							this
-																								.handleEmailChange
-																						}
-																						placeholder="Phone number"
-																					/>
-																					{this.state
-																						.errorEmail && (
-																						<Typography
-																							variant="subtitle2"
-																							color="error"
-																							gutterBottom
-																						>
-																							{
-																								'Email provided is invalid'
-																							}
-																						</Typography>
-																					)}
-																				</Grid>
-																			</Grid>
-																		</Grid>
-																	</Grid>
-																</Grid>
-															</Grid>
+																First Name
+															</Typography>
+														</Grid>
+														<Grid item>
+															<Input
+																id="firstName"
+																fullWidth
+																required
+																onChange={
+																	this.handleFirstNameChange
+																}
+																placeholder="First Name"
+															/>
 														</Grid>
 													</Grid>
-												</form>
+													<Grid
+														container
+														direction="column"
+														className={classes.inputBox}
+													>
+														<Grid item>
+															<Typography
+																variant="overline"
+																gutterBottom
+															>
+																Last Name
+															</Typography>
+														</Grid>
+														<Grid item>
+															<Input
+																id="lastName"
+																fullWidth
+																required
+																onChange={
+																	this.handleFirstNameChange
+																}
+																placeholder="Family Name"
+															/>
+														</Grid>
+													</Grid>
+												</Grid>
+												<Grid
+													container
+													direction="row"
+													justify="space-between"
+													wrap="nowrap"
+													xs={12}
+												>
+													<Grid
+														container
+														direction="column"
+														className={classes.inputBox}
+													>
+														<Grid item>
+															<Typography
+																variant="overline"
+																gutterBottom
+															>
+																Citizenship
+															</Typography>
+														</Grid>
+														<Grid item>
+															<Select
+																value="Entity Type"
+																onChange=""
+																displayEmpty
+																name="entitytype"
+																disableUnderline
+																IconComponent={KeyboardArrowDown}
+																input={<Input disableUnderline />}
+																style={{
+																	width: '100%'
+																}}
+															>
+																<MenuItem value="">
+																	<em>Choose...</em>
+																</MenuItem>
+																{[
+																	'Entity Type 1',
+																	'Entity Type 2',
+																	'Entity Type 3',
+																	'Entity Type 4',
+																	'Entity Type 5'
+																].map(item => (
+																	<MenuItem
+																		key={item}
+																		value={item}
+																	>
+																		{item}
+																	</MenuItem>
+																))}
+															</Select>
+														</Grid>
+													</Grid>
+													<Grid
+														container
+														direction="column"
+														className={classes.inputBox}
+													>
+														<Grid item>
+															<Typography
+																variant="overline"
+																gutterBottom
+																className={classes.idNickname}
+															>
+																Residency
+															</Typography>
+														</Grid>
+														<Grid item>
+															<Select
+																value="Value"
+																onChange=""
+																displayEmpty
+																name="jurisdiction"
+																disableUnderline
+																IconComponent={KeyboardArrowDown}
+																input={
+																	<Input
+																		disableUnderline
+																		placeholder="Choose..."
+																	/>
+																}
+																style={{
+																	width: '100%'
+																}}
+															>
+																<MenuItem value="">
+																	<em>Choose...</em>
+																</MenuItem>
+																{[
+																	'Jurisdiction 1',
+																	'Jurisdiction 2',
+																	'Jurisdiction 3',
+																	'Jurisdiction 4',
+																	'Jurisdiction 5'
+																].map(item => (
+																	<MenuItem
+																		key={item}
+																		value={item}
+																	>
+																		{item}
+																	</MenuItem>
+																))}
+															</Select>
+														</Grid>
+													</Grid>
+												</Grid>
+												<Grid
+													container
+													direction="row"
+													justify="space-between"
+													wrap="nowrap"
+													xs={12}
+												>
+													<Grid
+														container
+														direction="column"
+														className={classes.inputBox}
+													>
+														<Grid item>
+															<Typography
+																variant="overline"
+																gutterBottom
+															>
+																Email
+															</Typography>
+														</Grid>
+														<Grid item>
+															<Input
+																id="email"
+																fullWidth
+																type="email"
+																error={this.state.errorEmail}
+																required
+																onChange={this.handleEmailChange}
+																placeholder="Email"
+															/>
+															{this.state.errorEmail && (
+																<Typography
+																	variant="subtitle2"
+																	color="error"
+																	gutterBottom
+																>
+																	{'Email provided is invalid'}
+																</Typography>
+															)}
+														</Grid>
+													</Grid>
+													<Grid
+														container
+														direction="column"
+														className={classes.inputBox}
+													>
+														<Grid item>
+															<Typography
+																variant="overline"
+																gutterBottom
+															>
+																Phone
+																<Typography
+																	variant="overline"
+																	className={classes.optional}
+																>
+																	(optional)
+																</Typography>
+															</Typography>
+														</Grid>
+														<Grid item>
+															<Input
+																id="phone"
+																fullWidth
+																type="number"
+																error={this.state.errorEmail}
+																required
+																onChange={this.handleEmailChange}
+																placeholder="Phone number"
+															/>
+															{this.state.errorEmail && (
+																<Typography
+																	variant="subtitle2"
+																	color="error"
+																	gutterBottom
+																>
+																	{'Phone number is invalid'}
+																</Typography>
+															)}
+														</Grid>
+													</Grid>
+												</Grid>
+												<Grid
+													container
+													direction="row"
+													justify="space-between"
+													wrap="nowrap"
+													xs={12}
+												>
+													<Grid
+														container
+														direction="column"
+														className={classes.inputBox}
+													>
+														<Grid item>
+															<Typography
+																variant="overline"
+																gutterBottom
+															>
+																Shares owned
+															</Typography>
+														</Grid>
+														<Grid item>
+															<Grid
+																container
+																direction="row"
+																wrap="nowrap"
+																alignItems="center"
+															>
+																<Input
+																	id="shares"
+																	fullWidth
+																	type="number"
+																	error={this.state.errorEmail}
+																	required
+																	onChange={
+																		this.handleEmailChange
+																	}
+																	placeholder="0"
+																	className={classes.shareInput}
+																/>
+																<Typography variant="body1">
+																	%
+																</Typography>
+															</Grid>
+															{this.state.errorEmail && (
+																<Typography
+																	variant="subtitle2"
+																	color="error"
+																	gutterBottom
+																>
+																	{'You can use only numbers'}
+																</Typography>
+															)}
+														</Grid>
+													</Grid>
+												</Grid>
+												<Grid
+													container
+													direction="row"
+													justify="space-between"
+													wrap="nowrap"
+													xs={12}
+												>
+													<Grid container direction="column">
+														<Grid item>
+															<Typography
+																variant="overline"
+																gutterBottom
+															>
+																Selfkey DID
+																<Typography
+																	variant="overline"
+																	className={classes.optional}
+																>
+																	(optional)
+																</Typography>
+															</Typography>
+														</Grid>
+														<Grid item>
+															<Input
+																id="did"
+																fullWidth
+																type="text"
+																error={this.state.errorEmail}
+																required
+																onChange={this.handleEmailChange}
+																placeholder="did:selfkey:"
+															/>
+															{this.state.errorEmail && (
+																<Typography
+																	variant="subtitle2"
+																	color="error"
+																	gutterBottom
+																>
+																	{'DID is invalid'}
+																</Typography>
+															)}
+														</Grid>
+													</Grid>
+												</Grid>
 											</Grid>
+												</form>
 										</Grid>
 									</Grid>
 								</Grid>
-								<Grid item>
-									<Grid container direction="row" spacing={24}>
-										<Grid item>
-											<StyledButton
-												id="saveButton"
-												variant="contained"
-												size="large"
-												type="submit"
-												disabled={
-													!this.state.label ||
-													!this.state.address ||
-													hasAddressError ||
-													hasLabelError
-												}
-											>
-												Save
-											</StyledButton>
-										</Grid>
-										<Grid item>
-											<StyledButton
-												id="cancelButton"
-												variant="outlined"
-												size="large"
-												onClick={this.closeAction}
-											>
-												Cancel
-											</StyledButton>
-										</Grid>
+							</Grid>
+							<Grid item style={{ marginTop: '60px' }}>
+								<Grid container direction="row">
+									<Grid item style={{ marginRight: '20px' }}>
+										<StyledButton
+											id="saveButton"
+											variant="contained"
+											size="large"
+											type="submit"
+											disabled={
+												!this.state.label ||
+												!this.state.address ||
+												hasAddressError ||
+												hasLabelError
+											}
+										>
+											Continue
+										</StyledButton>
+									</Grid>
+									<Grid item>
+										<StyledButton
+											id="cancelButton"
+											variant="outlined"
+											size="large"
+											onClick={this.closeAction}
+										>
+											Cancel
+										</StyledButton>
 									</Grid>
 								</Grid>
 							</Grid>
