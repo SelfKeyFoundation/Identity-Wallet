@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-	StyledButton,
 	ModalWrap,
 	ModalCloseButton,
 	ModalCloseIcon,
 	ModalHeader,
-	ModalBody
+	ModalBody,
+	StyledButton,
+	DirectorIcon,
+	ChartIcon,
+	ProfileIcon,
+	CompanyIcon
 } from 'selfkey-ui';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
 import { Grid, Modal, Typography, Input, Select, MenuItem } from '@material-ui/core';
@@ -44,6 +48,84 @@ const styles = theme => ({
 		fontSize: '12px',
 		fontWeight: 'bold',
 		lineHeight: '15px'
+	},
+	inputBox: {
+		marginBottom: '35px',
+		width: '47%'
+	},
+	optional: {
+		display: 'inline',
+		fontStyle: 'italic',
+		marginLeft: '5px',
+		textTransform: 'lowarcase'
+	},
+	shareInput: {
+		maxWidth: '160px',
+		marginRight: '10px',
+		'& input': {
+			textAlign: 'right'
+		}
+	},
+	hr: {
+		backgroundColor: '#303C49',
+		border: 'none',
+		boxSizing: 'border-box',
+		height: '1px',
+		margin: '40px 0',
+		width: '100%'
+	},
+	title: {
+		marginTop: '12px'
+	},
+	icon: {
+		marginRight: '15px'
+	},
+	radiobox: {
+		backgroundColor: '#293743',
+		borderRadius: '4px',
+		boxSizing: 'border-box',
+		maxWidth: '280px',
+		padding: '25px'
+	},
+	radioBoxContainer: {
+		margin: '10px 0 40px'
+	},
+	radio: {
+		margin: '0 15px',
+		'& input[type="radio"]': {
+			opacity: 0
+		},
+		'& input[type="radio"] + label::after': {
+			content: 'none'
+		},
+		'& label::before': {
+			content: '',
+			display: 'inline-block',
+			height: '16px',
+			width: '16px',
+			border: '1px solid'
+		},
+		'& label::after': {
+			content: '',
+			display: 'inline-block',
+			height: '6px',
+			width: '9px',
+			borderLeft: '2px solid',
+			borderBottom: '2px solid',
+			transform: 'rotate(-45deg)'
+		},
+		'& input[type="radio"] + label': {
+			'& div': {
+				border: '2px solid #1D505F',
+				cursor: 'pointer'
+			}
+		},
+		'& input[type="radio"]:checked + label': {
+			'& div': {
+				border: '2px solid #1CA9BA',
+				cursor: 'pointer'
+			}
+		}
 	}
 });
 
@@ -111,37 +193,145 @@ class AddCompanyMemberContainer extends Component {
 					</ModalHeader>
 					<ModalBody>
 						<form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
-							<Grid container direction="column" spacing={32}>
-								<Grid item>
+							<Grid
+								container
+								direction="column"
+								justify="center"
+								alignItems="center"
+								spacing={0}
+								xs={12}
+							>
+								<Grid
+									spacing={0}
+									style={{
+										width: '100%'
+									}}
+								>
 									<Grid container direction="column" spacing={8}>
 										<Grid item>
-											<Typography variant="body1">Select a role</Typography>
+											<Typography
+												variant="body1"
+												align="center"
+												className={classes.title}
+											>
+												Select a role
+											</Typography>
 										</Grid>
 										<Grid item>
-											<Typography variant="body1">Type</Typography>
+											<Grid
+												container
+												justify="center"
+												className={classes.radioBoxContainer}
+											>
+												<div className={classes.radio}>
+													<input type="radio" id="radio_1" name="role" />
+													<label htmlFor="radio_1">
+														<Grid
+															container
+															className={classes.radiobox}
+														>
+															<DirectorIcon
+																className={classes.icon}
+															/>
+															<Typography variant="body2">
+																Director
+															</Typography>
+															<Typography
+																variant="subtitle2"
+																color="secondary"
+																style={{ marginTop: '15px' }}
+															>
+																Person from a group of managers who
+																leads or supervises a particular
+																area of your company.
+															</Typography>
+														</Grid>
+													</label>
+												</div>
+												<div className={classes.radio}>
+													<input type="radio" id="radio_2" name="role" />
+													<label htmlFor="radio_2">
+														<Grid
+															container
+															className={classes.radiobox}
+														>
+															<ChartIcon className={classes.icon} />
+															<Typography variant="body2">
+																Shareholder
+															</Typography>
+															<Typography
+																variant="subtitle2"
+																color="secondary"
+																style={{ marginTop: '15px' }}
+															>
+																Individual or institution that
+																legally owns one or more shares of
+																stock in your company.
+															</Typography>
+														</Grid>
+													</label>
+												</div>
+											</Grid>
 										</Grid>
 									</Grid>
 								</Grid>
-								<Grid item>
-									<Grid
-										container
-										direction="column"
-										justify="center"
-										alignItems="center"
-										spacing={24}
-									>
-										<Grid container item spacing={0} justify="center">
-											<Grid item xs={12}>
-												<form onSubmit={this.handleSave} noValidate>
-													<Grid
-														container
-														direction="column"
-														justify="center"
-														alignItems="center"
-														spacing={0}
-														xs={12}
-													>
+								<Grid
+									spacing={0}
+									style={{
+										width: '100%'
+									}}
+								>
+									<Grid container direction="column" spacing={8}>
+										<Grid item>
+											<Typography variant="body1" align="center">
+												Type
+											</Typography>
+										</Grid>
+										<Grid item>
+											<Grid
+												container
+												justify="center"
+												className={classes.radioContainer}
+											>
+												<div className={classes.radio}>
+													<input type="radio" id="radio_3" name="type" />
+													<label htmlFor="radio_3">
 														<Grid
+															container
+															className={classes.radiobox}
+														>
+															<ProfileIcon
+																height="29px"
+																width="33px"
+																viewBox="0 0 29 33"
+																className={classes.icon}
+															/>
+															<Typography variant="body2">
+																Individual
+															</Typography>
+														</Grid>
+													</label>
+												</div>
+												<div className={classes.radio}>
+													<input type="radio" id="radio_4" name="type" />
+													<label htmlFor="radio_4">
+														<Grid
+															container
+															className={classes.radiobox}
+														>
+															<CompanyIcon className={classes.icon} />
+															<Typography variant="body2">
+																Legal Entity
+															</Typography>
+														</Grid>
+													</label>
+												</div>
+											</Grid>
+										</Grid>
+									</Grid>
+								</Grid>
+								<hr className={classes.hr} />
+								<Grid
 									item
 									spacing={0}
 									style={{
@@ -516,7 +706,6 @@ class AddCompanyMemberContainer extends Component {
 													</Grid>
 												</Grid>
 											</Grid>
-												</form>
 										</Grid>
 									</Grid>
 								</Grid>
