@@ -39,10 +39,11 @@ export class LWSService {
 
 	async reqWallets(msg, conn) {
 		const { website, did } = msg.payload.config;
-		let payload = await Wallet.findAll();
+		let payload = await Wallet.findAll().eager('identities');
 		payload = await Promise.all(
 			payload.map(async w => {
-				let unlocked = !!conn.getIdentity(w.publicKey);
+				const identity = conn.getIdentity(w.publicKey);
+				let unlocked = !!identity;
 				let signedUp = unlocked && (await w.hasSignedUpTo(website.url));
 				const retWallet = {
 					publicKey: w.publicKey,
@@ -52,13 +53,12 @@ export class LWSService {
 					signedUp
 				};
 				if (unlocked) {
-					retWallet.hasSelfkeyId = w.isSetupFinished;
-					if (did) {
-						retWallet.did = w.did
-							? `did:selfkey:${w.did.replace('did:selfkey:', '')}`
-							: null;
+					retWallet.hasSelfkeyId = identity.ident.isSetupFinished;
+					if (did && identity.did) {
+						retWallet.did = identity.did;
 					}
 				}
+
 				return retWallet;
 			})
 		);
@@ -178,7 +178,9 @@ export class LWSService {
 	async reqUnlock(msg, conn) {
 		const { publicKey, password, config, profile, path } = msg.payload;
 		let payload = { publicKey, unlocked: false };
-		let wallet = await Wallet.findByPublicKey(publicKey);
+		let wallet = await Wallet.findByPublicKey(publicKey).eager('identities');
+		const ident = wallet.getDefaultIdentity();
+		log.debug('XXX reqUnlock ident %2j', ident);
 		wallet = !wallet
 			? await Wallet.create({
 					publicKey,
@@ -186,17 +188,15 @@ export class LWSService {
 					path
 			  })
 			: wallet;
-		let identity = new Identity(wallet);
+		let identity = new Identity(wallet, ident);
 		payload.profile = identity.profile;
 		try {
 			await identity.unlock({ password });
 			conn.addIdentity(publicKey, identity);
 			payload.unlocked = true;
-			payload.hasSelfkeyId = wallet.isSetupFinished;
+			payload.hasSelfkeyId = ident.isSetupFinished;
 			if (config.did) {
-				payload.did = wallet.did
-					? `did:selfkey:${wallet.did.replace('did:selfkey:', '')}`
-					: null;
+				payload.did = identity.did || null;
 			}
 			payload.name = wallet.name;
 			payload.signedUp = await wallet.hasSignedUpTo(config.website.url);

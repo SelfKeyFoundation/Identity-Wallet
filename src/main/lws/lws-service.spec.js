@@ -19,6 +19,10 @@ describe('lws-service', () => {
 		send(msg, req) {},
 		addIdentity(publicKey, identity) {}
 	});
+	const identity = {
+		id: 1,
+		did: 'test'
+	};
 	describe('LWSService', () => {
 		let service = null;
 
@@ -34,24 +38,32 @@ describe('lws-service', () => {
 		describe('reqWallets', () => {
 			it('returns wallets', async () => {
 				sinon.stub(Wallet, 'findAll');
-				Wallet.findAll.resolves([
-					{
-						publicKey: 'unlocked',
-						profile: 'local',
-						hasSignedUpTo() {
-							return true;
+				Wallet.findAll.returns({
+					eager: () => [
+						{
+							name: 'test1',
+							publicKey: 'unlocked',
+							profile: 'local',
+							hasSignedUpTo() {
+								return true;
+							}
+						},
+						{
+							name: 'test2',
+							publicKey: 'locked',
+							profile: 'local',
+							hasSignedUpTo() {
+								return true;
+							}
 						}
-					},
-					{
-						publicKey: 'locked',
-						profile: 'local',
-						hasSignedUpTo() {
-							return true;
-						}
-					}
-				]);
+					]
+				});
 
-				const conn = connMock({ publicKey: 'unlocked', privateKey: 'private' });
+				const conn = connMock({
+					publicKey: 'unlocked',
+					privateKey: 'private',
+					ident: { isSetupFinished: false }
+				});
 				sinon.stub(conn, 'send');
 
 				const msg = { type: 'test', payload: { config: { website: { url: 'test' } } } };
@@ -62,12 +74,15 @@ describe('lws-service', () => {
 					{
 						payload: [
 							{
+								hasSelfkeyId: false,
+								name: 'test1',
 								publicKey: 'unlocked',
 								profile: 'local',
 								unlocked: true,
 								signedUp: true
 							},
 							{
+								name: 'test2',
 								publicKey: 'locked',
 								profile: 'local',
 								unlocked: false,
@@ -179,7 +194,11 @@ describe('lws-service', () => {
 					sinon.stub(web3Service, 'getLedgerTransport').returns(transport);
 					sinon.stub(transport, 'send').resolves('true');
 
-					sinon.stub(Wallet, 'findByPublicKey').resolves(wallet);
+					sinon.stub(Wallet, 'findByPublicKey').returns({
+						eager: () => {
+							return wallet;
+						}
+					});
 					const conn = connMock(wallet);
 					sinon.stub(conn, 'send');
 					sinon.stub(conn, 'addIdentity');
@@ -228,7 +247,8 @@ describe('lws-service', () => {
 					publicKey: 'unlocked',
 					privateKey: 'ok',
 					profile: 'local',
-					hasSignedUpTo: sinon.stub().resolves(true)
+					hasSignedUpTo: sinon.stub().resolves(true),
+					getDefaultIdentity: () => identity
 				},
 				true
 			);
@@ -238,7 +258,8 @@ describe('lws-service', () => {
 				{
 					publicKey: 'locked',
 					profile: 'local',
-					hasSignedUpTo: sinon.stub().resolves(true)
+					hasSignedUpTo: sinon.stub().resolves(true),
+					getDefaultIdentity: () => identity
 				},
 				false
 			);
@@ -249,7 +270,8 @@ describe('lws-service', () => {
 					publicKey: 'unlocked',
 					profile: 'ledger',
 					hasSignedUpTo: sinon.stub().resolves(true),
-					path: `44'/60'/0'/0`
+					path: `44'/60'/0'/0`,
+					getDefaultIdentity: () => identity
 				},
 				true
 			);

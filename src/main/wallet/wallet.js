@@ -1,7 +1,6 @@
 import { Model, transaction } from 'objection';
 import { Logger } from 'common/logger';
 import BaseModel from '../common/base-model';
-import IdAttribute from '../identity/id-attribute';
 import config from 'common/config';
 
 const TABLE_NAME = 'wallets';
@@ -27,8 +26,7 @@ export class Wallet extends BaseModel {
 				profilePicture: { type: 'binary' },
 				isSetupFinished: { type: 'integer' },
 				profile: { type: 'string' },
-				path: { type: 'string' },
-				did: { type: 'string' }
+				path: { type: 'string' }
 			}
 		};
 	}
@@ -36,8 +34,8 @@ export class Wallet extends BaseModel {
 	static get relationMappings() {
 		const WalletSetting = require('./wallet-setting').default;
 		const WalletToken = require('./wallet-token').default;
-		const IdAttribute = require('../identity/id-attribute').default;
 		const LoginAttempt = require('../lws/login-attempt').default;
+		const Identity = require('../identity/identity').default;
 
 		return {
 			setting: {
@@ -56,20 +54,20 @@ export class Wallet extends BaseModel {
 					to: `${WalletToken.tableName}.walletId`
 				}
 			},
-			idAttributes: {
-				relation: Model.HasManyRelation,
-				modelClass: IdAttribute,
-				join: {
-					from: `${this.tableName}.id`,
-					to: `${IdAttribute.tableName}.walletId`
-				}
-			},
 			loginAttempts: {
 				relation: Model.HasManyRelation,
 				modelClass: LoginAttempt,
 				join: {
 					from: `${this.tableName}.id`,
 					to: `${LoginAttempt.tableName}.walletId`
+				}
+			},
+			identities: {
+				relation: Model.HasManyRelation,
+				modelClass: Identity,
+				join: {
+					from: `${this.tableName}.id`,
+					to: `${Identity.tableName}.walletId`
 				}
 			}
 		};
@@ -88,6 +86,11 @@ export class Wallet extends BaseModel {
 					tokens: [
 						{
 							tokenId: config.constants.primaryToken === 'KEY' ? 1 : 2
+						}
+					],
+					identities: [
+						{
+							type: 'individual'
 						}
 					]
 				},
@@ -137,11 +140,6 @@ export class Wallet extends BaseModel {
 		return wallet;
 	}
 
-	static async updateDID({ id, did }) {
-		let wallet = await this.query().patchAndFetchById(id, { did });
-		return wallet;
-	}
-
 	static async selectProfilePictureById(id) {
 		let itm = await this.query().findById(id);
 		if (!itm) return null;
@@ -162,14 +160,8 @@ export class Wallet extends BaseModel {
 		return this.$relatedQuery('loginAttempts').insert({ ...attempt, walletId: this.id });
 	}
 
-	static async addInitialIdAttributesAndActivate(id, initialIdAttributesValues) {
-		for (let key in initialIdAttributesValues) {
-			await IdAttribute.create({
-				walletId: id,
-				typeId: 1,
-				data: { [key]: initialIdAttributesValues[key] }
-			});
-		}
+	getDefaultIdentity() {
+		return this.identities.find(ident => ident.type === 'individual') || this.identities[0];
 	}
 }
 

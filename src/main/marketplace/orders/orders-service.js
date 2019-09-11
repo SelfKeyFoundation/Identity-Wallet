@@ -1,8 +1,8 @@
 import { MarketplaceOrder } from './order';
 
 export class MarketplaceOrdersService {
-	async loadOrders(walletId) {
-		return MarketplaceOrder.findAll().where({ walletId });
+	async loadOrders(identityId) {
+		return MarketplaceOrder.findAll().where({ identityId });
 	}
 
 	async createOrder(order) {

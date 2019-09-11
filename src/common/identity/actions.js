@@ -17,27 +17,27 @@ export const identityActions = {
 		type: identityTypes.IDENTITY_UI_SCHEMAS_SET,
 		payload: uiSchemas
 	}),
-	setDocumentsAction: (walletId, documents) => ({
+	setDocumentsAction: (identityId, documents) => ({
 		type: identityTypes.IDENTITY_DOCUMENTS_SET,
 		payload: {
-			walletId,
+			identityId,
 			documents
 		}
 	}),
-	deleteDocumentsAction: walletId => ({
+	deleteDocumentsAction: identityId => ({
 		type: identityTypes.IDENTITY_DOCUMENTS_DELETE,
-		payload: walletId
+		payload: identityId
 	}),
-	setIdAttributesAction: (walletId, attributes) => ({
+	setIdAttributesAction: (identityId, attributes) => ({
 		type: identityTypes.IDENTITY_ATTRIBUTES_SET,
 		payload: {
-			walletId,
+			identityId,
 			attributes
 		}
 	}),
-	deleteIdAttributesAction: walletId => ({
+	deleteIdAttributesAction: identityId => ({
 		type: identityTypes.IDENTITY_ATTRIBUTES_DELETE,
-		payload: walletId
+		payload: identityId
 	}),
 	deleteIdAttributeAction: attributeId => ({
 		type: identityTypes.IDENTITY_ATTRIBUTE_DELETE,
@@ -70,6 +70,22 @@ export const identityActions = {
 	deleteDocumentAction: documentId => ({
 		type: identityTypes.IDENTITY_DOCUMENT_DELETE,
 		payload: documentId
+	}),
+	setIdentitiesAction: identities => ({
+		type: identityTypes.IDENTITIES_SET,
+		payload: identities
+	}),
+	addIdentity: identity => ({
+		type: identityTypes.IDENTITY_ADD,
+		payload: identity
+	}),
+	updateIdentity: identity => ({
+		type: identityTypes.IDENTITY_UPDATE,
+		payload: identity
+	}),
+	setCurrentIdentityAction: identityId => ({
+		type: identityTypes.IDENTITY_CURRENT_SET,
+		payload: identityId
 	})
 };
 

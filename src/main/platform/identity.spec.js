@@ -9,13 +9,17 @@ describe('identity', () => {
 	let id = null;
 	const publicKey = '0x1Ff482D42D8727258A1686102Fa4ba925C46Bc42';
 	const privateKey = 'c6cbd7d76bc5baca530c875663711b947efa6a86a900a9e8645ce32e5821484e';
+	const ident = {};
 	beforeEach(() => {
-		id = new Identity({
-			publicKey,
-			privateKey,
-			profile: 'local',
-			wid: 1
-		});
+		id = new Identity(
+			{
+				publicKey,
+				privateKey,
+				profile: 'local',
+				wid: 1
+			},
+			ident
+		);
 	});
 	afterEach(() => {
 		getPrivateKey.mockRestore();
@@ -29,18 +33,24 @@ describe('identity', () => {
 	});
 	describe('unlock', () => {
 		it('should unlock ledger', async () => {
-			let id1 = new Identity({
-				profile: 'ledger'
-			});
+			let id1 = new Identity(
+				{
+					profile: 'ledger'
+				},
+				ident
+			);
 			sinon.stub(id1, 'getPublicKeyFromHardwareWallet').returns(publicKey);
 			await id1.unlock();
 			expect(id1.publicKey).toEqual(publicKey);
 		});
 		it('should throw invalid password if failed to unlock keystore', async () => {
-			let id1 = new Identity({
-				publicKey,
-				profile: 'local'
-			});
+			let id1 = new Identity(
+				{
+					publicKey,
+					profile: 'local'
+				},
+				ident
+			);
 			getPrivateKey.mockImplementation((filePath, password) => {
 				if (password !== 'test') throw new Error('invalid pass');
 				return privateKey;
@@ -52,10 +62,13 @@ describe('identity', () => {
 			}
 		});
 		it('should unlock keystore', async () => {
-			let id1 = new Identity({
-				publicKey,
-				profile: 'local'
-			});
+			let id1 = new Identity(
+				{
+					publicKey,
+					profile: 'local'
+				},
+				ident
+			);
 			getPrivateKey.mockImplementation((filePath, password) => {
 				if (password !== 'test') throw new Error('invalid pass');
 				return privateKey;
