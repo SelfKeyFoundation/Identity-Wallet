@@ -7,8 +7,9 @@ import { CorporateDashboardPage } from '../src/renderer/corporate';
 import { CorporateDashboardTabs } from '../src/renderer/corporate/dashboard/dashboard-tabs';
 import { CorporateDetails } from '../src/renderer/corporate/common/corporate-details';
 import { CorporateApplicationsSummary } from '../src/renderer/corporate/common/corporate-applications';
+import { CorporateCapTable } from '../src/renderer/corporate/common/corporate-cap-table';
 
-import { corporateApplications } from './corporate-data';
+import { corporateApplications, corporateCapTable } from './corporate-data';
 
 storiesOf('Corporate', module).add('Dashboard', () => (
 	<div style={{ width: '1140px' }}>
@@ -51,7 +52,7 @@ storiesOf('Corporate/Dashboard Tabs', module)
 		/>
 	));
 
-storiesOf('Corporate/Summary Blocks', module)
+storiesOf('Corporate/Blocks', module)
 	.add('Company', () => (
 		<CorporateDetails
 			name="Company Name"
@@ -72,4 +73,7 @@ storiesOf('Corporate/Summary Blocks', module)
 	))
 	.add('Corporate Applications', () => (
 		<CorporateApplicationsSummary applications={corporateApplications} />
+	))
+	.add('Corporate Cap Table', () => (
+		<CorporateCapTable cap={corporateCapTable} onEdit={action('corporate cap edit click')} />
 	));

@@ -58,7 +58,7 @@ const renderStatus = status => {
 };
 
 const CorporateApplicationsSummary = withStyles(styles)(props => {
-	const { classes, applications = [1, 2, 3] } = props;
+	const { classes, applications = [] } = props;
 	return (
 		<Grid container direction="column" spacing={32}>
 			<Grid item>
