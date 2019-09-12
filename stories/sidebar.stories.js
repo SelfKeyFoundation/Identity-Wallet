@@ -32,6 +32,7 @@ storiesOf('Sidebars/Toolbar', module)
 			isProfileOpen={false}
 			onToggleMenu={action('onToggleMenu')}
 			onProfileClick={action('onProfileClick')}
+			onProfileSelect={identity => () => action(`profile switch ${identity.id}`)}
 			onCreateCorporateProfileClick={action('onCreateCorporateProfileClick')}
 		/>
 	))
@@ -44,6 +45,7 @@ storiesOf('Sidebars/Toolbar', module)
 			isProfileOpen={false}
 			onToggleMenu={action('onToggleMenu')}
 			onProfileClick={action('onProfileClick')}
+			onProfileSelect={identity => () => action(`profile switch ${identity.id}`)}
 			onCreateCorporateProfileClick={action('onCreateCorporateProfileClick')}
 		/>
 	))
@@ -56,6 +58,7 @@ storiesOf('Sidebars/Toolbar', module)
 			isProfileOpen={true}
 			onToggleMenu={action('onToggleMenu')}
 			onProfileClick={action('onProfileClick')}
+			onProfileSelect={identity => () => action(`profile switch ${identity.id}`)}
 			onCreateCorporateProfileClick={action('onCreateCorporateProfileClick')}
 		/>
 	));

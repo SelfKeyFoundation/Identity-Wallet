@@ -1,25 +1,25 @@
 import React, { Component } from 'react';
-import { push } from 'connected-react-router';
+
 import {
 	Grid,
-	CardHeader,
-	Card,
-	CardContent,
-	Table,
-	TableBody,
-	TableRow,
-	TableCell,
-	IconButton,
-	TableHead,
+	// CardHeader,
+	// Card,
+	// CardContent,
+	// Table,
+	// TableBody,
+	// TableRow,
+	// TableCell,
+	// IconButton,
+	// TableHead,
 	Typography,
 	Button,
-	Input,
-	MenuItem,
-	Select,
+	// Input,
+	// MenuItem,
+	// Select,
 	withStyles
 } from '@material-ui/core';
-import { KeyboardArrowDown } from '@material-ui/icons';
-import { EditTransparentIcon, DeleteIcon, SmallTableHeadRow, KeyPicker } from 'selfkey-ui';
+// import { KeyboardArrowDown } from '@material-ui/icons';
+// import { EditTransparentIcon, DeleteIcon, SmallTableHeadRow, KeyPicker } from 'selfkey-ui';
 
 import backgroundImage from '../../../../static/assets/images/icons/icon-marketplace.png';
 
@@ -98,34 +98,14 @@ const styles = theme => ({
 });
 
 class CorporateWizardComponent extends Component {
-	state = {
-		error: '',
-		errorEmail: false,
-		nickName: '',
-		firstName: '',
-		lastName: '',
-		email: '',
-		isDisabled: true
-	};
-
-	handleContinueClick = evt => {
-		evt && evt.preventDefault();
-		this.props.dispatch(push('/main/dashboard'));
-	};
-
-	handleCancelClick = evt => {
-		evt && evt.preventDefault();
-		this.props.dispatch(push('/main/dashboard'));
-	};
-
 	render() {
-		const { classes, members } = this.props;
+		const { classes } = this.props;
 		return (
 			<Grid container direction="column" spacing={32}>
 				<Grid item>
 					<Typography variant="h1">SelfKey Corporate Vault Setup</Typography>
 				</Grid>
-				<Grid item>
+				{/* <Grid item>
 					<Grid id="createProfile" container direction="column" spacing={32}>
 						<Grid item>
 							<Grid container direction="column" spacing={32}>
@@ -681,7 +661,7 @@ class CorporateWizardComponent extends Component {
 							</Grid>
 						</Grid>
 					</Grid>
-				</Grid>
+				</Grid> */}
 				<Grid
 					container
 					direction="row"
@@ -690,12 +670,16 @@ class CorporateWizardComponent extends Component {
 					className={classes.footer}
 				>
 					<Grid item>
-						<Button variant="contained" size="large" onClick={this.handleContinueClick}>
+						<Button
+							variant="contained"
+							size="large"
+							onClick={this.props.onContinueClick}
+						>
 							Continue
 						</Button>
 					</Grid>
 					<Grid item className={classes.cancel}>
-						<Button variant="outlined" size="large" onClick={this.handleCancelClick}>
+						<Button variant="outlined" size="large" onClick={this.props.onCancelClick}>
 							Cancel
 						</Button>
 					</Grid>

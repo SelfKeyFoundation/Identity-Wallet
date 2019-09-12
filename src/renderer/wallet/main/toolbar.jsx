@@ -113,7 +113,8 @@ const profileStyle = theme =>
 			justifyContent: 'center'
 		},
 		profileDetail: {
-			paddingBottom: '20px'
+			paddingBottom: '20px',
+			cursor: 'pointer'
 		},
 		profileName: {
 			paddingLeft: '28px'
@@ -123,19 +124,29 @@ const profileStyle = theme =>
 		}
 	});
 
+const defaultIdentityName = ({ type }) =>
+	type === 'individual' ? 'New individual' : 'New company';
+
 const ProfileList = withStyles(profileStyle)(
-	({ classes, profiles, isOpen, onClickPersonal, onClickCorporate }) => {
+	({ classes, profiles, isOpen, onProfileSelect, onClickCorporate }) => {
 		return (
 			isOpen && (
 				<div className={classes.profile}>
 					{profiles &&
 						profiles.map((el, index) => (
-							<Grid container key={index} className={classes.profileDetail}>
+							<Grid
+								container
+								key={index}
+								className={classes.profileDetail}
+								onClick={onProfileSelect(el)}
+							>
 								<Grid item sm={2}>
-									{el.type === 'company' ? <RoundCompany /> : <RoundPerson />}
+									{el.type === 'corporate' ? <RoundCompany /> : <RoundPerson />}
 								</Grid>
 								<Grid item sm={8} className={classes.profileName}>
-									<Typography variant="h6">{el.name}</Typography>
+									<Typography variant="h6">
+										{el.name || defaultIdentityName(el)}
+									</Typography>
 									<Typography variant="subtitle1" color="secondary">
 										{`${el.type.charAt(0).toUpperCase() +
 											el.type.slice(1)} Profile`}
@@ -175,7 +186,7 @@ const Profile = withStyles(styles)(({ classes, profile, isOpen, onProfileClick }
 	<Grid container wrap="nowrap">
 		<Grid item>{profile.type === 'individual' ? <RoundPerson /> : <RoundCompany />}</Grid>
 		<Grid item className={classes.nameRole}>
-			<Typography variant="h6">{profile.name}</Typography>
+			<Typography variant="h6">{profile.name || defaultIdentityName(profile)}</Typography>
 			<Typography variant="subtitle1" color="secondary">
 				{profile.type === 'individual' ? 'Personal Profile' : 'Corporate Profile'}
 			</Typography>
@@ -200,6 +211,7 @@ class Toolbar extends Component {
 			isProfileOpen,
 			selectedProfile,
 			onProfileClick,
+			onProfileSelect,
 			profiles,
 			onCreateCorporateProfileClick,
 			primaryToken
@@ -259,6 +271,7 @@ class Toolbar extends Component {
 						profiles={profiles}
 						isOpen={isProfileOpen}
 						onClickCorporate={onCreateCorporateProfileClick}
+						onProfileSelect={onProfileSelect}
 					/>
 				</Grid>
 			</div>

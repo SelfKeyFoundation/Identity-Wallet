@@ -1,24 +1,9 @@
 import React, { Component } from 'react';
 import Toolbar from './toolbar';
 import config from 'common/config';
-
-const profiles = [
-	{
-		id: 1,
-		name: 'James Bond',
-		type: 'individual'
-	},
-	{
-		id: 2,
-		name: 'Acme Corp',
-		type: 'corporate'
-	},
-	{
-		id: 3,
-		name: 'Standard United Bank',
-		type: 'corporate'
-	}
-];
+import { connect } from 'react-redux';
+import { identitySelectors, identityOperations } from 'common/identity';
+import { push } from 'connected-react-router';
 
 class ToolbarContainer extends Component {
 	state = {
@@ -40,6 +25,13 @@ class ToolbarContainer extends Component {
 
 	createCorporateProfile = evt => {
 		this.toggleProfile(!this.state.isProfileOpen);
+		this.props.dispatch(push('/main/create-corporate-profile'));
+	};
+
+	handleProfileSelect = identity => evt => {
+		evt.preventDefault();
+		this.toggleProfile(!this.state.isProfileOpen);
+		this.props.dispatch(identityOperations.switchProfileOperation(identity));
 	};
 
 	handleProfileClick = evt => {
@@ -51,9 +43,10 @@ class ToolbarContainer extends Component {
 			<Toolbar
 				isSidebarOpen={isSidebarOpen}
 				isProfileOpen={isProfileOpen}
-				profiles={profiles}
-				selectedProfile={profiles[0]}
+				profiles={this.props.profiles}
+				selectedProfile={this.props.selectedProfile}
 				onProfileClick={this.handleProfileClick}
+				onProfileSelect={this.handleProfileSelect}
 				onCreateCorporateProfileClick={this.createCorporateProfile}
 				onToggleMenu={this.toggleDrawer}
 				primaryToken={config.constants.primaryToken}
@@ -62,4 +55,7 @@ class ToolbarContainer extends Component {
 	}
 }
 
-export default ToolbarContainer;
+export default connect(state => ({
+	profiles: identitySelectors.selectAllIdentities(state) || [],
+	selectedProfile: identitySelectors.selectCurrentIdentity(state) || {}
+}))(ToolbarContainer);

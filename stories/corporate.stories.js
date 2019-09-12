@@ -41,6 +41,4 @@ const dummyMembers = [
 	}
 ];
 
-storiesOf('Corporate', module).add('Corporate/Wizard', () => (
-	<CorporateWizard members={dummyMembers} />
-));
+storiesOf('Corporate', module).add('Wizard', () => <CorporateWizard members={dummyMembers} />);

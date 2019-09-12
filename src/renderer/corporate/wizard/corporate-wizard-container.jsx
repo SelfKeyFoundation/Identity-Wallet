@@ -2,10 +2,37 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { appSelectors } from 'common/app';
 import { CorporateWizard } from './corporate-wizard';
+import { push } from 'connected-react-router';
+import { identityOperations } from 'common/identity';
 
 class CorporateWizardContainerComponent extends Component {
+	state = {
+		error: '',
+		errorEmail: false,
+		nickName: '',
+		firstName: '',
+		lastName: '',
+		email: '',
+		isDisabled: true
+	};
+
+	handleContinueClick = evt => {
+		evt && evt.preventDefault();
+		this.props.dispatch(identityOperations.createCorporateProfileOperation());
+	};
+
+	handleCancelClick = evt => {
+		evt && evt.preventDefault();
+		this.props.dispatch(push('/main/dashboard'));
+	};
 	render() {
-		return <CorporateWizard {...this.props} />;
+		return (
+			<CorporateWizard
+				{...this.props}
+				onContinueClick={this.handleContinueClick}
+				onCancelClick={this.handleCancelClick}
+			/>
+		);
 	}
 }
 

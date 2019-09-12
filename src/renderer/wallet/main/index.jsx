@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-import { push } from 'connected-react-router';
 import Dashboard from '../../dashboard';
 import { CryptoMangerContainer, AddTokenContainer } from '../../crypto-manager';
 import AddressBook from '../../address-book/main';
@@ -87,16 +86,6 @@ class Main extends Component {
 		await this.props.dispatch(walletTokensOperations.loadWalletTokens());
 		this.setMatomoId();
 	}
-
-	createPersonalProfile = evt => {
-		evt && evt.preventDefault();
-		this.props.dispatch(push('/selfKeyIdCreate'));
-	};
-
-	createCorporateProfile = evt => {
-		evt && evt.preventDefault();
-		this.props.dispatch(push('/main/create-corporate-profile'));
-	};
 
 	render() {
 		const { match, classes } = this.props;
