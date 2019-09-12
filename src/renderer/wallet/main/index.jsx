@@ -27,7 +27,7 @@ import AdvancedTransaction from '../../transaction/send/advanced-transaction';
 import ReceiveTransfer from '../../transaction/receive';
 
 import { Grid, withStyles } from '@material-ui/core';
-import Toolbar from './toolbar';
+import Toolbar from './toolbar-container';
 import { connect } from 'react-redux';
 
 import TransactionSendProgress from '../../transaction/progress/containers/transaction-send-progress-box';
