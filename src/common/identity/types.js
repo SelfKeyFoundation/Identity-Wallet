@@ -38,7 +38,10 @@ export const identityTypes = {
 	IDENTITY_UPDATE: 'identity/UPDATE',
 	IDENTITIES_LOAD: 'identities/LOAD',
 	IDENTITY_CURRENT_SET: 'identities/current/SET',
-	IDENTITIES_UPDATE_SETUP_OPERATION: 'identities/setup/UPDATE'
+	IDENTITIES_UPDATE_SETUP_OPERATION: 'identities/setup/UPDATE',
+	IDENTITIES_CREATE_OPERATION: 'identities/CREATE',
+	IDENTITIES_CREATE_CORPORATE_PROFILE_OPERATION: 'identities/profile/corporate/CREATE',
+	IDENTITIES_SWITCH_PROFILE_OPERATION: 'identities/profile/SWITCH'
 };
 
 export default identityTypes;
