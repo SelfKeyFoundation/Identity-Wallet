@@ -47,13 +47,21 @@ const selectExpiredRepositories = state => {
 		.filter(repo => forceUpdateAttributes || repo.expires <= now);
 };
 
-const selectIdAttributeTypes = state =>
+const selectIdAttributeTypes = (state, entityType = 'individual') =>
 	identitySelectors
 		.selectIdentity(state)
 		.idAtrributeTypes.map(
 			id => identitySelectors.selectIdentity(state).idAtrributeTypesById[id]
 		)
-		.filter(t => t && t.content);
+		.filter(t => {
+			if (!t || !t.content) return false;
+
+			if (!t.entityType && entityType !== 'individual') {
+				return false;
+			}
+
+			return t.entityType.includes(entityType);
+		});
 
 const selectExpiredIdAttributeTypes = state => {
 	let now = Date.now();

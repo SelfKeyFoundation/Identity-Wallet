@@ -130,7 +130,7 @@ const unlockIdentityOperation = identityId => async (dispatch, getState) => {
 };
 
 const createSelfkeyIdOperation = (identityId, data) => async (dispatch, getState) => {
-	const idAttributeTypes = identitySelectors.selectIdAttributeTypes(getState());
+	const idAttributeTypes = identitySelectors.selectIdAttributeTypes(getState(), 'individual');
 	const identity = identitySelectors.selectIdentityById(getState(), identityId);
 	const getTypeId = url => {
 		return idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
