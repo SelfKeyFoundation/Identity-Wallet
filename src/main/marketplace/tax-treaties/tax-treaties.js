@@ -1,5 +1,6 @@
 import BaseModel from '../../common/base-model';
-import { isDevMode, isTestMode } from 'common/utils/common';
+import { transaction } from 'objection';
+import { isDevMode, isTestMode, setImmediatePromise, arrayChunks } from 'common/utils/common';
 const TABLE_NAME = 'tax_treaties';
 const env = isTestMode() ? 'test' : isDevMode() ? 'development' : 'production';
 export class TaxTreaties extends BaseModel {
@@ -57,15 +58,33 @@ export class TaxTreaties extends BaseModel {
 		return this.insertMany(items);
 	}
 
-	static async bulkUpsert(items) {
-		const insert = items.filter(item => !item.hasOwnProperty(this.idColumn));
-		const update = items.filter(item => item.hasOwnProperty(this.idColumn));
+	static async bulkUpsert(items, chunkSize = 100) {
+		let foundItems = [];
+		const chunks = arrayChunks(items, chunkSize);
 
-		let all = await this.bulkAdd(insert);
-		all = all.concat(await this.bulkEdit(update));
+		const tx = await transaction.start(this.knex());
+		try {
+			for (const chunk of chunks) {
+				const insert = chunk.filter(item => !item.hasOwnProperty(this.idColumn));
+				const update = chunk.filter(item => item.hasOwnProperty(this.idColumn));
 
-		let found = await this.findAll();
-		return found.filter(x => all.find(t => t[this.idColumn] === x[this.idColumn]));
+				let all = await this.bulkAdd(insert);
+				all = all.concat(await this.bulkEdit(update));
+
+				let found = await this.findAll();
+				foundItems = [
+					...foundItems,
+					...found.filter(x => all.find(t => t[this.idColumn] === x[this.idColumn]))
+				];
+
+				await setImmediatePromise();
+			}
+			await tx.commit();
+		} catch (error) {
+			await tx.rollback();
+			throw error;
+		}
+		return foundItems;
 	}
 }
 

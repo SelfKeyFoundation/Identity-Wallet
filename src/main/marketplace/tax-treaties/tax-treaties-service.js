@@ -1,7 +1,7 @@
 import config from 'common/config';
 import { TaxTreaties } from './tax-treaties';
 import request from 'request-promise-native';
-import { isDevMode, mapKeysAsync, setImmediatePromise, arrayChunks } from 'common/utils/common';
+import { isDevMode, mapKeysAsync, setImmediatePromise } from 'common/utils/common';
 import _ from 'lodash';
 import { Logger } from '../../../common/logger';
 import { TAX_TREATIES_SYNC_JOB } from './tax-treaties-sync-job-handler';
@@ -89,11 +89,7 @@ export class TaxTreatiesService {
 		return TaxTreaties.findAll();
 	}
 	async upsert(upsert) {
-		const chunks = arrayChunks(upsert, 100);
-		for (const c of chunks) {
-			TaxTreaties.bulkUpsert(c);
-			await setImmediatePromise();
-		}
+		return TaxTreaties.bulkUpsert(upsert);
 	}
 	async deleteMany(ids) {
 		return TaxTreaties.deleteMany(ids);
