@@ -48,18 +48,18 @@ export class TaxTreaties extends BaseModel {
 		return this.query().patchAndFetchById(id, data);
 	}
 
-	static bulkEdit(items) {
+	static bulkEdit(items, tx = undefined) {
 		items = items.map(item => ({ ...item, env }));
-		return this.updateMany(items);
+		return this.updateMany(items, tx);
 	}
 
-	static bulkAdd(items) {
+	static async bulkAdd(items, tx = undefined) {
 		items = items.map(item => ({ ...item, env }));
-		return this.insertMany(items);
+		return this.insertMany(items, tx);
 	}
 
 	static async bulkUpsert(items, chunkSize = 100) {
-		let foundItems = [];
+		let all = [];
 		const chunks = arrayChunks(items, chunkSize);
 
 		const tx = await transaction.start(this.knex());
@@ -68,23 +68,20 @@ export class TaxTreaties extends BaseModel {
 				const insert = chunk.filter(item => !item.hasOwnProperty(this.idColumn));
 				const update = chunk.filter(item => item.hasOwnProperty(this.idColumn));
 
-				let all = await this.bulkAdd(insert);
-				all = all.concat(await this.bulkEdit(update));
-
-				let found = await this.findAll();
-				foundItems = [
-					...foundItems,
-					...found.filter(x => all.find(t => t[this.idColumn] === x[this.idColumn]))
-				];
-
+				all = all.concat(await this.bulkAdd(insert, tx));
+				all = all.concat(await this.bulkEdit(update, tx));
 				await setImmediatePromise();
 			}
 			await tx.commit();
+			const found = await this.findAll();
+			const foundItems = found.filter(x =>
+				all.find(t => t[this.idColumn] === x[this.idColumn])
+			);
+			return foundItems;
 		} catch (error) {
 			await tx.rollback();
 			throw error;
 		}
-		return foundItems;
 	}
 }
 
