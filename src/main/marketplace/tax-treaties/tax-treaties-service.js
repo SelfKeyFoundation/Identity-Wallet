@@ -96,7 +96,7 @@ export class TaxTreatiesService {
 		}
 	}
 	async deleteMany(ids) {
-		TaxTreaties.deleteMany(ids);
+		return TaxTreaties.deleteMany(ids);
 	}
 }
 
