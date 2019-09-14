@@ -97,15 +97,6 @@ describe('Wallet model', () => {
 		expect(check.name).toBe(itm.name);
 	});
 
-	it('updateDID', async () => {
-		let itm = await Wallet.query().insertAndFetch(testItm);
-		expect(itm.did).toBeNull();
-		itm.did = 'did';
-		await Wallet.updateDID(itm);
-		let check = await Wallet.query().findById(itm.id);
-		expect(check.did).toBe(itm.did);
-	});
-
 	it('selectProfilePictureById', async () => {
 		let itm = await Wallet.query().insertAndFetch({
 			...testItm,

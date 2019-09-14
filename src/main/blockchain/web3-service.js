@@ -93,6 +93,32 @@ export class Web3Service {
 		this.web3.transactionConfirmationBlocks = 1;
 	}
 
+	createAccount(password) {
+		return this.web3.eth.accounts.create(password);
+	}
+
+	setDefaultAccount(account) {
+		this.web3.eth.accounts.wallet.add(account);
+		this.setDefaultAddress(account.address);
+	}
+
+	setDefaultAddress(address) {
+		this.web3.eth.defaultAccount = address;
+	}
+
+	encryptAccount(account, password) {
+		const { privateKey } = account;
+		return this.web3.eth.accounts.encrypt(privateKey, password);
+	}
+
+	decryptAccount(keystore, password) {
+		return this.web3.eth.accounts.decrypt(keystore.toString('utf8'), password, true);
+	}
+
+	privateKeyToAccount(privateKey) {
+		return this.web3.eth.accounts.privateKeyToAccount(privateKey);
+	}
+
 	async switchToTrezorWallet(accountsOffset = 0, accountsQuantity = 6, eventEmitter) {
 		this.trezorWalletSubProvider = await TrezorWalletSubProviderFactory(
 			CONFIG.chainId,

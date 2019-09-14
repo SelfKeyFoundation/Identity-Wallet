@@ -17,11 +17,11 @@ export class IdAttribute extends BaseModel {
 	static get jsonSchema() {
 		return {
 			type: 'object',
-			required: ['walletId', 'typeId'],
+			required: ['identityId', 'typeId'],
 			properties: {
 				id: { type: 'integer' },
 				name: { type: 'string' },
-				walletId: { type: 'integer' },
+				identityId: { type: 'integer' },
 				typeId: { type: 'integer' },
 				data: { type: 'object' }
 			}
@@ -29,16 +29,16 @@ export class IdAttribute extends BaseModel {
 	}
 
 	static get relationMappings() {
-		const Wallet = require('../wallet/wallet').default;
+		const Identity = require('./identity').default;
 		const IdAttributeType = require('./id-attribute-type').default;
 		const Document = require('./document').default;
 		return {
-			wallet: {
+			identity: {
 				relation: Model.BelongsToOneRelation,
-				modelClass: Wallet,
+				modelClass: Identity,
 				join: {
-					from: `${this.tableName}.walletId`,
-					to: `${Wallet.tableName}.id`
+					from: `${this.tableName}.identityId`,
+					to: `${Identity.tableName}.id`
 				}
 			},
 			attributeType: {
@@ -99,8 +99,8 @@ export class IdAttribute extends BaseModel {
 		}
 	}
 
-	static findAllByWalletId(walletId) {
-		return this.query().where({ walletId });
+	static findAllByIdentityId(identityId) {
+		return this.query().where({ identityId });
 	}
 
 	static async delete(id) {
@@ -120,11 +120,11 @@ export class IdAttribute extends BaseModel {
 		}
 	}
 
-	static findByTypeUrls(walletId, urls = []) {
+	static findByTypeUrls(identityId, urls = []) {
 		return this.query()
 			.select(`${TABLE_NAME}.*`)
 			.join('id_attribute_types', `${TABLE_NAME}.typeId`, 'id_attribute_types.id')
-			.where({ walletId })
+			.where({ identityId })
 			.whereIn('id_attribute_types.url', urls);
 	}
 }

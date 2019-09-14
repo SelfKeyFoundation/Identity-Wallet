@@ -8,18 +8,19 @@ import AppEth from '@ledgerhq/hw-app-eth';
 
 const log = new Logger('Identity');
 export class Identity {
-	constructor(wallet) {
+	constructor(wallet, ident) {
 		this.address = wallet.publicKey;
 		this.publicKey = null;
 		this.profile = wallet.profile;
 		this.privateKey = wallet.privateKey ? wallet.privateKey.replace('0x', '') : null;
 		this.keystorePath = wallet.keystoreFilePath;
-		this.did = wallet.did
-			? `did:selfkey:${wallet.did.replace('did:selfkey:', '')}`
+		this.did = ident.did
+			? `did:selfkey:${ident.did.replace('did:selfkey:', '')}`
 			: `did:eth:${this.address ? this.address.toLowerCase() : ''}`;
 		this.wid = wallet.id;
 		this.path = wallet.path;
 		this.wallet = wallet;
+		this.ident = ident;
 		if (this.profile === 'local' && this.privateKey) {
 			this.publicKey = ethUtil
 				.privateToPublic(Buffer.from(this.privateKey, 'hex'))
@@ -44,7 +45,7 @@ export class Identity {
 		return `${this.getDidWithParams()}#keys-1`;
 	}
 	getDidWithParams() {
-		if (!this.wallet.did || !isDevMode()) {
+		if (!this.ident.did || !isDevMode()) {
 			return this.did;
 		}
 		return `${this.did};selfkey:chain=ropsten`;

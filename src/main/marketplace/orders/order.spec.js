@@ -6,9 +6,9 @@ describe('Vendor model', () => {
 		id: 1,
 		vendorId: 'test',
 		itemId: 'test',
-		walletId: 1
+		identityId: 1
 	};
-	const testItem2 = { walletId: 1, vendorId: 'test2', itemId: 'test2' };
+	const testItem2 = { identityId: 1, vendorId: 'test2', itemId: 'test2' };
 
 	beforeEach(async () => {
 		await TestDb.init();

@@ -47,8 +47,9 @@ export class TaxTreatiesService {
 	async fetchTaxTreatiesSelfkey() {
 		try {
 			let fetched = await request.get({ url: TAX_TREATIES_API_ENDPOINT, json: true });
+			const validEntities = fetched.entities.filter(e => Object.keys(e.data).length);
 			let data = [];
-			for (const entity of fetched.entities) {
+			for (const entity of validEntities) {
 				const item = await mapKeysAsync(entity.data, (value, key) => _.camelCase(key));
 				data.push(item);
 				await setImmediatePromise();

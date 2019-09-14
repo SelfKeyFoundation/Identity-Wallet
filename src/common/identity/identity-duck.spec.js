@@ -58,7 +58,7 @@ describe('Identity Duck', () => {
 				expect(
 					identityActions.deleteDocumentsAction.calledOnceWith(testWalletId)
 				).toBeTruthy();
-				expect(store.dispatch.callCount).toBe(2);
+				expect(store.dispatch.callCount).toBe(3);
 			});
 			it('unlockIdentityOperation', async () => {
 				sinon.stub(identityOperations, 'loadIdAttributesOperation').returns(() => {});
@@ -336,12 +336,12 @@ describe('Identity Duck', () => {
 		let testWalletId = 1;
 		let testAttributeId = 1;
 		let testDocuments = [
-			{ id: 1, walletId: testWalletId, attributeId: testAttributeId },
-			{ id: 2, walletId: testWalletId, attributeId: testAttributeId }
+			{ id: 1, identityId: testWalletId, attributeId: testAttributeId },
+			{ id: 2, identityId: testWalletId, attributeId: testAttributeId }
 		];
 		let testDocumentsRaw = testDocuments.map(doc => {
 			doc = { ...doc };
-			delete doc.walletId;
+			delete doc.identityId;
 			return doc;
 		});
 		describe('Operation', () => {
@@ -391,7 +391,7 @@ describe('Identity Duck', () => {
 			it('setDocumentsAction', () => {
 				expect(identityActions.setDocumentsAction(testWalletId, testDocuments)).toEqual({
 					type: identityTypes.IDENTITY_DOCUMENTS_SET,
-					payload: { walletId: testWalletId, documents: testDocuments }
+					payload: { identityId: testWalletId, documents: testDocuments }
 				});
 			});
 			it('setDocumentsForAttributeAction', () => {
@@ -437,7 +437,7 @@ describe('Identity Duck', () => {
 			it('setDocumentsReducer', async () => {
 				let state = {
 					documents: [3],
-					documentsById: { 3: { id: 3, walletId: 2 } }
+					documentsById: { 3: { id: 3, identityId: 2 } }
 				};
 				let newState = identityReducers.setDocumentsReducer(
 					state,
@@ -447,7 +447,7 @@ describe('Identity Duck', () => {
 				expect(newState).toEqual({
 					documents: [3, testDocuments[0].id],
 					documentsById: {
-						3: { id: 3, walletId: 2 },
+						3: { id: 3, identityId: 2 },
 						[testDocuments[0].id]: testDocuments[0]
 					}
 				});
@@ -458,7 +458,7 @@ describe('Identity Duck', () => {
 					documentsById: {
 						1: testDocuments[0],
 						2: testDocuments[1],
-						3: { id: 3, walletId: 2 }
+						3: { id: 3, identityId: 2 }
 					}
 				};
 				let newState = identityReducers.deleteDocumentsReducer(
@@ -469,7 +469,7 @@ describe('Identity Duck', () => {
 				expect(newState).toEqual({
 					documents: [3],
 					documentsById: {
-						3: { id: 3, walletId: 2 }
+						3: { id: 3, identityId: 2 }
 					}
 				});
 			});
@@ -479,7 +479,7 @@ describe('Identity Duck', () => {
 					documentsById: {
 						1: testDocuments[0],
 						2: testDocuments[1],
-						3: { id: 3, walletId: 2 }
+						3: { id: 3, identityId: 2 }
 					}
 				};
 				let newState = identityReducers.deleteDocumentReducer(
@@ -491,7 +491,7 @@ describe('Identity Duck', () => {
 					documents: [1, 3],
 					documentsById: {
 						1: testDocuments[0],
-						3: { id: 3, walletId: 2 }
+						3: { id: 3, identityId: 2 }
 					}
 				});
 			});
@@ -505,7 +505,7 @@ describe('Identity Duck', () => {
 				};
 				let newState = identityReducers.addDocumentReducer(
 					state,
-					identityActions.addDocumentAction({ id: 3, walletId: 2 })
+					identityActions.addDocumentAction({ id: 3, identityId: 2 })
 				);
 
 				expect(newState).toEqual({
@@ -513,7 +513,7 @@ describe('Identity Duck', () => {
 					documentsById: {
 						1: testDocuments[0],
 						2: testDocuments[1],
-						3: { id: 3, walletId: 2 }
+						3: { id: 3, identityId: 2 }
 					}
 				});
 			});
@@ -522,26 +522,30 @@ describe('Identity Duck', () => {
 					documents: [1, 3],
 					documentsById: {
 						1: testDocuments[0],
-						3: { id: 3, walletId: 2, mimeType: 'test', name: 'test' }
+						3: { id: 3, identityId: 2, mimeType: 'test', name: 'test' }
 					}
 				};
 				let newState = identityReducers.updateDocumentReducer(
 					state,
-					identityActions.updateDocumentAction({ id: 3, walletId: 2, mimeType: 'test2' })
+					identityActions.updateDocumentAction({
+						id: 3,
+						identityId: 2,
+						mimeType: 'test2'
+					})
 				);
 
 				expect(newState).toEqual({
 					documents: [1, 3],
 					documentsById: {
 						1: testDocuments[0],
-						3: { id: 3, walletId: 2, mimeType: 'test2', name: 'test' }
+						3: { id: 3, identityId: 2, mimeType: 'test2', name: 'test' }
 					}
 				});
 			});
 			it('setAttributeDocumentsReducer', async () => {
 				let state = {
 					documents: [3],
-					documentsById: { 3: { id: 3, walletId: 1, attributeId: 2 } }
+					documentsById: { 3: { id: 3, identityId: 1, attributeId: 2 } }
 				};
 				let newState = identityReducers.setAttributeDocumentsReducer(
 					state,
@@ -551,7 +555,7 @@ describe('Identity Duck', () => {
 				expect(newState).toEqual({
 					documents: [3, ...testDocuments.map(d => d.id)],
 					documentsById: {
-						3: { id: 3, walletId: 1, attributeId: 2 },
+						3: { id: 3, identityId: 1, attributeId: 2 },
 						[testDocuments[0].id]: testDocuments[0],
 						[testDocuments[1].id]: testDocuments[1]
 					}
@@ -563,7 +567,7 @@ describe('Identity Duck', () => {
 					documentsById: {
 						1: testDocuments[0],
 						2: testDocuments[1],
-						3: { id: 3, walletId: 1, attributeId: 2 }
+						3: { id: 3, identityId: 1, attributeId: 2 }
 					}
 				};
 				let newState = identityReducers.deleteAttributeDocumentsReducer(
@@ -574,17 +578,17 @@ describe('Identity Duck', () => {
 				expect(newState).toEqual({
 					documents: [3],
 					documentsById: {
-						3: { id: 3, walletId: 1, attributeId: 2 }
+						3: { id: 3, identityId: 1, attributeId: 2 }
 					}
 				});
 			});
 		});
 		describe('Selectors', () => {
 			beforeEach(() => {
-				state.identity.documents = [...testDocuments, { id: 3, walletId: 2 }].map(
+				state.identity.documents = [...testDocuments, { id: 3, identityId: 2 }].map(
 					repo => repo.id
 				);
-				state.identity.documentsById = [...testDocuments, { id: 3, walletId: 2 }].reduce(
+				state.identity.documentsById = [...testDocuments, { id: 3, identityId: 2 }].reduce(
 					(acc, curr) => {
 						acc[curr.id] = curr;
 						return acc;
@@ -595,7 +599,7 @@ describe('Identity Duck', () => {
 			it('selectDocuments', () => {
 				expect(identitySelectors.selectDocuments(state)).toEqual([
 					...testDocuments,
-					{ id: 3, walletId: 2 }
+					{ id: 3, identityId: 2 }
 				]);
 			});
 		});
@@ -603,8 +607,8 @@ describe('Identity Duck', () => {
 	describe('IdAttributes', () => {
 		let testWalletId = 1;
 		let testIdAttributes = [
-			{ id: 1, walletId: testWalletId, typeId: 1 },
-			{ id: 2, walletId: testWalletId, typeId: 2 }
+			{ id: 1, identityId: testWalletId, typeId: 1 },
+			{ id: 2, identityId: testWalletId, typeId: 2 }
 		];
 		describe('Operation', () => {
 			it('loadIdAttributesOperation', async () => {
@@ -623,7 +627,7 @@ describe('Identity Duck', () => {
 			it('createIdAttributeOperation', async () => {
 				const testAttribute = {
 					typeId: 1,
-					walletId: 1,
+					identityId: 1,
 					data: { test: 'test' },
 					documents: [
 						{ name: 'test1', mimeType: 'mime1', size: 100, buffer: '0xsadasdasd' },
@@ -638,15 +642,14 @@ describe('Identity Duck', () => {
 				sinon
 					.stub(testExports.operations, 'loadDocumentsForAttributeOperation')
 					.returns(() => {});
+				sinon.stub(identitySelectors, 'selectCurrentIdentity').returns({ id: 1 });
 
 				await testExports.operations.createIdAttributeOperation(testAttribute)(
 					store.dispatch,
 					store.getState.bind(store)
 				);
 
-				expect(
-					identityService.createIdAttribute.calledOnceWith(testAttribute)
-				).toBeTruthy();
+				expect(identityService.createIdAttribute.getCall(0).args).toEqual([testAttribute]);
 				expect(
 					testExports.operations.loadDocumentsForAttributeOperation.calledOnceWith(1)
 				).toBeTruthy();
@@ -695,7 +698,7 @@ describe('Identity Duck', () => {
 					identityActions.setIdAttributesAction(testWalletId, testIdAttributes)
 				).toEqual({
 					type: identityTypes.IDENTITY_ATTRIBUTES_SET,
-					payload: { walletId: testWalletId, attributes: testIdAttributes }
+					payload: { identityId: testWalletId, attributes: testIdAttributes }
 				});
 			});
 			it('deleteIdAttributesAction', () => {
@@ -727,7 +730,7 @@ describe('Identity Duck', () => {
 			it('setIdAttributesReducer', async () => {
 				let state = {
 					attributes: [3],
-					attributesById: { 3: { id: 3, walletId: 2, typeId: 3 } }
+					attributesById: { 3: { id: 3, identityId: 2, typeId: 3 } }
 				};
 				let newState = identityReducers.setIdAttributesReducer(
 					state,
@@ -737,7 +740,7 @@ describe('Identity Duck', () => {
 				expect(newState).toEqual({
 					attributes: [3, testIdAttributes[0].id],
 					attributesById: {
-						3: { id: 3, walletId: 2, typeId: 3 },
+						3: { id: 3, identityId: 2, typeId: 3 },
 						[testIdAttributes[0].id]: testIdAttributes[0]
 					}
 				});
@@ -748,7 +751,7 @@ describe('Identity Duck', () => {
 					attributesById: {
 						1: testIdAttributes[0],
 						2: testIdAttributes[1],
-						3: { id: 3, walletId: 2, typeId: 3 }
+						3: { id: 3, identityId: 2, typeId: 3 }
 					}
 				};
 				let newState = identityReducers.deleteIdAttributesReducer(
@@ -759,7 +762,7 @@ describe('Identity Duck', () => {
 				expect(newState).toEqual({
 					attributes: [3],
 					attributesById: {
-						3: { id: 3, walletId: 2, typeId: 3 }
+						3: { id: 3, identityId: 2, typeId: 3 }
 					}
 				});
 			});
@@ -773,7 +776,7 @@ describe('Identity Duck', () => {
 				};
 				let newState = identityReducers.addIdAttributeReducer(
 					state,
-					identityActions.addIdAttributeAction({ id: 3, walletId: 2, typeId: 3 })
+					identityActions.addIdAttributeAction({ id: 3, identityId: 2, typeId: 3 })
 				);
 
 				expect(newState).toEqual({
@@ -781,7 +784,7 @@ describe('Identity Duck', () => {
 					attributesById: {
 						1: testIdAttributes[0],
 						2: testIdAttributes[1],
-						3: { id: 3, walletId: 2, typeId: 3 }
+						3: { id: 3, identityId: 2, typeId: 3 }
 					}
 				});
 			});
@@ -790,14 +793,14 @@ describe('Identity Duck', () => {
 					attributes: [1, 3],
 					attributesById: {
 						1: testIdAttributes[0],
-						3: { id: 3, walletId: 2, typeId: 3, name: 'test1', mimeType: 'test' }
+						3: { id: 3, identityId: 2, typeId: 3, name: 'test1', mimeType: 'test' }
 					}
 				};
 				let newState = identityReducers.updateIdAttributeReducer(
 					state,
 					identityActions.updateIdAttributeAction({
 						id: 3,
-						walletId: 2,
+						identityId: 2,
 						typeId: 3,
 						name: 'test2'
 					})
@@ -807,7 +810,7 @@ describe('Identity Duck', () => {
 					attributes: [1, 3],
 					attributesById: {
 						1: testIdAttributes[0],
-						3: { id: 3, walletId: 2, typeId: 3, name: 'test2', mimeType: 'test' }
+						3: { id: 3, identityId: 2, typeId: 3, name: 'test2', mimeType: 'test' }
 					}
 				});
 			});
@@ -816,7 +819,7 @@ describe('Identity Duck', () => {
 					attributes: [1, 3],
 					attributesById: {
 						1: testIdAttributes[0],
-						3: { id: 3, walletId: 2, typeId: 3, name: 'test2', mimeType: 'test' }
+						3: { id: 3, identityId: 2, typeId: 3, name: 'test2', mimeType: 'test' }
 					}
 				};
 				let newState = identityReducers.deleteIdAttributeReducer(
@@ -827,7 +830,7 @@ describe('Identity Duck', () => {
 				expect(newState).toEqual({
 					attributes: [3],
 					attributesById: {
-						3: { id: 3, walletId: 2, typeId: 3, name: 'test2', mimeType: 'test' }
+						3: { id: 3, identityId: 2, typeId: 3, name: 'test2', mimeType: 'test' }
 					}
 				});
 			});
@@ -836,12 +839,12 @@ describe('Identity Duck', () => {
 			beforeEach(() => {
 				state.identity.attributes = [
 					...testIdAttributes,
-					{ id: 3, walletId: 2, typeId: 3 }
+					{ id: 3, identityId: 2, typeId: 3 }
 				].map(repo => repo.id);
 
 				state.identity.attributesById = [
 					...testIdAttributes,
-					{ id: 3, walletId: 2, typeId: 3 }
+					{ id: 3, identityId: 2, typeId: 3 }
 				].reduce((acc, curr) => {
 					acc[curr.id] = curr;
 					return acc;
@@ -851,6 +854,86 @@ describe('Identity Duck', () => {
 				expect(identitySelectors.selectIdAttributes(state, testWalletId)).toEqual(
 					testIdAttributes
 				);
+			});
+		});
+	});
+	describe('Identity', () => {
+		const testIdentities = [
+			{ id: 1, name: 'test1' },
+			{ id: 2, name: 'test2' },
+			{ id: 3, name: 'test3' }
+		];
+		describe('Actions', () => {
+			it('setIdentitiesActions', () => {
+				expect(identityActions.setIdentitiesAction(testIdentities)).toEqual({
+					type: identityTypes.IDENTITIES_SET,
+					payload: testIdentities
+				});
+			});
+			it('addIdentity', () => {
+				expect(identityActions.addIdentity(testIdentities[0])).toEqual({
+					type: identityTypes.IDENTITY_ADD,
+					payload: testIdentities[0]
+				});
+			});
+			it('updateIdentity', () => {
+				expect(identityActions.updateIdentity(testIdentities[0])).toEqual({
+					type: identityTypes.IDENTITY_UPDATE,
+					payload: testIdentities[0]
+				});
+			});
+		});
+		describe('Reducers', () => {
+			it('setIdentitiesReducer', () => {
+				let state = {
+					identities: [],
+					identitiesById: {}
+				};
+				let newState = identityReducers.setIdentitiesReducer(
+					state,
+					identityActions.setIdentitiesAction(testIdentities)
+				);
+
+				expect(newState).toEqual({
+					identities: testIdentities.map(idnt => idnt.id),
+					identitiesById: testIdentities.reduce((acc, curr) => {
+						acc[curr.id] = curr;
+						return acc;
+					}, {})
+				});
+			});
+			it('addIdentityReducer', () => {
+				let state = {
+					identities: [],
+					identitiesById: {}
+				};
+				let newState = identityReducers.addIdentityReducer(
+					state,
+					identityActions.addIdentity(testIdentities[0])
+				);
+
+				expect(newState).toEqual({
+					identities: [testIdentities[0].id],
+					identitiesById: {
+						[testIdentities[0].id]: testIdentities[0]
+					}
+				});
+			});
+			it('updateIdentityReducer', () => {
+				let state = {
+					identities: [1],
+					identitiesById: { 1: { id: 1, name: 'pre-test' } }
+				};
+				let newState = identityReducers.updateIdentityReducer(
+					state,
+					identityActions.updateIdentity(testIdentities[0])
+				);
+				expect(newState).toEqual({
+					identities: [testIdentities[0].id],
+					identitiesById: {
+						[testIdentities[0].id]: testIdentities[0]
+					}
+				});
 			});
 		});
 	});

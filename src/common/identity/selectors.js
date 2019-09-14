@@ -1,6 +1,6 @@
-import { walletSelectors } from '../wallet';
 import { jsonSchema, identityAttributes } from './utils';
 import { forceUpdateAttributes } from 'common/config';
+import { walletSelectors } from 'common/wallet';
 
 const EMAIL_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/email.json';
 const FIRST_NAME_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/first-name.json';
@@ -82,11 +82,11 @@ const selectDocuments = state =>
 		.selectIdentity(state)
 		.documents.map(docId => identitySelectors.selectIdentity(state).documentsById[docId]);
 
-const selectIdAttributes = (state, walletId) =>
+const selectIdAttributes = (state, identityId) =>
 	identitySelectors
 		.selectIdentity(state)
 		.attributes.map(attrId => identitySelectors.selectIdentity(state).attributesById[attrId])
-		.filter(attr => attr.walletId === walletId);
+		.filter(attr => attr.identityId === identityId);
 
 const selectDocumentsByAttributeIds = (state, attributeIds = null) =>
 	identitySelectors.selectDocuments(state).reduce((acc, curr) => {
@@ -101,13 +101,13 @@ const selectUiSchema = (state, typeId, repositoryId) =>
 		schema => schema.repositoryId === repositoryId && typeId === schema.attributeTypeId
 	);
 
-const selectFullIdAttributesByIds = (state, walletId, attributeIds = null) => {
+const selectFullIdAttributesByIds = (state, identityId, attributeIds = null) => {
 	const identity = identitySelectors.selectIdentity(state);
 	const documents = selectDocumentsByAttributeIds(state, attributeIds);
 	const types = identity.idAtrributeTypesById;
 
 	return identitySelectors
-		.selectIdAttributes(state, walletId)
+		.selectIdAttributes(state, identityId)
 		.filter(attr => !attributeIds || attributeIds.includes(attr.id))
 		.map(attr => {
 			const type = types[attr.typeId];
@@ -132,9 +132,9 @@ const selectFullIdAttributesByIds = (state, walletId, attributeIds = null) => {
 };
 
 const selectSelfkeyId = state => {
+	const identity = identitySelectors.selectCurrentIdentity(state);
 	const wallet = walletSelectors.getWallet(state);
-
-	const allAttributes = identitySelectors.selectFullIdAttributesByIds(state, wallet.id);
+	const allAttributes = identitySelectors.selectFullIdAttributesByIds(state, identity.id);
 
 	// FIXME: all base attribute types should be rendered (even if not created yet)
 	const basicAttributes = allAttributes.reduce(
@@ -160,8 +160,9 @@ const selectSelfkeyId = state => {
 		if (!attr || !attr.data || !attr.data.value) return '';
 		return attr.data.value;
 	};
-
+	// TODO max: move profile picture to identity model
 	return {
+		identity,
 		wallet,
 		profilePicture: wallet.profilePicture,
 		allAttributes,
@@ -173,6 +174,21 @@ const selectSelfkeyId = state => {
 		lastName: getBasicInfo(LAST_NAME_ATTRIBUTE, basicAttributes),
 		middleName: getBasicInfo(MIDDLE_NAME_ATTRIBUTE, basicAttributes)
 	};
+};
+
+const selectIdentityById = (state, id) => {
+	const tree = selectIdentity(state);
+	return tree.identitiesById[id];
+};
+
+const selectAllIdentities = state => {
+	const tree = selectIdentity(state);
+	return tree.identities.map(id => tree.identitiesById[id]);
+};
+
+const selectCurrentIdentity = state => {
+	const tree = selectIdentity(state);
+	return tree.identitiesById[tree.currentIdentity];
 };
 
 export const identitySelectors = {
@@ -190,7 +206,10 @@ export const identitySelectors = {
 	selectDocumentsByAttributeIds,
 	selectFullIdAttributesByIds,
 	selectSelfkeyId,
-	selectUiSchema
+	selectUiSchema,
+	selectCurrentIdentity,
+	selectIdentityById,
+	selectAllIdentities
 };
 
 export default identitySelectors;
