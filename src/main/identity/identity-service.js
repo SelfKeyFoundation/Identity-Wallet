@@ -129,6 +129,7 @@ export class IdentityService {
 	}
 
 	updateIdentityDID(did, id) {
+		did = did.replace('did:selfkey:', '');
 		return Identity.updateDID({ did, id });
 	}
 
