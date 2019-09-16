@@ -1,4 +1,4 @@
-import { walletOperations } from '../wallet';
+import { walletOperations, walletSelectors } from '../wallet';
 import { getGlobalContext } from '../context';
 import { createAliasedAction } from 'electron-redux';
 import { push } from 'connected-react-router';
@@ -129,6 +129,23 @@ const unlockIdentityOperation = identityId => async (dispatch, getState) => {
 	await dispatch(identityOperations.setCurrentIdentityAction(identityId));
 };
 
+const createIdentityOperation = (walletId, type) => async (dispatch, getState) => {
+	let identityService = getGlobalContext().identityService;
+	const identity = await identityService.createIdentity(walletId, type);
+	await dispatch(identityOperations.loadIdentitiesOperation(walletId));
+	return identity;
+};
+
+const createCorporateProfileOperation = () => async (dispatch, getState) => {
+	const wallet = walletSelectors.getWallet(getState());
+	const identity = await dispatch(
+		identityOperations.createIdentityOperation(wallet.id, 'corporate')
+	);
+	await dispatch(identityOperations.updateIdentitySetupOperation(true, identity.id));
+	await dispatch(identityOperations.unlockIdentityOperation(identity.id));
+	await dispatch(push('/main/dashboard'));
+};
+
 const createSelfkeyIdOperation = (identityId, data) => async (dispatch, getState) => {
 	const idAttributeTypes = identitySelectors.selectIdAttributeTypes(getState());
 	const identity = identitySelectors.selectIdentityById(getState(), identityId);
@@ -185,6 +202,10 @@ const updateDIDOperation = (did, id) => async (dispatch, getState) => {
 	await dispatch(identityActions.updateIdentity(identity));
 };
 
+const switchProfileOperation = identity => async (dispatch, getState) => {
+	await dispatch(identityOperations.unlockIdentityOperation(identity.id));
+};
+
 export const operations = {
 	loadCountriesOperation,
 	loadRepositoriesOperation,
@@ -206,7 +227,10 @@ export const operations = {
 	createSelfkeyIdOperation,
 	loadIdentitiesOperation,
 	updateIdentitySetupOperation,
-	updateDIDOperation
+	updateDIDOperation,
+	createIdentityOperation,
+	createCorporateProfileOperation,
+	switchProfileOperation
 };
 
 export const identityOperations = {
@@ -294,6 +318,18 @@ export const identityOperations = {
 	updateDIDOperation: createAliasedAction(
 		identityTypes.IDENTITIES_UPDATE_DID_OPERATION,
 		operations.updateDIDOperation
+	),
+	createIdentityOperation: createAliasedAction(
+		identityTypes.IDENTITIES_CREATE_OPERATION,
+		operations.createIdentityOperation
+	),
+	createCorporateProfileOperation: createAliasedAction(
+		identityTypes.IDENTITIES_CREATE_CORPORATE_PROFILE_OPERATION,
+		operations.createCorporateProfileOperation
+	),
+	switchProfileOperation: createAliasedAction(
+		identityTypes.IDENTITIES_SWITCH_PROFILE_OPERATION,
+		operations.switchProfileOperation
 	)
 };
 

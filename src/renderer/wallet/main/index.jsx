@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-import { push } from 'connected-react-router';
 import Dashboard from '../../dashboard';
 import { CryptoMangerContainer, AddTokenContainer } from '../../crypto-manager';
 import AddressBook from '../../address-book/main';
@@ -27,7 +26,7 @@ import AdvancedTransaction from '../../transaction/send/advanced-transaction';
 import ReceiveTransfer from '../../transaction/receive';
 
 import { Grid, withStyles } from '@material-ui/core';
-import Toolbar from './toolbar';
+import Toolbar from './toolbar-container';
 import { connect } from 'react-redux';
 
 import TransactionSendProgress from '../../transaction/progress/containers/transaction-send-progress-box';
@@ -50,7 +49,7 @@ import ReactPiwik from 'react-piwik';
 import CreateDID from '../../selfkey-id/main/components/create-did';
 import CreateDIDProcessing from '../../selfkey-id/main/components/create-did-processing';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
-import CreateCorporateProfile from '../../selfkey-id/main/components/create-corporate-profile';
+import CorporateWizardContainer from '../../corporate/wizard/corporate-wizard-container';
 
 const styles = theme => ({
 	headerSection: {
@@ -87,16 +86,6 @@ class Main extends Component {
 		await this.props.dispatch(walletTokensOperations.loadWalletTokens());
 		this.setMatomoId();
 	}
-
-	createPersonalProfile = evt => {
-		evt && evt.preventDefault();
-		this.props.dispatch(push('/selfKeyIdCreate'));
-	};
-
-	createCorporateProfile = evt => {
-		evt && evt.preventDefault();
-		this.props.dispatch(push('/main/create-corporate-profile'));
-	};
 
 	render() {
 		const { match, classes } = this.props;
@@ -234,7 +223,7 @@ class Main extends Component {
 					/>
 					<Route
 						path={`${match.path}/create-corporate-profile`}
-						component={CreateCorporateProfile}
+						component={CorporateWizardContainer}
 					/>
 				</Grid>
 			</Grid>

@@ -132,6 +132,10 @@ export class IdentityService {
 		did = did.replace('did:selfkey:', '');
 		return Identity.updateDID({ did, id });
 	}
+
+	createIdentity(walletId, type) {
+		return Identity.create({ walletId, type });
+	}
 }
 
 export default IdentityService;
