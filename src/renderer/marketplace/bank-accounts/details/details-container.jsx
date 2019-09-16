@@ -100,7 +100,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 		const maxFromCurrencyString = (accounts, field) => {
 			return Object.keys(accounts).reduce((current, accountId) => {
 				const account = accounts[accountId];
-				const item = Number(account[field].replace(/[^0-9.-]+/g, ''));
+				const item = Number((account[field] || '0').replace(/[^0-9.-]+/g, ''));
 				return current > item ? current : item;
 			}, 0);
 		};
