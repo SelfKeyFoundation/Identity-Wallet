@@ -1,7 +1,6 @@
 import React from 'react';
 import { Grid, CardHeader, Card, CardContent, Typography } from '@material-ui/core';
 import { Chart } from 'react-google-charts';
-import { CheckMaIcon, AttributeAlertIcon, EditTransparentIcon } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core';
 
 const styles = theme => ({
@@ -39,8 +38,31 @@ const styles = theme => ({
 			marginRight: '0.5em',
 			verticalAlign: 'middle'
 		}
+	},
+	legend: {
+		alignSelf: 'flex-end',
+		marginBottom: '1em',
+		'& > div': {
+			display: 'flex',
+			alignItems: 'center',
+			marginTop: '0.5em'
+		},
+		'& span': {
+			marginLeft: '0.5em'
+		}
+	},
+	coloredBox: {
+		width: '22px !important',
+		height: '8px !important',
+		borderRadius: '8px !important',
+		position: 'relative'
 	}
 });
+
+const getColors = () => {
+	// TODO: generate random colors algorithm to account for unknown number of shareholders
+	return ['#46dfba', '#46b7df', '#238db4', '#1d7999', '#0e4b61'];
+};
 
 const chartOptions = {
 	backgroundColor: 'transparent',
@@ -48,7 +70,7 @@ const chartOptions = {
 	chartArea: { left: 15, top: 15, bottom: 15, right: 15 },
 	pieHole: 0.7,
 	pieSliceBorderColor: 'none',
-	colors: ['#46dfba', '#46b7df', '#238db4', '#1d7999', '#0e4b61'],
+	colors: getColors(),
 	legend: {
 		position: 'none'
 	},
@@ -62,9 +84,7 @@ const chartOptions = {
 
 const getChartData = cap => {
 	const data = [['Content', 'percents']];
-	console.log(cap);
 	const dataPoints = cap.map(shareholder => [shareholder.name, shareholder.shares]);
-	console.log(data.concat(dataPoints));
 	return data.concat(dataPoints);
 };
 
@@ -111,7 +131,17 @@ const CorporateShareholding = withStyles(styles)(props => {
 									}}
 								/>
 							</Grid>
-							<Grid item xs={4} />
+							<Grid item xs={4} className={classes.legend}>
+								{cap.map((shareholder, index) => (
+									<div key={`shareholder-${index}`}>
+										<div
+											className={classes.coloredBox}
+											style={{ backgroundColor: getColors()[index] }}
+										/>
+										<span>{shareholder.name}</span>
+									</div>
+								))}
+							</Grid>
 						</Grid>
 					</CardContent>
 				</Card>
