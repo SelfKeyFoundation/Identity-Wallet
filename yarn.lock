@@ -17654,6 +17654,11 @@ react-onclickoutside@^6.5.0:
   resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.8.0.tgz#9f91b5b3ed59f4d9e43fd71620dc200773a4d569"
   integrity sha512-5Q4Rn7QLEoh7WIe66KFvYIpWJ49GeHoygP1/EtJyZjXKgrWH19Tf0Ty3lWyQzrEEDyLOwUvvmBFSE3dcDdvagA==
 
+react-orgchart@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/react-orgchart/-/react-orgchart-1.0.5.tgz#49da6714ed12926315c79744cd7f8bed18f1e915"
+  integrity sha1-SdpnFO0SkmMVx5dEzX+L7Rjx6RU=
+
 react-piwik@1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/react-piwik/-/react-piwik-1.6.0.tgz#3b9eee55167d953824867791cd5288593d652d66"
