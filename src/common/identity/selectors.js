@@ -56,11 +56,11 @@ const selectIdAttributeTypes = (state, entityType = 'individual') =>
 		.filter(t => {
 			if (!t || !t.content) return false;
 
-			if (!t.entityType && entityType !== 'individual') {
+			if (!t.content.entityType && entityType !== 'individual') {
 				return false;
 			}
 
-			return t.entityType.includes(entityType);
+			return (t.content.entityType || ['individual']).includes(entityType);
 		});
 
 const selectExpiredIdAttributeTypes = state => {
