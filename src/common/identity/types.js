@@ -39,6 +39,7 @@ export const identityTypes = {
 	IDENTITIES_LOAD: 'identities/LOAD',
 	IDENTITY_CURRENT_SET: 'identities/current/SET',
 	IDENTITIES_UPDATE_SETUP_OPERATION: 'identities/setup/UPDATE',
+	IDENTITIES_UPDATE_DID_OPERATION: 'identities/did/UPDATE',
 	IDENTITIES_CREATE_OPERATION: 'identities/CREATE',
 	IDENTITIES_CREATE_CORPORATE_PROFILE_OPERATION: 'identities/profile/corporate/CREATE',
 	IDENTITIES_SWITCH_PROFILE_OPERATION: 'identities/profile/SWITCH'

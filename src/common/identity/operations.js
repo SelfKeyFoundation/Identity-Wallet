@@ -196,6 +196,12 @@ const loadIdentitiesOperation = walletId => async (dispatch, getState) => {
 	await dispatch(identityActions.setIdentitiesAction(identities));
 };
 
+const updateDIDOperation = (did, id) => async (dispatch, getState) => {
+	const identityService = getGlobalContext().identityService;
+	const identity = await identityService.updateIdentityDID(did, id);
+	await dispatch(identityActions.updateIdentity(identity));
+};
+
 const switchProfileOperation = identity => async (dispatch, getState) => {
 	await dispatch(identityOperations.unlockIdentityOperation(identity.id));
 };
@@ -221,6 +227,7 @@ export const operations = {
 	createSelfkeyIdOperation,
 	loadIdentitiesOperation,
 	updateIdentitySetupOperation,
+	updateDIDOperation,
 	createIdentityOperation,
 	createCorporateProfileOperation,
 	switchProfileOperation
@@ -307,6 +314,10 @@ export const identityOperations = {
 	updateIdentitySetupOperation: createAliasedAction(
 		identityTypes.IDENTITIES_UPDATE_SETUP_OPERATION,
 		operations.updateIdentitySetupOperation
+	),
+	updateDIDOperation: createAliasedAction(
+		identityTypes.IDENTITIES_UPDATE_DID_OPERATION,
+		operations.updateDIDOperation
 	),
 	createIdentityOperation: createAliasedAction(
 		identityTypes.IDENTITIES_CREATE_OPERATION,
