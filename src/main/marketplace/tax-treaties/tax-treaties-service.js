@@ -1,7 +1,7 @@
 import config from 'common/config';
 import { TaxTreaties } from './tax-treaties';
 import request from 'request-promise-native';
-import { isDevMode } from 'common/utils/common';
+import { isDevMode, mapKeysAsync, setImmediatePromise } from 'common/utils/common';
 import _ from 'lodash';
 import { Logger } from '../../../common/logger';
 import { TAX_TREATIES_SYNC_JOB } from './tax-treaties-sync-job-handler';
@@ -47,9 +47,14 @@ export class TaxTreatiesService {
 	async fetchTaxTreatiesSelfkey() {
 		try {
 			let fetched = await request.get({ url: TAX_TREATIES_API_ENDPOINT, json: true });
-			return fetched.entities
-				.filter(e => Object.keys(e.data).length)
-				.map(entity => _.mapKeys(entity.data, (value, key) => _.camelCase(key)));
+			const validEntities = fetched.entities.filter(e => Object.keys(e.data).length);
+			let data = [];
+			for (const entity of validEntities) {
+				const item = await mapKeysAsync(entity.data, (value, key) => _.camelCase(key));
+				data.push(item);
+				await setImmediatePromise();
+			}
+			return data;
 		} catch (error) {
 			log.error(`fetchTaxTreatiesSelfkey: ${error}`);
 			return [];
@@ -58,25 +63,35 @@ export class TaxTreatiesService {
 	async fetchTaxTreatiesFlagtheory() {
 		try {
 			let fetched = await request.get({ url: FLAGTHEORY_TAX_TREATIES_ENDPOINT, json: true });
-			return fetched[0].map(entity =>
-				_.mapKeys(_.omit(entity, 'id'), (value, key) => _.camelCase(key))
-			);
+			let data = [];
+			for (const entity of fetched[0]) {
+				const item = await mapKeysAsync(_.omit(entity, 'id'), (value, key) =>
+					_.camelCase(key)
+				);
+				data.push(item);
+				await setImmediatePromise();
+			}
+			return data;
 		} catch (error) {
 			log.error(`fetchTaxTreatiesFlagtheory: ${error}`);
 			return [];
 		}
 	}
 	start() {
-		this.schedulerService.queueJob(null, TAX_TREATIES_SYNC_JOB);
+		const now = new Date();
+		this.schedulerService.queueJob(
+			null,
+			TAX_TREATIES_SYNC_JOB,
+			now.setMinutes(now.getMinutes() + 1)
+		);
 	}
-
 	loadTaxTreaties() {
 		return TaxTreaties.findAll();
 	}
-	upsert(upsert) {
+	async upsert(upsert) {
 		return TaxTreaties.bulkUpsert(upsert);
 	}
-	deleteMany(ids) {
+	async deleteMany(ids) {
 		return TaxTreaties.deleteMany(ids);
 	}
 }
