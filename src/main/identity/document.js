@@ -33,11 +33,11 @@ export class Document extends BaseModel {
 		};
 	}
 
-	static findAllByWalletId(walletId) {
+	static findAllByIdentityId(identityId) {
 		return this.query()
 			.select(`${TABLE_NAME}.*`)
 			.join('id_attributes', `${TABLE_NAME}.attributeId`, 'id_attributes.id')
-			.where({ 'id_attributes.walletId': walletId });
+			.where({ 'id_attributes.identityId': identityId });
 	}
 
 	static findAllByAttributeId(attributeId) {

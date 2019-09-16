@@ -6,7 +6,7 @@ import { push } from 'connected-react-router';
 import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorporations-component';
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
-import { walletSelectors } from 'common/wallet';
+import { identitySelectors } from 'common/identity';
 import { withStyles } from '@material-ui/core/styles';
 import { marketplaceSelectors } from 'common/marketplace';
 import { IncorporationsDetailsPage } from './incorporations-details-page';
@@ -99,7 +99,7 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 	};
 
 	onApplyClick = () => {
-		const { rp, wallet, vendorId, program } = this.props;
+		const { rp, identity, vendorId, program } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
 		const transactionNoKeyError = '/main/transaction-no-key-error';
@@ -115,10 +115,10 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 			if (keyPrice.gt(keyAvailable)) {
 				return this.props.dispatch(push(transactionNoKeyError));
 			}
-			if (!wallet.isSetupFinished) {
+			if (!identity.isSetupFinished) {
 				return this.props.dispatch(push(selfkeyIdRequiredRoute));
 			}
-			if (!wallet.did) {
+			if (!identity.did) {
 				return this.props.dispatch(push(selfkeyDIDRequiredRoute));
 			}
 			if (!rp || !rp.authenticated) {
@@ -207,7 +207,7 @@ const mapStateToProps = (state, props) => {
 			notAuthenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(state, vendorId, templateId),
-		wallet: walletSelectors.getWallet(state),
+		identity: identitySelectors.selectCurrentIdentity(state),
 		cryptoValue: getCryptoValue(state, primaryToken)
 	};
 };

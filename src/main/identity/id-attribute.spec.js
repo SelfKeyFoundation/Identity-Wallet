@@ -5,10 +5,10 @@ import Document from './document';
 import TestDb from '../db/test-db';
 
 describe('IdAttribute model', () => {
-	const testWalletId = 1;
-	const testAttribute = { walletId: testWalletId, typeId: 1, data: { value: 'test' } };
+	const testIdentityId = 1;
+	const testAttribute = { identityId: testIdentityId, typeId: 1, data: { value: 'test' } };
 	const testAttributeComplex = {
-		walletId: testWalletId,
+		identityId: testIdentityId,
 		typeId: 2,
 		data: { testDate1: 'testdata' }
 	};
@@ -32,11 +32,11 @@ describe('IdAttribute model', () => {
 
 	describe('create', () => {
 		it('sanity', async () => {
-			let all = await IdAttribute.query().where({ walletId: testWalletId });
+			let all = await IdAttribute.query().where({ identityId: testIdentityId });
 			expect(all.length).toBe(0);
 			let attr = await IdAttribute.create(testAttribute);
 			expect(attr.id).toBeGreaterThan(0);
-			expect(attr.walletId).toBe(testWalletId);
+			expect(attr.identityId).toBe(testIdentityId);
 			expect(attr.createdAt).toBeGreaterThan(0);
 			expect(attr.updatedAt).toBeGreaterThan(0);
 			expect(attr.value).toEqual(testAttribute.value);
@@ -44,7 +44,7 @@ describe('IdAttribute model', () => {
 			expect(attr.value).toEqual(testAttribute.value);
 			attr = await IdAttribute.create({ ...testAttribute, documents: [testDoc] });
 			expect(attr.id).toBeGreaterThan(0);
-			expect(attr.walletId).toBe(testWalletId);
+			expect(attr.identityId).toBe(testIdentityId);
 			expect(attr.createdAt).toBeGreaterThan(0);
 			expect(attr.updatedAt).toBeGreaterThan(0);
 			expect(attr.data).toEqual(testAttribute.data);
@@ -68,7 +68,7 @@ describe('IdAttribute model', () => {
 				name: 'passport',
 				typeId: 14,
 				updatedAt: 1543342261241,
-				walletId: 1
+				identityId: 1
 			};
 			let create = await IdAttribute.create(attr);
 			expect(create.documents.length).toBe(1);
@@ -78,12 +78,12 @@ describe('IdAttribute model', () => {
 		});
 	});
 
-	it('findAllByWalletId', async () => {
+	it('findAllByIdentityId', async () => {
 		await IdAttribute.create(testAttribute);
-		await IdAttribute.create({ ...testAttribute, walletId: 2 });
+		await IdAttribute.create({ ...testAttribute, identityId: 2 });
 		await IdAttribute.create(testAttribute);
 
-		let res = await IdAttribute.findAllByWalletId(testWalletId);
+		let res = await IdAttribute.findAllByIdentityId(testIdentityId);
 		expect(res.length).toBe(2);
 	});
 
@@ -117,16 +117,16 @@ describe('IdAttribute model', () => {
 			expires: 0,
 			defaultRepositoryId: 1
 		});
-		await IdAttribute.create({ walletId: 1, typeId: 1, data: { value: 'test' } });
-		await IdAttribute.create({ walletId: 1, typeId: 2, data: { value: 'test1' } });
-		await IdAttribute.create({ walletId: 2, typeId: 2, data: { value: 'test1-1' } });
+		await IdAttribute.create({ identityId: 1, typeId: 1, data: { value: 'test' } });
+		await IdAttribute.create({ identityId: 1, typeId: 2, data: { value: 'test1' } });
+		await IdAttribute.create({ identityId: 2, typeId: 2, data: { value: 'test1-1' } });
 		await IdAttribute.create({
-			walletId: 1,
+			identityId: 1,
 			typeId: 2,
 			data: { value: 'test1.1' },
 			documents: [testDoc]
 		});
-		await IdAttribute.create({ walletId: 1, typeId: 3, data: { value: 'test2' } });
+		await IdAttribute.create({ identityId: 1, typeId: 3, data: { value: 'test2' } });
 
 		let attrs = await IdAttribute.findByTypeUrls(1, ['test', 'test2']);
 
@@ -157,7 +157,7 @@ describe('IdAttribute model', () => {
 				name: 'passport',
 				typeId: 14,
 				updatedAt: 1543342261241,
-				walletId: 1
+				identityId: 1
 			};
 			await IdAttribute.create(_.omit(attr, ['data', 'document']));
 			let update = await IdAttribute.update(attr);

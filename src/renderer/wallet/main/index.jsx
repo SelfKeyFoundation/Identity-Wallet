@@ -26,7 +26,7 @@ import AdvancedTransaction from '../../transaction/send/advanced-transaction';
 import ReceiveTransfer from '../../transaction/receive';
 
 import { Grid, withStyles } from '@material-ui/core';
-import Toolbar from './toolbar';
+import Toolbar from './toolbar-container';
 import { connect } from 'react-redux';
 
 import TransactionSendProgress from '../../transaction/progress/containers/transaction-send-progress-box';
@@ -49,6 +49,7 @@ import ReactPiwik from 'react-piwik';
 import CreateDID from '../../selfkey-id/main/components/create-did';
 import CreateDIDProcessing from '../../selfkey-id/main/components/create-did-processing';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
+import CorporateWizardContainer from '../../corporate/wizard/corporate-wizard-container';
 
 const styles = theme => ({
 	headerSection: {
@@ -97,7 +98,10 @@ class Main extends Component {
 				className={classes.page}
 			>
 				<Grid item className={classes.headerSection}>
-					<Toolbar />
+					<Toolbar
+						createPersonalProfile={this.createPersonalProfile}
+						createCorporateProfile={this.createCorporateProfile}
+					/>
 				</Grid>
 				<Grid item xs={12} className={classes.bodySection} style={contentWrapperStyle}>
 					<Route path={`${match.path}/dashboard`} component={Dashboard} />
@@ -216,6 +220,10 @@ class Main extends Component {
 					<Route
 						path={`${match.path}/create-did-processing`}
 						component={CreateDIDProcessing}
+					/>
+					<Route
+						path={`${match.path}/create-corporate-profile`}
+						component={CorporateWizardContainer}
 					/>
 				</Grid>
 			</Grid>

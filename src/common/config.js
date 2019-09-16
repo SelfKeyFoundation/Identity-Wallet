@@ -161,7 +161,11 @@ const prod = {
 	},
 	matomoSite: 1,
 	ledgerAddress: '0x0cb853331293d689c95187190e09bb46cb4e533e',
-	paymentSplitterAddress: '0xC3f1fbe8f4BE283426F913f0F2BE8329fC6BE041'
+	paymentSplitterAddress: '0xC3f1fbe8f4BE283426F913f0F2BE8329fC6BE041',
+	features: {
+		paymentContract: false,
+		scheduler: true
+	}
 };
 
 const setupFilesPath = getSetupFilePath();

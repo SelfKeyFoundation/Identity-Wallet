@@ -6,7 +6,7 @@ import { push } from 'connected-react-router';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
-import { walletSelectors } from 'common/wallet';
+import { identitySelectors } from 'common/identity';
 import { withStyles } from '@material-ui/core/styles';
 import { BankingDetailsPage } from './details-page';
 import { marketplaceSelectors } from 'common/marketplace';
@@ -52,7 +52,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	onApplyClick = () => {
-		const { rp, wallet, vendorId, jurisdiction } = this.props;
+		const { rp, identity, vendorId, jurisdiction } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
 		const transactionNoKeyError = '/main/transaction-no-key-error';
@@ -68,10 +68,10 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 			if (keyPrice.gt(keyAvailable)) {
 				return this.props.dispatch(push(transactionNoKeyError));
 			}
-			if (!wallet.isSetupFinished) {
+			if (!identity.isSetupFinished) {
 				return this.props.dispatch(push(selfkeyIdRequiredRoute));
 			}
-			if (!wallet.did) {
+			if (!identity.did) {
 				return this.props.dispatch(push(selfkeyDIDRequiredRoute));
 			}
 			if (!rp || !rp.authenticated) {
@@ -100,7 +100,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 		const maxFromCurrencyString = (accounts, field) => {
 			return Object.keys(accounts).reduce((current, accountId) => {
 				const account = accounts[accountId];
-				const item = Number(account[field].replace(/[^0-9.-]+/g, ''));
+				const item = Number((account[field] || '0').replace(/[^0-9.-]+/g, ''));
 				return current > item ? current : item;
 			}, 0);
 		};
@@ -211,7 +211,7 @@ const mapStateToProps = (state, props) => {
 			authenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(state, vendorId, templateId),
-		wallet: walletSelectors.getWallet(state),
+		identity: identitySelectors.selectCurrentIdentity(state),
 		cryptoValue: getCryptoValue(state, primaryToken)
 	};
 };

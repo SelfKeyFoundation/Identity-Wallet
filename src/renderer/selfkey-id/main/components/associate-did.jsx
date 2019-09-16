@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { walletOperations, walletSelectors } from 'common/wallet';
+import { identitySelectors } from 'common/identity';
 import {
 	Grid,
 	Button,
@@ -114,7 +115,9 @@ class AssociateDIDComponent extends Component {
 		await this.resetErrors();
 		let did = this.state.did;
 		if (did !== '') {
-			await this.props.dispatch(walletOperations.updateWalletDID(this.props.wallet.id, did));
+			await this.props.dispatch(
+				walletOperations.updateWalletDID(this.props.identity.walletId, did)
+			);
 		} else {
 			this.setState({ searching: false });
 		}
@@ -245,7 +248,7 @@ class AssociateDIDComponent extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		wallet: walletSelectors.getWallet(state),
+		identity: identitySelectors.selectCurrentIdentity(state),
 		associateError: walletSelectors.getAssociateError(state),
 		didOriginUrl: walletSelectors.getDidOriginUrl(state)
 	};

@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { getGlobalContext } from 'common/context';
 import { createAliasedAction } from 'electron-redux';
 import { walletSelectors } from '../../wallet';
+import { identitySelectors } from '../../identity';
 import { appSelectors } from '../../app';
 import { transactionOperations } from 'common/transaction';
 import { push } from 'connected-react-router';
@@ -84,6 +85,7 @@ const createOrderOperation = ({
 }) => async (dispatch, getState) => {
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const wallet = walletSelectors.getWallet(getState());
+	const identity = identitySelectors.selectCurrentIdentity(getState());
 	const order = await ordersService.createOrder({
 		amount: '' + amount,
 		applicationId,
@@ -92,7 +94,8 @@ const createOrderOperation = ({
 		vendorDID,
 		productInfo,
 		vendorName,
-		did: wallet.did,
+		did: identity.did,
+		identityId: identity.id,
 		walletId: wallet.id,
 		vendorWallet,
 		// On marketplace direct payment orders, allowance is considered complete as initial state
@@ -203,9 +206,9 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 };
 
 const ordersLoadOperation = () => async (dispatch, getState) => {
-	const wallet = walletSelectors.getWallet(getState());
+	const identity = identitySelectors.selectCurrentIdentity(getState());
 	const ordersService = getGlobalContext().marketplaceOrdersService;
-	const orders = await ordersService.loadOrders(wallet.id);
+	const orders = await ordersService.loadOrders(identity.id);
 	await dispatch(ordersActions.setOrdersAction(orders));
 };
 
