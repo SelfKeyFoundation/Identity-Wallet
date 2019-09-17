@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import { createStyles, withStyles, Button, Grid, Typography } from '@material-ui/core';
-import { MenuNewIcon, DropdownIcon, RoundCompany, RoundPerson } from 'selfkey-ui';
+import { Link } from 'react-router-dom';
+import {
+	MenuNewIcon,
+	DropdownIcon,
+	SmallRoundCompany,
+	SmallRoundPerson,
+	RoundCompany,
+	RoundPerson
+} from 'selfkey-ui';
 import PriceBox from '../../price-box';
 import Sidebar from './sidebar';
 
@@ -44,6 +52,10 @@ const styles = theme => ({
 	closedDrawer: {
 		left: '73px'
 	},
+	flexLink: {
+		display: 'flex',
+		textDecoration: 'none'
+	},
 	nameRole: {
 		display: 'flex',
 		flexDirection: 'column',
@@ -66,7 +78,7 @@ const styles = theme => ({
 		width: '100%',
 		position: 'fixed',
 		right: '2%',
-		top: '78px',
+		top: '63px',
 		zIndex: '999'
 	},
 	openedProfile: {
@@ -82,10 +94,10 @@ const styles = theme => ({
 const profileStyle = theme =>
 	createStyles({
 		profile: {
-			minWidth: '201px',
-			maxWidth: '201px',
+			minWidth: '198px',
+			maxWidth: '198px',
 			float: 'right',
-			padding: '20px 20px 8px 20px',
+			padding: '20px 15px 8px 15px',
 			borderRadius: '4px',
 			backgroundColor: '#1E262E',
 			border: 'solid 1px #303c49'
@@ -117,7 +129,7 @@ const profileStyle = theme =>
 			cursor: 'pointer'
 		},
 		profileName: {
-			paddingLeft: '28px'
+			paddingLeft: '15px'
 		},
 		button: {
 			width: '189px'
@@ -141,7 +153,11 @@ const ProfileList = withStyles(profileStyle)(
 								onClick={onProfileSelect(el)}
 							>
 								<Grid item sm={2}>
-									{el.type === 'corporate' ? <RoundCompany /> : <RoundPerson />}
+									{el.type === 'corporate' ? (
+										<SmallRoundCompany />
+									) : (
+										<SmallRoundPerson />
+									)}
 								</Grid>
 								<Grid item sm={8} className={classes.profileName}>
 									<Typography variant="h6">
@@ -184,14 +200,16 @@ const ProfileList = withStyles(profileStyle)(
 
 const Profile = withStyles(styles)(({ classes, profile, isOpen, onProfileClick }) => (
 	<Grid container wrap="nowrap">
-		<Grid item>{profile.type === 'individual' ? <RoundPerson /> : <RoundCompany />}</Grid>
-		<Grid item className={classes.nameRole}>
-			<Typography variant="h6">{profile.name || defaultIdentityName(profile)}</Typography>
-			<Typography variant="subtitle1" color="secondary">
-				{profile.type === 'individual' ? 'Personal Profile' : 'Corporate Profile'}
-			</Typography>
-		</Grid>
-		<Grid item style={{ marginTop: '18px', paddingRight: '15px' }}>
+		<Link to="/main/selfkeyId" className={classes.flexLink}>
+			<Grid item>{profile.type === 'individual' ? <RoundPerson /> : <RoundCompany />}</Grid>
+			<Grid item className={classes.nameRole}>
+				<Typography variant="h6">{profile.name || defaultIdentityName(profile)}</Typography>
+				<Typography variant="subtitle1" color="secondary">
+					{profile.type === 'individual' ? 'Personal Profile' : 'Corporate Profile'}
+				</Typography>
+			</Grid>
+		</Link>
+		<Grid item style={{ marginTop: '13px', paddingRight: '15px' }}>
 			<DropdownIcon
 				className={`${classes.menuIcon} ${
 					isOpen ? classes.openedProfile : classes.closedProfile
@@ -243,7 +261,7 @@ class Toolbar extends Component {
 							</Grid>
 						</Grid>
 					</Grid>
-					<Grid item xs={2} style={{ minWidth: '240px' }}>
+					<Grid item xs={2} style={{ maxWidth: '240px' }}>
 						<Grid container wrap="nowrap">
 							<Grid item className={classes.sepVertContainer}>
 								<div className={classes.sepVert} />
@@ -255,7 +273,7 @@ class Toolbar extends Component {
 								alignItems="center"
 								spacing={0}
 							>
-								<Grid item style={{ width: '222px' }}>
+								<Grid item style={{ cursor: 'pointer', width: '222px' }}>
 									<Profile
 										profile={selectedProfile}
 										isOpen={isProfileOpen}
