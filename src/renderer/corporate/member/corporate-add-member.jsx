@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import {
 	ModalWrap,
 	ModalCloseButton,
@@ -12,11 +11,9 @@ import {
 	ProfileIcon,
 	CompanyIcon
 } from 'selfkey-ui';
-import { addressBookSelectors, addressBookOperations } from 'common/address-book';
 import { Grid, Modal, Typography, Input, Select, MenuItem } from '@material-ui/core';
 import { KeyboardArrowDown } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
-import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	errorText: {
@@ -130,48 +127,24 @@ const styles = theme => ({
 	}
 });
 
-class AddCompanyMemberContainer extends Component {
+class CorporateAddMemberComponent extends Component {
 	state = {
-		label: '',
-		address: ''
+		error: '',
+		errorEmail: false,
+		nickName: '',
+		firstName: '',
+		lastName: '',
+		email: '',
+		isDisabled: true
 	};
 
-	componentDidMount() {
-		this.props.dispatch(addressBookOperations.resetAdd());
-	}
-
-	handleSubmit = event => {
-		event.preventDefault();
-		return this.handleSave(this.state.label, this.state.address);
-	};
-
-	handleSave = async (label, address) => {
-		await this.props.dispatch(addressBookOperations.addAddressBookEntry({ label, address }));
-		this.closeAction();
-	};
-
-	handleLabelChange = event => {
-		event.preventDefault();
-		const label = event.target.value;
-		this.setState({
-			...this.state,
-			label
+	handleEmailChange = event => {
+		this.setState({ email: event.target.value }, () => {
+			let valid = this.isValidEmail(this.state.email);
+			this.setState({ errorEmail: !valid }, () => {
+				this.isDisabled();
+			});
 		});
-		this.props.dispatch(addressBookOperations.validateLabel(label));
-	};
-
-	handleAddressChange = event => {
-		event.preventDefault();
-		const address = event.target.value;
-		this.setState({
-			...this.state,
-			address
-		});
-		this.props.dispatch(addressBookOperations.validateAddress(address));
-	};
-
-	closeAction = () => {
-		this.props.dispatch(push('/main/create-corporate-profile'));
 	};
 
 	render() {
@@ -767,12 +740,6 @@ class AddCompanyMemberContainer extends Component {
 	}
 }
 
-const mapStateToProps = (state, props) => {
-	return {
-		labelError: addressBookSelectors.getLabelError(state),
-		addressError: addressBookSelectors.getAddressError(state)
-	};
-};
+export const CorporateAddMember = withStyles(styles)(CorporateAddMemberComponent);
 
-const styledComponent = withStyles(styles)(AddCompanyMemberContainer);
-export default connect(mapStateToProps)(styledComponent);
+export default CorporateAddMember;

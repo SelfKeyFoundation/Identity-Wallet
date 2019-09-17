@@ -50,7 +50,7 @@ import CreateDID from '../../selfkey-id/main/components/create-did';
 import CreateDIDProcessing from '../../selfkey-id/main/components/create-did-processing';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
 import CorporateWizardContainer from '../../corporate/wizard/corporate-wizard-container';
-import AddCompanyMemberContainer from '../../selfkey-id/main/components/add-company-member';
+import CorporateAddMemberContainer from '../../corporate/member/corporate-add-member-container';
 
 const styles = theme => ({
 	headerSection: {
@@ -227,8 +227,8 @@ class Main extends Component {
 						component={CorporateWizardContainer}
 					/>
 					<Route
-						path={`${match.path}/add-company-member`}
-						component={AddCompanyMemberContainer}
+						path={`${match.path}/corporate-add-member`}
+						component={CorporateAddMemberContainer}
 					/>
 				</Grid>
 			</Grid>
