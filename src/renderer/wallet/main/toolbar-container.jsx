@@ -21,6 +21,23 @@ class ToolbarContainer extends Component {
 		this.setState({
 			isProfileOpen
 		});
+
+		if (isProfileOpen) {
+			document.body.addEventListener('click', this.handleClickWhenMenuIsOpen);
+		} else {
+			document.body.removeEventListener('click', this.handleClickWhenMenuIsOpen);
+		}
+	};
+
+	handleClickWhenMenuIsOpen = e => {
+		const clickedOutsideProfileMenu = !e.path.find(
+			el => el.id === 'profile-list' || el.id === 'toolbar-profile'
+		);
+		if (clickedOutsideProfileMenu) {
+			this.setState({
+				isProfileOpen: false
+			});
+		}
 	};
 
 	createCorporateProfile = evt => {

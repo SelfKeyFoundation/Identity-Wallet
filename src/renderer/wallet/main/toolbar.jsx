@@ -131,7 +131,7 @@ const ProfileList = withStyles(profileStyle)(
 	({ classes, profiles, isOpen, onProfileSelect, onClickCorporate }) => {
 		return (
 			isOpen && (
-				<div className={classes.profile}>
+				<div id="profile-list" className={classes.profile}>
 					{profiles &&
 						profiles.map((el, index) => (
 							<Grid
@@ -243,7 +243,7 @@ class Toolbar extends Component {
 							</Grid>
 						</Grid>
 					</Grid>
-					<Grid item xs={2} style={{ minWidth: '240px' }}>
+					<Grid id="toolbar-profile" item xs={2} style={{ minWidth: '240px' }}>
 						<Grid container wrap="nowrap">
 							<Grid item className={classes.sepVertContainer}>
 								<div className={classes.sepVert} />
