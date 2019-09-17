@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { createStyles, withStyles, Button, Grid, Typography } from '@material-ui/core';
+import {
+	createStyles,
+	withStyles,
+	Button,
+	Grid,
+	Typography,
+	ClickAwayListener
+} from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import {
 	MenuNewIcon,
@@ -198,26 +205,32 @@ const ProfileList = withStyles(profileStyle)(
 	}
 );
 
-const Profile = withStyles(styles)(({ classes, profile, isOpen, onProfileClick }) => (
-	<Grid container wrap="nowrap">
-		<Link to="/main/selfkeyId" className={classes.flexLink}>
-			<Grid item>{profile.type === 'individual' ? <RoundPerson /> : <RoundCompany />}</Grid>
-			<Grid item className={classes.nameRole}>
-				<Typography variant="h6">{profile.name || defaultIdentityName(profile)}</Typography>
-				<Typography variant="subtitle1" color="secondary">
-					{profile.type === 'individual' ? 'Personal Profile' : 'Corporate Profile'}
-				</Typography>
+const Profile = withStyles(styles)(({ classes, profile, isOpen, onProfileClick, closeProfile }) => (
+	<ClickAwayListener onClickAway={closeProfile}>
+		<Grid container wrap="nowrap">
+			<Link to="/main/selfkeyId" className={classes.flexLink}>
+				<Grid item>
+					{profile.type === 'individual' ? <RoundPerson /> : <RoundCompany />}
+				</Grid>
+				<Grid item className={classes.nameRole}>
+					<Typography variant="h6">
+						{profile.name || defaultIdentityName(profile)}
+					</Typography>
+					<Typography variant="subtitle1" color="secondary">
+						{profile.type === 'individual' ? 'Personal Profile' : 'Corporate Profile'}
+					</Typography>
+				</Grid>
+			</Link>
+			<Grid item style={{ marginTop: '13px', paddingRight: '15px' }}>
+				<DropdownIcon
+					className={`${classes.menuIcon} ${
+						isOpen ? classes.openedProfile : classes.closedProfile
+					}`}
+					onClick={onProfileClick}
+				/>
 			</Grid>
-		</Link>
-		<Grid item style={{ marginTop: '13px', paddingRight: '15px' }}>
-			<DropdownIcon
-				className={`${classes.menuIcon} ${
-					isOpen ? classes.openedProfile : classes.closedProfile
-				}`}
-				onClick={onProfileClick}
-			/>
 		</Grid>
-	</Grid>
+	</ClickAwayListener>
 ));
 
 class Toolbar extends Component {
@@ -227,6 +240,7 @@ class Toolbar extends Component {
 			onToggleMenu,
 			isSidebarOpen,
 			isProfileOpen,
+			closeProfile,
 			selectedProfile,
 			onProfileClick,
 			onProfileSelect,
@@ -278,6 +292,7 @@ class Toolbar extends Component {
 										profile={selectedProfile}
 										isOpen={isProfileOpen}
 										onProfileClick={onProfileClick}
+										closeProfile={closeProfile}
 									/>
 								</Grid>
 							</Grid>
