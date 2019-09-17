@@ -11,6 +11,10 @@ class ToolbarContainer extends Component {
 		isProfileOpen: false
 	};
 
+	componentWillUnmount() {
+		document.body.removeEventListener('click', this.handleClickWhenMenuIsOpen);
+	}
+
 	toggleDrawer = isSidebarOpen => {
 		this.setState({
 			isSidebarOpen
