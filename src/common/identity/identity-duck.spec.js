@@ -239,7 +239,7 @@ describe('Identity Duck', () => {
 				}, {});
 			});
 			it('selectIdAttributeTypes', () => {
-				expect(identitySelectors.selectIdAttributeTypes(state)).toEqual(
+				expect(identitySelectors.selectIdAttributeTypes(state, 'individual')).toEqual(
 					testIdAttributeTypes
 				);
 			});
