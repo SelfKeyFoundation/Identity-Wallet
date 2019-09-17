@@ -72,7 +72,7 @@ class CreateAttributePopupComponent extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		types: identitySelectors.selectIdAttributeTypes(state),
+		types: identitySelectors.selectIdAttributeTypes(state, 'individual'),
 		uiSchemas: identitySelectors.selectUiSchemas(state)
 	};
 };
