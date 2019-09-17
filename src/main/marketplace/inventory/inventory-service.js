@@ -152,8 +152,11 @@ export class FlagtheoryIncorporationsInventoryFetcher extends InventoryFetcher {
 				return {
 					sku,
 					name,
-					status: data.templateId ? 'active' : 'inactive',
-					price: data.walletPrice || null,
+					status: data.templateId && data.showInWallet ? 'active' : 'inactive',
+					price:
+						data.activeTestPrice && data.testPrice
+							? data.testPrice
+							: data.walletPrice || null,
 					priceCurrency: 'USD',
 					category: 'incorporations',
 					vendorId: 'flagtheory_incorporations',
