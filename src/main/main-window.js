@@ -51,7 +51,7 @@ export const createMainWindow = () => {
 
 	mainWindow.loadURL(webAppPath);
 
-	// mainWindow.setMenu(null); // in order to don't show electron default menu bar
+	mainWindow.setMenu(null); // in order to don't show electron default menu bar
 
 	if (isDebugMode()) {
 		log.info('app is running in debug mode');
