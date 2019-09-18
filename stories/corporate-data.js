@@ -16,36 +16,6 @@ export const corporateApplications = [
 	}
 ];
 
-export const corporateCapTable = [
-	{
-		type: 'Person',
-		role: 'Director',
-		name: 'John Doe',
-		email: 'john.doe@email.com',
-		citizenship: 'Italy',
-		residency: 'Singapore',
-		shares: 0.5
-	},
-	{
-		type: 'Corporate',
-		role: 'Shareholder',
-		name: 'ACME Inc',
-		email: null,
-		citizenship: 'Hong Kong',
-		residency: 'Hong Kong',
-		shares: 0.09
-	},
-	{
-		type: 'Corporate',
-		role: 'Shareholder',
-		name: 'Apple Inc',
-		email: null,
-		citizenship: 'U.S.A.',
-		residency: 'U.S.A.',
-		shares: 0.41
-	}
-];
-
 export const dummyMembers = [
 	{
 		id: '1',
@@ -82,5 +52,38 @@ export const dummyMembers = [
 		citizenship: 'France',
 		residency: 'France',
 		shares: '5%'
+	}
+];
+
+export const corporateCapTable = [
+	{
+		type: 'Person',
+		role: 'Director',
+		name: 'John Doe',
+		email: 'john.doe@email.com',
+		citizenship: 'Italy',
+		residency: 'Singapore',
+		shares: 0.5,
+		children: []
+	},
+	{
+		type: 'Corporate',
+		role: 'Shareholder',
+		name: 'ACME Inc',
+		email: null,
+		citizenship: 'Hong Kong',
+		residency: 'Hong Kong',
+		shares: 0.09,
+		children: dummyMembers
+	},
+	{
+		type: 'Corporate',
+		role: 'Shareholder',
+		name: 'Apple Inc',
+		email: null,
+		citizenship: 'U.S.A.',
+		residency: 'U.S.A.',
+		shares: 0.41,
+		children: []
 	}
 ];

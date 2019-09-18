@@ -9,6 +9,7 @@ import { CorporateDetails } from '../src/renderer/corporate/common/corporate-det
 import { CorporateApplicationsSummary } from '../src/renderer/corporate/common/corporate-applications';
 import { CorporateCapTable } from '../src/renderer/corporate/common/corporate-cap-table';
 import { CorporateShareholding } from '../src/renderer/corporate/common/corporate-shareholding';
+import { CorporateOrgChart } from '../src/renderer/corporate/common/corporate-org-chart';
 import { CorporateWizard } from '../src/renderer/corporate/wizard/corporate-wizard';
 import { CorporateAddMember } from '../src/renderer/corporate/member/corporate-add-member';
 
@@ -80,7 +81,10 @@ storiesOf('Corporate/Blocks', module)
 	.add('Corporate Cap Table', () => (
 		<CorporateCapTable cap={corporateCapTable} onEdit={action('corporate cap edit click')} />
 	))
-	.add('Corporate Shareholding', () => <CorporateShareholding cap={corporateCapTable} />);
+	.add('Corporate Shareholding', () => <CorporateShareholding cap={corporateCapTable} />)
+	.add('Corporate Org Chart', () => (
+		<CorporateOrgChart name="Company Name" cap={corporateCapTable} />
+	));
 
 storiesOf('Corporate', module).add('Wizard', () => <CorporateWizard members={dummyMembers} />);
 
