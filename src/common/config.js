@@ -18,16 +18,16 @@ const PRIMARY_TOKEN = process.env.PRIMARY_TOKEN_OVERRIDE
 	? process.env.PRIMARY_TOKEN_OVERRIDE.toUpperCase()
 	: null;
 
+// KYCC ENV variables
+const KYCC_API_OVERRIDE = process.env.KYCC_API_OVERRIDE;
 // Incorporations ENV variables
 const INCORPORATIONS_TEMPLATE_OVERRIDE = process.env.INCORPORATIONS_TEMPLATE_OVERRIDE;
 const INCORPORATIONS_PRICE_OVERRIDE = process.env.INCORPORATIONS_PRICE_OVERRIDE;
-const INCORPORATION_KYCC_INSTANCE = process.env.INCORPORATION_KYCC_INSTANCE;
 const INCORPORATION_API_URL = process.env.INCORPORATION_API_URL;
 const INCORPORATION_TREATIES_URL = process.env.INCORPORATION_TREATIES_URL;
 // Bank Accounts ENV variables
 const BANKACCOUNTS_TEMPLATE_OVERRIDE = process.env.BANKACCOUNTS_TEMPLATE_OVERRIDE;
 const BANKACCOUNTS_PRICE_OVERRIDE = process.env.BANKACCOUNTS_PRICE_OVERRIDE;
-const BANKACCOUNTS_KYCC_INSTANCE = process.env.BANKACCOUNTS_KYCC_INSTANCE;
 const BANKACCOUNTS_API_URL = process.env.BANKACCOUNTS_API_URL;
 
 const COUNTRY_INFO_URL = process.env.COUNTRY_INFO_URL;
@@ -47,16 +47,14 @@ const common = {
 	forceUpdateAttributes: process.env.FORCE_UPDATE_ATTRIBUTES === 'true' && !isTestMode(),
 	userAgent: `SelfKeyIDW/${pkg.version}`,
 	airtableBaseUrl: 'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=',
-	incorporationsInstance:
-		INCORPORATION_KYCC_INSTANCE || 'https://dev.instance.kyc-chain.com/api/v2/',
+
+	kyccUrlOverride: KYCC_API_OVERRIDE,
 	incorporationsPriceOverride: INCORPORATIONS_PRICE_OVERRIDE,
 	incorporationsTemplateOverride: INCORPORATIONS_TEMPLATE_OVERRIDE,
 	incorporationApiUrl: INCORPORATION_API_URL || 'https://passports.io/api/incorporations',
 	incorporationTreatiesUrl: INCORPORATION_TREATIES_URL || 'https://passports.io/api/tax-treaties',
 	countryInfoUrl: COUNTRY_INFO_URL || 'https://passports.io/api/country',
 	allCountriesInfoUrl: ALL_COUNTRIES_INFO_URL || 'https://passports.io/api/countries',
-	bankAccountsInstance:
-		BANKACCOUNTS_KYCC_INSTANCE || 'https://dev.instance.kyc-chain.com/api/v2/',
 	bankAccountsPriceOverride: BANKACCOUNTS_PRICE_OVERRIDE,
 	bankAccountsTemplateOverride: BANKACCOUNTS_TEMPLATE_OVERRIDE,
 	bankAccountsApiUrl: BANKACCOUNTS_API_URL || 'https://api.bankaccounts.io/api/bank-accounts',
@@ -129,9 +127,6 @@ const dev = {
 	kycApiEndpoint: 'https://token-sale-demo-api.kyc-chain.com/',
 	chainId: 3,
 	node: 'infura',
-	incorporationsInstance:
-		INCORPORATION_KYCC_INSTANCE || 'https://dev.instance.kyc-chain.com/api/v2/',
-
 	constants: {
 		primaryToken: PRIMARY_TOKEN || 'KI'
 	},
@@ -154,8 +149,6 @@ const prod = {
 	kycApiEndpoint: 'https://tokensale-api.selfkey.org/',
 	chainId: 1,
 	node: 'infura',
-	incorporationsInstance:
-		INCORPORATION_KYCC_INSTANCE || 'https://flagtheory-v2.instance.kyc-chain.com/api/v2/',
 	constants: {
 		primaryToken: PRIMARY_TOKEN || 'KEY'
 	},

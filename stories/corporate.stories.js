@@ -11,6 +11,7 @@ import { CorporateCapTable } from '../src/renderer/corporate/common/corporate-ca
 import { CorporateShareholding } from '../src/renderer/corporate/common/corporate-shareholding';
 import { CorporateOrgChart } from '../src/renderer/corporate/common/corporate-org-chart';
 import { CorporateWizard } from '../src/renderer/corporate/wizard/corporate-wizard';
+import { CorporateAddMember } from '../src/renderer/corporate/member/corporate-add-member';
 
 import { corporateApplications, corporateCapTable, dummyMembers } from './corporate-data';
 
@@ -86,3 +87,5 @@ storiesOf('Corporate/Blocks', module)
 	));
 
 storiesOf('Corporate', module).add('Wizard', () => <CorporateWizard members={dummyMembers} />);
+
+storiesOf('Corporate', module).add('Add Member', () => <CorporateAddMember />);

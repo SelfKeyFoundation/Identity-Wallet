@@ -45,15 +45,15 @@ export const kycTypes = {
 	KYC_APPLICATIONS_RESET: 'kyc/applications/reset'
 };
 
-const incorporationsRPDetails = {
-	name: 'Incorporations',
-	status: 'active',
-	description: 'Incorporations',
-	relying_party_config: {
-		rootEndpoint: config.incorporationsInstance,
+const devRPDetails = {
+	name: 'Dev',
+	status: config.kyccUrlOverride ? 'active' : 'inactive',
+	description: 'Dev',
+	relyingPartyConfig: {
+		rootEndpoint: config.kyccUrlOverride,
 		did: true,
 		endpoints: {
-			'/templates/:id': `${config.incorporationsInstance}templates/:id?format=minimum`
+			'/templates/:id': `${config.kyccUrlOverride}templates/:id?format=minimum`
 		}
 	}
 };
@@ -72,14 +72,13 @@ export const kycSelectors = {
 		if (rp && !rp.disabled) {
 			return true;
 		}
-		let service;
-		if (rpName === 'incorporations') {
-			service = { ...incorporationsRPDetails };
-		} else {
-			service = marketplaceSelectors.selectRPDetails(state, rpName);
+		let service = marketplaceSelectors.selectRPDetails(state, rpName);
+
+		if (devRPDetails.status === 'active') {
+			service = { ...devRPDetails };
 		}
 
-		const rpConfig = service.relying_party_config || service.relyingPartyConfig;
+		const rpConfig = service.relyingPartyConfig;
 		return service.status === 'active' && rpConfig;
 	},
 	relyingPartyShouldUpdateSelector(state, rpName, authenticate = true) {
@@ -316,20 +315,23 @@ const loadRelyingPartyOperation = (
 	afterAuthRoute,
 	cancelRoute
 ) => async (dispatch, getState) => {
-	const walletType = appSelectors.selectApp(getState()).walletType;
+	const state = getState();
+	const walletType = appSelectors.selectApp(state).walletType;
 	if (!rpName) return null;
 
-	const wallet = walletSelectors.getWallet(getState());
+	const wallet = walletSelectors.getWallet(state);
 	if (!wallet) return;
 
 	const ts = Date.now();
-	let rp;
-	if (rpName === 'incorporations') {
-		rp = { ...incorporationsRPDetails };
-	} else {
-		rp = marketplaceSelectors.selectRPDetails(getState(), rpName);
+
+	let rp = marketplaceSelectors.selectRPDetails(state, rpName);
+
+	if (devRPDetails.status === 'active') {
+		console.log('Selecting dev RP');
+		rp = { ...devRPDetails };
 	}
-	const config = rp.relying_party_config || rp.relyingPartyConfig;
+
+	const config = rp.relyingPartyConfig;
 
 	try {
 		await dispatch(kycActions.setCancelRoute(cancelRoute));

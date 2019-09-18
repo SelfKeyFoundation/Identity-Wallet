@@ -25,6 +25,7 @@ dist/
 src/renderer/angular/app.templates.js
 static/stylesheets/css/main.css
 static/stylesheets/css/*
+storybook-static/
 
 client-secret.json
 **/.env
