@@ -647,7 +647,7 @@ class CorporateWizardComponent extends Component {
 															variant="outlined"
 															size="large"
 															color="secondary"
-															onClick={this.handleAddDocument}
+															onClick={this.handleAddCompanyMember}
 															className={classes.button}
 														>
 															Add New Member

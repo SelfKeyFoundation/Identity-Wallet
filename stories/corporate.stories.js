@@ -10,6 +10,7 @@ import { CorporateApplicationsSummary } from '../src/renderer/corporate/common/c
 import { CorporateCapTable } from '../src/renderer/corporate/common/corporate-cap-table';
 import { CorporateShareholding } from '../src/renderer/corporate/common/corporate-shareholding';
 import { CorporateWizard } from '../src/renderer/corporate/wizard/corporate-wizard';
+import { CorporateAddMember } from '../src/renderer/corporate/member/corporate-add-member';
 
 import { corporateApplications, corporateCapTable, dummyMembers } from './corporate-data';
 
@@ -82,3 +83,5 @@ storiesOf('Corporate/Blocks', module)
 	.add('Corporate Shareholding', () => <CorporateShareholding cap={corporateCapTable} />);
 
 storiesOf('Corporate', module).add('Wizard', () => <CorporateWizard members={dummyMembers} />);
+
+storiesOf('Corporate', module).add('Add Member', () => <CorporateAddMember />);
