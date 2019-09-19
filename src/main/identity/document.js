@@ -1,8 +1,9 @@
 import { Model } from 'objection';
 import BaseModel from '../common/base-model';
+import { isDevMode } from 'common/utils/common';
 import { formatDataUrl } from 'common/utils/document';
 const TABLE_NAME = 'documents';
-
+const env = isDevMode() ? 'development' : 'production';
 export class Document extends BaseModel {
 	static tableName = TABLE_NAME;
 	static idColumn = 'id';
@@ -14,7 +15,8 @@ export class Document extends BaseModel {
 			mimeType: { type: 'string' },
 			size: { type: 'integer' },
 			buffer: { type: 'binary' },
-			attributeId: { type: 'integer' }
+			attributeId: { type: 'integer' },
+			env: { type: 'string', enum: ['production', 'development'], default: env }
 		},
 		required: ['attributeId', 'mimeType', 'size', 'buffer']
 	};
@@ -37,7 +39,7 @@ export class Document extends BaseModel {
 		return this.query()
 			.select(`${TABLE_NAME}.*`)
 			.join('id_attributes', `${TABLE_NAME}.attributeId`, 'id_attributes.id')
-			.where({ 'id_attributes.identityId': identityId });
+			.where({ 'id_attributes.identityId': identityId, [`${TABLE_NAME}.env`]: env });
 	}
 
 	static findAllByAttributeId(attributeId) {
@@ -53,7 +55,7 @@ export class Document extends BaseModel {
 	}
 
 	static create(itm, tx) {
-		return this.query(tx).insertAndFetch(itm);
+		return this.query(tx).insertAndFetch({ ...itm, env });
 	}
 
 	static delete(id, tx) {
