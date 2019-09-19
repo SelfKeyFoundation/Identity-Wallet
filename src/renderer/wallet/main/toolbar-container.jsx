@@ -17,6 +17,12 @@ class ToolbarContainer extends Component {
 		});
 	};
 
+	closeProfile = isProfileOpen => {
+		this.setState({
+			isProfileOpen: false
+		});
+	};
+
 	toggleProfile = isProfileOpen => {
 		this.setState({
 			isProfileOpen
@@ -50,6 +56,7 @@ class ToolbarContainer extends Component {
 				onCreateCorporateProfileClick={this.createCorporateProfile}
 				onToggleMenu={this.toggleDrawer}
 				primaryToken={config.constants.primaryToken}
+				closeProfile={this.closeProfile}
 			/>
 		);
 	}

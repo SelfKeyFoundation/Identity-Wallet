@@ -310,8 +310,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 		}
 
 		const getRpInfo = (rpName, field) => {
-			// return config.relyingPartyInfo[rpName][field];
-			return config.relyingPartyInfo['incorporations'][field];
+			return config.relyingPartyInfo[rpName][field];
 		};
 
 		const getRpName = title => {
