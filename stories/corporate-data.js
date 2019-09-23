@@ -87,3 +87,81 @@ export const corporateCapTable = [
 		children: []
 	}
 ];
+
+export const corporateAttributes = [
+	{
+		createdAt: 1568107330518,
+		updatedAt: 1568282607094,
+		name: 'Company Name',
+		type: {
+			content: {
+				$id: 'http://platform.selfkey.org/schema/attribute/company-name.json',
+				title: 'Company Name',
+				entityType: ['corporate']
+			}
+		},
+		data: {
+			value: 'ACME Inc'
+		}
+	},
+	{
+		createdAt: 1568107330518,
+		updatedAt: 1568282607094,
+		name: 'Entity Type',
+		type: {
+			content: {
+				$id: 'http://platform.selfkey.org/schema/attribute/legal-entity-type.json',
+				title: 'Entity Type',
+				entityType: ['corporate']
+			}
+		},
+		data: {
+			value: 'LLC'
+		}
+	},
+	{
+		createdAt: 1568107330518,
+		updatedAt: 1568282607094,
+		name: 'Jurisdiction',
+		type: {
+			content: {
+				$id: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json',
+				title: 'Legal Jurisdiction',
+				entityType: ['corporate']
+			}
+		},
+		data: {
+			value: 'Singapore'
+		}
+	},
+	{
+		createdAt: 1568107330518,
+		updatedAt: 1568282607094,
+		name: 'Incorporation Date',
+		type: {
+			content: {
+				$id: 'http://platform.selfkey.org/schema/attribute/incorporation-date.json',
+				title: 'Incorporation Date',
+				entityType: ['corporate']
+			}
+		},
+		data: {
+			value: '17/10/1980'
+		}
+	},
+	{
+		createdAt: 1568107330518,
+		updatedAt: 1568282607094,
+		name: 'Address',
+		type: {
+			content: {
+				$id: 'http://platform.selfkey.org/schema/attribute/physical-address.json',
+				title: 'Address',
+				entityType: ['corporate']
+			}
+		},
+		data: {
+			value: '1, Infinite Loop, California USA'
+		}
+	}
+];
