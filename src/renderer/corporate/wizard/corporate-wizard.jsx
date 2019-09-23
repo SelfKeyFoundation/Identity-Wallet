@@ -93,7 +93,19 @@ const styles = theme => ({
 });
 
 const CompanyInformation = withStyles(styles)(props => {
-	const { classes, errors = {}, onFieldChange = () => {} } = props;
+	const {
+		classes,
+		jurisdictions = [],
+		entityTypes = [],
+		errors = {},
+		jurisdiction,
+		taxId,
+		entityType,
+		email,
+		entityName,
+		creationDate,
+		onFieldChange = () => {}
+	} = props;
 	return (
 		<Grid container direction="column" spacing={32}>
 			<Grid item>
@@ -176,10 +188,12 @@ const CompanyInformation = withStyles(styles)(props => {
 																	</Grid>
 																	<Grid item>
 																		<Select
-																			value="Value"
-																			onChange=""
+																			onChange={onFieldChange(
+																				'jurisdiction'
+																			)}
 																			displayEmpty
 																			name="jurisdiction"
+																			value={jurisdiction}
 																			disableUnderline
 																			IconComponent={
 																				KeyboardArrowDown
@@ -197,20 +211,16 @@ const CompanyInformation = withStyles(styles)(props => {
 																			<MenuItem value="">
 																				<em>Choose...</em>
 																			</MenuItem>
-																			{[
-																				'Jurisdiction 1',
-																				'Jurisdiction 2',
-																				'Jurisdiction 3',
-																				'Jurisdiction 4',
-																				'Jurisdiction 5'
-																			].map(item => (
-																				<MenuItem
-																					key={item}
-																					value={item}
-																				>
-																					{item}
-																				</MenuItem>
-																			))}
+																			{jurisdictions.map(
+																				item => (
+																					<MenuItem
+																						key={item}
+																						value={item}
+																					>
+																						{item}
+																					</MenuItem>
+																				)
+																			)}
 																		</Select>
 																	</Grid>
 																</Grid>
@@ -229,11 +239,12 @@ const CompanyInformation = withStyles(styles)(props => {
 																	</Grid>
 																	<Grid item>
 																		<Input
-																			id="firstName"
+																			id="entityName"
 																			fullWidth
 																			required
+																			value={entityName}
 																			onChange={onFieldChange(
-																				'firstName'
+																				'entityName'
 																			)}
 																			placeholder="Entity Name"
 																		/>
@@ -262,9 +273,10 @@ const CompanyInformation = withStyles(styles)(props => {
 																	</Grid>
 																	<Grid item>
 																		<Select
-																			value="Entity Type"
-																			onChange=""
-																			displayEmpty
+																			onChange={onFieldChange(
+																				'entityType'
+																			)}
+																			value={entityType}
 																			name="entitytype"
 																			disableUnderline
 																			IconComponent={
@@ -282,20 +294,16 @@ const CompanyInformation = withStyles(styles)(props => {
 																			<MenuItem value="">
 																				<em>Choose...</em>
 																			</MenuItem>
-																			{[
-																				'Entity Type 1',
-																				'Entity Type 2',
-																				'Entity Type 3',
-																				'Entity Type 4',
-																				'Entity Type 5'
-																			].map(item => (
-																				<MenuItem
-																					key={item}
-																					value={item}
-																				>
-																					{item}
-																				</MenuItem>
-																			))}
+																			{entityTypes.map(
+																				item => (
+																					<MenuItem
+																						key={item}
+																						value={item}
+																					>
+																						{item}
+																					</MenuItem>
+																				)
+																			)}
 																		</Select>
 																	</Grid>
 																</Grid>
@@ -315,9 +323,10 @@ const CompanyInformation = withStyles(styles)(props => {
 																	<Grid item>
 																		<KeyPicker
 																			id="creationDate"
+																			value={creationDate}
 																			required
 																			onChange={onFieldChange(
-																				'lastName'
+																				'creationDate'
 																			)}
 																			className={
 																				classes.picker
@@ -366,7 +375,7 @@ const CompanyInformation = withStyles(styles)(props => {
 																			fullWidth
 																			type="email"
 																			error={errors.email}
-																			required
+																			value={email}
 																			onChange={onFieldChange(
 																				'email'
 																			)}
@@ -408,27 +417,15 @@ const CompanyInformation = withStyles(styles)(props => {
 																	</Grid>
 																	<Grid item>
 																		<Input
-																			id="email"
+																			id="taxId"
 																			fullWidth
-																			type="email"
-																			error={errors.email}
-																			required
+																			value={taxId}
+																			type="text"
 																			onChange={onFieldChange(
-																				'email'
+																				'taxId'
 																			)}
 																			placeholder="Tax Payer ID"
 																		/>
-																		{errors.email && (
-																			<Typography
-																				variant="subtitle2"
-																				color="error"
-																				gutterBottom
-																			>
-																				{
-																					'Email provided is invalid'
-																				}
-																			</Typography>
-																		)}
 																	</Grid>
 																</Grid>
 															</Grid>

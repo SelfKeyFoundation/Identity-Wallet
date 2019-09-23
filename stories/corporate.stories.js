@@ -13,7 +13,13 @@ import { CorporateOrgChart } from '../src/renderer/corporate/common/corporate-or
 import { CorporateWizard } from '../src/renderer/corporate/wizard/corporate-wizard';
 import { CorporateAddMember } from '../src/renderer/corporate/member/corporate-add-member';
 
-import { corporateApplications, corporateCapTable, dummyMembers } from './corporate-data';
+import {
+	corporateApplications,
+	corporateCapTable,
+	dummyMembers,
+	entityTypes,
+	legalJurisdictions
+} from './corporate-data';
 
 storiesOf('Corporate', module).add('Dashboard', () => (
 	<div style={{ width: '1140px' }}>
@@ -86,6 +92,27 @@ storiesOf('Corporate/Blocks', module)
 		<CorporateOrgChart name="Company Name" cap={corporateCapTable} />
 	));
 
-storiesOf('Corporate', module).add('Wizard', () => <CorporateWizard members={dummyMembers} />);
+storiesOf('Corporate/Wizard', module)
+	.add('default', () => (
+		<CorporateWizard
+			members={dummyMembers}
+			entityTypes={entityTypes}
+			jurisdictions={legalJurisdictions}
+			onFieldChange={name => action(`field change ${name}:`)}
+		/>
+	))
+	.add('field error', () => (
+		<CorporateWizard
+			members={dummyMembers}
+			entityTypes={entityTypes}
+			jurisdictions={legalJurisdictions}
+			creationDate="2019-09-10"
+			email="hello"
+			entityName="hello"
+			jurisdiction="Barbados"
+			errors={{ email: 'email issue' }}
+			onFieldChange={name => action(`field change ${name}:`)}
+		/>
+	));
 
 storiesOf('Corporate', module).add('Add Member', () => <CorporateAddMember />);

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { appSelectors } from 'common/app';
 import { CorporateWizard } from './corporate-wizard';
@@ -7,29 +8,85 @@ import { identityOperations } from 'common/identity';
 
 class CorporateWizardContainerComponent extends Component {
 	state = {
-		error: '',
-		errorEmail: false,
-		nickName: '',
-		firstName: '',
-		lastName: '',
-		email: '',
-		isDisabled: true
+		errors: {},
+		jurisdiction: null,
+		taxId: null,
+		entityType: null,
+		email: null,
+		entityName: null,
+		creationDate: null
+	};
+
+	handleFieldChange = name => evt => {
+		const errors = { ...this.state.errors };
+		let value = evt;
+
+		if (evt && evt.target) {
+			value = evt.target.value;
+		}
+
+		if (name === 'email') {
+			errors.email = value && !this.isValidEmail(value) ? 'Invalid email' : null;
+		}
+		this.setState({
+			errors,
+			[name]: value
+		});
 	};
 
 	handleContinueClick = evt => {
 		evt && evt.preventDefault();
-		this.props.dispatch(identityOperations.createCorporateProfileOperation());
+		this.props.dispatch(
+			identityOperations.createCorporateProfileOperation(
+				_.pick(
+					this.state,
+					'jurisdiction',
+					'taxId',
+					'entityType',
+					'email',
+					'entityName',
+					'creationDate'
+				)
+			)
+		);
 	};
 
 	handleCancelClick = evt => {
 		evt && evt.preventDefault();
 		this.props.dispatch(push('/main/dashboard'));
 	};
+
+	isValidEmail = email => {
+		var re = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+		return email ? re.test(String(email).toLowerCase()) : true;
+	};
+
+	isDisabled() {
+		return (
+			!this.state.jurisdiction ||
+			!this.state.entityType ||
+			!this.state.entityName ||
+			!this.state.creationDate ||
+			(this.state.email && !this.isValidEmail(this.state.email))
+		);
+	}
+
 	render() {
+		const companyForm = _.pick(
+			this.state,
+			'errors',
+			'jurisdiction',
+			'taxId',
+			'entityType',
+			'email',
+			'entityName',
+			'creationDate'
+		);
 		return (
 			<CorporateWizard
 				{...this.props}
-				errors={{ email: this.props.errorEmail }}
+				{...companyForm}
+				isDisabled={this.isDisabled()}
 				onContinueClick={this.handleContinueClick}
 				onCancelClick={this.handleCancelClick}
 			/>
