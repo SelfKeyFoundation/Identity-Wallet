@@ -228,7 +228,7 @@ const ProfileList = withStyles(profileStyle)(
 
 const Profile = withStyles(styles)(({ classes, profile, isOpen, onProfileClick, closeProfile }) => (
 	<ClickAwayListener onClickAway={closeProfile}>
-		<Grid container wrap="nowrap">
+		<Grid container wrap="nowrap" justify="space-between">
 			<Link to="/main/selfkeyId" className={classes.flexLink}>
 				<Grid item>
 					{profile.type === 'individual' ? <RoundPerson /> : <RoundCompany />}
