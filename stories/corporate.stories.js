@@ -14,7 +14,12 @@ import { CorporateInformation } from '../src/renderer/corporate/common/corporate
 import { CorporateWizard } from '../src/renderer/corporate/wizard/corporate-wizard';
 import { CorporateAddMember } from '../src/renderer/corporate/member/corporate-add-member';
 
-import { corporateApplications, corporateCapTable, dummyMembers } from './corporate-data';
+import {
+	corporateApplications,
+	corporateCapTable,
+	dummyMembers,
+	corporateAttributes
+} from './corporate-data';
 
 storiesOf('Corporate', module).add('Dashboard', () => (
 	<div style={{ width: '1140px' }}>
@@ -86,7 +91,12 @@ storiesOf('Corporate/Components', module)
 	.add('Corporate Org Chart', () => (
 		<CorporateOrgChart name="Company Name" cap={corporateCapTable} />
 	))
-	.add('Corporate Informations', () => <CorporateInformation />);
+	.add('Corporate Informations', () => (
+		<CorporateInformation
+			attributes={corporateAttributes}
+			onEditAttribute={action('on edit attribute')}
+		/>
+	));
 
 storiesOf('Corporate', module).add('Wizard', () => <CorporateWizard members={dummyMembers} />);
 

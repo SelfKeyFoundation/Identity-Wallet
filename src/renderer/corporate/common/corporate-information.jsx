@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import {
 	Grid,
 	CardHeader,
@@ -8,10 +9,15 @@ import {
 	Table,
 	TableHead,
 	TableBody,
-	TableRow,
-	TableCell
+	IconButton
 } from '@material-ui/core';
-import { IdCardIcon, SmallTableHeadRow, SmallTableRow, SmallTableCell } from 'selfkey-ui';
+import {
+	IdCardIcon,
+	SmallTableHeadRow,
+	SmallTableRow,
+	SmallTableCell,
+	EditTransparentIcon
+} from 'selfkey-ui';
 import { withStyles } from '@material-ui/core';
 
 const styles = theme => ({
@@ -49,8 +55,16 @@ const styles = theme => ({
 	}
 });
 
+const renderLastUpdateDate = ({ updatedAt }) => moment(updatedAt).format('DD MMM YYYY, hh:mm a');
+
+// const renderAttributeLabel = ({ name }) => name || 'No label provided';
+
+const renderAttributeValue = ({ data }) => data.value || '';
+
+const renderAttributeTitle = attr => attr.type.content.title || 'No title provided';
+
 const CorporateInformation = withStyles(styles)(props => {
-	const { classes } = props;
+	const { classes, attributes = [], onEditAttribute } = props;
 	return (
 		<Grid container direction="column" spacing={32}>
 			<Grid item>
@@ -112,7 +126,36 @@ const CorporateInformation = withStyles(styles)(props => {
 												</SmallTableCell>
 											</SmallTableHeadRow>
 										</TableHead>
-										<TableBody />
+										<TableBody>
+											{attributes.map(attr => (
+												<SmallTableRow key={attr.id}>
+													<SmallTableCell className={classes.labelCell}>
+														<Typography variant="subtitle1">
+															{renderAttributeTitle(attr)}
+														</Typography>
+													</SmallTableCell>
+													<SmallTableCell className={classes.labelCell}>
+														<Typography variant="subtitle1">
+															{renderAttributeValue(attr)}
+														</Typography>
+													</SmallTableCell>
+													<SmallTableCell>
+														<Typography variant="subtitle1">
+															{renderLastUpdateDate(attr)}
+														</Typography>
+													</SmallTableCell>
+													<SmallTableCell align="right">
+														<IconButton id="editButton">
+															<EditTransparentIcon
+																onClick={() => {
+																	onEditAttribute(attr);
+																}}
+															/>
+														</IconButton>
+													</SmallTableCell>
+												</SmallTableRow>
+											))}
+										</TableBody>
 									</Table>
 								</Grid>
 							</Grid>
