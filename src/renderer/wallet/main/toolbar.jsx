@@ -82,11 +82,15 @@ const styles = theme => ({
 		width: '1px'
 	},
 	profileContainer: {
-		width: '100%',
+		left: '-33px',
 		position: 'fixed',
 		right: '2%',
 		top: '63px',
-		zIndex: '999'
+		width: '100%',
+		zIndex: '999',
+		'@media screen and (min-width: 1480px)': {
+			left: '-43px'
+		}
 	},
 	openedProfile: {
 		transform: 'scaleY(-1)',
@@ -101,17 +105,17 @@ const styles = theme => ({
 const profileStyle = theme =>
 	createStyles({
 		profile: {
-			minWidth: '198px',
-			maxWidth: '198px',
+			minWidth: '208px',
+			maxWidth: '208px',
 			float: 'right',
-			padding: '20px 15px 8px 15px',
 			borderRadius: '4px',
 			backgroundColor: '#1E262E',
 			border: 'solid 1px #303c49'
 		},
 		profileFooter: {
 			bottom: '7px',
-			marginTop: '10px'
+			marginTop: '10px',
+			padding: '0 15px'
 		},
 		horizontalDivider: {
 			height: '1px',
@@ -125,21 +129,33 @@ const profileStyle = theme =>
 			justifyContent: 'center'
 		},
 		profileCorporate: {
-			padding: '20px 0px 14px 6px',
+			padding: '20px 15px 14px',
 			display: 'flex',
 			flexDirection: 'row',
 			alignItems: 'center',
 			justifyContent: 'center'
 		},
 		profileDetail: {
-			paddingBottom: '20px',
-			cursor: 'pointer'
+			cursor: 'pointer',
+			padding: '10px 15px 10px 15px',
+			width: '208px',
+			'&:hover': {
+				backgroundColor: '#313D49'
+			},
+			'&:first-child': {
+				marginTop: '5px'
+			}
 		},
 		profileName: {
 			paddingLeft: '15px'
 		},
 		button: {
 			width: '189px'
+		},
+		smallButton: {
+			fontSize: '10px',
+			letterSpacing: '0.4px',
+			width: '100%'
 		}
 	});
 
@@ -167,10 +183,10 @@ const ProfileList = withStyles(profileStyle)(
 									)}
 								</Grid>
 								<Grid item sm={8} className={classes.profileName}>
-									<Typography variant="h6">
+									<Typography variant="subtitle1" style={{ marginBottom: '5px' }}>
 										{el.name || defaultIdentityName(el)}
 									</Typography>
-									<Typography variant="subtitle1" color="secondary">
+									<Typography variant="subtitle2" color="secondary">
 										{`${el.type.charAt(0).toUpperCase() +
 											el.type.slice(1)} Profile`}
 									</Typography>
@@ -185,7 +201,7 @@ const ProfileList = withStyles(profileStyle)(
 							<Button
 								variant="outlined"
 								size="small"
-								className={classes.button}
+								className={classes.smallButton}
 								onClick={onClickPersonal}
 							>
 								NEW PERSONAL PROFILE
@@ -194,7 +210,12 @@ const ProfileList = withStyles(profileStyle)(
 					</Grid> */}
 					<Grid container className={classes.profileCorporate}>
 						<Grid item xs={12}>
-							<Button variant="outlined" size="small" onClick={onClickCorporate}>
+							<Button
+								variant="outlined"
+								size="small"
+								onClick={onClickCorporate}
+								className={classes.smallButton}
+							>
 								NEW CORPORATE PROFILE
 							</Button>
 						</Grid>
