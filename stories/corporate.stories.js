@@ -10,10 +10,16 @@ import { CorporateApplicationsSummary } from '../src/renderer/corporate/common/c
 import { CorporateCapTable } from '../src/renderer/corporate/common/corporate-cap-table';
 import { CorporateShareholding } from '../src/renderer/corporate/common/corporate-shareholding';
 import { CorporateOrgChart } from '../src/renderer/corporate/common/corporate-org-chart';
+import { CorporateInformation } from '../src/renderer/corporate/common/corporate-information';
 import { CorporateWizard } from '../src/renderer/corporate/wizard/corporate-wizard';
 import { CorporateAddMember } from '../src/renderer/corporate/member/corporate-add-member';
 
-import { corporateApplications, corporateCapTable, dummyMembers } from './corporate-data';
+import {
+	corporateApplications,
+	corporateCapTable,
+	dummyMembers,
+	corporateAttributes
+} from './corporate-data';
 
 storiesOf('Corporate', module).add('Dashboard', () => (
 	<div style={{ width: '1140px' }}>
@@ -56,7 +62,7 @@ storiesOf('Corporate/Dashboard Tabs', module)
 		/>
 	));
 
-storiesOf('Corporate/Blocks', module)
+storiesOf('Corporate/Components', module)
 	.add('Company', () => (
 		<CorporateDetails
 			name="Company Name"
@@ -84,6 +90,12 @@ storiesOf('Corporate/Blocks', module)
 	.add('Corporate Shareholding', () => <CorporateShareholding cap={corporateCapTable} />)
 	.add('Corporate Org Chart', () => (
 		<CorporateOrgChart name="Company Name" cap={corporateCapTable} />
+	))
+	.add('Corporate Informations', () => (
+		<CorporateInformation
+			attributes={corporateAttributes}
+			onEditAttribute={action('on edit attribute')}
+		/>
 	));
 
 storiesOf('Corporate', module).add('Wizard', () => <CorporateWizard members={dummyMembers} />);

@@ -1,5 +1,8 @@
 import Ajv from 'ajv';
+import RefParser from 'json-schema-ref-parser';
 import { Logger } from 'common/logger';
+import { sleep } from '../utils/async';
+import fetch from 'node-fetch';
 
 const log = new Logger('identity-utils');
 
@@ -220,6 +223,66 @@ jsonSchema.removeMeta = (schema, maxDepth = 10) => {
 		schema.items = jsonSchema.removeMeta(schema.items, maxDepth - 1);
 	}
 	return schema;
+};
+
+jsonSchema.loadRemoteSchema = async (url, options, attempt = 1) => {
+	if (options.env === 'development') {
+		url = url.replace('/schema/', '/dev-schema/');
+	}
+	try {
+		let res = await fetch(url);
+		if (res.status >= 400) {
+			throw new Error('Failed to fetch schema from remote');
+		}
+		return await res.json();
+	} catch (error) {
+		log.error('Load schema %s attempt %d error, %s', url, attempt, error);
+		if (attempt <= 3) {
+			await sleep(attempt * 200);
+			return jsonSchema.loadRemoteSchema(url, options, attempt + 1);
+		}
+		throw error;
+	}
+};
+
+jsonSchema.dereference = (schema, options) => {
+	const resolver = {
+		order: 1,
+		canRead: /^platform\.selfkey\.org:/i,
+		async read(file) {
+			return jsonSchema.loadRemoteSchema(file, options);
+		}
+	};
+	return RefParser.dereference(schema, { resolve: { selfkey: resolver } });
+};
+
+jsonSchema.getDefaultRepo = (schema, options) => {
+	if (!schema.identityAttributeRepository) {
+		return null;
+	}
+	return options.env === 'development'
+		? schema.identityAttributeRepository.replace('/repository.json', '/dev-repository.json')
+		: schema.identityAttributeRepository;
+};
+
+jsonSchema.loadRemoteRepository = async (url, options, attempt = 1) => {
+	if (options.env === 'development') {
+		url = url.replace('/repository.json', '/dev-repository.json');
+	}
+	try {
+		let res = await fetch(url);
+		if (res.status >= 400) {
+			throw new Error('Failed to fetch repository from remote');
+		}
+		return await res.json();
+	} catch (error) {
+		log.error('Load repository %s attempt %d error, %s', url, attempt, error);
+		if (attempt <= 3) {
+			await sleep(attempt * 200);
+			return jsonSchema.loadRemoteRepository(url, options, attempt + 1);
+		}
+		throw error;
+	}
 };
 
 export default { identityAttributes, jsonSchema };

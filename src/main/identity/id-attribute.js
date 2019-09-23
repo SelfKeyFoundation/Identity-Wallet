@@ -2,7 +2,9 @@ import { Model, transaction } from 'objection';
 import _ from 'lodash';
 import BaseModel from '../common/base-model';
 import Document from './document';
+import { isDevMode } from 'common/utils/common';
 
+const env = isDevMode() ? 'development' : 'production';
 const TABLE_NAME = 'id_attributes';
 
 export class IdAttribute extends BaseModel {
@@ -23,7 +25,8 @@ export class IdAttribute extends BaseModel {
 				name: { type: 'string' },
 				identityId: { type: 'integer' },
 				typeId: { type: 'integer' },
-				data: { type: 'object' }
+				data: { type: 'object' },
+				env: { type: 'string', enum: ['production', 'development'], default: env }
 			}
 		};
 	}
@@ -64,7 +67,9 @@ export class IdAttribute extends BaseModel {
 		const tx = await transaction.start(this.knex());
 		attr = { ...attr };
 		try {
-			let newAttr = await this.query(tx).insertAndFetch(_.omit(attr, ['documents']));
+			let newAttr = await this.query(tx).insertAndFetch(
+				_.omit({ ...attr, env }, ['documents'])
+			);
 			attr.id = newAttr.id;
 			attr = await this.update(attr, tx);
 			await tx.commit();
@@ -124,7 +129,7 @@ export class IdAttribute extends BaseModel {
 		return this.query()
 			.select(`${TABLE_NAME}.*`)
 			.join('id_attribute_types', `${TABLE_NAME}.typeId`, 'id_attribute_types.id')
-			.where({ identityId })
+			.where({ identityId, [`${TABLE_NAME}.env`]: env })
 			.whereIn('id_attribute_types.url', urls);
 	}
 }
