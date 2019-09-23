@@ -115,7 +115,8 @@ const common = {
 	],
 	features: {
 		paymentContract: false,
-		scheduler: false
+		scheduler: true,
+		corporate: false
 	}
 };
 
@@ -135,7 +136,8 @@ const dev = {
 	paymentSplitterAddress: '0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5',
 	features: {
 		paymentContract: false,
-		scheduler: true
+		scheduler: true,
+		corporate: true
 	},
 	testWalletAddress: '0x23d233933c86f93b74705cf0d236b39f474249f8',
 	testDidAddress: '0xee10a3335f48e10b444e299cf017d57879109c1e32cec3e31103ceca7718d0ec'
@@ -157,7 +159,8 @@ const prod = {
 	paymentSplitterAddress: '0xC3f1fbe8f4BE283426F913f0F2BE8329fC6BE041',
 	features: {
 		paymentContract: false,
-		scheduler: true
+		scheduler: true,
+		corporate: false
 	}
 };
 
