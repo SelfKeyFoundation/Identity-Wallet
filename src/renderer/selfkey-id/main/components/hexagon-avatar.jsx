@@ -29,18 +29,20 @@ const styles = theme => ({
 	}
 });
 
-export const HexagonAvatar = withStyles(styles)(({ classes, src = avatarPlaceholder, onClick }) => (
-	<div className={classes.hexagon} onClick={onClick}>
-		<div className={classes.hexagonIn}>
-			<div
-				className={classes.hexagonIn2}
-				style={{
-					backgroundImage: `url(${src === null ? avatarPlaceholder : src})`,
-					backgroundSize: src === null ? 'auto' : 'cover'
-				}}
-			/>
+export const HexagonAvatar = withStyles(styles)(
+	({ classes, src = avatarPlaceholder, onClick, className }) => (
+		<div className={`${classes.hexagon} ${className}`} onClick={onClick}>
+			<div className={classes.hexagonIn}>
+				<div
+					className={classes.hexagonIn2}
+					style={{
+						backgroundImage: `url(${src === null ? avatarPlaceholder : src})`,
+						backgroundSize: src === null ? 'auto' : 'cover'
+					}}
+				/>
+			</div>
 		</div>
-	</div>
-));
+	)
+);
 
 export default HexagonAvatar;

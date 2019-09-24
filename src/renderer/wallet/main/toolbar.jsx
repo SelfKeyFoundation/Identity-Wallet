@@ -18,6 +18,7 @@ import {
 import PriceBox from '../../price-box';
 import Sidebar from './sidebar';
 import { featureIsEnabled } from 'common/feature-flags';
+import { HexagonAvatar } from '../../selfkey-id/main/components/hexagon-avatar';
 
 const styles = theme => ({
 	wrapper: {
@@ -116,6 +117,11 @@ const styles = theme => ({
 	},
 	priceBox: {
 		paddingRight: '10px'
+	},
+	profileAvatar: {
+		width: '40px',
+		height: '40px',
+		margin: 0
 	}
 });
 
@@ -176,14 +182,19 @@ const profileStyle = theme =>
 			fontSize: '10px',
 			letterSpacing: '0.4px',
 			width: '100%'
+		},
+		profileListAvatar: {
+			width: '28px',
+			height: '28px',
+			margin: 0
 		}
 	});
 
-const defaultIdentityName = ({ type }) =>
-	type === 'individual' ? 'New individual' : 'New company';
+const defaultIdentityName = ({ type }, walletName) =>
+	type === 'individual' ? walletName || 'New individual' : 'New company';
 
 const ProfileList = withStyles(profileStyle)(
-	({ classes, profiles, isOpen, onProfileSelect, onClickCorporate, closeProfile }) => {
+	({ classes, profiles, wallet, isOpen, onProfileSelect, onClickCorporate, closeProfile }) => {
 		return (
 			isOpen && (
 				<ClickAwayListener onClickAway={closeProfile}>
@@ -199,13 +210,18 @@ const ProfileList = withStyles(profileStyle)(
 									<Grid item sm={2}>
 										{el.type === 'corporate' ? (
 											<SmallRoundCompany />
+										) : wallet.profilePicture ? (
+											<HexagonAvatar
+												src={wallet.profilePicture}
+												className={classes.profileListAvatar}
+											/>
 										) : (
 											<SmallRoundPerson />
 										)}
 									</Grid>
 									<Grid item sm={8} className={classes.profileName}>
 										<Typography variant="subtitle1">
-											{el.name || defaultIdentityName(el)}
+											{el.name || defaultIdentityName(el, wallet.profileName)}
 										</Typography>
 										<Typography variant="subtitle2" color="secondary">
 											{`${el.type.charAt(0).toUpperCase() +
@@ -252,11 +268,21 @@ const ProfileList = withStyles(profileStyle)(
 );
 
 const Profile = withStyles(styles)(
-	({ classes, profile, isOpen, onProfileClick, onProfileNavigate }) => (
+	({ classes, profile, wallet, isOpen, onProfileClick, onProfileNavigate }) => (
 		<Grid container wrap="nowrap" justify="space-between" onClick={onProfileNavigate}>
-			<Grid item>{profile.type === 'individual' ? <RoundPerson /> : <RoundCompany />}</Grid>
+			<Grid item>
+				{profile.type === 'corporate' ? (
+					<RoundCompany />
+				) : wallet.profilePicture ? (
+					<HexagonAvatar src={wallet.profilePicture} className={classes.profileAvatar} />
+				) : (
+					<RoundPerson />
+				)}
+			</Grid>
 			<Grid item className={classes.nameRole}>
-				<Typography variant="h6">{profile.name || defaultIdentityName(profile)}</Typography>
+				<Typography variant="h6">
+					{profile.name || defaultIdentityName(profile, wallet.profileName)}
+				</Typography>
 				<Typography variant="subtitle1" color="secondary">
 					{profile.type === 'individual' ? 'Personal Profile' : 'Corporate Profile'}
 				</Typography>
@@ -286,6 +312,7 @@ class Toolbar extends Component {
 			onProfileNavigate,
 			onProfileSelect,
 			profiles,
+			wallet,
 			onCreateCorporateProfileClick,
 			primaryToken
 		} = this.props;
@@ -329,6 +356,7 @@ class Toolbar extends Component {
 							>
 								<Grid item className={classes.toolbarProfile}>
 									<Profile
+										wallet={wallet}
 										profile={selectedProfile}
 										isOpen={isProfileOpen}
 										onProfileClick={onProfileClick}
@@ -341,6 +369,7 @@ class Toolbar extends Component {
 				</Grid>
 				<Grid id="profile" className={classes.profileContainer}>
 					<ProfileList
+						wallet={wallet}
 						profiles={profiles}
 						isOpen={isProfileOpen}
 						onClickCorporate={onCreateCorporateProfileClick}
