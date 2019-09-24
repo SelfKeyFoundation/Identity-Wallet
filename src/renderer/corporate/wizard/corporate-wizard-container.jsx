@@ -22,13 +22,13 @@ class CorporateWizardContainerComponent extends Component {
 	}
 
 	componentDidMount() {
-		if (this.props.identity.type !== 'corporate') {
+		if (this.props.identity && this.props.identity.type !== 'corporate') {
 			this.props.dispatch(identityOperations.navigateToProfileOperation());
 		}
 	}
 
 	componentDidUpdate() {
-		if (this.props.identity.type !== 'corporate') {
+		if (this.props.identity && this.props.identity.type !== 'corporate') {
 			this.props.dispatch(identityOperations.navigateToProfileOperation());
 		}
 	}
