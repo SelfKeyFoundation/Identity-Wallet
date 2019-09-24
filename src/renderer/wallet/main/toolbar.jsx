@@ -253,6 +253,7 @@ const ProfileList = withStyles(profileStyle)(
 											variant="outlined"
 											size="small"
 											onClick={onClickCorporate}
+											className={classes.smallButton}
 										>
 											New Corporate Profile
 										</Button>
