@@ -97,6 +97,8 @@ storiesOf('Corporate/Components', module)
 		<CorporateInformation
 			attributes={corporateAttributes}
 			onEditAttribute={action('on edit attribute')}
+			onDeleteAttribute={action('on delete attribute')}
+			onAddAttribute={action('on add attribute')}
 		/>
 	))
 	.add('Corporate Documents', () => (

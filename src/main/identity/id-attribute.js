@@ -105,7 +105,7 @@ export class IdAttribute extends BaseModel {
 	}
 
 	static findAllByIdentityId(identityId) {
-		return this.query().where({ identityId });
+		return this.query().where({ identityId, env });
 	}
 
 	static async delete(id) {
