@@ -247,7 +247,7 @@ class Sidebar extends Component {
 							component={dashboard}
 							key="dashboard"
 						>
-							<ListItemIcon className={classes.listItemIcon}>
+							<ListItemIcon className={classes.listItemIcon} title="Dashboard">
 								<DashboardMenuIcon width="16px" height="16px" viewBox="0 0 16 16" />
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
@@ -260,7 +260,7 @@ class Sidebar extends Component {
 							component={marketplace}
 							key="marketplace"
 						>
-							<ListItemIcon className={classes.listItemIcon}>
+							<ListItemIcon className={classes.listItemIcon} title="Marketplace">
 								<MarketplaceMenuIcon
 									width="15px"
 									height="16px"
@@ -277,7 +277,7 @@ class Sidebar extends Component {
 							component={addressBook}
 							key="addressBook"
 						>
-							<ListItemIcon className={classes.listItemIcon}>
+							<ListItemIcon className={classes.listItemIcon} title="Address Book">
 								<AddressBookMenuIcon
 									width="15px"
 									height="16px"
@@ -295,7 +295,7 @@ class Sidebar extends Component {
 							component={selfkeyId}
 							key="selfkeyId"
 						>
-							<ListItemIcon className={classes.listItemIcon}>
+							<ListItemIcon className={classes.listItemIcon} title="My Profile">
 								<SelfkeyIDMenuIcon width="14px" height="20px" viewBox="0 0 14 20" />
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
@@ -377,7 +377,7 @@ class Sidebar extends Component {
 							}}
 							key="helpAndSupport"
 						>
-							<ListItemIcon className={classes.listItemIcon}>
+							<ListItemIcon className={classes.listItemIcon} title="Help & Support">
 								<MenuHelpIcon />
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
@@ -401,7 +401,7 @@ class Sidebar extends Component {
 							component={switchAccount}
 							key="switchAccount"
 						>
-							<ListItemIcon className={classes.listItemIcon}>
+							<ListItemIcon className={classes.listItemIcon} title="Switch Wallet">
 								<SwitchAccountsIcon />
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
@@ -409,7 +409,7 @@ class Sidebar extends Component {
 							</Typography>
 						</ListItem>
 						<ListItem className={classes.listItem} key="quit" onClick={window.quit}>
-							<ListItemIcon className={classes.listItemIcon}>
+							<ListItemIcon className={classes.listItemIcon} title="Quit">
 								<PowerIcon />
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
