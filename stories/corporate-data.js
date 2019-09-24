@@ -165,3 +165,53 @@ export const corporateAttributes = [
 		}
 	}
 ];
+
+export const corporateDocuments = [
+	{
+		createdAt: 1568107330518,
+		updatedAt: 1568282607094,
+		name: 'Certificate of Incorporation',
+		type: {
+			content: {
+				$id:
+					'http://platform.selfkey.org/schema/attribute/certificate-of-incorporation.json',
+				title: 'Certificate of Incorporation',
+				entityType: ['corporate']
+			}
+		},
+		documents: [
+			{
+				name: 'certificate.pdf',
+				mimeType: 'application/pdf'
+			}
+		],
+		data: {
+			value: {
+				expires: 1568282607094
+			}
+		}
+	},
+	{
+		createdAt: 1568107330518,
+		updatedAt: 1568282607094,
+		name: 'Member Register',
+		type: {
+			content: {
+				$id: 'http://platform.selfkey.org/schema/attribute/member-register.json',
+				title: 'Member Register',
+				entityType: ['corporate']
+			}
+		},
+		documents: [
+			{
+				name: 'member_register.doc',
+				mimeType: 'application/msword'
+			}
+		],
+		data: {
+			value: {
+				expires: 1568107330518
+			}
+		}
+	}
+];
