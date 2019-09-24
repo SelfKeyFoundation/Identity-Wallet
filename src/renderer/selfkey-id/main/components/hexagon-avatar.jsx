@@ -22,6 +22,7 @@ const styles = theme => ({
 		backgroundPosition: '50%',
 		backgroundRepeat: 'no-repeat',
 		backgroundSize: 'cover',
+		borderRadius: '50%',
 		height: '100%',
 		transform: 'rotate(-60deg)',
 		visibility: 'visible',
