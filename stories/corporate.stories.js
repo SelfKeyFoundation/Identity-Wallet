@@ -10,15 +10,19 @@ import { CorporateApplicationsSummary } from '../src/renderer/corporate/common/c
 import { CorporateCapTable } from '../src/renderer/corporate/common/corporate-cap-table';
 import { CorporateShareholding } from '../src/renderer/corporate/common/corporate-shareholding';
 import { CorporateOrgChart } from '../src/renderer/corporate/common/corporate-org-chart';
+import { CorporateInformation } from '../src/renderer/corporate/common/corporate-information';
 import { CorporateWizard } from '../src/renderer/corporate/wizard/corporate-wizard';
 import { CorporateAddMember } from '../src/renderer/corporate/member/corporate-add-member';
+import { CorporateDocuments } from '../src/renderer/corporate/common/corporate-documents';
 
 import {
 	corporateApplications,
 	corporateCapTable,
 	dummyMembers,
 	entityTypes,
-	legalJurisdictions
+	legalJurisdictions,
+	corporateAttributes,
+	corporateDocuments
 } from './corporate-data';
 
 storiesOf('Corporate', module).add('Dashboard', () => (
@@ -62,7 +66,7 @@ storiesOf('Corporate/Dashboard Tabs', module)
 		/>
 	));
 
-storiesOf('Corporate/Blocks', module)
+storiesOf('Corporate/Components', module)
 	.add('Company', () => (
 		<CorporateDetails
 			name="Company Name"
@@ -90,6 +94,22 @@ storiesOf('Corporate/Blocks', module)
 	.add('Corporate Shareholding', () => <CorporateShareholding cap={corporateCapTable} />)
 	.add('Corporate Org Chart', () => (
 		<CorporateOrgChart name="Company Name" cap={corporateCapTable} />
+	))
+	.add('Corporate Informations', () => (
+		<CorporateInformation
+			attributes={corporateAttributes}
+			onEditAttribute={action('on edit attribute')}
+			onDeleteAttribute={action('on delete attribute')}
+			onAddAttribute={action('on add attribute')}
+		/>
+	))
+	.add('Corporate Documents', () => (
+		<CorporateDocuments
+			documents={corporateDocuments}
+			onAddDocument={action('on add document')}
+			onEditDocument={action('on edit document')}
+			onDeleteDocument={action('on delete document')}
+		/>
 	));
 
 storiesOf('Corporate/Wizard', module)

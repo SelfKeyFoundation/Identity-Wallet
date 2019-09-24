@@ -161,7 +161,7 @@ export class WalletService {
 
 	async unlockWalletWithPublicKey(publicKey, hwPath, profile) {
 		let wallet = await Wallet.findByPublicKey(publicKey);
-		this.setDefaultAddress(publicKey);
+		this.web3Service.setDefaultAddress(publicKey);
 
 		if (!wallet) {
 			wallet = await Wallet.create({

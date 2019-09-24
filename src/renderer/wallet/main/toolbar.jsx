@@ -17,6 +17,7 @@ import {
 } from 'selfkey-ui';
 import PriceBox from '../../price-box';
 import Sidebar from './sidebar';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({
 	wrapper: {
@@ -81,11 +82,15 @@ const styles = theme => ({
 		width: '1px'
 	},
 	profileContainer: {
-		width: '100%',
+		left: '-33px',
 		position: 'fixed',
 		right: '2%',
 		top: '63px',
-		zIndex: '999'
+		width: '100%',
+		zIndex: '999',
+		'@media screen and (min-width: 1480px)': {
+			left: '-43px'
+		}
 	},
 	openedProfile: {
 		transform: 'scaleY(-1)',
@@ -94,23 +99,40 @@ const styles = theme => ({
 	closedProfile: {
 		transform: 'scaleY(1)',
 		'-webkit-transform': 'scaleY(1)'
+	},
+	profileIcon: {
+		marginTop: '13px',
+		paddingRight: '15px'
+	},
+	absolute: {
+		position: 'absolute'
+	},
+	maxWidth: {
+		maxWidth: '240px'
+	},
+	toolbarProfile: {
+		cursor: 'pointer',
+		width: '222px'
+	},
+	priceBox: {
+		paddingRight: '10px'
 	}
 });
 
 const profileStyle = theme =>
 	createStyles({
 		profile: {
-			minWidth: '198px',
-			maxWidth: '198px',
+			minWidth: '208px',
+			maxWidth: '208px',
 			float: 'right',
-			padding: '20px 15px 8px 15px',
 			borderRadius: '4px',
 			backgroundColor: '#1E262E',
 			border: 'solid 1px #303c49'
 		},
 		profileFooter: {
 			bottom: '7px',
-			marginTop: '10px'
+			marginTop: '10px',
+			padding: '0 15px'
 		},
 		horizontalDivider: {
 			height: '1px',
@@ -124,21 +146,36 @@ const profileStyle = theme =>
 			justifyContent: 'center'
 		},
 		profileCorporate: {
-			padding: '20px 0px 14px 6px',
+			padding: '20px 15px 14px',
 			display: 'flex',
 			flexDirection: 'row',
 			alignItems: 'center',
 			justifyContent: 'center'
 		},
 		profileDetail: {
-			paddingBottom: '20px',
-			cursor: 'pointer'
+			cursor: 'pointer',
+			padding: '10px 15px 10px 15px',
+			width: '208px',
+			'&:hover': {
+				backgroundColor: '#313D49'
+			},
+			'&:first-child': {
+				marginTop: '5px'
+			}
 		},
 		profileName: {
-			paddingLeft: '15px'
+			paddingLeft: '15px',
+			'& h6:first-child': {
+				marginBottom: '5px'
+			}
 		},
 		button: {
 			width: '189px'
+		},
+		smallButton: {
+			fontSize: '10px',
+			letterSpacing: '0.4px',
+			width: '100%'
 		}
 	});
 
@@ -167,20 +204,22 @@ const ProfileList = withStyles(profileStyle)(
 										)}
 									</Grid>
 									<Grid item sm={8} className={classes.profileName}>
-										<Typography variant="h6">
+										<Typography variant="subtitle1">
 											{el.name || defaultIdentityName(el)}
 										</Typography>
-										<Typography variant="subtitle1" color="secondary">
+										<Typography variant="subtitle2" color="secondary">
 											{`${el.type.charAt(0).toUpperCase() +
 												el.type.slice(1)} Profile`}
 										</Typography>
 									</Grid>
 								</Grid>
 							))}
-						<Grid className={classes.profileFooter}>
-							<div className={classes.horizontalDivider} />
-						</Grid>
-						{/* <Grid container className={classes.profilePersonal}>
+						{featureIsEnabled('corporate') && (
+							<React.Fragment>
+								<Grid className={classes.profileFooter}>
+									<div className={classes.horizontalDivider} />
+								</Grid>
+								{/* <Grid container className={classes.profilePersonal}>
 						<Grid item xs={12}>
 							<Button
 								variant="outlined"
@@ -192,13 +231,19 @@ const ProfileList = withStyles(profileStyle)(
 							</Button>
 						</Grid>
 					</Grid> */}
-						<Grid container className={classes.profileCorporate}>
-							<Grid item xs={12}>
-								<Button variant="outlined" size="small" onClick={onClickCorporate}>
-									NEW CORPORATE PROFILE
-								</Button>
-							</Grid>
-						</Grid>
+								<Grid container className={classes.profileCorporate}>
+									<Grid item xs={12}>
+										<Button
+											variant="outlined"
+											size="small"
+											onClick={onClickCorporate}
+										>
+											New Corporate Profile
+										</Button>
+									</Grid>
+								</Grid>
+							</React.Fragment>
+						)}
 					</div>
 				</ClickAwayListener>
 			)
@@ -208,7 +253,7 @@ const ProfileList = withStyles(profileStyle)(
 
 const Profile = withStyles(styles)(
 	({ classes, profile, isOpen, onProfileClick, onProfileNavigate }) => (
-		<Grid container wrap="nowrap" onClick={onProfileNavigate}>
+		<Grid container wrap="nowrap" justify="space-between" onClick={onProfileNavigate}>
 			<Grid item>{profile.type === 'individual' ? <RoundPerson /> : <RoundCompany />}</Grid>
 			<Grid item className={classes.nameRole}>
 				<Typography variant="h6">{profile.name || defaultIdentityName(profile)}</Typography>
@@ -216,7 +261,7 @@ const Profile = withStyles(styles)(
 					{profile.type === 'individual' ? 'Personal Profile' : 'Corporate Profile'}
 				</Typography>
 			</Grid>
-			<Grid item style={{ marginTop: '13px', paddingRight: '15px' }}>
+			<Grid item className={classes.profileIcon}>
 				<DropdownIcon
 					className={`${classes.menuIcon} ${
 						isOpen ? classes.openedProfile : classes.closedProfile
@@ -255,13 +300,12 @@ class Toolbar extends Component {
 					className={classes.wrapper}
 				>
 					<MenuNewIcon
-						style={{ position: 'absolute' }}
-						className={`${classes.menuIcon} ${
+						className={`${classes.menuIcon} ${classes.absolute} ${
 							isSidebarOpen ? classes.openedDrawer : classes.closedDrawer
 						}`}
 						onClick={() => onToggleMenu(!isSidebarOpen)}
 					/>
-					<Grid item xs={9} style={{ paddingRight: '10px' }}>
+					<Grid item xs={9} className={classes.priceBox}>
 						<Grid container direction="row" justify="flex-end" alignItems="center">
 							<Grid item>
 								<PriceBox cryptoCurrency={primaryToken} />
@@ -271,7 +315,7 @@ class Toolbar extends Component {
 							</Grid>
 						</Grid>
 					</Grid>
-					<Grid item xs={2} style={{ maxWidth: '240px' }}>
+					<Grid item xs={2} className={classes.maxWidth}>
 						<Grid container wrap="nowrap">
 							<Grid item className={classes.sepVertContainer}>
 								<div className={classes.sepVert} />
@@ -283,7 +327,7 @@ class Toolbar extends Component {
 								alignItems="center"
 								spacing={0}
 							>
-								<Grid item style={{ cursor: 'pointer', width: '222px' }}>
+								<Grid item className={classes.toolbarProfile}>
 									<Profile
 										profile={selectedProfile}
 										isOpen={isProfileOpen}
