@@ -18,6 +18,7 @@ import {
 } from 'selfkey-ui';
 import PriceBox from '../../price-box';
 import Sidebar from './sidebar';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({
 	wrapper: {
@@ -177,28 +178,36 @@ const ProfileList = withStyles(profileStyle)(
 								</Grid>
 							</Grid>
 						))}
-					<Grid className={classes.profileFooter}>
-						<div className={classes.horizontalDivider} />
-					</Grid>
-					{/* <Grid container className={classes.profilePersonal}>
-						<Grid item xs={12}>
-							<Button
-								variant="outlined"
-								size="small"
-								className={classes.button}
-								onClick={onClickPersonal}
-							>
-								NEW PERSONAL PROFILE
-							</Button>
-						</Grid>
-					</Grid> */}
-					<Grid container className={classes.profileCorporate}>
-						<Grid item xs={12}>
-							<Button variant="outlined" size="small" onClick={onClickCorporate}>
-								NEW CORPORATE PROFILE
-							</Button>
-						</Grid>
-					</Grid>
+					{featureIsEnabled('corporate') && (
+						<React.Fragment>
+							<Grid className={classes.profileFooter}>
+								<div className={classes.horizontalDivider} />
+							</Grid>
+							{/* <Grid container className={classes.profilePersonal}>
+								<Grid item xs={12}>
+									<Button
+										variant="outlined"
+										size="small"
+										className={classes.button}
+										onClick={onClickPersonal}
+									>
+										New Personal Profile
+									</Button>
+								</Grid>
+							</Grid> */}
+							<Grid container className={classes.profileCorporate}>
+								<Grid item xs={12}>
+									<Button
+										variant="outlined"
+										size="small"
+										onClick={onClickCorporate}
+									>
+										New Corporate Profile
+									</Button>
+								</Grid>
+							</Grid>
+						</React.Fragment>
+					)}
 				</div>
 			)
 		);
