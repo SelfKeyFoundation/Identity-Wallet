@@ -9,14 +9,16 @@ import {
 	Table,
 	TableHead,
 	TableBody,
-	IconButton
+	IconButton,
+	Button
 } from '@material-ui/core';
 import {
 	IdCardIcon,
 	SmallTableHeadRow,
 	SmallTableRow,
 	SmallTableCell,
-	EditTransparentIcon
+	EditTransparentIcon,
+	DeleteIcon
 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core';
 
@@ -64,7 +66,7 @@ const renderAttributeValue = ({ data }) => data.value || '';
 const renderAttributeTitle = attr => attr.type.content.title || 'No title provided';
 
 const CorporateInformation = withStyles(styles)(props => {
-	const { classes, attributes = [], onEditAttribute } = props;
+	const { classes, attributes = [], onEditAttribute, onDeleteAttribute, onAddAttribute } = props;
 	return (
 		<Grid container direction="column" spacing={32}>
 			<Grid item>
@@ -145,18 +147,37 @@ const CorporateInformation = withStyles(styles)(props => {
 														</Typography>
 													</SmallTableCell>
 													<SmallTableCell align="right">
-														<IconButton id="editButton">
-															<EditTransparentIcon
-																onClick={() => {
-																	onEditAttribute(attr);
-																}}
-															/>
+														<IconButton
+															id="editButton"
+															onClick={() => onEditAttribute(attr)}
+														>
+															<EditTransparentIcon />
+														</IconButton>
+														<IconButton
+															id="deleteButton"
+															onClick={() => onDeleteAttribute(attr)}
+														>
+															<DeleteIcon />
 														</IconButton>
 													</SmallTableCell>
 												</SmallTableRow>
 											))}
 										</TableBody>
 									</Table>
+								</Grid>
+							</Grid>
+							<Grid container item spacing={0} justify="center">
+								<Grid item>
+									<Button
+										id="addAttributes"
+										variant="outlined"
+										size="large"
+										color="secondary"
+										onClick={onAddAttribute}
+										className={classes.button}
+									>
+										Add Information
+									</Button>
 								</Grid>
 							</Grid>
 						</Grid>
