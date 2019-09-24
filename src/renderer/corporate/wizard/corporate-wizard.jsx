@@ -254,7 +254,7 @@ const CompanyInformation = withStyles(styles)(props => {
 															<Grid
 																container
 																direction="row"
-																justify="space-between"
+																justify="s pace-between"
 																wrap="nowrap"
 																xs={12}
 															>

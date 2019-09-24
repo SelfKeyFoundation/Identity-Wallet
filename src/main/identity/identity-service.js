@@ -128,6 +128,10 @@ export class IdentityService {
 		return Identity.updateSetup({ id, isSetupFinished });
 	}
 
+	updateIdentityName(name, id) {
+		return Identity.updateName({ id, name });
+	}
+
 	updateIdentityDID(did, id) {
 		did = did.replace('did:selfkey:', '');
 		return Identity.updateDID({ did, id });

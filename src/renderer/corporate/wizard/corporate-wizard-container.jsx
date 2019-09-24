@@ -4,23 +4,38 @@ import { connect } from 'react-redux';
 import { appSelectors } from 'common/app';
 import { CorporateWizard } from './corporate-wizard';
 import { push } from 'connected-react-router';
-import { identityOperations } from 'common/identity';
+import { identityOperations, identitySelectors } from 'common/identity';
 
 class CorporateWizardContainerComponent extends Component {
-	state = {
-		errors: {},
-		jurisdiction: null,
-		taxId: null,
-		entityType: null,
-		email: null,
-		entityName: null,
-		creationDate: null
-	};
+	constructor(props) {
+		super(props);
+		const { basicIdentity = {} } = props;
+		this.state = {
+			errors: {},
+			jurisdiction: basicIdentity.jurisdiction || '',
+			taxId: basicIdentity.taxId || null,
+			entityType: basicIdentity.entityType || '',
+			email: basicIdentity.email || null,
+			entityName: basicIdentity.entityName || null,
+			creationDate: basicIdentity.creationDate || null
+		};
+	}
+
+	componentDidMount() {
+		if (this.props.identity.type !== 'corporate') {
+			this.props.dispatch(identityOperations.navigateToProfileOperation());
+		}
+	}
+
+	componentDidUpdate() {
+		if (this.props.identity.type !== 'corporate') {
+			this.props.dispatch(identityOperations.navigateToProfileOperation());
+		}
+	}
 
 	handleFieldChange = name => evt => {
 		const errors = { ...this.state.errors };
 		let value = evt;
-
 		if (evt && evt.target) {
 			value = evt.target.value;
 		}
@@ -37,8 +52,8 @@ class CorporateWizardContainerComponent extends Component {
 	handleContinueClick = evt => {
 		evt && evt.preventDefault();
 		this.props.dispatch(
-			identityOperations.createCorporateProfileOperation(
-				_.pick(
+			identityOperations.createCorporateProfileOperation({
+				..._.pick(
 					this.state,
 					'jurisdiction',
 					'taxId',
@@ -46,8 +61,9 @@ class CorporateWizardContainerComponent extends Component {
 					'email',
 					'entityName',
 					'creationDate'
-				)
-			)
+				),
+				identityId: this.props.match.params.identityId
+			})
 		);
 	};
 
@@ -87,6 +103,7 @@ class CorporateWizardContainerComponent extends Component {
 				{...this.props}
 				{...companyForm}
 				isDisabled={this.isDisabled()}
+				onFieldChange={this.handleFieldChange}
 				onContinueClick={this.handleContinueClick}
 				onCancelClick={this.handleCancelClick}
 			/>
@@ -135,7 +152,13 @@ class CorporateWizardContainerComponent extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		walletType: appSelectors.selectWalletType(state)
+		basicIdentity: identitySelectors.selectCorporateProfile(
+			state,
+			props.match.params.identityId
+		),
+		walletType: appSelectors.selectWalletType(state),
+		jurisdictions: identitySelectors.selectCorporateJurisdictions(state),
+		entityTypes: identitySelectors.selectCorporateLegalEntityTypes(state)
 		// members: dummyMembers
 	};
 };

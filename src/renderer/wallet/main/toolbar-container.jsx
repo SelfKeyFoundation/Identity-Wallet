@@ -40,7 +40,13 @@ class ToolbarContainer extends Component {
 		this.props.dispatch(identityOperations.switchProfileOperation(identity));
 	};
 
+	handleProfileNavigate = evt => {
+		evt.preventDefault();
+		this.props.dispatch(identityOperations.navigateToProfileOperation());
+	};
+
 	handleProfileClick = evt => {
+		evt && evt.stopPropagation();
 		this.toggleProfile(!this.state.isProfileOpen);
 	};
 	render() {
@@ -57,6 +63,7 @@ class ToolbarContainer extends Component {
 				onToggleMenu={this.toggleDrawer}
 				primaryToken={config.constants.primaryToken}
 				closeProfile={this.closeProfile}
+				onProfileNavigate={this.handleProfileNavigate}
 			/>
 		);
 	}

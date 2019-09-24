@@ -51,6 +51,7 @@ import CreateDIDProcessing from '../../selfkey-id/main/components/create-did-pro
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
 import CorporateWizardContainer from '../../corporate/wizard/corporate-wizard-container';
 import CorporateAddMemberContainer from '../../corporate/member/corporate-add-member-container';
+import { CorporateDashboardPage } from '../../corporate';
 
 const styles = theme => ({
 	headerSection: {
@@ -227,8 +228,16 @@ class Main extends Component {
 						component={CorporateWizardContainer}
 					/>
 					<Route
+						path={`${match.path}/:identityId/setup-corporate-profile`}
+						component={CorporateWizardContainer}
+					/>
+					<Route
 						path={`${match.path}/corporate-add-member`}
 						component={CorporateAddMemberContainer}
+					/>
+					<Route
+						path={`${match.path}/corporate-dashboard`}
+						component={CorporateDashboardPage}
 					/>
 				</Grid>
 			</Grid>

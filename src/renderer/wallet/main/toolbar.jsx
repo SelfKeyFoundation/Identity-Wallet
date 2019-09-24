@@ -7,7 +7,6 @@ import {
 	Typography,
 	ClickAwayListener
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 import {
 	MenuNewIcon,
 	DropdownIcon,
@@ -147,40 +146,41 @@ const defaultIdentityName = ({ type }) =>
 	type === 'individual' ? 'New individual' : 'New company';
 
 const ProfileList = withStyles(profileStyle)(
-	({ classes, profiles, isOpen, onProfileSelect, onClickCorporate }) => {
+	({ classes, profiles, isOpen, onProfileSelect, onClickCorporate, closeProfile }) => {
 		return (
 			isOpen && (
-				<div className={classes.profile}>
-					{profiles &&
-						profiles.map((el, index) => (
-							<Grid
-								container
-								key={index}
-								className={classes.profileDetail}
-								onClick={onProfileSelect(el)}
-							>
-								<Grid item sm={2}>
-									{el.type === 'corporate' ? (
-										<SmallRoundCompany />
-									) : (
-										<SmallRoundPerson />
-									)}
+				<ClickAwayListener onClickAway={closeProfile}>
+					<div className={classes.profile}>
+						{profiles &&
+							profiles.map((el, index) => (
+								<Grid
+									container
+									key={index}
+									className={classes.profileDetail}
+									onClick={onProfileSelect(el)}
+								>
+									<Grid item sm={2}>
+										{el.type === 'corporate' ? (
+											<SmallRoundCompany />
+										) : (
+											<SmallRoundPerson />
+										)}
+									</Grid>
+									<Grid item sm={8} className={classes.profileName}>
+										<Typography variant="h6">
+											{el.name || defaultIdentityName(el)}
+										</Typography>
+										<Typography variant="subtitle1" color="secondary">
+											{`${el.type.charAt(0).toUpperCase() +
+												el.type.slice(1)} Profile`}
+										</Typography>
+									</Grid>
 								</Grid>
-								<Grid item sm={8} className={classes.profileName}>
-									<Typography variant="h6">
-										{el.name || defaultIdentityName(el)}
-									</Typography>
-									<Typography variant="subtitle1" color="secondary">
-										{`${el.type.charAt(0).toUpperCase() +
-											el.type.slice(1)} Profile`}
-									</Typography>
-								</Grid>
-							</Grid>
-						))}
-					<Grid className={classes.profileFooter}>
-						<div className={classes.horizontalDivider} />
-					</Grid>
-					{/* <Grid container className={classes.profilePersonal}>
+							))}
+						<Grid className={classes.profileFooter}>
+							<div className={classes.horizontalDivider} />
+						</Grid>
+						{/* <Grid container className={classes.profilePersonal}>
 						<Grid item xs={12}>
 							<Button
 								variant="outlined"
@@ -192,35 +192,30 @@ const ProfileList = withStyles(profileStyle)(
 							</Button>
 						</Grid>
 					</Grid> */}
-					<Grid container className={classes.profileCorporate}>
-						<Grid item xs={12}>
-							<Button variant="outlined" size="small" onClick={onClickCorporate}>
-								NEW CORPORATE PROFILE
-							</Button>
+						<Grid container className={classes.profileCorporate}>
+							<Grid item xs={12}>
+								<Button variant="outlined" size="small" onClick={onClickCorporate}>
+									NEW CORPORATE PROFILE
+								</Button>
+							</Grid>
 						</Grid>
-					</Grid>
-				</div>
+					</div>
+				</ClickAwayListener>
 			)
 		);
 	}
 );
 
-const Profile = withStyles(styles)(({ classes, profile, isOpen, onProfileClick, closeProfile }) => (
-	<ClickAwayListener onClickAway={closeProfile}>
-		<Grid container wrap="nowrap">
-			<Link to="/main/selfkeyId" className={classes.flexLink}>
-				<Grid item>
-					{profile.type === 'individual' ? <RoundPerson /> : <RoundCompany />}
-				</Grid>
-				<Grid item className={classes.nameRole}>
-					<Typography variant="h6">
-						{profile.name || defaultIdentityName(profile)}
-					</Typography>
-					<Typography variant="subtitle1" color="secondary">
-						{profile.type === 'individual' ? 'Personal Profile' : 'Corporate Profile'}
-					</Typography>
-				</Grid>
-			</Link>
+const Profile = withStyles(styles)(
+	({ classes, profile, isOpen, onProfileClick, onProfileNavigate }) => (
+		<Grid container wrap="nowrap" onClick={onProfileNavigate}>
+			<Grid item>{profile.type === 'individual' ? <RoundPerson /> : <RoundCompany />}</Grid>
+			<Grid item className={classes.nameRole}>
+				<Typography variant="h6">{profile.name || defaultIdentityName(profile)}</Typography>
+				<Typography variant="subtitle1" color="secondary">
+					{profile.type === 'individual' ? 'Personal Profile' : 'Corporate Profile'}
+				</Typography>
+			</Grid>
 			<Grid item style={{ marginTop: '13px', paddingRight: '15px' }}>
 				<DropdownIcon
 					className={`${classes.menuIcon} ${
@@ -230,8 +225,8 @@ const Profile = withStyles(styles)(({ classes, profile, isOpen, onProfileClick, 
 				/>
 			</Grid>
 		</Grid>
-	</ClickAwayListener>
-));
+	)
+);
 
 class Toolbar extends Component {
 	render() {
@@ -243,6 +238,7 @@ class Toolbar extends Component {
 			closeProfile,
 			selectedProfile,
 			onProfileClick,
+			onProfileNavigate,
 			onProfileSelect,
 			profiles,
 			onCreateCorporateProfileClick,
@@ -292,7 +288,7 @@ class Toolbar extends Component {
 										profile={selectedProfile}
 										isOpen={isProfileOpen}
 										onProfileClick={onProfileClick}
-										closeProfile={closeProfile}
+										onProfileNavigate={onProfileNavigate}
 									/>
 								</Grid>
 							</Grid>
@@ -305,6 +301,7 @@ class Toolbar extends Component {
 						isOpen={isProfileOpen}
 						onClickCorporate={onCreateCorporateProfileClick}
 						onProfileSelect={onProfileSelect}
+						closeProfile={closeProfile}
 					/>
 				</Grid>
 			</div>

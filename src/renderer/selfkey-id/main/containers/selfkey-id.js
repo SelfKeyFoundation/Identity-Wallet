@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { identitySelectors } from 'common/identity';
+import { identitySelectors, identityOperations } from 'common/identity';
 import SelfkeyId from '../components/selfkey-id';
 import SelfkeyIdOverview from './selfkey-id-overview';
 import SelfkeyIdApplications from './selfkey-id-applications';
@@ -16,6 +16,9 @@ class SelfkeyIdContainerComponent extends Component {
 	async componentDidMount() {
 		const { identity, dispatch } = this.props;
 		const tab = this.props.tabValue;
+		if (this.props.identity.type !== 'individual') {
+			return this.props.dispatch(identityOperations.navigateToProfileOperation());
+		}
 		if (!identity.isSetupFinished) {
 			await dispatch(push('/selfkeyIdCreate'));
 		}
@@ -26,6 +29,12 @@ class SelfkeyIdContainerComponent extends Component {
 	handleTabChange = (event, tab) => {
 		this.setState({ tab });
 	};
+
+	componentDidUpdate() {
+		if (this.props.identity.type !== 'individual') {
+			this.props.dispatch(identityOperations.navigateToProfileOperation());
+		}
+	}
 
 	handleMarketplaceAccessClick = _ => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
 	render() {
