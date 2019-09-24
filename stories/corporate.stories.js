@@ -13,12 +13,14 @@ import { CorporateOrgChart } from '../src/renderer/corporate/common/corporate-or
 import { CorporateInformation } from '../src/renderer/corporate/common/corporate-information';
 import { CorporateWizard } from '../src/renderer/corporate/wizard/corporate-wizard';
 import { CorporateAddMember } from '../src/renderer/corporate/member/corporate-add-member';
+import { CorporateDocuments } from '../src/renderer/corporate/common/corporate-documents';
 
 import {
 	corporateApplications,
 	corporateCapTable,
 	dummyMembers,
-	corporateAttributes
+	corporateAttributes,
+	corporateDocuments
 } from './corporate-data';
 
 storiesOf('Corporate', module).add('Dashboard', () => (
@@ -95,6 +97,16 @@ storiesOf('Corporate/Components', module)
 		<CorporateInformation
 			attributes={corporateAttributes}
 			onEditAttribute={action('on edit attribute')}
+			onDeleteAttribute={action('on delete attribute')}
+			onAddAttribute={action('on add attribute')}
+		/>
+	))
+	.add('Corporate Documents', () => (
+		<CorporateDocuments
+			documents={corporateDocuments}
+			onAddDocument={action('on add document')}
+			onEditDocument={action('on edit document')}
+			onDeleteDocument={action('on delete document')}
 		/>
 	));
 
