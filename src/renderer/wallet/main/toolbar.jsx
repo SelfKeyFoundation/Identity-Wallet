@@ -99,6 +99,23 @@ const styles = theme => ({
 	closedProfile: {
 		transform: 'scaleY(1)',
 		'-webkit-transform': 'scaleY(1)'
+	},
+	profileIcon: {
+		marginTop: '13px',
+		paddingRight: '15px'
+	},
+	absolute: {
+		position: 'absolute'
+	},
+	maxWidth: {
+		maxWidth: '240px'
+	},
+	toolbarProfile: {
+		cursor: 'pointer',
+		width: '222px'
+	},
+	priceBox: {
+		paddingRight: '10px'
 	}
 });
 
@@ -147,7 +164,10 @@ const profileStyle = theme =>
 			}
 		},
 		profileName: {
-			paddingLeft: '15px'
+			paddingLeft: '15px',
+			'& h6:first-child': {
+				marginBottom: '5px'
+			}
 		},
 		button: {
 			width: '189px'
@@ -183,7 +203,7 @@ const ProfileList = withStyles(profileStyle)(
 									)}
 								</Grid>
 								<Grid item sm={8} className={classes.profileName}>
-									<Typography variant="subtitle1" style={{ marginBottom: '5px' }}>
+									<Typography variant="subtitle1">
 										{el.name || defaultIdentityName(el)}
 									</Typography>
 									<Typography variant="subtitle2" color="secondary">
@@ -242,7 +262,7 @@ const Profile = withStyles(styles)(({ classes, profile, isOpen, onProfileClick, 
 					</Typography>
 				</Grid>
 			</Link>
-			<Grid item style={{ marginTop: '13px', paddingRight: '15px' }}>
+			<Grid item className={classes.profileIcon}>
 				<DropdownIcon
 					className={`${classes.menuIcon} ${
 						isOpen ? classes.openedProfile : classes.closedProfile
@@ -280,13 +300,12 @@ class Toolbar extends Component {
 					className={classes.wrapper}
 				>
 					<MenuNewIcon
-						style={{ position: 'absolute' }}
-						className={`${classes.menuIcon} ${
+						className={`${classes.menuIcon} ${classes.absolute} ${
 							isSidebarOpen ? classes.openedDrawer : classes.closedDrawer
 						}`}
 						onClick={() => onToggleMenu(!isSidebarOpen)}
 					/>
-					<Grid item xs={9} style={{ paddingRight: '10px' }}>
+					<Grid item xs={9} className={classes.priceBox}>
 						<Grid container direction="row" justify="flex-end" alignItems="center">
 							<Grid item>
 								<PriceBox cryptoCurrency={primaryToken} />
@@ -296,7 +315,7 @@ class Toolbar extends Component {
 							</Grid>
 						</Grid>
 					</Grid>
-					<Grid item xs={2} style={{ maxWidth: '240px' }}>
+					<Grid item xs={2} className={classes.maxWidth}>
 						<Grid container wrap="nowrap">
 							<Grid item className={classes.sepVertContainer}>
 								<div className={classes.sepVert} />
@@ -308,7 +327,7 @@ class Toolbar extends Component {
 								alignItems="center"
 								spacing={0}
 							>
-								<Grid item style={{ cursor: 'pointer', width: '222px' }}>
+								<Grid item className={classes.toolbarProfile}>
 									<Profile
 										profile={selectedProfile}
 										isOpen={isProfileOpen}
