@@ -272,26 +272,28 @@ const ProfileList = withStyles(profileStyle)(
 const Profile = withStyles(styles)(
 	({ classes, profile, wallet, isOpen, onProfileClick, onProfileNavigate }) => (
 		<Grid container wrap="nowrap" justify="space-between" onClick={onProfileNavigate}>
-			<Grid item>
-				{profile.type === 'corporate' ? (
-					<RoundCompany />
-				) : wallet.profilePicture ? (
-					<HexagonAvatar
-						src={wallet.profilePicture}
-						className={classes.profileAvatar}
-						smallAvatar={true}
-					/>
-				) : (
-					<RoundPerson />
-				)}
-			</Grid>
-			<Grid item className={classes.nameRole}>
-				<Typography variant="h6">
-					{profile.name || defaultIdentityName(profile, wallet.profileName)}
-				</Typography>
-				<Typography variant="subtitle1" color="secondary">
-					{profile.type === 'individual' ? 'Personal Profile' : 'Corporate Profile'}
-				</Typography>
+			<Grid container>
+				<Grid item>
+					{profile.type === 'corporate' ? (
+						<RoundCompany />
+					) : wallet.profilePicture ? (
+						<HexagonAvatar
+							src={wallet.profilePicture}
+							className={classes.profileAvatar}
+							smallAvatar={true}
+						/>
+					) : (
+						<RoundPerson />
+					)}
+				</Grid>
+				<Grid item className={classes.nameRole}>
+					<Typography variant="h6">
+						{profile.name || defaultIdentityName(profile, wallet.profileName)}
+					</Typography>
+					<Typography variant="subtitle1" color="secondary">
+						{profile.type === 'individual' ? 'Personal Profile' : 'Corporate Profile'}
+					</Typography>
+				</Grid>
 			</Grid>
 			<Grid item className={classes.profileIcon}>
 				<DropdownIcon
