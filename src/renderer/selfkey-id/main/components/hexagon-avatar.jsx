@@ -22,20 +22,22 @@ const styles = theme => ({
 		backgroundPosition: '50%',
 		backgroundRepeat: 'no-repeat',
 		backgroundSize: 'cover',
-		borderRadius: '50%',
 		height: '100%',
 		transform: 'rotate(-60deg)',
 		visibility: 'visible',
 		width: '100%'
+	},
+	smallAvatar: {
+		borderRadius: '50%'
 	}
 });
 
 export const HexagonAvatar = withStyles(styles)(
-	({ classes, src = avatarPlaceholder, onClick, className }) => (
+	({ classes, smallAvatar = false, src = avatarPlaceholder, onClick, className }) => (
 		<div className={`${classes.hexagon} ${className}`} onClick={onClick}>
 			<div className={classes.hexagonIn}>
 				<div
-					className={classes.hexagonIn2}
+					className={`${classes.hexagonIn2} ${smallAvatar ? classes.smallAvatar : ''}`}
 					style={{
 						backgroundImage: `url(${src === null ? avatarPlaceholder : src})`,
 						backgroundSize: src === null ? 'auto' : 'cover'

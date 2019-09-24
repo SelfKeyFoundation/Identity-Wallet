@@ -214,6 +214,7 @@ const ProfileList = withStyles(profileStyle)(
 											<HexagonAvatar
 												src={wallet.profilePicture}
 												className={classes.profileListAvatar}
+												smallAvatar={true}
 											/>
 										) : (
 											<SmallRoundPerson />
@@ -275,7 +276,11 @@ const Profile = withStyles(styles)(
 				{profile.type === 'corporate' ? (
 					<RoundCompany />
 				) : wallet.profilePicture ? (
-					<HexagonAvatar src={wallet.profilePicture} className={classes.profileAvatar} />
+					<HexagonAvatar
+						src={wallet.profilePicture}
+						className={classes.profileAvatar}
+						smallAvatar={true}
+					/>
 				) : (
 					<RoundPerson />
 				)}
