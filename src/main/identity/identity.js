@@ -1,6 +1,8 @@
 import { Model } from 'objection';
 import IdAttribute from './id-attribute';
 import BaseModel from '../common/base-model';
+import { formatDataUrl, bufferFromDataUrl } from 'common/utils/document';
+
 const TABLE_NAME = 'identities';
 
 export class Identity extends BaseModel {
@@ -99,6 +101,18 @@ export class Identity extends BaseModel {
 				data: { [key]: initialIdAttributesValues[key] }
 			});
 		}
+	}
+
+	$parseDatabaseJson(json) {
+		json = super.$parseDatabaseJson(json);
+		json.profilePicture = formatDataUrl(json.profilePicture);
+		return json;
+	}
+
+	$formatDatabaseJson(json) {
+		json = super.$formatDatabaseJson(json);
+		json.profilePicture = bufferFromDataUrl(json.profilePicture);
+		return json;
 	}
 }
 

@@ -23,7 +23,6 @@ export class Wallet extends BaseModel {
 				publicKey: { type: 'string' },
 				privateKey: { type: 'string' },
 				keystoreFilePath: { type: 'string' },
-				profilePicture: { type: 'binary' },
 				isSetupFinished: { type: 'integer' },
 				profile: { type: 'string' },
 				path: { type: 'string' }
@@ -125,11 +124,6 @@ export class Wallet extends BaseModel {
 		return this.query().findOne({ publicKey: publicKey.toLowerCase() });
 	}
 
-	static async updateProfilePicture({ id, profilePicture }) {
-		let wallet = await this.query().patchAndFetchById(id, { profilePicture });
-		return wallet;
-	}
-
 	static async updateName({ id, name }) {
 		let wallet = await this.query().patchAndFetchById(id, { name });
 		return wallet;
@@ -138,12 +132,6 @@ export class Wallet extends BaseModel {
 	static async updateSetup({ id, setup }) {
 		let wallet = await this.query().patchAndFetchById(id, { isSetupFinished: setup ? 1 : 0 });
 		return wallet;
-	}
-
-	static async selectProfilePictureById(id) {
-		let itm = await this.query().findById(id);
-		if (!itm) return null;
-		return itm.profilePicture;
 	}
 
 	async hasSignedUpTo(websiteUrl) {

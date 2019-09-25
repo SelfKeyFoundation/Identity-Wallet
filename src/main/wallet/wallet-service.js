@@ -2,7 +2,6 @@ import { Logger } from 'common/logger';
 import { Wallet } from './wallet';
 import fs from 'fs';
 import path from 'path';
-import { formatDataUrl, bufferFromDataUrl } from 'common/utils/document';
 import EthUnits from 'common/utils/eth-units';
 import * as EthUtil from 'ethereumjs-util';
 
@@ -69,7 +68,6 @@ export class WalletService {
 
 		const newWallet = {
 			...wallet,
-			profilePicture: formatDataUrl(wallet.profilePicture),
 			privateKey: account.privateKey
 		};
 
@@ -82,9 +80,8 @@ export class WalletService {
 		return EthUnits.toEther(balanceInWei, 'wei');
 	}
 
-	async getWallets() {
-		const wallets = await Wallet.findAllWithKeyStoreFile();
-		return wallets.map(w => ({ ...w, profilePicture: formatDataUrl(w.profilePicture) }));
+	getWallets() {
+		return Wallet.findAllWithKeyStoreFile();
 	}
 
 	async unlockWalletWithPassword(id, password) {
@@ -100,7 +97,6 @@ export class WalletService {
 		await this.web3Service.setDefaultAccount(account);
 		return {
 			...wallet,
-			profilePicture: formatDataUrl(wallet.profilePicture),
 			publicKey: account.address,
 			privateKey: account.privateKey
 		};
@@ -127,7 +123,6 @@ export class WalletService {
 
 		const newWallet = {
 			...wallet,
-			profilePicture: formatDataUrl(wallet.profilePicture),
 			privateKey: account.privateKey
 		};
 
@@ -152,7 +147,6 @@ export class WalletService {
 		}
 		const newWallet = {
 			...wallet,
-			profilePicture: formatDataUrl(wallet.profilePicture),
 			privateKey: account.privateKey
 		};
 
@@ -192,13 +186,6 @@ export class WalletService {
 					resolve(Promise.all(promises));
 				}
 			});
-		});
-	}
-
-	updateWalletAvatar(avatar, id) {
-		return Wallet.updateProfilePicture({
-			id,
-			profilePicture: bufferFromDataUrl(avatar)
 		});
 	}
 

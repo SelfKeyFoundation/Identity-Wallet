@@ -187,7 +187,7 @@ const selectSelfkeyId = state => {
 	return {
 		identity,
 		wallet,
-		profilePicture: wallet.profilePicture,
+		profilePicture: identity.profilePicture,
 		allAttributes,
 		attributes,
 		basicAttributes,
@@ -268,7 +268,7 @@ const selectCorporateProfile = (state, id) => {
 	return {
 		identity,
 		wallet,
-		profilePicture: wallet.profilePicture,
+		profilePicture: identity.profilePicture,
 		allAttributes,
 		attributes,
 		basicAttributes,

@@ -937,26 +937,6 @@ module.exports = function(cradle) {
 			});
 	};
 
-	controller.prototype.updateWalletprofilePicture = function(event, actionId, actionName, args) {
-		Wallet.updateProfilePicture(args)
-			.then(data => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-			})
-			.catch(error => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-			});
-	};
-
-	controller.prototype.getWalletProfilePicture = function(event, actionId, actionName, args) {
-		Wallet.selectProfilePictureById(args.id)
-			.then(data => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-			})
-			.catch(error => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-			});
-	};
-
 	controller.prototype.getWalletByPublicKey = async function(event, actionId, actionName, args) {
 		try {
 			let data = await Wallet.findByPublicKey(args.publicKey);
