@@ -17,7 +17,6 @@ import {
 } from 'selfkey-ui';
 import PriceBox from '../../price-box';
 import Sidebar from './sidebar';
-import { featureIsEnabled } from 'common/feature-flags';
 import { HexagonAvatar } from '../../selfkey-id/main/components/hexagon-avatar';
 
 const styles = theme => ({
@@ -194,7 +193,16 @@ const defaultIdentityName = ({ type }, walletName) =>
 	type === 'individual' ? walletName || 'New individual' : 'New company';
 
 const ProfileList = withStyles(profileStyle)(
-	({ classes, profiles, wallet, isOpen, onProfileSelect, onClickCorporate, closeProfile }) => {
+	({
+		classes,
+		profiles,
+		wallet,
+		isOpen,
+		onProfileSelect,
+		onClickCorporate,
+		closeProfile,
+		showCorporate
+	}) => {
 		return (
 			isOpen && (
 				<ClickAwayListener onClickAway={closeProfile}>
@@ -231,23 +239,23 @@ const ProfileList = withStyles(profileStyle)(
 									</Grid>
 								</Grid>
 							))}
-						{featureIsEnabled('corporate') && (
+						{showCorporate && (
 							<React.Fragment>
 								<Grid className={classes.profileFooter}>
 									<div className={classes.horizontalDivider} />
 								</Grid>
 								{/* <Grid container className={classes.profilePersonal}>
-						<Grid item xs={12}>
-							<Button
-								variant="outlined"
-								size="small"
-								className={classes.button}
-								onClick={onClickPersonal}
-							>
-								NEW PERSONAL PROFILE
-							</Button>
-						</Grid>
-					</Grid> */}
+									<Grid item xs={12}>
+										<Button
+											variant="outlined"
+											size="small"
+											className={classes.button}
+											onClick={onClickPersonal}
+										>
+											New Personal Profile
+										</Button>
+									</Grid>
+								</Grid> */}
 								<Grid container className={classes.profileCorporate}>
 									<Grid item xs={12}>
 										<Button
