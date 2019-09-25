@@ -1,4 +1,4 @@
-import config from './config';
+import config from 'common/config';
 
 const featureIsEnabled = featureName => {
 	const snakeCase = featureName
