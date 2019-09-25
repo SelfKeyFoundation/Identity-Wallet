@@ -102,9 +102,10 @@ const editIdAttributeOperation = attribute => async (dispatch, getState) => {
 	await dispatch(identityActions.updateIdAttributeAction(attribute));
 };
 
-const updateProfilePictureOperation = (picture, identityId) => (dispatch, getState) => {
-	// TODO max: move avatar handling to identity module
-	return dispatch(walletOperations.updateWalletAvatar(picture, identityId));
+const updateProfilePictureOperation = (picture, identityId) => async (dispatch, getState) => {
+	let identityService = getGlobalContext().identityService;
+	let identity = await identityService.updateIdentityProfilePicture(picture, identityId);
+	await dispatch(identityActions.updateIdentity(identity));
 };
 
 const lockIdentityOperation = identityId => async (dispatch, getState) => {

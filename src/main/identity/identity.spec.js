@@ -32,7 +32,7 @@ describe('Identity model', () => {
 		itm.keystoreFilePath = 'change keystore';
 		await Identity.updateProfilePicture(itm);
 		let check = await Identity.query().findById(itm.id);
-		expect(check.profilePicture).toBe(itm.profilePicture);
+		expect(check.profilePicture).toBe('data:;base64,supertes');
 	});
 
 	it('updateSetup', async () => {
@@ -50,7 +50,7 @@ describe('Identity model', () => {
 			profilePicture: 'test_profile_picture'
 		});
 		let selectedProfilePicture = await Identity.selectProfilePictureById(itm.id);
-		expect(selectedProfilePicture).toBe('test_profile_picture');
+		expect(selectedProfilePicture).toBe('data:;base64,test/profile/picture');
 	});
 
 	it('create', async () => {

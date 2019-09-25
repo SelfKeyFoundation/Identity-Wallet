@@ -43,7 +43,7 @@ class SelfkeyIdOverviewContainerComponent extends Component {
 
 	render() {
 		const { popup } = this.state;
-		const { profilePicture, wallet } = this.props;
+		const { profilePicture, identity } = this.props;
 		return (
 			<React.Fragment>
 				{popup === 'create-attribute' && (
@@ -72,7 +72,7 @@ class SelfkeyIdOverviewContainerComponent extends Component {
 						open={true}
 						onClose={this.handlePopupClose}
 						avatar={profilePicture}
-						walletId={wallet.id}
+						identityId={identity.id}
 					/>
 				)}
 				<SelfkeyIdOverview
