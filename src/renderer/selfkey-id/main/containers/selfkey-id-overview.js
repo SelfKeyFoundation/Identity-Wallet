@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { identityOperations } from 'common/identity';
 import SelfkeyIdOverview from '../components/selfkey-id-overview';
-import { walletOperations } from 'common/wallet';
+
 import { CreateAttributePopup } from './create-attribute-popup';
 import { EditAttributePopup } from './edit-attribute-popup';
 import { DeleteAttributePopup } from './delete-attribute-popup';
 import { EditAvatarPopup } from './edit-avatar-popup';
-
-const SELFKEY_ID_PATH = '/main/selfkeyId';
+import { RegisterDidCardContainer } from '../../../did';
 
 class SelfkeyIdOverviewContainerComponent extends Component {
 	state = {
@@ -17,10 +16,6 @@ class SelfkeyIdOverviewContainerComponent extends Component {
 
 	handleAttributeDelete = attributeId =>
 		this.props.dispatch(identityOperations.removeIdAttributeOperation(attributeId));
-
-	handleGetDid = _ => this.props.dispatch(walletOperations.startCreateDidFlow(SELFKEY_ID_PATH));
-	handleEnterDid = _ =>
-		this.props.dispatch(walletOperations.startAssociateDidFlow(SELFKEY_ID_PATH));
 
 	handleEditAttribute = attribute => {
 		this.setState({ popup: 'edit-attribute', editAttribute: attribute });
@@ -76,6 +71,7 @@ class SelfkeyIdOverviewContainerComponent extends Component {
 					/>
 				)}
 				<SelfkeyIdOverview
+					didCard={!this.props.identity.did ? <RegisterDidCardContainer /> : null}
 					onGetDid={this.handleGetDid}
 					onEnterDid={this.handleEnterDid}
 					onDeleteAttribute={this.handleDeleteAttribute}

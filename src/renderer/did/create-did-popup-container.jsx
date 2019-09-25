@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import config from 'common/config';
-import { Popup } from '../../../common/popup';
-import { CreateDIDContent } from './create-did-content';
+
+import { CreateDIDPopup } from './create-did-popup';
 import { getLocale } from 'common/locale/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
@@ -16,7 +16,7 @@ import { push } from 'connected-react-router';
 
 const CRYPTOCURRENCY = config.constants.primaryToken;
 
-class CreateDIDComponent extends Component {
+class CreateDIDPopupContainerComponent extends Component {
 	state = {
 		open: true,
 		isConfirmationOpen: false
@@ -54,29 +54,24 @@ class CreateDIDComponent extends Component {
 		this.props.dispatch(push(this.props.didOriginUrl));
 	};
 
+	handleLearnHowClicked = e => {
+		window.openExternal(e, 'https://help.selfkey.org/');
+	};
+
 	render() {
 		const { open } = this.state;
 		const { usdFee, ethFee, cryptoCurrency } = this.getPaymentParameters();
 		return (
-			<React.Fragment>
-				<Popup
-					closeAction={this.handleCloseAction}
-					text={'Register on the Selfkey Network'}
-					open={open}
-				>
-					<CreateDIDContent
-						crypoCurrency={cryptoCurrency}
-						usdNetworkFee={usdFee}
-						ethNetworkFee={ethFee}
-						tooltipNetworkFee={
-							'The fee will be paid in ETH, at the day’s exchange rate.'
-						}
-						learnHowURL={'https://help.selfkey.org/'}
-						onConfirm={this.handleCreateDIDAction}
-						onCancel={this.handleCloseAction}
-					/>
-				</Popup>
-			</React.Fragment>
+			<CreateDIDPopup
+				crypoCurrency={cryptoCurrency}
+				usdNetworkFee={usdFee}
+				ethNetworkFee={ethFee}
+				tooltipNetworkFee={'The fee will be paid in ETH, at the day’s exchange rate.'}
+				onConfirm={this.handleCreateDIDAction}
+				onCancel={this.handleCloseAction}
+				onLearnHowClicked={this.handleLearnHowClicked}
+				open={open}
+			/>
 		);
 	}
 }
@@ -95,6 +90,6 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-export const CreateDID = connect(mapStateToProps)(CreateDIDComponent);
+export const CreateDIDPopupContainer = connect(mapStateToProps)(CreateDIDPopupContainerComponent);
 
-export default CreateDID;
+export default CreateDIDPopupContainer;
