@@ -31,17 +31,6 @@ const resetAssociateDID = () => async dispatch => {
 	await dispatch(actions.setAssociateError(''));
 };
 
-const updateWalletAvatar = (avatar, walletId) => async (dispatch, getState) => {
-	try {
-		const walletService = getGlobalContext().walletService;
-		await walletService.updateWalletAvatar(avatar, walletId);
-		const wallet = getWallet(getState());
-		await dispatch(updateWalletWithBalance({ ...wallet, profilePicture: avatar }));
-	} catch (error) {
-		console.error(error);
-	}
-};
-
 const updateWalletName = (name, walletId) => async (dispatch, getState) => {
 	try {
 		const walletService = getGlobalContext().walletService;
@@ -164,7 +153,6 @@ export default {
 	updateWalletWithBalance,
 	refreshWalletBalance,
 	resetAssociateDID,
-	updateWalletAvatar: createAliasedAction(types.WALLET_AVATAR_UPDATE, updateWalletAvatar),
 	updateWalletName: createAliasedAction(types.WALLET_NAME_UPDATE, updateWalletName),
 	updateWalletSetup: createAliasedAction(types.WALLET_SETUP_UPDATE, updateWalletSetup),
 	createWalletDID: createAliasedAction(types.WALLET_DID_CREATE, createWalletDID),

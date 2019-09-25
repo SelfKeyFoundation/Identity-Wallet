@@ -210,9 +210,9 @@ const ProfileList = withStyles(profileStyle)(
 									<Grid item sm={2}>
 										{el.type === 'corporate' ? (
 											<SmallRoundCompany />
-										) : wallet.profilePicture ? (
+										) : el.profilePicture ? (
 											<HexagonAvatar
-												src={wallet.profilePicture}
+												src={el.profilePicture}
 												className={classes.profileListAvatar}
 												smallAvatar={true}
 											/>
@@ -276,9 +276,9 @@ const Profile = withStyles(styles)(
 				<Grid item>
 					{profile.type === 'corporate' ? (
 						<RoundCompany />
-					) : wallet.profilePicture ? (
+					) : profile.profilePicture ? (
 						<HexagonAvatar
-							src={wallet.profilePicture}
+							src={profile.profilePicture}
 							className={classes.profileAvatar}
 							smallAvatar={true}
 						/>

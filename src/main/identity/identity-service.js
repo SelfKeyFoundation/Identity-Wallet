@@ -132,6 +132,10 @@ export class IdentityService {
 		return Identity.updateName({ id, name });
 	}
 
+	updateIdentityProfilePicture(profilePicture, id) {
+		return Identity.updateProfilePicture({ id, profilePicture });
+	}
+
 	updateIdentityDID(did, id) {
 		did = did.replace('did:selfkey:', '');
 		return Identity.updateDID({ did, id });
