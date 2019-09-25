@@ -3,6 +3,7 @@ import Toolbar from './toolbar';
 import config from 'common/config';
 import { connect } from 'react-redux';
 import { identitySelectors, identityOperations } from 'common/identity';
+import { walletSelectors } from 'common/wallet';
 import { push } from 'connected-react-router';
 
 class ToolbarContainer extends Component {
@@ -40,7 +41,13 @@ class ToolbarContainer extends Component {
 		this.props.dispatch(identityOperations.switchProfileOperation(identity));
 	};
 
+	handleProfileNavigate = evt => {
+		evt.preventDefault();
+		this.props.dispatch(identityOperations.navigateToProfileOperation());
+	};
+
 	handleProfileClick = evt => {
+		evt && evt.stopPropagation();
 		this.toggleProfile(!this.state.isProfileOpen);
 	};
 	render() {
@@ -51,12 +58,14 @@ class ToolbarContainer extends Component {
 				isProfileOpen={isProfileOpen}
 				profiles={this.props.profiles}
 				selectedProfile={this.props.selectedProfile}
+				wallet={this.props.wallet}
 				onProfileClick={this.handleProfileClick}
 				onProfileSelect={this.handleProfileSelect}
 				onCreateCorporateProfileClick={this.createCorporateProfile}
 				onToggleMenu={this.toggleDrawer}
 				primaryToken={config.constants.primaryToken}
 				closeProfile={this.closeProfile}
+				onProfileNavigate={this.handleProfileNavigate}
 			/>
 		);
 	}
@@ -64,5 +73,6 @@ class ToolbarContainer extends Component {
 
 export default connect(state => ({
 	profiles: identitySelectors.selectAllIdentities(state) || [],
-	selectedProfile: identitySelectors.selectCurrentIdentity(state) || {}
+	selectedProfile: identitySelectors.selectCurrentIdentity(state) || {},
+	wallet: walletSelectors.getWallet(state)
 }))(ToolbarContainer);

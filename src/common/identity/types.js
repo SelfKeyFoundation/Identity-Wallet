@@ -42,7 +42,9 @@ export const identityTypes = {
 	IDENTITIES_UPDATE_DID_OPERATION: 'identities/did/UPDATE',
 	IDENTITIES_CREATE_OPERATION: 'identities/CREATE',
 	IDENTITIES_CREATE_CORPORATE_PROFILE_OPERATION: 'identities/profile/corporate/CREATE',
-	IDENTITIES_SWITCH_PROFILE_OPERATION: 'identities/profile/SWITCH'
+	IDENTITIES_SWITCH_PROFILE_OPERATION: 'identities/profile/SWITCH',
+	IDENTITIES_NAVIGATE_TO_PROFILE_OPERATION: 'identities/profile/NAVIGATE',
+	IDENTITIES_UPDATE_NAME_OPERATION: 'identities/name/UPDATE'
 };
 
 export default identityTypes;

@@ -7,7 +7,6 @@ import {
 	Typography,
 	ClickAwayListener
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 import {
 	MenuNewIcon,
 	DropdownIcon,
@@ -19,6 +18,7 @@ import {
 import PriceBox from '../../price-box';
 import Sidebar from './sidebar';
 import { featureIsEnabled } from 'common/feature-flags';
+import { HexagonAvatar } from '../../selfkey-id/main/components/hexagon-avatar';
 
 const styles = theme => ({
 	wrapper: {
@@ -117,6 +117,11 @@ const styles = theme => ({
 	},
 	priceBox: {
 		paddingRight: '10px'
+	},
+	profileAvatar: {
+		width: '40px',
+		height: '40px',
+		margin: 0
 	}
 });
 
@@ -177,96 +182,119 @@ const profileStyle = theme =>
 			fontSize: '10px',
 			letterSpacing: '0.4px',
 			width: '100%'
+		},
+		profileListAvatar: {
+			width: '28px',
+			height: '28px',
+			margin: 0
 		}
 	});
 
-const defaultIdentityName = ({ type }) =>
-	type === 'individual' ? 'New individual' : 'New company';
+const defaultIdentityName = ({ type }, walletName) =>
+	type === 'individual' ? walletName || 'New individual' : 'New company';
 
 const ProfileList = withStyles(profileStyle)(
-	({ classes, profiles, isOpen, onProfileSelect, onClickCorporate }) => {
+	({ classes, profiles, wallet, isOpen, onProfileSelect, onClickCorporate, closeProfile }) => {
 		return (
 			isOpen && (
-				<div className={classes.profile}>
-					{profiles &&
-						profiles.map((el, index) => (
-							<Grid
-								container
-								key={index}
-								className={classes.profileDetail}
-								onClick={onProfileSelect(el)}
+				<ClickAwayListener onClickAway={closeProfile}>
+					<div className={classes.profile}>
+						{profiles &&
+							profiles.map((el, index) => (
+								<Grid
+									container
+									key={index}
+									className={classes.profileDetail}
+									onClick={onProfileSelect(el)}
+								>
+									<Grid item sm={2}>
+										{el.type === 'corporate' ? (
+											<SmallRoundCompany />
+										) : wallet.profilePicture ? (
+											<HexagonAvatar
+												src={wallet.profilePicture}
+												className={classes.profileListAvatar}
+												smallAvatar={true}
+											/>
+										) : (
+											<SmallRoundPerson />
+										)}
+									</Grid>
+									<Grid item sm={8} className={classes.profileName}>
+										<Typography variant="subtitle1">
+											{el.name || defaultIdentityName(el, wallet.profileName)}
+										</Typography>
+										<Typography variant="subtitle2" color="secondary">
+											{`${el.type.charAt(0).toUpperCase() +
+												el.type.slice(1)} Profile`}
+										</Typography>
+									</Grid>
+								</Grid>
+							))}
+						{featureIsEnabled('corporate') && (
+							<React.Fragment>
+								<Grid className={classes.profileFooter}>
+									<div className={classes.horizontalDivider} />
+								</Grid>
+								{/* <Grid container className={classes.profilePersonal}>
+						<Grid item xs={12}>
+							<Button
+								variant="outlined"
+								size="small"
+								className={classes.button}
+								onClick={onClickPersonal}
 							>
-								<Grid item sm={2}>
-									{el.type === 'corporate' ? (
-										<SmallRoundCompany />
-									) : (
-										<SmallRoundPerson />
-									)}
+								NEW PERSONAL PROFILE
+							</Button>
+						</Grid>
+					</Grid> */}
+								<Grid container className={classes.profileCorporate}>
+									<Grid item xs={12}>
+										<Button
+											variant="outlined"
+											size="small"
+											onClick={onClickCorporate}
+											className={classes.smallButton}
+										>
+											New Corporate Profile
+										</Button>
+									</Grid>
 								</Grid>
-								<Grid item sm={8} className={classes.profileName}>
-									<Typography variant="subtitle1">
-										{el.name || defaultIdentityName(el)}
-									</Typography>
-									<Typography variant="subtitle2" color="secondary">
-										{`${el.type.charAt(0).toUpperCase() +
-											el.type.slice(1)} Profile`}
-									</Typography>
-								</Grid>
-							</Grid>
-						))}
-					{featureIsEnabled('corporate') && (
-						<React.Fragment>
-							<Grid className={classes.profileFooter}>
-								<div className={classes.horizontalDivider} />
-							</Grid>
-							{/* <Grid container className={classes.profilePersonal}>
-								<Grid item xs={12}>
-									<Button
-										variant="outlined"
-										size="small"
-										className={classes.button}
-										onClick={onClickPersonal}
-									>
-										New Personal Profile
-									</Button>
-								</Grid>
-							</Grid> */}
-							<Grid container className={classes.profileCorporate}>
-								<Grid item xs={12}>
-									<Button
-										variant="outlined"
-										size="small"
-										onClick={onClickCorporate}
-										className={classes.smallButton}
-									>
-										New Corporate Profile
-									</Button>
-								</Grid>
-							</Grid>
-						</React.Fragment>
-					)}
-				</div>
+							</React.Fragment>
+						)}
+					</div>
+				</ClickAwayListener>
 			)
 		);
 	}
 );
 
-const Profile = withStyles(styles)(({ classes, profile, isOpen, onProfileClick, closeProfile }) => (
-	<ClickAwayListener onClickAway={closeProfile}>
-		<Grid container wrap="nowrap" justify="space-between">
-			<Link to="/main/selfkeyId" className={classes.flexLink}>
+const Profile = withStyles(styles)(
+	({ classes, profile, wallet, isOpen, onProfileClick, onProfileNavigate }) => (
+		<Grid container wrap="nowrap" justify="space-between" onClick={onProfileNavigate}>
+			<Grid container>
 				<Grid item>
-					{profile.type === 'individual' ? <RoundPerson /> : <RoundCompany />}
+					{profile.type === 'corporate' ? (
+						<RoundCompany />
+					) : wallet.profilePicture ? (
+						<HexagonAvatar
+							src={wallet.profilePicture}
+							className={classes.profileAvatar}
+							smallAvatar={true}
+						/>
+					) : (
+						<RoundPerson />
+					)}
 				</Grid>
 				<Grid item className={classes.nameRole}>
 					<Typography variant="h6">
-						{profile.name || defaultIdentityName(profile)}
+						{profile.name || defaultIdentityName(profile, wallet.profileName)}
 					</Typography>
 					<Typography variant="subtitle1" color="secondary">
 						{profile.type === 'individual' ? 'Personal Profile' : 'Corporate Profile'}
 					</Typography>
 				</Grid>
-			</Link>
+			</Grid>
 			<Grid item className={classes.profileIcon}>
 				<DropdownIcon
 					className={`${classes.menuIcon} ${
@@ -276,8 +304,8 @@ const Profile = withStyles(styles)(({ classes, profile, isOpen, onProfileClick, 
 				/>
 			</Grid>
 		</Grid>
-	</ClickAwayListener>
-));
+	)
+);
 
 class Toolbar extends Component {
 	render() {
@@ -289,8 +317,10 @@ class Toolbar extends Component {
 			closeProfile,
 			selectedProfile,
 			onProfileClick,
+			onProfileNavigate,
 			onProfileSelect,
 			profiles,
+			wallet,
 			onCreateCorporateProfileClick,
 			primaryToken
 		} = this.props;
@@ -334,10 +364,11 @@ class Toolbar extends Component {
 							>
 								<Grid item className={classes.toolbarProfile}>
 									<Profile
+										wallet={wallet}
 										profile={selectedProfile}
 										isOpen={isProfileOpen}
 										onProfileClick={onProfileClick}
-										closeProfile={closeProfile}
+										onProfileNavigate={onProfileNavigate}
 									/>
 								</Grid>
 							</Grid>
@@ -346,10 +377,12 @@ class Toolbar extends Component {
 				</Grid>
 				<Grid id="profile" className={classes.profileContainer}>
 					<ProfileList
+						wallet={wallet}
 						profiles={profiles}
 						isOpen={isProfileOpen}
 						onClickCorporate={onCreateCorporateProfileClick}
 						onProfileSelect={onProfileSelect}
+						closeProfile={closeProfile}
 					/>
 				</Grid>
 			</div>

@@ -6,6 +6,7 @@ export const getWallet = state => {
 	const ethereumPrice =
 		((getPrices(state) || {}).prices || []).filter(price => price.symbol === 'ETH')[0] || {};
 	wallet.balanceInFiat = wallet.balance * (ethereumPrice.priceUSD || 0);
+	wallet.profileName = wallet.profileName || wallet.name;
 	wallet.name = 'Ethereum';
 	wallet.symbol = 'ETH';
 	wallet.price = ethereumPrice.priceUSD;

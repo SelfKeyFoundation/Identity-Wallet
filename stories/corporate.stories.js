@@ -19,6 +19,8 @@ import {
 	corporateApplications,
 	corporateCapTable,
 	dummyMembers,
+	entityTypes,
+	legalJurisdictions,
 	corporateAttributes,
 	corporateDocuments
 } from './corporate-data';
@@ -110,6 +112,27 @@ storiesOf('Corporate/Components', module)
 		/>
 	));
 
-storiesOf('Corporate', module).add('Wizard', () => <CorporateWizard members={dummyMembers} />);
+storiesOf('Corporate/Wizard', module)
+	.add('default', () => (
+		<CorporateWizard
+			members={dummyMembers}
+			entityTypes={entityTypes}
+			jurisdictions={legalJurisdictions}
+			onFieldChange={name => action(`field change ${name}:`)}
+		/>
+	))
+	.add('field error', () => (
+		<CorporateWizard
+			members={dummyMembers}
+			entityTypes={entityTypes}
+			jurisdictions={legalJurisdictions}
+			creationDate="2019-09-10"
+			email="hello"
+			entityName="hello"
+			jurisdiction="Barbados"
+			errors={{ email: 'email issue' }}
+			onFieldChange={name => action(`field change ${name}:`)}
+		/>
+	));
 
 storiesOf('Corporate', module).add('Add Member', () => <CorporateAddMember />);

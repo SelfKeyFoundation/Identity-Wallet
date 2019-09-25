@@ -5,6 +5,8 @@ import { push } from 'connected-react-router';
 import identitySelectors from './selectors';
 import identityActions from './actions';
 import identityTypes from './types';
+import { Logger } from 'common/logger';
+const log = new Logger('identity-operations');
 
 const loadCountriesOperation = () => async (dispatch, getState) => {
 	const countryService = getGlobalContext().countryService;
@@ -136,14 +138,90 @@ const createIdentityOperation = (walletId, type) => async (dispatch, getState) =
 	return identity;
 };
 
-const createCorporateProfileOperation = () => async (dispatch, getState) => {
+const createCorporateProfileOperation = data => async (dispatch, getState) => {
 	const wallet = walletSelectors.getWallet(getState());
-	const identity = await dispatch(
-		identityOperations.createIdentityOperation(wallet.id, 'corporate')
-	);
-	await dispatch(identityOperations.updateIdentitySetupOperation(true, identity.id));
-	await dispatch(identityOperations.unlockIdentityOperation(identity.id));
-	await dispatch(push('/main/dashboard'));
+	let identity = null;
+	if (data.identityId) {
+		identity = identitySelectors.selectIdentityById(getState(), data.identityId);
+	}
+	const idAttributeTypes = identitySelectors.selectIdAttributeTypes(getState(), 'corporate');
+	if (!identity) {
+		identity = await dispatch(
+			identityOperations.createIdentityOperation(wallet.id, 'corporate')
+		);
+	}
+	const getTypeId = url => {
+		return idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
+	};
+	// TODO: XXX update to entity operations
+	await dispatch(identityOperations.updateIdentityNameOperation(data.entityName, identity.id));
+	try {
+		await dispatch(
+			identityOperations.createIdAttributeOperation({
+				typeId: getTypeId('http://platform.selfkey.org/schema/attribute/company-name.json'),
+				name: 'Legal Entity Name',
+				data: { value: data.entityName }
+			})
+		);
+
+		await dispatch(
+			identityOperations.createIdAttributeOperation({
+				typeId: getTypeId(
+					'http://platform.selfkey.org/schema/attribute/legal-entity-type.json'
+				),
+				name: 'Legal Entity Type',
+				data: { value: data.entityType }
+			})
+		);
+
+		await dispatch(
+			identityOperations.createIdAttributeOperation({
+				typeId: getTypeId(
+					'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json'
+				),
+				name: 'Legal Jurisdiction',
+				data: { value: data.jurisdiction }
+			})
+		);
+
+		await dispatch(
+			identityOperations.createIdAttributeOperation({
+				typeId: getTypeId(
+					'http://platform.selfkey.org/schema/attribute/incorporation-date.json'
+				),
+				name: 'Incorporation Date',
+				data: { value: data.creationDate }
+			})
+		);
+
+		if (data.email) {
+			await dispatch(
+				identityOperations.createIdAttributeOperation({
+					typeId: getTypeId('http://platform.selfkey.org/schema/attribute/email.json'),
+					name: 'Email',
+					data: { value: data.email }
+				})
+			);
+		}
+
+		if (data.taxId) {
+			await dispatch(
+				identityOperations.createIdAttributeOperation({
+					typeId: getTypeId(
+						'http://platform.selfkey.org/schema/attribute/tax-id-number.json'
+					),
+					name: 'Tax Id',
+					data: { value: data.taxId }
+				})
+			);
+		}
+
+		await dispatch(identityOperations.updateIdentitySetupOperation(true, identity.id));
+		await dispatch(identityOperations.unlockIdentityOperation(identity.id));
+		await dispatch(push('/main/corporate-dashboard'));
+	} catch (error) {
+		log.error('failed to create corporate identity %s', error);
+	}
 };
 
 const createSelfkeyIdOperation = (identityId, data) => async (dispatch, getState) => {
@@ -190,6 +268,12 @@ const updateIdentitySetupOperation = (isSetupFinished, id) => async (dispatch, g
 	await dispatch(identityActions.updateIdentity(identity));
 };
 
+const updateIdentityNameOperation = (name, id) => async (dispatch, getState) => {
+	const identityService = getGlobalContext().identityService;
+	const identity = await identityService.updateIdentityName(name, id);
+	await dispatch(identityActions.updateIdentity(identity));
+};
+
 const loadIdentitiesOperation = walletId => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
 	let identities = await identityService.loadIdentities(walletId);
@@ -204,6 +288,19 @@ const updateDIDOperation = (did, id) => async (dispatch, getState) => {
 
 const switchProfileOperation = identity => async (dispatch, getState) => {
 	await dispatch(identityOperations.unlockIdentityOperation(identity.id));
+};
+
+const navigateToProfileOperation = () => async (dispatch, getState) => {
+	const identity = identitySelectors.selectCurrentIdentity(getState());
+
+	if (identity.type === 'individual') {
+		return dispatch(push('/main/selfkeyId'));
+	}
+
+	if (identity.isSetupFinished) {
+		return dispatch(push('/main/corporate-dashboard'));
+	}
+	return dispatch(push(`/main/${identity.id}/setup-corporate-profile`));
 };
 
 export const operations = {
@@ -230,7 +327,9 @@ export const operations = {
 	updateDIDOperation,
 	createIdentityOperation,
 	createCorporateProfileOperation,
-	switchProfileOperation
+	switchProfileOperation,
+	navigateToProfileOperation,
+	updateIdentityNameOperation
 };
 
 export const identityOperations = {
@@ -330,6 +429,14 @@ export const identityOperations = {
 	switchProfileOperation: createAliasedAction(
 		identityTypes.IDENTITIES_SWITCH_PROFILE_OPERATION,
 		operations.switchProfileOperation
+	),
+	navigateToProfileOperation: createAliasedAction(
+		identityTypes.IDENTITIES_NAVIGATE_TO_PROFILE_OPERATION,
+		operations.navigateToProfileOperation
+	),
+	updateIdentityNameOperation: createAliasedAction(
+		identityTypes.IDENTITIES_UPDATE_NAME_OPERATION,
+		operations.updateIdentityNameOperation
 	)
 };
 

@@ -11,7 +11,7 @@ const styles = theme => ({
 		backgroundImage: `url(${backgroundImage})`,
 		minHeight: '100vh',
 		textAlign: 'center',
-		padddingTop: '50px'
+		paddingTop: '200px'
 	}
 });
 
