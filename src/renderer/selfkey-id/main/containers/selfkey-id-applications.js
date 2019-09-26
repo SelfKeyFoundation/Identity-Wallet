@@ -1,209 +1,96 @@
 import React, { Component } from 'react';
-import config from 'common/config';
 import { connect } from 'react-redux';
 import { walletSelectors } from 'common/wallet';
-import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
-import { kycSelectors, kycOperations, kycActions } from 'common/kyc';
+import { kycOperations } from 'common/kyc';
+import { marketplaceSelectors, marketplaceOperations } from 'common/marketplace';
 import { appSelectors } from 'common/app';
 import SelfkeyIdApplications from '../components/selfkey-id-applications';
+import { kycSelectors } from '../../../../common/kyc';
 
 class SelfkeyIdApplicationsContainerComponent extends Component {
 	state = {
-		loading: false,
-		applicationId: null,
-		addingDocuments: false,
-		rpName: null,
-		refreshing: false,
 		showApplicationRefreshModal: false
 	};
 
 	async componentDidMount() {
-		const { rp, afterAuthRoute } = this.props;
-		const cancelRoute = `/main/selfkeyId`;
-		const authenticate = true;
+		const { vendors } = this.props;
 
 		await this.props.dispatch(kycOperations.resetApplications());
-		// if relying party not loaded, try again
-		if (!rp || !rp.authenticated) {
-			this.setState({ loading: true }, async () => {
-				await this.props.dispatch(kycOperations.setProcessing(true));
-				await this.props.dispatch(
-					kycOperations.loadRelyingParty(
-						'incorporations',
-						authenticate,
-						afterAuthRoute,
-						cancelRoute
-					)
-				);
-			});
-		}
-
-		// try to load existing kyc_applications data
+		// load marketplace store
+		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
+		// load existing kyc_applications data
 		await this.props.dispatch(kycOperations.loadApplicationsOperation());
 
-		// this is needed otherwise the rp keeps loading (stuck)
-		if (!this.props.incorporations || !this.props.incorporations.length) {
-			await this.props.dispatch(incorporationsOperations.loadIncorporationsOperation());
-		}
+		await this.loadRelyingParties(vendors);
 	}
 
 	async componentDidUpdate(prevProps) {
-		if (prevProps.rp !== this.props.rp) {
-			if (this.props.rp.authenticated) {
-				await this.props.dispatch(kycOperations.loadApplicationsOperation());
-			}
-			this.setState({ loading: false }, () => {
-				if (this.state.refreshing) {
-					if (this.state.applicationId) {
-						// try to refresh again after loading relying party
-						this.handleApplicationRefresh(this.state.applicationId);
-					}
-				}
-				if (this.state.addingDocuments) {
-					if (this.state.applicationId) {
-						// try to refresh again after loading relying party
-						this.handleApplicationAddDocuments(
-							this.state.applicationId,
-							this.state.rpName
-						);
-					}
-				}
-			});
+		if (prevProps.vendors.length !== this.props.vendors.length) {
+			await this.loadRelyingParties(this.props.vendors);
 		}
 	}
 
-	handleApplicationAddDocuments = (id, rpName) => {
-		const { rp, afterAuthRoute } = this.props;
-		const cancelRoute = `/main/selfkeyId`;
-		const authenticate = true;
+	async loadRelyingParties(vendors) {
+		const authenticated = true;
+		const { afterAuthRoute, cancelRoute } = this.props;
 
-		// if relying party not loaded, try again
-		if (!rp || !rp.authenticated) {
-			this.setState(
-				{ loading: true, addingDocuments: true, applicationId: id, rpName },
-				async () => {
-					await this.props.dispatch(
-						kycOperations.loadRelyingParty(
-							'incorporations',
-							authenticate,
-							afterAuthRoute,
-							cancelRoute
-						)
-					);
-				}
-			);
-		} else {
-			let self = this;
-			this.setState(
-				{
-					loading: false,
-					addingDocuments: false,
-					applicationId: null,
-					rpName: null
-				},
-				async () => {
-					// Get current application info from kyc
-					let currentApplication = self.props.rp.applications.find(app => {
-						return app.id === id;
-					});
-					// get stored application from local database
-					let application = this.props.applications.find(app => {
-						return app.id === id;
-					});
-					const {
-						template,
-						vendor,
-						privacyPolicy,
-						termsOfService,
-						attributes
-					} = currentApplication;
-					const { rpName, title } = application;
-					/* eslint-disable camelcase */
-					const description = application.sub_title;
-					/* eslint-enable camelcase */
-					const agreement = true;
-
-					// Set application data
-					await self.props.dispatch(
-						kycActions.setCurrentApplication(
-							rpName,
-							template,
-							afterAuthRoute,
-							cancelRoute,
-							title,
-							description,
-							agreement,
-							vendor,
-							privacyPolicy,
-							termsOfService,
-							attributes
-						)
-					);
-
-					// Open add documents modal
-					// (Later on, we will need to improve this to be able to distinguish requirements
-					// that can be fulfilled by the wallet and ones that need redirect to KYCC.)
-					//
-					// await self.props.dispatch(
-					// 	kycOperations.loadRelyingParty(
-					// 		rpName,
-					// 		true,
-					// 		`/main/kyc/current-application/${rpName}?applicationId=${id}`
-					// 	)
-					// );
-
-					// Redirects to KYCC chain on an external browser window with auto-login
-					const instanceUrl = self.props.rp.session.ctx.config.rootEndpoint;
-					const url = `${instanceUrl}/applications/${application.id}?access_token=${
-						self.props.rp.session.access_token.jwt
-					}`;
-					window.openExternal(null, url);
-				}
+		for (const vendor of vendors) {
+			await this.props.dispatch(
+				kycOperations.loadRelyingParty(
+					vendor.vendorId,
+					authenticated,
+					afterAuthRoute,
+					cancelRoute
+				)
 			);
 		}
+	}
+
+	handleApplicationAdditionalRequirements = application => {
+		const { rps } = this.props;
+
+		// get current application info from RP
+		const rp = rps[application.rpName];
+		if (!rp) {
+			console.warning(`Can't find RP named ${application.rpName}`);
+			return false;
+		}
+		// Later on, we will need to improve this to be able to distinguish requirements
+		// that can be fulfilled by the wallet directly and ones that need redirect to KYCC
+		// onboarding app.
+		// Redirects to KYCC with auto-login via JWT token
+		const instanceUrl = rp.session.ctx.config.rootEndpoint;
+		const url = `${instanceUrl}/applications/${application.id}?access_token=${
+			rp.session.access_token.jwt
+		}`;
+		window.openExternal(null, url);
 	};
 
-	handleApplicationRefresh = id => {
-		const { afterAuthRoute } = this.props;
-		const cancelRoute = `/main/selfkeyId`;
-		const authenticate = true;
+	handleApplicationRefresh = application => {
+		const { rps } = this.props;
 
-		// if relying party not loaded, try again
-		if (!this.state.refreshing) {
-			this.setState({ loading: true, refreshing: true, applicationId: id }, async () => {
-				await this.props.dispatch(
-					kycOperations.loadRelyingParty(
-						'incorporations',
-						authenticate,
-						afterAuthRoute,
-						cancelRoute
-					)
-				);
-			});
-		} else {
-			// get stored application from local database
-			let application = this.props.applications.find(app => {
-				return app.id === id;
-			});
-			// get current application info from kyc
-			let kycApplication = this.props.rp.applications.find(app => {
-				return app.id === id;
-			});
-
-			if (application && kycApplication) {
-				// update stored application
-				application.currentStatus = kycApplication.currentStatus;
-				application.currentStatusName = kycApplication.statusName;
-				application.updatedAt = kycApplication.updatedAt;
-			}
-
-			// sync of RP applications with local database is done automatically, all done, show modal
-			this.setState({
-				refreshing: false,
-				applicationId: null,
-				showApplicationRefreshModal: true
-			});
+		// get current application info from RP
+		const rp = rps[application.rpName];
+		if (!rp) {
+			console.warning(`Can't find RP named ${application.rpName}`);
+			return false;
 		}
+
+		console.log(rp);
+
+		const kycApplication = rp.applications.find(app => app.id === application.id);
+
+		if (application && kycApplication) {
+			// update stored application
+			application.currentStatus = kycApplication.currentStatus;
+			application.currentStatusName = kycApplication.statusName;
+			application.updatedAt = kycApplication.updatedAt;
+		}
+
+		// sync of RP applications with local database is done automatically, all done, show modal
+		this.setState({
+			showApplicationRefreshModal: true
+		});
 	};
 
 	handleCloseApplicationRefreshModal = evt => {
@@ -212,41 +99,36 @@ class SelfkeyIdApplicationsContainerComponent extends Component {
 	};
 
 	render() {
-		const { isLoading, processing } = this.props;
-		let loading = isLoading || processing || this.state.loading;
+		const { rps, vendors } = this.props;
+		const loading = Object.keys(rps).length === 0 || vendors.length === 0;
 		return (
 			<SelfkeyIdApplications
 				{...this.props}
-				config={config}
 				loading={loading}
 				showApplicationRefreshModal={this.state.showApplicationRefreshModal}
 				onCloseApplicationRefreshModal={this.handleCloseApplicationRefreshModal}
 				onApplicationRefresh={this.handleApplicationRefresh}
-				onApplicationAddDocuments={this.handleApplicationAddDocuments}
+				onApplicationAdditionalRequirements={this.handleApplicationAdditionalRequirements}
 			/>
 		);
 	}
 }
 
 const mapStateToProps = (state, props) => {
-	const notAuthenticated = false;
 	const walletType = appSelectors.selectApp(state).walletType;
-	const afterAuthRoute =
-		walletType === 'ledger' || walletType === 'trezor' ? `/main/selfkeyIdApplications` : '';
+
 	return {
 		wallet: walletSelectors.getWallet(state),
-		isLoading: incorporationsSelectors.getLoading(state),
-		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
-		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
-			state,
-			'incorporations',
-			notAuthenticated
-		),
+		orders: marketplaceSelectors.getAllOrders(state),
+		vendors: marketplaceSelectors.selectActiveVendors(state),
+		rps: kycSelectors.relyingPartiesSelector(state),
 		applications: kycSelectors.selectApplications(state),
-		processing: kycSelectors.selectProcessing(state),
-		afterAuthRoute
+		afterAuthRoute:
+			walletType === 'ledger' || walletType === 'trezor' ? `/main/selfkeyIdApplications` : '',
+		cancelRoute: `/main/selfkeyId`
 	};
 };
+
 export const SelfkeyIdApplicationsContainer = connect(mapStateToProps)(
 	SelfkeyIdApplicationsContainerComponent
 );

@@ -14,6 +14,12 @@ export class KycApplicationService {
 	};
 
 	editEntry = entry => {
+		// Don't update rpName or title, they should be
+		// set on creation. Otherwise rp syncing will
+		// overwrite this field
+		delete entry.rpName;
+		delete entry.title;
+
 		return KycApplication.update(entry);
 	};
 
