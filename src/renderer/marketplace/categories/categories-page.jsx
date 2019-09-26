@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ethGasStationInfoOperations } from 'common/eth-gas-station';
-import { marketplacesOperations, marketplacesSelectors } from 'common/marketplaces';
+import { marketplacesSelectors } from 'common/marketplaces';
 import { MarketplaceCategoriesList } from './categories-list';
 import { push } from 'connected-react-router';
 import { ordersOperations } from '../../../common/marketplace/orders';
@@ -13,8 +13,6 @@ const mapStateToProps = state => ({
 class MarketplaceCategoriesPageComponent extends Component {
 	componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
-		this.props.dispatch(marketplacesOperations.loadTransactions());
-		this.props.dispatch(marketplacesOperations.loadStakes());
 		this.props.dispatch(ordersOperations.ordersLoadOperation());
 	}
 

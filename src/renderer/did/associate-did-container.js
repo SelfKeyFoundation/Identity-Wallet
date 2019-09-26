@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
-import { walletOperations, walletSelectors } from 'common/wallet';
 import { identitySelectors } from 'common/identity';
-
+import { didSelectors, didOperations } from 'common/did';
 import { AssociateDid } from './associate-did';
 
 class AssociateDIDContainerComponent extends Component {
@@ -28,7 +27,7 @@ class AssociateDIDContainerComponent extends Component {
 	}
 
 	resetErrors = () => {
-		this.props.dispatch(walletOperations.resetAssociateDID());
+		this.props.dispatch(didOperations.resetAssociateDIDOperation());
 	};
 
 	handleCancelClick = evt => {
@@ -46,9 +45,7 @@ class AssociateDIDContainerComponent extends Component {
 		await this.resetErrors();
 		let did = this.state.did;
 		if (did !== '') {
-			await this.props.dispatch(
-				walletOperations.updateWalletDID(this.props.identity.walletId, did)
-			);
+			await this.props.dispatch(didOperations.updateDIDOperation(did));
 		} else {
 			this.setState({ searching: false });
 		}
@@ -80,8 +77,8 @@ class AssociateDIDContainerComponent extends Component {
 const mapStateToProps = (state, props) => {
 	return {
 		identity: identitySelectors.selectCurrentIdentity(state),
-		associateError: walletSelectors.getAssociateError(state),
-		didOriginUrl: walletSelectors.getDidOriginUrl(state)
+		associateError: didSelectors.selectAssociateError(state),
+		didOriginUrl: didSelectors.selectOriginUrl(state)
 	};
 };
 
