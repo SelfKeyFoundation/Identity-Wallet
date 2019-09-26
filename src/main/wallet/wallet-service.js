@@ -196,13 +196,6 @@ export class WalletService {
 		});
 	}
 
-	updateWalletSetup(setup, id) {
-		return Wallet.updateSetup({
-			id,
-			setup: setup
-		});
-	}
-
 	async updateDID(id, did) {
 		did = did.replace('did:selfkey:', '');
 		return Wallet.updateDID({
