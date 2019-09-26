@@ -60,6 +60,7 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 		const { jurisdiction, templateId, vendorId } = this.props;
 		const { region } = jurisdiction.data;
 
+		// TODO: get URLs and vendor name from the RP store
 		this.props.dispatch(
 			kycOperations.startCurrentApplicationOperation(
 				vendorId,

@@ -189,9 +189,10 @@ const mapStateToProps = (state, props) => {
 		cryptoCurrency: config.constants.primaryToken
 	};
 	return {
-		vendorId,
-		templateId,
+		companyCode,
 		countryCode,
+		templateId,
+		vendorId,
 		program: marketplaceSelectors.selectIncorporationByFilter(
 			state,
 			c => c.data.companyCode === companyCode

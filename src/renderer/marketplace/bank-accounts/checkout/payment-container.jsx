@@ -29,16 +29,18 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 		const price = this.priceInKEY(jurisdiction.price);
 		const walletAddress = jurisdiction.walletAddress;
 		const vendorDID = jurisdiction.didAddress;
+		// TODO: get vendor name from RP store
+		const vendorName = VENDOR_NAME;
 
 		this.props.dispatch(
 			ordersOperations.startOrderOperation({
+				productInfo: `Bank account in ${jurisdiction.data.region}`,
 				applicationId: application.id,
 				amount: price,
-				vendorId: vendorId,
+				vendorId,
 				itemId: accountCode,
 				vendorDID,
-				productInfo: `Bank account in ${jurisdiction.data.region}`,
-				vendorName: VENDOR_NAME,
+				vendorName,
 				backUrl: this.cancelRoute(),
 				completeUrl: this.paymentCompleteRoute(),
 				vendorWallet: featureIsEnabled('paymentContract') ? '' : walletAddress
@@ -54,12 +56,13 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 }
 
 const mapStateToProps = (state, props) => {
-	const { accountCode, vendorId } = props.match.params;
+	const { accountCode, templateId, vendorId } = props.match.params;
 	const authenticated = true;
 
 	return {
-		vendorId,
 		accountCode,
+		templateId,
+		vendorId,
 		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
 		publicKey: getWallet(state).publicKey,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),

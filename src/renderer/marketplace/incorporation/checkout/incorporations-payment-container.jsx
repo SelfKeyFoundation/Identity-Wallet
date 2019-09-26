@@ -11,7 +11,6 @@ import { ordersOperations } from 'common/marketplace/orders';
 import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorporations-component';
 
 const styles = theme => ({});
-// TODO: future improvement load from rp config
 const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class IncorporationsPaymentContainer extends MarketplaceIncorporationsComponent {
@@ -29,16 +28,19 @@ class IncorporationsPaymentContainer extends MarketplaceIncorporationsComponent 
 		const application = this.getLastApplication();
 		const price = this.priceInKEY(program.price);
 		const walletAddress = program.walletAddress;
+		const vendorDID = program.didAddress;
+		// TODO: get vendor name from RP store
+		const vendorName = VENDOR_NAME;
 
 		this.props.dispatch(
 			ordersOperations.startOrderOperation({
+				productInfo: `Incorporate in ${program.Region}`,
 				applicationId: application.id,
 				amount: price,
-				vendorId: vendorId,
+				vendorId,
 				itemId: companyCode,
-				vendorDID: program.didAddress,
-				productInfo: `Incorporate in ${program.Region}`,
-				vendorName: VENDOR_NAME,
+				vendorDID,
+				vendorName,
 				backUrl: this.cancelRoute(),
 				completeUrl: this.paymentCompleteRoute(),
 				vendorWallet: featureIsEnabled('paymentContract') ? '' : walletAddress
@@ -54,12 +56,12 @@ class IncorporationsPaymentContainer extends MarketplaceIncorporationsComponent 
 }
 
 const mapStateToProps = (state, props) => {
-	const { companyCode, vendorId, templateId } = props.match.params;
+	const { companyCode, templateId, vendorId } = props.match.params;
 	const authenticated = true;
 	return {
 		companyCode,
-		vendorId,
 		templateId,
+		vendorId,
 		program: marketplaceSelectors.selectIncorporationByFilter(
 			state,
 			c => c.data.companyCode === companyCode

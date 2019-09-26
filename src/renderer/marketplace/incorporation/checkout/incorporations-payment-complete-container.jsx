@@ -66,15 +66,14 @@ class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsCo
 		}
 	};
 
-	getNextRoute = () => {
-		return this.selfKeyIdRoute();
-	};
+	getNextRoute = () => this.selfKeyIdRoute();
 
 	onBackClick = () => this.props.dispatch(push(this.cancelRoute()));
 
 	onContinueClick = () => this.props.dispatch(push(this.getNextRoute()));
 
 	render() {
+		// TODO: get vendor email from the RP
 		const body = (
 			<React.Fragment>
 				<Typography variant="h1" gutterBottom>
