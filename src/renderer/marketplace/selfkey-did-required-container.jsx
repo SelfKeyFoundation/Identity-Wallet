@@ -2,21 +2,21 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { MarketplaceDIDRequired } from './selfkey-did-required';
-import { walletOperations } from 'common/wallet';
+import { didOperations } from 'common/did';
 
 const MARKETPLACE_PATH = '/main/marketplace-categories';
 
 class MarketplaceSelfkeyDIDRequiredContainer extends Component {
 	handleConfirm = evt => {
 		evt.preventDefault();
-		this.props.dispatch(walletOperations.startCreateDidFlow(MARKETPLACE_PATH));
+		this.props.dispatch(didOperations.startCreateDidFlowOperation(MARKETPLACE_PATH));
 	};
 	handleClose = () => {
 		this.props.dispatch(push(MARKETPLACE_PATH));
 	};
 	handleEnterDID = evt => {
 		evt.preventDefault();
-		this.props.dispatch(walletOperations.startAssociateDidFlow(MARKETPLACE_PATH));
+		this.props.dispatch(didOperations.startAssociateDidFlowOperation(MARKETPLACE_PATH));
 	};
 	render() {
 		return (
