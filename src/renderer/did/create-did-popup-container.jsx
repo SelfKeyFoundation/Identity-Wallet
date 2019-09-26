@@ -10,7 +10,7 @@ import { pricesSelectors } from 'common/prices';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { appOperations, appSelectors } from 'common/app';
 import { gasSelectors, gasOperations } from 'common/gas';
-import { walletOperations, walletSelectors } from 'common/wallet';
+import { didSelectors, didOperations } from 'common/did';
 import EthUnits from 'common/utils/eth-units';
 import { push } from 'connected-react-router';
 
@@ -44,7 +44,7 @@ class CreateDIDPopupContainerComponent extends Component {
 
 	handleCreateDIDAction = async _ => {
 		await this.props.dispatch(appOperations.setGoBackPath('/main/get-did'));
-		await this.props.dispatch(walletOperations.createWalletDID());
+		await this.props.dispatch(didOperations.createDIDOperation());
 		if (this.props.walletType === 'ledger' || this.props.walletType === 'trezor') {
 			await this.props.dispatch(appOperations.setGoNextPath('/main/hd-transaction-timer'));
 		}
@@ -86,7 +86,7 @@ const mapStateToProps = (state, props) => {
 		...getFiatCurrency(state),
 		walletType: appSelectors.selectWalletType(state),
 		gasLimit: gasSelectors.selectGas(state).didGasLimit,
-		didOriginUrl: walletSelectors.getDidOriginUrl(state)
+		didOriginUrl: didSelectors.selectOriginUrl(state)
 	};
 };
 
