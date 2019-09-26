@@ -62,6 +62,9 @@ export const kycSelectors = {
 	kycSelector(state) {
 		return state.kyc;
 	},
+	relyingPartiesSelector(state) {
+		return this.kycSelector(state).relyingPartiesByName;
+	},
 	relyingPartySelector(state, rpName) {
 		if (!rpName) return null;
 		return this.kycSelector(state).relyingPartiesByName[rpName];
@@ -350,6 +353,8 @@ const loadRelyingPartyOperation = (
 		if (authenticate) {
 			applications = await session.listKYCApplications();
 			for (const application of applications) {
+				const template = templates.find(t => t.id === application.template);
+
 				await dispatch(
 					kycOperations.updateApplicationsOperation({
 						id: application.id,
@@ -360,11 +365,7 @@ const loadRelyingPartyOperation = (
 						owner: application.owner,
 						scope: application.scope,
 						applicationDate: application.createdAt,
-						// TODO: this is only a workaround for now, we must change this in the future
-						title:
-							Object.keys(application.questions).length > 0
-								? 'Bank Account'
-								: 'Incorporation'
+						title: template ? template.name : rpName
 					})
 				);
 			}
