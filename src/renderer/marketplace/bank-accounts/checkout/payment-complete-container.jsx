@@ -17,7 +17,7 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 	}
 
 	async componentDidMount() {
-		const { transaction, jurisdiction } = this.props;
+		const { transaction, jurisdiction, vendorId } = this.props;
 
 		this.saveTransactionHash();
 		this.clearRelyingParty();
@@ -27,7 +27,7 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 			price: jurisdiction.price,
 			code: jurisdiction.data.accountCode,
 			jurisdiction: jurisdiction.data.region,
-			rpName: 'Bank Accounts'
+			rpName: vendorId
 		});
 	}
 
@@ -73,6 +73,7 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 	onContinueClick = () => this.props.dispatch(push(this.getNextRoute()));
 
 	render() {
+		// TODO: get vendor email from the RP
 		return (
 			<BankAccountsPaymentComplete
 				email={'support@flagtheory.com'}
@@ -84,9 +85,12 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 }
 
 const mapStateToProps = (state, props) => {
-	const { accountCode, vendorId } = props.match.params;
+	const { accountCode, vendorId, templateId } = props.match.params;
 	const authenticated = true;
 	return {
+		accountCode,
+		templateId,
+		vendorId,
 		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
 		transaction: transactionSelectors.getTransaction(state),
 		address: getWallet(state).address,

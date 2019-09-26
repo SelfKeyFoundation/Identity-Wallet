@@ -18,6 +18,7 @@ import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorp
 const styles = theme => ({});
 const CRYPTOCURRENCY = config.constants.primaryToken;
 const FIXED_GAS_LIMIT_PRICE = 21000;
+const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent {
 	async componentDidMount() {
@@ -61,6 +62,7 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 		const { program, vendorId, templateId } = this.props;
 		const { region } = program.data;
 
+		// TODO: get URLs and vendor name from the RP store
 		this.props.dispatch(
 			kycOperations.startCurrentApplicationOperation(
 				vendorId,
@@ -73,7 +75,7 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 				will result in delays in the incorporation process. You may also be asked to provide
 				more information by the service provider`,
 				'conducting KYC',
-				'Far Horizon Capital Inc',
+				VENDOR_NAME,
 				'https://flagtheory.com/privacy-policy',
 				'http://flagtheory.com/terms-and-conditions'
 			)
@@ -110,12 +112,12 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 }
 
 const mapStateToProps = (state, props) => {
-	const { companyCode, vendorId, countryCode, templateId } = props.match.params;
+	const { companyCode, countryCode, templateId, vendorId } = props.match.params;
 	const authenticated = true;
 	return {
-		vendorId,
 		countryCode,
 		templateId,
+		vendorId,
 		program: marketplaceSelectors.selectIncorporationByFilter(
 			state,
 			c => c.data.companyCode === companyCode
