@@ -330,7 +330,8 @@ class Toolbar extends Component {
 			profiles,
 			wallet,
 			onCreateCorporateProfileClick,
-			primaryToken
+			primaryToken,
+			showCorporate
 		} = this.props;
 		return (
 			<div>
@@ -391,6 +392,7 @@ class Toolbar extends Component {
 						onClickCorporate={onCreateCorporateProfileClick}
 						onProfileSelect={onProfileSelect}
 						closeProfile={closeProfile}
+						showCorporate={showCorporate}
 					/>
 				</Grid>
 			</div>
