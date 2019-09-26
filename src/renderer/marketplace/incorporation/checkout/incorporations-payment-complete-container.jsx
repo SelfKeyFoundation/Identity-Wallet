@@ -113,7 +113,7 @@ const mapStateToProps = (state, props) => {
 		vendorId,
 		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
 		transaction: transactionSelectors.getTransaction(state),
-		publicKey: getWallet(state).publicKey,
+		address: getWallet(state).address,
 		currentApplication: kycSelectors.selectCurrentApplication(state),
 		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(

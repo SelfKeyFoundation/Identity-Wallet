@@ -22,7 +22,7 @@ export class BalanceUpdaterService extends EventEmitter {
 	updateTokensBalance() {
 		let tokens = this.getCurrentWalletTokens();
 		let wallet = this.getCurrentWallet();
-		return store.dispatch(walletTokensOperations.updateWalletTokens(tokens, wallet.publicKey));
+		return store.dispatch(walletTokensOperations.updateWalletTokens(tokens, wallet.address));
 	}
 
 	getCurrentWallet() {

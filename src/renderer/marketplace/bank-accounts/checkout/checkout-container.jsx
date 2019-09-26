@@ -125,7 +125,7 @@ const mapStateToProps = (state, props) => {
 		...getFiatCurrency(state),
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
 		tokens: getTokens(state).splice(1), // remove ETH
-		publicKey: getWallet(state).publicKey,
+		address: getWallet(state).address,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		ethRate: pricesSelectors.getRate(state, 'ETH', 'USD'),
 		cryptoCurrency: CRYPTOCURRENCY,

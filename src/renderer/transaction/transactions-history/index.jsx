@@ -238,8 +238,8 @@ class TransactionsHistory extends Component {
 	};
 
 	hasSent = transaction => {
-		const publicKey = this.props.wallet.publicKey || '';
-		return transaction.from.toLowerCase() === publicKey.toLowerCase();
+		const address = this.props.wallet.address || '';
+		return transaction.from.toLowerCase() === address.toLowerCase();
 	};
 
 	renderDate(timestamp) {

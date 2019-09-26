@@ -277,7 +277,7 @@ export class Web3Service {
 		if (!wallet) {
 			wallet = this.store.getState().wallet;
 		}
-		if (!wallet || wallet.publicKey !== opts.from) {
+		if (!wallet || wallet.address !== opts.from) {
 			throw new Error('provided wallet does not contain requested address');
 		}
 		if ((wallet.profile && wallet.profile !== 'local') || wallet.isHardwareWallet) {

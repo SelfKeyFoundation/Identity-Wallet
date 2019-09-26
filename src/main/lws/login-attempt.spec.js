@@ -13,7 +13,7 @@ describe('LoginAttempt', () => {
 		errorMessage: 'A test error has occured',
 		signup: true
 	};
-	const testWallet = { id: 10, publicKey: 'public' };
+	const testWallet = { id: 10, address: 'public' };
 	beforeEach(async () => {
 		await TestDb.init();
 	});

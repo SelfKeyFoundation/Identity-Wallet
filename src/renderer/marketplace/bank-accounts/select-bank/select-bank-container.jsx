@@ -78,7 +78,7 @@ const mapStateToProps = (state, props) => {
 		countryCode,
 		accountCode,
 		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
-		publicKey: getWallet(state).publicKey,
+		address: getWallet(state).address,
 		currentApplication: kycSelectors.selectCurrentApplication(state),
 		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(

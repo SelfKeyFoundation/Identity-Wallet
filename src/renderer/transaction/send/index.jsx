@@ -153,7 +153,7 @@ export class Transfer extends React.Component {
 	};
 
 	render() {
-		const { classes, cryptoCurrency, publicKey } = this.props;
+		const { classes, cryptoCurrency, address } = this.props;
 
 		return (
 			<Modal open={true} className={classes.modal}>
@@ -193,9 +193,9 @@ export class Transfer extends React.Component {
 								</Typography>
 								<div className={classes.tokenPublicKey}>
 									<Typography variant="body2" color="secondary" gutterBottom>
-										{publicKey}
+										{address}
 									</Typography>
-									<Copy text={publicKey} />
+									<Copy text={address} />
 								</div>
 							</div>
 							<Divider />
@@ -235,7 +235,7 @@ export class Transfer extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		publicKey: getWallet(state).publicKey,
+		address: getWallet(state).address,
 		transactions: transactionHistorySelectors.selectTransactionHistory(state).transactions
 	};
 };
