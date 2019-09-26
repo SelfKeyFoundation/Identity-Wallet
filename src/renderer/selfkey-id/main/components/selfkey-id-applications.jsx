@@ -404,10 +404,7 @@ class SelfkeyIdApplicationsComponent extends Component {
 										application={item}
 										status={item.currentStatus}
 										onClick={() =>
-											this.props.onApplicationAdditionalRequirements(
-												item.id,
-												item.rpName
-											)
+											this.props.onApplicationAdditionalRequirements(item)
 										}
 										handleRefresh={() => this.props.onApplicationRefresh(item)}
 										tooltip={moment(new Date(item.updatedAt)).format(
