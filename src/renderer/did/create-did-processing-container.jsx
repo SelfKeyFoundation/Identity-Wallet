@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { TransactionProcessingPopup } from '../common/transaction-processing-popup';
-import { walletSelectors } from 'common/wallet';
+import { didSelectors } from 'common/did';
 
 class CreateDIDProcessingContainerComponent extends Component {
 	handleCloseAction = _ => {
@@ -22,7 +22,7 @@ class CreateDIDProcessingContainerComponent extends Component {
 }
 
 const mapStateToProps = (state, props) => {
-	return { didOriginUrl: walletSelectors.getDidOriginUrl(state) };
+	return { didOriginUrl: didSelectors.selectOriginUrl(state) };
 };
 
 export const CreateDIDProcessingContainer = connect(mapStateToProps)(
