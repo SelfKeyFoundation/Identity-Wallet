@@ -10,14 +10,14 @@ jest.mock('node-fetch');
 
 describe('lws-service', () => {
 	const connMock = wallet => ({
-		getIdentity(publicKey) {
-			if (publicKey === wallet.publicKey) {
+		getIdentity(address) {
+			if (address === wallet.address) {
 				return wallet;
 			}
 			return null;
 		},
 		send(msg, req) {},
-		addIdentity(publicKey, identity) {}
+		addIdentity(address, identity) {}
 	});
 	const identity = {
 		id: 1,
@@ -42,7 +42,7 @@ describe('lws-service', () => {
 					eager: () => [
 						{
 							name: 'test1',
-							publicKey: 'unlocked',
+							address: 'unlocked',
 							profile: 'local',
 							hasSignedUpTo() {
 								return true;
@@ -50,7 +50,7 @@ describe('lws-service', () => {
 						},
 						{
 							name: 'test2',
-							publicKey: 'locked',
+							address: 'locked',
 							profile: 'local',
 							hasSignedUpTo() {
 								return true;
@@ -60,7 +60,7 @@ describe('lws-service', () => {
 				});
 
 				const conn = connMock({
-					publicKey: 'unlocked',
+					address: 'unlocked',
 					privateKey: 'private',
 					ident: { isSetupFinished: false }
 				});
@@ -101,17 +101,17 @@ describe('lws-service', () => {
 					getLedgerWallets: () => {}
 				};
 				setGlobalContext({ walletService });
-				sinon.stub(walletService, 'getLedgerWallets').returns([{ publicKey: 'test' }]);
+				sinon.stub(walletService, 'getLedgerWallets').returns([{ address: 'test' }]);
 				sinon.stub(Wallet, 'findByPublicKey');
 				Wallet.findByPublicKey.resolves({
-					publicKey: 'test',
+					address: 'test',
 					profile: 'ledger',
 					hasSignedUpTo() {
 						return false;
 					}
 				});
 
-				const conn = connMock({ publicKey: 'unlocked', privateKey: 'private' });
+				const conn = connMock({ address: 'unlocked', privateKey: 'private' });
 				sinon.stub(conn, 'send');
 
 				const msg = {
@@ -143,17 +143,17 @@ describe('lws-service', () => {
 					getTrezorWallets: () => {}
 				};
 				setGlobalContext({ walletService });
-				sinon.stub(walletService, 'getTrezorWallets').returns([{ publicKey: 'test' }]);
+				sinon.stub(walletService, 'getTrezorWallets').returns([{ address: 'test' }]);
 				sinon.stub(Wallet, 'findByPublicKey');
 				Wallet.findByPublicKey.resolves({
-					publicKey: 'test',
+					address: 'test',
 					profile: 'trezor',
 					hasSignedUpTo() {
 						return false;
 					}
 				});
 
-				const conn = connMock({ publicKey: 'unlocked', privateKey: 'private' });
+				const conn = connMock({ address: 'unlocked', privateKey: 'private' });
 				sinon.stub(conn, 'send');
 
 				const msg = {
@@ -210,7 +210,7 @@ describe('lws-service', () => {
 					await service.reqUnlock(
 						{
 							payload: {
-								publicKey: wallet.publicKey,
+								publicKey: wallet.address,
 								config: { website: { url: 'test' } },
 								profile
 							}
@@ -226,14 +226,14 @@ describe('lws-service', () => {
 						conn.send.calledWithMatch(
 							{
 								payload: {
-									publicKey: wallet.publicKey,
+									publicKey: wallet.address,
 									profile: wallet.profile,
 									unlocked: expected
 								}
 							},
 							{
 								payload: {
-									publicKey: wallet.publicKey,
+									publicKey: wallet.address,
 									config: { website: { url: 'test' } }
 								}
 							}
@@ -508,7 +508,7 @@ describe('lws-service', () => {
 				const identity = { getPublicKeyFromHardwareWallet: async () => 'test' };
 				const conn = {
 					send: () => {},
-					getIdentity: publicKey => identity
+					getIdentity: address => identity
 				};
 				const msg = { payload: { publicKey: 'test', profile: 'ledger' } };
 				await service.reqAuth(msg, conn);
@@ -589,7 +589,7 @@ describe('lws-service', () => {
 				const identity = { getPublicKeyFromHardwareWallet: async () => 'test' };
 				const conn = {
 					send: () => {},
-					getIdentity: publicKey => identity
+					getIdentity: address => identity
 				};
 				const msg = { payload: { publicKey: 'test', profile: 'ledger' } };
 				sinon.stub(conn, 'send');
@@ -709,12 +709,12 @@ describe('lws-service', () => {
 		});
 
 		it('unlockWallet', () => {
-			const publicKey = 'public';
+			const address = 'public';
 			const privateKey = 'private';
 
-			expect(wsconn.getIdentity(publicKey)).toBeNull();
-			wsconn.addIdentity(publicKey, privateKey);
-			expect(wsconn.getIdentity(publicKey)).toBe(privateKey);
+			expect(wsconn.getIdentity(address)).toBeNull();
+			wsconn.addIdentity(address, privateKey);
+			expect(wsconn.getIdentity(address)).toBe(privateKey);
 		});
 		describe('handleMessage', () => {
 			it('sends error on invalalid json msg', async () => {

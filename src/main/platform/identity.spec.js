@@ -7,13 +7,13 @@ jest.mock('../keystorage');
 
 describe('identity', () => {
 	let id = null;
-	const publicKey = '0x1Ff482D42D8727258A1686102Fa4ba925C46Bc42';
+	const address = '0x1Ff482D42D8727258A1686102Fa4ba925C46Bc42';
 	const privateKey = 'c6cbd7d76bc5baca530c875663711b947efa6a86a900a9e8645ce32e5821484e';
 	const ident = {};
 	beforeEach(() => {
 		id = new Identity(
 			{
-				publicKey,
+				address,
 				privateKey,
 				profile: 'local',
 				wid: 1
@@ -39,14 +39,14 @@ describe('identity', () => {
 				},
 				ident
 			);
-			sinon.stub(id1, 'getPublicKeyFromHardwareWallet').returns(publicKey);
+			sinon.stub(id1, 'getPublicKeyFromHardwareWallet').returns(address);
 			await id1.unlock();
-			expect(id1.publicKey).toEqual(publicKey);
+			expect(id1.publicKey).toEqual(address);
 		});
 		it('should throw invalid password if failed to unlock keystore', async () => {
 			let id1 = new Identity(
 				{
-					publicKey,
+					address,
 					profile: 'local'
 				},
 				ident
@@ -64,7 +64,7 @@ describe('identity', () => {
 		it('should unlock keystore', async () => {
 			let id1 = new Identity(
 				{
-					publicKey,
+					address,
 					profile: 'local'
 				},
 				ident

@@ -81,10 +81,10 @@ export const getGasLimit = async (
 	return tokenService.getGasLimit(tokenContract, address, amount, walletAddress);
 };
 
-const getTransactionCount = async publicKey => {
+const getTransactionCount = async address => {
 	const params = {
 		method: 'getTransactionCount',
-		args: [publicKey, 'pending']
+		args: [address, 'pending']
 	};
 
 	return (getGlobalContext() || {}).web3Service.waitForTicket(params);
@@ -99,7 +99,7 @@ export const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimi
 		const transaction = getTransaction(state);
 		const address = !newAddress ? transaction.address : newAddress;
 		const amount = !newAmount ? transaction.amount : newAmount;
-		const walletAddress = state.wallet.publicKey;
+		const walletAddress = state.wallet.address;
 
 		dispatch(setLocked(true));
 
@@ -422,7 +422,7 @@ const updateBalances = () => async (dispatch, getState) => {
 	let tokens = getTokens(getState()).splice(1);
 
 	await dispatch(walletOperations.updateWalletWithBalance(wallet));
-	await dispatch(walletTokensOperations.updateWalletTokensWithBalance(tokens, wallet.publicKey));
+	await dispatch(walletTokensOperations.updateWalletTokensWithBalance(tokens, wallet.address));
 
 	await dispatch(
 		actions.updateTransaction({
@@ -440,7 +440,7 @@ const createTxHistry = transactionHash => (dispatch, getState) => {
 		...transaction,
 		tokenSymbol,
 		networkId: chainId,
-		from: wallet.publicKey,
+		from: wallet.address,
 		to: transaction.address,
 		value: +transaction.amount,
 		gasPrice: +transaction.gasPrice,

@@ -19,9 +19,9 @@ const styles = theme => ({
 });
 
 export const TransactionNoKeyError = withStyles(styles)(
-	({ classes, children, publicKey, closeAction }) => {
+	({ classes, children, address, closeAction }) => {
 		return (
-			<TransactionErrorBox publicKey={publicKey} closeAction={closeAction}>
+			<TransactionErrorBox address={address} closeAction={closeAction}>
 				<div className={classes.bodyText}>
 					<Typography variant="body1">
 						You do not have enough KEY tokens to pay for this Marketplace Application.

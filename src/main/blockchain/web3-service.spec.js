@@ -115,9 +115,9 @@ describe('Web3Service', () => {
 				encodeABI: sinon.stub(),
 				estimateGas: sinon.stub().resolves(100)
 			};
-			let wallet = { publicKey: '0xtest', privateKey: 'test', profile: 'local' };
+			let wallet = { address: '0xtest', privateKey: 'test', profile: 'local' };
 			store.state.wallet = wallet;
-			const args = { from: wallet.publicKey };
+			const args = { from: wallet.address };
 			sinon.stub(ethMock, 'sendSignedTransaction').resolves('ok');
 			service.web3.eth = ethMock;
 			service.web3.utils = ethUtilMock;
@@ -132,9 +132,9 @@ describe('Web3Service', () => {
 		});
 		it('uses regular send method for non local profiles', async () => {
 			let contactMethodInstance = { send: sinon.stub() };
-			let wallet = { publicKey: '0xtest', privateKey: 'test', profile: 'test' };
+			let wallet = { address: '0xtest', privateKey: 'test', profile: 'test' };
 			store.state.wallet = wallet;
-			const args = { from: wallet.publicKey };
+			const args = { from: wallet.address };
 			await service.sendSignedTransaction(contactMethodInstance, contractAddress, [args]);
 			expect(contactMethodInstance.send.calledOnceWith(args)).toBeTruthy();
 			store.state.wallet = {};

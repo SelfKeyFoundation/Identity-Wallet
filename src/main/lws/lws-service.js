@@ -42,11 +42,11 @@ export class LWSService {
 		let payload = await Wallet.findAll().eager('identities');
 		payload = await Promise.all(
 			payload.map(async w => {
-				const identity = conn.getIdentity(w.publicKey);
+				const identity = conn.getIdentity(w.address);
 				let unlocked = !!identity;
 				let signedUp = unlocked && (await w.hasSignedUpTo(website.url));
 				const retWallet = {
-					publicKey: w.publicKey,
+					publicKey: w.address,
 					unlocked,
 					profile: w.profile,
 					name: w.name,
@@ -73,11 +73,11 @@ export class LWSService {
 	getHardwareWalletsPayload(wallets, conn, website, type) {
 		return Promise.all(
 			wallets.map(async w => {
-				let unlocked = !!conn.getIdentity(w.publicKey);
-				const wallet = Wallet.findByPublicKey(w.publicKey);
+				let unlocked = !!conn.getIdentity(w.address);
+				const wallet = Wallet.findByPublicKey(w.address);
 				let signedUp = unlocked && wallet && (await wallet.hasSignedUpTo(website.url));
 				return {
-					publicKey: w.publicKey,
+					publicKey: w.address,
 					unlocked,
 					profile: type,
 					signedUp
@@ -183,7 +183,7 @@ export class LWSService {
 		log.debug('XXX reqUnlock ident %2j', ident);
 		wallet = !wallet
 			? await Wallet.create({
-					publicKey,
+					address: publicKey,
 					profile,
 					path
 			  })
@@ -556,12 +556,12 @@ export class WSConnection {
 		};
 	}
 
-	addIdentity(publicKey, identity) {
-		this.ctx.identities[publicKey] = identity;
+	addIdentity(address, identity) {
+		this.ctx.identities[address] = identity;
 	}
 
-	getIdentity(publicKey) {
-		return this.ctx.identities[publicKey] || null;
+	getIdentity(address) {
+		return this.ctx.identities[address] || null;
 	}
 
 	async handleMessage(msg) {
