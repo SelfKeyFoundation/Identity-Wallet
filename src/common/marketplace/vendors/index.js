@@ -61,6 +61,11 @@ export const vendorSelectors = {
 		vendorSelectors
 			.selectVendorRoot(state)
 			.all.map(id => vendorSelectors.selectVendorRoot(state).byId[id]),
+	selectActiveVendors: state =>
+		vendorSelectors
+			.selectVendorRoot(state)
+			.all.filter(id => vendorSelectors.selectVendorRoot(state).byId[id].status === 'active')
+			.map(id => vendorSelectors.selectVendorRoot(state).byId[id]),
 	selectVendorsForCategory: (state, category, status = 'active') =>
 		vendorSelectors
 			.selectVendors(state)

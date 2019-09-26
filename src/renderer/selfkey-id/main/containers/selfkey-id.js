@@ -26,9 +26,7 @@ class SelfkeyIdContainerComponent extends Component {
 		this.setState({ tab: tab ? parseInt(tab) : 0 });
 	}
 
-	handleTabChange = (event, tab) => {
-		this.setState({ tab });
-	};
+	handleTabChange = (event, tab) => this.setState({ tab });
 
 	componentDidUpdate() {
 		if (this.props.identity.type !== 'individual') {
@@ -37,6 +35,7 @@ class SelfkeyIdContainerComponent extends Component {
 	}
 
 	handleMarketplaceAccessClick = _ => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
+
 	render() {
 		const { tab } = this.state;
 		let component = (

@@ -263,61 +263,59 @@ class SelfkeyIdApplicationsComponent extends Component {
 		</Grid>
 	);
 
-	renderApplicationRefreshModal() {
-		const { classes } = this.props;
-		return (
-			<Popup
-				open={true}
-				text={'Update Application'}
-				closeAction={this.props.onCloseApplicationRefreshModal}
+	renderApplicationRefreshModal = () => (
+		<Popup
+			open={true}
+			text={'Update Application'}
+			closeAction={this.props.onCloseApplicationRefreshModal}
+		>
+			<Grid
+				container
+				className={this.props.classes.root}
+				spacing={32}
+				direction="column"
+				justify="flex-start"
+				alignItems="stretch"
 			>
-				<Grid
-					container
-					className={classes.root}
-					spacing={32}
-					direction="column"
-					justify="flex-start"
-					alignItems="stretch"
-				>
-					<Grid item>
-						<Typography variant="overline">
-							Application status updated successfully.
-						</Typography>
-					</Grid>
-					<Grid item>
-						<Grid container spacing={24}>
-							<Grid item>
-								<Button
-									variant="outlined"
-									size="large"
-									onClick={this.props.handleCloseApplicationRefreshModal}
-								>
-									Close
-								</Button>
-							</Grid>
+				<Grid item>
+					<Typography variant="overline">
+						Application status updated successfully.
+					</Typography>
+				</Grid>
+				<Grid item>
+					<Grid container spacing={24}>
+						<Grid item>
+							<Button
+								variant="outlined"
+								size="large"
+								onClick={this.props.onCloseApplicationRefreshModal}
+							>
+								Close
+							</Button>
 						</Grid>
 					</Grid>
 				</Grid>
-			</Popup>
-		);
-	}
+			</Grid>
+		</Popup>
+	);
 
 	render() {
-		const { classes, showApplicationRefreshModal, loading, config, applications } = this.props;
+		const { classes, showApplicationRefreshModal, loading, applications, vendors } = this.props;
+
+		const getRpInfo = (rpName, field) => {
+			const vendor = vendors.find(v => v.vendorId === rpName);
+			if (vendor && vendor[field]) {
+				return vendor[field];
+			} else {
+				return 'N/A';
+			}
+		};
+
+		const getRpName = application => getRpInfo(application.rpName, 'name');
 
 		if (loading) {
 			return this.renderLoadingScreen();
 		}
-
-		const getRpInfo = (rpName, field) => {
-			return config.relyingPartyInfo[rpName][field];
-		};
-
-		const getRpName = title => {
-			return title.toLowerCase().startsWith('bank account')
-				? 'Bank Accounts'
-				: 'Incorporations';
-		};
 
 		if (!loading && applications && applications.length === 0) {
 			return (
@@ -376,16 +374,10 @@ class SelfkeyIdApplicationsComponent extends Component {
 										alignItems="baseline"
 									>
 										<Typography variant="h2" className={classes.type}>
-											{/* Until the scheduler (and associate vendor airtable) is released, we are going to use
-											  the application's title because we are using the same rpName for BAM and Incorporations. */}
-											{/* {item.rpName.charAt(0).toUpperCase() +
-												item.rpName.slice(1)} */}
-											{getRpName(item.title)}
+											{item.title}
 										</Typography>
 										<Typography variant="subtitle2" color="secondary">
-											-{' '}
-											{item.title.charAt(0).toUpperCase() +
-												item.title.slice(1)}
+											{getRpName(item)}
 										</Typography>
 									</Grid>
 									<Grid
@@ -409,16 +401,15 @@ class SelfkeyIdApplicationsComponent extends Component {
 									alignItems="center"
 								>
 									<StatusInfo
+										application={item}
 										status={item.currentStatus}
 										onClick={() =>
-											this.props.onApplicationAddDocuments(
+											this.props.onApplicationAdditionalRequirements(
 												item.id,
 												item.rpName
 											)
 										}
-										handleRefresh={() =>
-											this.props.onApplicationRefresh(item.id)
-										}
+										handleRefresh={() => this.props.onApplicationRefresh(item)}
 										tooltip={moment(new Date(item.updatedAt)).format(
 											'DD MMM YYYY'
 										)}
@@ -479,7 +470,10 @@ class SelfkeyIdApplicationsComponent extends Component {
 																Provider Contact
 															</Typography>
 															<Typography variant="body2">
-																{getRpInfo(item.rpName, 'email')}
+																{getRpInfo(
+																	item.rpName,
+																	'contactEmail'
+																)}
 															</Typography>
 														</ListItem>
 														<ListItem
