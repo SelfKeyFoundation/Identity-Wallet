@@ -185,11 +185,11 @@ const unlockWalletWithPrivateKey = privateKey => async dispatch => {
 	}
 };
 
-const unlockWalletWithPublicKey = (publicKey, path) => async (dispatch, getState) => {
+const unlockWalletWithPublicKey = (address, path) => async (dispatch, getState) => {
 	const walletService = getGlobalContext().walletService;
 	const walletType = selectApp(getState()).walletType;
 	try {
-		const wallet = await walletService.unlockWalletWithPublicKey(publicKey, path, walletType);
+		const wallet = await walletService.unlockWalletWithPublicKey(address, path, walletType);
 		await dispatch(appOperations.unlockWalletOperation(wallet));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {

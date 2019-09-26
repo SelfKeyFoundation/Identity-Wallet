@@ -9,7 +9,7 @@ import AppEth from '@ledgerhq/hw-app-eth';
 const log = new Logger('Identity');
 export class Identity {
 	constructor(wallet, ident) {
-		this.address = wallet.publicKey;
+		this.address = wallet.address;
 		this.publicKey = null;
 		this.profile = wallet.profile;
 		this.privateKey = wallet.privateKey ? wallet.privateKey.replace('0x', '') : null;

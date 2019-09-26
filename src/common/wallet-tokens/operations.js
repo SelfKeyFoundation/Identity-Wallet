@@ -11,7 +11,7 @@ const loadWalletTokens = createAliasedAction(
 		const walletTokenService = getGlobalContext().walletTokenService;
 		const wallet = getWallet(getState());
 		const tokens = await walletTokenService.getWalletTokens(wallet.id);
-		await dispatch(updateWalletTokensWithBalance(tokens, wallet.publicKey));
+		await dispatch(updateWalletTokensWithBalance(tokens, wallet.address));
 	}
 );
 
@@ -47,7 +47,7 @@ const refreshWalletTokensBalance = () => async (dispatch, getState) => {
 	const state = getState();
 	await dispatch(
 		actions.setWalletTokens(
-			await getWalletTokensWithBalance(getTokens(state), getWallet(state).publicKey)
+			await getWalletTokensWithBalance(getTokens(state), getWallet(state).address)
 		)
 	);
 };

@@ -20,10 +20,8 @@ export class Wallet extends BaseModel {
 			properties: {
 				id: { type: 'integer' },
 				name: { type: 'string' },
-				publicKey: { type: 'string' },
-				privateKey: { type: 'string' },
+				address: { type: 'string' },
 				keystoreFilePath: { type: 'string' },
-				isSetupFinished: { type: 'integer' },
 				profile: { type: 'string' },
 				path: { type: 'string' }
 			}
@@ -73,7 +71,7 @@ export class Wallet extends BaseModel {
 	}
 
 	static async create(itm) {
-		itm.publicKey = itm.publicKey.toLowerCase();
+		itm.address = itm.address.toLowerCase();
 		const tx = await transaction.start(this.knex());
 		try {
 			let insertedItm = await this.query(tx).insertGraphAndFetch(
@@ -104,10 +102,6 @@ export class Wallet extends BaseModel {
 		}
 	}
 
-	static findActive() {
-		return this.findAllWithKeyStoreFile().where({ isSetupFinished: 1 });
-	}
-
 	static findById(id) {
 		return this.query().findById(id);
 	}
@@ -120,17 +114,12 @@ export class Wallet extends BaseModel {
 		return this.query();
 	}
 
-	static findByPublicKey(publicKey) {
-		return this.query().findOne({ publicKey: publicKey.toLowerCase() });
+	static findByPublicKey(address) {
+		return this.query().findOne({ address: address.toLowerCase() });
 	}
 
 	static async updateName({ id, name }) {
 		let wallet = await this.query().patchAndFetchById(id, { name });
-		return wallet;
-	}
-
-	static async updateSetup({ id, setup }) {
-		let wallet = await this.query().patchAndFetchById(id, { isSetupFinished: setup ? 1 : 0 });
 		return wallet;
 	}
 

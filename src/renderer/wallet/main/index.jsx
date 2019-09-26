@@ -82,7 +82,7 @@ const contentWrapperStyle = {
 
 class Main extends Component {
 	setMatomoId = () => {
-		ReactPiwik.push(['setUserId', md5(this.props.publicKey)]);
+		ReactPiwik.push(['setUserId', md5(this.props.address)]);
 		ReactPiwik.push(['setCustomVariable', 1, 'machineId', window.machineId, 'visit']);
 		ReactPiwik.push(['setCustomVariable', 2, 'walletType', this.props.walletType, 'visit']);
 		ReactPiwik.push(['setCustomVariable', 3, 'walletVersion', window.appVersion, 'visit']);
@@ -250,7 +250,7 @@ class Main extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		publicKey: walletSelectors.getWallet(state).publicKey,
+		address: walletSelectors.getWallet(state).address,
 		walletType: appSelectors.selectWalletType(state)
 	};
 };

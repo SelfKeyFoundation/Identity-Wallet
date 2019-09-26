@@ -64,7 +64,7 @@ const mapStateToProps = (state, props) => {
 			state,
 			c => c.data.companyCode === companyCode
 		),
-		publicKey: getWallet(state).publicKey,
+		address: getWallet(state).address,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		currentApplication: kycSelectors.selectCurrentApplication(state),
 		rp: kycSelectors.relyingPartySelector(state, vendorId),

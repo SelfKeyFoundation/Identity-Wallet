@@ -227,7 +227,7 @@ const checkOrderAllowanceOperation = orderId => async (dispatch, getState) => {
 	const amount = ordersSelectors.getContractFormattedAmount(getState(), orderId);
 
 	let allowance = await selfkeyService.getAllowance(
-		wallet.publicKey,
+		wallet.address,
 		config.paymentSplitterAddress
 	);
 	let update = null;
@@ -309,7 +309,7 @@ const preapproveCurrentOrderOperation = () => async (dispatch, getState) => {
 		const amount = ordersSelectors.getContractFormattedAmount(getState(), orderId);
 
 		const receipt = await selfkeyService.approve(
-			wallet.publicKey,
+			wallet.address,
 			config.paymentSplitterAddress,
 			amount,
 			allowanceGas,
@@ -448,7 +448,7 @@ const payCurrentOrderOperation = () => async (dispatch, getState) => {
 	try {
 		const amount = ordersSelectors.getContractFormattedAmount(getState(), orderId);
 		const receipt = await paymentService.makePayment(
-			wallet.publicKey,
+			wallet.address,
 			order.did,
 			order.vendorDID,
 			amount,
@@ -502,7 +502,7 @@ const estimateCurrentPreapproveGasOperation = () => async (dispatch, getState) =
 	const wallet = walletSelectors.getWallet(getState());
 	const amount = ordersSelectors.getContractFormattedAmount(getState(), orderId);
 	const gasLimit = await getGlobalContext().selfkeyService.estimateApproveGasLimit(
-		wallet.publicKey,
+		wallet.address,
 		config.paymentSplitterAddress,
 		amount
 	);

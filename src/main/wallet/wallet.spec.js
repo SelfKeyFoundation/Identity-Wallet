@@ -2,17 +2,15 @@ import Wallet from './wallet';
 import TestDb from '../db/test-db';
 
 describe('Wallet model', () => {
-	const testItm = { publicKey: 'abc', keystoreFilePath: 'abcd' };
+	const testItm = { address: 'abc', keystoreFilePath: 'abcd' };
 
 	const testItm2 = {
-		publicKey: 'active',
-		keystoreFilePath: 'active keystore',
-		isSetupFinished: 1
+		address: 'active',
+		keystoreFilePath: 'active keystore'
 	};
 
 	const testItm3 = {
-		publicKey: 'public-key-1',
-		isSetupFinished: 1
+		address: 'public-key-1'
 	};
 
 	beforeEach(async () => {
@@ -32,14 +30,6 @@ describe('Wallet model', () => {
 		let setting = await itm.$relatedQuery('setting');
 		expect(setting).toBeDefined();
 		expect(setting.walletId).toBe(itm.id);
-	});
-
-	it('findActive', async () => {
-		await Wallet.query().insert(testItm);
-		await Wallet.query().insert(testItm2);
-		let found = await Wallet.findActive();
-		expect(found.length).toBe(1);
-		expect(found[0].isSetupFinished).toBe(1);
 	});
 
 	it('findAll', async () => {
@@ -64,17 +54,8 @@ describe('Wallet model', () => {
 	it('findByPublicKey', async () => {
 		await Wallet.query().insert(testItm);
 		await Wallet.query().insert(testItm2);
-		let found = await Wallet.findByPublicKey(testItm.publicKey);
+		let found = await Wallet.findByPublicKey(testItm.address);
 		expect(found).toMatchObject(testItm);
-	});
-
-	it('updateSetup', async () => {
-		let itm = await Wallet.query().insertAndFetch(testItm);
-		expect(itm.isSetupFinished).toEqual(0);
-		itm.setup = 1;
-		await Wallet.updateSetup(itm);
-		let check = await Wallet.query().findById(itm.id);
-		expect(check.isSetupFinished).toBe(itm.setup);
 	});
 
 	it('updateName', async () => {
@@ -95,7 +76,7 @@ describe('Wallet model', () => {
 			success: true,
 			signup: true
 		};
-		const testWallet = { id: 10, publicKey: 'public' };
+		const testWallet = { id: 10, address: 'public' };
 		let wallet = null;
 		beforeEach(async () => {
 			wallet = await Wallet.query().insertAndFetch(testWallet);
@@ -155,7 +136,7 @@ describe('Wallet model', () => {
 			success: true,
 			signup: true
 		};
-		const testWallet = { id: 10, publicKey: 'public' };
+		const testWallet = { id: 10, address: 'public' };
 		it('adds a new login attempt', async () => {
 			let wallet = await Wallet.query().insertAndFetch(testWallet);
 			await wallet.addLoginAttempt({ ...testLoginAttempt });
