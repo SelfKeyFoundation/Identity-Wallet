@@ -20,7 +20,12 @@ import {
 	MarketplaceOrdersPage
 } from '../../marketplace';
 
-import { SelfkeyIdContainer, AssociateDID } from '../../selfkey-id/main';
+import { SelfkeyIdContainer } from '../../selfkey-id/main';
+import {
+	AssociateDIDContainer,
+	CreateDIDPopupContainer,
+	CreateDIDProcessingContainer
+} from '../../did';
 import Transfer from '../../transaction/send';
 import AdvancedTransaction from '../../transaction/send/advanced-transaction';
 import ReceiveTransfer from '../../transaction/receive';
@@ -46,8 +51,6 @@ import { CurrentApplication, ApplicationInProgress } from '../../kyc';
 
 import md5 from 'md5';
 import ReactPiwik from 'react-piwik';
-import CreateDID from '../../selfkey-id/main/components/create-did';
-import CreateDIDProcessing from '../../selfkey-id/main/components/create-did-processing';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
 import CorporateWizardContainer from '../../corporate/wizard/corporate-wizard-container';
 import CorporateAddMemberContainer from '../../corporate/member/corporate-add-member-container';
@@ -121,7 +124,7 @@ class Main extends Component {
 						path={`${match.path}/selfkeyIdApplications`}
 						render={props => <SelfkeyIdContainer tabValue={1} />}
 					/>
-					<Route path={`${match.path}/enter-did`} component={AssociateDID} />
+					<Route path={`${match.path}/enter-did`} component={AssociateDIDContainer} />
 					<Route path={`${match.path}/addressBookAdd`} component={AddressBookAdd} />
 					<Route path={`${match.path}/addressBookEdit/:id`} component={AddressBookEdit} />
 					<Route
@@ -218,10 +221,10 @@ class Main extends Component {
 					<Route path={`${match.path}/hd-error`} component={HardwareWalletError} />
 					<Route path={`${match.path}/auth-error`} component={AuthenticationError} />
 
-					<Route path={`${match.path}/get-did`} component={CreateDID} />
+					<Route path={`${match.path}/get-did`} component={CreateDIDPopupContainer} />
 					<Route
 						path={`${match.path}/create-did-processing`}
-						component={CreateDIDProcessing}
+						component={CreateDIDProcessingContainer}
 					/>
 					<Route
 						path={`${match.path}/create-corporate-profile`}
