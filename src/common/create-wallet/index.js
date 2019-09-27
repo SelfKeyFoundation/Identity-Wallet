@@ -1,6 +1,7 @@
 import { getGlobalContext } from 'common/context';
 import { createAliasedAction } from 'electron-redux';
 import { walletOperations, walletSelectors } from '../wallet';
+import { appOperations } from '../app';
 
 export const initialState = {
 	password: '',
@@ -27,8 +28,9 @@ const createWalletActions = {
 
 const createWallet = () => async (dispatch, getState) => {
 	const walletService = getGlobalContext().walletService;
-	const wallet = await walletService.createWallet(getState().createWallet.password);
+	const wallet = await walletService.createWalletWithPassword(getState().createWallet.password);
 	await dispatch(walletOperations.updateWalletWithBalance(wallet));
+	await dispatch(appOperations.unlockWalletOperation(wallet, 'privateKey'));
 };
 
 const downloadFile = toPath => async (dispatch, getState) => {
