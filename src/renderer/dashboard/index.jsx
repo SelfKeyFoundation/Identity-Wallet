@@ -1,65 +1,52 @@
-import React from 'react';
-import { Grid, Typography, Button } from '@material-ui/core';
-import TokenList from './token-list';
-import CryptoChartBox from './crypto-chart-box';
-import { push } from 'connected-react-router';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import TransactionsHistory from '../transaction/transactions-history';
-import { Alert } from '../common';
+import { push } from 'connected-react-router';
+import { Grid } from '@material-ui/core';
 import { appSelectors } from 'common/app';
+import { identitySelectors } from 'common/identity';
+import { PersonalDashboardPage } from './personal-dashboard';
+import { CorporateDashboardPage } from '../corporate';
+import { UpdateNotification } from './update-notification';
+
+class DashboardComponent extends Component {
+	onAutoUpdateClick = () => this.props.dispatch(push('/auto-update'));
+
+	componentWillReceiveProps() {
+		console.log('props');
+	}
+
+	render() {
+		const { selectedProfile, info } = this.props;
+		const Dashboard =
+			selectedProfile.type === 'corporate' ? (
+				<CorporateDashboardPage {...this.props} />
+			) : (
+				<PersonalDashboardPage {...this.props} />
+			);
+
+		return (
+			<Grid
+				id="viewDashboard"
+				container
+				direction="column"
+				justify="flex-start"
+				alignItems="center"
+				spacing={32}
+			>
+				<UpdateNotification info={info} onAutoUpdate={this.onAutoUpdateClick} />
+				{Dashboard}
+			</Grid>
+		);
+	}
+}
 
 const mapStateToProps = state => {
 	return {
-		info: appSelectors.selectAutoUpdateInfo(state)
+		info: appSelectors.selectAutoUpdateInfo(state),
+		selectedProfile: identitySelectors.selectCurrentIdentity(state)
 	};
 };
 
-const Dashboard = connect(mapStateToProps)(props => {
-	return (
-		<Grid
-			id="viewDashboard"
-			container
-			direction="column"
-			justify="flex-start"
-			alignItems="center"
-			spacing={32}
-		>
-			{props.info && props.info.version && (
-				<Grid item style={{ width: '100%' }}>
-					<Alert type="warning">
-						<Grid container direction="row" justify="space-between">
-							<Grid item>
-								A new version of the wallet is available! For security reasons
-								please update to the latest version.
-							</Grid>
-							<Grid item>
-								<Button
-									variant="contained"
-									size="small"
-									onClick={() => props.dispatch(push('/auto-update'))}
-								>
-									DOWNLOAD & INSTALL
-								</Button>
-							</Grid>
-						</Grid>
-					</Alert>
-				</Grid>
-			)}
-			<Grid container item direction="row" justify="flex-start" alignItems="flex-start">
-				<Typography variant="h1">SelfKey Dashboard</Typography>
-			</Grid>
-			<Grid item style={{ width: '100%' }}>
-				<TokenList />
-			</Grid>
-			<Grid item style={{ width: '100%' }}>
-				<CryptoChartBox
-					manageCryptoAction={() => props.dispatch(push('/main/crypto-manager'))}
-				/>
-			</Grid>
-			<Grid item style={{ width: '100%' }}>
-				<TransactionsHistory />
-			</Grid>
-		</Grid>
-	);
-});
+const Dashboard = connect(mapStateToProps)(DashboardComponent);
+export { Dashboard };
 export default Dashboard;

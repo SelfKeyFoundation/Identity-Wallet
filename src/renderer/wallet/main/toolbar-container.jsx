@@ -38,8 +38,8 @@ class ToolbarContainer extends Component {
 
 	handleProfileSelect = identity => evt => {
 		evt.preventDefault();
-		this.toggleProfile(!this.state.isProfileOpen);
 		this.props.dispatch(identityOperations.switchProfileOperation(identity));
+		this.toggleProfile(!this.state.isProfileOpen);
 	};
 
 	handleProfileNavigate = evt => {

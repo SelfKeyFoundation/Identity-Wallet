@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-import Dashboard from '../../dashboard';
+import { Dashboard } from '../../dashboard';
 import { CryptoMangerContainer, AddTokenContainer } from '../../crypto-manager';
 import AddressBook from '../../address-book/main';
 import AddressBookAdd from '../../address-book/add';

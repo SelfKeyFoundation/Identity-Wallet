@@ -3,13 +3,8 @@ import { Typography, Grid, withStyles } from '@material-ui/core';
 import { CorporateDashboardTabs } from './dashboard-tabs';
 
 const styles = theme => ({
-	container: {
-		width: '100%',
-		margin: '50px auto 0',
-		maxWidth: '960px'
-	},
 	title: {
-		padding: '22px 0'
+		padding: '0 0 22px 0'
 	},
 	contentContainer: {
 		borderBottom: '1px solid #303C49'
@@ -18,15 +13,8 @@ const styles = theme => ({
 export const CorporateDashboardPage = withStyles(styles)(props => {
 	const { classes, tab, onTabChange } = props;
 	return (
-		<Grid
-			id="corpWalletDashboard"
-			container
-			direction="column"
-			justify="flex-start"
-			alignItems="stretch"
-			className={classes.container}
-		>
-			<Grid item id="header">
+		<React.Fragment>
+			<Grid container item direction="row" justify="flex-start" alignItems="flex-start">
 				<Typography variant="h1" className={classes.title}>
 					SelfKey Corporate Vault
 				</Typography>
@@ -34,7 +22,7 @@ export const CorporateDashboardPage = withStyles(styles)(props => {
 			<Grid container className={classes.contentContainer}>
 				<CorporateDashboardTabs {...props} tab={tab} onTabChange={onTabChange} />
 			</Grid>
-		</Grid>
+		</React.Fragment>
 	);
 });
 
