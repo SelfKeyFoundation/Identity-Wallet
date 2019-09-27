@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = async ({ config }) => {
 	config.module.rules.push({
@@ -9,9 +10,29 @@ module.exports = async ({ config }) => {
 			path.resolve(__dirname, '../node_modules/selfkey-ui/')
 		],
 		options: {
-			presets: ['@babel/react']
+			presets: [
+				[
+					'@babel/preset-env',
+					{
+						targets: {
+							node: 'current'
+						}
+					}
+				],
+				'@babel/preset-react'
+			],
+			plugins: [
+				'@babel/plugin-proposal-class-properties',
+				'@babel/plugin-syntax-dynamic-import'
+			]
 		}
 	});
+
+	config.plugins.push(
+		new webpack.EnvironmentPlugin({
+			STORYBOOK: '1'
+		})
+	);
 
 	config.resolve.modules = [
 		path.resolve(__dirname, '..', 'src'),
@@ -19,5 +40,6 @@ module.exports = async ({ config }) => {
 	];
 
 	config.resolve.extensions = ['.js', '.jsx', '.css', '.svg'];
+	config.node = { fs: 'empty' };
 	return config;
 };
