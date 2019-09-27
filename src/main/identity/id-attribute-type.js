@@ -1,9 +1,9 @@
 import { Model, transaction } from 'objection';
 import BaseModel from '../common/base-model';
-import { isDevMode } from 'common/utils/common';
+import config from 'common/config';
 import { jsonSchema } from 'common/identity/utils';
 import { Logger } from 'common/logger';
-const env = isDevMode() ? 'development' : 'production';
+const env = config.attributeTypeSource;
 const log = new Logger('id-attribute-type-model');
 
 const TABLE_NAME = 'id_attribute_types';
