@@ -11,10 +11,6 @@ import { UpdateNotification } from './update-notification';
 class DashboardComponent extends Component {
 	onAutoUpdateClick = () => this.props.dispatch(push('/auto-update'));
 
-	componentWillReceiveProps() {
-		console.log('props');
-	}
-
 	render() {
 		const { selectedProfile, info } = this.props;
 		const Dashboard =
