@@ -74,7 +74,7 @@
 		"electron-devtools-installer": "2.2.4",
 		"electron-dl": "1.14.0",
 		"electron-is": "3.0.0",
-		"electron-pdf-window": "https://github.com/SelfKeyFoundation/electron-pdf-window.git#15ef0b0",
+		"electron-pdf-window": "https://github.com/SelfKeyFoundation/electron-pdf-window.git#289c1aeb35e9e1da30ab8eabe52428dc87cc1220",
 		"electron-redux": "1.3.1",
 		"ethereumjs-tx": "1.3.7",
 		"ethereumjs-util": "6.1.0",

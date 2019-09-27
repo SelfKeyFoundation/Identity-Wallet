@@ -82,6 +82,7 @@ window.openFileSelectDialog = event => {
 };
 
 window.openPDF = href => {
+	if (!href) return;
 	const { BrowserWindow } = electron.remote;
 	const win = new BrowserWindow({ width: 800, height: 600 });
 	PDFWindow.addSupport(win);
