@@ -1,12 +1,11 @@
 import { Model, transaction } from 'objection';
 import BaseModel from '../common/base-model';
 import { jsonSchema } from 'common/identity/utils';
-import { isDevMode } from 'common/utils/common';
 import IdAttributeType from './id-attribute-type';
 import { Logger } from 'common/logger';
 import { UiSchema } from './ui-schema';
-
-const env = isDevMode() ? 'development' : 'production';
+import config from 'common/config';
+const env = config.attributeTypeSource;
 
 const log = new Logger('repository-model');
 const TABLE_NAME = 'repository';
