@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { Popup } from '../../../common/popup';
 import { identityOperations, identitySelectors } from 'common/identity';
-import EditAttribute from '../components/edit-attribute';
+import EditAttribute from './edit-attribute';
 
-class EditAttributePopupComponent extends PureComponent {
+class EditAttributeContainerComponent extends PureComponent {
 	handleSave = attribute => {
 		this.props.dispatch(identityOperations.editIdAttributeOperation(attribute));
 	};
@@ -14,14 +13,14 @@ class EditAttributePopupComponent extends PureComponent {
 	render() {
 		const { open = true, attribute, text = 'Edit Information', uiSchema } = this.props;
 		return (
-			<Popup open={open} closeAction={this.handleCancel} text={text}>
-				<EditAttribute
-					onSave={this.handleSave}
-					onCancel={this.handleCancel}
-					attribute={attribute}
-					uiSchema={uiSchema}
-				/>
-			</Popup>
+			<EditAttribute
+				open={open}
+				text={text}
+				onSave={this.handleSave}
+				onCancel={this.handleCancel}
+				attribute={attribute}
+				uiSchema={uiSchema}
+			/>
 		);
 	}
 }
@@ -40,6 +39,6 @@ const mapStateToProps = (state, props) => {
 		uiSchema
 	};
 };
-export const EditAttributePopup = connect(mapStateToProps)(EditAttributePopupComponent);
+export const EditAttributeContainer = connect(mapStateToProps)(EditAttributeContainerComponent);
 
-export default EditAttributePopup;
+export default EditAttributeContainer;

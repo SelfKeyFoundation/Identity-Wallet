@@ -1,10 +1,9 @@
 import { Model, transaction } from 'objection';
 import BaseModel from '../common/base-model';
+import config from 'common/config';
 import { jsonSchema } from 'common/identity/utils';
-import { isDevMode } from 'common/utils/common';
 import { Logger } from 'common/logger';
-
-const env = isDevMode() ? 'development' : 'production';
+const env = config.attributeTypeSource;
 const log = new Logger('ui-schema-model');
 
 const UI_SCHEMA_EXPIRES = 86400000; // 1 day
