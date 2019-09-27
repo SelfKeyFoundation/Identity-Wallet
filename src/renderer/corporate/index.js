@@ -1,3 +1,3 @@
-import { CorporateDashboardPage } from './dashboard/dashboard-page';
+import { CorporateDashboardContainer } from './dashboard/dashboard-container';
 
-export { CorporateDashboardPage };
+export { CorporateDashboardContainer };

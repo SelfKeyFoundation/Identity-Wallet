@@ -1,7 +1,6 @@
 import React from 'react';
-import { Grid, CardHeader, Card, CardContent, Typography } from '@material-ui/core';
+import { Grid, CardHeader, Card, CardContent, Typography, withStyles } from '@material-ui/core';
 import { CheckMaIcon, AttributeAlertIcon, EditTransparentIcon } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core';
 
 const styles = theme => ({
 	hr: {
@@ -58,13 +57,14 @@ const editAction = onEdit => (
 );
 
 const CorporateDetails = withStyles(styles)(props => {
-	const { classes, name, jurisdiction, type, date, address, onEdit } = props;
+	const { classes, profile, onEdit } = props;
+	console.log(profile);
 	return (
 		<Grid container direction="column" spacing={32}>
 			<Grid item>
 				<Card>
 					<CardHeader
-						title={name}
+						title={profile.entityName}
 						className={classes.regularText}
 						action={editAction(onEdit)}
 					/>
@@ -81,25 +81,25 @@ const CorporateDetails = withStyles(styles)(props => {
 								<Typography className="label" color="secondary">
 									Jurisdiction
 								</Typography>
-								{renderAttr(jurisdiction)}
+								{renderAttr(profile.jurisdiction)}
 							</div>
 							<div className={classes.attr}>
 								<Typography className="label" color="secondary">
 									Entity Type
 								</Typography>
-								{renderAttr(type)}
+								{renderAttr(profile.entityType)}
 							</div>
 							<div className={classes.attr}>
 								<Typography className="label" color="secondary">
 									Incorporation Date
 								</Typography>
-								{renderAttr(date)}
+								{renderAttr(profile.creationDate)}
 							</div>
 							<div className={classes.attr}>
 								<Typography className="label" color="secondary">
 									Address
 								</Typography>
-								{renderAttr(address)}
+								{renderAttr(profile.address)}
 							</div>
 						</Grid>
 					</CardContent>

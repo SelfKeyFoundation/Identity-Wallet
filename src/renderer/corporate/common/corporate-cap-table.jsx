@@ -9,10 +9,10 @@ import {
 	TableHead,
 	TableBody,
 	TableRow,
-	TableCell
+	TableCell,
+	withStyles
 } from '@material-ui/core';
 import { EditTransparentIcon, SmallTableHeadRow } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core';
 
 const styles = theme => ({
 	hr: {

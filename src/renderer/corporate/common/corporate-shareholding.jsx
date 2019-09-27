@@ -1,7 +1,6 @@
 import React from 'react';
-import { Grid, CardHeader, Card, CardContent, Typography } from '@material-ui/core';
+import { Grid, CardHeader, Card, CardContent, withStyles } from '@material-ui/core';
 import { Chart } from 'react-google-charts';
-import { withStyles } from '@material-ui/core';
 
 const styles = theme => ({
 	cardContainer: {
@@ -91,7 +90,7 @@ const getChartData = cap => {
 const selectEvent = {
 	eventName: 'select',
 	callback: ({ chartWrapper }) => {
-		const selection = chartWrapper.getChart().getSelection();
+		// const selection = chartWrapper.getChart().getSelection();
 	}
 };
 
@@ -104,7 +103,12 @@ const readyEvent = {
 	}
 };
 
+/*
 let pieChartRef = null;
+ref={c => {
+	pieChartRef = c;
+}}
+*/
 
 const CorporateShareholding = withStyles(styles)(props => {
 	const { classes, cap = [] } = props;
@@ -126,9 +130,6 @@ const CorporateShareholding = withStyles(styles)(props => {
 									height="300px"
 									legend_toggle
 									chartEvents={[selectEvent, readyEvent]}
-									ref={c => {
-										pieChartRef = c;
-									}}
 								/>
 							</Grid>
 							<Grid item xs={4} className={classes.legend}>
