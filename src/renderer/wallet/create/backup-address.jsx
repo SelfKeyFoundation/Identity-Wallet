@@ -107,16 +107,16 @@ class BackupAddress extends Component {
 								</Grid>
 								<Grid item xs={10}>
 									<Typography variant="body1" gutterBottom>
-										Your public key is a unique address on the Ethereum
-										blockchain. Think of it like a bank account number that you
-										own, used to send and receive Ether or tokens. The ability
-										to authorize transactions on this address is encrypted by
-										the password you just created. Download a backup and save
-										this address in a convenient location.
+										Your address in Etherium network. Think of it like a bank
+										account number that you own, used to send and receive Ether
+										or tokens. The ability to authorize transactions on this
+										address is encrypted by the password you just created.
+										Download a backup and save this address in a convenient
+										location.
 									</Typography>
 									<br />
 									<Typography variant="overline" gutterBottom>
-										Your Public Key
+										Your Address
 									</Typography>
 									<Input
 										id="publicKey"
