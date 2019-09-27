@@ -1,9 +1,9 @@
 import { Model } from 'objection';
 import BaseModel from '../common/base-model';
-import { isDevMode } from 'common/utils/common';
+import config from 'common/config';
 import { formatDataUrl } from 'common/utils/document';
 const TABLE_NAME = 'documents';
-const env = isDevMode() ? 'development' : 'production';
+const env = config.attributeTypeSource;
 export class Document extends BaseModel {
 	static tableName = TABLE_NAME;
 	static idColumn = 'id';

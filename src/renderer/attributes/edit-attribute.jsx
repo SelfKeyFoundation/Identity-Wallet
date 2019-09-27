@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import { withStyles, Divider, Button, Grid, Select, Typography, Input } from '@material-ui/core';
+import { Input, withStyles, Typography, Divider, Button, Grid } from '@material-ui/core';
+import { Popup } from '../common/popup';
 import { identityAttributes, jsonSchema } from 'common/identity/utils';
 import Form from 'react-jsonschema-form-material-theme';
 import transformErrors from './transform-errors';
-import { KeyboardArrowDown } from '@material-ui/icons';
 
 const styles = theme => ({
 	section1: { marginBottom: '10px' },
@@ -17,29 +17,35 @@ const styles = theme => ({
 	},
 	divider: {
 		margin: '30px 0'
-	},
-	selectItem: {
-		border: 0,
-		backgroundColor: '#1E262E !important',
-		color: '#FFFFFF !important'
 	}
 });
 
-class CreateAttributeComponent extends Component {
-	state = {
-		typeId: -1,
-		label: '',
-		errorLabel: null,
-		value: undefined,
-		disabled: false,
-		liveValidate: false,
-		documentError: null
-	};
-	componentDidMount() {
-		this.setState({ typeId: this.props.typeId });
+class EditAttributeComponent extends Component {
+	constructor(props) {
+		super(props);
+		const { attribute, uiSchema = {} } = props;
+		let { type, data, documents, name } = attribute;
+		const schema = type.content;
+		const title = type.content.title;
+		let value = data ? _.cloneDeep(attribute.data).value : undefined;
+		let denormalized = identityAttributes.denormalizeDocumentsSchema(schema, value, documents);
+		value = denormalized.value;
+		this.state = {
+			title,
+			schema,
+			label: name,
+			errorLabel: null,
+			documentError: null,
+			value,
+			type,
+			attribute,
+			uiSchema,
+			disabled: false,
+			liveValidate: false
+		};
 	}
 	handleSave = ({ errors }) => {
-		let { typeId, label, value, disabled } = this.state;
+		let { label, value, schema, attribute, disabled } = this.state;
 		if (!label) {
 			return this.setState({
 				errorLabel: 'Label is required',
@@ -56,8 +62,7 @@ class CreateAttributeComponent extends Component {
 				errorLabel: null
 			});
 		}
-		const type = this.type;
-		const normalized = identityAttributes.normalizeDocumentsSchema(type.content, value);
+		const normalized = identityAttributes.normalizeDocumentsSchema(schema, value, []);
 		const documentError = identityAttributes.getDocumentsErrors(normalized.documents);
 
 		if (documentError) {
@@ -66,15 +71,13 @@ class CreateAttributeComponent extends Component {
 			});
 		}
 
-		this.props.onSave({
-			typeId,
+		const newAttr = {
+			...attribute,
 			name: label,
 			data: { value: normalized.value },
 			documents: normalized.documents
-		});
-		this.props.onCancel();
-	};
-	handleCancel = () => {
+		};
+		this.props.onSave(newAttr);
 		this.props.onCancel();
 	};
 	handleErrors = errors => {
@@ -99,6 +102,9 @@ class CreateAttributeComponent extends Component {
 		}
 		return false;
 	};
+	handleCancel = () => {
+		this.props.onCancel();
+	};
 	handleFieldChange = prop => evt => {
 		let { value, errors, liveValidate } = this.state;
 		let propValue = evt.target.value;
@@ -113,90 +119,42 @@ class CreateAttributeComponent extends Component {
 		this.setState({ [prop]: formData });
 		if (this.state.liveValidate) this.handleErrors(errors);
 	};
-
-	getType = _.memoize((id, types) => types.find(type => +type.id === +id));
-	get type() {
-		if (!this.state.typeId) return null;
-		return this.getType(this.state.typeId, this.types);
-	}
-	get uiSchema() {
-		const type = this.type;
-		if (!type) return null;
-		return (
-			this.props.uiSchemas.find(
-				ui => ui.repositoryId === type.defaultRepositoryId && ui.attributeTypeId === type.id
-			) || {}
-		);
-	}
-
-	getTypes = _.memoize((isDocument, types) =>
-		(isDocument
-			? types.filter(type => jsonSchema.containsFile(type.content))
-			: types.filter(type => !jsonSchema.containsFile(type.content))
-		).sort((a, b) =>
-			a.content.title > b.content.title ? 1 : a.content.title === b.content.title ? 0 : -1
-		)
-	);
-
-	get types() {
-		return this.getTypes(this.props.isDocument, this.props.types);
-	}
 	render() {
-		const { classes, subtitle } = this.props;
-		const types = this.types;
-		const { typeId, label, value, disabled, liveValidate } = this.state;
-		const type = this.type;
-		const uiSchema = this.uiSchema;
+		const { type, label, value, schema, title, uiSchema, disabled, liveValidate } = this.state;
+		const { classes, open, text } = this.props;
 		return (
-			<React.Fragment>
+			<Popup open={open} closeAction={this.handleCancel} text={text}>
 				<div className={classes.section1}>
 					<Typography variant="overline" className={classes.label}>
-						{subtitle}
+						Type
 					</Typography>
-					<Select
-						native
+					<Input
+						label="Type"
+						type="text"
+						value={title}
+						variant="filled"
 						fullWidth
-						value={typeId}
-						onChange={this.handleFieldChange('typeId')}
-						displayEmpty
-						IconComponent={KeyboardArrowDown}
-					>
-						<option value={-1} className={classes.selectItem}>
-							Choose...
-						</option>
-						{types.map(option => (
-							<option
-								key={option.id}
-								value={option.id}
-								className={classes.selectItem}
-							>
-								{option.content.title}
-							</option>
-						))}
-					</Select>
+						disabled
+					/>
 					<Divider className={classes.divider} />
-					{this.state.typeId > -1 && (
-						<>
-							<Typography variant="overline" className={classes.label}>
-								Label *
-							</Typography>
-							<Input
-								error={!!this.state.errorLabel}
-								label="Label"
-								placeholder="Internal naming for the information you are adding "
-								type="text"
-								value={label}
-								variant="filled"
-								onChange={this.handleFieldChange('label')}
-								onBlur={this.handleFieldChange('label')}
-								fullWidth
-							/>
-							{this.state.errorLabel && (
-								<Typography variant="subtitle2" color="error" gutterBottom>
-									{this.state.errorLabel}
-								</Typography>
-							)}
-						</>
+					<Typography variant="overline" className={classes.label}>
+						Label
+					</Typography>
+					<Input
+						label="Label"
+						placeholder="Internal naming for the information you are adding"
+						type="text"
+						value={label}
+						variant="filled"
+						error={!!this.state.errorLabel}
+						onChange={this.handleFieldChange('label')}
+						onBlur={this.handleFieldChange('label')}
+						fullWidth
+					/>
+					{this.state.errorLabel && (
+						<Typography variant="subtitle2" color="error" gutterBottom>
+							{this.state.errorLabel}
+						</Typography>
 					)}
 				</div>
 				{type && <Divider className={classes.divider} />}
@@ -206,9 +164,9 @@ class CreateAttributeComponent extends Component {
 							Content
 						</Typography>
 						<Form
-							schema={_.omit(jsonSchema.removeMeta(type.content), ['title'])}
-							formData={value}
+							schema={_.omit(jsonSchema.removeMeta(schema), ['title'])}
 							uiSchema={uiSchema.content}
+							formData={value}
 							liveValidate={liveValidate}
 							noHtml5Validate={true}
 							showErrorList={false}
@@ -228,8 +186,8 @@ class CreateAttributeComponent extends Component {
 									<Button
 										variant="contained"
 										size="large"
-										type="submit"
 										disabled={disabled}
+										type="submit"
 									>
 										Save
 									</Button>
@@ -248,11 +206,11 @@ class CreateAttributeComponent extends Component {
 						</Form>
 					</div>
 				)}
-			</React.Fragment>
+			</Popup>
 		);
 	}
 }
 
-export const CreateAttribute = withStyles(styles)(CreateAttributeComponent);
+export const EditAttribute = withStyles(styles)(EditAttributeComponent);
 
-export default CreateAttribute;
+export default EditAttribute;

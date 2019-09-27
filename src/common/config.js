@@ -1,13 +1,15 @@
 /* istanbul ignore file */
 'use strict';
 const path = require('path');
-const dotenv = require('dotenv');
-const electron = require('electron');
-
+let electron;
+if (!process.env.STORYBOOK) {
+	const dotenv = require('dotenv');
+	dotenv.config();
+	electron = require('electron');
+}
 const { isDevMode, isTestMode, getSetupFilePath, getUserDataPath } = require('./utils/common');
 const pkg = require('../../package.json');
 
-dotenv.config();
 const DEBUG_REQUEST = process.env.DEBUG_REQUEST === '1';
 if (DEBUG_REQUEST) {
 	require('request').debug = true;
@@ -35,9 +37,12 @@ const ALL_COUNTRIES_INFO_URL = process.env.ALL_COUNTRIES_INFO_URL;
 const MATOMO_SITE = process.env.MATOMO_SITE;
 const DEPOSIT_PRICE_OVERRIDE = process.env.DEPOSIT_PRICE_OVERRIDE;
 
+// development or production
+const ATTRIBUTE_TYPE_SOURCE_OVERRIDE = process.env.ATTRIBUTE_TYPE_SOURCE_OVERRIDE;
+
 let userDataDirectoryPath = '';
 let walletsDirectoryPath = '';
-if (electron.app) {
+if (electron && electron.app) {
 	userDataDirectoryPath = electron.app.getPath('userData');
 	walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
 }
@@ -140,7 +145,8 @@ const dev = {
 		corporate: true
 	},
 	testWalletAddress: '0x23d233933c86f93b74705cf0d236b39f474249f8',
-	testDidAddress: '0xee10a3335f48e10b444e299cf017d57879109c1e32cec3e31103ceca7718d0ec'
+	testDidAddress: '0xee10a3335f48e10b444e299cf017d57879109c1e32cec3e31103ceca7718d0ec',
+	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'development'
 };
 
 const prod = {
@@ -161,7 +167,8 @@ const prod = {
 		paymentContract: false,
 		scheduler: true,
 		corporate: false
-	}
+	},
+	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'
 };
 
 const setupFilesPath = getSetupFilePath();

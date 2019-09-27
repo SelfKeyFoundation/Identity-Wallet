@@ -1,8 +1,15 @@
 /* istanbul ignore file */
-import { init as confInit } from './config';
+if (!process.env.STORYBOOK) {
+	const confInit = require('./config').init;
+
+	confInit();
+}
+
 import Logger from './logger';
 
-confInit();
+if (process.env.STORYBOOK) {
+	Logger.prototype.log = console.log.bind(console);
+}
 
 export const createLog = prefix => new Logger(prefix);
 
