@@ -27,6 +27,9 @@ const styles = theme => ({
 		whiteSpace: 'normal',
 		wordBreak: 'break-all'
 	},
+	cardAction: {
+		padding: '1em 1em 0'
+	},
 	regularText: {
 		'& span': {
 			fontWeight: 400
@@ -48,7 +51,10 @@ const CorporateCapTable = withStyles(styles)(props => {
 				<Card>
 					<CardHeader
 						title="Cap Table"
-						className={classes.regularText}
+						classes={{
+							root: classes.regularText,
+							action: classes.cardAction
+						}}
 						action={editAction(onEdit)}
 					/>
 					<hr className={classes.hr} />

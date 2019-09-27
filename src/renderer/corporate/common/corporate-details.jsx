@@ -15,6 +15,9 @@ const styles = theme => ({
 		whiteSpace: 'normal',
 		wordBreak: 'break-all'
 	},
+	cardAction: {
+		padding: '1em 1em 0'
+	},
 	regularText: {
 		'& span': {
 			fontWeight: 400
@@ -58,14 +61,16 @@ const editAction = onEdit => (
 
 const CorporateDetails = withStyles(styles)(props => {
 	const { classes, profile, onEdit } = props;
-	console.log(profile);
 	return (
 		<Grid container direction="column" spacing={32}>
 			<Grid item>
 				<Card>
 					<CardHeader
 						title={profile.entityName}
-						className={classes.regularText}
+						classes={{
+							root: classes.regularText,
+							action: classes.cardAction
+						}}
 						action={editAction(onEdit)}
 					/>
 					<hr className={classes.hr} />

@@ -235,7 +235,6 @@ const selectCorporateLegalEntityTypes = state => {
 };
 
 const selectCurrentCorporateProfile = state => {
-	console.log(state);
 	const identity = identitySelectors.selectCurrentIdentity(state);
 	return identitySelectors.selectCorporateProfile(state, identity.id);
 };

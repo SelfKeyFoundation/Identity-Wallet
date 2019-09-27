@@ -1,11 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { identitySelectors } from 'common/identity';
-import { Typography, Grid, withStyles } from '@material-ui/core';
-import { CorporateComponent } from '../common/corporate-component';
-import { CorporateDashboardTabs } from './dashboard-tabs';
+import { CorporateDashboardPage } from './dashboard-page';
 
-// TODO: replace with real data
+// TODO: to be replaced with real data
 const dummyMembers = [
 	{
 		id: '1',
@@ -78,54 +76,6 @@ const dummyCorporateCapTable = [
 	}
 ];
 
-const styles = theme => ({
-	container: {
-		width: '100%'
-	},
-	title: {
-		padding: '0'
-	},
-	contentContainer: {
-		borderBottom: '1px solid #303C49'
-	}
-});
-class CorporateDashboardContainer extends CorporateComponent {
-	state = {
-		tab: 'overview'
-	};
-
-	onTabChange = tab => this.setState({ tab });
-
-	render() {
-		const { classes } = this.props;
-		const { tab } = this.state;
-		console.log(this.props);
-		return (
-			<Grid
-				id="corpWalletDashboard"
-				container
-				direction="column"
-				justify="flex-start"
-				alignItems="stretch"
-				className={classes.container}
-			>
-				<Grid item id="header">
-					<Typography variant="h1" className={classes.title}>
-						SelfKey Corporate Vault
-					</Typography>
-				</Grid>
-				<Grid container className={classes.contentContainer}>
-					<CorporateDashboardTabs
-						{...this.props}
-						tab={tab}
-						onTabChange={this.onTabChange}
-					/>
-				</Grid>
-			</Grid>
-		);
-	}
-}
-
 const mapStateToProps = (state, props) => {
 	return {
 		identity: identitySelectors.selectCurrentIdentity(state),
@@ -136,6 +86,9 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
+const CorporateDashboardContainer = connect(mapStateToProps)(props => (
+	<CorporateDashboardPage {...props} />
+));
+
 const connectedComponent = connect(mapStateToProps)(CorporateDashboardContainer);
-const styledComponent = withStyles(styles)(connectedComponent);
-export { styledComponent as CorporateDashboardContainer };
+export { connectedComponent as CorporateDashboardContainer };

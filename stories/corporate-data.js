@@ -1,3 +1,16 @@
+export const dummyProfile = {
+	entityName: 'Selfkey, LLC',
+	jurisdiction: 'United States',
+	entityType: 'LLC',
+	creationDate: '08/08/2018',
+	address: '1, Amazing Loop, Singapore'
+};
+export const dummyIncompleteProfile = {
+	entityName: 'Selfkey, LLC',
+	entityType: 'LLC',
+	creationDate: '08/08/2018'
+};
+
 export const corporateApplications = [
 	{
 		title: 'Incorporation',

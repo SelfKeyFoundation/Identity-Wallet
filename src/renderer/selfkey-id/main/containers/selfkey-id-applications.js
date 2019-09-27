@@ -76,8 +76,6 @@ class SelfkeyIdApplicationsContainerComponent extends Component {
 			return false;
 		}
 
-		console.log(rp);
-
 		const kycApplication = rp.applications.find(app => app.id === application.id);
 
 		if (application && kycApplication) {
