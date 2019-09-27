@@ -2,9 +2,8 @@ import { Model, transaction } from 'objection';
 import _ from 'lodash';
 import BaseModel from '../common/base-model';
 import Document from './document';
-import { isDevMode } from 'common/utils/common';
-
-const env = isDevMode() ? 'development' : 'production';
+import config from 'common/config';
+const env = config.attributeTypeSource;
 const TABLE_NAME = 'id_attributes';
 
 export class IdAttribute extends BaseModel {
