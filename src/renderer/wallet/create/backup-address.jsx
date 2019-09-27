@@ -107,7 +107,7 @@ class BackupAddress extends Component {
 								</Grid>
 								<Grid item xs={10}>
 									<Typography variant="body1" gutterBottom>
-										Your address in Etherium network. Think of it like a bank
+										Your address in Ethereum network. Think of it like a bank
 										account number that you own, used to send and receive Ether
 										or tokens. The ability to authorize transactions on this
 										address is encrypted by the password you just created.
