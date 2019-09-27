@@ -3,9 +3,12 @@ import { connect } from 'react-redux';
 import { identityOperations } from 'common/identity';
 import SelfkeyIdOverview from '../components/selfkey-id-overview';
 
-import { CreateAttributePopup } from './create-attribute-popup';
-import { EditAttributePopup } from './edit-attribute-popup';
-import { DeleteAttributePopup } from './delete-attribute-popup';
+import {
+	CreateAttributeContainer,
+	EditAttributeContainer,
+	DeleteAttributeContainer
+} from '../../../attributes';
+
 import { EditAvatarPopup } from './edit-avatar-popup';
 import { RegisterDidCardContainer } from '../../../did';
 
@@ -42,21 +45,21 @@ class SelfkeyIdOverviewContainerComponent extends Component {
 		return (
 			<React.Fragment>
 				{popup === 'create-attribute' && (
-					<CreateAttributePopup
+					<CreateAttributeContainer
 						open={true}
 						onClose={this.handlePopupClose}
 						isDocument={this.state.isDocument}
 					/>
 				)}
 				{popup === 'edit-attribute' && (
-					<EditAttributePopup
+					<EditAttributeContainer
 						open={true}
 						onClose={this.handlePopupClose}
 						attribute={this.state.editAttribute}
 					/>
 				)}
 				{popup === 'delete-attribute' && (
-					<DeleteAttributePopup
+					<DeleteAttributeContainer
 						open={true}
 						onClose={this.handlePopupClose}
 						attribute={this.state.deleteAttribute}

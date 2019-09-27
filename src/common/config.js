@@ -1,13 +1,15 @@
 /* istanbul ignore file */
 'use strict';
 const path = require('path');
-const dotenv = require('dotenv');
-const electron = require('electron');
-
+let electron;
+if (!process.env.STORYBOOK) {
+	const dotenv = require('dotenv');
+	dotenv.config();
+	electron = require('electron');
+}
 const { isDevMode, isTestMode, getSetupFilePath, getUserDataPath } = require('./utils/common');
 const pkg = require('../../package.json');
 
-dotenv.config();
 const DEBUG_REQUEST = process.env.DEBUG_REQUEST === '1';
 if (DEBUG_REQUEST) {
 	require('request').debug = true;
@@ -40,7 +42,7 @@ const ATTRIBUTE_TYPE_SOURCE_OVERRIDE = process.env.ATTRIBUTE_TYPE_SOURCE_OVERRID
 
 let userDataDirectoryPath = '';
 let walletsDirectoryPath = '';
-if (electron.app) {
+if (electron && electron.app) {
 	userDataDirectoryPath = electron.app.getPath('userData');
 	walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
 }

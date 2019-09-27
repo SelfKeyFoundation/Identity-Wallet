@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { identityOperations } from 'common/identity';
-import { Popup } from '../../../common/popup';
-import DeleteAttribute from '../components/delete-attribute';
+import DeleteAttribute from './delete-attribute';
 
-class DeleteAttributePopupComponent extends Component {
+class DeleteAttributeContainerComponent extends Component {
 	handleConfirm = attributeId => {
 		this.props.dispatch(identityOperations.removeIdAttributeOperation(attributeId));
 	};
@@ -14,18 +13,18 @@ class DeleteAttributePopupComponent extends Component {
 	render() {
 		const { attribute, open = true, text = 'Delete Information and History' } = this.props;
 		return (
-			<Popup open={open} closeAction={this.handleCancel} text={text}>
-				<DeleteAttribute
-					onConfirm={this.handleConfirm}
-					onCancel={this.handleCancel}
-					attribute={attribute}
-				/>
-			</Popup>
+			<DeleteAttribute
+				open={open}
+				text={text}
+				onConfirm={this.handleConfirm}
+				onCancel={this.handleCancel}
+				attribute={attribute}
+			/>
 		);
 	}
 }
 
 const mapStateToProps = (state, props) => ({});
-export const DeleteAttributePopup = connect(mapStateToProps)(DeleteAttributePopupComponent);
+export const DeleteAttributeContainer = connect(mapStateToProps)(DeleteAttributeContainerComponent);
 
-export default DeleteAttributePopup;
+export default DeleteAttributeContainer;
