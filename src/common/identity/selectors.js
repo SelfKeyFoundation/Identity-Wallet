@@ -234,6 +234,11 @@ const selectCorporateLegalEntityTypes = state => {
 	return idType.content.enum;
 };
 
+const selectCurrentCorporateProfile = state => {
+	const identity = identitySelectors.selectCurrentIdentity(state);
+	return identitySelectors.selectCorporateProfile(state, identity.id);
+};
+
 const selectCorporateProfile = (state, id) => {
 	const identity = identitySelectors.selectIdentityById(state, id);
 	if (!identity) return {};
@@ -303,7 +308,8 @@ export const identitySelectors = {
 	selectAllIdentities,
 	selectCorporateJurisdictions,
 	selectCorporateLegalEntityTypes,
-	selectCorporateProfile
+	selectCorporateProfile,
+	selectCurrentCorporateProfile
 };
 
 export default identitySelectors;

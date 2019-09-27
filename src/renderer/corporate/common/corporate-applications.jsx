@@ -9,12 +9,15 @@ import {
 	TableHead,
 	TableBody,
 	TableRow,
-	TableCell
+	TableCell,
+	withStyles
 } from '@material-ui/core';
 import { HourGlassSmallIcon, CheckMaIcon, DeniedIcon, SmallTableHeadRow } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core';
 
 const styles = theme => ({
+	container: {
+		width: '100%'
+	},
 	hr: {
 		backgroundColor: '#303C49',
 		border: 'none',
@@ -42,7 +45,7 @@ const renderStatus = status => {
 			</React.Fragment>
 		);
 	}
-	if (status == 'rejected') {
+	if (status === 'rejected') {
 		return (
 			<React.Fragment>
 				<DeniedIcon /> Denied
@@ -60,7 +63,7 @@ const renderStatus = status => {
 const CorporateApplicationsSummary = withStyles(styles)(props => {
 	const { classes, applications = [] } = props;
 	return (
-		<Grid container direction="column" spacing={32}>
+		<Grid container direction="column" spacing={32} classname={classes.container}>
 			<Grid item>
 				<Card>
 					<CardHeader title={'Application Status'} className={classes.regularText} />

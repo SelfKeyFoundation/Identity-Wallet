@@ -1,7 +1,6 @@
 import React from 'react';
-import { Grid, CardHeader, Card, CardContent } from '@material-ui/core';
+import { Grid, CardHeader, Card, CardContent, withStyles } from '@material-ui/core';
 import { base, grey, EditTransparentIcon } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core';
 import 'react-orgchart/index.css';
 import OrgChart from 'react-orgchart';
 
@@ -18,21 +17,25 @@ const styles = theme => ({
 		whiteSpace: 'normal',
 		wordBreak: 'break-all'
 	},
+	cardAction: {
+		padding: '1em 1em 0'
+	},
 	regularText: {
 		'& span': {
 			fontWeight: 400
 		}
 	},
 	orgChart: {
-		overflow: 'auto',
+		overflow: 'scroll',
 		margin: 'auto',
 		'& .initechNode': {
 			border: `solid 1px ${grey}`,
 			borderRadius: '3px',
 			padding: '1em',
-			width: '150px',
 			display: 'inline-block',
-			margin: '0 2px'
+			margin: '0 2px',
+			minWidth: '60px',
+			fontSize: '12px'
 		},
 		'& .initechNode span': {
 			display: 'block',
@@ -71,20 +74,23 @@ const treeNode = ({ node }) => (
 );
 
 const CorporateOrgChart = withStyles(styles)(props => {
-	const { classes, name, cap = [], onEdit } = props;
+	const { classes, profile, cap = [], onEdit } = props;
 	return (
 		<Grid container direction="column" spacing={32}>
 			<Grid item>
 				<Card>
 					<CardHeader
 						title="Structure"
-						className={classes.regularText}
+						classes={{
+							root: classes.regularText,
+							action: classes.cardAction
+						}}
 						action={editAction(onEdit)}
 					/>
 					<hr className={classes.hr} />
 					<CardContent className={classes.orgChart}>
 						<OrgChart
-							tree={generateStructFromCap(name, cap)}
+							tree={generateStructFromCap(profile.entityName, cap)}
 							NodeComponent={treeNode}
 						/>
 					</CardContent>

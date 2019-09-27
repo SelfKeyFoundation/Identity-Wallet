@@ -54,7 +54,7 @@ import ReactPiwik from 'react-piwik';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
 import CorporateWizardContainer from '../../corporate/wizard/corporate-wizard-container';
 import CorporateAddMemberContainer from '../../corporate/member/corporate-add-member-container';
-import { CorporateDashboardPage } from '../../corporate';
+import { CorporateDashboardContainer } from '../../corporate';
 
 const styles = theme => ({
 	headerSection: {
@@ -240,7 +240,7 @@ class Main extends Component {
 					/>
 					<Route
 						path={`${match.path}/corporate-dashboard`}
-						component={CorporateDashboardPage}
+						component={CorporateDashboardContainer}
 					/>
 				</Grid>
 			</Grid>

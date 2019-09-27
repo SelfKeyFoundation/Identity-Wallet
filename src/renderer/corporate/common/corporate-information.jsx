@@ -35,6 +35,9 @@ const styles = theme => ({
 		whiteSpace: 'normal',
 		wordBreak: 'break-all'
 	},
+	cardAction: {
+		padding: '20px'
+	},
 	regularText: {
 		'& span': {
 			fontWeight: 400

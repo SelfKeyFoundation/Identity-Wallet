@@ -1,7 +1,6 @@
 import React from 'react';
-import { Grid, CardHeader, Card, CardContent, Typography } from '@material-ui/core';
+import { Grid, CardHeader, Card, CardContent, Typography, withStyles } from '@material-ui/core';
 import { CheckMaIcon, AttributeAlertIcon, EditTransparentIcon } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core';
 
 const styles = theme => ({
 	hr: {
@@ -15,6 +14,9 @@ const styles = theme => ({
 	cardHeader: {
 		whiteSpace: 'normal',
 		wordBreak: 'break-all'
+	},
+	cardAction: {
+		padding: '1em 1em 0'
 	},
 	regularText: {
 		'& span': {
@@ -58,14 +60,17 @@ const editAction = onEdit => (
 );
 
 const CorporateDetails = withStyles(styles)(props => {
-	const { classes, name, jurisdiction, type, date, address, onEdit } = props;
+	const { classes, profile, onEdit } = props;
 	return (
 		<Grid container direction="column" spacing={32}>
 			<Grid item>
 				<Card>
 					<CardHeader
-						title={name}
-						className={classes.regularText}
+						title={profile.entityName}
+						classes={{
+							root: classes.regularText,
+							action: classes.cardAction
+						}}
 						action={editAction(onEdit)}
 					/>
 					<hr className={classes.hr} />
@@ -81,25 +86,25 @@ const CorporateDetails = withStyles(styles)(props => {
 								<Typography className="label" color="secondary">
 									Jurisdiction
 								</Typography>
-								{renderAttr(jurisdiction)}
+								{renderAttr(profile.jurisdiction)}
 							</div>
 							<div className={classes.attr}>
 								<Typography className="label" color="secondary">
 									Entity Type
 								</Typography>
-								{renderAttr(type)}
+								{renderAttr(profile.entityType)}
 							</div>
 							<div className={classes.attr}>
 								<Typography className="label" color="secondary">
 									Incorporation Date
 								</Typography>
-								{renderAttr(date)}
+								{renderAttr(profile.creationDate)}
 							</div>
 							<div className={classes.attr}>
 								<Typography className="label" color="secondary">
 									Address
 								</Typography>
-								{renderAttr(address)}
+								{renderAttr(profile.address)}
 							</div>
 						</Grid>
 					</CardContent>

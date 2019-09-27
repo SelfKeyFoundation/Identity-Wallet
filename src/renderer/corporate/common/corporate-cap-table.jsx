@@ -9,10 +9,10 @@ import {
 	TableHead,
 	TableBody,
 	TableRow,
-	TableCell
+	TableCell,
+	withStyles
 } from '@material-ui/core';
 import { EditTransparentIcon, SmallTableHeadRow } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core';
 
 const styles = theme => ({
 	hr: {
@@ -26,6 +26,9 @@ const styles = theme => ({
 	cardHeader: {
 		whiteSpace: 'normal',
 		wordBreak: 'break-all'
+	},
+	cardAction: {
+		padding: '1em 1em 0'
 	},
 	regularText: {
 		'& span': {
@@ -48,7 +51,10 @@ const CorporateCapTable = withStyles(styles)(props => {
 				<Card>
 					<CardHeader
 						title="Cap Table"
-						className={classes.regularText}
+						classes={{
+							root: classes.regularText,
+							action: classes.cardAction
+						}}
 						action={editAction(onEdit)}
 					/>
 					<hr className={classes.hr} />

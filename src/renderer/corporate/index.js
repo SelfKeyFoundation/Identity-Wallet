@@ -1,3 +1,4 @@
+import { CorporateDashboardContainer } from './dashboard/dashboard-container';
 import { CorporateDashboardPage } from './dashboard/dashboard-page';
 
-export { CorporateDashboardPage };
+export { CorporateDashboardContainer, CorporateDashboardPage };

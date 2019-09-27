@@ -150,6 +150,7 @@ const createCorporateProfileOperation = data => async (dispatch, getState) => {
 		identity = await dispatch(
 			identityOperations.createIdentityOperation(wallet.id, 'corporate')
 		);
+		await dispatch(identityOperations.setCurrentIdentityAction(identity.id));
 	}
 	const getTypeId = url => {
 		return idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
