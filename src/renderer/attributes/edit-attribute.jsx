@@ -174,7 +174,7 @@ class EditAttributeComponent extends Component {
 							onSubmit={this.handleSave}
 							onError={this.handleErrors}
 							transformErrors={transformErrors}
-							onPDFOpen={file => window.openPDF(file.content)}
+							onPDFOpen={file => window.openPDF(file.content || file.url)}
 						>
 							{this.state.documentError && (
 								<Typography variant="subtitle2" color="error" gutterBottom>
