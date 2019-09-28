@@ -10,7 +10,8 @@ import {
 	TableHead,
 	TableBody,
 	IconButton,
-	Button
+	Button,
+	withStyles
 } from '@material-ui/core';
 import {
 	IdCardIcon,
@@ -20,7 +21,6 @@ import {
 	EditTransparentIcon,
 	DeleteIcon
 } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core';
 
 const styles = theme => ({
 	hr: {

@@ -62,6 +62,14 @@ storiesOf('Corporate/Dashboard Tabs', module)
 			cap={corporateCapTable}
 			applications={corporateApplications}
 			onTabChange={linkTo('Corporate/Dashboard Tabs', tab => tab)}
+			attributes={corporateAttributes}
+			onEditAttribute={action('on edit attribute')}
+			onDeleteAttribute={action('on delete attribute')}
+			onAddAttribute={action('on add attribute')}
+			documents={corporateDocuments}
+			onAddDocument={action('on add document')}
+			onEditDocument={action('on edit document')}
+			onDeleteDocument={action('on delete document')}
 		/>
 	))
 	.add('members', () => (
