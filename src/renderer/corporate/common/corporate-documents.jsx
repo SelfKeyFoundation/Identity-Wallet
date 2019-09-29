@@ -12,7 +12,8 @@ import {
 	TableHead,
 	TableBody,
 	IconButton,
-	Button
+	Button,
+	withStyles
 } from '@material-ui/core';
 import {
 	SmallTableHeadRow,
@@ -24,7 +25,6 @@ import {
 	FileMultipleIcon,
 	FileAudioIcon
 } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core';
 
 const styles = theme => ({
 	hr: {

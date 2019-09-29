@@ -38,7 +38,7 @@ class CorporateDashboardPage extends CorporateComponent {
 						SelfKey Corporate Vault
 					</Typography>
 				</Grid>
-				<Grid container className={classes.contentContainer}>
+				<Grid item className={classes.contentContainer}>
 					<CorporateDashboardTabs
 						{...this.props}
 						tab={tab}

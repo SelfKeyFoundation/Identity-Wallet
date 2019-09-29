@@ -257,9 +257,7 @@ const selectCorporateProfile = (state, id) => {
 		},
 		{ seen: {}, attrs: [] }
 	).attrs;
-	const attributes = allAttributes.filter(
-		attr => !jsonSchema.containsFile(attr.type.content) && !basicAttributes.includes(attr)
-	);
+	const attributes = allAttributes.filter(attr => !jsonSchema.containsFile(attr.type.content));
 
 	// FIXME: document type should be determined by attribute type
 	const documents = allAttributes.filter(attr => jsonSchema.containsFile(attr.type.content));

@@ -47,7 +47,10 @@ class CreateAttributeContainerComponent extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		types: identitySelectors.selectIdAttributeTypes(state, 'individual'),
+		types: identitySelectors.selectIdAttributeTypes(
+			state,
+			props.corporate ? 'corporate' : 'individual'
+		),
 		uiSchemas: identitySelectors.selectUiSchemas(state)
 	};
 };
