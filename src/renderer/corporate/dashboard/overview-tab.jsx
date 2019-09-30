@@ -6,7 +6,11 @@ import { CorporateCapTable } from '../common/corporate-cap-table';
 import { CorporateShareholding } from '../common/corporate-shareholding';
 import { CorporateOrgChart } from '../common/corporate-org-chart';
 
-const styles = theme => ({});
+const styles = theme => ({
+	corporateShareholding: {
+		width: '550px'
+	}
+});
 
 const CorporateOverviewTab = withStyles(styles)(({ classes, applications, profile, cap }) => (
 	<div style={{ width: '100%', marginTop: '16px' }}>
@@ -43,7 +47,7 @@ const CorporateOverviewTab = withStyles(styles)(({ classes, applications, profil
 					wrap="nowrap"
 					spacing={16}
 				>
-					<Grid item xs>
+					<Grid item className={classes.corporateShareholding}>
 						<CorporateShareholding profile={profile} cap={cap} />
 					</Grid>
 					<Grid item xs>
