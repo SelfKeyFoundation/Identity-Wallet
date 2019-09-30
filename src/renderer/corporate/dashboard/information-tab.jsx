@@ -3,14 +3,7 @@ import { withStyles, Grid } from '@material-ui/core';
 import { CorporateInformation } from '../common/corporate-information';
 import { CorporateDocuments } from '../common/corporate-documents';
 
-const styles = theme => ({
-	container: {
-		padding: '20px',
-		width: '100%',
-		boxSizing: 'border-box',
-		position: 'relative'
-	}
-});
+const styles = theme => ({});
 
 const CorporateInformationTab = withStyles(styles)(
 	({
@@ -24,32 +17,24 @@ const CorporateInformationTab = withStyles(styles)(
 		onEditDocument,
 		onDeleteDocument
 	}) => (
-		<div className={classes.container}>
-			<Grid
-				container
-				direction="column"
-				justify="flex-start"
-				alignItems="stretch"
-				spacing={16}
-			>
-				<Grid item>
-					<CorporateInformation
-						attributes={attributes}
-						onAddAttribute={onAddAttribute}
-						onEditAttribute={onEditAttribute}
-						onDeleteAttribute={onDeleteAttribute}
-					/>
-				</Grid>
-				<Grid item>
-					<CorporateDocuments
-						documents={documents}
-						onAddDocument={onAddDocument}
-						onEditDocument={onEditDocument}
-						onDeleteDocument={onDeleteDocument}
-					/>
-				</Grid>
+		<Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={16}>
+			<Grid item>
+				<CorporateInformation
+					attributes={attributes}
+					onAddAttribute={onAddAttribute}
+					onEditAttribute={onEditAttribute}
+					onDeleteAttribute={onDeleteAttribute}
+				/>
 			</Grid>
-		</div>
+			<Grid item>
+				<CorporateDocuments
+					documents={documents}
+					onAddDocument={onAddDocument}
+					onEditDocument={onEditDocument}
+					onDeleteDocument={onDeleteDocument}
+				/>
+			</Grid>
+		</Grid>
 	)
 );
 
