@@ -64,7 +64,19 @@ const renderLastUpdateDate = ({ updatedAt }) => moment(updatedAt).format('DD MMM
 
 // const renderAttributeLabel = ({ name }) => name || 'No label provided';
 
-const renderAttributeValue = ({ data }) => data.value || '';
+const renderAttributeValue = ({ data, type }) => {
+	let valueToString = '';
+	if (type.content.type === 'object') {
+		for (const prop in data.value) {
+			if (Object.prototype.hasOwnProperty.call(data.value, prop)) {
+				valueToString += `${data.value[prop]} `;
+			}
+		}
+	} else {
+		valueToString = data.value || '';
+	}
+	return valueToString.trim();
+};
 
 const renderAttributeTitle = attr => attr.type.content.title || 'No title provided';
 

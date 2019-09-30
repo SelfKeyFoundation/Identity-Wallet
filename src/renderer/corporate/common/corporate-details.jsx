@@ -53,6 +53,14 @@ const renderAttr = attr =>
 		</Typography>
 	);
 
+const renderAddressAtr = profile => {
+	const addressAtr = profile.allAttributes.find(a => a.name === 'Address');
+	if (addressAtr) {
+		const value = addressAtr.data.value;
+		return renderAttr(!value ? `${value.address_line_1} ${value.address_line_2}` : '');
+	} else return renderAttr('');
+};
+
 const editAction = onEdit => (
 	<div onClick={onEdit}>
 		<EditTransparentIcon />
@@ -102,7 +110,7 @@ const CorporateDetails = withStyles(styles)(props => {
 						<Typography className="label" color="secondary">
 							Address
 						</Typography>
-						{renderAttr(profile.address)}
+						{renderAddressAtr(profile)}
 					</div>
 				</Grid>
 			</CardContent>

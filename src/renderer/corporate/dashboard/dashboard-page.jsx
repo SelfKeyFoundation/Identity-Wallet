@@ -21,6 +21,8 @@ class CorporateDashboardPage extends CorporateComponent {
 
 	onTabChange = tab => this.setState({ tab });
 
+	onEditCorporateDetails = () => this.setState({ tab: 'information' });
+
 	render() {
 		const { classes } = this.props;
 		const { tab } = this.state;
@@ -41,6 +43,7 @@ class CorporateDashboardPage extends CorporateComponent {
 				<Grid item className={classes.contentContainer}>
 					<CorporateDashboardTabs
 						{...this.props}
+						onEditCorporateDetails={this.onEditCorporateDetails}
 						tab={tab}
 						onTabChange={this.onTabChange}
 					/>

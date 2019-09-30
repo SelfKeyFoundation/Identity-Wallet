@@ -12,52 +12,60 @@ const styles = theme => ({
 	}
 });
 
-const CorporateOverviewTab = withStyles(styles)(({ classes, applications, profile, cap }) => (
-	<div style={{ width: '100%', marginTop: '16px' }}>
-		<Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={16}>
-			<Grid item>
-				<Grid
-					container
-					direction="row"
-					justify="space-between"
-					alignItems="stretch"
-					wrap="nowrap"
-					spacing={16}
-				>
-					<Grid item xs>
-						<CorporateDetails profile={profile} />
+const CorporateOverviewTab = withStyles(styles)(
+	({ classes, applications, profile, cap, onEditCorporateDetails }) => (
+		<div style={{ width: '100%', marginTop: '16px' }}>
+			<Grid
+				container
+				direction="column"
+				justify="flex-start"
+				alignItems="stretch"
+				spacing={16}
+			>
+				<Grid item>
+					<Grid
+						container
+						direction="row"
+						justify="space-between"
+						alignItems="stretch"
+						wrap="nowrap"
+						spacing={16}
+					>
+						<Grid item xs>
+							<CorporateDetails profile={profile} onEdit={onEditCorporateDetails} />
+						</Grid>
+						<Grid item xs>
+							<CorporateApplicationsSummary
+								profile={profile}
+								applications={applications}
+							/>
+						</Grid>
 					</Grid>
-					<Grid item xs>
-						<CorporateApplicationsSummary
-							profile={profile}
-							applications={applications}
-						/>
+				</Grid>
+				<Grid item>
+					<CorporateCapTable profile={profile} cap={cap} />
+				</Grid>
+				<Grid item>
+					<Grid
+						container
+						direction="row"
+						justify="space-between"
+						alignItems="stretch"
+						wrap="nowrap"
+						spacing={16}
+					>
+						<Grid item className={classes.corporateShareholding}>
+							<CorporateShareholding profile={profile} cap={cap} />
+						</Grid>
+						<Grid item xs>
+							<CorporateOrgChart profile={profile} cap={cap} />
+						</Grid>
 					</Grid>
 				</Grid>
 			</Grid>
-			<Grid item>
-				<CorporateCapTable profile={profile} cap={cap} />
-			</Grid>
-			<Grid item>
-				<Grid
-					container
-					direction="row"
-					justify="space-between"
-					alignItems="stretch"
-					wrap="nowrap"
-					spacing={16}
-				>
-					<Grid item className={classes.corporateShareholding}>
-						<CorporateShareholding profile={profile} cap={cap} />
-					</Grid>
-					<Grid item xs>
-						<CorporateOrgChart profile={profile} cap={cap} />
-					</Grid>
-				</Grid>
-			</Grid>
-		</Grid>
-	</div>
-));
+		</div>
+	)
+);
 
 export { CorporateOverviewTab };
 export default CorporateOverviewTab;
