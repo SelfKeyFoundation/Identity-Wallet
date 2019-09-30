@@ -127,107 +127,95 @@ const DocumentExpiryDate = ({ doc }) => {
 const CorporateDocuments = withStyles(styles)(props => {
 	const { classes, documents = [], onEditDocument, onDeleteDocument, onAddDocument } = props;
 	return (
-		<Grid container direction="column" spacing={32}>
-			<Grid item>
-				<Card>
-					<CardHeader title="Documents" className={classes.regularText} />
-					<hr className={classes.hr} />
-					<CardContent>
-						<Grid
-							container
-							direction="column"
-							justify="center"
-							alignItems="center"
-							spacing={24}
-						>
-							<Grid container item spacing={0} justify="center">
-								<Grid item xs={12}>
-									<Table>
-										<TableHead>
-											<SmallTableHeadRow>
-												<TableCell>
-													<Typography variant="overline">Type</Typography>
-												</TableCell>
-												<TableCell>
-													<Typography variant="overline">
-														Label
-													</Typography>
-												</TableCell>
-												<TableCell>
-													<Typography variant="overline">
-														Expiry Date
-													</Typography>
-												</TableCell>
-												<TableCell>
-													<Typography variant="overline">
-														Last Edited
-													</Typography>
-												</TableCell>
-												<TableCell align="right">
-													<Typography variant="overline">
-														Actions
-													</Typography>
-												</TableCell>
-											</SmallTableHeadRow>
-										</TableHead>
-										<TableBody>
-											{documents.map(entry => (
-												<TableRow key={entry.id}>
-													<TableCell>
-														<Typography variant="h6">
-															{renderAttributeTitle(entry)}
-														</Typography>
-													</TableCell>
-													<TableCell className={classes.labelCell}>
-														{renderDocumentName({ entry, classes })}
-													</TableCell>
-													<TableCell>
-														<DocumentExpiryDate doc={entry} />
-													</TableCell>
-													<TableCell>
-														<Typography variant="h6">
-															{renderLastUpdateDate(entry)}
-														</Typography>
-													</TableCell>
-													<TableCell align="right">
-														<IconButton
-															id="editButton"
-															onClick={() => onEditDocument(entry)}
-														>
-															<EditTransparentIcon />
-														</IconButton>
-														<IconButton
-															id="deleteButton"
-															onClick={() => onDeleteDocument(entry)}
-														>
-															<DeleteIcon />
-														</IconButton>
-													</TableCell>
-												</TableRow>
-											))}
-										</TableBody>
-									</Table>
-								</Grid>
-							</Grid>
-							<Grid container item spacing={0} justify="center">
-								<Grid item>
-									<Button
-										id="addDocuments"
-										variant="outlined"
-										size="large"
-										color="secondary"
-										onClick={onAddDocument}
-										className={classes.button}
-									>
-										Add Documents
-									</Button>
-								</Grid>
-							</Grid>
+		<Card>
+			<CardHeader title="Documents" className={classes.regularText} />
+			<hr className={classes.hr} />
+			<CardContent>
+				<Grid
+					container
+					direction="column"
+					justify="center"
+					alignItems="center"
+					spacing={24}
+				>
+					<Grid container item spacing={0} justify="center">
+						<Grid item xs={12}>
+							<Table>
+								<TableHead>
+									<SmallTableHeadRow>
+										<TableCell>
+											<Typography variant="overline">Type</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="overline">Label</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="overline">Expiry Date</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="overline">Last Edited</Typography>
+										</TableCell>
+										<TableCell align="right">
+											<Typography variant="overline">Actions</Typography>
+										</TableCell>
+									</SmallTableHeadRow>
+								</TableHead>
+								<TableBody>
+									{documents.map(entry => (
+										<TableRow key={entry.id}>
+											<TableCell>
+												<Typography variant="h6">
+													{renderAttributeTitle(entry)}
+												</Typography>
+											</TableCell>
+											<TableCell className={classes.labelCell}>
+												{renderDocumentName({ entry, classes })}
+											</TableCell>
+											<TableCell>
+												<DocumentExpiryDate doc={entry} />
+											</TableCell>
+											<TableCell>
+												<Typography variant="h6">
+													{renderLastUpdateDate(entry)}
+												</Typography>
+											</TableCell>
+											<TableCell align="right">
+												<IconButton
+													id="editButton"
+													onClick={() => onEditDocument(entry)}
+												>
+													<EditTransparentIcon />
+												</IconButton>
+												<IconButton
+													id="deleteButton"
+													onClick={() => onDeleteDocument(entry)}
+												>
+													<DeleteIcon />
+												</IconButton>
+											</TableCell>
+										</TableRow>
+									))}
+								</TableBody>
+							</Table>
 						</Grid>
-					</CardContent>
-				</Card>
-			</Grid>
-		</Grid>
+					</Grid>
+					<Grid container item spacing={0} justify="center">
+						<Grid item>
+							<Button
+								id="addDocuments"
+								variant="outlined"
+								size="large"
+								color="secondary"
+								onClick={onAddDocument}
+								className={classes.button}
+							>
+								Add Documents
+							</Button>
+						</Grid>
+					</Grid>
+				</Grid>
+			</CardContent>
+		</Card>
 	);
 });
 

@@ -13,16 +13,19 @@ export const dummyIncompleteProfile = {
 
 export const corporateApplications = [
 	{
+		id: 1,
 		title: 'Incorporation',
 		rpName: 'Flag Theory',
 		currentStatusName: 'pending'
 	},
 	{
+		id: 2,
 		title: 'Banking',
 		rpName: 'Flag Theory',
 		currentStatusName: 'rejected'
 	},
 	{
+		id: 3,
 		title: 'Banking',
 		rpName: 'Bank of China',
 		currentStatusName: 'approved'

@@ -16,7 +16,7 @@ export const CorporateDashboardTabs = withStyles(styles)(
 				direction="column"
 				justify="flex-start"
 				alignItems="stretch"
-				spacing={4}
+				spacing={8}
 			>
 				<Grid item>
 					<Tabs value={tab} onChange={(evt, value) => onTabChange(value)}>

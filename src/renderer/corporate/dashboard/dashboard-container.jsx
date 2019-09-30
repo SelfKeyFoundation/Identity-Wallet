@@ -96,6 +96,12 @@ class CorporateDashboardContainer extends Component {
 		popup: null
 	};
 
+	componentDidUpdate() {
+		if (this.props.identity.type !== 'corporate') {
+			this.props.dispatch(identityOperations.navigateToProfileOperation());
+		}
+	}
+
 	handleAttributeDelete = attributeId =>
 		this.props.dispatch(identityOperations.removeIdAttributeOperation(attributeId));
 
