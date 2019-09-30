@@ -63,55 +63,49 @@ const renderStatus = status => {
 const CorporateApplicationsSummary = withStyles(styles)(props => {
 	const { classes, applications = [] } = props;
 	return (
-		<Grid container direction="column" spacing={32} classname={classes.container}>
-			<Grid item>
-				<Card>
-					<CardHeader title={'Application Status'} className={classes.regularText} />
-					<hr className={classes.hr} />
-					<CardContent>
-						<Grid
-							container
-							direction="column"
-							justify="center"
-							alignItems="flex-start"
-							spacing={24}
-						>
-							<Table>
-								<TableHead>
-									<SmallTableHeadRow>
+		<Card className={classes.container}>
+			<CardHeader title={'Application Status'} className={classes.regularText} />
+			<hr className={classes.hr} />
+			<CardContent>
+				<Grid
+					container
+					direction="column"
+					justify="center"
+					alignItems="flex-start"
+					spacing={24}
+				>
+					<Table>
+						<TableHead>
+							<SmallTableHeadRow>
+								<TableCell>
+									<Typography variant="overline">Service</Typography>
+								</TableCell>
+								<TableCell>
+									<Typography variant="overline">Provider</Typography>
+								</TableCell>
+								<TableCell>
+									<Typography variant="overline">Status</Typography>
+								</TableCell>
+							</SmallTableHeadRow>
+						</TableHead>
+						<TableBody>
+							{applications &&
+								applications.map(a => (
+									<TableRow id={a.id} key={a.id}>
 										<TableCell>
-											<Typography variant="overline">Service</Typography>
+											<Typography variant="h6">{a.title}</Typography>
 										</TableCell>
 										<TableCell>
-											<Typography variant="overline">Provider</Typography>
+											<Typography variant="h6">{a.rpName}</Typography>
 										</TableCell>
-										<TableCell>
-											<Typography variant="overline">Status</Typography>
-										</TableCell>
-									</SmallTableHeadRow>
-								</TableHead>
-								<TableBody>
-									{applications &&
-										applications.map(a => (
-											<TableRow id={a.id} key={a.id}>
-												<TableCell>
-													<Typography variant="h6">{a.title}</Typography>
-												</TableCell>
-												<TableCell>
-													<Typography variant="h6">{a.rpName}</Typography>
-												</TableCell>
-												<TableCell>
-													{renderStatus(a.currentStatusName)}
-												</TableCell>
-											</TableRow>
-										))}
-								</TableBody>
-							</Table>
-						</Grid>
-					</CardContent>
-				</Card>
-			</Grid>
-		</Grid>
+										<TableCell>{renderStatus(a.currentStatusName)}</TableCell>
+									</TableRow>
+								))}
+						</TableBody>
+					</Table>
+				</Grid>
+			</CardContent>
+		</Card>
 	);
 });
 

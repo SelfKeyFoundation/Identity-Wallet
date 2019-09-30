@@ -6,7 +6,9 @@ import { CorporateDocuments } from '../common/corporate-documents';
 const styles = theme => ({
 	container: {
 		padding: '20px',
-		width: '100%'
+		width: '100%',
+		boxSizing: 'border-box',
+		position: 'relative'
 	}
 });
 
@@ -28,7 +30,7 @@ const CorporateInformationTab = withStyles(styles)(
 				direction="column"
 				justify="flex-start"
 				alignItems="stretch"
-				spacing={4}
+				spacing={16}
 			>
 				<Grid item>
 					<CorporateInformation

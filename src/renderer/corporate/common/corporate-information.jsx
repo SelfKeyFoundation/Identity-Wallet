@@ -71,24 +71,23 @@ const renderAttributeTitle = attr => attr.type.content.title || 'No title provid
 const CorporateInformation = withStyles(styles)(props => {
 	const { classes, attributes = [], onEditAttribute, onDeleteAttribute, onAddAttribute } = props;
 	return (
-		<Grid container direction="column" spacing={32}>
-			<Grid item>
-				<Card>
-					<CardHeader title="Informations" className={classes.regularText} />
-					<hr className={classes.hr} />
-					<CardContent>
-						<Grid
-							container
-							direction="column"
-							justify="center"
-							alignItems="center"
-							spacing={24}
-						>
-							<Grid container item spacing={0} justify="space-between">
+		<Card>
+			<CardHeader title="Informations" className={classes.regularText} />
+			<hr className={classes.hr} />
+			<CardContent>
+				<Grid
+					container
+					direction="column"
+					justify="center"
+					alignItems="stretch"
+					spacing={24}
+				>
+					<Grid item>
+						<Grid container spacing={0} justify="space-between">
+							<Grid item xs={3}>
 								<Grid
 									container
-									xs={3}
-									justify="end"
+									justify="flex-end"
 									alignItems="center"
 									direction="column"
 									wrap="nowrap"
@@ -105,89 +104,87 @@ const CorporateInformation = withStyles(styles)(props => {
 										</Typography>
 									</Grid>
 								</Grid>
-								<Grid item xs={9}>
-									<Table>
-										<TableHead>
-											<SmallTableHeadRow>
-												<SmallTableCell variant="head">
-													<Typography variant="overline">
-														Information
-													</Typography>
-												</SmallTableCell>
-												<SmallTableCell variant="head">
-													<Typography variant="overline">
-														Label
-													</Typography>
-												</SmallTableCell>
-												<SmallTableCell variant="head">
-													<Typography variant="overline">
-														Last edited
-													</Typography>
-												</SmallTableCell>
-												<SmallTableCell variant="head" align="right">
-													<Typography variant="overline">
-														Actions
-													</Typography>
-												</SmallTableCell>
-											</SmallTableHeadRow>
-										</TableHead>
-										<TableBody>
-											{attributes.map(attr => (
-												<SmallTableRow key={attr.id}>
-													<SmallTableCell className={classes.labelCell}>
-														<Typography variant="subtitle1">
-															{renderAttributeTitle(attr)}
-														</Typography>
-													</SmallTableCell>
-													<SmallTableCell className={classes.labelCell}>
-														<Typography variant="subtitle1">
-															{renderAttributeValue(attr)}
-														</Typography>
-													</SmallTableCell>
-													<SmallTableCell>
-														<Typography variant="subtitle1">
-															{renderLastUpdateDate(attr)}
-														</Typography>
-													</SmallTableCell>
-													<SmallTableCell align="right">
-														<IconButton
-															id="editButton"
-															onClick={() => onEditAttribute(attr)}
-														>
-															<EditTransparentIcon />
-														</IconButton>
-														<IconButton
-															id="deleteButton"
-															onClick={() => onDeleteAttribute(attr)}
-														>
-															<DeleteIcon />
-														</IconButton>
-													</SmallTableCell>
-												</SmallTableRow>
-											))}
-										</TableBody>
-									</Table>
-								</Grid>
 							</Grid>
-							<Grid container item spacing={0} justify="center">
-								<Grid item>
-									<Button
-										id="addAttributes"
-										variant="outlined"
-										size="large"
-										color="secondary"
-										onClick={onAddAttribute}
-										className={classes.button}
-									>
-										Add Information
-									</Button>
-								</Grid>
+							<Grid item xs={9}>
+								<Table>
+									<TableHead>
+										<SmallTableHeadRow>
+											<SmallTableCell variant="head">
+												<Typography variant="overline">
+													Information
+												</Typography>
+											</SmallTableCell>
+											<SmallTableCell variant="head">
+												<Typography variant="overline">Label</Typography>
+											</SmallTableCell>
+											<SmallTableCell variant="head">
+												<Typography variant="overline">
+													Last edited
+												</Typography>
+											</SmallTableCell>
+											<SmallTableCell variant="head" align="right">
+												<Typography variant="overline">Actions</Typography>
+											</SmallTableCell>
+										</SmallTableHeadRow>
+									</TableHead>
+									<TableBody>
+										{attributes.map(attr => (
+											<SmallTableRow key={attr.id}>
+												<SmallTableCell className={classes.labelCell}>
+													<Typography variant="subtitle1">
+														{renderAttributeTitle(attr)}
+													</Typography>
+												</SmallTableCell>
+												<SmallTableCell className={classes.labelCell}>
+													<Typography variant="subtitle1">
+														{renderAttributeValue(attr)}
+													</Typography>
+												</SmallTableCell>
+												<SmallTableCell>
+													<Typography variant="subtitle1">
+														{renderLastUpdateDate(attr)}
+													</Typography>
+												</SmallTableCell>
+												<SmallTableCell align="right">
+													<IconButton
+														id="editButton"
+														onClick={() => onEditAttribute(attr)}
+													>
+														<EditTransparentIcon />
+													</IconButton>
+													<IconButton
+														id="deleteButton"
+														onClick={() => onDeleteAttribute(attr)}
+													>
+														<DeleteIcon />
+													</IconButton>
+												</SmallTableCell>
+											</SmallTableRow>
+										))}
+									</TableBody>
+								</Table>
 							</Grid>
 						</Grid>
-					</CardContent>
-				</Card>
-			</Grid>
-		</Grid>
+					</Grid>
+					<Grid item>
+						<Grid container spacing={0} justify="center">
+							<Grid item>
+								<Button
+									id="addAttributes"
+									variant="outlined"
+									size="large"
+									color="secondary"
+									onClick={onAddAttribute}
+									className={classes.button}
+								>
+									Add Information
+								</Button>
+							</Grid>
+						</Grid>
+					</Grid>
+				</Grid>
+			</CardContent>
+		</Card>
 	);
 });
 

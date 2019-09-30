@@ -62,55 +62,51 @@ const editAction = onEdit => (
 const CorporateDetails = withStyles(styles)(props => {
 	const { classes, profile, onEdit } = props;
 	return (
-		<Grid container direction="column" spacing={32}>
-			<Grid item>
-				<Card>
-					<CardHeader
-						title={profile.entityName}
-						classes={{
-							root: classes.regularText,
-							action: classes.cardAction
-						}}
-						action={editAction(onEdit)}
-					/>
-					<hr className={classes.hr} />
-					<CardContent>
-						<Grid
-							container
-							direction="column"
-							justify="center"
-							alignItems="flex-start"
-							spacing={24}
-						>
-							<div className={classes.attr}>
-								<Typography className="label" color="secondary">
-									Jurisdiction
-								</Typography>
-								{renderAttr(profile.jurisdiction)}
-							</div>
-							<div className={classes.attr}>
-								<Typography className="label" color="secondary">
-									Entity Type
-								</Typography>
-								{renderAttr(profile.entityType)}
-							</div>
-							<div className={classes.attr}>
-								<Typography className="label" color="secondary">
-									Incorporation Date
-								</Typography>
-								{renderAttr(profile.creationDate)}
-							</div>
-							<div className={classes.attr}>
-								<Typography className="label" color="secondary">
-									Address
-								</Typography>
-								{renderAttr(profile.address)}
-							</div>
-						</Grid>
-					</CardContent>
-				</Card>
-			</Grid>
-		</Grid>
+		<Card>
+			<CardHeader
+				title={profile.entityName}
+				classes={{
+					root: classes.regularText,
+					action: classes.cardAction
+				}}
+				action={editAction(onEdit)}
+			/>
+			<hr className={classes.hr} />
+			<CardContent>
+				<Grid
+					container
+					direction="column"
+					justify="center"
+					alignItems="flex-start"
+					spacing={24}
+				>
+					<div className={classes.attr}>
+						<Typography className="label" color="secondary">
+							Jurisdiction
+						</Typography>
+						{renderAttr(profile.jurisdiction)}
+					</div>
+					<div className={classes.attr}>
+						<Typography className="label" color="secondary">
+							Entity Type
+						</Typography>
+						{renderAttr(profile.entityType)}
+					</div>
+					<div className={classes.attr}>
+						<Typography className="label" color="secondary">
+							Incorporation Date
+						</Typography>
+						{renderAttr(profile.creationDate)}
+					</div>
+					<div className={classes.attr}>
+						<Typography className="label" color="secondary">
+							Address
+						</Typography>
+						{renderAttr(profile.address)}
+					</div>
+				</Grid>
+			</CardContent>
+		</Card>
 	);
 });
 
