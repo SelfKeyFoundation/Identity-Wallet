@@ -7,6 +7,7 @@ export const getTopTokenListSize = state => state.walletTokens.topTokenListSize;
 
 export const getTokens = state => {
 	const tokens = state.walletTokens.tokens.slice(0);
+	const wallet = { ...getWallet(state) };
 	tokens.forEach(token => {
 		const price = getPrices(state).prices.filter(price => price.symbol === token.symbol)[0];
 		const priceUSD = price ? price.priceUSD : 0;
@@ -15,7 +16,8 @@ export const getTokens = state => {
 		// Workaround for Tokens with different Symbols than the ones in price table
 		token.name = token.name ? token.name : 'Token';
 	});
-	return [getWallet(state), ...tokens];
+	delete wallet.address;
+	return [wallet, ...tokens];
 };
 
 const getTokensForDisplay = state => {
