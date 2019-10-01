@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { identitySelectors, identityOperations } from 'common/identity';
 import { CorporateDashboardPage } from './dashboard-page';
+import { RegisterDidCardContainer } from '../../did';
 import {
 	CreateAttributeContainer,
 	EditAttributeContainer,
@@ -123,7 +124,6 @@ class CorporateDashboardContainer extends Component {
 
 	render() {
 		const { popup } = this.state;
-
 		return (
 			<React.Fragment>
 				{popup === 'create-attribute' && (
@@ -159,6 +159,9 @@ class CorporateDashboardContainer extends Component {
 					onAddDocument={this.handleAddDocument}
 					onEditDocument={this.handleEditAttribute}
 					onDeleteDocument={this.handleDeleteAttribute}
+					didComponent={
+						<RegisterDidCardContainer returnPath={'/main/corporate-dashboard'} />
+					}
 				/>
 			</React.Fragment>
 		);

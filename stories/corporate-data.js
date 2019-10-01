@@ -3,12 +3,16 @@ export const dummyProfile = {
 	jurisdiction: 'United States',
 	entityType: 'LLC',
 	creationDate: '08/08/2018',
-	address: '1, Amazing Loop, Singapore'
+	address: '1, Amazing Loop, Singapore',
+	did: 'did:selfkey:0x9cb701490ad6112d2880225c1d712f1af8c7dce1a81c44030b321fb31029cd75',
+	allAttributes: []
 };
 export const dummyIncompleteProfile = {
 	entityName: 'Selfkey, LLC',
 	entityType: 'LLC',
-	creationDate: '08/08/2018'
+	creationDate: '08/08/2018',
+	did: false,
+	allAttributes: []
 };
 
 export const corporateApplications = [

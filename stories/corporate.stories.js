@@ -3,6 +3,8 @@ import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
 import { storiesOf } from '@storybook/react';
 
+import { RegisterDidCard } from '../src/renderer/did/register-did-card';
+
 import { CorporateDashboardPage } from '../src/renderer/corporate/dashboard/dashboard-page';
 import { CorporateDashboardTabs } from '../src/renderer/corporate/dashboard/dashboard-tabs';
 import { CorporateDetails } from '../src/renderer/corporate/common/corporate-details';
@@ -52,6 +54,21 @@ storiesOf('Corporate/Dashboard Tabs', module)
 			profile={dummyProfile}
 			cap={corporateCapTable}
 			applications={corporateApplications}
+			onTabChange={linkTo('Corporate/Dashboard Tabs', tab => tab)}
+		/>
+	))
+	.add('overview with incomplete profile', () => (
+		<CorporateDashboardTabs
+			tab="overview"
+			profile={dummyIncompleteProfile}
+			cap={corporateCapTable}
+			applications={corporateApplications}
+			didComponent={
+				<RegisterDidCard
+					onRegisterDidClick={action('register did click')}
+					onAssociateDidClick={action('associate did click')}
+				/>
+			}
 			onTabChange={linkTo('Corporate/Dashboard Tabs', tab => tab)}
 		/>
 	))
@@ -137,7 +154,11 @@ storiesOf('Corporate/Components', module)
 	))
 	.add('Corporate Org Chart', () => (
 		<div style={{ width: '650px' }}>
-			<CorporateOrgChart profile={dummyProfile} cap={corporateCapTable} />
+			<CorporateOrgChart
+				profile={dummyProfile}
+				cap={corporateCapTable}
+				onEdit={action('corporate org chart edit click')}
+			/>
 		</div>
 	))
 	.add('Corporate Informations', () => (

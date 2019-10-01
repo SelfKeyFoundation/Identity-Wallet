@@ -7,9 +7,17 @@ const SELFKEY_ID_PATH = '/main/selfkeyId';
 
 class RegisterDidCardContainerComponent extends Component {
 	handleRegisterDidClick = _ =>
-		this.props.dispatch(didOperations.startCreateDidFlowOperation(SELFKEY_ID_PATH));
+		this.props.dispatch(
+			didOperations.startCreateDidFlowOperation(
+				this.props.returnPath ? this.props.returnPath : SELFKEY_ID_PATH
+			)
+		);
 	handleAssociateDidClick = _ =>
-		this.props.dispatch(didOperations.startAssociateDidFlowOperation(SELFKEY_ID_PATH));
+		this.props.dispatch(
+			didOperations.startAssociateDidFlowOperation(
+				this.props.returnPath ? this.props.returnPath : SELFKEY_ID_PATH
+			)
+		);
 
 	render() {
 		return (

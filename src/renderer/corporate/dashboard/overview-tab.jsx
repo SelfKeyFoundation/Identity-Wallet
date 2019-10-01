@@ -13,7 +13,7 @@ const styles = theme => ({
 });
 
 const CorporateOverviewTab = withStyles(styles)(
-	({ classes, applications, profile, cap, onEditCorporateDetails }) => (
+	({ classes, applications, profile, cap, onEditCorporateDetails, didComponent }) => (
 		<div style={{ width: '100%', marginTop: '16px' }}>
 			<Grid
 				container
@@ -22,6 +22,7 @@ const CorporateOverviewTab = withStyles(styles)(
 				alignItems="stretch"
 				spacing={16}
 			>
+				{!profile.did && <Grid item>{didComponent}</Grid>}
 				<Grid item>
 					<Grid
 						container

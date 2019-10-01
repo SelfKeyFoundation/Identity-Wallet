@@ -112,6 +112,14 @@ const CorporateDetails = withStyles(styles)(props => {
 						</Typography>
 						{renderAddressAtr(profile)}
 					</div>
+					{profile.did && (
+						<div className={classes.attr}>
+							<Typography className="label" color="secondary">
+								DID
+							</Typography>
+							{profile.did}
+						</div>
+					)}
 				</Grid>
 			</CardContent>
 		</Card>
