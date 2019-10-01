@@ -31,8 +31,8 @@ export class KycApplicationService {
 		return KycApplication.findById(id);
 	};
 
-	load = walletId => {
-		return KycApplication.findAll(walletId);
+	load = identityId => {
+		return KycApplication.findAll(identityId);
 	};
 }
 
