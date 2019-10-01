@@ -68,7 +68,13 @@ const styles = theme => ({
 		flexDirection: 'column',
 		justifyContent: 'space-around',
 		margin: '0 20px 0 15px',
-		maxWidth: '118px'
+		maxWidth: '118px',
+		'& .toolbarProfileName': {
+			maxWidth: '110px',
+			overflow: 'hidden',
+			textOverflow: 'ellipsis',
+			whiteSpace: 'nowrap'
+		}
 	},
 	sepVertContainer: {
 		display: 'flex',
@@ -295,7 +301,11 @@ const Profile = withStyles(styles)(
 					)}
 				</Grid>
 				<Grid item className={classes.nameRole}>
-					<Typography variant="h6">
+					<Typography
+						variant="h6"
+						className="toolbarProfileName"
+						title={profile.name || defaultIdentityName(profile, wallet.profileName)}
+					>
 						{profile.name || defaultIdentityName(profile, wallet.profileName)}
 					</Typography>
 					<Typography variant="subtitle1" color="secondary">
