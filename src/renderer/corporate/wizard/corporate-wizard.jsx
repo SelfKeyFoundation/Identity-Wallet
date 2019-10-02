@@ -574,7 +574,7 @@ class CorporateWizardComponent extends Component {
 		return (
 			<Grid container direction="column" spacing={32}>
 				<Grid item>
-					<Typography variant="h1">SelfKey Corporate Vault Setup</Typography>
+					<Typography variant="h1">SelfKey Corporate Wallet Setup</Typography>
 				</Grid>
 				<Grid item>
 					<Grid id="createProfile" container direction="column" spacing={32}>
