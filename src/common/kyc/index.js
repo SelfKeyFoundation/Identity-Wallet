@@ -1,5 +1,4 @@
 import { marketplaceSelectors } from '../marketplace';
-import * as walletSelectors from '../wallet/selectors';
 import { appSelectors } from '../app';
 import { identitySelectors } from '../identity';
 import { getGlobalContext } from '../context';
@@ -42,7 +41,8 @@ export const kycTypes = {
 	KYC_APPLICATIONS_UPDATE: 'kyc/applications/update',
 	KYC_APPLICATIONS_PROCESSING: 'kyc/applications/processing',
 	KYC_APPLICATIONS_PROCESSING_SET: 'kyc/applications/set/processing',
-	KYC_APPLICATIONS_RESET: 'kyc/applications/reset'
+	KYC_APPLICATIONS_RESET: 'kyc/applications/reset',
+	KYC_APPLICATIONS_REFRESH: 'kyc/applications/refresh'
 };
 
 const devRPDetails = {
@@ -120,9 +120,9 @@ export const kycSelectors = {
 			acc[curr.schemaId] = [];
 			return acc;
 		}, {});
-		const wallet = walletSelectors.getWallet(state);
+		const identity = identitySelectors.selectCurrentIdentity(state);
 		const walletAttributes = identitySelectors
-			.selectFullIdAttributesByIds(state, wallet.id)
+			.selectFullIdAttributesByIds(state, identity.id)
 			.reduce((acc, curr) => {
 				if (!curr || !curr.type || !curr.type.url) return acc;
 				if (!acc.hasOwnProperty(curr.type.url)) return acc;
@@ -158,9 +158,13 @@ export const kycSelectors = {
 			};
 		});
 	},
-	selectKYCAttributes(state, walletId, attributes = []) {
+	selectKYCAttributes(state, identityId, attributes = []) {
 		const kycAttributes = identitySelectors
-			.selectFullIdAttributesByIds(state, walletId, attributes.map(attr => attr.attributeId))
+			.selectFullIdAttributesByIds(
+				state,
+				identityId,
+				attributes.map(attr => attr.attributeId)
+			)
 			.reduce((acc, curr) => {
 				acc[curr.id] = curr;
 				return acc;
@@ -322,8 +326,8 @@ const loadRelyingPartyOperation = (
 	const walletType = appSelectors.selectApp(state).walletType;
 	if (!rpName) return null;
 
-	const wallet = walletSelectors.getWallet(state);
-	if (!wallet) return;
+	const identity = identitySelectors.selectCurrentIdentity(state);
+	if (!identity) return;
 
 	const ts = Date.now();
 
@@ -358,7 +362,7 @@ const loadRelyingPartyOperation = (
 				await dispatch(
 					kycOperations.updateApplicationsOperation({
 						id: application.id,
-						walletId: wallet.id,
+						identityId: identity.id,
 						rpName: rpName,
 						currentStatus: application.currentStatus,
 						currentStatusName: application.statusName,
@@ -416,14 +420,14 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 		throw new Error('template does not exist');
 	}
 
-	const wallet = walletSelectors.getWallet(getState());
-	if (!wallet) return;
+	const identity = identitySelectors.selectCurrentIdentity(getState());
+	if (!identity) return;
 
 	if (!rp.session.isActive()) {
 		await rp.session.establish();
 	}
 
-	attributes = kycSelectors.selectKYCAttributes(getState(), wallet.id, attributes);
+	attributes = kycSelectors.selectKYCAttributes(getState(), identity.id, attributes);
 	try {
 		let application = await rp.session.createKYCApplication(templateId, attributes);
 		application = await rp.session.getKYCApplication(application.id);
@@ -432,7 +436,7 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 		await dispatch(
 			kycOperations.updateApplicationsOperation({
 				id: application.id,
-				walletId: wallet.id,
+				identityId: identity.id,
 				rpName: rpName,
 				currentStatus: application.currentStatus,
 				currentStatusName: application.statusName,
@@ -448,6 +452,26 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 	}
 };
 
+const refreshRelyingPartyForKycApplication = (application, afterAuthRoute, cancelRoute) => async (
+	dispatch,
+	getState
+) => {
+	await dispatch(
+		kycOperations.loadRelyingParty(application.rpName, true, afterAuthRoute, cancelRoute)
+	);
+
+	const rp = kycSelectors.relyingPartySelector(getState(), application.rpName);
+	const kycApplication = rp.applications.find(app => app.id === application.id);
+	await dispatch(
+		kycOperations.updateApplicationsOperation({
+			id: application.id,
+			currentStatus: kycApplication.currentStatus,
+			currentStatusName: kycApplication.statusName,
+			updatedAt: kycApplication.updatedAt
+		})
+	);
+};
+
 const updateRelyingPartyKYCApplication = (
 	rpName,
 	templateId,
@@ -461,8 +485,8 @@ const updateRelyingPartyKYCApplication = (
 		throw new Error('template does not exist');
 	}
 
-	const wallet = walletSelectors.getWallet(getState());
-	if (!wallet) return;
+	const identity = identitySelectors.selectCurrentIdentity(getState());
+	if (!identity) return;
 
 	if (!rp.session.isActive()) {
 		await rp.session.establish();
@@ -471,7 +495,7 @@ const updateRelyingPartyKYCApplication = (
 	const updatedApplication = { id: applicationId, templateId };
 
 	if (attributes) {
-		attributes = kycSelectors.selectKYCAttributes(getState(), wallet.id, attributes);
+		attributes = kycSelectors.selectKYCAttributes(getState(), identity.id, attributes);
 		updatedApplication.attributes = attributes;
 	}
 	if (questions) {
@@ -486,7 +510,7 @@ const updateRelyingPartyKYCApplication = (
 		await dispatch(
 			kycOperations.updateApplicationsOperation({
 				id: application.id,
-				walletId: wallet.id,
+				identityId: identity.id,
 				rpName: rpName,
 				currentStatus: application.currentStatus,
 				currentStatusName: application.statusName,
@@ -645,10 +669,10 @@ const clearRelyingPartyOperation = () => async dispatch => {
 };
 
 const loadApplicationsOperation = () => async (dispatch, getState) => {
-	const wallet = walletSelectors.getWallet(getState());
+	const identity = identitySelectors.selectCurrentIdentity(getState());
 	let kycApplicationService = getGlobalContext().kycApplicationService;
 	await dispatch(kycActions.setProcessingAction(true));
-	let applications = await kycApplicationService.load(wallet.id);
+	let applications = await kycApplicationService.load(identity.id);
 	let sortedApplications = applications.sort((d1, d2) => {
 		d1 = d1.createdAt ? new Date(d1.createdAt).getTime() : 0;
 		d2 = d2.createdAt ? new Date(d2.createdAt).getTime() : 0;
@@ -718,6 +742,10 @@ export const kycOperations = {
 	resetApplications: createAliasedAction(
 		kycTypes.KYC_APPLICATIONS_RESET,
 		resetApplicationsOperation
+	),
+	refreshRelyingPartyForKycApplication: createAliasedAction(
+		kycTypes.KYC_APPLICATIONS_REFRESH,
+		refreshRelyingPartyForKycApplication
 	)
 };
 
