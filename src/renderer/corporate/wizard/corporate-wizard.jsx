@@ -55,8 +55,7 @@ const styles = theme => ({
 		paddingLeft: '20px'
 	},
 	footer: {
-		paddingTop: '20px',
-		paddingLeft: '16px'
+		paddingTop: '20px'
 	},
 	divider: {
 		backgroundColor: '#475768',
