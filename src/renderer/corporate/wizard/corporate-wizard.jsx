@@ -1,16 +1,8 @@
 import React, { Component } from 'react';
-
 import {
-	Grid,
 	CardHeader,
 	Card,
 	CardContent,
-	// Table,
-	// TableBody,
-	// TableRow,
-	// TableCell,
-	// IconButton,
-	// TableHead,
 	Typography,
 	Button,
 	Input,
@@ -19,7 +11,7 @@ import {
 	withStyles
 } from '@material-ui/core';
 import { KeyboardArrowDown } from '@material-ui/icons';
-import { /* EditTransparentIcon, DeleteIcon, SmallTableHeadRow, */ KeyPicker } from 'selfkey-ui';
+import { KeyPicker } from 'selfkey-ui';
 
 const styles = theme => ({
 	hr: {
@@ -27,26 +19,13 @@ const styles = theme => ({
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
-		margin: '5px 16px'
+		margin: '5px 30px 10px'
 	},
 	card: {
 		overflow: 'visible'
 	},
-	labelCell: {
-		whiteSpace: 'normal',
-		wordBreak: 'break-all',
-		'& > div': {
-			alignItems: 'center'
-		}
-	},
-	cardHeader: {
-		whiteSpace: 'normal',
-		wordBreak: 'break-all'
-	},
-	button: {
-		marginBottom: '16px'
-	},
 	regularText: {
+		padding: '24px 30px',
 		'& span': {
 			fontWeight: 400
 		}
@@ -55,24 +34,17 @@ const styles = theme => ({
 		paddingLeft: '20px'
 	},
 	footer: {
-		paddingTop: '20px'
-	},
-	divider: {
-		backgroundColor: '#475768',
-		width: '100%',
-		marginTop: '10px',
-		marginBottom: '10px'
-	},
-	dropdown: {
-		width: '322px'
-	},
-	idNickname: {
-		alignItems: 'baseline',
+		alignItems: 'flex-start',
 		display: 'flex',
-		flexDirection: 'row'
+		justifyContent: 'flex-start',
+		paddingTop: '60px'
 	},
 	inputBox: {
 		marginBottom: '35px',
+		width: '47%'
+	},
+	lastInputBox: {
+		marginBottom: '26px',
 		width: '47%'
 	},
 	keyBox: {
@@ -88,7 +60,47 @@ const styles = theme => ({
 		fontStyle: 'italic',
 		marginLeft: '5px',
 		textTransform: 'lowercase'
+	},
+	select: {
+		width: '100%'
+	},
+	flexColumn: {
+		display: 'flex',
+		flexDirection: 'column'
+	},
+	inputContainer: {
+		alignItems: 'flex-start',
+		justify: 'flex-start'
+	},
+	inputWrap: {
+		display: 'flex',
+		flexWrap: 'nowrap',
+		justifyContent: 'space-between',
+		width: '100%'
+	},
+	cardContent: {
+		padding: '24px 30px'
+	},
+	wizardTitle: {
+		marginBottom: '45px'
 	}
+});
+
+const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => {
+	return (
+		<div>
+			<Typography variant="overline" gutterBottom>
+				{title}
+				{optional ? (
+					<Typography variant="overline" className={classes.optional}>
+						(optional)
+					</Typography>
+				) : (
+					''
+				)}
+			</Typography>
+		</div>
+	);
 });
 
 const CompanyInformation = withStyles(styles)(props => {
@@ -106,341 +118,121 @@ const CompanyInformation = withStyles(styles)(props => {
 		onFieldChange = () => {}
 	} = props;
 	return (
-		<Grid container direction="column" spacing={32}>
-			<Grid item>
-				<Card className={classes.card}>
-					<CardHeader
-						title="Step 1. Company Information"
-						className={classes.regularText}
-					/>
-					<hr className={classes.hr} />
-					<CardContent>
-						<Grid
-							container
-							direction="column"
-							justify="center"
-							alignItems="center"
-							spacing={24}
-						>
-							<Grid container item spacing={0} justify="center">
-								<Grid item xs={12}>
-									<form noValidate>
-										<Grid
-											container
-											direction="column"
-											justify="center"
-											alignItems="center"
-											spacing={0}
-											xs={12}
-										>
-											<Grid
-												item
-												spacing={0}
-												style={{
-													width: '100%'
-												}}
-											>
-												<Grid
-													container
-													direction="column"
-													spacing={0}
-													justify="flex-start"
-													alignItems="flex-start"
-													xs={12}
-												>
-													<Grid
-														item
-														spacing={0}
-														style={{
-															width: '100%'
-														}}
-													>
-														<Grid
-															container
-															direction="column"
-															spacing={0}
-															justify="flex-start"
-															alignItems="flex-start"
-														>
-															<Grid
-																container
-																direction="row"
-																justify="space-between"
-																wrap="nowrap"
-																xs={12}
-															>
-																<Grid
-																	container
-																	direction="column"
-																	className={classes.inputBox}
-																>
-																	<Grid item>
-																		<Typography
-																			variant="overline"
-																			gutterBottom
-																			className={
-																				classes.idNickname
-																			}
-																		>
-																			Legal Jurisdiction
-																		</Typography>
-																	</Grid>
-																	<Grid item>
-																		<Select
-																			onChange={onFieldChange(
-																				'jurisdiction'
-																			)}
-																			displayEmpty
-																			name="jurisdiction"
-																			value={jurisdiction}
-																			disableUnderline
-																			IconComponent={
-																				KeyboardArrowDown
-																			}
-																			input={
-																				<Input
-																					disableUnderline
-																					placeholder="Choose..."
-																				/>
-																			}
-																			style={{
-																				width: '100%'
-																			}}
-																		>
-																			<MenuItem value="">
-																				<em>Choose...</em>
-																			</MenuItem>
-																			{jurisdictions.map(
-																				item => (
-																					<MenuItem
-																						key={item}
-																						value={item}
-																					>
-																						{item}
-																					</MenuItem>
-																				)
-																			)}
-																		</Select>
-																	</Grid>
-																</Grid>
-																<Grid
-																	container
-																	direction="column"
-																	className={classes.inputBox}
-																>
-																	<Grid item>
-																		<Typography
-																			variant="overline"
-																			gutterBottom
-																		>
-																			Legal Entity Name
-																		</Typography>
-																	</Grid>
-																	<Grid item>
-																		<Input
-																			id="entityName"
-																			fullWidth
-																			required
-																			value={entityName}
-																			onChange={onFieldChange(
-																				'entityName'
-																			)}
-																			placeholder="Entity Name"
-																		/>
-																	</Grid>
-																</Grid>
-															</Grid>
-															<Grid
-																container
-																direction="row"
-																justify="space-between"
-																wrap="nowrap"
-																xs={12}
-															>
-																<Grid
-																	container
-																	direction="column"
-																	className={classes.inputBox}
-																>
-																	<Grid item>
-																		<Typography
-																			variant="overline"
-																			gutterBottom
-																		>
-																			Legal Entity Type
-																		</Typography>
-																	</Grid>
-																	<Grid item>
-																		<Select
-																			onChange={onFieldChange(
-																				'entityType'
-																			)}
-																			value={entityType}
-																			name="entitytype"
-																			disableUnderline
-																			IconComponent={
-																				KeyboardArrowDown
-																			}
-																			input={
-																				<Input
-																					disableUnderline
-																				/>
-																			}
-																			style={{
-																				width: '100%'
-																			}}
-																		>
-																			<MenuItem value="">
-																				<em>Choose...</em>
-																			</MenuItem>
-																			{entityTypes.map(
-																				item => (
-																					<MenuItem
-																						key={item}
-																						value={item}
-																					>
-																						{item}
-																					</MenuItem>
-																				)
-																			)}
-																		</Select>
-																	</Grid>
-																</Grid>
-																<Grid
-																	container
-																	direction="column"
-																	className={classes.keyBox}
-																>
-																	<Grid item>
-																		<Typography
-																			variant="overline"
-																			gutterBottom
-																		>
-																			Creation Date
-																		</Typography>
-																	</Grid>
-																	<Grid item>
-																		<KeyPicker
-																			id="creationDate"
-																			value={creationDate}
-																			required
-																			onChange={onFieldChange(
-																				'creationDate'
-																			)}
-																			className={
-																				classes.picker
-																			}
-																			style={{
-																				'& >div': {
-																					width:
-																						'200px !important'
-																				}
-																			}}
-																		/>
-																	</Grid>
-																</Grid>
-															</Grid>
-															<Grid
-																container
-																direction="row"
-																justify="space-between"
-																wrap="nowrap"
-																xs={12}
-															>
-																<Grid
-																	container
-																	direction="column"
-																	className={classes.inputBox}
-																>
-																	<Grid item>
-																		<Typography
-																			variant="overline"
-																			gutterBottom
-																		>
-																			Contact Email
-																			<Typography
-																				variant="overline"
-																				className={
-																					classes.optional
-																				}
-																			>
-																				(optional)
-																			</Typography>
-																		</Typography>
-																	</Grid>
-																	<Grid item>
-																		<Input
-																			id="email"
-																			fullWidth
-																			type="email"
-																			error={errors.email}
-																			value={email}
-																			onChange={onFieldChange(
-																				'email'
-																			)}
-																			placeholder="Entity Email"
-																		/>
-																		{errors.email && (
-																			<Typography
-																				variant="subtitle2"
-																				color="error"
-																				gutterBottom
-																			>
-																				{
-																					'Email provided is invalid'
-																				}
-																			</Typography>
-																		)}
-																	</Grid>
-																</Grid>
-																<Grid
-																	container
-																	direction="column"
-																	className={classes.inputBox}
-																>
-																	<Grid item>
-																		<Typography
-																			variant="overline"
-																			gutterBottom
-																		>
-																			Tax ID
-																			<Typography
-																				variant="overline"
-																				className={
-																					classes.optional
-																				}
-																			>
-																				(optional)
-																			</Typography>
-																		</Typography>
-																	</Grid>
-																	<Grid item>
-																		<Input
-																			id="taxId"
-																			fullWidth
-																			value={taxId}
-																			type="text"
-																			onChange={onFieldChange(
-																				'taxId'
-																			)}
-																			placeholder="Tax Payer ID"
-																		/>
-																	</Grid>
-																</Grid>
-															</Grid>
-														</Grid>
-													</Grid>
-												</Grid>
-											</Grid>
-										</Grid>
-									</form>
-								</Grid>
-							</Grid>
-						</Grid>
-					</CardContent>
-				</Card>
-			</Grid>
-		</Grid>
+		<div className={classes.flexColumn}>
+			<Card className={classes.card}>
+				<CardHeader title="Step 1. Company Information" className={classes.regularText} />
+				<hr className={classes.hr} />
+				<CardContent className={classes.cardContent}>
+					<form noValidate>
+						<div className={`${classes.flexColumn} ${classes.inputContainer}`}>
+							<div className={classes.inputWrap}>
+								<div className={`${classes.inputBox} ${classes.flexColumn}`}>
+									<InputTitle title="Legal Jurisdiction" />
+									<Select
+										className={classes.select}
+										onChange={onFieldChange('jurisdiction')}
+										displayEmpty
+										name="jurisdiction"
+										value={jurisdiction}
+										disableUnderline
+										IconComponent={KeyboardArrowDown}
+										input={<Input disableUnderline placeholder="Choose..." />}
+									>
+										<MenuItem value="">
+											<em>Choose...</em>
+										</MenuItem>
+										{jurisdictions.map(item => (
+											<MenuItem key={item} value={item}>
+												{item}
+											</MenuItem>
+										))}
+									</Select>
+								</div>
+								<div className={`${classes.inputBox} ${classes.flexColumn}`}>
+									<InputTitle title="Legal Entity Name" />
+									<Input
+										id="entityName"
+										fullWidth
+										required
+										value={entityName}
+										onChange={onFieldChange('entityName')}
+										placeholder="Entity Name"
+									/>
+								</div>
+							</div>
+							<div className={classes.inputWrap}>
+								<div className={`${classes.inputBox} ${classes.flexColumn}`}>
+									<InputTitle title="Legal Entity Type" />
+									<Select
+										className={classes.select}
+										onChange={onFieldChange('entityType')}
+										value={entityType}
+										name="entitytype"
+										disableUnderline
+										IconComponent={KeyboardArrowDown}
+										input={<Input disableUnderline />}
+									>
+										<MenuItem value="">
+											<em>Choose...</em>
+										</MenuItem>
+										{entityTypes.map(item => (
+											<MenuItem key={item} value={item}>
+												{item}
+											</MenuItem>
+										))}
+									</Select>
+								</div>
+								<div className={`${classes.inputBox} ${classes.flexColumn}`}>
+									<InputTitle title="Creation Date" />
+									<KeyPicker
+										id="creationDate"
+										value={creationDate}
+										required
+										onChange={onFieldChange('creationDate')}
+										className={classes.picker}
+										style={{
+											'& >div': {
+												width: '200px !important'
+											}
+										}}
+									/>
+								</div>
+							</div>
+							<div className={classes.inputWrap}>
+								<div className={`${classes.lastInputBox} ${classes.flexColumn}`}>
+									<InputTitle title="Contact Email" optional={true} />
+									<Input
+										id="email"
+										fullWidth
+										type="email"
+										error={errors.email}
+										value={email}
+										onChange={onFieldChange('email')}
+										placeholder="Entity Email"
+									/>
+									{errors.email && (
+										<Typography variant="subtitle2" color="error" gutterBottom>
+											{'Email provided is invalid'}
+										</Typography>
+									)}
+								</div>
+								<div className={`${classes.lastInputBox} ${classes.flexColumn}`}>
+									<InputTitle title="Tax ID" optional={true} />
+									<Input
+										id="taxId"
+										fullWidth
+										value={taxId}
+										type="text"
+										onChange={onFieldChange('taxId')}
+										placeholder="Tax Payer ID"
+									/>
+								</div>
+							</div>
+						</div>
+					</form>
+				</CardContent>
+			</Card>
+		</div>
 	);
 });
 
@@ -571,47 +363,31 @@ class CorporateWizardComponent extends Component {
 	render() {
 		const { classes } = this.props;
 		return (
-			<Grid container direction="column" spacing={32}>
-				<Grid item>
+			<div className={classes.flexColumn}>
+				<div className={classes.wizardTitle}>
 					<Typography variant="h1">SelfKey Corporate Wallet Setup</Typography>
-				</Grid>
-				<Grid item>
-					<Grid id="createProfile" container direction="column" spacing={32}>
-						<Grid item>
-							<CompanyInformation {...this.props} />
-						</Grid>
-						{/* <Grid item><MembersList {...this.props}/></Grid> */}
-					</Grid>
-					<Grid item>
-						<Grid
-							container
-							direction="row"
-							justify="flex-start"
-							alignItems="flex-start"
-							className={classes.footer}
+				</div>
+				<div id="createProfile">
+					<CompanyInformation {...this.props} />
+					{/* <Grid item><MembersList {...this.props}/></Grid> */}
+				</div>
+				<div className={classes.footer}>
+					<div>
+						<Button
+							variant="contained"
+							size="large"
+							onClick={this.props.onContinueClick}
 						>
-							<Grid item>
-								<Button
-									variant="contained"
-									size="large"
-									onClick={this.props.onContinueClick}
-								>
-									Continue
-								</Button>
-							</Grid>
-							<Grid item className={classes.cancel}>
-								<Button
-									variant="outlined"
-									size="large"
-									onClick={this.props.onCancelClick}
-								>
-									Cancel
-								</Button>
-							</Grid>
-						</Grid>
-					</Grid>
-				</Grid>
-			</Grid>
+							Continue
+						</Button>
+					</div>
+					<div className={classes.cancel}>
+						<Button variant="outlined" size="large" onClick={this.props.onCancelClick}>
+							Cancel
+						</Button>
+					</div>
+				</div>
+			</div>
 		);
 	}
 }
