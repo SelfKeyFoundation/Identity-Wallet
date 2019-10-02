@@ -37,7 +37,7 @@ class CorporateDashboardPage extends CorporateComponent {
 			>
 				<Grid item id="header">
 					<Typography variant="h1" className={classes.title}>
-						SelfKey Corporate Vault
+						SelfKey Corporate Wallet
 					</Typography>
 				</Grid>
 				<Grid item className={classes.contentContainer}>
