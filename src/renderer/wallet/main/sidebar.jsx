@@ -185,7 +185,6 @@ const styles = theme => ({
 
 const dashboard = props => <Link to="/main/dashboard" {...props} />;
 const marketplace = props => <Link to="/main/marketplace-categories" {...props} />;
-const selfkeyId = props => <Link to="/main/selfkeyId" {...props} />;
 const addressBook = props => <Link to="/main/addressBook" {...props} />;
 const switchAccount = props => <Link to="/home" {...props} />;
 
@@ -212,7 +211,7 @@ class Sidebar extends Component {
 	};
 
 	render() {
-		const { classes } = this.props;
+		const { classes, onProfileNavigate } = this.props;
 
 		const sideList = (
 			<Grid
@@ -292,8 +291,8 @@ class Sidebar extends Component {
 						<ListItem
 							id="selfkeyIdButton"
 							className={classes.listItem}
-							component={selfkeyId}
 							key="selfkeyId"
+							onClick={onProfileNavigate}
 						>
 							<ListItemIcon className={classes.listItemIcon} title="My Profile">
 								<SelfkeyIDMenuIcon width="14px" height="20px" viewBox="0 0 14 20" />
