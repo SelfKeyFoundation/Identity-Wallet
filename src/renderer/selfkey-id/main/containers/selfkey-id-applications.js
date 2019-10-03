@@ -9,7 +9,8 @@ import { kycSelectors } from '../../../../common/kyc';
 
 class SelfkeyIdApplicationsContainerComponent extends Component {
 	state = {
-		showApplicationRefreshModal: false
+		showApplicationRefreshModal: false,
+		loading: true
 	};
 
 	async componentDidMount() {
@@ -20,12 +21,20 @@ class SelfkeyIdApplicationsContainerComponent extends Component {
 		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
 		// load existing kyc_applications data
 		await this.props.dispatch(kycOperations.loadApplicationsOperation());
+		if (this.props.wallet.profile === 'local') {
+			await this.loadRelyingParties(vendors);
+		}
 
-		await this.loadRelyingParties(vendors);
+		setTimeout(() => {
+			this.setState({ loading: false });
+		}, 2000);
 	}
 
 	async componentDidUpdate(prevProps) {
-		if (prevProps.vendors.length !== this.props.vendors.length) {
+		if (
+			prevProps.vendors.length !== this.props.vendors.length &&
+			this.props.wallet.profile === 'local'
+		) {
 			await this.loadRelyingParties(this.props.vendors);
 		}
 	}
@@ -52,7 +61,7 @@ class SelfkeyIdApplicationsContainerComponent extends Component {
 		// get current application info from RP
 		const rp = rps[application.rpName];
 		if (!rp) {
-			console.warning(`Can't find RP named ${application.rpName}`);
+			console.error(`Can't find RP named ${application.rpName}`);
 			return false;
 		}
 		// Later on, we will need to improve this to be able to distinguish requirements
@@ -67,13 +76,23 @@ class SelfkeyIdApplicationsContainerComponent extends Component {
 	};
 
 	handleApplicationRefresh = application => {
-		const { rps } = this.props;
+		const { rps, wallet, dispatch, afterAuthRoute, cancelRoute } = this.props;
 
 		// get current application info from RP
 		const rp = rps[application.rpName];
-		if (!rp) {
+		if (!rp && wallet.profile === 'local') {
 			console.warning(`Can't find RP named ${application.rpName}`);
 			return false;
+		}
+
+		if (wallet.profile !== 'local') {
+			return dispatch(
+				kycOperations.refreshRelyingPartyForKycApplication(
+					application,
+					afterAuthRoute,
+					cancelRoute
+				)
+			);
 		}
 
 		const kycApplication = rp.applications.find(app => app.id === application.id);
@@ -97,8 +116,12 @@ class SelfkeyIdApplicationsContainerComponent extends Component {
 	};
 
 	render() {
-		const { rps, vendors } = this.props;
-		const loading = Object.keys(rps).length === 0 || vendors.length === 0;
+		const { rps, vendors, wallet } = this.props;
+		let loading = this.state.loading;
+		if (wallet.profile === 'local') {
+			loading = Object.keys(rps).length === 0 || vendors.length === 0;
+		}
+
 		return (
 			<SelfkeyIdApplications
 				{...this.props}
@@ -123,7 +146,8 @@ const mapStateToProps = (state, props) => {
 		applications: kycSelectors.selectApplications(state),
 		afterAuthRoute:
 			walletType === 'ledger' || walletType === 'trezor' ? `/main/selfkeyIdApplications` : '',
-		cancelRoute: `/main/selfkeyId`
+		cancelRoute: `/main/selfkeyId`,
+		walletType
 	};
 };
 

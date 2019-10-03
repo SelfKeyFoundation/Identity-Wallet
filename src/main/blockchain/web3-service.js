@@ -98,6 +98,7 @@ export class Web3Service {
 	}
 
 	setDefaultAccount(account) {
+		this.defaultWallet();
 		this.web3.eth.accounts.wallet.add(account);
 		this.setDefaultAddress(account.address);
 	}

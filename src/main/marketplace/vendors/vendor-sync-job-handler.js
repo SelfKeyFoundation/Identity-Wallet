@@ -22,7 +22,6 @@ export class VendorSyncJobHandler {
 
 		job.emitProgress(25, { message: 'load db vendors' });
 		const dbVendors = await this.vendorService.loadVendors();
-		job.emitProgress(50, { message: 'load db vendors' });
 
 		job.emitProgress(50, { message: 'Merging remote and local data' });
 

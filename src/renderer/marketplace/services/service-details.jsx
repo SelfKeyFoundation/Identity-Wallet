@@ -421,18 +421,19 @@ class MarketplaceServiceDetailsComponent extends Component {
 		const getColors = () => ['#46dfba', '#46b7df', '#238db4', '#25a788', '#0e4b61'];
 		let random = Math.floor(Math.random() * 4);
 
-		const icon = item.data.logo[0].url ? (
-			<img src={item.data.logo[0].url} className={classes.defaultIcon} />
-		) : (
-			<div
-				className={classes.defaultIcon}
-				style={{
-					backgroundColor: getColors()[random]
-				}}
-			>
-				{item.name.charAt(0)}
-			</div>
-		);
+		const icon =
+			item.data.logo && item.data.logo[0].url ? (
+				<img src={item.data.logo[0].url} className={classes.defaultIcon} />
+			) : (
+				<div
+					className={classes.defaultIcon}
+					style={{
+						backgroundColor: getColors()[random]
+					}}
+				>
+					{item.name.charAt(0)}
+				</div>
+			);
 
 		return (
 			<Grid container>
@@ -536,9 +537,10 @@ class MarketplaceServiceDetailsComponent extends Component {
 												<span>
 													<Typography variant="h5">Location:</Typography>
 													<Typography variant="body2">
-														{item.data.location.map(name => (
-															<span key={name}>{`${name} `}</span>
-														))}
+														{item.data.location &&
+															item.data.location.map(name => (
+																<span key={name}>{`${name} `}</span>
+															))}
 													</Typography>
 												</span>
 												<span>
@@ -584,9 +586,10 @@ class MarketplaceServiceDetailsComponent extends Component {
 														FIAT Payment:
 													</Typography>
 													<Typography variant="body2">
-														{item.data.fiatPayments.map(name => (
-															<span key={name}>{`${name} `}</span>
-														))}
+														{item.data.fiatPayments &&
+															item.data.fiatPayments.map(name => (
+																<span key={name}>{`${name} `}</span>
+															))}
 													</Typography>
 												</span>
 												<span>
@@ -594,9 +597,10 @@ class MarketplaceServiceDetailsComponent extends Component {
 														FIAT Supported:
 													</Typography>
 													<Typography variant="body2">
-														{item.data.fiatSupported.map(name => (
-															<span key={name}>{`${name} `}</span>
-														))}
+														{item.data.fiatSupported &&
+															item.data.fiatSupported.map(name => (
+																<span key={name}>{`${name} `}</span>
+															))}
 													</Typography>
 												</span>
 												<span>
@@ -618,9 +622,14 @@ class MarketplaceServiceDetailsComponent extends Component {
 														Excluded Resident:
 													</Typography>
 													<Typography variant="body2">
-														{item.data.excludedResidents.map(name => (
-															<span key={name}>{`${name} `}</span>
-														))}
+														{item.data.excludedResidents &&
+															item.data.excludedResidents.map(
+																name => (
+																	<span
+																		key={name}
+																	>{`${name} `}</span>
+																)
+															)}
 													</Typography>
 												</span>
 												<span>
@@ -634,7 +643,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 									</Grid>
 								</Grid>
 							</Grid>
-							{templates[0] && (
+							{templates && templates[0] && (
 								<Grid item id="requirements" className={classes.fullWidth}>
 									<Grid
 										container
