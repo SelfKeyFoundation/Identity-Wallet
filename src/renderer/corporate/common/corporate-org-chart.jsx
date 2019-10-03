@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, CardHeader, Card, CardContent, withStyles } from '@material-ui/core';
-import { grey, EditTransparentIcon } from 'selfkey-ui';
+import { grey, EditTransparentIcon, typography } from 'selfkey-ui';
 import 'react-orgchart/index.css';
 import OrgChart from 'react-orgchart';
 
@@ -29,6 +29,7 @@ const styles = theme => ({
 		overflow: 'scroll',
 		margin: 'auto',
 		'& .initechNode': {
+			backgroundColor: '#313D49',
 			border: `solid 1px ${grey}`,
 			borderRadius: '3px',
 			padding: '1em',
@@ -39,7 +40,7 @@ const styles = theme => ({
 		},
 		'& .initechNode span': {
 			display: 'block',
-			color: `${grey}`,
+			color: `${typography}`,
 			fontSize: '12px',
 			marginTop: '0.5em'
 		},
