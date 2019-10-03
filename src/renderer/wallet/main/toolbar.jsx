@@ -345,7 +345,11 @@ class Toolbar extends Component {
 		} = this.props;
 		return (
 			<div>
-				<Sidebar isOpen={isSidebarOpen} onClose={onToggleMenu} />
+				<Sidebar
+					isOpen={isSidebarOpen}
+					onClose={onToggleMenu}
+					onProfileNavigate={onProfileNavigate}
+				/>
 				<Grid
 					container
 					direction="row"
