@@ -295,6 +295,10 @@ const switchProfileOperation = identity => async (dispatch, getState) => {
 const navigateToProfileOperation = () => async (dispatch, getState) => {
 	const identity = identitySelectors.selectCurrentIdentity(getState());
 
+	if (identity.type === 'individual' && !identity.isSetupFinished) {
+		return dispatch(push('/selfkeyIdCreate'));
+	}
+
 	if (identity.type === 'individual') {
 		return dispatch(push('/main/selfkeyId'));
 	}
