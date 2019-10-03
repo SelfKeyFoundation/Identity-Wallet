@@ -3,9 +3,6 @@ import { Grid, CardHeader, Card, CardContent, withStyles } from '@material-ui/co
 import { Chart } from 'react-google-charts';
 
 const styles = theme => ({
-	cardContainer: {
-		maxWidth: '550px'
-	},
 	hr: {
 		backgroundColor: '#303C49',
 		border: 'none',
@@ -13,30 +10,19 @@ const styles = theme => ({
 		height: '1px',
 		margin: '5px 16px'
 	},
-	card: {},
-	cardHeader: {
-		whiteSpace: 'normal',
-		wordBreak: 'break-all'
+	cardContent: {
+		height: 'initial'
 	},
 	regularText: {
+		boxSizing: 'border-box',
+		height: 58,
 		'& span': {
 			fontWeight: 400
 		}
 	},
-	attr: {
-		margin: '0.5em',
-		display: 'block',
-		'& .label': {
-			display: 'inline-block',
-			minWidth: '12em'
-		},
-		'& h5': {
-			display: 'inline-block'
-		},
-		'& svg': {
-			marginRight: '0.5em',
-			verticalAlign: 'middle'
-		}
+	chartWrap: {
+		alignItems: 'flex-start',
+		display: 'flex'
 	},
 	legend: {
 		alignSelf: 'flex-end',
@@ -113,41 +99,37 @@ ref={c => {
 const CorporateShareholding = withStyles(styles)(props => {
 	const { classes, cap = [] } = props;
 	return (
-		<Grid container direction="column" spacing={32} className={classes.cardContainer}>
-			<Grid item>
-				<Card>
-					<CardHeader title="Shareholding" className={classes.regularText} />
-					<hr className={classes.hr} />
-					<CardContent>
-						<Grid container alignItems="flex-start" spacing={0}>
-							<Grid item xs={8}>
-								<Chart
-									chartType="PieChart"
-									data={getChartData(cap)}
-									options={chartOptions}
-									graph_id="PieChart"
-									width="100%"
-									height="300px"
-									legend_toggle
-									chartEvents={[selectEvent, readyEvent]}
+		<Card>
+			<CardHeader title="Shareholding" className={classes.regularText} />
+			<hr className={classes.hr} />
+			<CardContent className={classes.cardContent}>
+				<div className={classes.chartWrap}>
+					<Grid item xs={8}>
+						<Chart
+							chartType="PieChart"
+							data={getChartData(cap)}
+							options={chartOptions}
+							graph_id="PieChart"
+							width="100%"
+							height="300px"
+							legend_toggle
+							chartEvents={[selectEvent, readyEvent]}
+						/>
+					</Grid>
+					<Grid item xs={4} className={classes.legend}>
+						{cap.map((shareholder, index) => (
+							<div key={`shareholder-${index}`}>
+								<div
+									className={classes.coloredBox}
+									style={{ backgroundColor: getColors()[index] }}
 								/>
-							</Grid>
-							<Grid item xs={4} className={classes.legend}>
-								{cap.map((shareholder, index) => (
-									<div key={`shareholder-${index}`}>
-										<div
-											className={classes.coloredBox}
-											style={{ backgroundColor: getColors()[index] }}
-										/>
-										<span>{shareholder.name}</span>
-									</div>
-								))}
-							</Grid>
-						</Grid>
-					</CardContent>
-				</Card>
-			</Grid>
-		</Grid>
+								<span>{shareholder.name}</span>
+							</div>
+						))}
+					</Grid>
+				</div>
+			</CardContent>
+		</Card>
 	);
 });
 

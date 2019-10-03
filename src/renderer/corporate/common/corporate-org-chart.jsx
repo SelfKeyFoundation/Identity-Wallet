@@ -1,12 +1,12 @@
 import React from 'react';
 import { Grid, CardHeader, Card, CardContent, withStyles } from '@material-ui/core';
-import { base, grey, EditTransparentIcon } from 'selfkey-ui';
+import { grey, EditTransparentIcon } from 'selfkey-ui';
 import 'react-orgchart/index.css';
 import OrgChart from 'react-orgchart';
 
 const styles = theme => ({
 	hr: {
-		backgroundColor: `${base}`,
+		backgroundColor: '#303C49',
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
