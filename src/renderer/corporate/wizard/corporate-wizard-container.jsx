@@ -4,14 +4,17 @@ import { connect } from 'react-redux';
 import { appSelectors } from 'common/app';
 import { CorporateWizard } from './corporate-wizard';
 import { push } from 'connected-react-router';
+import { identityAttributes } from 'common/identity/utils';
 import { identityOperations, identitySelectors } from 'common/identity';
+
+const fields = ['jurisdiction', 'taxId', 'entityType', 'email', 'entityName', 'creationDate'];
 
 class CorporateWizardContainerComponent extends Component {
 	constructor(props) {
 		super(props);
 		const { basicIdentity = {} } = props;
 		this.state = {
-			errors: {},
+			errors: { hasErrors: false },
 			jurisdiction: basicIdentity.jurisdiction || '',
 			taxId: basicIdentity.taxId || null,
 			entityType: basicIdentity.entityType || '',
@@ -34,34 +37,79 @@ class CorporateWizardContainerComponent extends Component {
 	}
 
 	handleFieldChange = name => evt => {
-		const errors = { ...this.state.errors };
 		let value = evt;
+
 		if (evt && evt.target) {
 			value = evt.target.value;
 		}
 
-		if (name === 'email') {
-			errors.email = value && !this.isValidEmail(value) ? 'Invalid email' : null;
-		}
+		const stateErrors = { ...this.state.errors };
+		delete stateErrors[name];
+		const errors = this.validateAllAttributes([{ name, value }]);
+
 		this.setState({
-			errors,
 			[name]: value
 		});
+		this.setErrors(errors);
 	};
+
+	setErrors(errors) {
+		const hasErrors = Object.keys(errors).length > 1;
+		this.setState({
+			errors: { ...errors, hasErrors }
+		});
+	}
+
+	validateAllAttributes(attrs) {
+		const errorText = {
+			email: 'Email provided is invalid',
+			jurisdiction: 'Please select a jurisdiction',
+			entityName: 'Please enter an entity name',
+			entityType: 'Please select a entity type',
+			creationDate: 'Please enter company creation date',
+			taxId: 'Tax id provided is invalid'
+		};
+		if (!attrs) {
+			attrs = fields.map(name => ({ name, value: this.state[name] }));
+		}
+		const errors = attrs.reduce(
+			(acc, curr) => {
+				const { name, value } = curr;
+				const isError = !this.isValidAttribute(name, value);
+
+				if (isError) {
+					acc[name] = errorText[name];
+					acc.hasErrors = true;
+				}
+			},
+			{ hasErrors: false }
+		);
+
+		return errors;
+	}
+
+	isValidAttribute(name, value) {
+		const { basicAttributeTypes } = this.props;
+		const type = basicAttributeTypes[name];
+		if (!type || !type.content) {
+			throw new Error('Not a basic attribute');
+		}
+		if (type.required && !value) {
+			return false;
+		}
+		return identityAttributes.validate(type.content, { value }, []);
+	}
 
 	handleContinueClick = evt => {
 		evt && evt.preventDefault();
+
+		const errors = this.validateAllAttributes();
+
+		if (errors.hasError) return;
+
 		this.props.dispatch(
 			identityOperations.createCorporateProfileOperation({
-				..._.pick(
-					this.state,
-					'jurisdiction',
-					'taxId',
-					'entityType',
-					'email',
-					'entityName',
-					'creationDate'
-				),
+				..._.pick(this.state, fields),
 				identityId: this.props.match.params.identityId
 			})
 		);
@@ -78,13 +126,7 @@ class CorporateWizardContainerComponent extends Component {
 	};
 
 	isDisabled() {
-		return (
-			!this.state.jurisdiction ||
-			!this.state.entityType ||
-			!this.state.entityName ||
-			!this.state.creationDate ||
-			(this.state.email && !this.isValidEmail(this.state.email))
-		);
+		return this.state.errors.hasErrors;
 	}
 
 	render() {
@@ -152,6 +194,7 @@ class CorporateWizardContainerComponent extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
+		basicAttributeTypes: identitySelectors.selectBasicCorporateAttributeTypes(state),
 		basicIdentity: identitySelectors.selectCorporateProfile(
 			state,
 			props.match.params.identityId

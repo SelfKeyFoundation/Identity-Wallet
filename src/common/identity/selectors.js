@@ -239,6 +239,46 @@ const selectCurrentCorporateProfile = state => {
 	return identitySelectors.selectCorporateProfile(state, identity.id);
 };
 
+const selectBasicCorporateAttributeTypes = state => {
+	let map = BASIC_CORPORATE_ATTRIBUTES;
+
+	let allTypes = selectIdAttributeTypes(state, 'corporate');
+
+	return allTypes
+		.filter(t => map[t.url])
+		.reduce((acc, curr) => {
+			curr = { ...curr };
+			switch (curr.url) {
+				case EMAIL_ATTRIBUTE:
+					acc.email = curr;
+					curr.required = false;
+					return acc;
+				case TAX_ID:
+					acc.taxId = curr;
+					curr.required = false;
+					return acc;
+				case ENTITY_NAME:
+					acc.entityName = curr;
+					curr.required = true;
+					return acc;
+				case ENTITY_TYPE:
+					acc.entityType = curr;
+					curr.required = true;
+					return acc;
+				case CREATION_DATE:
+					acc.creationDate = curr;
+					curr.required = true;
+					return acc;
+				case JURISDICTION:
+					acc.jurisdiction = curr;
+					curr.required = true;
+					return acc;
+				default:
+					return acc;
+			}
+		}, {});
+};
+
 const selectCorporateProfile = (state, id) => {
 	const identity = identitySelectors.selectIdentityById(state, id);
 	if (!identity) return {};
@@ -307,7 +347,8 @@ export const identitySelectors = {
 	selectCorporateJurisdictions,
 	selectCorporateLegalEntityTypes,
 	selectCorporateProfile,
-	selectCurrentCorporateProfile
+	selectCurrentCorporateProfile,
+	selectBasicCorporateAttributeTypes
 };
 
 export default identitySelectors;
