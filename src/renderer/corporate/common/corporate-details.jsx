@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, CardHeader, Card, CardContent, Typography, withStyles } from '@material-ui/core';
+import { CardHeader, Card, CardContent, Typography, withStyles } from '@material-ui/core';
 import { CheckMaIcon, AttributeAlertIcon, EditTransparentIcon } from 'selfkey-ui';
 
 const styles = theme => ({
@@ -10,10 +10,14 @@ const styles = theme => ({
 		height: '1px',
 		margin: '5px 16px'
 	},
-	card: {},
-	cardHeader: {
-		whiteSpace: 'normal',
-		wordBreak: 'break-all'
+	cardContentBox: {
+		height: 'initial'
+	},
+	cardContent: {
+		alignItems: 'flex-start',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center'
 	},
 	cardAction: {
 		padding: '1em 1em 0'
@@ -24,8 +28,8 @@ const styles = theme => ({
 		}
 	},
 	attr: {
-		margin: '0.5em',
 		display: 'block',
+		marginBottom: '20px',
 		'& .label': {
 			display: 'inline-block',
 			minWidth: '12em'
@@ -80,14 +84,8 @@ const CorporateDetails = withStyles(styles)(props => {
 				action={editAction(onEdit)}
 			/>
 			<hr className={classes.hr} />
-			<CardContent>
-				<Grid
-					container
-					direction="column"
-					justify="center"
-					alignItems="flex-start"
-					spacing={24}
-				>
+			<CardContent className={classes.cardContentBox}>
+				<div className={classes.cardContent}>
 					<div className={classes.attr}>
 						<Typography className="label" color="secondary">
 							Jurisdiction
@@ -120,7 +118,7 @@ const CorporateDetails = withStyles(styles)(props => {
 							{profile.did}
 						</div>
 					)}
-				</Grid>
+				</div>
 			</CardContent>
 		</Card>
 	);

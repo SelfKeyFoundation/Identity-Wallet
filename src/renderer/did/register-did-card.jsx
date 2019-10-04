@@ -76,7 +76,7 @@ class RegisterDidCardComponent extends Component {
 							</Grid>
 
 							<Grid item xs={9}>
-								<Typography variant="h5">
+								<Typography variant="body1">
 									Use a DID when accesing different services in the marketplace.
 									Once created you’ll see it under your profile.
 								</Typography>

@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-	Grid,
 	CardHeader,
 	Card,
 	CardContent,
@@ -8,11 +7,16 @@ import {
 	Table,
 	TableHead,
 	TableBody,
-	TableRow,
-	TableCell,
 	withStyles
 } from '@material-ui/core';
-import { HourGlassSmallIcon, CheckMaIcon, DeniedIcon, SmallTableHeadRow } from 'selfkey-ui';
+import {
+	HourGlassSmallIcon,
+	CheckMaIcon,
+	DeniedIcon,
+	SmallTableRow,
+	SmallTableCell,
+	SmallTableHeadRow
+} from 'selfkey-ui';
 
 const styles = theme => ({
 	container: {
@@ -25,10 +29,16 @@ const styles = theme => ({
 		height: '1px',
 		margin: '5px 16px'
 	},
-	card: {},
 	cardHeader: {
 		whiteSpace: 'normal',
 		wordBreak: 'break-all'
+	},
+	cardContent: {
+		alignItems: 'flex-start',
+		display: 'flex',
+		flexDirection: 'column',
+		maxHeight: '180px',
+		overflow: 'scroll'
 	},
 	regularText: {
 		'& span': {
@@ -64,46 +74,44 @@ const CorporateApplicationsSummary = withStyles(styles)(props => {
 	const { classes, applications = [] } = props;
 	return (
 		<Card className={classes.container}>
-			<CardHeader title={'Application Status'} className={classes.regularText} />
+			<CardHeader title={'Applications Status'} className={classes.regularText} />
 			<hr className={classes.hr} />
-			<CardContent>
-				<Grid
-					container
-					direction="column"
-					justify="center"
-					alignItems="flex-start"
-					spacing={24}
-				>
+			<CardContent style={{ height: 'initial' }}>
+				<div className={classes.cardContent}>
 					<Table>
 						<TableHead>
 							<SmallTableHeadRow>
-								<TableCell>
+								<SmallTableCell>
 									<Typography variant="overline">Service</Typography>
-								</TableCell>
-								<TableCell>
+								</SmallTableCell>
+								<SmallTableCell>
 									<Typography variant="overline">Provider</Typography>
-								</TableCell>
-								<TableCell>
+								</SmallTableCell>
+								<SmallTableCell>
 									<Typography variant="overline">Status</Typography>
-								</TableCell>
+								</SmallTableCell>
 							</SmallTableHeadRow>
 						</TableHead>
 						<TableBody>
 							{applications &&
 								applications.map(a => (
-									<TableRow id={a.id} key={a.id}>
-										<TableCell>
-											<Typography variant="h6">{a.title}</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="h6">{a.rpName}</Typography>
-										</TableCell>
-										<TableCell>{renderStatus(a.currentStatusName)}</TableCell>
-									</TableRow>
+									<SmallTableRow id={a.id} key={a.id}>
+										<SmallTableCell>
+											<Typography variant="subtitle1">{a.title}</Typography>
+										</SmallTableCell>
+										<SmallTableCell>
+											<Typography variant="subtitle1">{a.rpName}</Typography>
+										</SmallTableCell>
+										<SmallTableCell>
+											<Typography variant="subtitle1">
+												{renderStatus(a.currentStatusName)}
+											</Typography>
+										</SmallTableCell>
+									</SmallTableRow>
 								))}
 						</TableBody>
 					</Table>
-				</Grid>
+				</div>
 			</CardContent>
 		</Card>
 	);
