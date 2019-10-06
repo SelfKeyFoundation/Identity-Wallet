@@ -3,9 +3,6 @@ import { Grid, CardHeader, Card, CardContent, withStyles } from '@material-ui/co
 import { Chart } from 'react-google-charts';
 
 const styles = theme => ({
-	cardContainer: {
-		maxWidth: '550px'
-	},
 	hr: {
 		backgroundColor: '#303C49',
 		border: 'none',
@@ -13,29 +10,9 @@ const styles = theme => ({
 		height: '1px',
 		margin: '5px 16px'
 	},
-	card: {},
-	cardHeader: {
-		whiteSpace: 'normal',
-		wordBreak: 'break-all'
-	},
 	regularText: {
 		'& span': {
 			fontWeight: 400
-		}
-	},
-	attr: {
-		margin: '0.5em',
-		display: 'block',
-		'& .label': {
-			display: 'inline-block',
-			minWidth: '12em'
-		},
-		'& h5': {
-			display: 'inline-block'
-		},
-		'& svg': {
-			marginRight: '0.5em',
-			verticalAlign: 'middle'
 		}
 	},
 	legend: {
