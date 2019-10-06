@@ -10,8 +10,8 @@ const styles = theme => ({
 	title: {
 		padding: '0'
 	},
-	contentContainer: {
-		borderBottom: '1px solid #303C49'
+	header: {
+		marginBottom: '45px'
 	}
 });
 class CorporateDashboardPage extends CorporateComponent {
@@ -35,9 +35,9 @@ class CorporateDashboardPage extends CorporateComponent {
 				alignItems="stretch"
 				className={classes.container}
 			>
-				<Grid item id="header">
+				<Grid item id="header" className={classes.header}>
 					<Typography variant="h1" className={classes.title}>
-						SelfKey Corporate Vault
+						SelfKey Corporate Wallet
 					</Typography>
 				</Grid>
 				<Grid item className={classes.contentContainer}>

@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-	Grid,
 	CardHeader,
 	Card,
 	CardContent,
@@ -8,11 +7,9 @@ import {
 	Table,
 	TableHead,
 	TableBody,
-	TableRow,
-	TableCell,
 	withStyles
 } from '@material-ui/core';
-import { EditTransparentIcon, SmallTableHeadRow } from 'selfkey-ui';
+import { SmallTableRow, SmallTableCell, EditTransparentIcon, SmallTableHeadRow } from 'selfkey-ui';
 
 const styles = theme => ({
 	hr: {
@@ -22,12 +19,14 @@ const styles = theme => ({
 		height: '1px',
 		margin: '5px 16px'
 	},
-	card: {
+	cardHeader: {
 		height: '100%'
 	},
-	cardHeader: {
-		whiteSpace: 'normal',
-		wordBreak: 'break-all'
+	cardContent: {
+		alignItems: 'flex-item',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center'
 	},
 	cardAction: {
 		padding: '1em 1em 0'
@@ -55,78 +54,76 @@ const CorporateCapTable = withStyles(styles)(props => {
 					root: classes.regularText,
 					action: classes.cardAction
 				}}
-				className={classes.card}
+				className={classes.cardHeader}
 				action={editAction(onEdit)}
 			/>
 			<hr className={classes.hr} />
 			<CardContent>
-				<Grid
-					container
-					direction="column"
-					justify="center"
-					alignItems="flex-start"
-					spacing={24}
-				>
+				<div className={classes.cardContent}>
 					<Table>
 						<TableHead>
 							<SmallTableHeadRow>
-								<TableCell>
+								<SmallTableCell>
 									<Typography variant="overline">Type</Typography>
-								</TableCell>
-								<TableCell>
+								</SmallTableCell>
+								<SmallTableCell>
 									<Typography variant="overline">Role</Typography>
-								</TableCell>
-								<TableCell>
+								</SmallTableCell>
+								<SmallTableCell>
 									<Typography variant="overline">Name</Typography>
-								</TableCell>
-								<TableCell>
+								</SmallTableCell>
+								<SmallTableCell>
 									<Typography variant="overline">Email</Typography>
-								</TableCell>
-								<TableCell>
+								</SmallTableCell>
+								<SmallTableCell>
 									<Typography variant="overline">
 										Citizenship / Incorporation
 									</Typography>
-								</TableCell>
-								<TableCell>
+								</SmallTableCell>
+								<SmallTableCell>
 									<Typography variant="overline">Residency / Domicile</Typography>
-								</TableCell>
-								<TableCell>
+								</SmallTableCell>
+								<SmallTableCell>
 									<Typography variant="overline">Shares</Typography>
-								</TableCell>
+								</SmallTableCell>
 							</SmallTableHeadRow>
 						</TableHead>
 						<TableBody>
 							{cap &&
 								cap.map((c, idx) => (
-									<TableRow key={`cap-${idx}`}>
-										<TableCell>
-											<Typography variant="h6">{c.type}</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="h6">{c.role}</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="h6">{c.name}</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="h6">
+									<SmallTableRow key={`cap-${idx}`}>
+										<SmallTableCell>
+											<Typography variant="subtitle1">{c.type}</Typography>
+										</SmallTableCell>
+										<SmallTableCell>
+											<Typography variant="subtitle1">{c.role}</Typography>
+										</SmallTableCell>
+										<SmallTableCell>
+											<Typography variant="subtitle1">{c.name}</Typography>
+										</SmallTableCell>
+										<SmallTableCell>
+											<Typography variant="subtitle1">
 												{c.email ? c.email : '-'}
 											</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="h6">{c.citizenship}</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="h6">{c.residency}</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="h6">{c.shares}</Typography>
-										</TableCell>
-									</TableRow>
+										</SmallTableCell>
+										<SmallTableCell>
+											<Typography variant="subtitle1">
+												{c.citizenship}
+											</Typography>
+										</SmallTableCell>
+										<SmallTableCell>
+											<Typography variant="subtitle1">
+												{c.residency}
+											</Typography>
+										</SmallTableCell>
+										<SmallTableCell>
+											<Typography variant="subtitle1">{c.shares}</Typography>
+										</SmallTableCell>
+									</SmallTableRow>
 								))}
 						</TableBody>
 					</Table>
-				</Grid>
+				</div>
 			</CardContent>
 		</Card>
 	);

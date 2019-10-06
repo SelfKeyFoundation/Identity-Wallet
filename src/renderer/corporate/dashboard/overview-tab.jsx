@@ -7,63 +7,58 @@ import { CorporateShareholding } from '../common/corporate-shareholding';
 import { CorporateOrgChart } from '../common/corporate-org-chart';
 
 const styles = theme => ({
-	corporateShareholding: {
-		width: '550px'
+	overviewBox: {
+		alignItems: 'strech',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'flex-start',
+		'& .halfWidgetBox': {
+			alignItems: 'stretch',
+			display: 'flex',
+			flexWrap: 'nowrap',
+			justifyContent: 'space-between',
+			margin: '30px 0',
+			'& .halfWidth': {
+				width: '100%'
+			},
+			'& .halfWidth:first-child': {
+				marginRight: 15
+			},
+			'& .halfWidth:last-child': {
+				marginLeft: 15
+			}
+		}
 	}
 });
 
 const CorporateOverviewTab = withStyles(styles)(
 	({ classes, applications, profile, cap, onEditCorporateDetails, didComponent }) => (
-		<div style={{ width: '100%', marginTop: '16px' }}>
-			<Grid
-				container
-				direction="column"
-				justify="flex-start"
-				alignItems="stretch"
-				spacing={16}
-			>
+		<div>
+			<div className={classes.overviewBox}>
 				{!profile.did && <Grid item>{didComponent}</Grid>}
-				<Grid item>
-					<Grid
-						container
-						direction="row"
-						justify="space-between"
-						alignItems="stretch"
-						wrap="nowrap"
-						spacing={16}
-					>
-						<Grid item xs>
-							<CorporateDetails profile={profile} onEdit={onEditCorporateDetails} />
-						</Grid>
-						<Grid item xs>
-							<CorporateApplicationsSummary
-								profile={profile}
-								applications={applications}
-							/>
-						</Grid>
-					</Grid>
-				</Grid>
-				<Grid item>
+				<div className="halfWidgetBox">
+					<div className="halfWidth">
+						<CorporateDetails profile={profile} onEdit={onEditCorporateDetails} />
+					</div>
+					<div className="halfWidth">
+						<CorporateApplicationsSummary
+							profile={profile}
+							applications={applications}
+						/>
+					</div>
+				</div>
+				<div>
 					<CorporateCapTable profile={profile} cap={cap} />
-				</Grid>
-				<Grid item>
-					<Grid
-						container
-						direction="row"
-						justify="space-between"
-						alignItems="stretch"
-						wrap="nowrap"
-						spacing={16}
-					>
-						<Grid item className={classes.corporateShareholding}>
-							<CorporateShareholding profile={profile} cap={cap} />
-						</Grid>
-						<Grid item xs>
-							<CorporateOrgChart profile={profile} cap={cap} />
-						</Grid>
-					</Grid>
-				</Grid>
-			</Grid>
+				</div>
+				<div className="halfWidgetBox">
+					<div className="halfWidth" styles={{ marginRight: 15 }}>
+						<CorporateShareholding profile={profile} cap={cap} />
+					</div>
+					<div className="halfWidth" styles={{ marginLeft: 15 }}>
+						<CorporateOrgChart profile={profile} cap={cap} />
+					</div>
+				</div>
+			</div>
 		</div>
 	)
 );

@@ -14,7 +14,7 @@ import {
 	withStyles
 } from '@material-ui/core';
 import {
-	IdCardIcon,
+	BookIcon,
 	SmallTableHeadRow,
 	SmallTableRow,
 	SmallTableCell,
@@ -34,6 +34,12 @@ const styles = theme => ({
 	cardHeader: {
 		whiteSpace: 'normal',
 		wordBreak: 'break-all'
+	},
+	cardContent: {
+		alignItems: 'stretch',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center'
 	},
 	cardAction: {
 		padding: '20px'
@@ -57,6 +63,22 @@ const styles = theme => ({
 			marginRight: '0.5em',
 			verticalAlign: 'middle'
 		}
+	},
+	informationLeft: {
+		alignItems: 'center',
+		display: 'flex',
+		flexDirection: 'column',
+		flexWrap: 'nowrap',
+		justifyContent: 'flex-end',
+		paddingRight: '30px'
+	},
+	bookIcon: {
+		margin: '30px 0 20px'
+	},
+	button: {
+		display: 'flex',
+		justifyContent: 'center',
+		marginTop: '30px'
 	}
 });
 
@@ -86,115 +108,86 @@ const CorporateInformation = withStyles(styles)(props => {
 		<Card>
 			<CardHeader title="Informations" className={classes.regularText} />
 			<hr className={classes.hr} />
-			<CardContent>
-				<Grid
-					container
-					direction="column"
-					justify="center"
-					alignItems="stretch"
-					spacing={24}
-				>
-					<Grid item>
-						<Grid container spacing={0} justify="space-between">
-							<Grid item xs={3}>
-								<Grid
-									container
-									justify="flex-end"
-									alignItems="center"
-									direction="column"
-									wrap="nowrap"
-									spacing={24}
-									className={classes.info}
-								>
-									<Grid item>
-										<IdCardIcon />
-									</Grid>
-									<Grid item>
-										<Typography variant="subtitle2" color="secondary">
-											Information provided here will be used for the KYC
-											processes in the Marketplace.
-										</Typography>
-									</Grid>
-								</Grid>
-							</Grid>
-							<Grid item xs={9}>
-								<Table>
-									<TableHead>
-										<SmallTableHeadRow>
-											<SmallTableCell variant="head">
-												<Typography variant="overline">
-													Information
+			<CardContent className={classes.cardContent}>
+				<div>
+					<Grid container spacing={0} justify="space-between">
+						<Grid item xs={3}>
+							<div className={classes.informationLeft}>
+								<BookIcon className={classes.bookIcon} />
+								<Typography variant="subtitle2" color="secondary">
+									Information provided here will be used for the KYC processes in
+									the Marketplace.
+								</Typography>
+							</div>
+						</Grid>
+						<Grid item xs={9}>
+							<Table>
+								<TableHead>
+									<SmallTableHeadRow>
+										<SmallTableCell variant="head">
+											<Typography variant="overline">Information</Typography>
+										</SmallTableCell>
+										<SmallTableCell variant="head">
+											<Typography variant="overline">Label</Typography>
+										</SmallTableCell>
+										<SmallTableCell variant="head">
+											<Typography variant="overline">Last edited</Typography>
+										</SmallTableCell>
+										<SmallTableCell variant="head" align="right">
+											<Typography variant="overline">Actions</Typography>
+										</SmallTableCell>
+									</SmallTableHeadRow>
+								</TableHead>
+								<TableBody>
+									{attributes.map(attr => (
+										<SmallTableRow key={attr.id}>
+											<SmallTableCell className={classes.labelCell}>
+												<Typography variant="subtitle1">
+													{renderAttributeTitle(attr)}
 												</Typography>
 											</SmallTableCell>
-											<SmallTableCell variant="head">
-												<Typography variant="overline">Label</Typography>
-											</SmallTableCell>
-											<SmallTableCell variant="head">
-												<Typography variant="overline">
-													Last edited
+											<SmallTableCell className={classes.labelCell}>
+												<Typography variant="subtitle1">
+													{renderAttributeValue(attr)}
 												</Typography>
 											</SmallTableCell>
-											<SmallTableCell variant="head" align="right">
-												<Typography variant="overline">Actions</Typography>
+											<SmallTableCell>
+												<Typography variant="subtitle1">
+													{renderLastUpdateDate(attr)}
+												</Typography>
 											</SmallTableCell>
-										</SmallTableHeadRow>
-									</TableHead>
-									<TableBody>
-										{attributes.map(attr => (
-											<SmallTableRow key={attr.id}>
-												<SmallTableCell className={classes.labelCell}>
-													<Typography variant="subtitle1">
-														{renderAttributeTitle(attr)}
-													</Typography>
-												</SmallTableCell>
-												<SmallTableCell className={classes.labelCell}>
-													<Typography variant="subtitle1">
-														{renderAttributeValue(attr)}
-													</Typography>
-												</SmallTableCell>
-												<SmallTableCell>
-													<Typography variant="subtitle1">
-														{renderLastUpdateDate(attr)}
-													</Typography>
-												</SmallTableCell>
-												<SmallTableCell align="right">
-													<IconButton
-														id="editButton"
-														onClick={() => onEditAttribute(attr)}
-													>
-														<EditTransparentIcon />
-													</IconButton>
-													<IconButton
-														id="deleteButton"
-														onClick={() => onDeleteAttribute(attr)}
-													>
-														<DeleteIcon />
-													</IconButton>
-												</SmallTableCell>
-											</SmallTableRow>
-										))}
-									</TableBody>
-								</Table>
-							</Grid>
+											<SmallTableCell align="right">
+												<IconButton
+													id="editButton"
+													onClick={() => onEditAttribute(attr)}
+												>
+													<EditTransparentIcon />
+												</IconButton>
+												<IconButton
+													id="deleteButton"
+													onClick={() => onDeleteAttribute(attr)}
+												>
+													<DeleteIcon />
+												</IconButton>
+											</SmallTableCell>
+										</SmallTableRow>
+									))}
+								</TableBody>
+							</Table>
 						</Grid>
 					</Grid>
-					<Grid item>
-						<Grid container spacing={0} justify="center">
-							<Grid item>
-								<Button
-									id="addAttributes"
-									variant="outlined"
-									size="large"
-									color="secondary"
-									onClick={onAddAttribute}
-									className={classes.button}
-								>
-									Add Information
-								</Button>
-							</Grid>
-						</Grid>
-					</Grid>
-				</Grid>
+				</div>
+				<div className={classes.button}>
+					<Button
+						id="addAttributes"
+						variant="outlined"
+						size="large"
+						color="secondary"
+						onClick={onAddAttribute}
+					>
+						Add Information
+					</Button>
+				</div>
 			</CardContent>
 		</Card>
 	);
