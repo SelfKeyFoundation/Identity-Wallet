@@ -132,6 +132,7 @@ const CompanyInformation = withStyles(styles)(props => {
 										className={classes.select}
 										onChange={onFieldChange('jurisdiction')}
 										displayEmpty
+										error={errors.jurisdiction}
 										name="jurisdiction"
 										value={jurisdiction}
 										disableUnderline
@@ -147,6 +148,11 @@ const CompanyInformation = withStyles(styles)(props => {
 											</MenuItem>
 										))}
 									</Select>
+									{errors.jurisdiction && (
+										<Typography variant="subtitle2" color="error" gutterBottom>
+											{errors.jurisdiction}
+										</Typography>
+									)}
 								</div>
 								<div className={`${classes.inputBox} ${classes.flexColumn}`}>
 									<InputTitle title="Legal Entity Name" />
@@ -154,10 +160,16 @@ const CompanyInformation = withStyles(styles)(props => {
 										id="entityName"
 										fullWidth
 										required
+										error={errors.entityName}
 										value={entityName}
 										onChange={onFieldChange('entityName')}
 										placeholder="Entity Name"
 									/>
+									{errors.entityName && (
+										<Typography variant="subtitle2" color="error" gutterBottom>
+											{errors.entityName}
+										</Typography>
+									)}
 								</div>
 							</div>
 							<div className={classes.inputWrap}>
@@ -168,6 +180,7 @@ const CompanyInformation = withStyles(styles)(props => {
 										onChange={onFieldChange('entityType')}
 										value={entityType}
 										name="entitytype"
+										error={errors.entityType}
 										disableUnderline
 										IconComponent={KeyboardArrowDown}
 										input={<Input disableUnderline />}
@@ -181,6 +194,11 @@ const CompanyInformation = withStyles(styles)(props => {
 											</MenuItem>
 										))}
 									</Select>
+									{errors.entityType && (
+										<Typography variant="subtitle2" color="error" gutterBottom>
+											{errors.entityType}
+										</Typography>
+									)}
 								</div>
 								<div className={`${classes.inputBox} ${classes.flexColumn}`}>
 									<InputTitle title="Creation Date" />
@@ -188,6 +206,7 @@ const CompanyInformation = withStyles(styles)(props => {
 										id="creationDate"
 										value={creationDate}
 										required
+										error={errors.creationDate}
 										onChange={onFieldChange('creationDate')}
 										className={classes.picker}
 										style={{
@@ -196,6 +215,11 @@ const CompanyInformation = withStyles(styles)(props => {
 											}
 										}}
 									/>
+									{errors.creationDate && (
+										<Typography variant="subtitle2" color="error" gutterBottom>
+											{errors.creationDate}
+										</Typography>
+									)}
 								</div>
 							</div>
 							<div className={classes.inputWrap}>
@@ -212,7 +236,7 @@ const CompanyInformation = withStyles(styles)(props => {
 									/>
 									{errors.email && (
 										<Typography variant="subtitle2" color="error" gutterBottom>
-											{'Email provided is invalid'}
+											{errors.email}
 										</Typography>
 									)}
 								</div>
@@ -222,10 +246,16 @@ const CompanyInformation = withStyles(styles)(props => {
 										id="taxId"
 										fullWidth
 										value={taxId}
+										error={errors.taxId}
 										type="text"
 										onChange={onFieldChange('taxId')}
 										placeholder="Tax Payer ID"
 									/>
+									{errors.taxId && (
+										<Typography variant="subtitle2" color="error" gutterBottom>
+											{errors.taxId}
+										</Typography>
+									)}
 								</div>
 							</div>
 						</div>
@@ -361,7 +391,7 @@ const CompanyInformation = withStyles(styles)(props => {
 
 class CorporateWizardComponent extends Component {
 	render() {
-		const { classes } = this.props;
+		const { classes, isDisabled } = this.props;
 		return (
 			<div className={classes.flexColumn}>
 				<div className={classes.wizardTitle}>
@@ -376,6 +406,7 @@ class CorporateWizardComponent extends Component {
 						<Button
 							variant="contained"
 							size="large"
+							disabled={isDisabled}
 							onClick={this.props.onContinueClick}
 						>
 							Continue
