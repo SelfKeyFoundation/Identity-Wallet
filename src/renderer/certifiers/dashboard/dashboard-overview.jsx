@@ -25,7 +25,7 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginTop: '40px'
+		margin: '40px 0 30px'
 	},
 	newRequests: {
 		backgroundColor: '#262F39',
@@ -58,7 +58,7 @@ const paperStyle = theme => ({
 		boxShadow: 'none',
 		padding: 30,
 		maxWidth: 350,
-		minHeight: '192px',
+		minHeight: '198px',
 		width: '31%',
 		'& h1': {
 			fontWeight: 600,
