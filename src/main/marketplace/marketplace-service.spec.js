@@ -12,7 +12,7 @@ describe('MarketplaceService', () => {
 		placeStake() {},
 		withdrawStake() {}
 	};
-	let wallet = { publicKey: '0xtest', balance: 0 };
+	let wallet = { address: '0xtest', balance: 0 };
 	let state = { wallet, prices: { prices: [] } };
 	let store = {
 		dispatch: () => {},

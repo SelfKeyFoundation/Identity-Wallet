@@ -20,13 +20,18 @@ import {
 	MarketplaceOrdersPage
 } from '../../marketplace';
 
-import { SelfkeyIdContainer, AssociateDID } from '../../selfkey-id/main';
+import { SelfkeyIdContainer } from '../../selfkey-id/main';
+import {
+	AssociateDIDContainer,
+	CreateDIDPopupContainer,
+	CreateDIDProcessingContainer
+} from '../../did';
 import Transfer from '../../transaction/send';
 import AdvancedTransaction from '../../transaction/send/advanced-transaction';
 import ReceiveTransfer from '../../transaction/receive';
 
 import { Grid, withStyles } from '@material-ui/core';
-import Toolbar from './toolbar';
+import Toolbar from './toolbar-container';
 import { connect } from 'react-redux';
 
 import TransactionSendProgress from '../../transaction/progress/containers/transaction-send-progress-box';
@@ -46,9 +51,10 @@ import { CurrentApplication, ApplicationInProgress } from '../../kyc';
 
 import md5 from 'md5';
 import ReactPiwik from 'react-piwik';
-import CreateDID from '../../selfkey-id/main/components/create-did';
-import CreateDIDProcessing from '../../selfkey-id/main/components/create-did-processing';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
+import CorporateWizardContainer from '../../corporate/wizard/corporate-wizard-container';
+import CorporateAddMemberContainer from '../../corporate/member/corporate-add-member-container';
+import { CorporateDashboardContainer } from '../../corporate';
 
 const styles = theme => ({
 	headerSection: {
@@ -57,20 +63,26 @@ const styles = theme => ({
 		width: '100%'
 	},
 	bodySection: {
-		maxWidth: '1140px',
+		maxWidth: '1080px',
 		width: '100%'
+	},
+	'@media screen and (min-width: 1230px)': {
+		bodySection: {
+			maxWidth: '1140px'
+		}
 	},
 	page: {}
 });
 
 const contentWrapperStyle = {
 	marginBottom: '60px',
-	marginTop: '50px'
+	marginRight: '-55px',
+	marginTop: '128px'
 };
 
 class Main extends Component {
 	setMatomoId = () => {
-		ReactPiwik.push(['setUserId', md5(this.props.publicKey)]);
+		ReactPiwik.push(['setUserId', md5(this.props.address)]);
 		ReactPiwik.push(['setCustomVariable', 1, 'machineId', window.machineId, 'visit']);
 		ReactPiwik.push(['setCustomVariable', 2, 'walletType', this.props.walletType, 'visit']);
 		ReactPiwik.push(['setCustomVariable', 3, 'walletVersion', window.appVersion, 'visit']);
@@ -91,7 +103,10 @@ class Main extends Component {
 				className={classes.page}
 			>
 				<Grid item className={classes.headerSection}>
-					<Toolbar />
+					<Toolbar
+						createPersonalProfile={this.createPersonalProfile}
+						createCorporateProfile={this.createCorporateProfile}
+					/>
 				</Grid>
 				<Grid item xs={12} className={classes.bodySection} style={contentWrapperStyle}>
 					<Route path={`${match.path}/dashboard`} component={Dashboard} />
@@ -109,7 +124,7 @@ class Main extends Component {
 						path={`${match.path}/selfkeyIdApplications`}
 						render={props => <SelfkeyIdContainer tabValue={1} />}
 					/>
-					<Route path={`${match.path}/enter-did`} component={AssociateDID} />
+					<Route path={`${match.path}/enter-did`} component={AssociateDIDContainer} />
 					<Route path={`${match.path}/addressBookAdd`} component={AddressBookAdd} />
 					<Route path={`${match.path}/addressBookEdit/:id`} component={AddressBookEdit} />
 					<Route
@@ -129,7 +144,7 @@ class Main extends Component {
 						component={MarketplaceExchangesPage}
 					/>
 					<Route
-						path={`${match.path}/marketplace-services/:name`}
+						path={`${match.path}/marketplace-services/:inventoryId`}
 						component={MarketplaceServiceDetailsPage}
 					/>
 					<Route
@@ -206,10 +221,26 @@ class Main extends Component {
 					<Route path={`${match.path}/hd-error`} component={HardwareWalletError} />
 					<Route path={`${match.path}/auth-error`} component={AuthenticationError} />
 
-					<Route path={`${match.path}/get-did`} component={CreateDID} />
+					<Route path={`${match.path}/get-did`} component={CreateDIDPopupContainer} />
 					<Route
 						path={`${match.path}/create-did-processing`}
-						component={CreateDIDProcessing}
+						component={CreateDIDProcessingContainer}
+					/>
+					<Route
+						path={`${match.path}/create-corporate-profile`}
+						component={CorporateWizardContainer}
+					/>
+					<Route
+						path={`${match.path}/:identityId/setup-corporate-profile`}
+						component={CorporateWizardContainer}
+					/>
+					<Route
+						path={`${match.path}/corporate-add-member`}
+						component={CorporateAddMemberContainer}
+					/>
+					<Route
+						path={`${match.path}/corporate-dashboard`}
+						component={CorporateDashboardContainer}
 					/>
 				</Grid>
 			</Grid>
@@ -219,7 +250,7 @@ class Main extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		publicKey: walletSelectors.getWallet(state).publicKey,
+		address: walletSelectors.getWallet(state).address,
 		walletType: appSelectors.selectWalletType(state)
 	};
 };

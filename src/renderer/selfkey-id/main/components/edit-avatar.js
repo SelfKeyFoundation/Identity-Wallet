@@ -7,13 +7,13 @@ const styles = theme => ({});
 class EditAvatarComponent extends Component {
 	constructor(props) {
 		super(props);
-		const { avatar, walletId } = props;
-		this.state = { avatar, walletId };
+		const { avatar, identityId } = props;
+		this.state = { avatar, identityId };
 	}
 	handleSave = evt => {
 		evt.preventDefault();
-		const { walletId, avatar } = this.state;
-		this.props.onSave(avatar, walletId);
+		const { identityId, avatar } = this.state;
+		this.props.onSave(avatar, identityId);
 		this.props.onCancel();
 	};
 	handleImageChange = evt => {

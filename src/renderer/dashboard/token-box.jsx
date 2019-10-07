@@ -12,7 +12,7 @@ const styles = theme => ({
 		padding: 20,
 		maxWidth: 350
 	},
-	publicKey: {
+	address: {
 		fontSize: 10.5
 	},
 	tokenBoxHeader: {
@@ -37,7 +37,7 @@ const TokenBox = props => {
 		CryptoCurrencyIconComponent,
 		transferAction,
 		children,
-		publicKey
+		address
 	} = props;
 	return (
 		<Paper className={classes.paper}>
@@ -69,11 +69,11 @@ const TokenBox = props => {
 							variant="subtitle2"
 							color="secondary"
 						>
-							{publicKey}
+							{address}
 						</Typography>
 					</Grid>
 					<Grid item>
-						<Copy text={publicKey} />
+						<Copy text={address} />
 					</Grid>
 				</Grid>
 			</Grid>
@@ -83,7 +83,7 @@ const TokenBox = props => {
 
 const mapStateToProps = state => {
 	return {
-		publicKey: getWallet(state).publicKey
+		address: getWallet(state).address
 	};
 };
 

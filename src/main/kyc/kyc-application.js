@@ -27,7 +27,7 @@ export class KycApplication extends BaseModel {
 				applicationDate: { type: 'string' },
 				payments: { type: 'object' },
 				nextRoute: { type: 'string' },
-				walletId: { type: 'integer' }
+				identityId: { type: 'integer' }
 			}
 		};
 	}
@@ -36,8 +36,8 @@ export class KycApplication extends BaseModel {
 		return this.query().findById(id);
 	}
 
-	static findAll(walletId) {
-		return this.query().where({ walletId });
+	static findAll(identityId) {
+		return this.query().where({ identityId });
 	}
 
 	static async create(itm) {

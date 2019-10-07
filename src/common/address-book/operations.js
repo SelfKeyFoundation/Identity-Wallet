@@ -59,7 +59,7 @@ const validateAddress = address => async (dispatch, getState) => {
 		'addressBookService' in context
 			? context.addressBookService.isValidAddress(address)
 			: EthUtils.isValidAddress(address);
-	const currentWalletAddress = walletSelectors.getWallet(getState()).publicKey;
+	const currentWalletAddress = walletSelectors.getWallet(getState()).address;
 	const existentAddress = getAddresses(getState()).filter(entry => {
 		return entry.address === address;
 	});

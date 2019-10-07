@@ -135,11 +135,11 @@ export const IncorporationsCountryTab = withStyles(styles)(({ classes, country, 
 						/>
 					</div>
 				</Grid>
-				{program && program.translation && (
+				{program && (
 					<div className={classes.countryInfo}>
 						<div
 							dangerouslySetInnerHTML={{
-								__html: sanitize(program.translation.country_details)
+								__html: sanitize(program.data.en.countryDetails)
 							}}
 						/>
 					</div>

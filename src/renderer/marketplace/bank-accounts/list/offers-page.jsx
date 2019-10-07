@@ -7,8 +7,13 @@ import { BankIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	pageContent: {
-		width: '1140px',
+		width: '1080px',
 		margin: '0 auto'
+	},
+	'@media screen and (min-width: 1230px)': {
+		pageContent: {
+			width: '1140px'
+		}
 	},
 	header: {
 		borderBottom: 'solid 1px #475768',
@@ -27,7 +32,7 @@ const styles = theme => ({
 		width: '36px'
 	},
 	backButtonContainer: {
-		left: '15px',
+		left: '75px',
 		position: 'absolute'
 	},
 	tabs: {
@@ -39,7 +44,7 @@ const BankingOffersPage = withStyles(styles)(
 	({
 		classes,
 		loading,
-		data,
+		inventory,
 		keyRate,
 		onDetails,
 		accountType,
@@ -93,7 +98,7 @@ const BankingOffersPage = withStyles(styles)(
 							<Grid item>
 								<BankingOffersTable
 									keyRate={keyRate}
-									data={data}
+									inventory={inventory}
 									onDetails={onDetails}
 								/>
 							</Grid>

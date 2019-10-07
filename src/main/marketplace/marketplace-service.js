@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { MarketplaceTransactions } from './marketplace-transactions';
 import { getWallet } from '../../common/wallet/selectors';
+import { identitySelectors } from '../../common/identity';
 import CONFIG from '../../common/config';
 import BN from 'bignumber.js';
 import { Identity } from '../platform/identity';
@@ -15,9 +16,14 @@ export class MarketplaceService {
 	get wallet() {
 		return getWallet(this.store.getState());
 	}
+
+	get identity() {
+		return identitySelectors.selectCurrentIdentity(this.store.getState());
+	}
+
 	get walletAddress() {
-		if (!this.wallet || !this.wallet.publicKey) return null;
-		return this.wallet.publicKey;
+		if (!this.wallet || !this.wallet.address) return null;
+		return this.wallet.address;
 	}
 	loadTransactions(serviceOwner, serviceId) {
 		return MarketplaceTransactions.find({ serviceOwner, serviceId });
@@ -110,7 +116,7 @@ export class MarketplaceService {
 	}
 
 	createRelyingPartySession(config) {
-		const identity = new Identity(this.wallet);
+		const identity = new Identity(this.wallet, this.identity);
 		return new RelyingPartySession(config, identity);
 	}
 }

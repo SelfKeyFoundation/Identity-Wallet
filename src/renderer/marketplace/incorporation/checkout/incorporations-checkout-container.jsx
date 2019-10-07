@@ -11,19 +11,20 @@ import { getWallet } from 'common/wallet/selectors';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
-import { incorporationsSelectors } from 'common/incorporations';
+import { marketplaceSelectors } from 'common/marketplace';
 import { PaymentCheckout } from '../../common/payment-checkout';
 import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorporations-component';
 
 const styles = theme => ({});
 const CRYPTOCURRENCY = config.constants.primaryToken;
 const FIXED_GAS_LIMIT_PRICE = 21000;
+const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent {
 	async componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 
-		await this.loadRelyingParty({ rp: 'incorporations', authenticated: true });
+		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: true });
 
 		this.checkIfUserCanIncorporate();
 	}
@@ -32,32 +33,6 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 		if (!this.canApply(this.props.program.price)) {
 			this.props.dispatch(push(this.cancelRoute()));
 		}
-	};
-
-	getProgramOptions = options => {
-		if (!options) return [];
-		const strArray = options.split('-');
-
-		const optionsArray = strArray.map((text, idx) => {
-			if (!text) return false;
-
-			let price = text.match(/\(.*\)/);
-			let notes = text.match(/\[.*\]/);
-			const id = `options-${idx}`;
-
-			price = price ? price[0].replace('(', '').replace(')', '') : '';
-			price = price ? parseInt(price) : '';
-			notes = notes ? notes[0].replace('[', '').replace(']', '') : '';
-
-			let description = text
-				.replace(/\(.*\)/, '')
-				.replace(/\[.*\]/, '')
-				.trim();
-
-			return { price, notes, description, id };
-		});
-
-		return optionsArray.filter(el => el !== false);
 	};
 
 	getPaymentParameters() {
@@ -84,24 +59,23 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 	onBackClick = () => this.props.dispatch(push(this.cancelRoute()));
 
 	onStartClick = async () => {
-		const { program } = this.props;
-		const { templateId } = this.props.match.params;
+		const { program, vendorId, templateId } = this.props;
+		const { region } = program.data;
 
+		// TODO: get URLs and vendor name from the RP store
 		this.props.dispatch(
 			kycOperations.startCurrentApplicationOperation(
-				'incorporations',
+				vendorId,
 				templateId,
 				this.payRoute(),
 				this.cancelRoute(),
-				`Incorporate in ${program.Region}`,
-				`You are about to begin the incorporation process in ${
-					program.Region
-				}. Please double check your
+				`Incorporate in ${region}`,
+				`You are about to begin the incorporation process in ${region}. Please double check your
 				required documents are Certified True or Notarized where necessary. Failure to do so
 				will result in delays in the incorporation process. You may also be asked to provide
 				more information by the service provider`,
 				'conducting KYC',
-				'Far Horizon Capital Inc',
+				VENDOR_NAME,
 				'https://flagtheory.com/privacy-policy',
 				'http://flagtheory.com/terms-and-conditions'
 			)
@@ -109,17 +83,16 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 	};
 
 	render() {
-		const { program } = this.props;
-		const countryCode = this.props.match.params.countryCode;
+		const { program, countryCode } = this.props;
 		return (
 			<PaymentCheckout
-				title={`Pay Incorporation Fee: ${program.Region}`}
-				description={program.wallet_description}
-				timeToForm={program['Time to form (weeks)']}
+				title={`Pay Incorporation Fee: ${program.data.region}`}
+				description={program.data.walletDescription}
+				timeToForm={program.data.timeToFormWeeks}
 				program={program}
 				countryCode={countryCode}
 				{...this.getPaymentParameters()}
-				options={program.checkoutOptions}
+				options={program.data.checkoutOptions}
 				price={program.price}
 				onBackClick={this.onBackClick}
 				onStartClick={this.onStartClick}
@@ -139,22 +112,28 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 }
 
 const mapStateToProps = (state, props) => {
-	const { companyCode } = props.match.params;
+	const { companyCode, countryCode, templateId, vendorId } = props.match.params;
 	const authenticated = true;
 	return {
-		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
+		countryCode,
+		templateId,
+		vendorId,
+		program: marketplaceSelectors.selectIncorporationByFilter(
+			state,
+			c => c.data.companyCode === companyCode
+		),
 		...getLocale(state),
 		...getFiatCurrency(state),
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
 		tokens: getTokens(state).splice(1), // remove ETH
-		publicKey: getWallet(state).publicKey,
+		address: getWallet(state).address,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		ethRate: pricesSelectors.getRate(state, 'ETH', 'USD'),
 		cryptoCurrency: CRYPTOCURRENCY,
-		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
-			'incorporations',
+			vendorId,
 			authenticated
 		)
 	};

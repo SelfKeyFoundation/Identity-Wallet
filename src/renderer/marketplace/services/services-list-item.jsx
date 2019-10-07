@@ -100,6 +100,7 @@ const styles = theme => ({
 
 export const MarketplaceServicesListItem = withStyles(styles)(
 	({
+		id,
 		classes,
 		children,
 		name,
@@ -133,10 +134,19 @@ export const MarketplaceServicesListItem = withStyles(styles)(
 		);
 
 		const isNotExcludedResidents =
-			excludedResidents.length === 0 || excludedResidents[0] === 'None';
+			excludedResidents === '-' ||
+			excludedResidents.length === 0 ||
+			excludedResidents[0] === 'None';
 
-		const isFiatSupported = fiatSupported.length !== 0 && fiatSupported[0] !== 'Not Available';
-		const isFiatPayments = fiatPayments.length !== 0 && fiatPayments[0] !== 'Not Available';
+		const isFiatSupported =
+			fiatSupported !== '-' &&
+			fiatSupported.length !== 0 &&
+			fiatSupported[0] !== 'Not Available';
+
+		const isFiatPayments =
+			fiatPayments !== '-' &&
+			fiatPayments.length !== 0 &&
+			fiatPayments[0] !== 'Not Available';
 
 		return (
 			<TableRow key={name} className={classes.tableRow}>
@@ -197,7 +207,7 @@ export const MarketplaceServicesListItem = withStyles(styles)(
 						variant="text"
 						color={status === 'Inactive' ? 'secondary' : 'primary'}
 						className={classes.button}
-						onClick={() => (viewAction ? viewAction(name) : '')}
+						onClick={() => (viewAction ? viewAction(id) : '')}
 					>
 						{getButtonText(status)}
 					</Button>

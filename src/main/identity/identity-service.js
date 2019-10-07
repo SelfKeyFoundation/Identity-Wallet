@@ -4,12 +4,16 @@ import { Document } from './document';
 import { IdAttribute } from './id-attribute';
 import { formatDataUrl, bufferFromDataUrl } from 'common/utils/document';
 import { UiSchema } from './ui-schema';
+import { Identity } from './identity';
 
 import { Logger } from 'common/logger';
 
 const log = new Logger('identity-service');
 
 export class IdentityService {
+	loadIdentities(walletId) {
+		return Identity.findAllByWalletId(walletId);
+	}
 	loadRepositories() {
 		return Repository.findAll();
 	}
@@ -58,8 +62,8 @@ export class IdentityService {
 		);
 	}
 
-	async loadDocuments(walletId) {
-		let docs = await Document.findAllByWalletId(walletId);
+	async loadDocuments(identityId) {
+		let docs = await Document.findAllByIdentityId(identityId);
 		return docs.map(doc => {
 			doc = doc.toJSON();
 			if (doc.buffer) {
@@ -70,8 +74,8 @@ export class IdentityService {
 		});
 	}
 
-	loadIdAttributes(walletId) {
-		return IdAttribute.findAllByWalletId(walletId);
+	loadIdAttributes(identityId) {
+		return IdAttribute.findAllByIdentityId(identityId);
 	}
 
 	async loadDocumentsForAttribute(attributeId) {
@@ -119,6 +123,26 @@ export class IdentityService {
 		});
 		attribute = { ...attribute, documents };
 		return IdAttribute.update(attribute);
+	}
+	updateIdentitySetup(isSetupFinished, id) {
+		return Identity.updateSetup({ id, isSetupFinished });
+	}
+
+	updateIdentityName(name, id) {
+		return Identity.updateName({ id, name });
+	}
+
+	updateIdentityProfilePicture(profilePicture, id) {
+		return Identity.updateProfilePicture({ id, profilePicture });
+	}
+
+	updateIdentityDID(did, id) {
+		did = did.replace('did:selfkey:', '');
+		return Identity.updateDID({ did, id });
+	}
+
+	createIdentity(walletId, type) {
+		return Identity.create({ walletId, type });
 	}
 }
 

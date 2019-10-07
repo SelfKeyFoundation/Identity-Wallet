@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { getGlobalContext } from 'common/context';
 import { createAliasedAction } from 'electron-redux';
 import { walletSelectors } from '../../wallet';
+import { identitySelectors } from '../../identity';
 import { appSelectors } from '../../app';
 import { transactionOperations } from 'common/transaction';
 import { push } from 'connected-react-router';
@@ -84,6 +85,7 @@ const createOrderOperation = ({
 }) => async (dispatch, getState) => {
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const wallet = walletSelectors.getWallet(getState());
+	const identity = identitySelectors.selectCurrentIdentity(getState());
 	const order = await ordersService.createOrder({
 		amount: '' + amount,
 		applicationId,
@@ -92,7 +94,8 @@ const createOrderOperation = ({
 		vendorDID,
 		productInfo,
 		vendorName,
-		did: wallet.did,
+		did: identity.did,
+		identityId: identity.id,
 		walletId: wallet.id,
 		vendorWallet,
 		// On marketplace direct payment orders, allowance is considered complete as initial state
@@ -203,9 +206,9 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 };
 
 const ordersLoadOperation = () => async (dispatch, getState) => {
-	const wallet = walletSelectors.getWallet(getState());
+	const identity = identitySelectors.selectCurrentIdentity(getState());
 	const ordersService = getGlobalContext().marketplaceOrdersService;
-	const orders = await ordersService.loadOrders(wallet.id);
+	const orders = await ordersService.loadOrders(identity.id);
 	await dispatch(ordersActions.setOrdersAction(orders));
 };
 
@@ -224,7 +227,7 @@ const checkOrderAllowanceOperation = orderId => async (dispatch, getState) => {
 	const amount = ordersSelectors.getContractFormattedAmount(getState(), orderId);
 
 	let allowance = await selfkeyService.getAllowance(
-		wallet.publicKey,
+		wallet.address,
 		config.paymentSplitterAddress
 	);
 	let update = null;
@@ -306,7 +309,7 @@ const preapproveCurrentOrderOperation = () => async (dispatch, getState) => {
 		const amount = ordersSelectors.getContractFormattedAmount(getState(), orderId);
 
 		const receipt = await selfkeyService.approve(
-			wallet.publicKey,
+			wallet.address,
 			config.paymentSplitterAddress,
 			amount,
 			allowanceGas,
@@ -445,7 +448,7 @@ const payCurrentOrderOperation = () => async (dispatch, getState) => {
 	try {
 		const amount = ordersSelectors.getContractFormattedAmount(getState(), orderId);
 		const receipt = await paymentService.makePayment(
-			wallet.publicKey,
+			wallet.address,
 			order.did,
 			order.vendorDID,
 			amount,
@@ -499,7 +502,7 @@ const estimateCurrentPreapproveGasOperation = () => async (dispatch, getState) =
 	const wallet = walletSelectors.getWallet(getState());
 	const amount = ordersSelectors.getContractFormattedAmount(getState(), orderId);
 	const gasLimit = await getGlobalContext().selfkeyService.estimateApproveGasLimit(
-		wallet.publicKey,
+		wallet.address,
 		config.paymentSplitterAddress,
 		amount
 	);

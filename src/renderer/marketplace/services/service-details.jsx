@@ -70,6 +70,9 @@ const styles = theme => ({
 
 	formGroup: {
 		backgroundColor: 'transparent',
+		'& h5': {
+			marginRight: '1em'
+		},
 		'& span': {
 			fontSize: '14px',
 			lineHeight: '35px',
@@ -143,7 +146,7 @@ const styles = theme => ({
 	},
 
 	backButtonContainer: {
-		left: '15px',
+		left: '75px',
 		position: 'absolute',
 		top: '120px'
 	},
@@ -418,18 +421,19 @@ class MarketplaceServiceDetailsComponent extends Component {
 		const getColors = () => ['#46dfba', '#46b7df', '#238db4', '#25a788', '#0e4b61'];
 		let random = Math.floor(Math.random() * 4);
 
-		const icon = item.logo[0].url ? (
-			<img src={item.logo[0].url} className={classes.defaultIcon} />
-		) : (
-			<div
-				className={classes.defaultIcon}
-				style={{
-					backgroundColor: getColors()[random]
-				}}
-			>
-				{item.name.charAt(0)}
-			</div>
-		);
+		const icon =
+			item.data.logo && item.data.logo[0].url ? (
+				<img src={item.data.logo[0].url} className={classes.defaultIcon} />
+			) : (
+				<div
+					className={classes.defaultIcon}
+					style={{
+						backgroundColor: getColors()[random]
+					}}
+				>
+					{item.name.charAt(0)}
+				</div>
+			);
 
 		return (
 			<Grid container>
@@ -531,43 +535,46 @@ class MarketplaceServiceDetailsComponent extends Component {
 										<FormControl className={classes.formControl}>
 											<FormGroup className={classes.formGroup}>
 												<span>
-													<Typography variant="h5">Location:</Typography>{' '}
+													<Typography variant="h5">Location:</Typography>
 													<Typography variant="body2">
-														{item.location}{' '}
+														{item.data.location &&
+															item.data.location.map(name => (
+																<span key={name}>{`${name} `}</span>
+															))}
 													</Typography>
 												</span>
 												<span>
 													<Typography variant="h5">
 														Year Launched:
-													</Typography>{' '}
+													</Typography>
 													<Typography variant="body2">
-														{item.year_launched}{' '}
+														{item.data.yearLaunched}
 													</Typography>
 												</span>
 												<span>
 													<Typography variant="h5">
 														Coin Pairs:
-													</Typography>{' '}
+													</Typography>
 													<Typography variant="body2">
-														{item.coin_pairs}{' '}
+														{item.data.coinPairs}
 													</Typography>
 												</span>
 												<span>
-													<Typography variant="h5">Maker Fee:</Typography>{' '}
+													<Typography variant="h5">Maker Fee:</Typography>
 													<Typography variant="body2">
-														{item.maker_fee}{' '}
+														{item.data.makerFee}
 													</Typography>
 												</span>
 												<span>
-													<Typography variant="h5">Taker Fee:</Typography>{' '}
+													<Typography variant="h5">Taker Fee:</Typography>
 													<Typography variant="body2">
-														{item.taker_fee}{' '}
+														{item.data.takerFee}
 													</Typography>
 												</span>
 												<span>
-													<Typography variant="h5">URL:</Typography>{' '}
+													<Typography variant="h5">URL:</Typography>
 													<Typography variant="body2">
-														{item.url}{' '}
+														{item.data.url}
 													</Typography>
 												</span>
 											</FormGroup>
@@ -577,49 +584,58 @@ class MarketplaceServiceDetailsComponent extends Component {
 												<span>
 													<Typography variant="h5">
 														FIAT Payment:
-													</Typography>{' '}
+													</Typography>
 													<Typography variant="body2">
-														{item.fiat_payments}{' '}
+														{item.data.fiatPayments &&
+															item.data.fiatPayments.map(name => (
+																<span key={name}>{`${name} `}</span>
+															))}
 													</Typography>
 												</span>
 												<span>
 													<Typography variant="h5">
 														FIAT Supported:
-													</Typography>{' '}
+													</Typography>
 													<Typography variant="body2">
-														{item.fiat_supported
-															? item.fiat_supported
-																	.toString()
-																	.replace(/,/g, ' ')
-															: ''}{' '}
+														{item.data.fiatSupported &&
+															item.data.fiatSupported.map(name => (
+																<span key={name}>{`${name} `}</span>
+															))}
 													</Typography>
 												</span>
 												<span>
 													<Typography variant="h5">
 														Margin Trading:
-													</Typography>{' '}
+													</Typography>
 													<Typography variant="body2">
-														{item.margin_trading}{' '}
+														{item.data.marginTrading}
 													</Typography>
 												</span>
 												<span>
-													<Typography variant="h5">KYC/AML:</Typography>{' '}
+													<Typography variant="h5">KYC/AML:</Typography>
 													<Typography variant="body2">
-														{item.kyc_aml}{' '}
+														{item.data.kycAml}
 													</Typography>
 												</span>
 												<span>
 													<Typography variant="h5">
 														Excluded Resident:
-													</Typography>{' '}
+													</Typography>
 													<Typography variant="body2">
-														{item.excluded_residents}{' '}
+														{item.data.excludedResidents &&
+															item.data.excludedResidents.map(
+																name => (
+																	<span
+																		key={name}
+																	>{`${name} `}</span>
+																)
+															)}
 													</Typography>
 												</span>
 												<span>
-													<Typography variant="h5">Contact:</Typography>{' '}
+													<Typography variant="h5">Contact:</Typography>
 													<Typography variant="body2">
-														{item.email}{' '}
+														{item.data.email}
 													</Typography>
 												</span>
 											</FormGroup>
@@ -627,7 +643,7 @@ class MarketplaceServiceDetailsComponent extends Component {
 									</Grid>
 								</Grid>
 							</Grid>
-							{templates[0] && (
+							{templates && templates[0] && (
 								<Grid item id="requirements" className={classes.fullWidth}>
 									<Grid
 										container
