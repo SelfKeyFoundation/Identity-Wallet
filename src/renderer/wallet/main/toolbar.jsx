@@ -207,6 +207,7 @@ const ProfileList = withStyles(profileStyle)(
 		onProfileSelect,
 		onClickCorporate,
 		closeProfile,
+		selectedProfile,
 		showCorporate
 	}) => {
 		return (
@@ -214,37 +215,42 @@ const ProfileList = withStyles(profileStyle)(
 				<ClickAwayListener onClickAway={closeProfile}>
 					<div className={classes.profile}>
 						{profiles &&
-							profiles.map((el, index) => (
-								<Grid
-									container
-									key={index}
-									className={classes.profileDetail}
-									onClick={onProfileSelect(el)}
-								>
-									<Grid item sm={2}>
-										{el.type === 'corporate' ? (
-											<SmallRoundCompany />
-										) : el.profilePicture ? (
-											<HexagonAvatar
-												src={el.profilePicture}
-												className={classes.profileListAvatar}
-												smallAvatar={true}
-											/>
-										) : (
-											<SmallRoundPerson />
-										)}
+							profiles.map((el, index) =>
+								el.id !== selectedProfile.id ? (
+									<Grid
+										container
+										key={index}
+										className={classes.profileDetail}
+										onClick={onProfileSelect(el)}
+									>
+										<Grid item sm={2}>
+											{el.type === 'corporate' ? (
+												<SmallRoundCompany />
+											) : el.profilePicture ? (
+												<HexagonAvatar
+													src={el.profilePicture}
+													className={classes.profileListAvatar}
+													smallAvatar={true}
+												/>
+											) : (
+												<SmallRoundPerson />
+											)}
+										</Grid>
+										<Grid item sm={8} className={classes.profileName}>
+											<Typography variant="subtitle1">
+												{el.name ||
+													defaultIdentityName(el, wallet.profileName)}
+											</Typography>
+											<Typography variant="subtitle2" color="secondary">
+												{`${el.type.charAt(0).toUpperCase() +
+													el.type.slice(1)} Profile`}
+											</Typography>
+										</Grid>
 									</Grid>
-									<Grid item sm={8} className={classes.profileName}>
-										<Typography variant="subtitle1">
-											{el.name || defaultIdentityName(el, wallet.profileName)}
-										</Typography>
-										<Typography variant="subtitle2" color="secondary">
-											{`${el.type.charAt(0).toUpperCase() +
-												el.type.slice(1)} Profile`}
-										</Typography>
-									</Grid>
-								</Grid>
-							))}
+								) : (
+									''
+								)
+							)}
 						{showCorporate && (
 							<React.Fragment>
 								<Grid className={classes.profileFooter}>
@@ -407,6 +413,7 @@ class Toolbar extends Component {
 						onProfileSelect={onProfileSelect}
 						closeProfile={closeProfile}
 						showCorporate={showCorporate}
+						selectedProfile={selectedProfile}
 					/>
 				</Grid>
 			</div>
