@@ -3,7 +3,6 @@ import moment from 'moment';
 import {
 	withStyles,
 	Typography,
-	Grid,
 	Paper,
 	Divider,
 	Table,
@@ -40,6 +39,10 @@ const styles = theme => ({
 		whiteSpace: 'nowrap'
 	},
 	notarizationRequests: {
+		alignItems: 'stretch',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'flex-start',
 		marginTop: '40px',
 		'& .notarizationRequestsBox': {
 			padding: '0 20px'
@@ -48,7 +51,38 @@ const styles = theme => ({
 	identityValidation: {
 		marginTop: '30px',
 		padding: '0 20px'
+	},
+	flex: {
+		display: 'flex',
+		justifyContent: 'space-between'
 	}
+});
+
+export const RequestTableHead = withStyles(styles)(({ classes }) => {
+	return (
+		<TableHead>
+			<SmallTableHeadRow>
+				<TableCell>
+					<Typography variant="overline">Date</Typography>
+				</TableCell>
+				<TableCell>
+					<Typography variant="overline">User</Typography>
+				</TableCell>
+				<TableCell>
+					<Typography variant="overline">No. of documents</Typography>
+				</TableCell>
+				<TableCell>
+					<Typography variant="overline">Revenue</Typography>
+				</TableCell>
+				<TableCell>
+					<Typography variant="overline">KEY/USD EX Rate</Typography>
+				</TableCell>
+				<TableCell>
+					<Typography variant="overline">Actions</Typography>
+				</TableCell>
+			</SmallTableHeadRow>
+		</TableHead>
+	);
 });
 
 export const RequestsTableRow = withStyles(styles)(({ classes, data }) => {
@@ -105,140 +139,75 @@ class CertifiersDashboardHistory extends Component {
 	render() {
 		const { classes, documents } = this.props;
 		return (
-			<Grid
-				container
-				direction="column"
-				justify="flex-start"
-				alignItems="stretch"
-				spacing={40}
-				className={classes.notarizationRequests}
-			>
-				<Grid item xs={12} className="notarizationRequestsBox">
+			<div className={classes.notarizationRequests}>
+				<div className="notarizationRequestsBox">
 					<Paper className={classes.newRequests}>
-						<Grid container>
-							<Grid container justify="space-between">
+						<div>
+							<div className={classes.flex}>
 								<Typography variant="h2">Notarization Requests</Typography>
 								<RefreshIcon className={classes.icon} />
-							</Grid>
-							<Grid item xs={12}>
-								<Divider className={classes.divider} />
-							</Grid>
-							<Grid item xs={12}>
-								<Table>
-									<TableHead>
-										<SmallTableHeadRow>
-											<TableCell>
-												<Typography variant="overline">Date</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">User</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">
-													No. of documents
-												</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">Revenue</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">
-													KEY/USD EX Rate
-												</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">Actions</Typography>
-											</TableCell>
-										</SmallTableHeadRow>
-									</TableHead>
-									<TableBody>
-										{documents &&
-											documents.map(entry => {
-												return <RequestsTableRow data={entry} />;
-											})}
-									</TableBody>
-								</Table>
-								<TablePagination
-									rowsPerPageOptions={[5, 10, 25]}
-									component="div"
-									count={documents.length}
-									rowsPerPage={5}
-									page={1}
-									backIconButtonProps={{
-										'aria-label': 'previous page'
-									}}
-									nextIconButtonProps={{
-										'aria-label': 'next page'
-									}}
-								/>
-							</Grid>
-						</Grid>
+							</div>
+							<Divider className={classes.divider} />
+							<Table>
+								<RequestTableHead />
+								<TableBody>
+									{documents &&
+										documents.map(entry => {
+											return <RequestsTableRow data={entry} />;
+										})}
+								</TableBody>
+							</Table>
+							<TablePagination
+								rowsPerPageOptions={[5, 10, 25]}
+								component="div"
+								count={documents.length}
+								rowsPerPage={5}
+								page={1}
+								backIconButtonProps={{
+									'aria-label': 'previous page'
+								}}
+								nextIconButtonProps={{
+									'aria-label': 'next page'
+								}}
+							/>
+						</div>
 					</Paper>
-				</Grid>
+				</div>
 
-				<Grid item xs={12} className={classes.identityValidation}>
+				<div className={classes.identityValidation}>
 					<Paper className={classes.newRequests}>
-						<Grid container>
-							<Grid container justify="space-between">
+						<div>
+							<div className={classes.flex}>
 								<Typography variant="h2">Identity Validation Requests</Typography>
 								<RefreshIcon className={classes.icon} />
-							</Grid>
-							<Grid item xs={12}>
-								<Divider className={classes.divider} />
-							</Grid>
-							<Grid item xs={12}>
-								<Table>
-									<TableHead>
-										<SmallTableHeadRow>
-											<TableCell>
-												<Typography variant="overline">Date</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">User</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">
-													No. of documents
-												</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">Revenue</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">
-													KEY/USD EX Rate
-												</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">Actions</Typography>
-											</TableCell>
-										</SmallTableHeadRow>
-									</TableHead>
-									<TableBody>
-										{documents &&
-											documents.map(entry => {
-												return <RequestsTableRow data={entry} />;
-											})}
-									</TableBody>
-								</Table>
-								<TablePagination
-									rowsPerPageOptions={[5, 10, 25]}
-									component="div"
-									count={documents.length}
-									rowsPerPage={5}
-									page={1}
-									backIconButtonProps={{
-										'aria-label': 'previous page'
-									}}
-									nextIconButtonProps={{
-										'aria-label': 'next page'
-									}}
-								/>
-							</Grid>
-						</Grid>
+							</div>
+							<Divider className={classes.divider} />
+							<Table>
+								<RequestTableHead />
+								<TableBody>
+									{documents &&
+										documents.map(entry => {
+											return <RequestsTableRow data={entry} />;
+										})}
+								</TableBody>
+							</Table>
+							<TablePagination
+								rowsPerPageOptions={[5, 10, 25]}
+								component="div"
+								count={documents.length}
+								rowsPerPage={5}
+								page={1}
+								backIconButtonProps={{
+									'aria-label': 'previous page'
+								}}
+								nextIconButtonProps={{
+									'aria-label': 'next page'
+								}}
+							/>
+						</div>
 					</Paper>
-				</Grid>
-			</Grid>
+				</div>
+			</div>
 		);
 	}
 }
