@@ -50,7 +50,7 @@ class CorporateWizardContainerComponent extends Component {
 		this.setState({
 			[name]: value
 		});
-		this.setErrors(errors);
+		this.setErrors({ ...stateErrors, ...errors });
 	};
 
 	setErrors(errors) {
@@ -81,6 +81,7 @@ class CorporateWizardContainerComponent extends Component {
 					acc[name] = errorText[name];
 					acc.hasErrors = true;
 				}
+				return acc;
 			},
 			{ hasErrors: false }
 		);
@@ -94,10 +95,12 @@ class CorporateWizardContainerComponent extends Component {
 		if (!type || !type.content) {
 			throw new Error('Not a basic attribute');
 		}
-		if (type.required && !value) {
-			return false;
+
+		if (!value) {
+			return !type.required;
 		}
-		return identityAttributes.validate(type.content, { value }, []);
+
+		return identityAttributes.validate(type.content, value, []);
 	}
 
 	handleContinueClick = evt => {
@@ -105,7 +108,9 @@ class CorporateWizardContainerComponent extends Component {
 
 		const errors = this.validateAllAttributes();
 
-		if (errors.hasError) return;
+		if (errors.hasErrors) {
+			return this.setErrors(errors);
+		}
 
 		this.props.dispatch(
 			identityOperations.createCorporateProfileOperation({
@@ -118,11 +123,6 @@ class CorporateWizardContainerComponent extends Component {
 	handleCancelClick = evt => {
 		evt && evt.preventDefault();
 		this.props.dispatch(push('/main/dashboard'));
-	};
-
-	isValidEmail = email => {
-		var re = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
-		return email ? re.test(String(email).toLowerCase()) : true;
 	};
 
 	isDisabled() {
