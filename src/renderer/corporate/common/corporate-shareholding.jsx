@@ -10,19 +10,10 @@ const styles = theme => ({
 		height: '1px',
 		margin: '5px 16px'
 	},
-	cardContent: {
-		height: 'initial'
-	},
 	regularText: {
-		boxSizing: 'border-box',
-		height: 58,
 		'& span': {
 			fontWeight: 400
 		}
-	},
-	chartWrap: {
-		alignItems: 'flex-start',
-		display: 'flex'
 	},
 	legend: {
 		alignSelf: 'flex-end',
@@ -41,6 +32,24 @@ const styles = theme => ({
 		height: '8px !important',
 		borderRadius: '8px !important',
 		position: 'relative'
+	},
+	chartWrap: {
+		display: 'flex',
+		'& div.google-visualization-tooltip': {
+			backgroundColor: '#1F2830',
+			border: '1px solid #43505B',
+			boxShadow: 'none',
+			top: '40px !important',
+			'& .google-visualization-tooltip-item span': {
+				fontSize: '13px !important'
+			},
+			'& .google-visualization-tooltip-item-list li:first-child span': {
+				color: '#93B0C1 !important'
+			},
+			'& .google-visualization-tooltip-item-list li:nth-child(2) span': {
+				color: '#FFFFFF !important'
+			}
+		}
 	}
 });
 
@@ -61,7 +70,9 @@ const chartOptions = {
 	},
 	fontSize: 13,
 	pieSliceText: 'none',
-	/* tooltip: tooltip, */
+	tooltip: {
+		isHtml: true
+	},
 	animation: {
 		startup: true
 	}
@@ -102,20 +113,18 @@ const CorporateShareholding = withStyles(styles)(props => {
 		<Card>
 			<CardHeader title="Shareholding" className={classes.regularText} />
 			<hr className={classes.hr} />
-			<CardContent className={classes.cardContent}>
+			<CardContent>
 				<div className={classes.chartWrap}>
-					<Grid item xs={8}>
-						<Chart
-							chartType="PieChart"
-							data={getChartData(cap)}
-							options={chartOptions}
-							graph_id="PieChart"
-							width="100%"
-							height="300px"
-							legend_toggle
-							chartEvents={[selectEvent, readyEvent]}
-						/>
-					</Grid>
+					<Chart
+						chartType="PieChart"
+						data={getChartData(cap)}
+						options={chartOptions}
+						graph_id="PieChart"
+						width="100%"
+						height="300px"
+						legend_toggle
+						chartEvents={[selectEvent, readyEvent]}
+					/>
 					<Grid item xs={4} className={classes.legend}>
 						{cap.map((shareholder, index) => (
 							<div key={`shareholder-${index}`}>
