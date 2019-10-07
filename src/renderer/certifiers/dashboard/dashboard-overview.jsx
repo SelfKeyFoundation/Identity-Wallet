@@ -3,7 +3,6 @@ import moment from 'moment';
 import {
 	withStyles,
 	Typography,
-	Grid,
 	Paper,
 	Divider,
 	Table,
@@ -15,14 +14,18 @@ import {
 import { SmallTableHeadRow, ViewIcon, RefreshIcon } from 'selfkey-ui';
 
 const styles = theme => ({
+	certifiersDashboard: {
+		alignItems: 'stretch',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'flex-start'
+	},
 	papers: {
+		alignItems: 'center',
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
 		marginTop: '40px'
-	},
-	publicKey: {
-		fontSize: 10.5
-	},
-	marginSpace: {
-		marginTop: '7px'
 	},
 	newRequests: {
 		backgroundColor: '#262F39',
@@ -33,13 +36,19 @@ const styles = theme => ({
 		}
 	},
 	divider: {
-		margin: '20px 0'
+		margin: '20px 0',
+		width: '100%'
 	},
 	icon: {
 		cursor: 'pointer'
 	},
 	capitalized: {
 		textTransform: 'capitalize'
+	},
+	flex: {
+		display: 'flex',
+		justifyContent: 'space-between',
+		width: '100%'
 	}
 });
 
@@ -115,21 +124,21 @@ export const PaperItem = withStyles(paperStyle)(
 	({ classes, title, value, info, totalRevenueInKey, extraInfo }) => {
 		return (
 			<Paper className={classes.paper}>
-				<Grid container spacing={8}>
-					<Grid container className={classes.tokenBoxHeader}>
-						<Grid item className={classes.flexGrow}>
+				<div>
+					<div className={classes.tokenBoxHeader}>
+						<div className={classes.flexGrow}>
 							<Typography variant="body1" color="secondary">
 								{title}
 							</Typography>
-						</Grid>
-					</Grid>
-					<Grid container>
+						</div>
+					</div>
+					<div>
 						<Typography variant="h1" color="primary">
 							{title === 'Total Revenue' ? '$ ' : ''}
 							{value}
 						</Typography>
-					</Grid>
-					<Grid container>
+					</div>
+					<div>
 						{title === 'Total Revenue' ? (
 							`${totalRevenueInKey} KEY`
 						) : value === 0 ? (
@@ -137,8 +146,8 @@ export const PaperItem = withStyles(paperStyle)(
 						) : (
 							extraInfo
 						)}
-					</Grid>
-				</Grid>
+					</div>
+				</div>
 			</Paper>
 		);
 	}
@@ -173,92 +182,70 @@ class CertifiersDashboardOverview extends Component {
 			totalRevenueInKey
 		} = this.props;
 		return (
-			<Grid
-				container
-				direction="column"
-				justify="flex-start"
-				alignItems="stretch"
-				spacing={40}
-			>
-				<Grid item className={classes.papers}>
-					<Grid
-						container
-						direction="row"
-						justify="space-between"
-						alignItems="center"
-						spacing={0}
-					>
-						<PaperItem
-							title="In Progress Requests"
-							value={requestedProcesses}
-							info="Number of in progress certification processes"
-						/>
-						<PaperItem
-							title="Total Completed Requests"
-							value={completedRequests}
-							info="Total number of completed requests since you joined"
-							extraInfo="From December 2007"
-						/>
-						<PaperItem
-							title="Total Revenue"
-							value={total}
-							info="0 KEY"
-							totalRevenueInKey={totalRevenueInKey}
-						/>
-					</Grid>
-				</Grid>
-				<Grid item xs={12}>
-					<Paper className={classes.newRequests}>
-						<Grid container>
-							<Grid container justify="space-between">
-								<Typography variant="h2">New Requests</Typography>
-								<RefreshIcon className={classes.icon} />
-							</Grid>
-							<Grid item xs={12}>
-								<Divider className={classes.divider} />
-							</Grid>
-							<Grid item xs={12}>
-								<Table>
-									<TableHead>
-										<SmallTableHeadRow>
-											<TableCell>
-												<Typography variant="overline">Date</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">User</Typography>
-											</TableCell>
-											<TableCell className={classes.type}>
-												<Typography variant="overline">Type</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">
-													No. of documents
-												</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">Status</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">Actions</Typography>
-											</TableCell>
-										</SmallTableHeadRow>
-									</TableHead>
-									<TableBody>
-										{documents ? (
-											documents &&
-											documents.map(entry => {
-												return <RequestsTableRow data={entry} />;
-											})
-										) : (
-											<EmptyTableStatus />
-										)}
-									</TableBody>
-								</Table>
-							</Grid>
-						</Grid>
-					</Paper>
-				</Grid>
-			</Grid>
+			<div className={classes.certifiersDashboard}>
+				<div className={classes.papers}>
+					<PaperItem
+						title="In Progress Requests"
+						value={requestedProcesses}
+						info="Number of in progress certification processes"
+					/>
+					<PaperItem
+						title="Total Completed Requests"
+						value={completedRequests}
+						info="Total number of completed requests since you joined"
+						extraInfo="From December 2007"
+					/>
+					<PaperItem
+						title="Total Revenue"
+						value={total}
+						info="0 KEY"
+						totalRevenueInKey={totalRevenueInKey}
+					/>
+				</div>
+				<Paper className={classes.newRequests}>
+					<div>
+						<div className={classes.flex}>
+							<Typography variant="h2">New Requests</Typography>
+							<RefreshIcon className={classes.icon} />
+						</div>
+						<Divider className={classes.divider} />
+						<Table>
+							<TableHead>
+								<SmallTableHeadRow>
+									<TableCell>
+										<Typography variant="overline">Date</Typography>
+									</TableCell>
+									<TableCell>
+										<Typography variant="overline">User</Typography>
+									</TableCell>
+									<TableCell className={classes.type}>
+										<Typography variant="overline">Type</Typography>
+									</TableCell>
+									<TableCell>
+										<Typography variant="overline">No. of documents</Typography>
+									</TableCell>
+									<TableCell>
+										<Typography variant="overline">Status</Typography>
+									</TableCell>
+									<TableCell>
+										<Typography variant="overline">Actions</Typography>
+									</TableCell>
+								</SmallTableHeadRow>
+							</TableHead>
+							<TableBody>
+								{documents ? (
+									documents &&
+									documents.map(entry => {
+										return <RequestsTableRow data={entry} />;
+									})
+								) : (
+									<EmptyTableStatus />
+								)}
+							</TableBody>
+						</Table>
+					</div>
+				</Paper>
+			</div>
 		);
 	}
 }

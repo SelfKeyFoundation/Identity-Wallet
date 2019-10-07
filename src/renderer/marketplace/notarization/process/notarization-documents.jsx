@@ -38,7 +38,7 @@ const styles = theme => ({
 	},
 	button: {
 		marginBottom: '16px',
-		marginTop: '6px'
+		marginTop: '36px'
 	},
 	ellipsis: {
 		overflow: 'hidden',
@@ -52,6 +52,23 @@ const styles = theme => ({
 	},
 	type: {
 		padding: '0'
+	},
+	tableContainer: {
+		display: 'flex',
+		justifyContent: 'center',
+		width: '100%'
+	},
+	container: {
+		alignItems: 'center',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center'
+	},
+	wrap: {
+		display: 'flex',
+		flexDirection: 'column',
+		margin: 0,
+		width: '100%'
 	}
 });
 
@@ -121,101 +138,65 @@ class NotarizationDocumentsComponent extends Component {
 		const { classes, documents } = this.props;
 
 		return (
-			<Grid
-				id="viewOverview"
-				container
-				direction="column"
-				spacing={32}
-				style={{ margin: 0, width: '100%' }}
-			>
-				<Grid item style={{ padding: 0 }}>
-					<Grid container direction="column" spacing={32}>
-						<Grid item>
-							<Grid
-								container
-								direction="column"
-								justify="center"
-								alignItems="center"
-								spacing={24}
-							>
-								<Grid container item spacing={0} justify="center">
-									<Grid item xs={12}>
-										<Table>
-											<TableHead>
-												<SmallTableHeadRow>
-													<TableCell className={classes.checkbox}>
-														&nbsp;
-													</TableCell>
-													<TableCell className={classes.type}>
-														<Typography variant="overline">
-															Type
-														</Typography>
-													</TableCell>
-													<TableCell>
-														<Typography variant="overline">
-															Label
-														</Typography>
-													</TableCell>
-													<TableCell>
-														<Typography variant="overline">
-															Expiry Date
-														</Typography>
-													</TableCell>
-												</SmallTableHeadRow>
-											</TableHead>
-											<TableBody>
-												{documents &&
-													documents.map(entry => {
-														return (
-															<TableRow key={entry.id}>
-																<TableCell
-																	className={classes.checkbox}
-																>
-																	<Checkbox />
-																</TableCell>
-																<TableCell className={classes.type}>
-																	<Typography variant="h6">
-																		{entry.type.content.title}
-																	</Typography>
-																</TableCell>
-																<TableCell
-																	className={classes.labelCell}
-																>
-																	{this.renderDocumentName({
-																		entry,
-																		classes
-																	})}
-																</TableCell>
-																<TableCell>
-																	{' '}
-																	{this.renderExpiryDate(
-																		entry
-																	)}{' '}
-																</TableCell>
-															</TableRow>
-														);
+			<div id="viewOverview" className={classes.wrap}>
+				<div className={classes.container}>
+					<div className={classes.tableContainer}>
+						<Table>
+							<TableHead>
+								<SmallTableHeadRow>
+									<TableCell className={classes.checkbox}>&nbsp;</TableCell>
+									<TableCell className={classes.type}>
+										<Typography variant="overline">Type</Typography>
+									</TableCell>
+									<TableCell>
+										<Typography variant="overline">Label</Typography>
+									</TableCell>
+									<TableCell>
+										<Typography variant="overline">Expiry Date</Typography>
+									</TableCell>
+								</SmallTableHeadRow>
+							</TableHead>
+							<TableBody>
+								{documents &&
+									documents.map(entry => {
+										return (
+											<TableRow key={entry.id}>
+												<TableCell className={classes.checkbox}>
+													<Checkbox />
+												</TableCell>
+												<TableCell className={classes.type}>
+													<Typography variant="h6">
+														{entry.type.content.title}
+													</Typography>
+												</TableCell>
+												<TableCell className={classes.labelCell}>
+													{this.renderDocumentName({
+														entry,
+														classes
 													})}
-											</TableBody>
-										</Table>
-									</Grid>
-								</Grid>
-								<Grid item>
-									<Button
-										id="addDocuments"
-										variant="outlined"
-										size="large"
-										color="secondary"
-										onClick={this.handleAddDocument}
-										className={classes.button}
-									>
-										Add Documents
-									</Button>
-								</Grid>
-							</Grid>
-						</Grid>
-					</Grid>
-				</Grid>
-			</Grid>
+												</TableCell>
+												<TableCell>
+													{' '}
+													{this.renderExpiryDate(entry)}{' '}
+												</TableCell>
+											</TableRow>
+										);
+									})}
+							</TableBody>
+						</Table>
+					</div>
+					<Button
+						id="addDocuments"
+						variant="outlined"
+						size="large"
+						color="secondary"
+						onClick={this.handleAddDocument}
+						className={classes.button}
+					>
+						Add Documents
+					</Button>
+				</div>
+			</div>
 		);
 	}
 }

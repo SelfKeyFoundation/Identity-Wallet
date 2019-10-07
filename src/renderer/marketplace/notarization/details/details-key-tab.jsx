@@ -1,35 +1,17 @@
 import React, { Component } from 'react';
-import { withStyles, Typography, Grid, List, ListItem } from '@material-ui/core';
+import { withStyles, Typography, List, ListItem } from '@material-ui/core';
 
 const styles = theme => ({
 	tabContainer: {
-		width: '100%',
+		alignItems: 'stretch',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'flex-start',
 		padding: '30px 0 0',
-		'& strong': {
-			fontWeight: 'bold',
-			color: theme.palette.secondary.main,
-			display: 'block',
-			padding: '0',
-			borderBottom: '1px solid #435160',
-			marginBottom: '0.5em',
-			marginTop: '0em'
-		},
-		'& ul': {
-			listStyle: 'outside',
-			lineHeight: '1.4em',
-			marginLeft: '1.5em',
-			marginBottom: '1.5em'
-		},
-		'& ul li': {
-			lineHeight: '1.4em',
-			marginBottom: '19px'
-		},
-		'& a': {
-			color: theme.palette.secondary.main
-		}
+		width: '100%'
 	},
 	gridPadding: {
-		padding: '15px 20px !important'
+		padding: '15px 0 !important'
 	}
 });
 
@@ -57,7 +39,7 @@ export const KeyInformationListItem = withStyles(listItemStyles)(({ classes, lab
 ));
 
 export const KeyInformationList = withStyles(listItemStyles)(({ classes }) => (
-	<Grid>
+	<div>
 		<List className={classes.list}>
 			<KeyInformationListItem
 				label="Services Provided:"
@@ -68,7 +50,7 @@ export const KeyInformationList = withStyles(listItemStyles)(({ classes }) => (
 			<KeyInformationListItem label="Video Call Required:" data="Yes" />
 			<KeyInformationListItem label="Standard Notarized Document Price:" data="$ 25 USD" />
 		</List>
-	</Grid>
+	</div>
 ));
 
 class NotarizationKeyTabComponent extends Component {
@@ -86,18 +68,10 @@ class NotarizationKeyTabComponent extends Component {
 		const { classes } = this.props;
 		return (
 			<div className={classes.tabContainer}>
-				<Grid
-					container
-					direction="column"
-					justify="flex-start"
-					alignItems="stretch"
-					spacing={40}
-				>
-					<Grid item className={classes.gridPadding}>
-						<Typography variant="h2">Key Informations</Typography>
-					</Grid>
-					<KeyInformationList />
-				</Grid>
+				<div className={classes.gridPadding}>
+					<Typography variant="h2">Key Informations</Typography>
+				</div>
+				<KeyInformationList />
 			</div>
 		);
 	}
