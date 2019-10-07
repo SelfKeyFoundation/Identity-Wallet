@@ -43,18 +43,17 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'flex-start',
-		marginTop: '40px',
-		'& .notarizationRequestsBox': {
-			padding: '0 20px'
-		}
+		marginTop: '40px'
 	},
 	identityValidation: {
-		marginTop: '30px',
-		padding: '0 20px'
+		marginTop: '30px'
 	},
 	flex: {
 		display: 'flex',
 		justifyContent: 'space-between'
+	},
+	topSpace: {
+		paddingTop: '10px'
 	}
 });
 
@@ -158,6 +157,7 @@ class CertifiersDashboardHistory extends Component {
 								</TableBody>
 							</Table>
 							<TablePagination
+								className={classes.topSpace}
 								rowsPerPageOptions={[5, 10, 25]}
 								component="div"
 								count={documents.length}
@@ -192,6 +192,7 @@ class CertifiersDashboardHistory extends Component {
 								</TableBody>
 							</Table>
 							<TablePagination
+								className={classes.topSpace}
 								rowsPerPageOptions={[5, 10, 25]}
 								component="div"
 								count={documents.length}
