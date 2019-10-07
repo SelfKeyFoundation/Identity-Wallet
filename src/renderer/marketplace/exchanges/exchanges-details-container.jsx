@@ -1,16 +1,36 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-// import { getServiceDetails, hasBalance } from 'common/exchanges/selectors';
+import { withStyles } from '@material-ui/core/styles';
 import { marketplacesSelectors } from 'common/marketplaces';
 import { marketplaceSelectors } from 'common/marketplace';
 import { kycSelectors, kycOperations } from 'common/kyc';
-import { Logger } from 'common/logger';
 import { push } from 'connected-react-router';
 import { walletSelectors } from 'common/wallet';
-import { MarketplaceServiceDetails } from './service-details';
+import { ExchangesDetails } from './exchanges-details';
+import { MarketplaceExchangesComponent } from './common/marketplace-exchanges-component';
 
-// eslint-disable-next-line
-const log = new Logger('marketplace-item-container');
+const styles = theme => ({});
+
+class ExchangesDetailsContainer extends MarketplaceExchangesComponent {
+	async componentDidMount() {
+		if (this.props.relyingPartyShouldUpdate) {
+			await this.props.dispatch(kycOperations.loadRelyingParty(this.props.item.name));
+		}
+	}
+
+	onBackClick = () => {
+		this.props.dispatch(push(this.rootPath()));
+	};
+
+	render() {
+		let item = this.props.item;
+		return (
+			<div>
+				<ExchangesDetails {...this.props} item={item} backAction={this.onBackClick} />
+			</div>
+		);
+	}
+}
 
 const mapStateToProps = (state, props) => {
 	const id = props.match.params.inventoryId;
@@ -44,33 +64,7 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-class MarketplaceServiceDetailsPageComponent extends Component {
-	async componentDidMount() {
-		if (this.props.relyingPartyShouldUpdate) {
-			await this.props.dispatch(kycOperations.loadRelyingParty(this.props.item.name));
-		}
-	}
-
-	backAction = () => {
-		this.props.dispatch(push('/main/marketplace-exchanges'));
-	};
-
-	render() {
-		let item = this.props.item;
-		return (
-			<div>
-				<MarketplaceServiceDetails
-					{...this.props}
-					item={item}
-					backAction={this.backAction}
-				/>
-			</div>
-		);
-	}
-}
-
-export const MarketplaceServiceDetailsPage = connect(mapStateToProps)(
-	MarketplaceServiceDetailsPageComponent
-);
-
-export default MarketplaceServiceDetailsPage;
+const styledComponent = withStyles(styles)(ExchangesDetailsContainer);
+const connectedComponent = connect(mapStateToProps)(styledComponent);
+export default connectedComponent;
+export { connectedComponent as ExchangesDetailsContainer };

@@ -9,7 +9,7 @@ import {
 	TableCell
 } from '@material-ui/core';
 import { LargeTableHeadRow, BackButton } from 'selfkey-ui';
-import { MarketplaceServicesListItem } from './services-list-item';
+import { ExchangesListItem } from './exchanges-list-item';
 import { PageLoading } from '../common';
 
 const styles = theme => ({
@@ -69,7 +69,7 @@ const getServices = (items, viewAction) => {
 	return items.map(item => {
 		return (
 			<React.Fragment key={item.id || item.name}>
-				<MarketplaceServicesListItem
+				<ExchangesListItem
 					id={item.id || item.name}
 					name={item.name}
 					location={item.data.location || '-'}
@@ -86,7 +86,7 @@ const getServices = (items, viewAction) => {
 	});
 };
 
-export const MarketplaceServicesList = withStyles(styles)(
+export const ExchangesList = withStyles(styles)(
 	({ classes, children, category, items, backAction, viewAction, isLoading }) => (
 		<Grid container>
 			<Grid item>
@@ -170,4 +170,4 @@ export const MarketplaceServicesList = withStyles(styles)(
 	)
 );
 
-export default MarketplaceServicesList;
+export default ExchangesList;
