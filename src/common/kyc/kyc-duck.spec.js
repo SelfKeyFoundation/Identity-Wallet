@@ -1,5 +1,6 @@
 import sinon from 'sinon';
 import { setGlobalContext } from '../context';
+import { identitySelectors } from '../identity';
 import { kycActions, kycTypes, reducers, initialState, kycSelectors, testExports } from './index';
 
 describe('KYC Duck', () => {
@@ -28,6 +29,7 @@ describe('KYC Duck', () => {
 		describe('Operations', () => {
 			it('loadApplicationsOperation', async () => {
 				sinon.stub(kycApplicationService, 'load').resolves(testApplications);
+				sinon.stub(identitySelectors, 'selectCurrentIdentity').returns({ id: 1 });
 				sinon.stub(store, 'dispatch');
 
 				await testExports.operations.loadApplicationsOperation()(

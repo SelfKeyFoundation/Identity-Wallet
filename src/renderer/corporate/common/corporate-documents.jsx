@@ -1,7 +1,6 @@
 import React from 'react';
 import moment from 'moment';
 import {
-	Grid,
 	CardHeader,
 	Card,
 	CardContent,
@@ -34,29 +33,22 @@ const styles = theme => ({
 		height: '1px',
 		margin: '5px 16px'
 	},
-	card: {},
+	card: {
+		marginTop: '22px'
+	},
 	cardHeader: {
 		whiteSpace: 'normal',
 		wordBreak: 'break-all'
 	},
+	cardContent: {
+		alignItems: 'center',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center'
+	},
 	regularText: {
 		'& span': {
 			fontWeight: 400
-		}
-	},
-	attr: {
-		margin: '0.5em',
-		display: 'block',
-		'& .label': {
-			display: 'inline-block',
-			minWidth: '12em'
-		},
-		'& h5': {
-			display: 'inline-block'
-		},
-		'& svg': {
-			marginRight: '0.5em',
-			verticalAlign: 'middle'
 		}
 	},
 	documentColumn: {
@@ -65,6 +57,11 @@ const styles = theme => ({
 		'& .file-icon': {
 			marginRight: '15px'
 		}
+	},
+	button: {
+		display: 'flex',
+		justifyContent: 'center',
+		marginTop: '30px'
 	}
 });
 
@@ -127,93 +124,78 @@ const DocumentExpiryDate = ({ doc }) => {
 const CorporateDocuments = withStyles(styles)(props => {
 	const { classes, documents = [], onEditDocument, onDeleteDocument, onAddDocument } = props;
 	return (
-		<Card>
+		<Card className={classes.card}>
 			<CardHeader title="Documents" className={classes.regularText} />
 			<hr className={classes.hr} />
-			<CardContent>
-				<Grid
-					container
-					direction="column"
-					justify="center"
-					alignItems="center"
-					spacing={24}
-				>
-					<Grid container item spacing={0} justify="center">
-						<Grid item xs={12}>
-							<Table>
-								<TableHead>
-									<SmallTableHeadRow>
-										<TableCell>
-											<Typography variant="overline">Type</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="overline">Label</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="overline">Expiry Date</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="overline">Last Edited</Typography>
-										</TableCell>
-										<TableCell align="right">
-											<Typography variant="overline">Actions</Typography>
-										</TableCell>
-									</SmallTableHeadRow>
-								</TableHead>
-								<TableBody>
-									{documents.map(entry => (
-										<TableRow key={entry.id}>
-											<TableCell>
-												<Typography variant="h6">
-													{renderAttributeTitle(entry)}
-												</Typography>
-											</TableCell>
-											<TableCell className={classes.labelCell}>
-												{renderDocumentName({ entry, classes })}
-											</TableCell>
-											<TableCell>
-												<DocumentExpiryDate doc={entry} />
-											</TableCell>
-											<TableCell>
-												<Typography variant="h6">
-													{renderLastUpdateDate(entry)}
-												</Typography>
-											</TableCell>
-											<TableCell align="right">
-												<IconButton
-													id="editButton"
-													onClick={() => onEditDocument(entry)}
-												>
-													<EditTransparentIcon />
-												</IconButton>
-												<IconButton
-													id="deleteButton"
-													onClick={() => onDeleteDocument(entry)}
-												>
-													<DeleteIcon />
-												</IconButton>
-											</TableCell>
-										</TableRow>
-									))}
-								</TableBody>
-							</Table>
-						</Grid>
-					</Grid>
-					<Grid container item spacing={0} justify="center">
-						<Grid item>
-							<Button
-								id="addDocuments"
-								variant="outlined"
-								size="large"
-								color="secondary"
-								onClick={onAddDocument}
-								className={classes.button}
-							>
-								Add Documents
-							</Button>
-						</Grid>
-					</Grid>
-				</Grid>
+			<CardContent className={classes.cardContent}>
+				<Table>
+					<TableHead>
+						<SmallTableHeadRow>
+							<TableCell>
+								<Typography variant="overline">Type</Typography>
+							</TableCell>
+							<TableCell>
+								<Typography variant="overline">Label</Typography>
+							</TableCell>
+							<TableCell>
+								<Typography variant="overline">Expiry Date</Typography>
+							</TableCell>
+							<TableCell>
+								<Typography variant="overline">Last Edited</Typography>
+							</TableCell>
+							<TableCell align="right">
+								<Typography variant="overline">Actions</Typography>
+							</TableCell>
+						</SmallTableHeadRow>
+					</TableHead>
+					<TableBody>
+						{documents.map(entry => (
+							<TableRow key={entry.id}>
+								<TableCell>
+									<Typography variant="h6">
+										{renderAttributeTitle(entry)}
+									</Typography>
+								</TableCell>
+								<TableCell className={classes.labelCell}>
+									{renderDocumentName({ entry, classes })}
+								</TableCell>
+								<TableCell>
+									<DocumentExpiryDate doc={entry} />
+								</TableCell>
+								<TableCell>
+									<Typography variant="h6">
+										{renderLastUpdateDate(entry)}
+									</Typography>
+								</TableCell>
+								<TableCell align="right">
+									<IconButton
+										id="editButton"
+										onClick={() => onEditDocument(entry)}
+									>
+										<EditTransparentIcon />
+									</IconButton>
+									<IconButton
+										id="deleteButton"
+										onClick={() => onDeleteDocument(entry)}
+									>
+										<DeleteIcon />
+									</IconButton>
+								</TableCell>
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
+				<div className={classes.button}>
+					<Button
+						id="addDocuments"
+						variant="outlined"
+						size="large"
+						color="secondary"
+						onClick={onAddDocument}
+					>
+						Add Documents
+					</Button>
+				</div>
 			</CardContent>
 		</Card>
 	);
