@@ -207,7 +207,7 @@ const ProfileList = withStyles(profileStyle)(
 		onProfileSelect,
 		onClickCorporate,
 		closeProfile,
-		selectedProfile,
+		selectedProfileId,
 		showCorporate
 	}) => {
 		return (
@@ -216,7 +216,7 @@ const ProfileList = withStyles(profileStyle)(
 					<div className={classes.profile}>
 						{profiles &&
 							profiles.map((el, index) =>
-								el.id !== selectedProfile.id ? (
+								el.id !== selectedProfileId ? (
 									<Grid
 										container
 										key={index}
@@ -413,7 +413,7 @@ class Toolbar extends Component {
 						onProfileSelect={onProfileSelect}
 						closeProfile={closeProfile}
 						showCorporate={showCorporate}
-						selectedProfile={selectedProfile}
+						selectedProfileId={selectedProfile.id}
 					/>
 				</Grid>
 			</div>
