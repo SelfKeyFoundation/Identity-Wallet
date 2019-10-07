@@ -3,7 +3,6 @@ import moment from 'moment';
 import {
 	withStyles,
 	Typography,
-	Grid,
 	Paper,
 	Divider,
 	Table,
@@ -51,10 +50,18 @@ const styles = theme => ({
 		whiteSpace: 'nowrap'
 	},
 	messagesTable: {
-		marginTop: '40px',
-		'& .messagesTableBox': {
-			padding: '0 20px'
-		}
+		alignItems: 'stretch',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'flex-start',
+		marginTop: '40px'
+	},
+	flex: {
+		display: 'flex',
+		justifyContent: 'space-between'
+	},
+	topSpace: {
+		paddingTop: '10px'
 	}
 });
 
@@ -104,70 +111,60 @@ class CertifiersDashboardMessages extends Component {
 	render() {
 		const { classes, documents } = this.props;
 		return (
-			<Grid
-				container
-				direction="column"
-				justify="flex-start"
-				alignItems="stretch"
-				spacing={40}
-				className={classes.messagesTable}
-			>
-				<Grid item xs={12} className="messagesTableBox">
+			<div className={classes.messagesTable}>
+				<div>
 					<Paper className={classes.newRequests}>
-						<Grid container>
-							<Grid container justify="space-between">
+						<div>
+							<div className={classes.flex}>
 								<Typography variant="h2">Messages</Typography>
 								<RefreshIcon className={classes.icon} />
-							</Grid>
-							<Grid item xs={12}>
-								<Divider className={classes.divider} />
-							</Grid>
-							<Grid item xs={12}>
-								<Table>
-									<TableHead>
-										<SmallTableHeadRow>
-											<TableCell>
-												<Typography variant="overline">Date</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">From</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">Message</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">Status</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">Actions</Typography>
-											</TableCell>
-										</SmallTableHeadRow>
-									</TableHead>
-									<TableBody>
-										{documents &&
-											documents.map(entry => {
-												return <RequestsTableRow data={entry} />;
-											})}
-									</TableBody>
-								</Table>
-								<TablePagination
-									rowsPerPageOptions={[5, 10, 25]}
-									component="div"
-									count={documents.length}
-									rowsPerPage={5}
-									page={1}
-									backIconButtonProps={{
-										'aria-label': 'previous page'
-									}}
-									nextIconButtonProps={{
-										'aria-label': 'next page'
-									}}
-								/>
-							</Grid>
-						</Grid>
+							</div>
+							<Divider className={classes.divider} />
+							<Table>
+								<TableHead>
+									<SmallTableHeadRow>
+										<TableCell>
+											<Typography variant="overline">Date</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="overline">From</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="overline">Message</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="overline">Status</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="overline">Actions</Typography>
+										</TableCell>
+									</SmallTableHeadRow>
+								</TableHead>
+								<TableBody>
+									{documents &&
+										documents.map(entry => {
+											return <RequestsTableRow data={entry} />;
+										})}
+								</TableBody>
+							</Table>
+							<TablePagination
+								className={classes.topSpace}
+								rowsPerPageOptions={[5, 10, 25]}
+								component="div"
+								count={documents.length}
+								rowsPerPage={5}
+								page={1}
+								backIconButtonProps={{
+									'aria-label': 'previous page'
+								}}
+								nextIconButtonProps={{
+									'aria-label': 'next page'
+								}}
+							/>
+						</div>
 					</Paper>
-				</Grid>
-			</Grid>
+				</div>
+			</div>
 		);
 	}
 }

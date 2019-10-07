@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Typography, Button, withStyles } from '@material-ui/core';
+import { Typography, Button, withStyles } from '@material-ui/core';
 import { CloseButtonIcon, RoundCompany, RoundPerson, baseDark, grey } from 'selfkey-ui';
 import moment from 'moment';
 
@@ -11,7 +11,10 @@ const styles = theme => ({
 		width: '100%'
 	},
 	containerHeader: {
+		alignItems: 'flex-start',
 		background: '#2A3540',
+		display: 'flex',
+		justifyContent: 'flex-start',
 		padding: '25px 30px',
 		'& div': {
 			display: 'inline-block',
@@ -31,6 +34,7 @@ const styles = theme => ({
 	send: {
 		backgroundColor: '#313D49',
 		boxSizing: 'border-box',
+		display: 'flex',
 		flexWrap: 'nowrap',
 		justifyContent: 'space-between',
 		marginLeft: '-30px',
@@ -61,8 +65,20 @@ const styles = theme => ({
 
 const messageStyles = theme => ({
 	messageBox: {
+		display: 'flex',
+		flexDirection: 'column',
 		marginBottom: 30,
-		marginTop: 30
+		marginTop: 30,
+		width: '100%',
+		'& .messageHead': {
+			display: 'flex',
+			width: '100%'
+		},
+		'& .messageBody': {
+			display: 'flex',
+			flexDirection: 'column',
+			width: '100%'
+		}
 	},
 	person: {
 		marginBottom: 15,
@@ -117,20 +133,20 @@ const messageStyles = theme => ({
 export const DirectMessage = withStyles(messageStyles)(({ classes, data, index }) => {
 	const messageType = `${data.type === 'person' ? `${classes.person}` : `${classes.company}`}`;
 	return (
-		<Grid container key={index} className={`${classes.messageBox} ${messageType}`}>
-			<Grid container className="messageHead">
+		<div key={index} className={`${classes.messageBox} ${messageType}`}>
+			<div className="messageHead">
 				{data.type === 'person' ? <RoundPerson /> : <RoundCompany />}
 				<Typography variant="h2">{data.name}</Typography>
-			</Grid>
-			<Grid container direction="column" className="messageBody">
-				<Grid item>
+			</div>
+			<div className="messageBody">
+				<div>
 					<Typography variant="body2">{data.message}</Typography>
-				</Grid>
+				</div>
 				<Typography variant="subtitle2" color="secondary" className="date">
 					{moment(data.date).format('DD MMM YYYY')}
 				</Typography>
-			</Grid>
-		</Grid>
+			</div>
+		</div>
 	);
 });
 
@@ -140,31 +156,24 @@ class MessageComponent extends Component {
 		return (
 			<div className={classes.container}>
 				<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
-				<Grid
-					container
-					justify="flex-start"
-					alignItems="flex-start"
-					className={classes.containerHeader}
-				>
+				<div className={classes.containerHeader}>
 					<Typography variant="h2" className="region">
 						Message Reply
 					</Typography>
-				</Grid>
+				</div>
 				<div className={classes.contentContainer}>
 					{messages &&
 						messages.map((message, indx) => (
 							<DirectMessage key={indx} data={message} index={indx} />
 						))}
-					<Grid container className={classes.send}>
-						<Grid item className={classes.textArea}>
+					<div className={classes.send}>
+						<div className={classes.textArea}>
 							<textarea rows="5" placeholder="Message..." />
-						</Grid>
-						<Grid item>
-							<Button variant="contained" size="large" onClick={onBackClick}>
-								Send
-							</Button>
-						</Grid>
-					</Grid>
+						</div>
+						<Button variant="contained" size="large" onClick={onBackClick}>
+							Send
+						</Button>
+					</div>
 				</div>
 			</div>
 		);
