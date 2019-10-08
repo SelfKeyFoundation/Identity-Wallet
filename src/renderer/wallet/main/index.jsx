@@ -11,10 +11,9 @@ import { appSelectors } from 'common/app';
 
 import {
 	MarketplaceCategoriesPage,
-	MarketplaceExchangesPage,
+	MarketplaceExchangesContainer,
 	MarketplaceIncorporationPage,
 	MarketplaceBankAccountsPage,
-	MarketplaceServiceDetailsPage,
 	MarketplaceSelfkeyIdRequired,
 	MarketplaceSelfkeyDIDRequiredContainer,
 	MarketplaceOrdersPage
@@ -141,11 +140,7 @@ class Main extends Component {
 					/>
 					<Route
 						path={`${match.path}/marketplace-exchanges`}
-						component={MarketplaceExchangesPage}
-					/>
-					<Route
-						path={`${match.path}/marketplace-services/:inventoryId`}
-						component={MarketplaceServiceDetailsPage}
+						component={MarketplaceExchangesContainer}
 					/>
 					<Route
 						path={`${match.path}/marketplace-incorporation`}
