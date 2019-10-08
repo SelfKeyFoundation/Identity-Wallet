@@ -170,7 +170,7 @@ export const SimpleServiceCost = withStyles(serviceCostStyle)(({ classes }) => (
 ));
 
 export const StepItem = withStyles(stepItemStyle)(
-	({ classes, number, title, description, link }) => {
+	({ classes, number, onWhatsThisClicked, title, description }) => {
 		return (
 			<div className={classes.howItWorksBox}>
 				<header className={classes.header}>
@@ -181,7 +181,13 @@ export const StepItem = withStyles(stepItemStyle)(
 				</header>
 				<div>
 					<Typography variant="subtitle2" color="secondary">
-						{description} {link ? <a className={classes.link}>{link}</a> : ''}
+						{description}{' '}
+						{onWhatsThisClicked && (
+							<a className={classes.link} onClick={onWhatsThisClicked}>
+								(what’s this?)
+							</a>
+						)}
+						.
 					</Typography>
 				</div>
 			</div>
@@ -190,6 +196,10 @@ export const StepItem = withStyles(stepItemStyle)(
 );
 
 class BecomeCertifierComponent extends Component {
+	handleWhatsThisClicked = e => {
+		window.openExternal(e, 'https://help.selfkey.org/');
+	};
+
 	render() {
 		const { classes, onBackClick } = this.props;
 
@@ -234,7 +244,7 @@ class BecomeCertifierComponent extends Component {
 							number={1}
 							title="Join the maketplace"
 							description="Joining our marketplace is FREE, you are paying only once for the Network Transaction Fee "
-							link="(what’s this?)."
+							onWhatsThisClicked={this.handleWhatsThisClicked}
 						/>
 						<StepItem
 							number={2}
