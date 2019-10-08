@@ -32,10 +32,10 @@ class BankAccountsTableContainer extends MarketplaceBankAccountsComponent {
 		const { accountType } = this.state;
 
 		const data = inventory
+			.filter(bank => bank.data.type === this.state.accountType)
 			.sort((a, b) =>
 				a.data.region < b.data.region ? -1 : a.data.region > b.data.region ? 1 : 0
-			)
-			.filter(bank => bank.data.type === this.state.accountType);
+			);
 
 		return (
 			<BankingOffersPage
