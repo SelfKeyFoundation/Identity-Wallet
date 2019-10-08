@@ -98,7 +98,7 @@ const styles = theme => ({
 	}
 });
 
-export const MarketplaceServicesListItem = withStyles(styles)(
+export const ExchangesListItem = withStyles(styles)(
 	({
 		id,
 		classes,
@@ -217,4 +217,4 @@ export const MarketplaceServicesListItem = withStyles(styles)(
 	}
 );
 
-export default MarketplaceServicesListItem;
+export default ExchangesListItem;
