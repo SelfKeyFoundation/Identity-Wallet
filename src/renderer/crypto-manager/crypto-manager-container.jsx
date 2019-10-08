@@ -3,28 +3,15 @@ import { Grid, Button, Typography, withStyles, List } from '@material-ui/core';
 import { connect } from 'react-redux';
 import CryptoPriceTableContainer from './crypto-price-table-container';
 import { push } from 'connected-react-router';
-import { MyCryptoLargeIcon, PriceSummary } from 'selfkey-ui';
+import { MyCryptoLargeIcon, PriceSummary, BackButton } from 'selfkey-ui';
 import { getLocale } from 'common/locale/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { Popup } from '../common/popup';
 import { walletTokensOperations } from 'common/wallet-tokens';
 
 const styles = theme => ({
-	back: {
-		position: 'absolute',
-		top: '100px',
-		left: '20px'
-	},
 	bottomSpace: {
 		marginBottom: '15px'
-	},
-	bold: {
-		fontWeight: 600
-	},
-	backButtonContainer: {
-		left: '15px',
-		position: 'absolute',
-		top: '120px'
 	},
 	topSpace: {
 		marginTop: '30px'
@@ -230,20 +217,9 @@ class CryptoManagerContainerComponent extends Component {
 				justify="flex-start"
 				alignItems="center"
 				spacing={32}
+				style={{ width: '100%', margin: 0 }}
 			>
-				<div className={classes.backButtonContainer}>
-					<Button
-						variant="outlined"
-						color="secondary"
-						size="small"
-						onClick={this.handleBackClick}
-					>
-						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
-							‹ Back
-						</Typography>
-					</Button>
-				</div>
-
+				<BackButton onclick={this.handleBackClick} />
 				<Grid item className={classes.topSpace}>
 					<MyCryptoLargeIcon />
 				</Grid>

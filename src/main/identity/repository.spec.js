@@ -300,7 +300,7 @@ describe('Repository model', () => {
 			await repo1.addAttribute(attr);
 			let attrType = await IdAttributeType.findByUrl(attr.json);
 			await IdAttribute.create({
-				walletId: 1,
+				identityId: 1,
 				typeId: attrType.id
 			});
 			await repo1.deleteAttribute(attr);

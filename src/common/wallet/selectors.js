@@ -6,18 +6,11 @@ export const getWallet = state => {
 	const ethereumPrice =
 		((getPrices(state) || {}).prices || []).filter(price => price.symbol === 'ETH')[0] || {};
 	wallet.balanceInFiat = wallet.balance * (ethereumPrice.priceUSD || 0);
+	wallet.profileName = wallet.profileName || wallet.name;
 	wallet.name = 'Ethereum';
 	wallet.symbol = 'ETH';
 	wallet.price = ethereumPrice.priceUSD;
 	wallet.recordState = 1;
 	wallet.isHardwareWallet = wallet.profile === 'ledger' || wallet.profile === 'trezor';
 	return wallet;
-};
-
-export const getAssociateError = state => {
-	return state.wallet.associateError;
-};
-
-export const getDidOriginUrl = state => {
-	return state.wallet.didOriginUrl;
 };

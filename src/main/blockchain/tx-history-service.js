@@ -309,7 +309,7 @@ export class TxHistoryService {
 	async sync() {
 		let wallets = await Wallet.findAll();
 		for (let wallet of wallets) {
-			let address = wallet.publicKey.toLowerCase();
+			let address = wallet.address.toLowerCase();
 			address = address.startsWith('0x') ? address : `0x${address}`;
 			await this.syncByWallet(address, wallet.id);
 			await this.removeNotMinedPendingTxs(address);
@@ -334,12 +334,12 @@ export class TxHistoryService {
 		})();
 	}
 
-	async getTransactions(publicKey) {
-		return TxHistory.findByPublicKey(publicKey);
+	async getTransactions(address) {
+		return TxHistory.findByPublicKey(address);
 	}
 
 	async reload(wallet) {
-		let address = wallet.publicKey.toLowerCase();
+		let address = wallet.address.toLowerCase();
 		address = address.startsWith('0x') ? address : `0x${address}`;
 		await this.syncByWallet(address, wallet.id, true, true);
 		await this.removeNotMinedPendingTxs(address);

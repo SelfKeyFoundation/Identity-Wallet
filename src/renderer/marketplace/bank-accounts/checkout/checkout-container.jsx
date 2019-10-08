@@ -11,7 +11,7 @@ import { getWallet } from 'common/wallet/selectors';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
-import { bankAccountsSelectors } from 'common/bank-accounts';
+import { marketplaceSelectors } from 'common/marketplace';
 import { PaymentCheckout } from '../../common/payment-checkout';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 
@@ -23,24 +23,20 @@ const VENDOR_NAME = 'Far Horizon Capital Inc';
 class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 	async componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
-
-		await this.loadRelyingParty({ rp: 'incorporations', authenticated: true });
-
+		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: true });
 		this.checkIfUserCanOpenBankAccount();
-
-		await this.loadBankAccounts();
 	}
 
 	checkIfUserCanOpenBankAccount = async () => {
-		if (!this.canApply(this.props.accountType.price)) {
+		if (!this.canApply(this.props.jurisdiction.price)) {
 			this.props.dispatch(push(this.cancelRoute()));
 		}
 	};
 
 	getPaymentParameters() {
-		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency, accountType } = this.props;
+		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency, jurisdiction } = this.props;
 		const gasPrice = ethGasStationInfo.fast;
-		const price = accountType.price;
+		const price = jurisdiction.price;
 		const keyAmount = price / keyRate;
 		const gasLimit = FIXED_GAS_LIMIT_PRICE;
 		const ethFee = EthUnits.toEther(gasPrice * gasLimit, 'gwei');
@@ -61,13 +57,13 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 	onBackClick = () => this.props.dispatch(push(this.cancelRoute()));
 
 	onStartClick = async () => {
-		const { accountType } = this.props;
-		const { templateId } = this.props.match.params;
-		const { region } = accountType;
+		const { jurisdiction, templateId, vendorId } = this.props;
+		const { region } = jurisdiction.data;
 
+		// TODO: get URLs and vendor name from the RP store
 		this.props.dispatch(
 			kycOperations.startCurrentApplicationOperation(
-				'incorporations',
+				vendorId,
 				templateId,
 				this.payRoute(),
 				this.cancelRoute(),
@@ -85,18 +81,24 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	render() {
-		const { accountType, banks } = this.props;
-		const countryCode = this.props.match.params.countryCode;
+		const { jurisdiction, countryCode } = this.props;
+		const { region, walletDescription, checkoutOptions, accounts } = jurisdiction.data;
+
+		const timeToOpen = Object.keys(accounts).reduce((current, accountId) => {
+			const account = accounts[accountId];
+			return current || account.timeToOpen;
+		}, '');
+
 		return (
 			<PaymentCheckout
-				title={`Banking Application Fee: ${accountType.region}`}
-				description={accountType.walletDescription}
-				timeToForm={banks[0].timeToOpen}
-				program={accountType}
+				title={`Banking Application Fee: ${region}`}
+				description={walletDescription}
+				timeToForm={timeToOpen}
+				program={jurisdiction}
 				countryCode={countryCode}
 				{...this.getPaymentParameters()}
-				price={accountType.price}
-				options={accountType.checkoutOptions}
+				price={jurisdiction.price}
+				options={checkoutOptions}
 				initialDocsText={`You will be required to provide a few basic informations about yourself like full name and email.
 					This will be done through SelfKey ID Wallet.`}
 				kycProcessText={`You will undergo a standard KYC process and our team will get in touch with you to make sure we
@@ -112,24 +114,25 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 }
 
 const mapStateToProps = (state, props) => {
-	const { accountCode, countryCode } = props.match.params;
+	const { accountCode, vendorId, countryCode, templateId } = props.match.params;
 	const authenticated = true;
 	return {
-		accountType: bankAccountsSelectors.getTypeByAccountCode(state, accountCode),
-		banks: bankAccountsSelectors.getDetailsByAccountCode(state, accountCode),
-		jurisdiction: bankAccountsSelectors.getJurisdictionsByCountryCode(state, countryCode),
+		countryCode,
+		templateId,
+		vendorId,
+		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
 		...getLocale(state),
 		...getFiatCurrency(state),
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
 		tokens: getTokens(state).splice(1), // remove ETH
-		publicKey: getWallet(state).publicKey,
+		address: getWallet(state).address,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		ethRate: pricesSelectors.getRate(state, 'ETH', 'USD'),
 		cryptoCurrency: CRYPTOCURRENCY,
-		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
-			'incorporations',
+			vendorId,
 			authenticated
 		)
 	};

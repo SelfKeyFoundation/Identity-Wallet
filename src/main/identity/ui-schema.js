@@ -1,8 +1,9 @@
 import { Model, transaction } from 'objection';
 import BaseModel from '../common/base-model';
-import fetch from 'node-fetch';
+import config from 'common/config';
+import { jsonSchema } from 'common/identity/utils';
 import { Logger } from 'common/logger';
-
+const env = config.attributeTypeSource;
 const log = new Logger('ui-schema-model');
 
 const UI_SCHEMA_EXPIRES = 86400000; // 1 day
@@ -21,7 +22,8 @@ export class UiSchema extends BaseModel {
 			repositoryId: { type: 'integer' },
 			attributeTypeId: { type: 'integer' },
 			content: { type: 'object' },
-			expires: { type: 'integer' }
+			expires: { type: 'integer' },
+			env: { type: 'string', enum: ['production', 'development'], default: env }
 		}
 	};
 
@@ -49,11 +51,11 @@ export class UiSchema extends BaseModel {
 	}
 
 	static findAll(where) {
-		return this.query().where(where || {});
+		return this.query().where({ ...where, env } || { env });
 	}
 
 	static findByUrl(url, repositoryId, tx) {
-		return this.query(tx).findOne({ url, repositoryId });
+		return this.query(tx).findOne({ url, repositoryId, env });
 	}
 
 	static async findById(id, tx) {
@@ -61,7 +63,7 @@ export class UiSchema extends BaseModel {
 	}
 
 	static create(itm, tx) {
-		return this.query(tx).insertAndFetch(itm);
+		return this.query(tx).insertAndFetch({ ...itm, env });
 	}
 
 	static delete(id, tx) {
@@ -69,11 +71,7 @@ export class UiSchema extends BaseModel {
 	}
 
 	static async loadRemote(url) {
-		let res = await fetch(url);
-		if (res.status >= 400) {
-			throw new Error('Failed to fetch ui-schema from remote');
-		}
-		let remote = await res.json();
+		const remote = await jsonSchema.loadRemoteSchema(url, { env });
 
 		let remoteSchema = {
 			url,

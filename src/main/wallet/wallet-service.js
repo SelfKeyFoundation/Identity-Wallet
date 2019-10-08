@@ -1,48 +1,45 @@
 import { Logger } from 'common/logger';
-import { getGlobalContext } from 'common/context';
 import { Wallet } from './wallet';
 import fs from 'fs';
 import path from 'path';
-import { formatDataUrl, bufferFromDataUrl } from 'common/utils/document';
 import EthUnits from 'common/utils/eth-units';
 import * as EthUtil from 'ethereumjs-util';
 
 const log = new Logger('wallet-model');
 export class WalletService {
-	constructor() {
-		this.web3Service = getGlobalContext().web3Service;
+	constructor({ web3Service, config }) {
+		this.web3Service = web3Service;
+		this.config = config;
 	}
 
-	async createWallet(password) {
-		const account = this.web3Service.web3.eth.accounts.create(password);
-		this.web3Service.web3.eth.accounts.wallet.add(account);
-		this.web3Service.web3.eth.defaultAccount = account.address;
-		const { address, privateKey } = account;
-		const keystore = this.web3Service.web3.eth.accounts.encrypt(privateKey, password);
-		const keystoreFileFullPath = path.resolve(
-			getGlobalContext().config.walletsDirectoryPath,
-			address
-		);
+	getWalletKeystorePath(address, walletsPath = null) {
+		walletsPath = walletsPath || this.config.walletsDirectoryPath;
+		return path.resolve(walletsPath, address);
+	}
+
+	async saveAccountToKeystore(account, password, walletsPath = null) {
+		const keystore = this.web3Service.encryptAccount(account, password);
+		const keystoreFileFullPath = this.getWalletKeystorePath(account.address, walletsPath);
 		try {
 			await fs.promises.writeFile(keystoreFileFullPath, JSON.stringify(keystore), 'utf8');
+			return keystoreFileFullPath;
 		} catch (error) {
 			log.error(error);
+			throw error;
 		}
-		const wallet = await Wallet.create({
-			publicKey: address,
-			keystoreFilePath: keystoreFileFullPath,
-			profile: 'local'
-		});
+	}
 
-		const newWallet = {
-			...wallet,
-			profilePicture: formatDataUrl(wallet.profilePicture),
-			publicKey: address,
-			privateKey: privateKey,
-			keystoreFilePath: keystoreFileFullPath
-		};
-
-		return newWallet;
+	async loadAccountFromKeystore(filePath, password, address, walletsPath = null) {
+		try {
+			await fs.promises.access(filePath, fs.constants.R_OK);
+		} catch (error) {
+			if (!filePath && !address) {
+				throw error;
+			}
+			filePath = this.getWalletKeystorePath(filePath || address, walletsPath);
+		}
+		let keystore = await fs.promises.readFile(filePath);
+		return this.web3Service.decryptAccount(keystore, password);
 	}
 
 	async copyKeystoreFile(id, toPath) {
@@ -50,7 +47,7 @@ export class WalletService {
 		try {
 			await fs.promises.copyFile(
 				wallet.keystoreFilePath,
-				path.resolve(toPath, wallet.publicKey)
+				path.resolve(toPath, wallet.address)
 			);
 			return true;
 		} catch (error) {
@@ -59,86 +56,74 @@ export class WalletService {
 		}
 	}
 
+	async createWalletWithPassword(password) {
+		const account = this.web3Service.createAccount(password);
+		this.web3Service.setDefaultAccount(account);
+		const keystoreFileFullPath = await this.saveAccountToKeystore(account, password);
+		const wallet = await Wallet.create({
+			address: account.address,
+			keystoreFilePath: keystoreFileFullPath,
+			profile: 'local'
+		});
+
+		const newWallet = {
+			...wallet,
+			privateKey: account.privateKey
+		};
+
+		return newWallet;
+	}
+
 	async getBalance(id) {
 		const wallet = await Wallet.findById(id);
-		const balanceInWei = await this.web3Service.web3.eth.getBalance(wallet.publicKey);
+		const balanceInWei = await this.web3Service.web3.eth.getBalance(wallet.address);
 		return EthUnits.toEther(balanceInWei, 'wei');
 	}
 
-	async getWallets() {
-		const wallets = await Wallet.findAllWithKeyStoreFile();
-		return wallets.map(w => ({ ...w, profilePicture: formatDataUrl(w.profilePicture) }));
+	getWallets() {
+		return Wallet.findAllWithKeyStoreFile();
 	}
 
 	async unlockWalletWithPassword(id, password) {
 		const wallet = await Wallet.findById(id);
-		let keystoreFilePath = wallet.keystoreFilePath;
-		try {
-			await fs.promises.access(keystoreFilePath, fs.constants.R_OK);
-		} catch (error) {
-			keystoreFilePath = path.resolve(
-				getGlobalContext().config.walletsDirectoryPath,
-				keystoreFilePath
-			);
-		}
-		let keystore = await fs.promises.readFile(keystoreFilePath);
-		const account = this.web3Service.web3.eth.accounts.decrypt(
-			keystore.toString('utf8'),
+		const account = await this.loadAccountFromKeystore(
+			wallet.keystoreFilePath,
 			password,
-			true
+			wallet.address
 		);
-		this.web3Service.web3.eth.accounts.wallet.add(account);
-		this.web3Service.web3.eth.defaultAccount = account.address;
-
 		if (!account) {
 			throw new Error('Wrong Password!');
 		}
-		// testPaymentContract(wallet);
+		await this.web3Service.setDefaultAccount(account);
 		return {
 			...wallet,
-			profilePicture: formatDataUrl(wallet.profilePicture),
-			publicKey: account.address,
+			address: account.address,
 			privateKey: account.privateKey
 		};
 	}
 
 	async unlockWalletWithNewFile(filePath, password) {
-		const keystore = await fs.promises.readFile(filePath);
-		const account = this.web3Service.web3.eth.accounts.decrypt(
-			keystore.toString('utf8'),
-			password,
-			true
-		);
-		this.web3Service.web3.eth.accounts.wallet.add(account);
-		this.web3Service.web3.eth.defaultAccount = account.address;
+		const account = await this.loadAccountFromKeystore(filePath, password);
 
 		if (!account) {
 			throw new Error('Wrong Password!');
 		}
-
-		const keystoreFileFullPath = path.resolve(
-			getGlobalContext().config.walletsDirectoryPath,
-			account.address
-		);
-
-		await fs.promises.copyFile(filePath, keystoreFileFullPath);
+		await this.web3Service.setDefaultAccount(account);
+		const keystoreFileFullPath = await this.saveAccountToKeystore(account, password);
 
 		let wallet = await Wallet.findByPublicKey(account.address);
 
-		wallet = !wallet
-			? await Wallet.create({
-					publicKey: account.address,
-					keystoreFilePath: keystoreFileFullPath,
-					profile: 'local'
-			  })
-			: wallet;
+		if (!wallet) {
+			wallet = await Wallet.create({
+				address: account.address,
+				keystoreFilePath: keystoreFileFullPath,
+				profile: 'local'
+			});
+		}
 
 		const newWallet = {
 			...wallet,
-			profilePicture: formatDataUrl(wallet.profilePicture),
-			publicKey: account.address,
-			privateKey: account.privateKey,
-			keystoreFilePath: keystoreFileFullPath
+			privateKey: account.privateKey
 		};
 
 		return newWallet;
@@ -148,40 +133,37 @@ export class WalletService {
 		if (!EthUtil.isValidPrivate(Buffer.from(privateKey.replace('0x', ''), 'hex'))) {
 			throw new Error('The private key you entered is incorrect. Please try again!');
 		}
-		const account = this.web3Service.web3.eth.accounts.privateKeyToAccount(privateKey);
-		this.web3Service.web3.eth.accounts.wallet.add(account);
-		this.web3Service.web3.eth.defaultAccount = account.address;
+		const account = this.web3Service.privateKeyToAccount(privateKey);
+
+		this.web3Service.setDefaultAccount(account);
 
 		let wallet = await Wallet.findByPublicKey(account.address);
 
-		wallet = !wallet
-			? await Wallet.create({
-					publicKey: account.address,
-					profile: 'local'
-			  })
-			: wallet;
-
+		if (!wallet) {
+			wallet = await Wallet.create({
+				address: account.address,
+				profile: 'local'
+			});
+		}
 		const newWallet = {
 			...wallet,
-			profilePicture: formatDataUrl(wallet.profilePicture),
-			publicKey: account.address,
 			privateKey: account.privateKey
 		};
 
 		return newWallet;
 	}
 
-	async unlockWalletWithPublicKey(publicKey, path, profile) {
-		let wallet = await Wallet.findByPublicKey(publicKey);
-		this.web3Service.web3.eth.defaultAccount = publicKey;
+	async unlockWalletWithPublicKey(address, hwPath, profile) {
+		let wallet = await Wallet.findByPublicKey(address);
+		this.web3Service.setDefaultAddress(address);
 
-		wallet = !wallet
-			? await Wallet.create({
-					publicKey,
-					profile,
-					path
-			  })
-			: wallet;
+		if (!wallet) {
+			wallet = await Wallet.create({
+				address,
+				profile,
+				path: hwPath
+			});
+		}
 
 		return wallet;
 	}
@@ -207,24 +189,10 @@ export class WalletService {
 		});
 	}
 
-	updateWalletAvatar(avatar, id) {
-		return Wallet.updateProfilePicture({
-			id,
-			profilePicture: bufferFromDataUrl(avatar)
-		});
-	}
-
 	updateWalletName(name, id) {
 		return Wallet.updateName({
 			id,
 			name: name
-		});
-	}
-
-	updateWalletSetup(setup, id) {
-		return Wallet.updateSetup({
-			id,
-			setup: setup
 		});
 	}
 
@@ -257,32 +225,32 @@ export default WalletService;
 // 	const ctx = getGlobalContext();
 // 	console.log('XXX', wallet);
 // 	let res = await ctx.selfkeyService.getAllowance(
-// 		wallet.publicKey,
+// 		wallet.address,
 // 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5'
 // 	);
 // 	const amount = 20000000000000;
 // 	let gas = await ctx.selfkeyService.estimateApproveGasLimit(
-// 		wallet.publicKey,
+// 		wallet.address,
 // 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5',
 // 		amount
 // 	);
 
 // 	console.log('XXX pre allow', res.toString());
 // 	res = await ctx.selfkeyService.approve(
-// 		wallet.publicKey,
+// 		wallet.address,
 // 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5',
 // 		amount,
 // 		gas
 // 	);
 // 	console.log('XXX approve res', res.events.Approval.returnValues);
 // 	res = await ctx.selfkeyService.getAllowance(
-// 		wallet.publicKey,
+// 		wallet.address,
 // 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5'
 // 	);
 // 	console.log('XXX post approve', res.toString());
 // 	const did = wallet.did;
 // 	// gas = await ctx.paymentService.getGasLimit(
-// 	// 	wallet.publicKey,
+// 	// 	wallet.address,
 // 	// 	did,
 // 	// 	did,
 // 	// 	10000,
@@ -293,7 +261,7 @@ export default WalletService;
 // 	// console.log('XXX payment gas', gas);
 
 // 	res = await ctx.paymentService.makePayment(
-// 		wallet.publicKey,
+// 		wallet.address,
 // 		did,
 // 		did,
 // 		10000,
@@ -305,7 +273,7 @@ export default WalletService;
 // 	console.log('XXX payment res', res);
 
 // 	res = await ctx.selfkeyService.getAllowance(
-// 		wallet.publicKey,
+// 		wallet.address,
 // 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5'
 // 	);
 // 	console.log('XXX post payment', res.toString());

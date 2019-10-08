@@ -1,14 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { BigNumber } from 'bignumber.js';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorporations-component';
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
-import { walletSelectors } from 'common/wallet';
+import { identitySelectors } from 'common/identity';
 import { withStyles } from '@material-ui/core/styles';
-import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';
+import { marketplaceSelectors } from 'common/marketplace';
 import { IncorporationsDetailsPage } from './incorporations-details-page';
+import { getCryptoValue } from '../../../common/price-utils';
+import config from 'common/config';
 
 const styles = theme => ({});
 
@@ -19,18 +22,7 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 	};
 
 	async componentDidMount() {
-		const { program } = this.props;
-
-		if (!program) {
-			this.props.dispatch(incorporationsOperations.loadIncorporationsOperation());
-		}
-
-		this.loadRelyingParty({ rp: 'incorporations', authenticated: false });
-
-		this.loadTreaties();
-
-		this.loadCountry();
-
+		this.loadRelyingParty({ rp: this.props.vendorId, authenticated: false });
 		window.scrollTo(0, 0);
 	}
 
@@ -38,48 +30,48 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 
 	onTabChange = tab => this.setState({ tab });
 
-	buildResumeData = tax => {
+	buildResumeData = data => {
 		return [
 			[
 				{
 					name: 'Offshore Tax',
-					value: tax['Offshore Income Tax Rate'],
+					value: data.offshoreIncomeTaxRate,
 					highlighted: true
 				},
 				{
 					name: 'Dividends Received',
-					value: tax['Dividends Received'],
+					value: data.dividendsReceived,
 					highlighted: true
 				}
 			],
 			[
 				{
 					name: 'Corp Income',
-					value: tax['Corporate Tax Rate'],
+					value: data.corporateTaxRate,
 					highlighted: true
 				},
 				{
 					name: 'Dividends paid',
-					value: tax['Dividends Withholding Tax Rate'],
+					value: data.dividendsWithholdingTaxRate,
 					highlighted: true
 				}
 			],
 			[
 				{
 					name: 'Capital Gains',
-					value: tax['Capital Gains Tax Rate'],
+					value: data.capitalGainsTaxRate,
 					highlighted: true
 				},
 				{
 					name: 'Royalties paid',
-					value: tax['Royalties Withholding Tax Rate'],
+					value: data.royaltiesWithholdingTaxRate,
 					highlighted: true
 				}
 			],
 			[
 				{
 					name: 'Interests paid',
-					value: tax['Interests Withholding Tax Rate'],
+					value: data.interestsWithholdingTaxRate,
 					highlighted: true
 				}
 			]
@@ -102,28 +94,37 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 		return null;
 	};
 
+	priceInKEY = priceUSD => {
+		return new BigNumber(priceUSD).dividedBy(this.props.keyRate);
+	};
+
 	onApplyClick = () => {
-		const { rp, wallet } = this.props;
+		const { rp, identity, vendorId, program } = this.props;
 		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
 		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
+		const transactionNoKeyError = '/main/transaction-no-key-error';
 		const authenticated = true;
-
+		const keyPrice = this.priceInKEY(program.price);
+		const keyAvailable = new BigNumber(this.props.cryptoValue);
 		// When clicking the start process,
 		// we check if an authenticated kyc-chain session exists
 		// If it doesn't we trigger a new authenticated rp session
 		// and redirect to checkout route
 		// The loading state is used to disable the button while data is being loaded
 		this.setState({ loading: true }, async () => {
-			if (!wallet.isSetupFinished) {
+			if (keyPrice.gt(keyAvailable)) {
+				return this.props.dispatch(push(transactionNoKeyError));
+			}
+			if (!identity.isSetupFinished) {
 				return this.props.dispatch(push(selfkeyIdRequiredRoute));
 			}
-			if (!wallet.did) {
+			if (!identity.did) {
 				return this.props.dispatch(push(selfkeyDIDRequiredRoute));
 			}
 			if (!rp || !rp.authenticated) {
 				await this.props.dispatch(
 					kycOperations.loadRelyingParty(
-						'incorporations',
+						vendorId,
 						authenticated,
 						this.checkoutRoute(),
 						this.cancelRoute()
@@ -136,10 +137,16 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 	};
 
 	render() {
-		const { program, keyRate, kycRequirements, country, treaties } = this.props;
-		const { templateId } = this.props.match.params;
-		const countryCode = program['Country code'];
-		const region = program['Region'];
+		const {
+			program,
+			keyRate,
+			kycRequirements,
+			country,
+			treaties,
+			templateId,
+			countryCode
+		} = this.props;
+		const region = program.data.region;
 		const price = program.price;
 		return (
 			<IncorporationsDetailsPage
@@ -151,7 +158,7 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 				treaties={treaties}
 				price={price}
 				tab={this.state.tab}
-				resume={this.buildResumeData(program.tax)}
+				resume={this.buildResumeData(program.data)}
 				onTabChange={this.onTabChange}
 				keyRate={keyRate}
 				region={region}
@@ -175,26 +182,34 @@ IncorporationsDetailsContainer.propTypes = {
 };
 
 const mapStateToProps = (state, props) => {
-	const { companyCode, countryCode, templateId } = props.match.params;
+	const { companyCode, countryCode, templateId, vendorId } = props.match.params;
 	const notAuthenticated = false;
+	let primaryToken = {
+		...props,
+		cryptoCurrency: config.constants.primaryToken
+	};
 	return {
-		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
-		treaties: incorporationsSelectors.getTaxTreaties(state, countryCode),
-		country: incorporationsSelectors.getCountry(state, countryCode),
-		isLoading: incorporationsSelectors.getLoading(state),
+		companyCode,
+		countryCode,
+		templateId,
+		vendorId,
+		program: marketplaceSelectors.selectIncorporationByFilter(
+			state,
+			c => c.data.companyCode === companyCode
+		),
+		treaties: marketplaceSelectors.selectTaxTreatiesByCountryCode(state, countryCode),
+		country: marketplaceSelectors.selectCountryByCode(state, countryCode),
+		isLoading: marketplaceSelectors.isLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
-		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
-			'incorporations',
+			vendorId,
 			notAuthenticated
 		),
-		kycRequirements: kycSelectors.selectRequirementsForTemplate(
-			state,
-			'incorporations',
-			templateId
-		),
-		wallet: walletSelectors.getWallet(state)
+		kycRequirements: kycSelectors.selectRequirementsForTemplate(state, vendorId, templateId),
+		identity: identitySelectors.selectCurrentIdentity(state),
+		cryptoValue: getCryptoValue(state, primaryToken)
 	};
 };
 

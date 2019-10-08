@@ -88,7 +88,7 @@ module.exports = function(cradle) {
 			let keystoreFileName = path.basename(outputPath);
 			let keystoreFilePath = path.join(keystoreObject.address, keystoreFileName);
 			Wallet.create({
-				publicKey: keystoreObject.address,
+				address: keystoreObject.address,
 				keystoreFilePath: keystoreFilePath
 			})
 				.then(resp => {
@@ -97,7 +97,7 @@ module.exports = function(cradle) {
 					const newWallet = {
 						id: resp.id,
 						isSetupFinished: resp.isSetupFinished,
-						publicKey: keystoreObject.address,
+						address: keystoreObject.address,
 						privateKey: privateKey,
 						keystoreFilePath: keystoreFilePath
 					};
@@ -145,7 +145,7 @@ module.exports = function(cradle) {
 						}
 
 						Wallet.create({
-							publicKey: keystoreObject.address,
+							address: keystoreObject.address,
 							keystoreFilePath: ksFilePathToSave
 						})
 							.then(resp => {
@@ -153,7 +153,7 @@ module.exports = function(cradle) {
 								const newWallet = {
 									id: resp.id,
 									isSetupFinished: resp.isSetupFinished,
-									publicKey: keystoreObject.address,
+									address: keystoreObject.address,
 									privateKey: privateKey,
 									keystoreFilePath: ksFilePathToSave,
 									profile: 'local'
@@ -207,7 +207,7 @@ module.exports = function(cradle) {
 	// refactored
 	controller.prototype.unlockKeystoreFile = function(event, actionId, actionName, args) {
 		try {
-			let selectWalletPromise = Wallet.findByPublicKey(args.publicKey);
+			let selectWalletPromise = Wallet.findByPublicKey(args.address);
 			selectWalletPromise
 				.then(wallet => {
 					let keystoreFileFullPath = path.join(
@@ -223,7 +223,7 @@ module.exports = function(cradle) {
 								id: wallet.id,
 								isSetupFinished: wallet.isSetupFinished,
 								privateKey: privateKey,
-								publicKey: keystoreObject.address,
+								address: keystoreObject.address,
 								keystoreFilePath: wallet.keystoreFilePath,
 								profile: wallet.profile
 							};
@@ -259,11 +259,11 @@ module.exports = function(cradle) {
 	// refactored
 	controller.prototype.importPrivateKey = function(event, actionId, actionName, args) {
 		try {
-			let publicKey = ethereumjsUtil.privateToAddress(args.privateKey);
-			publicKey = publicKey.toString('hex');
+			let address = ethereumjsUtil.privateToAddress(args.privateKey);
+			address = address.toString('hex');
 
 			let privateKeyBuffer = Buffer.from(args.privateKey, 'hex');
-			let walletSelectPromise = Wallet.findByPublicKey(publicKey);
+			let walletSelectPromise = Wallet.findByPublicKey(address);
 			let profile = 'local';
 
 			walletSelectPromise
@@ -275,13 +275,13 @@ module.exports = function(cradle) {
 					} else {
 						Wallet.create({
 							profile,
-							publicKey
+							address
 						})
 							.then(resp => {
 								const newWallet = {
 									id: resp.id,
 									isSetupFinished: resp.isSetupFinished,
-									publicKey: publicKey,
+									address: address,
 									privateKey: privateKeyBuffer,
 									profile
 								};
@@ -334,7 +334,7 @@ module.exports = function(cradle) {
 					try {
 						keystorage.importFromFile(filePaths[0], keystoreObject => {
 							app.win.webContents.send(RPC_METHOD, actionId, actionName, null, {
-								publicKey: keystoreObject.address,
+								address: keystoreObject.address,
 								keystoreFilePath: filePaths[0]
 							});
 						});
@@ -912,16 +912,6 @@ module.exports = function(cradle) {
 			});
 	};
 
-	controller.prototype.findActiveWallets = function(event, actionId, actionName, args) {
-		Wallet.findActive()
-			.then(data => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-			})
-			.catch(error => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-			});
-	};
-
 	controller.prototype.findAllWalletsWithKeyStoreFile = function(
 		event,
 		actionId,
@@ -937,29 +927,9 @@ module.exports = function(cradle) {
 			});
 	};
 
-	controller.prototype.updateWalletprofilePicture = function(event, actionId, actionName, args) {
-		Wallet.updateProfilePicture(args)
-			.then(data => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-			})
-			.catch(error => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-			});
-	};
-
-	controller.prototype.getWalletProfilePicture = function(event, actionId, actionName, args) {
-		Wallet.selectProfilePictureById(args.id)
-			.then(data => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
-			})
-			.catch(error => {
-				app.win.webContents.send(RPC_METHOD, actionId, actionName, error, null);
-			});
-	};
-
 	controller.prototype.getWalletByPublicKey = async function(event, actionId, actionName, args) {
 		try {
-			let data = await Wallet.findByPublicKey(args.publicKey);
+			let data = await Wallet.findByPublicKey(args.address);
 			await store.dispatch(walletOperations.updateWalletWithBalance(data));
 
 			app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -1002,7 +972,7 @@ module.exports = function(cradle) {
 		Wallet.findById(data.walletId).then(wallet => {
 			WalletToken.findByTokenId(data.tokenId).then(tokens => {
 				store.dispatch(
-					walletTokensOperations.updateWalletTokensWithBalance(tokens, wallet.publicKey)
+					walletTokensOperations.updateWalletTokensWithBalance(tokens, wallet.address)
 				);
 			});
 		});
@@ -1070,7 +1040,7 @@ module.exports = function(cradle) {
 						store.dispatch(
 							walletTokensOperations.updateWalletTokensWithBalance(
 								data,
-								wallet.publicKey
+								wallet.address
 							)
 						);
 						app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
@@ -1195,11 +1165,11 @@ module.exports = function(cradle) {
 
 	controller.prototype.createHarwareWalletByAdress = function(event, actionId, actionName, args) {
 		try {
-			let publicKey = args.address;
+			let address = args.address;
 			let { profile } = args;
-			publicKey = publicKey.toString('hex');
+			address = address.toString('hex');
 
-			let walletSelectPromise = Wallet.findByPublicKey(publicKey);
+			let walletSelectPromise = Wallet.findByPublicKey(address);
 			walletSelectPromise
 				.then(wallet => {
 					if (wallet) {
@@ -1207,14 +1177,14 @@ module.exports = function(cradle) {
 						app.win.webContents.send(RPC_METHOD, actionId, actionName, null, wallet);
 					} else {
 						Wallet.create({
-							publicKey,
+							address,
 							profile
 						})
 							.then(resp => {
 								const newWallet = {
 									id: resp.id,
 									isSetupFinished: resp.isSetupFinished,
-									publicKey,
+									address,
 									profile
 								};
 								store.dispatch(walletOperations.updateWalletWithBalance(newWallet));
@@ -1263,9 +1233,9 @@ module.exports = function(cradle) {
 		actionName,
 		args
 	) {
-		TxHistory.findByPublicKeyAndTokenSymbol(args.publicKey, args.tokenSymbol, args.pager)
+		TxHistory.findByPublicKeyAndTokenSymbol(args.address, args.tokenSymbol, args.pager)
 			.then(data => {
-				data = { ...data, isSyncing: TxHistoryService.isSyncing(args.publicKey) };
+				data = { ...data, isSyncing: TxHistoryService.isSyncing(args.address) };
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
@@ -1279,13 +1249,9 @@ module.exports = function(cradle) {
 		actionName,
 		args
 	) {
-		TxHistory.findByPublicKeyAndContractAddress(
-			args.publicKey,
-			args.contractAddress,
-			args.pager
-		)
+		TxHistory.findByPublicKeyAndContractAddress(args.address, args.contractAddress, args.pager)
 			.then(data => {
-				data = { ...data, isSyncing: TxHistoryService.isSyncing(args.publicKey) };
+				data = { ...data, isSyncing: TxHistoryService.isSyncing(args.address) };
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {
@@ -1295,7 +1261,7 @@ module.exports = function(cradle) {
 
 	controller.prototype.syncTxHistoryByWallet = function(event, actionId, actionName, args) {
 		txHistoryService
-			.syncByWallet(args.publicKey, args.walletId, args.showProgress)
+			.syncByWallet(args.address, args.walletId, args.showProgress)
 			.then(data => {
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
@@ -1315,9 +1281,9 @@ module.exports = function(cradle) {
 	};
 
 	controller.prototype.getTxHistoryByPublicKey = function(event, actionId, actionName, args) {
-		TxHistory.findByPublicKey(args.publicKey, args.pager)
+		TxHistory.findByPublicKey(args.address, args.pager)
 			.then(data => {
-				data = { ...data, isSyncing: TxHistoryService.isSyncing(args.publicKey) };
+				data = { ...data, isSyncing: TxHistoryService.isSyncing(args.address) };
 				app.win.webContents.send(RPC_METHOD, actionId, actionName, null, data);
 			})
 			.catch(error => {

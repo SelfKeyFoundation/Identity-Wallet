@@ -1,40 +1,36 @@
 import { MarketplaceComponent } from '../../common/marketplace-component';
-import { incorporationsOperations } from 'common/incorporations';
 
 const MARKETPLACE_INCORPORATIONS_ROOT_PATH = '/main/marketplace-incorporation';
 
 export default class MarketplaceIncorporationsComponent extends MarketplaceComponent {
 	paymentCompleteRoute = () => {
-		const { countryCode, companyCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_INCORPORATIONS_ROOT_PATH}/payment-complete/${companyCode}/${countryCode}/${templateId}`;
+		const { countryCode, companyCode, templateId, vendorId } = this.props.match.params;
+		return `${MARKETPLACE_INCORPORATIONS_ROOT_PATH}/payment-complete/${companyCode}/${countryCode}/${templateId}/${vendorId}`;
 	};
 
 	payRoute = () => {
-		const { countryCode, companyCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_INCORPORATIONS_ROOT_PATH}/pay/${companyCode}/${countryCode}/${templateId}`;
+		const { countryCode, companyCode, templateId, vendorId } = this.props.match.params;
+		return `${MARKETPLACE_INCORPORATIONS_ROOT_PATH}/pay/${companyCode}/${countryCode}/${templateId}/${vendorId}`;
 	};
 
 	checkoutRoute = () => {
-		const { countryCode, companyCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_INCORPORATIONS_ROOT_PATH}/checkout/${companyCode}/${countryCode}/${templateId}`;
+		const { countryCode, companyCode, templateId, vendorId } = this.props.match.params;
+		return `${MARKETPLACE_INCORPORATIONS_ROOT_PATH}/checkout/${companyCode}/${countryCode}/${templateId}/${vendorId}`;
 	};
 
 	cancelRoute = () => {
-		const { countryCode, companyCode, templateId } = this.props.match.params;
-		return `${MARKETPLACE_INCORPORATIONS_ROOT_PATH}/details/${companyCode}/${countryCode}/${templateId}`;
+		const { companyCode, countryCode, templateId, vendorId } = this.props.match.params;
+		return this.detailsRoute({ companyCode, countryCode, templateId, vendorId });
 	};
 
-	listRoute = () => {
-		return MARKETPLACE_INCORPORATIONS_ROOT_PATH;
-	};
+	detailsRoute = ({ companyCode, countryCode, templateId, vendorId }) =>
+		`${MARKETPLACE_INCORPORATIONS_ROOT_PATH}/details/${companyCode}/${countryCode}/${templateId}/${vendorId}`;
 
-	rootPath = () => {
-		return this.listRoute();
-	};
+	listRoute = () => MARKETPLACE_INCORPORATIONS_ROOT_PATH;
 
-	manageApplicationsRoute = () => {
-		return `/main/selfkeyIdApplications`;
-	};
+	rootPath = () => this.listRoute();
+
+	manageApplicationsRoute = () => `/main/selfkeyIdApplications`;
 
 	getApplicationStatus = () => {
 		if (this.props.rp && this.props.rp.authenticated && this.userHasApplied()) {
@@ -46,34 +42,6 @@ export default class MarketplaceIncorporationsComponent extends MarketplaceCompo
 			return 'progress';
 		}
 		return null;
-	};
-
-	loadIncorporations = async () => {
-		if (!this.props.program) {
-			await this.props.dispatch(incorporationsOperations.loadIncorporationsOperation());
-		}
-	};
-
-	loadTreaties = async () => {
-		const { treaties } = this.props;
-		const { countryCode } = this.props.match.params;
-
-		if (!treaties || !treaties.length) {
-			this.props.dispatch(
-				await incorporationsOperations.loadIncorporationsTaxTreatiesOperation(countryCode)
-			);
-		}
-	};
-
-	loadCountry = async () => {
-		const { country } = this.props;
-		const { countryCode } = this.props.match.params;
-
-		if (!country) {
-			this.props.dispatch(
-				await incorporationsOperations.loadIncorporationsCountryOperation(countryCode)
-			);
-		}
 	};
 }
 

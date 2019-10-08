@@ -65,7 +65,8 @@ export const appTypes = {
 	APP_SET_AUTO_UPDATE_PROGRESS: 'app/auto/update/progress/SET',
 	APP_SET_AUTO_UPDATE_DOWNLOADED: 'app/auto/update/downloaded/SET',
 	APP_DOWNLOAD_UPDATE: 'app/update/DOWNLOAD',
-	APP_INSTALL_UPDATE: 'app/update/INSTALL'
+	APP_INSTALL_UPDATE: 'app/update/INSTALL',
+	APP_UNLOCK_WALLET: 'app/unlock/wallet'
 };
 
 const appActions = {
@@ -137,13 +138,20 @@ const loadWallets = () => async dispatch => {
 	}
 };
 
+const unlockWalletOperation = (wallet, type) => async dispatch => {
+	await dispatch(walletOperations.updateWalletWithBalance(wallet));
+	await dispatch(identityOperations.loadIdentitiesOperation(wallet.id));
+	await dispatch(identityOperations.unlockIdentityOperation());
+	if (type) {
+		await dispatch(appActions.setWalletType(type));
+	}
+};
+
 const unlockWalletWithPassword = (walletId, password) => async dispatch => {
 	const walletService = getGlobalContext().walletService;
 	try {
 		const wallet = await walletService.unlockWalletWithPassword(walletId, password);
-		await dispatch(walletOperations.updateWalletWithBalance(wallet));
-		await dispatch(identityOperations.unlockIdentityOperation(wallet.id));
-		await dispatch(appActions.setWalletType('existingAddress'));
+		await dispatch(appOperations.unlockWalletOperation(wallet, 'existingAddress'));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
@@ -156,9 +164,7 @@ const unlockWalletWithNewFile = (filePath, password) => async dispatch => {
 	const walletService = getGlobalContext().walletService;
 	try {
 		const wallet = await walletService.unlockWalletWithNewFile(filePath, password);
-		await dispatch(walletOperations.updateWalletWithBalance(wallet));
-		await dispatch(identityOperations.unlockIdentityOperation(wallet.id));
-		await dispatch(appActions.setWalletType('newAddress'));
+		await dispatch(appOperations.unlockWalletOperation(wallet, 'newAddress'));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
@@ -171,9 +177,7 @@ const unlockWalletWithPrivateKey = privateKey => async dispatch => {
 	const walletService = getGlobalContext().walletService;
 	try {
 		const wallet = await walletService.unlockWalletWithPrivateKey(privateKey);
-		await dispatch(walletOperations.updateWalletWithBalance(wallet));
-		await dispatch(identityOperations.unlockIdentityOperation(wallet.id));
-		await dispatch(appActions.setWalletType('privateKey'));
+		await dispatch(appOperations.unlockWalletOperation(wallet, 'privateKey'));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
@@ -181,13 +185,12 @@ const unlockWalletWithPrivateKey = privateKey => async dispatch => {
 	}
 };
 
-const unlockWalletWithPublicKey = (publicKey, path) => async (dispatch, getState) => {
+const unlockWalletWithPublicKey = (address, path) => async (dispatch, getState) => {
 	const walletService = getGlobalContext().walletService;
 	const walletType = selectApp(getState()).walletType;
 	try {
-		const wallet = await walletService.unlockWalletWithPublicKey(publicKey, path, walletType);
-		await dispatch(walletOperations.updateWalletWithBalance(wallet));
-		await dispatch(identityOperations.unlockIdentityOperation(wallet.id));
+		const wallet = await walletService.unlockWalletWithPublicKey(address, path, walletType);
+		await dispatch(appOperations.unlockWalletOperation(wallet));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
@@ -359,7 +362,8 @@ const operations = {
 	networkStatusUpdateOperation,
 	startAutoUpdate,
 	downloadUpdate,
-	installUpdate
+	installUpdate,
+	unlockWalletOperation
 };
 
 const appOperations = {
@@ -421,6 +425,10 @@ const appOperations = {
 	installUpdateOperation: createAliasedAction(
 		appTypes.APP_INSTALL_UPDATE,
 		operations.installUpdate
+	),
+	unlockWalletOperation: createAliasedAction(
+		appTypes.APP_UNLOCK_WALLET,
+		operations.unlockWalletOperation
 	)
 };
 

@@ -2,7 +2,7 @@ const tools = require('../../../utils/tools.js');
 const data = require('../../../data/data.json');
 const delay = require('delay');
 
-let publicKey;
+let address;
 let privateKey;
 
 export const givenUserHasOpenedTheMarketplaceScreen = given => {
@@ -22,7 +22,7 @@ export const givenUserHasOpenedTheMarketplaceScreen = given => {
 			.then(() => delay(2000))
 			.then(() => tools.app.client.getValue('#publicKey'))
 			.then(pubKey => {
-				publicKey = pubKey;
+				address = pubKey;
 				return tools.regStep(tools.app, '#keystoreNext');
 			})
 			.then(() => tools.app.client.getValue('#privateKey'))
@@ -62,7 +62,7 @@ export const givenUserHasOpenedTheBankAccountsScreen = given => {
 			.then(() => delay(2000))
 			.then(() => tools.app.client.getValue('#publicKey'))
 			.then(pubKey => {
-				publicKey = pubKey;
+				address = pubKey;
 				return tools.regStep(tools.app, '#keystoreNext');
 			})
 			.then(() => tools.app.client.getValue('#privateKey'))
@@ -97,7 +97,7 @@ export const givenUserHasOpenedTheJurisdictionDetailedScreen = given => {
 			.then(() => delay(2000))
 			.then(() => tools.app.client.getValue('#publicKey'))
 			.then(pubKey => {
-				publicKey = pubKey;
+				address = pubKey;
 				return tools.regStep(tools.app, '#keystoreNext');
 			})
 			.then(() => tools.app.client.getValue('#privateKey'))
@@ -119,7 +119,7 @@ export const givenUserHasOpenedTheJurisdictionDetailedScreen = given => {
 };
 
 export const getPublicKey = () => {
-	return publicKey;
+	return address;
 };
 
 export const getPrivateKey = () => {

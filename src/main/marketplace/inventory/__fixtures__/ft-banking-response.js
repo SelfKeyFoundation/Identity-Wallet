@@ -59,6 +59,7 @@ export default () => ({
 				id: 'recJnaoYzOsieepcC',
 				fields: {
 					TemplateId: '5d09d11c26f7be563f7e0650',
+					bankCode: 'AD1b1',
 					accountCode: 'AD1b',
 					countryCode: 'AD',
 					countryName: 'Andorra',

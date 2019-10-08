@@ -24,6 +24,26 @@ const getWalletsDir = () => {
 	return path.resolve(getUserDataPath(), 'wallets');
 };
 
+const setImmediatePromise = () =>
+	new Promise(resolve => {
+		setImmediate(() => resolve());
+	});
+
+const mapKeysAsync = async (obj, fn) => {
+	const newObj = {};
+	for (const key in obj) {
+		if (!obj.hasOwnProperty(key)) continue;
+		newObj[fn(obj[key], key)] = obj[key];
+		await setImmediatePromise();
+	}
+	return newObj;
+};
+
+const arrayChunks = (arr, size) =>
+	Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+		arr.slice(i * size, i * size + size)
+	);
+
 module.exports = {
 	isDevMode,
 	isTestMode,
@@ -31,5 +51,8 @@ module.exports = {
 	isElectronApp,
 	getUserDataPath,
 	getSetupFilePath,
-	getWalletsDir
+	getWalletsDir,
+	mapKeysAsync,
+	arrayChunks,
+	setImmediatePromise
 };

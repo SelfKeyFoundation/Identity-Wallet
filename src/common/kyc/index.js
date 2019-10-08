@@ -1,5 +1,4 @@
-import * as serviceSelectors from '../exchanges/selectors';
-import * as walletSelectors from '../wallet/selectors';
+import { marketplaceSelectors } from '../marketplace';
 import { appSelectors } from '../app';
 import { identitySelectors } from '../identity';
 import { getGlobalContext } from '../context';
@@ -42,18 +41,19 @@ export const kycTypes = {
 	KYC_APPLICATIONS_UPDATE: 'kyc/applications/update',
 	KYC_APPLICATIONS_PROCESSING: 'kyc/applications/processing',
 	KYC_APPLICATIONS_PROCESSING_SET: 'kyc/applications/set/processing',
-	KYC_APPLICATIONS_RESET: 'kyc/applications/reset'
+	KYC_APPLICATIONS_RESET: 'kyc/applications/reset',
+	KYC_APPLICATIONS_REFRESH: 'kyc/applications/refresh'
 };
 
-const incorporationsRPDetails = {
-	name: 'Incorporations',
-	status: 'Active',
-	description: 'Incorporations',
-	relying_party_config: {
-		rootEndpoint: config.incorporationsInstance,
+const devRPDetails = {
+	name: 'Dev',
+	status: config.kyccUrlOverride ? 'active' : 'inactive',
+	description: 'Dev',
+	relyingPartyConfig: {
+		rootEndpoint: config.kyccUrlOverride,
 		did: true,
 		endpoints: {
-			'/templates/:id': `${config.incorporationsInstance}templates/:id?format=minimum`
+			'/templates/:id': `${config.kyccUrlOverride}templates/:id?format=minimum`
 		}
 	}
 };
@@ -61,6 +61,9 @@ const incorporationsRPDetails = {
 export const kycSelectors = {
 	kycSelector(state) {
 		return state.kyc;
+	},
+	relyingPartiesSelector(state) {
+		return this.kycSelector(state).relyingPartiesByName;
 	},
 	relyingPartySelector(state, rpName) {
 		if (!rpName) return null;
@@ -72,16 +75,14 @@ export const kycSelectors = {
 		if (rp && !rp.disabled) {
 			return true;
 		}
-		let service;
-		if (rpName === 'incorporations') {
-			service = { ...incorporationsRPDetails };
-		} else {
-			service = serviceSelectors.getServiceDetails(state, rpName);
+		let service = marketplaceSelectors.selectRPDetails(state, rpName);
+
+		if (devRPDetails.status === 'active') {
+			service = { ...devRPDetails };
 		}
 
-		const rpConfig = service.relying_party_config;
-
-		return service.status === 'Active' && rpConfig;
+		const rpConfig = service.relyingPartyConfig;
+		return service.status === 'active' && rpConfig;
 	},
 	relyingPartyShouldUpdateSelector(state, rpName, authenticate = true) {
 		if (!this.relyingPartyIsActiveSelector(state, rpName)) return false;
@@ -119,9 +120,9 @@ export const kycSelectors = {
 			acc[curr.schemaId] = [];
 			return acc;
 		}, {});
-		const wallet = walletSelectors.getWallet(state);
+		const identity = identitySelectors.selectCurrentIdentity(state);
 		const walletAttributes = identitySelectors
-			.selectFullIdAttributesByIds(state, wallet.id)
+			.selectFullIdAttributesByIds(state, identity.id)
 			.reduce((acc, curr) => {
 				if (!curr || !curr.type || !curr.type.url) return acc;
 				if (!acc.hasOwnProperty(curr.type.url)) return acc;
@@ -157,9 +158,13 @@ export const kycSelectors = {
 			};
 		});
 	},
-	selectKYCAttributes(state, walletId, attributes = []) {
+	selectKYCAttributes(state, identityId, attributes = []) {
 		const kycAttributes = identitySelectors
-			.selectFullIdAttributesByIds(state, walletId, attributes.map(attr => attr.attributeId))
+			.selectFullIdAttributesByIds(
+				state,
+				identityId,
+				attributes.map(attr => attr.attributeId)
+			)
 			.reduce((acc, curr) => {
 				acc[curr.id] = curr;
 				return acc;
@@ -317,20 +322,27 @@ const loadRelyingPartyOperation = (
 	afterAuthRoute,
 	cancelRoute
 ) => async (dispatch, getState) => {
-	const walletType = appSelectors.selectApp(getState()).walletType;
+	const state = getState();
+	const walletType = appSelectors.selectApp(state).walletType;
 	if (!rpName) return null;
 
-	const wallet = walletSelectors.getWallet(getState());
-	if (!wallet) return;
+	const identity = identitySelectors.selectCurrentIdentity(state);
+	if (!identity) return;
 
 	const ts = Date.now();
-	let rp;
-	if (rpName === 'incorporations') {
-		rp = { ...incorporationsRPDetails };
-	} else {
-		rp = serviceSelectors.getServiceDetails(getState(), rpName);
+
+	let rp = marketplaceSelectors.selectRPDetails(state, rpName);
+
+	if (devRPDetails.status === 'active') {
+		console.log('Selecting dev RP');
+		rp = { ...devRPDetails };
 	}
-	const config = rp.relying_party_config;
+
+	const config = rp.relyingPartyConfig;
+	if (!config.rootEndpoint) {
+		console.log('Empty RP config object');
+		return;
+	}
 
 	try {
 		await dispatch(kycActions.setCancelRoute(cancelRoute));
@@ -349,21 +361,19 @@ const loadRelyingPartyOperation = (
 		if (authenticate) {
 			applications = await session.listKYCApplications();
 			for (const application of applications) {
+				const template = templates.find(t => t.id === application.template);
+
 				await dispatch(
 					kycOperations.updateApplicationsOperation({
 						id: application.id,
-						walletId: wallet.id,
+						identityId: identity.id,
 						rpName: rpName,
 						currentStatus: application.currentStatus,
 						currentStatusName: application.statusName,
 						owner: application.owner,
 						scope: application.scope,
 						applicationDate: application.createdAt,
-						// TODO: this is only a workaround for now, we must change this in the future
-						title:
-							Object.keys(application.questions).length > 0
-								? 'Bank Account'
-								: 'Incorporation'
+						title: template ? template.name : rpName
 					})
 				);
 			}
@@ -391,7 +401,7 @@ const loadRelyingPartyOperation = (
 			await dispatch(push(afterAuthRoute));
 		}
 	} catch (error) {
-		log.error('loadRelyingParty %s', error);
+		log.error('Error loadRelyingParty %s', error);
 		await dispatch(
 			kycActions.updateRelyingParty(
 				{
@@ -414,14 +424,14 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 		throw new Error('template does not exist');
 	}
 
-	const wallet = walletSelectors.getWallet(getState());
-	if (!wallet) return;
+	const identity = identitySelectors.selectCurrentIdentity(getState());
+	if (!identity) return;
 
 	if (!rp.session.isActive()) {
 		await rp.session.establish();
 	}
 
-	attributes = kycSelectors.selectKYCAttributes(getState(), wallet.id, attributes);
+	attributes = kycSelectors.selectKYCAttributes(getState(), identity.id, attributes);
 	try {
 		let application = await rp.session.createKYCApplication(templateId, attributes);
 		application = await rp.session.getKYCApplication(application.id);
@@ -430,7 +440,7 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 		await dispatch(
 			kycOperations.updateApplicationsOperation({
 				id: application.id,
-				walletId: wallet.id,
+				identityId: identity.id,
 				rpName: rpName,
 				currentStatus: application.currentStatus,
 				currentStatusName: application.statusName,
@@ -446,6 +456,26 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 	}
 };
 
+const refreshRelyingPartyForKycApplication = (application, afterAuthRoute, cancelRoute) => async (
+	dispatch,
+	getState
+) => {
+	await dispatch(
+		kycOperations.loadRelyingParty(application.rpName, true, afterAuthRoute, cancelRoute)
+	);
+
+	const rp = kycSelectors.relyingPartySelector(getState(), application.rpName);
+	const kycApplication = rp.applications.find(app => app.id === application.id);
+	await dispatch(
+		kycOperations.updateApplicationsOperation({
+			id: application.id,
+			currentStatus: kycApplication.currentStatus,
+			currentStatusName: kycApplication.statusName,
+			updatedAt: kycApplication.updatedAt
+		})
+	);
+};
+
 const updateRelyingPartyKYCApplication = (
 	rpName,
 	templateId,
@@ -459,8 +489,8 @@ const updateRelyingPartyKYCApplication = (
 		throw new Error('template does not exist');
 	}
 
-	const wallet = walletSelectors.getWallet(getState());
-	if (!wallet) return;
+	const identity = identitySelectors.selectCurrentIdentity(getState());
+	if (!identity) return;
 
 	if (!rp.session.isActive()) {
 		await rp.session.establish();
@@ -469,7 +499,7 @@ const updateRelyingPartyKYCApplication = (
 	const updatedApplication = { id: applicationId, templateId };
 
 	if (attributes) {
-		attributes = kycSelectors.selectKYCAttributes(getState(), wallet.id, attributes);
+		attributes = kycSelectors.selectKYCAttributes(getState(), identity.id, attributes);
 		updatedApplication.attributes = attributes;
 	}
 	if (questions) {
@@ -484,7 +514,7 @@ const updateRelyingPartyKYCApplication = (
 		await dispatch(
 			kycOperations.updateApplicationsOperation({
 				id: application.id,
-				walletId: wallet.id,
+				identityId: identity.id,
 				rpName: rpName,
 				currentStatus: application.currentStatus,
 				currentStatusName: application.statusName,
@@ -643,10 +673,10 @@ const clearRelyingPartyOperation = () => async dispatch => {
 };
 
 const loadApplicationsOperation = () => async (dispatch, getState) => {
-	const wallet = walletSelectors.getWallet(getState());
+	const identity = identitySelectors.selectCurrentIdentity(getState());
 	let kycApplicationService = getGlobalContext().kycApplicationService;
 	await dispatch(kycActions.setProcessingAction(true));
-	let applications = await kycApplicationService.load(wallet.id);
+	let applications = await kycApplicationService.load(identity.id);
 	let sortedApplications = applications.sort((d1, d2) => {
 		d1 = d1.createdAt ? new Date(d1.createdAt).getTime() : 0;
 		d2 = d2.createdAt ? new Date(d2.createdAt).getTime() : 0;
@@ -716,6 +746,10 @@ export const kycOperations = {
 	resetApplications: createAliasedAction(
 		kycTypes.KYC_APPLICATIONS_RESET,
 		resetApplicationsOperation
+	),
+	refreshRelyingPartyForKycApplication: createAliasedAction(
+		kycTypes.KYC_APPLICATIONS_REFRESH,
+		refreshRelyingPartyForKycApplication
 	)
 };
 

@@ -22,6 +22,7 @@ import identity from '../identity';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import history from './history';
 import createWallet from '../create-wallet';
+import did from '../did';
 import transactionHistory from '../transaction-history';
 import app from '../app';
 import gas from '../gas';
@@ -86,6 +87,7 @@ export default (initialState, scope = 'main') => {
 		kyc,
 		tokens,
 		scheduler,
+		did,
 		...scopedReducers
 	});
 	const enhancer = compose(...enhanced);

@@ -179,7 +179,7 @@ describe('address book operations', () => {
 			isValidAddress() {}
 		};
 		const wallet = {
-			publicKey: '0xdasdas'
+			address: '0xdasdas'
 		};
 
 		const entries = [

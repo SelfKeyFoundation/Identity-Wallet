@@ -39,26 +39,26 @@ export class LWSService {
 
 	async reqWallets(msg, conn) {
 		const { website, did } = msg.payload.config;
-		let payload = await Wallet.findAll();
+		let payload = await Wallet.findAll().eager('identities');
 		payload = await Promise.all(
 			payload.map(async w => {
-				let unlocked = !!conn.getIdentity(w.publicKey);
+				const identity = conn.getIdentity(w.address);
+				let unlocked = !!identity;
 				let signedUp = unlocked && (await w.hasSignedUpTo(website.url));
 				const retWallet = {
-					publicKey: w.publicKey,
+					publicKey: w.address,
 					unlocked,
 					profile: w.profile,
 					name: w.name,
 					signedUp
 				};
 				if (unlocked) {
-					retWallet.hasSelfkeyId = w.isSetupFinished;
-					if (did) {
-						retWallet.did = w.did
-							? `did:selfkey:${w.did.replace('did:selfkey:', '')}`
-							: null;
+					retWallet.hasSelfkeyId = identity.ident.isSetupFinished;
+					if (did && identity.did) {
+						retWallet.did = identity.did;
 					}
 				}
+
 				return retWallet;
 			})
 		);
@@ -73,11 +73,11 @@ export class LWSService {
 	getHardwareWalletsPayload(wallets, conn, website, type) {
 		return Promise.all(
 			wallets.map(async w => {
-				let unlocked = !!conn.getIdentity(w.publicKey);
-				const wallet = Wallet.findByPublicKey(w.publicKey);
+				let unlocked = !!conn.getIdentity(w.address);
+				const wallet = Wallet.findByPublicKey(w.address);
 				let signedUp = unlocked && wallet && (await wallet.hasSignedUpTo(website.url));
 				return {
-					publicKey: w.publicKey,
+					publicKey: w.address,
 					unlocked,
 					profile: type,
 					signedUp
@@ -178,25 +178,25 @@ export class LWSService {
 	async reqUnlock(msg, conn) {
 		const { publicKey, password, config, profile, path } = msg.payload;
 		let payload = { publicKey, unlocked: false };
-		let wallet = await Wallet.findByPublicKey(publicKey);
+		let wallet = await Wallet.findByPublicKey(publicKey).eager('identities');
+		const ident = wallet.getDefaultIdentity();
+		log.debug('XXX reqUnlock ident %2j', ident);
 		wallet = !wallet
 			? await Wallet.create({
-					publicKey,
+					address: publicKey,
 					profile,
 					path
 			  })
 			: wallet;
-		let identity = new Identity(wallet);
+		let identity = new Identity(wallet, ident);
 		payload.profile = identity.profile;
 		try {
 			await identity.unlock({ password });
 			conn.addIdentity(publicKey, identity);
 			payload.unlocked = true;
-			payload.hasSelfkeyId = wallet.isSetupFinished;
+			payload.hasSelfkeyId = ident.isSetupFinished;
 			if (config.did) {
-				payload.did = wallet.did
-					? `did:selfkey:${wallet.did.replace('did:selfkey:', '')}`
-					: null;
+				payload.did = identity.did || null;
 			}
 			payload.name = wallet.name;
 			payload.signedUp = await wallet.hasSignedUpTo(config.website.url);
@@ -556,12 +556,12 @@ export class WSConnection {
 		};
 	}
 
-	addIdentity(publicKey, identity) {
-		this.ctx.identities[publicKey] = identity;
+	addIdentity(address, identity) {
+		this.ctx.identities[address] = identity;
 	}
 
-	getIdentity(publicKey) {
-		return this.ctx.identities[publicKey] || null;
+	getIdentity(address) {
+		return this.ctx.identities[address] || null;
 	}
 
 	async handleMessage(msg) {

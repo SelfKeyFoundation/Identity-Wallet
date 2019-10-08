@@ -4,7 +4,7 @@ import { Grid, Button, withStyles, Typography } from '@material-ui/core';
 
 const styles = theme => ({
 	root: {
-		width: '360px',
+		width: '340px',
 		height: '326px',
 		marginTop: '30px',
 		marginBottom: '30px',
@@ -24,7 +24,9 @@ const styles = theme => ({
 
 	header: {
 		backgroundColor: '#2a3540',
-		height: '76px'
+		borderRadius: '3px 3px 0 0',
+		height: '76px',
+		width: '338px'
 	},
 
 	svgIcon: {
@@ -33,7 +35,7 @@ const styles = theme => ({
 	},
 
 	body: {
-		width: '320px',
+		width: '300px',
 		textAlign: 'left',
 		margin: '20px',
 		color: '#fff',
@@ -48,6 +50,16 @@ const styles = theme => ({
 		margin: '20px',
 		'& button': {
 			fontSize: '10px'
+		}
+	},
+
+	'@media screen and (min-width: 1230px)': {
+		root: {
+			width: '360px'
+		},
+
+		header: {
+			width: '358px'
 		}
 	}
 });

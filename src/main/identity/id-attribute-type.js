@@ -1,14 +1,14 @@
 import { Model, transaction } from 'objection';
 import BaseModel from '../common/base-model';
-import RefParser from 'json-schema-ref-parser';
-import fetch from 'node-fetch';
+import config from 'common/config';
+import { jsonSchema } from 'common/identity/utils';
 import { Logger } from 'common/logger';
-
+const env = config.attributeTypeSource;
 const log = new Logger('id-attribute-type-model');
 
 const TABLE_NAME = 'id_attribute_types';
 
-const ID_ATTROBUTE_TYPE_EXPIRES = 86400000; // 1 day
+const ID_ATTRIBUTE_TYPE_EXPIRES = 86400000; // 1 day
 
 export class IdAttributeType extends BaseModel {
 	static get tableName() {
@@ -28,7 +28,8 @@ export class IdAttributeType extends BaseModel {
 				url: { type: 'string' },
 				defaultRepositoryId: { type: 'integer' },
 				content: { type: 'object' },
-				expires: { type: 'integer' }
+				expires: { type: 'integer' },
+				env: { type: 'string', enum: ['production', 'development'], default: env }
 			}
 		};
 	}
@@ -79,7 +80,7 @@ export class IdAttributeType extends BaseModel {
 	}
 
 	static create(data, tx) {
-		return this.query(tx).insertAndFetch(data);
+		return this.query(tx).insertAndFetch({ ...data, env });
 	}
 
 	static findById(id, tx) {
@@ -87,32 +88,29 @@ export class IdAttributeType extends BaseModel {
 	}
 
 	static findAll(tx) {
-		return this.query(tx);
+		return this.query(tx).where({ env });
 	}
 
 	static findByUrl(url, tx) {
-		return this.query(tx).findOne({ url });
+		return this.query(tx).findOne({ url, env });
 	}
 
 	static async loadRemote(url) {
 		const Repository = require('./repository').default;
 		let defaultRepo = null;
-		let res = await fetch(url);
-		if (res.status >= 400) {
-			throw new Error('Failed to fetch repository from remote');
-		}
-		let remote = await res.json();
-		remote = await RefParser.dereference(remote);
-		if (remote.identityAttributeRepository) {
-			defaultRepo = await Repository.findByUrl(remote.identityAttributeRepository);
+		let remote = await jsonSchema.loadRemoteSchema(url, { env });
+		remote = await jsonSchema.dereference(remote, { env });
+		let repoUrl = jsonSchema.getDefaultRepo(remote, { env });
+		if (repoUrl) {
+			defaultRepo = await Repository.findByUrl(repoUrl);
 			if (!defaultRepo) {
-				defaultRepo = await Repository.addRemoteRepo(remote.identityAttributeRepository);
+				defaultRepo = await Repository.addRemoteRepo(repoUrl);
 			}
 		}
 		let remoteAttrType = {
 			url,
 			content: remote,
-			expires: Date.now() + (remote.expires || ID_ATTROBUTE_TYPE_EXPIRES)
+			expires: Date.now() + (remote.expires || ID_ATTRIBUTE_TYPE_EXPIRES)
 		};
 		if (defaultRepo) remoteAttrType.defaultRepositoryId = defaultRepo.id;
 		return remoteAttrType;

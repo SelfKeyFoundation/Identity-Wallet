@@ -26,21 +26,26 @@ const styles = theme => ({
 		transform: 'rotate(-60deg)',
 		visibility: 'visible',
 		width: '100%'
+	},
+	smallAvatar: {
+		borderRadius: '50%'
 	}
 });
 
-export const HexagonAvatar = withStyles(styles)(({ classes, src = avatarPlaceholder, onClick }) => (
-	<div className={classes.hexagon} onClick={onClick}>
-		<div className={classes.hexagonIn}>
-			<div
-				className={classes.hexagonIn2}
-				style={{
-					backgroundImage: `url(${src === null ? avatarPlaceholder : src})`,
-					backgroundSize: src === null ? 'auto' : 'cover'
-				}}
-			/>
+export const HexagonAvatar = withStyles(styles)(
+	({ classes, smallAvatar = false, src = avatarPlaceholder, onClick, className }) => (
+		<div className={`${classes.hexagon} ${className}`} onClick={onClick}>
+			<div className={classes.hexagonIn}>
+				<div
+					className={`${classes.hexagonIn2} ${smallAvatar ? classes.smallAvatar : ''}`}
+					style={{
+						backgroundImage: `url(${src === null ? avatarPlaceholder : src})`,
+						backgroundSize: src === null ? 'auto' : 'cover'
+					}}
+				/>
+			</div>
 		</div>
-	</div>
-));
+	)
+);
 
 export default HexagonAvatar;
