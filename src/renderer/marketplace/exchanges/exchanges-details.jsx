@@ -232,7 +232,7 @@ const styles = theme => ({
 	}
 });
 
-class MarketplaceServiceDetailsComponent extends Component {
+class ExchangesDetailsComponent extends Component {
 	getLastApplication = () => {
 		const { relyingParty } = this.props;
 		// const { templateId } = this.props.match.params;
@@ -673,6 +673,6 @@ class MarketplaceServiceDetailsComponent extends Component {
 	}
 }
 
-export const MarketplaceServiceDetails = withStyles(styles)(MarketplaceServiceDetailsComponent);
+export const ExchangesDetails = withStyles(styles)(ExchangesDetailsComponent);
 
-export default MarketplaceServiceDetails;
+export default ExchangesDetails;
