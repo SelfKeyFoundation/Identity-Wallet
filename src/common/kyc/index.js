@@ -339,6 +339,10 @@ const loadRelyingPartyOperation = (
 	}
 
 	const config = rp.relyingPartyConfig;
+	if (!config.rootEndpoint) {
+		console.log('Empty RP config object');
+		return;
+	}
 
 	try {
 		await dispatch(kycActions.setCancelRoute(cancelRoute));
