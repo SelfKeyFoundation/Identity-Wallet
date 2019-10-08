@@ -207,7 +207,7 @@ const ProfileList = withStyles(profileStyle)(
 		onProfileSelect,
 		onClickCorporate,
 		closeProfile,
-		selectedProfileId,
+		selectedProfile,
 		showCorporate
 	}) => {
 		return (
@@ -215,8 +215,9 @@ const ProfileList = withStyles(profileStyle)(
 				<ClickAwayListener onClickAway={closeProfile}>
 					<div className={classes.profile}>
 						{profiles &&
-							profiles.map((el, index) =>
-								el.id !== selectedProfileId ? (
+							profiles
+								.filter(el => el.id !== selectedProfile.id)
+								.map((el, index) => (
 									<Grid
 										container
 										key={index}
@@ -247,10 +248,7 @@ const ProfileList = withStyles(profileStyle)(
 											</Typography>
 										</Grid>
 									</Grid>
-								) : (
-									''
-								)
-							)}
+								))}
 						{showCorporate && (
 							<React.Fragment>
 								<Grid className={classes.profileFooter}>
@@ -413,7 +411,7 @@ class Toolbar extends Component {
 						onProfileSelect={onProfileSelect}
 						closeProfile={closeProfile}
 						showCorporate={showCorporate}
-						selectedProfileId={selectedProfile.id}
+						selectedProfile={selectedProfile}
 					/>
 				</Grid>
 			</div>
