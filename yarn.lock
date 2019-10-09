@@ -17195,7 +17195,7 @@ proxy-addr@~2.0.5:
     forwarded "~0.1.2"
     ipaddr.js "1.9.0"
 
-proxy-agent@*, proxy-agent@^3.1.0:
+proxy-agent@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/proxy-agent/-/proxy-agent-3.1.0.tgz#3cf86ee911c94874de4359f37efd9de25157c113"
   integrity sha512-IkbZL4ClW3wwBL/ABFD2zJ8iP84CY0uKMvBPk/OceQe/cEjrxzN1pMHsLwhbzUoRhG9QbSxYC+Z7LBkTiBNvrA==
@@ -17674,15 +17674,15 @@ react-is@^16.8.5:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.5.tgz#c54ac229dd66b5afe0de5acbe47647c3da692ff8"
   integrity sha512-sudt2uq5P/2TznPV4Wtdi+Lnq3yaYW8LfvPKLM9BKD8jJNBkxMVyB0C9/GmVhLw7Jbdmndk/73n7XQGeN9A3QQ==
 
-"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#3f42a8826fb2d8ee1be300757a69e072d1ee6482":
+"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#f0fea4b7bebebad01e275686548cc4cf779f785f":
   version "0.0.1"
-  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#3f42a8826fb2d8ee1be300757a69e072d1ee6482"
+  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#f0fea4b7bebebad01e275686548cc4cf779f785f"
   dependencies:
     ajv "^6.5.5"
     lodash.topath "^4.5.2"
     mime "^2.4.0"
     react-jsonschema-form "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f"
-    selfkey-ui "https://github.com/SelfKeyFoundation/selfkey-ui.git#1d0e02a16881053e4085285a6e813faa93da8b13"
+    selfkey-ui "https://github.com/SelfKeyFoundation/selfkey-ui.git#master"
     snyk "^1.189.0"
     svg-inline-loader "^0.8.0"
 
@@ -19062,37 +19062,6 @@ select@^1.1.2:
   resolved "https://registry.yarnpkg.com/select/-/select-1.1.2.tgz#0e7350acdec80b1108528786ec1d4418d11b396d"
   integrity sha1-DnNQrN7ICxEIUoeG7B1EGNEbOW0=
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#1d0e02a16881053e4085285a6e813faa93da8b13":
-  version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#1d0e02a16881053e4085285a6e813faa93da8b13"
-  dependencies:
-    "@material-ui/core" "3.9.2"
-    "@material-ui/icons" "3.0.2"
-    "@material-ui/lab" "3.0.0-alpha.29"
-    "@types/classnames" "^2.2.7"
-    "@types/google.visualization" "0.0.46"
-    "@types/react-dom" "16.0.11"
-    bignumber.js "8.0.1"
-    classnames "^2.2.6"
-    jss "9.8.7"
-    jss-compose "5.0.0"
-    jss-expand "5.3.0"
-    jss-extend "6.2.0"
-    jss-global "3.0.0"
-    jss-preset-default "4.5.0"
-    jss-template "1.0.1"
-    lodash "4.17.13"
-    moment "^2.23.0"
-    react "16.6.3"
-    react-copy-to-clipboard "5.0.1"
-    react-datetime "^2.16.3"
-    react-dom "16.6.3"
-    react-google-charts "3.0.10"
-    react-jss "8.6.1"
-    react-truncate "2.4.0"
-    reset-jss "1.0.0"
-    snyk "^1.193.2"
-
 "selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#fee59787132eafe315352b9d21e95cc7b448a422":
   version "1.0.0"
   resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#fee59787132eafe315352b9d21e95cc7b448a422"
@@ -19113,6 +19082,37 @@ select@^1.1.2:
     jss-preset-default "4.5.0"
     jss-template "1.0.1"
     lodash "4.17.11"
+    moment "^2.23.0"
+    react "16.6.3"
+    react-copy-to-clipboard "5.0.1"
+    react-datetime "^2.16.3"
+    react-dom "16.6.3"
+    react-google-charts "3.0.10"
+    react-jss "8.6.1"
+    react-truncate "2.4.0"
+    reset-jss "1.0.0"
+    snyk "^1.193.2"
+
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#master":
+  version "1.0.0"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#1d0e02a16881053e4085285a6e813faa93da8b13"
+  dependencies:
+    "@material-ui/core" "3.9.2"
+    "@material-ui/icons" "3.0.2"
+    "@material-ui/lab" "3.0.0-alpha.29"
+    "@types/classnames" "^2.2.7"
+    "@types/google.visualization" "0.0.46"
+    "@types/react-dom" "16.0.11"
+    bignumber.js "8.0.1"
+    classnames "^2.2.6"
+    jss "9.8.7"
+    jss-compose "5.0.0"
+    jss-expand "5.3.0"
+    jss-extend "6.2.0"
+    jss-global "3.0.0"
+    jss-preset-default "4.5.0"
+    jss-template "1.0.1"
+    lodash "4.17.13"
     moment "^2.23.0"
     react "16.6.3"
     react-copy-to-clipboard "5.0.1"
