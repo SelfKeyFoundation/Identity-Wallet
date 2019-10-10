@@ -3,6 +3,7 @@ import {
 	Grid,
 	withStyles,
 	Typography,
+	Divider,
 	Table,
 	TableHead,
 	TableBody,
@@ -10,6 +11,7 @@ import {
 } from '@material-ui/core';
 import { LargeTableHeadRow, BackButton } from 'selfkey-ui';
 import { ExchangesListItem } from './exchanges-list-item';
+import { MarketplaceDisclaimer } from '../common/disclaimer';
 import { PageLoading } from '../common';
 
 const styles = theme => ({
@@ -62,6 +64,15 @@ const styles = theme => ({
 	},
 	unlockIcon: {
 		marginRight: '10px'
+	},
+	disclaimer: {
+		margin: '40px auto',
+		textAlign: 'center',
+		maxWidth: '80%'
+	},
+	divider: {
+		backgroundColor: '#475768',
+		marginBottom: '20px'
 	}
 });
 
@@ -127,40 +138,52 @@ export const ExchangesList = withStyles(styles)(
 						>
 							{isLoading && <PageLoading />}
 							{!isLoading && (
-								<Table>
-									<TableHead>
-										<LargeTableHeadRow>
-											<TableCell className={classes.icon}>&nbsp;</TableCell>
-											<TableCell>
-												<Typography variant="overline">Exchange</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">Location</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">Fees</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">
-													Fiat Supported
-												</Typography>
-											</TableCell>
-											<TableCell>
-												<Typography variant="overline">
-													Fiat Payments
-												</Typography>
-											</TableCell>
-											<TableCell style={{ padding: '10px' }}>
-												<Typography variant="overline">
-													Excluded Residents
-												</Typography>
-											</TableCell>
-											<TableCell>&nbsp;</TableCell>
-										</LargeTableHeadRow>
-									</TableHead>
+								<React.Fragment>
+									<Table>
+										<TableHead>
+											<LargeTableHeadRow>
+												<TableCell className={classes.icon}>
+													&nbsp;
+												</TableCell>
+												<TableCell>
+													<Typography variant="overline">
+														Exchange
+													</Typography>
+												</TableCell>
+												<TableCell>
+													<Typography variant="overline">
+														Location
+													</Typography>
+												</TableCell>
+												<TableCell>
+													<Typography variant="overline">Fees</Typography>
+												</TableCell>
+												<TableCell>
+													<Typography variant="overline">
+														Fiat Supported
+													</Typography>
+												</TableCell>
+												<TableCell>
+													<Typography variant="overline">
+														Fiat Payments
+													</Typography>
+												</TableCell>
+												<TableCell style={{ padding: '10px' }}>
+													<Typography variant="overline">
+														Excluded Residents
+													</Typography>
+												</TableCell>
+												<TableCell>&nbsp;</TableCell>
+											</LargeTableHeadRow>
+										</TableHead>
 
-									<TableBody>{getServices(items, viewAction)}</TableBody>
-								</Table>
+										<TableBody>{getServices(items, viewAction)}</TableBody>
+									</Table>
+									<div className={classes.disclaimer}>
+										<Divider className={classes.divider} />
+										<MarketplaceDisclaimer />
+									</div>
+								</React.Fragment>
 							)}
 						</Grid>
 					</Grid>

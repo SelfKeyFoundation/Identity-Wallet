@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { UserPlusIcon, primary, CalendarDepositIcon, typography } from 'selfkey-ui';
-
+import { MarketplaceDisclaimer } from '../common/disclaimer';
 import { Grid, Divider, FormGroup, FormControl, Button, Typography } from '@material-ui/core';
 import { KycRequirements } from '../../kyc';
 import { kycOperations } from 'common/kyc';
@@ -229,6 +229,11 @@ const styles = theme => ({
 		height: '44px',
 		justifyContent: 'center',
 		width: '44px'
+	},
+	disclaimer: {
+		margin: '20px auto',
+		textAlign: 'center',
+		maxWidth: '80%'
 	}
 });
 
@@ -666,6 +671,11 @@ class ExchangesDetailsComponent extends Component {
 								</Grid>
 							)}
 						</Grid>
+					</Grid>
+					<Grid item xs={12} alignItems="center">
+						<div className={classes.disclaimer}>
+							<MarketplaceDisclaimer />
+						</div>
 					</Grid>
 				</Grid>
 			</Grid>

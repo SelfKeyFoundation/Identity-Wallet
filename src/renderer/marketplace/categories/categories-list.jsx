@@ -1,7 +1,6 @@
 import React from 'react';
 import { Grid, withStyles, Typography } from '@material-ui/core';
 import { MarketplaceIcon } from 'selfkey-ui';
-
 import { MarketplaceCategory } from './category';
 
 const styles = theme => ({
