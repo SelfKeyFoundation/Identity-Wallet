@@ -18,9 +18,7 @@ class ExchangesDetailsContainer extends MarketplaceExchangesComponent {
 		}
 	}
 
-	onBackClick = () => {
-		this.props.dispatch(push(this.rootPath()));
-	};
+	onBackClick = () => this.props.dispatch(push(this.rootPath()));
 
 	render() {
 		let item = this.props.item;
