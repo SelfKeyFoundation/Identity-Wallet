@@ -68,7 +68,10 @@ const styles = theme => ({
 	disclaimer: {
 		margin: '40px auto',
 		textAlign: 'center',
-		maxWidth: '80%'
+		'& h6': {
+			maxWidth: '80%',
+			margin: 'auto'
+		}
 	},
 	divider: {
 		backgroundColor: '#475768',
