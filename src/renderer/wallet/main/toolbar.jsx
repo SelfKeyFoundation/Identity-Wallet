@@ -108,7 +108,8 @@ const styles = theme => ({
 	},
 	profileIcon: {
 		marginTop: '13px',
-		paddingRight: '15px'
+		paddingRight: '15px',
+		cursor: 'pointer'
 	},
 	absolute: {
 		position: 'absolute'
@@ -251,9 +252,11 @@ const ProfileList = withStyles(profileStyle)(
 								))}
 						{showCorporate && (
 							<React.Fragment>
-								<Grid className={classes.profileFooter}>
-									<div className={classes.horizontalDivider} />
-								</Grid>
+								{profiles && profiles.length ? (
+									<Grid className={classes.profileFooter}>
+										<div className={classes.horizontalDivider} />
+									</Grid>
+								) : null}
 								{/* <Grid container className={classes.profilePersonal}>
 									<Grid item xs={12}>
 										<Button
@@ -288,43 +291,48 @@ const ProfileList = withStyles(profileStyle)(
 );
 
 const Profile = withStyles(styles)(
-	({ classes, profile, wallet, isOpen, onProfileClick, onProfileNavigate }) => (
-		<Grid container wrap="nowrap" justify="space-between" onClick={onProfileNavigate}>
-			<Grid container>
-				<Grid item>
-					{profile.type === 'corporate' ? (
-						<RoundCompany />
-					) : profile.profilePicture ? (
-						<HexagonAvatar
-							src={profile.profilePicture}
-							className={classes.profileAvatar}
-							smallAvatar={true}
-						/>
-					) : (
-						<RoundPerson />
-					)}
-				</Grid>
-				<Grid item className={classes.nameRole}>
-					<Typography
-						variant="h6"
-						className="toolbarProfileName"
-						title={profile.name || defaultIdentityName(profile, wallet.profileName)}
-					>
-						{profile.name || defaultIdentityName(profile, wallet.profileName)}
-					</Typography>
-					<Typography variant="subtitle1" color="secondary">
-						{profile.type === 'individual' ? 'Personal Profile' : 'Corporate Profile'}
-					</Typography>
+	({ classes, profile, wallet, isOpen, onProfileClick, onProfileNavigate, showCorporate }) => (
+		<Grid container wrap="nowrap" justify="space-between">
+			<Grid item>
+				<Grid container onClick={onProfileNavigate}>
+					<Grid item>
+						{profile.type === 'corporate' ? (
+							<RoundCompany />
+						) : profile.profilePicture ? (
+							<HexagonAvatar
+								src={profile.profilePicture}
+								className={classes.profileAvatar}
+								smallAvatar={true}
+							/>
+						) : (
+							<RoundPerson />
+						)}
+					</Grid>
+					<Grid item className={classes.nameRole}>
+						<Typography
+							variant="h6"
+							className="toolbarProfileName"
+							title={profile.name || defaultIdentityName(profile, wallet.profileName)}
+						>
+							{profile.name || defaultIdentityName(profile, wallet.profileName)}
+						</Typography>
+						<Typography variant="subtitle1" color="secondary">
+							{profile.type === 'individual'
+								? 'Personal Profile'
+								: 'Corporate Profile'}
+						</Typography>
+					</Grid>
 				</Grid>
 			</Grid>
-			<Grid item className={classes.profileIcon}>
-				<DropdownIcon
-					className={`${classes.menuIcon} ${
-						isOpen ? classes.openedProfile : classes.closedProfile
-					}`}
-					onClick={onProfileClick}
-				/>
-			</Grid>
+			{showCorporate && (
+				<Grid item className={classes.profileIcon} onClick={onProfileClick}>
+					<DropdownIcon
+						className={`${classes.menuIcon} ${
+							isOpen ? classes.openedProfile : classes.closedProfile
+						}`}
+					/>
+				</Grid>
+			)}
 		</Grid>
 	)
 );
@@ -396,6 +404,7 @@ class Toolbar extends Component {
 										isOpen={isProfileOpen}
 										onProfileClick={onProfileClick}
 										onProfileNavigate={onProfileNavigate}
+										showCorporate={showCorporate}
 									/>
 								</Grid>
 							</Grid>
