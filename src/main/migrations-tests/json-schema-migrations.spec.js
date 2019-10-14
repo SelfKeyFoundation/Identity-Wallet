@@ -1,4 +1,4 @@
-import TestDb from './db/test-db';
+import TestDb from '../db/test-db';
 
 // const selfkeyPlatform = require('./assets/data/selfkey-platform.json');
 const path = require('path');
