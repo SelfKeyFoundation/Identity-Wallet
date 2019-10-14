@@ -29,56 +29,61 @@ const styles = theme => ({
 	}
 });
 
+const downloadTreatyPdf = (e, url) => window.openExternal(e, url);
+
 const TaxTreatiesTable = withStyles(styles)(({ classes, data }) => (
 	<Grid container direction="row" justify="space-evenly" alignItems="center">
-		<Table className={classes.table}>
-			<TableHead>
-				<LargeTableHeadRow>
-					<TableCell className={classes.flagCell} />
-					<TableCell>
-						<Typography variant="overline" gutterBottom>
-							Country
-						</Typography>
-					</TableCell>
-					<TableCell>
-						<Typography variant="overline" gutterBottom>
-							Treaty Type
-						</Typography>
-					</TableCell>
-					<TableCell>
-						<Typography variant="overline" gutterBottom>
-							Date Signed
-						</Typography>
-					</TableCell>
-					<TableCell className={classes.detailsCell}>
-						<Typography variant="overline" gutterBottom>
-							PDF
-						</Typography>
-					</TableCell>
-				</LargeTableHeadRow>
-			</TableHead>
-			<TableBody>
-				{data.map(treaty => (
-					<TableRow key={treaty.id}>
-						<TableCell className={classes.flagCell}>
-							<FlagCountryName code={treaty.jurisdictionCountryCode} />
+		{data.length === 0 && (
+			<div className={classes.table}>
+				<Typography variant="body2" gutterBottom className="region">
+					No Tax Treaties available
+				</Typography>
+			</div>
+		)}
+		{data.length > 0 && (
+			<Table className={classes.table}>
+				<TableHead>
+					<LargeTableHeadRow>
+						<TableCell className={classes.flagCell} />
+						<TableCell>
+							<Typography variant="overline" gutterBottom>
+								Country
+							</Typography>
 						</TableCell>
-						<TableCell>{treaty.jurisdiction}</TableCell>
-						<TableCell>{treaty.typeEOI}</TableCell>
-						<TableCell>{treaty.dateSigned}</TableCell>
+						<TableCell>
+							<Typography variant="overline" gutterBottom>
+								Treaty Type
+							</Typography>
+						</TableCell>
+						<TableCell>
+							<Typography variant="overline" gutterBottom>
+								Date Signed
+							</Typography>
+						</TableCell>
 						<TableCell className={classes.detailsCell}>
-							<a
-								onClick={e => {
-									window.openExternal(e, treaty.pdfUrl);
-								}}
-							>
-								Download
-							</a>
+							<Typography variant="overline" gutterBottom>
+								PDF
+							</Typography>
 						</TableCell>
-					</TableRow>
-				))}
-			</TableBody>
-		</Table>
+					</LargeTableHeadRow>
+				</TableHead>
+				<TableBody>
+					{data.map(treaty => (
+						<TableRow key={treaty.id}>
+							<TableCell className={classes.flagCell}>
+								<FlagCountryName code={treaty.jurisdictionCountryCode} />
+							</TableCell>
+							<TableCell>{treaty.jurisdiction}</TableCell>
+							<TableCell>{treaty.typeEOI}</TableCell>
+							<TableCell>{treaty.dateSigned}</TableCell>
+							<TableCell className={classes.detailsCell}>
+								<a onClick={e => downloadTreatyPdf(e, treaty.pdfUrl)}>Download</a>
+							</TableCell>
+						</TableRow>
+					))}
+				</TableBody>
+			</Table>
+		)}
 	</Grid>
 ));
 
