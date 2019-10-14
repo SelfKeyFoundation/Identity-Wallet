@@ -27,6 +27,7 @@ exports.up = async (knex, Promise) => {
 			delete newW.profilePicture;
 			delete newW.privateKey;
 			delete newW.isSetupFinished;
+			delete newW.did;
 			return newW;
 		});
 		if (wallets.length) {
