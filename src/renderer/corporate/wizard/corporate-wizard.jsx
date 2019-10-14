@@ -209,6 +209,7 @@ const CompanyInformation = withStyles(styles)(props => {
 										error={errors.creationDate}
 										onChange={onFieldChange('creationDate')}
 										className={classes.picker}
+										isError={errors.creationDate && 'true'}
 										style={{
 											'& >div': {
 												width: '200px !important'
