@@ -38,12 +38,15 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'column',
 		maxHeight: '180px',
-		overflow: 'scroll'
+		overflow: 'auto'
 	},
 	regularText: {
 		'& span': {
 			fontWeight: 400
 		}
+	},
+	noApplications: {
+		width: '100%'
 	}
 });
 
@@ -78,23 +81,23 @@ const CorporateApplicationsSummary = withStyles(styles)(props => {
 			<hr className={classes.hr} />
 			<CardContent style={{ height: 'initial' }}>
 				<div className={classes.cardContent}>
-					<Table>
-						<TableHead>
-							<SmallTableHeadRow>
-								<SmallTableCell>
-									<Typography variant="overline">Service</Typography>
-								</SmallTableCell>
-								<SmallTableCell>
-									<Typography variant="overline">Provider</Typography>
-								</SmallTableCell>
-								<SmallTableCell>
-									<Typography variant="overline">Status</Typography>
-								</SmallTableCell>
-							</SmallTableHeadRow>
-						</TableHead>
-						<TableBody>
-							{applications &&
-								applications.map(a => (
+					{applications && applications.length ? (
+						<Table>
+							<TableHead>
+								<SmallTableHeadRow>
+									<SmallTableCell>
+										<Typography variant="overline">Service</Typography>
+									</SmallTableCell>
+									<SmallTableCell>
+										<Typography variant="overline">Provider</Typography>
+									</SmallTableCell>
+									<SmallTableCell>
+										<Typography variant="overline">Status</Typography>
+									</SmallTableCell>
+								</SmallTableHeadRow>
+							</TableHead>
+							<TableBody>
+								{applications.map(a => (
 									<SmallTableRow id={a.id} key={a.id}>
 										<SmallTableCell>
 											<Typography variant="subtitle1">{a.title}</Typography>
@@ -109,8 +112,13 @@ const CorporateApplicationsSummary = withStyles(styles)(props => {
 										</SmallTableCell>
 									</SmallTableRow>
 								))}
-						</TableBody>
-					</Table>
+							</TableBody>
+						</Table>
+					) : (
+						<Typography variant="subtitle1" className={classes.noApplications}>
+							No applications
+						</Typography>
+					)}
 				</div>
 			</CardContent>
 		</Card>

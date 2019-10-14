@@ -92,7 +92,6 @@ exports.up = async (knex, Promise) => {
 		let walletsOld = await knex('wallets_old').select();
 		walletsOld = walletsOld.map(convertOldWalletToNew);
 		let wallets = await knex('wallets').select();
-		// console.log('XXX', wallets, walletsOld);
 		let insert = { wallets: walletsOld, newWallets: [], cleanup: [] };
 
 		if (wallets.length) {
@@ -127,7 +126,6 @@ exports.up = async (knex, Promise) => {
 				{ wallets: [], newWallets: [], cleanup: [] }
 			);
 		}
-		// console.log('XXX', insert);
 		if (insert.cleanup.length) {
 			await Promise.all(insert.cleanup.map(deleteWalletInfo));
 		}
