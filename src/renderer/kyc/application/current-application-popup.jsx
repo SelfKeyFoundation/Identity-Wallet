@@ -340,7 +340,7 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		// Add documents to an existing application
 		if (existingApplicationId) {
 			title = `${rpName || ''} Checklist: ${currentApplication.title}`;
-			description = 'You are required to reupload or provide the missing informations:';
+			description = 'You are required to reupload or provide the missing information:';
 			agreement = true;
 			agreementText = renderAgreementText({ classes, rpName });
 		}

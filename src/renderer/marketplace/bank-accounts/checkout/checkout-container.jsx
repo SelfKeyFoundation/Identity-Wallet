@@ -99,7 +99,7 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 				{...this.getPaymentParameters()}
 				price={jurisdiction.price}
 				options={checkoutOptions}
-				initialDocsText={`You will be required to provide a few basic informations about yourself like full name and email.
+				initialDocsText={`You will be required to provide a few basic information about yourself like full name and email.
 					This will be done through SelfKey ID Wallet.`}
 				kycProcessText={`You will undergo a standard KYC process and our team will get in touch with you to make sure we
 					have all the information needed.`}

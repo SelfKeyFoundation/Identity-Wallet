@@ -28,10 +28,10 @@ export const CorporateDashboardTabs = withStyles(styles)(
 					onChange={(evt, value) => onTabChange(value)}
 				>
 					<Tab id="overview" value="overview" label="Overview" />
-					<Tab id="information" value="information" label="Informations & Documents" />
-					<Tab id="members" value="members" label="Manage Members" />
-					<Tab id="applications" value="applications" label="Applications" />
-					<Tab id="history" value="history" label="History" />
+					<Tab id="information" value="information" label="Information & Documents" />
+					<Tab id="members" value="members" label="Manage Members" disabled />
+					<Tab id="applications" value="applications" label="Applications" disabled />
+					<Tab id="history" value="history" label="History" disabled />
 				</Tabs>
 				{tab === 'overview' && <CorporateOverviewTab id="overviewTab" {...tabProps} />}
 				{tab === 'information' && (
