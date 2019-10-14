@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { UserPlusIcon, primary, CalendarDepositIcon, typography } from 'selfkey-ui';
-
+import { MarketplaceDisclaimer } from '../common/disclaimer';
 import { Grid, Divider, FormGroup, FormControl, Button, Typography } from '@material-ui/core';
 import { KycRequirements } from '../../kyc';
 import { kycOperations } from 'common/kyc';
@@ -181,7 +181,10 @@ const styles = theme => ({
 	},
 	signUpButton: {
 		display: 'flex',
-		justifyContent: 'space-between'
+		justifyContent: 'space-between',
+		maxWidth: '200px',
+		marginLeft: 'auto',
+		marginRight: '0'
 	},
 	ctaArea: {
 		'& div': {
@@ -229,6 +232,11 @@ const styles = theme => ({
 		height: '44px',
 		justifyContent: 'center',
 		width: '44px'
+	},
+	disclaimer: {
+		margin: '20px auto',
+		textAlign: 'center',
+		maxWidth: '80%'
 	}
 });
 
@@ -268,15 +276,17 @@ class ExchangesDetailsComponent extends Component {
 		return window.openExternal(null, item.URL);
 	};
 
-	renderActionButton = () => {
+	linkToAffiliateUrl = url => {
+		return window.openExternal(null, url);
+	};
+
+	renderActionButton = item => {
 		const application = this.getLastApplication();
-		// FIXME: Troubleshooting and overriding
-		// FIXME: remove for final commit
-		// Force status
-		// if (application) application.currentStatus = APPLICATION_UPLOAD_REQUIRED;
 
 		if (!this.props.relyingParty) {
-			// Nothing should be shown because we don't have RP data just yet
+			if (item.data.affiliateUrl) {
+				return this.renderAffiliateLinkButton(item.data.affiliateUrl);
+			}
 			return null;
 		} else if (
 			!application ||
@@ -294,6 +304,19 @@ class ExchangesDetailsComponent extends Component {
 			return this.renderPendingApplication();
 		}
 	};
+
+	renderAffiliateLinkButton = url => (
+		<Button
+			variant="contained"
+			size="large"
+			className={`${this.props.classes.signUpButton} ${this.props.classes.ctaButton}`}
+			onClick={() => this.linkToAffiliateUrl(url)}
+		>
+			<UserPlusIcon />
+			<span>SIGN UP</span>
+			<span />
+		</Button>
+	);
 
 	renderApplicationButton = application => {
 		const { classes } = this.props;
@@ -512,8 +535,13 @@ class ExchangesDetailsComponent extends Component {
 											{item.description}
 										</Typography>
 									</Grid>
-									<Grid item xs={4} className={classes.ctaArea}>
-										{this.renderActionButton()}
+									<Grid
+										item
+										xs={4}
+										className={classes.ctaArea}
+										alignContent="right"
+									>
+										{this.renderActionButton(item)}
 									</Grid>
 								</Grid>
 							</Grid>
@@ -666,6 +694,11 @@ class ExchangesDetailsComponent extends Component {
 								</Grid>
 							)}
 						</Grid>
+					</Grid>
+					<Grid item xs={12} alignItems="center">
+						<div className={classes.disclaimer}>
+							<MarketplaceDisclaimer />
+						</div>
 					</Grid>
 				</Grid>
 			</Grid>
