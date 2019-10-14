@@ -11,7 +11,7 @@ export const NotarizationDetailsPageTabs = withStyles(styles)(
 			<React.Fragment>
 				<Tabs value={tab} onChange={(evt, value) => onTabChange(value)}>
 					<Tab id="typesButton" value="types" label="Supported Document Types" />
-					<Tab id="informationsButton" value="informations" label="Key Informations" />
+					<Tab id="informationsButton" value="informations" label="Key Information" />
 				</Tabs>
 				{tab === 'types' && <NotarizationTypesTab id="accountTab" {...tabProps} />}
 				{tab === 'informations' && (

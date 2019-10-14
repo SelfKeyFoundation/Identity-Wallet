@@ -69,7 +69,7 @@ class NotarizationKeyTabComponent extends Component {
 		return (
 			<div className={classes.tabContainer}>
 				<div className={classes.gridPadding}>
-					<Typography variant="h2">Key Informations</Typography>
+					<Typography variant="h2">Key Information</Typography>
 				</div>
 				<KeyInformationList />
 			</div>

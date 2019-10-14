@@ -2,9 +2,9 @@ import React from 'react';
 import { Grid, withStyles } from '@material-ui/core';
 import { CorporateDetails } from '../common/corporate-details';
 import { CorporateApplicationsSummary } from '../common/corporate-applications';
-import { CorporateCapTable } from '../common/corporate-cap-table';
-import { CorporateShareholding } from '../common/corporate-shareholding';
-import { CorporateOrgChart } from '../common/corporate-org-chart';
+// import { CorporateCapTable } from '../common/corporate-cap-table';
+// import { CorporateShareholding } from '../common/corporate-shareholding';
+// import { CorporateOrgChart } from '../common/corporate-org-chart';
 
 const styles = theme => ({
 	overviewBox: {
@@ -47,7 +47,7 @@ const CorporateOverviewTab = withStyles(styles)(
 						/>
 					</div>
 				</div>
-				<div>
+				{/* <div>
 					<CorporateCapTable profile={profile} cap={cap} />
 				</div>
 				<div className="halfWidgetBox">
@@ -57,7 +57,7 @@ const CorporateOverviewTab = withStyles(styles)(
 					<div className="halfWidth" styles={{ marginLeft: 15 }}>
 						<CorporateOrgChart profile={profile} cap={cap} />
 					</div>
-				</div>
+				</div> */}
 			</div>
 		</div>
 	)
