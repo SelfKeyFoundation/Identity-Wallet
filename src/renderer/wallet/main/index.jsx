@@ -10,7 +10,7 @@ import { walletSelectors } from 'common/wallet';
 import { appSelectors } from 'common/app';
 
 import {
-	MarketplaceCategoriesPage,
+	MarketplaceCategoriesContainer,
 	MarketplaceExchangesContainer,
 	MarketplaceIncorporationPage,
 	MarketplaceBankAccountsPage,
@@ -136,7 +136,7 @@ class Main extends Component {
 					/>
 					<Route
 						path={`${match.path}/marketplace-categories`}
-						component={MarketplaceCategoriesPage}
+						component={MarketplaceCategoriesContainer}
 					/>
 					<Route
 						path={`${match.path}/marketplace-exchanges`}

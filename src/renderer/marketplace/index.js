@@ -1,4 +1,4 @@
-export { MarketplaceCategoriesPage } from './categories/categories-page';
+export { MarketplaceCategoriesContainer } from './categories/categories-container';
 export { MarketplaceExchangesContainer } from './exchanges';
 export { MarketplaceIncorporationPage } from './incorporation';
 export { MarketplaceBankAccountsPage } from './bank-accounts';
