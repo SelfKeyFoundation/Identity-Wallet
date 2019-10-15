@@ -31,7 +31,11 @@ class BankAccountsTableContainer extends MarketplaceBankAccountsComponent {
 		const { isLoading, keyRate, vendors, inventory } = this.props;
 		const { accountType } = this.state;
 
-		const data = inventory.filter(bank => bank.data.type === this.state.accountType);
+		const data = inventory
+			.filter(bank => bank.data.type === this.state.accountType)
+			.sort((a, b) =>
+				a.data.region < b.data.region ? -1 : a.data.region > b.data.region ? 1 : 0
+			);
 
 		return (
 			<BankingOffersPage

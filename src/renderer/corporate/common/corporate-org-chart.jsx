@@ -26,7 +26,7 @@ const styles = theme => ({
 		}
 	},
 	orgChart: {
-		overflow: 'scroll',
+		overflow: 'auto',
 		margin: 'auto',
 		'& .initechNode': {
 			backgroundColor: '#313D49',

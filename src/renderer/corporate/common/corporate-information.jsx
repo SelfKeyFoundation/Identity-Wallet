@@ -106,7 +106,7 @@ const CorporateInformation = withStyles(styles)(props => {
 	const { classes, attributes = [], onEditAttribute, onDeleteAttribute, onAddAttribute } = props;
 	return (
 		<Card>
-			<CardHeader title="Informations" className={classes.regularText} />
+			<CardHeader title="Information" className={classes.regularText} />
 			<hr className={classes.hr} />
 			<CardContent className={classes.cardContent}>
 				<div>
