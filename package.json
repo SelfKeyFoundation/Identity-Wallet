@@ -45,11 +45,12 @@
 		"check-deps-precommit": "npm-check -i eslint -i redux -s || true",
 		"check-deps": "npm-check -i common",
 		"coveralls": "cat dist/coverage/lcov.info | coveralls",
-		"snyk-protect": "NODE_OPTIONS=--max-old-space-size=8192 snyk protect",
+		"snyk-protect": "snyk protect",
 		"postinstall": "rm -rf node_modules/.cache && electron-webpack dll",
 		"build-dev-dll": "rm -rf node_modules/.cache && electron-webpack dll --env.production=false",
 		"storybook": "start-storybook -p 6007",
-		"build-storybook": "build-storybook"
+		"build-storybook": "build-storybook",
+		"prepublish": "npm run snyk-protect"
 	},
 	"lint-staged": {
 		"*.js": [
@@ -117,7 +118,7 @@
 		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#fee59787132eafe315352b9d21e95cc7b448a422",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
-		"snyk": "1.216.0",
+		"snyk": "^1.235.0",
 		"socket.io-client": "2.2.0",
 		"source-map-support": "0.5.12",
 		"sprintf-js": "1.1.2",
