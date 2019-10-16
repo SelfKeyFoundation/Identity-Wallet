@@ -54,6 +54,7 @@ import HardwareWalletTransactionTimer from '../../transaction/send/timer';
 import CorporateWizardContainer from '../../corporate/wizard/corporate-wizard-container';
 import CorporateAddMemberContainer from '../../corporate/member/corporate-add-member-container';
 import { CorporateDashboardContainer } from '../../corporate';
+import { MarketplaceNotariesPage } from '../../marketplace/notarization';
 
 const styles = theme => ({
 	headerSection: {
@@ -153,6 +154,10 @@ class Main extends Component {
 					<Route
 						path={`${match.path}/marketplace-orders`}
 						component={MarketplaceOrdersPage}
+					/>
+					<Route
+						path={`${match.path}/marketplace-notaries`}
+						component={MarketplaceNotariesPage}
 					/>
 					<Route
 						path={`${match.path}/transfer/:crypto`}

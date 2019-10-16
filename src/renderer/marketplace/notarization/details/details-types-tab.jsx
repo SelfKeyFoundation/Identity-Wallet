@@ -137,7 +137,7 @@ class NotarizationTypesTabComponent extends Component {
 					return (
 						<div key={indx} className={classes.panelBox}>
 							<ExpansionPanel
-								onChange={(e, expanded) => toggleOpen(expanded)}
+								onChange={(e, expanded) => this.toggleOption(expanded)}
 								className={classes.expansionPanel}
 							>
 								<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>

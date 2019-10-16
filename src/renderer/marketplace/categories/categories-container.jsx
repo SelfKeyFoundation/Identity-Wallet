@@ -23,6 +23,9 @@ class MarketplaceCategoriesContainer extends Component {
 		},
 		bank_accounts: () => {
 			this.props.dispatch(push('/main/marketplace-bank-accounts'));
+		},
+		notaries: () => {
+			this.props.dispatch(push('/main/marketplace-notaries'));
 		}
 	};
 
