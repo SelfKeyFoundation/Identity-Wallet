@@ -168,7 +168,7 @@ const prod = {
 	features: {
 		paymentContract: false,
 		scheduler: true,
-		corporate: false
+		corporate: true
 	},
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'
 };
