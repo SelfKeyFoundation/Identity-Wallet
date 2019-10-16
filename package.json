@@ -234,6 +234,15 @@
 				"dmg",
 				"zip"
 			]
+		},
+		"linux": {
+			"target": {
+				"target": "AppImage",
+				"arch": "x64"
+			}
+		},
+		"win": {
+			"target": "nsis"
 		}
 	},
 	"electronWebpack": {
