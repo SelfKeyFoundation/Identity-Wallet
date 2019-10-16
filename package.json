@@ -1,7 +1,7 @@
 {
 	"name": "selfkey-identity-wallet",
 	"productName": "SelfKey Identity Wallet",
-	"version": "1.4.0",
+	"version": "1.4.1",
 	"description": "The Official SelfKey Identity Wallet for Desktop",
 	"repository": {
 		"type": "git",
@@ -168,6 +168,7 @@
 		"electron-chromedriver": "6.0.0-beta.3",
 		"electron-download": "4.1.1",
 		"electron-log": "2.2.17",
+		"electron-notarize": "^0.1.1",
 		"electron-squirrel-startup": "1.0.0",
 		"electron-updater": "4.0.4",
 		"electron-webpack": "2.6.1",
@@ -230,10 +231,14 @@
 		],
 		"mac": {
 			"category": "public.app-category.finance",
+			"hardenedRuntime": true,
 			"target": [
 				"dmg",
 				"zip"
 			]
+		},
+		"dmg": {
+			"sign": false
 		},
 		"linux": {
 			"target": {
