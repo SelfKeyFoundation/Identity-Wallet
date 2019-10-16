@@ -62,6 +62,12 @@ const styles = theme => ({
 		display: 'flex',
 		justifyContent: 'center',
 		marginTop: '30px'
+	},
+	noOverflow: {
+		maxWidth: '320px',
+		overflow: 'hidden',
+		textOverflow: 'ellipsis',
+		whiteSpace: 'nowrap'
 	}
 });
 
@@ -97,11 +103,13 @@ const renderDocumentName = ({ entry, classes }) => {
 				<FileIcon />
 			</div>
 			<div>
-				<Typography variant="h6">{entry.name}</Typography>
+				<Typography variant="h6" className={classes.noOverflow} title={entry.name}>
+					{entry.name}
+				</Typography>
 				<Typography
 					variant="subtitle1"
 					color="secondary"
-					className={classes.ellipsis}
+					className={classes.noOverflow}
 					title={fileName}
 				>
 					{fileName}
