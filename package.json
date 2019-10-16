@@ -225,6 +225,7 @@
 		"appId": "org.selfkey.wallet",
 		"buildDependenciesFromSource": true,
 		"generateUpdatesFilesForAllChannels": true,
+		"afterSign": "scripts/notarize.js",
 		"files": [
 			"dist/main",
 			"dist/common"
@@ -235,7 +236,10 @@
 			"target": [
 				"dmg",
 				"zip"
-			]
+			],
+			"gatekeeperAssess": false,
+			"entitlements": "build/entitlements.mac.plist",
+			"entitlementsInherit": "build/entitlements.mac.plist"
 		},
 		"dmg": {
 			"sign": false
