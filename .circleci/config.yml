@@ -63,8 +63,6 @@ jobs:
                       sudo apt-get update
                       sudo apt-get install build-essential
                       sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
-                      sudo apt-get install snapd
-                      sudo snap install snapcraft --classic
             - run:
                   name: Install Node Packages
                   command: yarn install-all
@@ -131,8 +129,6 @@ jobs:
                       sudo apt-get update
                       sudo apt-get install libudev-dev
                       sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
-                      sudo apt-get install snapd
-                      sudo snap install snapcraft --classic
             - run:
                   name: Install Node Packages
                   command: yarn install-all
@@ -251,7 +247,6 @@ jobs:
                       sudo apt-get update
                       sudo apt-get install build-essential
                       sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
-                      sudo snap install snapcraft --classic
             - run:
                   name: Install Node Packages
                   command: yarn install-all
