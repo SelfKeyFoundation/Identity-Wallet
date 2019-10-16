@@ -12,9 +12,6 @@ const styles = theme => ({
 		padding: 20,
 		maxWidth: 350
 	},
-	address: {
-		fontSize: 10.5
-	},
 	tokenBoxHeader: {
 		display: 'flex',
 		justifyContent: 'space-evenly',
@@ -26,6 +23,15 @@ const styles = theme => ({
 	},
 	marginSpace: {
 		marginTop: '7px'
+	},
+	publicKey: {
+		color: '#93B0C1',
+		fontSize: '12px',
+		lineHeight: '19px',
+		maxWidth: '250px',
+		overflow: 'hidden',
+		textOverflow: 'ellipsis',
+		whiteSpace: 'nowrap'
 	}
 });
 
@@ -64,13 +70,9 @@ const TokenBox = props => {
 				</Grid>
 				<Grid xs={12} container justify="space-between" className={classes.marginSpace}>
 					<Grid item>
-						<Typography
-							className={classes.publicKey}
-							variant="subtitle2"
-							color="secondary"
-						>
+						<p className={classes.publicKey} title={address}>
 							{address}
-						</Typography>
+						</p>
 					</Grid>
 					<Grid item>
 						<Copy text={address} />
