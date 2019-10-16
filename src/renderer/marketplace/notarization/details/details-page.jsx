@@ -194,15 +194,14 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 								<div className={classes.applyButton}>
 									<NotarizeApplicationButton
 										canNotarizeApplication={true}
-										price="1500"
 										loading={loading}
-										keyRate={keyRate}
 									/>
 									<ProgramPrice
 										id="fees"
-										price="122330"
+										price="25"
 										rate={keyRate}
-										label="Pricing: $"
+										label="From $"
+										extraLabel="/ Document"
 									/>
 								</div>
 							</div>
