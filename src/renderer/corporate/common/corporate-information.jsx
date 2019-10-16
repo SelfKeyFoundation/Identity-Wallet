@@ -79,6 +79,12 @@ const styles = theme => ({
 		display: 'flex',
 		justifyContent: 'center',
 		marginTop: '30px'
+	},
+	noOverflow: {
+		maxWidth: '320px',
+		overflow: 'hidden',
+		textOverflow: 'ellipsis',
+		whiteSpace: 'nowrap'
 	}
 });
 
@@ -141,13 +147,17 @@ const CorporateInformation = withStyles(styles)(props => {
 								<TableBody>
 									{attributes.map(attr => (
 										<SmallTableRow key={attr.id}>
-											<SmallTableCell className={classes.labelCell}>
+											<SmallTableCell>
 												<Typography variant="subtitle1">
 													{renderAttributeTitle(attr)}
 												</Typography>
 											</SmallTableCell>
-											<SmallTableCell className={classes.labelCell}>
-												<Typography variant="subtitle1">
+											<SmallTableCell>
+												<Typography
+													variant="subtitle1"
+													className={classes.noOverflow}
+													title={renderAttributeValue(attr)}
+												>
 													{renderAttributeValue(attr)}
 												</Typography>
 											</SmallTableCell>
