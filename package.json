@@ -237,6 +237,9 @@
 				"zip"
 			]
 		},
+		"dmg": {
+			"sign": false
+		},
 		"linux": {
 			"target": {
 				"target": "AppImage",
