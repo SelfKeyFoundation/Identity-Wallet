@@ -15,6 +15,10 @@ class NotarizationDetailsContainer extends MarketplaceNotariesComponent {
 		tab: 'types'
 	};
 
+	componentDidMount() {
+		window.scrollTo(0, 0);
+	}
+
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
 
 	onTabChange = tab => this.setState({ tab });
