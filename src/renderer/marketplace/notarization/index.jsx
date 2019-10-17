@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { marketplaceOperations } from 'common/marketplace';
-import { NotariesTableContainer } from './details/container';
+import { NotarizationDetailsContainer } from './details/notarization-details-container';
 
 class MarketplaceNotariesComponent extends Component {
 	async componentDidMount() {
@@ -14,7 +14,7 @@ class MarketplaceNotariesComponent extends Component {
 
 		return (
 			<div>
-				<Route exact path={`${path}`} component={NotariesTableContainer} />
+				<Route exact path={`${path}`} component={NotarizationDetailsContainer} />
 			</div>
 		);
 	}

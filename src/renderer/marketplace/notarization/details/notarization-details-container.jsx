@@ -6,12 +6,18 @@ import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
 import { marketplaceSelectors } from 'common/marketplace';
 import { MarketplaceNotariesComponent } from '../common/marketplace-notaries-component';
-import NotarizationDetailsPage from './details-page';
+import NotarizationDetailsPage from './notarization-details-page';
 
 const styles = theme => ({});
 
-class NotariesTableContainer extends MarketplaceNotariesComponent {
+class NotarizationDetailsContainer extends MarketplaceNotariesComponent {
+	state = {
+		tab: 'types'
+	};
+
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
+
+	onTabChange = tab => this.setState({ tab });
 
 	render() {
 		const { isLoading, keyRate } = this.props;
@@ -21,13 +27,14 @@ class NotariesTableContainer extends MarketplaceNotariesComponent {
 				onBackClick={this.onBackClick}
 				keyRate={keyRate}
 				loading={isLoading}
-				tab={this.tab}
+				tab={this.state.tab}
+				onTabChange={this.onTabChange}
 			/>
 		);
 	}
 }
 
-NotariesTableContainer.propTypes = {
+NotarizationDetailsContainer.propTypes = {
 	// inventory: PropTypes.array,
 	// vendors: PropTypes.array,
 	isLoading: PropTypes.bool,
@@ -43,7 +50,7 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-const styledComponent = withStyles(styles)(NotariesTableContainer);
+const styledComponent = withStyles(styles)(NotarizationDetailsContainer);
 const connectedComponent = connect(mapStateToProps)(styledComponent);
 export default connectedComponent;
-export { connectedComponent as NotariesTableContainer };
+export { connectedComponent as NotarizationDetailsContainer };

@@ -54,16 +54,6 @@ export const KeyInformationList = withStyles(listItemStyles)(({ classes }) => (
 ));
 
 class NotarizationKeyTabComponent extends Component {
-	state = { option: null };
-	toggleOption = optionIdx => expanded => {
-		const { option } = this.state;
-		if (!expanded) {
-			return this.setState({ option: null });
-		}
-		if (option !== optionIdx) {
-			return this.setState({ option: optionIdx });
-		}
-	};
 	render() {
 		const { classes } = this.props;
 		return (

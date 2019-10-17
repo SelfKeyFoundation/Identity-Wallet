@@ -1,12 +1,12 @@
 import React from 'react';
 import { withStyles, Tabs, Tab } from '@material-ui/core';
-import { NotarizationTypesTab } from './details-types-tab';
-import { NotarizationKeyTab } from './details-key-tab';
+import { NotarizationTypesTab } from './notarization-details-types-tab';
+import { NotarizationKeyTab } from './notarization-details-key-tab';
 
 const styles = theme => ({});
 
 export const NotarizationDetailsPageTabs = withStyles(styles)(
-	({ classes, tab = 'types', onTabChange, ...tabProps }) => {
+	({ classes, tab, onTabChange, ...tabProps }) => {
 		return (
 			<React.Fragment>
 				<Tabs value={tab} onChange={(evt, value) => onTabChange(value)}>
