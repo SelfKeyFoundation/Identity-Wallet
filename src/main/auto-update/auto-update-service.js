@@ -5,8 +5,9 @@ import { EventEmitter } from 'events';
 const log = new Logger('autoupdater');
 
 export class AutoUpdateService extends EventEmitter {
-	constructor() {
+	constructor({ app }) {
 		super();
+		this.app = app;
 		autoUpdater.logger = log;
 		autoUpdater.channel = 'beta';
 		autoUpdater.allowDowngrade = false;
@@ -26,6 +27,9 @@ export class AutoUpdateService extends EventEmitter {
 	}
 
 	quitAndInstall() {
+		if (this.app.win) {
+			this.app.win.shouldIgnoreCloseDialog = true;
+		}
 		autoUpdater.quitAndInstall();
 	}
 }
