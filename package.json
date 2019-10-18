@@ -1,7 +1,7 @@
 {
 	"name": "selfkey-identity-wallet",
 	"productName": "SelfKey Identity Wallet",
-	"version": "1.4.1",
+	"version": "1.4.2",
 	"description": "The Official SelfKey Identity Wallet for Desktop",
 	"repository": {
 		"type": "git",
@@ -226,17 +226,23 @@
 		"buildDependenciesFromSource": true,
 		"generateUpdatesFilesForAllChannels": true,
 		"afterSign": "scripts/notarize.js",
+		"asar": true,
+		"asarUnpack": [
+			"**/*.node",
+			"node_modules/knex/**",
+			"node_modules/sqlite3/**"
+		],
 		"files": [
 			"dist/main",
 			"dist/common"
 		],
 		"mac": {
 			"category": "public.app-category.finance",
-			"hardenedRuntime": true,
 			"target": [
 				"dmg",
 				"zip"
 			],
+			"hardenedRuntime": true,
 			"gatekeeperAssess": false,
 			"entitlements": "build/entitlements.mac.plist",
 			"entitlementsInherit": "build/entitlements.mac.plist"
