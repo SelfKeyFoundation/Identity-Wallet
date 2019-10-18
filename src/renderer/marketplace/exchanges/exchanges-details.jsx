@@ -244,6 +244,10 @@ const styles = theme => ({
 });
 
 class ExchangesDetailsComponent extends Component {
+	async componentDidMount() {
+		window.scrollTo(0, 0);
+	}
+
 	getLastApplication = () => {
 		const { relyingParty } = this.props;
 		// const { templateId } = this.props.match.params;
