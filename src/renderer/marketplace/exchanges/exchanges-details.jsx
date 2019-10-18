@@ -229,9 +229,12 @@ const styles = theme => ({
 		borderRadius: '8px',
 		color: '#FFFFFF',
 		display: 'flex',
-		height: '44px',
 		justifyContent: 'center',
+		maxWidth: '44px',
 		width: '44px'
+	},
+	generatedIcon: {
+		height: '44px'
 	},
 	disclaimer: {
 		margin: '20px auto',
@@ -449,7 +452,7 @@ class ExchangesDetailsComponent extends Component {
 				<img src={item.data.logo[0].url} className={classes.defaultIcon} />
 			) : (
 				<div
-					className={classes.defaultIcon}
+					className={`${classes.defaultIcon} ${classes.generatedIcon}`}
 					style={{
 						backgroundColor: getColors()[random]
 					}}
