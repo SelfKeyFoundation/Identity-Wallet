@@ -317,16 +317,22 @@ class ExchangesDetailsComponent extends Component {
 	};
 
 	renderAffiliateLinkButton = url => (
-		<Button
-			variant="contained"
-			size="large"
-			className={`${this.props.classes.signUpButton} ${this.props.classes.ctaButton}`}
-			onClick={() => this.linkToAffiliateUrl(url)}
-		>
-			<UserPlusIcon />
-			<span>SIGN UP</span>
-			<span />
-		</Button>
+		<>
+			<Button
+				variant="contained"
+				size="large"
+				className={`${this.props.classes.signUpButton} ${this.props.classes.ctaButton}`}
+				onClick={() => this.linkToAffiliateUrl(url)}
+			>
+				<UserPlusIcon />
+				<span>SIGN UP</span>
+				<span />
+			</Button>
+			<Typography variant="subtitle2" color="secondary" gutterBottom>
+				Disclosure: the button above is an affiliate link, we may receive a commission for
+				purchases made through these link.
+			</Typography>
+		</>
 	);
 
 	renderApplicationButton = application => {
