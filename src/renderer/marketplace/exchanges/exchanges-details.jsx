@@ -23,11 +23,7 @@ const styles = theme => ({
 	},
 
 	title: {
-		margin: '20px'
-	},
-
-	icon: {
-		marginLeft: '20px'
+		margin: '20px 20px 20px 12px'
 	},
 
 	header: {
@@ -224,6 +220,12 @@ const styles = theme => ({
 	leftAlign: {
 		textAlign: 'left'
 	},
+	icon: {
+		alignItems: 'center',
+		display: 'flex',
+		height: '44px',
+		marginLeft: '12px'
+	},
 	defaultIcon: {
 		alignItems: 'center',
 		borderRadius: '8px',
@@ -231,10 +233,12 @@ const styles = theme => ({
 		display: 'flex',
 		justifyContent: 'center',
 		maxWidth: '44px',
-		width: '44px'
+		padding: '0 8px'
 	},
 	generatedIcon: {
-		height: '44px'
+		height: 'inherit',
+		maxWidth: '28px',
+		width: '44px'
 	},
 	disclaimer: {
 		margin: '20px auto',
