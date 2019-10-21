@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { kycSelectors, kycOperations } from '../../../common/kyc';
 import { CurrentApplicationPopup } from './current-application-popup';
-import { CreateAttributePopup } from '../../selfkey-id/main/containers/create-attribute-popup';
-import { EditAttributePopup } from '../../selfkey-id/main/containers/edit-attribute-popup';
+import { CreateAttributeContainer, EditAttributeContainer } from '../../attributes';
 import { jsonSchema } from 'common/identity/utils';
 import { push } from 'connected-react-router';
 import qs from 'query-string';
@@ -122,7 +121,7 @@ class CurrentApplicationComponent extends Component {
 					existingApplicationId={existingApplicationId}
 				/>
 				{this.state.showCreateAttribute && (
-					<CreateAttributePopup
+					<CreateAttributeContainer
 						open={true}
 						onClose={this.handlePopupClose}
 						typeId={this.state.typeId}
@@ -130,7 +129,7 @@ class CurrentApplicationComponent extends Component {
 					/>
 				)}
 				{this.state.showEditAttribute && (
-					<EditAttributePopup
+					<EditAttributeContainer
 						open={true}
 						onClose={this.handlePopupClose}
 						attribute={this.state.editAttribute}

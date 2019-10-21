@@ -19,14 +19,14 @@ const styles = theme => ({
 });
 
 export const TransactionNoKeyError = withStyles(styles)(
-	({ classes, children, publicKey, closeAction }) => {
+	({ classes, children, address, closeAction }) => {
 		return (
-			<TransactionErrorBox publicKey={publicKey} closeAction={closeAction}>
+			<TransactionErrorBox address={address} closeAction={closeAction}>
 				<div className={classes.bodyText}>
 					<Typography variant="body1">
-						You do not have enough KEY tokens to pay for the incorporation. Please
-						transfer some KEY to this address and try again. Your KEY address of this
-						wallet is listed below.
+						You do not have enough KEY tokens to pay for this Marketplace Application.
+						Please transfer some KEY to this address and try again. Your KEY address of
+						this wallet is listed below.
 					</Typography>
 				</div>
 			</TransactionErrorBox>

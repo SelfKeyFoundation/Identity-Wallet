@@ -7,17 +7,30 @@ import {
 	ListItemIcon,
 	Grid,
 	Typography,
+	// Input,
+	// MenuItem,
+	// Select,
+	// IconButton
 	Divider
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import Close from '@material-ui/icons/Close';
 import {
 	DashboardMenuIcon,
 	MarketplaceMenuIcon,
 	SelfkeyIDMenuIcon,
 	AddressBookMenuIcon,
-	SelfkeyLogo
+	SelfkeyLogo,
+	MenuHelpIcon,
+	SwitchAccountsIcon,
+	PowerIcon,
+	// KeyTooltip,
+	// TooltipArrow,
+	// MenuAffiliateIcon,
+	// MenuExportIcon
+	// InfoTooltip,
+	primary
 } from 'selfkey-ui';
+// import { KeyboardArrowDown } from '@material-ui/icons';
 
 const styles = theme => ({
 	list: {
@@ -25,23 +38,23 @@ const styles = theme => ({
 		margin: 0,
 		minHeight: '100%',
 		overflow: 'auto',
-		width: 300
+		width: '100%'
 	},
 	logoSection: {
 		marginBottom: '30px',
-		marginTop: '-30px',
-		paddingLeft: '16px'
+		marginTop: '-30px'
 	},
 	logo: {
-		width: '38px',
-		height: '44px'
+		width: '30px',
+		height: '34px'
 	},
 	logoText: {
 		fontFamily: 'Orbitron, arial, sans-serif',
-		fontSize: '18px',
+		fontSize: '16px',
 		letterSpacing: '2.77px',
 		lineHeight: '22px',
-		paddingTop: '3px'
+		marginLeft: '13px',
+		marginTop: '3px'
 	},
 	closeSection: {
 		width: '100%'
@@ -49,12 +62,25 @@ const styles = theme => ({
 	pointer: {
 		cursor: 'pointer'
 	},
+	link: {
+		alignItems: 'center',
+		display: 'flex',
+		outline: 'none',
+		textDecoration: 'none',
+		'&:focus': {
+			outline: 'none'
+		}
+	},
 	listItem: {
-		alignItems: 'end',
 		cursor: 'pointer',
 		display: 'flex',
 		marginBottom: '30px',
 		paddingLeft: '10px',
+		'& p': {
+			overflow: 'hidden',
+			textOverflow: 'ellipsis',
+			whiteSpace: 'nowrap'
+		},
 		'&:hover': {
 			color: '#ffffff',
 			'& p': {
@@ -62,6 +88,7 @@ const styles = theme => ({
 			},
 			'& svg': {
 				color: '#ffffff',
+				fill: '#ffffff',
 				stroke: '#ffffff'
 			}
 		}
@@ -78,32 +105,86 @@ const styles = theme => ({
 	inheritHeight: {
 		height: 'inherit'
 	},
-	textColor: {
-		color: '#fff',
-		opacity: 0.8,
-		'&:hover': {
-			opacity: 1
-		}
-	},
 	version: {
 		color: '#fff',
 		fontSize: '10px',
 		opacity: 0.6,
 		position: 'absolute',
-		right: 0,
 		width: 'auto'
+	},
+	versionWrap: {
+		paddingLeft: '50px'
 	},
 	drawer: {
 		transition: 'all 3s',
 		'& > div:first-of-type': {
-			opacity: '1 !important'
+			borderBottom: 'none',
+			left: 0,
+			opacity: '1 !important',
+			right: 'auto'
 		}
+	},
+	openedDrawer: {
+		'& > div:first-of-type': {
+			minWidth: 200,
+			transition: 'all 0.2s ease-out'
+		},
+		'& .sidebarContainer': {
+			overflow: 'auto',
+			transition: 'all 0.2s ease-out',
+			width: 200
+		},
+		'& .divider': {
+			marginBottom: '30px',
+			marginLeft: 9,
+			paddingLeft: 0,
+			transition: 'all 0.2s ease-out',
+			width: 160
+		}
+	},
+	closedDrawer: {
+		'& > div:first-of-type': {
+			minWidth: 56,
+			transition: 'all 0.2s ease-out'
+		},
+		'& .sidebarContainer': {
+			overflow: 'hidden',
+			transition: 'all 0.2s ease-out',
+			width: 56
+		},
+		'& .divider': {
+			marginBottom: '30px',
+			marginLeft: 9,
+			paddingLeft: 0,
+			transition: 'all 0.2s ease-out',
+			width: 16
+		}
+	},
+	listItemIcon: {
+		marginRight: '22px'
+	},
+	select: {
+		width: '160px'
+	},
+	network: {
+		marginBottom: '30px',
+		paddingLeft: '20px'
+	},
+	tooltip: {
+		marginTop: '-2px',
+		padding: '0 0 0 10px'
+	},
+	customWidth: {
+		maxWidth: '168px'
+	},
+	tooltipLink: {
+		color: primary,
+		textDecoration: 'none'
 	}
 });
 
 const dashboard = props => <Link to="/main/dashboard" {...props} />;
 const marketplace = props => <Link to="/main/marketplace-categories" {...props} />;
-const selfkeyId = props => <Link to="/main/selfkeyId" {...props} />;
 const addressBook = props => <Link to="/main/addressBook" {...props} />;
 const switchAccount = props => <Link to="/home" {...props} />;
 
@@ -130,7 +211,7 @@ class Sidebar extends Component {
 	};
 
 	render() {
-		const { classes } = this.props;
+		const { classes, onProfileNavigate } = this.props;
 
 		const sideList = (
 			<Grid
@@ -138,44 +219,35 @@ class Sidebar extends Component {
 				direction="column"
 				justify="flex-start"
 				alignItems="flex-start"
-				className={classes.list}
+				className={`${classes.list} sidebarContainer`}
 				spacing={40}
 			>
-				<Grid item className={classes.closeSection}>
-					<Grid container direction="row" justify="flex-end" alignItems="flex-start">
-						<Grid item>
-							<Close color="secondary" className={classes.pointer} />
-						</Grid>
-					</Grid>
-				</Grid>
-				<Grid item>
+				<Grid item style={{ padding: '21px 0', flexGrow: 0 }}>
 					<Grid
 						container
 						direction="row"
-						justify="flex-start"
 						alignItems="center"
-						spacing={16}
-						className={classes.logoSection}
+						wrap="nowrap"
+						style={{ paddingLeft: '13px' }}
 					>
-						<Grid item>
+						<Link to="/main/dashboard" className={classes.link}>
 							<SelfkeyLogo className={classes.logo} />
-						</Grid>
-						<Grid item>
 							<Typography variant="h1" className={classes.logoText}>
 								SELFKEY
 							</Typography>
-						</Grid>
+						</Link>
 					</Grid>
 				</Grid>
-				<Grid item>
-					<List>
+				<Divider style={{ width: '100%', backgroundColor: '#475768', flexGrow: 0 }} />
+				<Grid item style={{ padding: '50px 0 20px', flexGrow: 1 }}>
+					<List style={{ paddingLeft: '10px' }}>
 						<ListItem
 							className={classes.listItem}
 							component={dashboard}
 							key="dashboard"
 						>
-							<ListItemIcon>
-								<DashboardMenuIcon />
+							<ListItemIcon className={classes.listItemIcon} title="Dashboard">
+								<DashboardMenuIcon width="16px" height="16px" viewBox="0 0 16 16" />
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
 								Dashboard
@@ -187,24 +259,15 @@ class Sidebar extends Component {
 							component={marketplace}
 							key="marketplace"
 						>
-							<ListItemIcon>
-								<MarketplaceMenuIcon />
+							<ListItemIcon className={classes.listItemIcon} title="Marketplace">
+								<MarketplaceMenuIcon
+									width="15px"
+									height="16px"
+									viewBox="0 0 15 16"
+								/>
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
 								Marketplace
-							</Typography>
-						</ListItem>
-						<ListItem
-							id="selfkeyIdButton"
-							className={classes.listItem}
-							component={selfkeyId}
-							key="selfkeyId"
-						>
-							<ListItemIcon>
-								<SelfkeyIDMenuIcon />
-							</ListItemIcon>
-							<Typography variant="body2" color="secondary">
-								SelfKey ID
 							</Typography>
 						</ListItem>
 						<ListItem
@@ -213,18 +276,99 @@ class Sidebar extends Component {
 							component={addressBook}
 							key="addressBook"
 						>
-							<ListItemIcon>
-								<AddressBookMenuIcon />
+							<ListItemIcon className={classes.listItemIcon} title="Address Book">
+								<AddressBookMenuIcon
+									width="15px"
+									height="16px"
+									viewBox="0 0 15 16"
+								/>
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
 								Address Book
 							</Typography>
 						</ListItem>
+						<Divider className={`divider`} />
+						<ListItem
+							id="selfkeyIdButton"
+							className={classes.listItem}
+							key="selfkeyId"
+							onClick={onProfileNavigate}
+						>
+							<ListItemIcon className={classes.listItemIcon} title="My Profile">
+								<SelfkeyIDMenuIcon width="14px" height="20px" viewBox="0 0 14 20" />
+							</ListItemIcon>
+							<Typography variant="body2" color="secondary">
+								My Profile
+							</Typography>
+						</ListItem>
+						{/* <ListItem
+							id="affiliate"
+							className={classes.listItem}
+							component={affiliate}
+							key="affiliate"
+						>
+							<ListItemIcon className={classes.listItemIcon}>
+								<MenuAffiliateIcon />
+							</ListItemIcon>
+							<Typography variant="body2" color="secondary">
+								Affiliate Program
+							</Typography>
+						</ListItem> */}
+						<Divider className={`divider`} />
 					</List>
 				</Grid>
 				<Divider />
-				<Grid item className={classes.secondaryButtons}>
-					<List className={classes.inheritWidth}>
+				<Grid item style={{ padding: '50px 0 20px' }}>
+					{/* <Grid item className={classes.network}>
+						<Typography variant="overline" gutterBottom>
+							Network
+							<KeyTooltip
+								interactive
+								placement="top-start"
+								className={classes.tooltip}
+								classes={{ tooltip: classes.customWidth }}
+								title={
+									<React.Fragment>
+										<span>
+											Modify the network settings to go from Ethereum Mainnet
+											to Ropsten testnet.{' '}
+											<a
+												className={classes.tooltipLink}
+												href="link"
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												What is a testnet?
+											</a>
+										</span>
+										<TooltipArrow />
+									</React.Fragment>
+								}
+							>
+								<IconButton aria-label="Info">
+									<InfoTooltip />
+								</IconButton>
+							</KeyTooltip>
+						</Typography>
+						<Select
+							displayEmpty
+							name="country"
+							disableUnderline
+							className={classes.select}
+							IconComponent={KeyboardArrowDown}
+							input={<Input disableUnderline />}
+						>
+							<MenuItem value="">
+								<em>Choose...</em>
+							</MenuItem>
+							{['Selfkey Mainnet', 'Testnet'].map(item => (
+								<MenuItem key={item} value={item}>
+									{item}
+								</MenuItem>
+							))}
+						</Select>
+					</Grid> */}
+					<List style={{ paddingLeft: '10px' }}>
 						<ListItem
 							className={classes.listItem}
 							onClick={e => {
@@ -232,25 +376,46 @@ class Sidebar extends Component {
 							}}
 							key="helpAndSupport"
 						>
-							<Typography variant="body2" className={classes.textColor}>
+							<ListItemIcon className={classes.listItemIcon} title="Help & Support">
+								<MenuHelpIcon />
+							</ListItemIcon>
+							<Typography variant="body2" color="secondary">
 								Help & Support
 							</Typography>
 						</ListItem>
+						{/* <ListItem
+							className={classes.listItem}
+							component={switchAccount}
+							key="switchAccount"
+						>
+							<ListItemIcon className={classes.listItemIcon}>
+								<MenuExportIcon />
+							</ListItemIcon>
+							<Typography variant="body2" color="secondary">
+								Export Wallet
+							</Typography>
+						</ListItem> */}
 						<ListItem
 							className={classes.listItem}
 							component={switchAccount}
 							key="switchAccount"
 						>
-							<Typography variant="body2" className={classes.textColor}>
-								Switch Accounts
+							<ListItemIcon className={classes.listItemIcon} title="Switch Wallet">
+								<SwitchAccountsIcon />
+							</ListItemIcon>
+							<Typography variant="body2" color="secondary">
+								Switch Wallet
 							</Typography>
 						</ListItem>
 						<ListItem className={classes.listItem} key="quit" onClick={window.quit}>
-							<Typography variant="body2" className={classes.textColor}>
+							<ListItemIcon className={classes.listItemIcon} title="Quit">
+								<PowerIcon />
+							</ListItemIcon>
+							<Typography variant="body2" color="secondary">
 								Quit
 							</Typography>
 						</ListItem>
-						<ListItem key="version">
+						<ListItem key="version" className={classes.versionWrap}>
 							<Typography variant="subtitle2" className={classes.version}>
 								V {window.appVersion}
 							</Typography>
@@ -265,15 +430,12 @@ class Sidebar extends Component {
 				anchor="right"
 				open={this.state.open}
 				onClose={() => this.toggleDrawer(false)}
-				className={classes.drawer}
+				className={`${classes.drawer} ${
+					this.state.open ? classes.openedDrawer : classes.closedDrawer
+				}`}
+				variant="permanent"
 			>
-				<div
-					tabIndex={0}
-					role="button"
-					onClick={() => this.toggleDrawer(false)}
-					onKeyDown={() => this.toggleDrawer(false)}
-					className={classes.inheritHeight}
-				>
+				<div tabIndex={0} role="button" className={classes.inheritHeight}>
 					{sideList}
 				</div>
 			</Drawer>

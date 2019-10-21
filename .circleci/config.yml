@@ -69,15 +69,15 @@ jobs:
             - run:
                   name: Unit Tests
                   command: yarn test:unit:coverage
-            - run:
-                  name: Coveralls
-                  command: yarn coveralls
+            # - run:
+            #       name: Coveralls
+            #       command: yarn coveralls
             - store_artifacts:
                   path: dist
             - *step_save_cache
     'build-mac':
         macos:
-            xcode: '9.0'
+            xcode: '11.1.0'
         environment:
             CACHE_VERSION: *cache_version
         steps:
@@ -93,9 +93,11 @@ jobs:
                   command: |
                       sudo mkdir -p ~/.config
                       sudo chown -R $USER:$GROUP ~/.config
+
             - run:
                   name: Install Node Packages
                   command: yarn install-all
+                  no_output_timeout: 30m
 
             - run:
                   name: Set Sentry
@@ -145,7 +147,7 @@ jobs:
             - *step_save_cache
     'e2e-mac':
         macos:
-            xcode: '9.0'
+            xcode: '11.1.0'
         environment:
             CACHE_VERSION: *cache_version
         steps:
@@ -209,7 +211,7 @@ jobs:
 
     'publish-mac':
         macos:
-            xcode: '9.0'
+            xcode: '11.1.0'
         environment:
             CACHE_VERSION: *cache_version
         steps:

@@ -1,46 +1,30 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { pricesSelectors } from 'common/prices';
-import { withStyles } from '@material-ui/core/styles';
-import { incorporationsOperations, incorporationsSelectors } from 'common/incorporations';
+import { marketplaceSelectors } from 'common/marketplace';
 import { IncorporationsListPage } from './incorporations-list-page';
-import NoConnection from 'renderer/no-connection';
+import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorporations-component';
 
 const styles = theme => ({});
-const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
-const INCORPORATIONS_DETAIL_PATH = '/main/marketplace-incorporation/details';
 
-class IncorporationsListContainer extends Component {
-	componentDidMount() {
-		if (!this.props.incorporations || !this.props.incorporations.length) {
-			this.props.dispatch(incorporationsOperations.loadIncorporationsOperation());
-		}
-	}
-
-	onBackClick = () => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
+class IncorporationsListContainer extends MarketplaceIncorporationsComponent {
+	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
 
 	onDetailsClick = jurisdiction => {
+		const { companyCode, countryCode } = jurisdiction.data;
+		const { templateId, vendorId } = jurisdiction;
 		this.props.dispatch(
-			push(
-				`${INCORPORATIONS_DETAIL_PATH}/${jurisdiction['Company code']}/${
-					jurisdiction['Country code']
-				}/${jurisdiction.templateId}`
-			)
+			push(this.detailsRoute({ companyCode, countryCode, templateId, vendorId }))
 		);
 	};
 
-	activeJurisdiction = jurisdiction => jurisdiction.show_in_wallet;
-
 	render() {
-		const { isLoading, incorporations, keyRate, isError } = this.props;
+		const { isLoading, incorporations, keyRate } = this.props;
 
-		if (!isLoading && isError) {
-			return <NoConnection onBackClick={this.onBackClick} />;
-		}
-
-		const data = incorporations.filter(this.activeJurisdiction);
+		const data = incorporations.filter(jurisdiction => jurisdiction.status === 'active');
 
 		return (
 			<IncorporationsListPage
@@ -57,15 +41,13 @@ class IncorporationsListContainer extends Component {
 IncorporationsListContainer.propTypes = {
 	incorporations: PropTypes.array,
 	isLoading: PropTypes.bool,
-	isError: PropTypes.any,
 	keyRate: PropTypes.number
 };
 
 const mapStateToProps = (state, props) => {
 	return {
-		incorporations: incorporationsSelectors.getMainIncorporationsWithTaxes(state),
-		isLoading: incorporationsSelectors.getLoading(state),
-		isError: incorporationsSelectors.getError(state),
+		incorporations: marketplaceSelectors.selectIncorporations(state),
+		isLoading: marketplaceSelectors.isLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
 	};
 };

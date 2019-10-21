@@ -1,14 +1,14 @@
-import React from 'react';
-import { withStyles } from '@material-ui/core';
+import React, { Component } from 'react';
+import { withStyles, Typography } from '@material-ui/core';
 import { sanitize } from '../../common';
+
 const styles = theme => ({
 	tabContainer: {
 		width: '100%',
 		padding: '2em 0',
 		color: '#FFFFFF',
 		'& p': {
-			marginBottom: '1.5em',
-			lineHeight: '1.4em'
+			marginBottom: '1.5em'
 		},
 		'& strong': {
 			fontWeight: 'bold',
@@ -35,15 +35,27 @@ const styles = theme => ({
 	}
 });
 
-const BankingDescriptionTab = withStyles(styles)(({ classes, accountType }) => (
-	<div className={classes.tabContainer}>
-		<div
-			dangerouslySetInnerHTML={{
-				__html: sanitize(accountType.introText)
-			}}
-		/>
-	</div>
-));
+class BankingDescriptionTabComponent extends Component {
+	async componentDidMount() {
+		window.scrollTo(0, 0);
+	}
 
-export { BankingDescriptionTab };
+	render() {
+		const { classes, jurisdiction } = this.props;
+		return (
+			<div className={classes.tabContainer}>
+				<Typography
+					variant="body1"
+					color="secondary"
+					dangerouslySetInnerHTML={{
+						__html: sanitize(jurisdiction.data.introText)
+					}}
+				/>
+			</div>
+		);
+	}
+}
+
+export const BankingDescriptionTab = withStyles(styles)(BankingDescriptionTabComponent);
+
 export default BankingDescriptionTab;

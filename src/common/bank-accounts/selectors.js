@@ -22,6 +22,24 @@ const selectTemplate = bank => {
 	return templateId;
 };
 
+const selectVendorWalletAddress = program => {
+	if (config.dev) {
+		return program['testWalletAddress']
+			? program['testWalletAddress']
+			: config.testWalletAddress;
+	} else {
+		return program['walletAddress'];
+	}
+};
+
+const selectVendorDidAddress = program => {
+	if (config.dev) {
+		return program['testDidAddress'] ? program['testDidAddress'] : config.testDidAddress;
+	} else {
+		return program['didAddress'];
+	}
+};
+
 const parseOptions = bank => {
 	if (!bank.priceOptions) {
 		return [];
@@ -67,6 +85,8 @@ export const bankAccountsSelectors = {
 			b.templateId = selectTemplate(b);
 			b.checkoutOptions = parseOptions(b);
 			b.accountType = b.type ? b.type[0].toLowerCase() : null;
+			b.walletAddress = selectVendorWalletAddress(b);
+			b.didAddress = selectVendorDidAddress(b);
 			return b;
 		});
 	},

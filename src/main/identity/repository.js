@@ -1,9 +1,11 @@
 import { Model, transaction } from 'objection';
 import BaseModel from '../common/base-model';
-import fetch from 'node-fetch';
+import { jsonSchema } from 'common/identity/utils';
 import IdAttributeType from './id-attribute-type';
 import { Logger } from 'common/logger';
 import { UiSchema } from './ui-schema';
+import config from 'common/config';
+const env = config.attributeTypeSource;
 
 const log = new Logger('repository-model');
 const TABLE_NAME = 'repository';
@@ -21,7 +23,8 @@ export class Repository extends BaseModel {
 			name: { type: 'string' },
 			eager: { type: 'boolean', default: false },
 			content: { type: 'object' },
-			expires: { type: 'integer' }
+			expires: { type: 'integer' },
+			env: { type: 'string', enum: ['production', 'development'], default: env }
 		}
 	};
 
@@ -58,11 +61,11 @@ export class Repository extends BaseModel {
 	}
 
 	static findByUrl(url, tx) {
-		return this.query(tx).findOne({ url });
+		return this.query(tx).findOne({ url, env });
 	}
 
 	static create(itm, tx) {
-		return this.query(tx).insertAndFetch(itm);
+		return this.query(tx).insertAndFetch({ ...itm, env });
 	}
 
 	static delete(id, tx) {
@@ -70,15 +73,11 @@ export class Repository extends BaseModel {
 	}
 
 	static findAll(where) {
-		return this.query().where(where || {});
+		return this.query().where({ ...where, env } || { env });
 	}
 
 	static async loadRemote(url) {
-		let res = await fetch(url);
-		if (res.status >= 400) {
-			throw new Error('Failed to fetch repository from remote');
-		}
-		let remoteRepo = await res.json();
+		let remoteRepo = await jsonSchema.loadRemoteRepository(url, { env });
 		return {
 			url,
 			name: remoteRepo.name,

@@ -1,57 +1,47 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
-import { bankAccountsOperations, bankAccountsSelectors } from 'common/bank-accounts';
 import { BankingOffersPage } from './offers-page';
-import NoConnection from 'renderer/no-connection';
+import { marketplaceSelectors } from 'common/marketplace';
+import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 
 const styles = theme => ({});
-const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
-const BANK_ACCOUNTS_DETAIL_PATH = '/main/marketplace-bank-accounts/details';
 
-class BankAccountsTableContainer extends Component {
+class BankAccountsTableContainer extends MarketplaceBankAccountsComponent {
 	state = {
 		accountType: 'business'
 	};
 
-	componentDidMount() {
-		if (!this.props.bankAccounts || !this.props.bankAccounts.length) {
-			this.props.dispatch(bankAccountsOperations.loadBankAccountsOperation());
-		}
-	}
-
-	onBackClick = () => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
+	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
 
 	onAccountTypeChange = accountType => this.setState({ accountType });
 
-	onDetailsClick = bank =>
+	onDetailsClick = jurisdiction => {
+		const { accountCode, countryCode } = jurisdiction.data;
+		const { templateId, vendorId } = jurisdiction;
 		this.props.dispatch(
-			push(
-				`${BANK_ACCOUNTS_DETAIL_PATH}/${bank.accountCode}/${bank.countryCode}/${
-					bank.templateId
-				}`
-			)
+			push(this.detailsRoute({ accountCode, countryCode, templateId, vendorId }))
 		);
-
-	activeBank = bank => bank.accountType === this.state.accountType && bank.showWallet === true;
+	};
 
 	render() {
-		const { isLoading, bankAccounts, keyRate, isError } = this.props;
+		const { isLoading, keyRate, vendors, inventory } = this.props;
 		const { accountType } = this.state;
 
-		if (!isLoading && isError) {
-			return <NoConnection onBackClick={this.onBackClick} />;
-		}
-
-		const data = bankAccounts.filter(this.activeBank);
+		const data = inventory
+			.filter(bank => bank.data.type === this.state.accountType)
+			.sort((a, b) =>
+				a.data.region < b.data.region ? -1 : a.data.region > b.data.region ? 1 : 0
+			);
 
 		return (
 			<BankingOffersPage
 				keyRate={keyRate}
-				data={data}
+				vendors={vendors}
+				inventory={data}
 				onBackClick={this.onBackClick}
 				accountType={accountType}
 				onAccountTypeChange={this.onAccountTypeChange}
@@ -63,18 +53,18 @@ class BankAccountsTableContainer extends Component {
 }
 
 BankAccountsTableContainer.propTypes = {
-	bankAccounts: PropTypes.array,
+	inventory: PropTypes.array,
+	vendors: PropTypes.array,
 	isLoading: PropTypes.bool,
-	keyRate: PropTypes.number,
-	isError: PropTypes.any
+	keyRate: PropTypes.number
 };
 
 const mapStateToProps = (state, props) => {
 	return {
-		bankAccounts: bankAccountsSelectors.getMainBankAccounts(state),
-		isLoading: bankAccountsSelectors.getLoading(state),
-		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
-		isError: bankAccountsSelectors.getError(state)
+		vendors: marketplaceSelectors.selectVendorsForCategory(state, 'banking'),
+		inventory: marketplaceSelectors.selectBanks(state),
+		isLoading: marketplaceSelectors.isLoading(state),
+		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
 	};
 };
 

@@ -12,9 +12,6 @@ const styles = theme => ({
 		padding: 20,
 		maxWidth: 350
 	},
-	publicKey: {
-		fontSize: 10.5
-	},
 	tokenBoxHeader: {
 		display: 'flex',
 		justifyContent: 'space-evenly',
@@ -26,6 +23,15 @@ const styles = theme => ({
 	},
 	marginSpace: {
 		marginTop: '7px'
+	},
+	publicKey: {
+		color: '#93B0C1',
+		fontSize: '12px',
+		lineHeight: '19px',
+		maxWidth: '250px',
+		overflow: 'hidden',
+		textOverflow: 'ellipsis',
+		whiteSpace: 'nowrap'
 	}
 });
 
@@ -37,7 +43,7 @@ const TokenBox = props => {
 		CryptoCurrencyIconComponent,
 		transferAction,
 		children,
-		publicKey
+		address
 	} = props;
 	return (
 		<Paper className={classes.paper}>
@@ -64,16 +70,12 @@ const TokenBox = props => {
 				</Grid>
 				<Grid xs={12} container justify="space-between" className={classes.marginSpace}>
 					<Grid item>
-						<Typography
-							className={classes.publicKey}
-							variant="subtitle2"
-							color="secondary"
-						>
-							{publicKey}
-						</Typography>
+						<p className={classes.publicKey} title={address}>
+							{address}
+						</p>
 					</Grid>
 					<Grid item>
-						<Copy text={publicKey} />
+						<Copy text={address} />
 					</Grid>
 				</Grid>
 			</Grid>
@@ -83,7 +85,7 @@ const TokenBox = props => {
 
 const mapStateToProps = state => {
 	return {
-		publicKey: getWallet(state).publicKey
+		address: getWallet(state).address
 	};
 };
 

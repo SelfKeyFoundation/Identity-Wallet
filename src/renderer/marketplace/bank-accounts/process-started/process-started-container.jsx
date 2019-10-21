@@ -8,6 +8,7 @@ import { MarketplaceProcessStarted } from '../../common/marketplace-process-star
 const styles = theme => ({});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = `/main/marketplace-bank-accounts`;
 const SELFKEY_PATH = `/main/selfkeyId`;
+
 // TODO: future improvement load from rp config
 const VENDOR_EMAIL = `support@flagtheory.com`;
 
@@ -26,7 +27,7 @@ class BankAccountsProcessStartedContainer extends Component {
 					Thank you for payment!
 				</Typography>
 				<Typography variant="body2" gutterBottom>
-					One of our our managers is reviewing the information you submitted and{' '}
+					One of our managers is reviewing the information you submitted and{' '}
 					<strong>will contact you shortly on the e-mail you provided</strong>, to
 					continue the process. If you have any questions in the meantime, you can reach
 					us at:

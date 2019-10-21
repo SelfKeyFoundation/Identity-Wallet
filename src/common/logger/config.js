@@ -57,7 +57,7 @@ export const updateConfig = (conf, silent) => {
 
 export const init = () => {
 	updateConfig({}, true);
-	if (process.env.MODE === 'test') return;
+	if (process.env.MODE === 'test' || process.env.STORYBOOK) return;
 	if (is.main()) ipcMain.on(LOG_UPDATED_MSG, (event, arg) => updateConfig(arg, true));
 	else ipcRenderer.on(LOG_UPDATED_MSG, (event, arg) => updateConfig(arg, true));
 };

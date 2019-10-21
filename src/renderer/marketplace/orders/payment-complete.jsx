@@ -96,10 +96,7 @@ export const MarketplacePaymentComplete = withStyles(styles)(props => {
 					<div className={classes.content}>
 						<div className={classes.description}>
 							<Typography variant="h1" gutterBottom>
-								Process Started
-							</Typography>
-							<Typography variant="body1" gutterBottom>
-								Thank you for payment!
+								Payment complete!
 							</Typography>
 							<Typography variant="body2" gutterBottom>
 								Please click the continue button to continue the process. If you

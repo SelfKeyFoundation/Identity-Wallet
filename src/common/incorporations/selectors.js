@@ -1,32 +1,53 @@
 import config from 'common/config';
 
-const selectPrice = program => {
+const selectPrice = item => {
+	const { data: program } = item;
 	// Check for override ENV variables
 	if (config.incorporationsPriceOverride) return config.incorporationsPriceOverride;
-	if (!program['Wallet Price'] && !program.test_price) return null;
+	if (!program.walletPrice && !program.testPrice) return null;
 
-	let price = `${program['Wallet Price']}`;
-	if (config.dev || program.active_test_price) {
-		price = `${program.test_price}`;
+	let price = `${program.walletPrice}`;
+	if (config.dev || program.activeTestPrice) {
+		price = `${program.testPrice}`;
 	}
 
 	return parseFloat(price.replace(/\$/, '').replace(/,/, ''));
 };
 
-const selectTemplate = program => {
+const selectTemplate = item => {
+	const { data: program } = item;
 	// Check for override ENV variables
 	if (config.incorporationsTemplateOverride) return config.incorporationsTemplateOverride;
-	if (!program.template_id && !program.test_template_id) return null;
+	if (!program.templateId && !program.testTemplateId) return null;
 
-	const templateId = config.dev ? program.test_template_id : program.template_id;
+	const templateId = config.dev ? program.testTemplateId : program.templateId;
 	return templateId;
 };
 
-const parseOptions = program => {
-	if (!program.wallet_options) {
+const selectVendorWalletAddress = item => {
+	const { data: program } = item;
+	if (config.dev) {
+		return program.testWalletAddress ? program.testWalletAddress : config.testWalletAddress;
+	} else {
+		return program.walletAddress;
+	}
+};
+
+const selectVendorDidAddress = item => {
+	const { data: program } = item;
+	if (config.dev) {
+		return program.testDidAddress ? program.testDidAddress : config.testDidAddress;
+	} else {
+		return program.didAddress;
+	}
+};
+
+const parseOptions = item => {
+	const { data: program } = item;
+	if (!program.walletOptions) {
 		return [];
 	}
-	const options = program.wallet_options;
+	const options = program.walletOptions;
 
 	const strArray = options.split('-');
 
@@ -51,7 +72,9 @@ const parseOptions = program => {
 
 export const incorporationsSelectors = {
 	getIncorporations(state) {
-		return state.incorporations;
+		return Object.keys(state.marketplaces.inventoryById).filter(
+			i => state.marketplaces.inventoryById[i].category === 'incorporations'
+		);
 	},
 	getLoading(state) {
 		return this.getIncorporations(state).loading;
@@ -60,14 +83,17 @@ export const incorporationsSelectors = {
 		return this.getIncorporations(state).error;
 	},
 	getMainIncorporations(state) {
-		const tree = this.getIncorporations(state);
-		const data = tree.incorporations.map(incId => tree.incorporationsById[incId]);
-		return data.map(i => {
+		const inventoryIds = this.getIncorporations(state);
+		const parsedData = inventoryIds.map(id => {
+			const i = state.marketplaces.inventoryById[id];
 			i.price = selectPrice(i);
 			i.templateId = selectTemplate(i);
-			i.checkoutOptions = parseOptions(i);
+			i.data.checkoutOptions = parseOptions(i);
+			i.walletAddress = selectVendorWalletAddress(i);
+			i.didAddress = selectVendorDidAddress(i);
 			return i;
 		});
+		return parsedData;
 	},
 	getTaxes(state) {
 		const tree = this.getIncorporations(state);
@@ -84,14 +110,14 @@ export const incorporationsSelectors = {
 		return this.getTranslation(state).find(t => t['Company code'] === companyCode);
 	},
 	getMainIncorporationByCompanyCode(state, companyCode) {
-		return this.getMainIncorporations(state).find(inc => inc['Company code'] === companyCode);
+		return this.getMainIncorporations(state).find(c => c.data.companyCode === companyCode);
 	},
 	getCorporations(state) {
 		const tree = this.getIncorporations(state);
 		return tree.corporations.map(id => tree.corporationsById[id]);
 	},
 	getCorporationsByCompanyCode(state, companyCode) {
-		return this.getCorporations(state).find(c => c['Company code'] === companyCode);
+		return this.getCorporations(state).find(c => c.data.companyCode === companyCode);
 	},
 	getLLCs(state) {
 		const tree = this.getIncorporations(state);
@@ -128,19 +154,26 @@ export const incorporationsSelectors = {
 		return data;
 	},
 	getMainIncorporationsWithTaxes(state) {
+		return this.getMainIncorporations(state);
+		/*
 		return this.getMainIncorporations(state).map(inc => ({
 			...inc,
 			tax: this.getTaxByCompanyCode(state, inc['Company code']) || {}
 		}));
+		*/
 	},
 	getIncorporationsDetails(state, companyCode) {
 		const inc = this.getMainIncorporationByCompanyCode(state, companyCode);
-		inc.tax = this.getTaxByCompanyCode(state, companyCode);
-		inc.translation = this.getTranslationByCompanyCode(state, companyCode);
-		inc.details = this.getDetailsForCompanyCode(state, companyCode);
+		// inc.tax = this.getTaxByCompanyCode(state, companyCode);
+		// inc.translation = this.getTranslationByCompanyCode(state, companyCode);
+		// inc.details = this.getDetailsForCompanyCode(state, companyCode);
 		return inc;
 	},
 	getTaxTreaties(state, countryCode) {
+		const root = state.marketplace.taxTreaties;
+		const ids = Object.keys(root.byId).filter(i => root.byId[i].countryCode === countryCode);
+		return ids.map(id => root.byId[id]);
+		/*
 		if (!countryCode) {
 			return false;
 		}
@@ -152,19 +185,13 @@ export const incorporationsSelectors = {
 		}
 
 		return tree[`treaties-${countryCode}`].map(id => tree[`treatiesById-${countryCode}`][id]);
+		*/
 	},
 	getCountry(state, countryCode) {
-		if (!countryCode) {
-			return false;
-		}
-		const tree = this.getIncorporations(state);
-
-		// Dynamic property, created after API call, might not exist at runtime
-		if (!tree[`country-${countryCode}`]) {
-			return false;
-		}
-
-		return tree[`countryById-${countryCode}`][countryCode];
+		const root = state.marketplace.countries;
+		// TODO: move to specific selector file
+		const id = Object.keys(root.byId).find(i => root.byId[i].code === countryCode);
+		return root.byId[id];
 	}
 };
 

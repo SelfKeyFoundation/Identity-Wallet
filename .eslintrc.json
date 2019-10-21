@@ -5,7 +5,8 @@
 		"sourceType": "module",
 		"ecmaFeatures": {
 			"jsx": true
-		}
+		},
+		"allowImportExportEverywhere": true
 	},
 	"parser": "babel-eslint",
 	"env": {
@@ -24,7 +25,8 @@
 			}
 		],
 		"react/prop-types": 0,
-		"import/no-named-as-default": 0
+		"import/no-named-as-default": 0,
+		"import/first": 0
 	},
 	"settings": {
 		"react": {

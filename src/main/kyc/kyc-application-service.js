@@ -14,6 +14,12 @@ export class KycApplicationService {
 	};
 
 	editEntry = entry => {
+		// Don't update rpName or title, they should be
+		// set on creation. Otherwise rp syncing will
+		// overwrite this field
+		delete entry.rpName;
+		delete entry.title;
+
 		return KycApplication.update(entry);
 	};
 
@@ -25,8 +31,8 @@ export class KycApplicationService {
 		return KycApplication.findById(id);
 	};
 
-	load = walletId => {
-		return KycApplication.findAll(walletId);
+	load = identityId => {
+		return KycApplication.findAll(identityId);
 	};
 }
 

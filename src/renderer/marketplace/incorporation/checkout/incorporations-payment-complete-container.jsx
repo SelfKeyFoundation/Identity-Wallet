@@ -16,11 +16,11 @@ const VENDOR_EMAIL = `support@flagtheory.com`;
 
 class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsComponent {
 	async componentWillMount() {
-		await this.loadRelyingParty({ rp: 'incorporations', authenticated: true });
+		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: true });
 	}
 
 	async componentDidMount() {
-		const { transaction, companyCode, program } = this.props;
+		const { transaction, companyCode, program, vendorId } = this.props;
 
 		this.saveTransactionHash();
 		this.clearRelyingParty();
@@ -29,19 +29,19 @@ class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsCo
 			transactionHash: transaction.transactionHash,
 			price: program.price,
 			code: companyCode,
-			jurisdiction: program.Region,
-			rpName: 'Incorporations'
+			jurisdiction: program.data.region,
+			rpName: vendorId
 		});
 	}
 
 	saveTransactionHash = async () => {
-		const { transaction, program } = this.props;
+		const { transaction, program, vendorId } = this.props;
 		const application = this.getLastApplication();
 
 		if (!this.userHasPaid() && transaction) {
 			await this.props.dispatch(
 				kycOperations.updateRelyingPartyKYCApplicationPayment(
-					'incorporations',
+					vendorId,
 					application.id,
 					transaction.transactionHash
 				)
@@ -66,15 +66,14 @@ class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsCo
 		}
 	};
 
-	getNextRoute = () => {
-		return this.selfKeyIdRoute();
-	};
+	getNextRoute = () => this.selfKeyIdRoute();
 
 	onBackClick = () => this.props.dispatch(push(this.cancelRoute()));
 
 	onContinueClick = () => this.props.dispatch(push(this.getNextRoute()));
 
 	render() {
+		// TODO: get vendor email from the RP
 		const body = (
 			<React.Fragment>
 				<Typography variant="h1" gutterBottom>
@@ -84,7 +83,7 @@ class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsCo
 					Thank you for payment!
 				</Typography>
 				<Typography variant="body2" gutterBottom>
-					One of our our managers is reviewing the information you submitted and{' '}
+					One of our managers is reviewing the information you submitted and{' '}
 					<strong>will contact you shortly on the e-mail you provided </strong>, to
 					continue the process. If you have any questions in the meantime, you can reach
 					us at:
@@ -100,24 +99,26 @@ class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsCo
 				title={`KYC Process Started`}
 				body={body}
 				onBackClick={this.onBackClick}
-				onSelfKeyClick={this.onSelfKeyClick}
+				onSelfKeyClick={this.onContinueClick}
 			/>
 		);
 	}
 }
 
 const mapStateToProps = (state, props) => {
-	const { companyCode } = props.match.params;
+	const { companyCode, vendorId } = props.match.params;
 	const authenticated = true;
 	return {
+		companyCode,
+		vendorId,
 		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
 		transaction: transactionSelectors.getTransaction(state),
-		publicKey: getWallet(state).publicKey,
+		address: getWallet(state).address,
 		currentApplication: kycSelectors.selectCurrentApplication(state),
-		rp: kycSelectors.relyingPartySelector(state, 'incorporations'),
+		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
-			'incorporations',
+			vendorId,
 			authenticated
 		)
 	};

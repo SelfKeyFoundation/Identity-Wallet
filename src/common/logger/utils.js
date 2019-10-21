@@ -30,9 +30,9 @@ export const createFilter = ({ filters, filterLevels }) => {
 
 export const errToStr = error => {
 	const hasStack = error instanceof Error && error.stack;
-	const errStr = '' + error;
-	if (!hasStack) return errStr;
-	const stackStr = '' + error.stack;
-	if (stackStr.startsWith(errStr)) return stackStr;
-	return errStr;
+	let errStr = '' + error;
+	if (hasStack && !('' + error.stack).startsWith(errStr)) {
+		errStr = '' + error.stack;
+	}
+	return errStr.replace(/%/gm, '%%');
 };

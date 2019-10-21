@@ -57,15 +57,13 @@ describe('TaxTrieatiesService', () => {
 	it('should upsert taxTreaties to db', async () => {
 		sinon.stub(TaxTreaties, 'bulkUpsert').resolves('ok');
 		const taxTreaties = [1, 2, 3];
-		const loaded = await taxTreatiesService.upsert(taxTreaties);
+		await taxTreatiesService.upsert(taxTreaties);
 		expect(TaxTreaties.bulkUpsert.getCall(0).args).toEqual([taxTreaties]);
-		expect(loaded).toEqual('ok');
 	});
 	it('should delete many taxTreaties from db', async () => {
 		sinon.stub(TaxTreaties, 'deleteMany').resolves('ok');
 		const taxTreaties = [1, 2, 3];
-		const loaded = await taxTreatiesService.deleteMany(taxTreaties);
+		await taxTreatiesService.deleteMany(taxTreaties);
 		expect(TaxTreaties.deleteMany.getCall(0).args).toEqual([taxTreaties]);
-		expect(loaded).toEqual('ok');
 	});
 });

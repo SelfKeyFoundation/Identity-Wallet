@@ -5,21 +5,21 @@ import { Popup } from '../../../common/popup';
 import EditAvatar from '../components/edit-avatar';
 
 class EditAvatarPopupComponent extends Component {
-	handleSave = (avatar, walletId) => {
-		this.props.dispatch(identityOperations.updateProfilePictureOperation(avatar, walletId));
+	handleSave = (avatar, identityId) => {
+		this.props.dispatch(identityOperations.updateProfilePictureOperation(avatar, identityId));
 	};
 	handleCancel = () => {
 		if (this.props.onClose) return this.props.onClose();
 	};
 	render() {
-		const { walletId, avatar, open = true, text = 'Update Profile Picture' } = this.props;
+		const { identityId, avatar, open = true, text = 'Update Profile Picture' } = this.props;
 		return (
 			<Popup open={open} closeAction={this.handleCancel} text={text}>
 				<EditAvatar
 					onSave={this.handleSave}
 					onCancel={this.handleCancel}
 					avatar={avatar}
-					walletId={walletId}
+					identityId={identityId}
 				/>
 			</Popup>
 		);

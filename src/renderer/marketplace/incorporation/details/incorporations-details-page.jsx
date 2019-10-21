@@ -2,7 +2,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Button, Typography } from '@material-ui/core';
 import { ApplicationStatusBar } from '../../../kyc/application/application-status';
-import { CertificateIcon } from 'selfkey-ui';
+import { CertificateIcon, BackButton } from 'selfkey-ui';
 import { FlagCountryName, ResumeBox, ProgramPrice, MarketplaceKycRequirements } from '../../common';
 import { IncorporationsDetailsTabs } from './incorporations-details-tabs';
 
@@ -11,13 +11,6 @@ const styles = theme => ({
 		width: '100%',
 		margin: '50px auto 0',
 		maxWidth: '960px'
-	},
-	backButtonContainer: {
-		left: '15px',
-		position: 'absolute'
-	},
-	bold: {
-		fontWeight: 600
 	},
 	title: {
 		padding: '22px 30px',
@@ -114,13 +107,7 @@ export const IncorporationsDetailsPage = withStyles(styles)(props => {
 	return (
 		<Grid container>
 			<Grid item>
-				<div className={classes.backButtonContainer}>
-					<Button variant="outlined" color="secondary" size="small" onClick={onBack}>
-						<Typography variant="subtitle2" color="secondary" className={classes.bold}>
-							‹ Back
-						</Typography>
-					</Button>
-				</div>
+				<BackButton onclick={onBack} />
 			</Grid>
 			<Grid item className={classes.container}>
 				<Grid

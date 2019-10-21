@@ -1,7 +1,6 @@
 import { Model, transaction } from 'objection';
 import { Logger } from 'common/logger';
 import BaseModel from '../common/base-model';
-import IdAttribute from '../identity/id-attribute';
 import config from 'common/config';
 
 const TABLE_NAME = 'wallets';
@@ -21,14 +20,10 @@ export class Wallet extends BaseModel {
 			properties: {
 				id: { type: 'integer' },
 				name: { type: 'string' },
-				publicKey: { type: 'string' },
-				privateKey: { type: 'string' },
+				address: { type: 'string' },
 				keystoreFilePath: { type: 'string' },
-				profilePicture: { type: 'binary' },
-				isSetupFinished: { type: 'integer' },
 				profile: { type: 'string' },
-				path: { type: 'string' },
-				did: { type: 'string' }
+				path: { type: 'string' }
 			}
 		};
 	}
@@ -36,8 +31,8 @@ export class Wallet extends BaseModel {
 	static get relationMappings() {
 		const WalletSetting = require('./wallet-setting').default;
 		const WalletToken = require('./wallet-token').default;
-		const IdAttribute = require('../identity/id-attribute').default;
 		const LoginAttempt = require('../lws/login-attempt').default;
+		const Identity = require('../identity/identity').default;
 
 		return {
 			setting: {
@@ -56,14 +51,6 @@ export class Wallet extends BaseModel {
 					to: `${WalletToken.tableName}.walletId`
 				}
 			},
-			idAttributes: {
-				relation: Model.HasManyRelation,
-				modelClass: IdAttribute,
-				join: {
-					from: `${this.tableName}.id`,
-					to: `${IdAttribute.tableName}.walletId`
-				}
-			},
 			loginAttempts: {
 				relation: Model.HasManyRelation,
 				modelClass: LoginAttempt,
@@ -71,12 +58,20 @@ export class Wallet extends BaseModel {
 					from: `${this.tableName}.id`,
 					to: `${LoginAttempt.tableName}.walletId`
 				}
+			},
+			identities: {
+				relation: Model.HasManyRelation,
+				modelClass: Identity,
+				join: {
+					from: `${this.tableName}.id`,
+					to: `${Identity.tableName}.walletId`
+				}
 			}
 		};
 	}
 
 	static async create(itm) {
-		itm.publicKey = itm.publicKey.toLowerCase();
+		itm.address = itm.address.toLowerCase();
 		const tx = await transaction.start(this.knex());
 		try {
 			let insertedItm = await this.query(tx).insertGraphAndFetch(
@@ -88,6 +83,11 @@ export class Wallet extends BaseModel {
 					tokens: [
 						{
 							tokenId: config.constants.primaryToken === 'KEY' ? 1 : 2
+						}
+					],
+					identities: [
+						{
+							type: 'individual'
 						}
 					]
 				},
@@ -102,10 +102,6 @@ export class Wallet extends BaseModel {
 		}
 	}
 
-	static findActive() {
-		return this.findAllWithKeyStoreFile().where({ isSetupFinished: 1 });
-	}
-
 	static findById(id) {
 		return this.query().findById(id);
 	}
@@ -118,34 +114,13 @@ export class Wallet extends BaseModel {
 		return this.query();
 	}
 
-	static findByPublicKey(publicKey) {
-		return this.query().findOne({ publicKey: publicKey.toLowerCase() });
-	}
-
-	static async updateProfilePicture({ id, profilePicture }) {
-		let wallet = await this.query().patchAndFetchById(id, { profilePicture });
-		return wallet;
+	static findByPublicKey(address) {
+		return this.query().findOne({ address: address.toLowerCase() });
 	}
 
 	static async updateName({ id, name }) {
 		let wallet = await this.query().patchAndFetchById(id, { name });
 		return wallet;
-	}
-
-	static async updateSetup({ id, setup }) {
-		let wallet = await this.query().patchAndFetchById(id, { isSetupFinished: setup ? 1 : 0 });
-		return wallet;
-	}
-
-	static async updateDID({ id, did }) {
-		let wallet = await this.query().patchAndFetchById(id, { did });
-		return wallet;
-	}
-
-	static async selectProfilePictureById(id) {
-		let itm = await this.query().findById(id);
-		if (!itm) return null;
-		return itm.profilePicture;
 	}
 
 	async hasSignedUpTo(websiteUrl) {
@@ -162,14 +137,8 @@ export class Wallet extends BaseModel {
 		return this.$relatedQuery('loginAttempts').insert({ ...attempt, walletId: this.id });
 	}
 
-	static async addInitialIdAttributesAndActivate(id, initialIdAttributesValues) {
-		for (let key in initialIdAttributesValues) {
-			await IdAttribute.create({
-				walletId: id,
-				typeId: 1,
-				data: { [key]: initialIdAttributesValues[key] }
-			});
-		}
+	getDefaultIdentity() {
+		return this.identities.find(ident => ident.type === 'individual') || this.identities[0];
 	}
 }
 

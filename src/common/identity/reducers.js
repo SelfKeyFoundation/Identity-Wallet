@@ -11,7 +11,10 @@ export const initialState = {
 	documentsById: {},
 	attributes: [],
 	attributesById: {},
-	countries: []
+	countries: [],
+	identities: [],
+	identitiesById: {},
+	currentIdentity: null
 };
 
 const setCountries = (state, action) => {
@@ -51,7 +54,7 @@ const setUiSchemasReducer = (state, action) => {
 const setDocumentsReducer = (state, action) => {
 	let oldDocuments = state.documents
 		.map(docId => state.documentsById[docId])
-		.filter(doc => doc.walletId !== action.walletId);
+		.filter(doc => doc.identityId !== action.identityId);
 	let documents = [...oldDocuments, ...(action.payload.documents || [])];
 	let documentsById = documents.reduce((acc, curr) => {
 		acc[curr.id] = curr;
@@ -89,7 +92,7 @@ const deleteAttributeDocumentsReducer = (state, action) => {
 const deleteDocumentsReducer = (state, action) => {
 	let documents = state.documents
 		.map(docId => state.documentsById[docId])
-		.filter(doc => doc.walletId !== action.payload);
+		.filter(doc => doc.identityId !== action.payload);
 	let documentsById = documents.reduce((acc, curr) => {
 		acc[curr.id] = curr;
 		return acc;
@@ -101,7 +104,7 @@ const deleteDocumentsReducer = (state, action) => {
 const setIdAttributesReducer = (state, action) => {
 	let oldIdAttributes = state.attributes
 		.map(attrId => state.attributesById[attrId])
-		.filter(attr => attr.walletId !== action.payload.walletId);
+		.filter(attr => attr.identityId !== action.payload.identityId);
 	let attributes = [...oldIdAttributes, ...(action.payload.attributes || [])];
 	let attributesById = attributes.reduce((acc, curr) => {
 		acc[curr.id] = curr;
@@ -114,7 +117,7 @@ const setIdAttributesReducer = (state, action) => {
 const deleteIdAttributesReducer = (state, action) => {
 	let attributes = state.attributes
 		.map(attrId => state.attributesById[attrId])
-		.filter(attr => attr.walletId !== action.payload);
+		.filter(attr => attr.identityId !== action.payload);
 	let attributesById = attributes.reduce((acc, curr) => {
 		acc[curr.id] = curr;
 		return acc;
@@ -175,6 +178,44 @@ const deleteIdAttributeReducer = (state, action) => {
 	return { ...state, attributesById, attributes };
 };
 
+const setIdentitiesReducer = (state, action) => {
+	const identities = (action.payload || []).map(idnt => idnt.id);
+	const identitiesById = (action.payload || []).reduce((acc, curr) => {
+		acc[curr.id] = curr;
+		return acc;
+	}, {});
+
+	return { ...state, identities, identitiesById };
+};
+
+const addIdentityReducer = (state, action) => {
+	const { identities, identitiesById } = state;
+
+	if (identities.includes(action.payload.id)) {
+		return state;
+	}
+
+	identities.push(action.payload.id);
+	identitiesById[action.payload.id] = action.payload;
+
+	return { ...state, identities, identitiesById };
+};
+
+const updateIdentityReducer = (state, action) => {
+	const { identities, identitiesById } = state;
+
+	if (!identities.includes(action.payload.id)) {
+		return state;
+	}
+	identitiesById[action.payload.id] = { ...identitiesById[action.payload.id], ...action.payload };
+
+	return { ...state, identities, identitiesById };
+};
+
+const setCurrentIdentityReducer = (state, action) => {
+	return { ...state, currentIdentity: action.payload };
+};
+
 export const identityReducers = {
 	setCountries,
 	setRepositoriesReducer,
@@ -191,7 +232,11 @@ export const identityReducers = {
 	updateIdAttributeReducer,
 	updateDocumentReducer,
 	deleteDocumentReducer,
-	deleteIdAttributeReducer
+	deleteIdAttributeReducer,
+	setIdentitiesReducer,
+	addIdentityReducer,
+	updateIdentityReducer,
+	setCurrentIdentityReducer
 };
 
 const reducer = (state = initialState, action) => {
@@ -228,6 +273,14 @@ const reducer = (state = initialState, action) => {
 			return identityReducers.deleteDocumentReducer(state, action);
 		case identityTypes.IDENTITY_ATTRIBUTE_DELETE:
 			return identityReducers.deleteIdAttributeReducer(state, action);
+		case identityTypes.IDENTITIES_SET:
+			return identityReducers.setIdentitiesReducer(state, action);
+		case identityTypes.IDENTITY_ADD:
+			return identityReducers.addIdentityReducer(state, action);
+		case identityTypes.IDENTITY_UPDATE:
+			return identityReducers.updateIdentityReducer(state, action);
+		case identityTypes.IDENTITY_CURRENT_SET:
+			return identityReducers.setCurrentIdentityReducer(state, action);
 	}
 	return state;
 };
