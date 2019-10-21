@@ -45,6 +45,10 @@ const TokenBox = props => {
 		children,
 		address
 	} = props;
+	const shortAddress = `${address.substring(0, 12)}...${address.substring(
+		address.length - 10,
+		address.length
+	)}`;
 	return (
 		<Paper className={classes.paper}>
 			<Grid container spacing={8}>
@@ -71,7 +75,7 @@ const TokenBox = props => {
 				<Grid xs={12} container justify="space-between" className={classes.marginSpace}>
 					<Grid item>
 						<p className={classes.publicKey} title={address}>
-							{address}
+							{shortAddress}
 						</p>
 					</Grid>
 					<Grid item>
