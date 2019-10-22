@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Button, withStyles } from '@material-ui/core';
 import { PageLoading, ProgramPrice } from '../../common';
-import { MarketplaceNotariesIcon, CertificateIcon } from 'selfkey-ui';
+import { MarketplaceNotariesIcon, NotarizeDocumentIcon } from 'selfkey-ui';
 import { Alert } from '../../../common';
 import NotarizationDetailsPageTabs from './notarization-details-tabs';
 import KycRequirementsList from '../../../kyc/requirements/requirements-list';
@@ -129,7 +129,7 @@ export const NotarizeApplicationButton = withStyles(styles)(
 		<React.Fragment>
 			{canNotarizeApplication && !loading && (
 				<Button variant="contained" size="large" onClick={startApplication}>
-					<CertificateIcon className={classes.documentIcon} />
+					<NotarizeDocumentIcon className={classes.documentIcon} />
 					Notarize Documents
 				</Button>
 			)}
