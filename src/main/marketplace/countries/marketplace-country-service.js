@@ -89,6 +89,7 @@ export class MarketplaceCountryService {
 		country.languages = (country.languages || '').split(',').filter(l => !!l);
 		country.population = +country.population || 0;
 		country.geonameId = '' + country.geonameId || null;
+		country.code = ('' + country.code || null).trim();
 		return country;
 	}
 
