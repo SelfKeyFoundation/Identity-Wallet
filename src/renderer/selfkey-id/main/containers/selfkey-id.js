@@ -6,7 +6,7 @@ import SelfkeyIdOverview from './selfkey-id-overview';
 import SelfkeyIdApplications from './selfkey-id-applications';
 import { push } from 'connected-react-router';
 
-const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
+const MARKETPLACE_ROOT_PATH = '/main/marketplace';
 
 class SelfkeyIdContainerComponent extends Component {
 	state = {

@@ -54,8 +54,8 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 
 	onApplyClick = () => {
 		const { rp, identity, vendorId, jurisdiction } = this.props;
-		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
-		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
+		const selfkeyIdRequiredRoute = '/main/marketplace/selfkey-id-required';
+		const selfkeyDIDRequiredRoute = '/main/marketplace/selfkey-did-required';
 		const transactionNoKeyError = '/main/transaction-no-key-error';
 		const authenticated = true;
 		const keyPrice = this.priceInKEY(jurisdiction.price);

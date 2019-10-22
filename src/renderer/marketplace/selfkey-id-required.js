@@ -20,7 +20,7 @@ class MarketplaceSelfkeyIdRequiredComponent extends Component {
 		this.props.dispatch(push('/main/selfkeyId'));
 	};
 	handleClose = () => {
-		this.props.dispatch(push('/main/marketplace-categories'));
+		this.props.dispatch(push('/main/marketplace'));
 	};
 	render() {
 		const { classes } = this.props;
