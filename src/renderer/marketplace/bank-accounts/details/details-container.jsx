@@ -23,6 +23,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 
 	async componentDidMount() {
 		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: false });
+		window.scrollTo(0, 0);
 	}
 
 	onBackClick = () => this.props.dispatch(push(this.listRoute()));

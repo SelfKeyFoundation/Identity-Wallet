@@ -23,11 +23,7 @@ const styles = theme => ({
 	},
 
 	title: {
-		margin: '20px'
-	},
-
-	icon: {
-		marginLeft: '20px'
+		margin: '20px 20px 20px 12px'
 	},
 
 	header: {
@@ -224,13 +220,24 @@ const styles = theme => ({
 	leftAlign: {
 		textAlign: 'left'
 	},
+	icon: {
+		alignItems: 'center',
+		display: 'flex',
+		height: '44px',
+		marginLeft: '12px'
+	},
 	defaultIcon: {
 		alignItems: 'center',
 		borderRadius: '8px',
 		color: '#FFFFFF',
 		display: 'flex',
-		height: '44px',
 		justifyContent: 'center',
+		maxWidth: '44px',
+		padding: '0 8px'
+	},
+	generatedIcon: {
+		height: 'inherit',
+		maxWidth: '28px',
 		width: '44px'
 	},
 	disclaimer: {
@@ -241,6 +248,10 @@ const styles = theme => ({
 });
 
 class ExchangesDetailsComponent extends Component {
+	async componentDidMount() {
+		window.scrollTo(0, 0);
+	}
+
 	getLastApplication = () => {
 		const { relyingParty } = this.props;
 		// const { templateId } = this.props.match.params;
@@ -449,7 +460,7 @@ class ExchangesDetailsComponent extends Component {
 				<img src={item.data.logo[0].url} className={classes.defaultIcon} />
 			) : (
 				<div
-					className={classes.defaultIcon}
+					className={`${classes.defaultIcon} ${classes.generatedIcon}`}
 					style={{
 						backgroundColor: getColors()[random]
 					}}
