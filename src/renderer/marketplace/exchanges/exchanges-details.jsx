@@ -439,7 +439,7 @@ class ExchangesDetailsComponent extends Component {
 		const { item, templates, wallet } = this.props;
 
 		if (!wallet.isSetupFinished) {
-			return this.props.dispatch(push('/main/marketplace-selfkey-id-required'));
+			return this.props.dispatch(push('/main/marketplace/selfkey-id-required'));
 		}
 
 		// TODO: hardware wallet support

@@ -5,3 +5,4 @@ export { MarketplaceBankAccountsPage } from './bank-accounts';
 export { MarketplaceSelfkeyIdRequired } from './selfkey-id-required';
 export { MarketplaceSelfkeyDIDRequiredContainer } from './selfkey-did-required-container';
 export { MarketplaceOrdersPage } from './orders';
+export { MarketplaceContainer } from './marketplace-container';
