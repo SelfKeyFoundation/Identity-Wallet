@@ -178,7 +178,7 @@ const styles = theme => ({
 	signUpButton: {
 		display: 'flex',
 		justifyContent: 'space-between',
-		maxWidth: '200px',
+		maxWidth: '100%',
 		marginLeft: 'auto',
 		marginRight: '0'
 	},
@@ -244,6 +244,9 @@ const styles = theme => ({
 		margin: '20px auto',
 		textAlign: 'center',
 		maxWidth: '80%'
+	},
+	affiliateMessage: {
+		textAlign: 'left'
 	}
 });
 
@@ -317,16 +320,27 @@ class ExchangesDetailsComponent extends Component {
 	};
 
 	renderAffiliateLinkButton = url => (
-		<Button
-			variant="contained"
-			size="large"
-			className={`${this.props.classes.signUpButton} ${this.props.classes.ctaButton}`}
-			onClick={() => this.linkToAffiliateUrl(url)}
-		>
-			<UserPlusIcon />
-			<span>SIGN UP</span>
-			<span />
-		</Button>
+		<React.Fragment>
+			<Button
+				variant="contained"
+				size="large"
+				className={`${this.props.classes.signUpButton} ${this.props.classes.ctaButton}`}
+				onClick={() => this.linkToAffiliateUrl(url)}
+			>
+				<UserPlusIcon />
+				<span>SIGN UP</span>
+				<span />
+			</Button>
+			<Typography
+				className={this.props.classes.affiliateMessage}
+				variant="subtitle2"
+				color="secondary"
+				gutterBottom
+			>
+				Disclosure: the button above is an affiliate link, we may receive a commission for
+				purchases made through these link.
+			</Typography>
+		</React.Fragment>
 	);
 
 	renderApplicationButton = application => {
