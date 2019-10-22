@@ -12,7 +12,6 @@ class MarketplaceCategoriesContainer extends Component {
 
 	actions = {
 		exchanges: () => {
-			console.log('/main/marketplace/exchanges');
 			this.props.dispatch(push('/main/marketplace/exchanges'));
 		},
 		incorporation: () => {
