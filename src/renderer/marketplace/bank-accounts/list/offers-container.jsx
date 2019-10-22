@@ -29,10 +29,11 @@ class BankAccountsTableContainer extends MarketplaceBankAccountsComponent {
 
 	render() {
 		const { isLoading, keyRate, vendors, inventory } = this.props;
-		const { accountType } = this.state;
+		const { accountType: selectedType } = this.state;
 
 		const data = inventory
-			.filter(bank => bank.data.type === this.state.accountType)
+			.filter(bank => bank.data.type === selectedType)
+			.filter(bank => Object.keys(bank.data.accounts).length > 0)
 			.sort((a, b) =>
 				a.data.region < b.data.region ? -1 : a.data.region > b.data.region ? 1 : 0
 			);
@@ -43,7 +44,7 @@ class BankAccountsTableContainer extends MarketplaceBankAccountsComponent {
 				vendors={vendors}
 				inventory={data}
 				onBackClick={this.onBackClick}
-				accountType={accountType}
+				accountType={selectedType}
 				onAccountTypeChange={this.onAccountTypeChange}
 				onDetails={this.onDetailsClick}
 				loading={isLoading}
