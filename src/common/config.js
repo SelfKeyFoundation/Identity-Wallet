@@ -122,7 +122,8 @@ const common = {
 		paymentContract: false,
 		scheduler: true,
 		corporate: false,
-		certifiers: false
+		certifiers: false,
+		corporateMarketplace: false
 	}
 };
 
@@ -144,7 +145,8 @@ const dev = {
 		paymentContract: false,
 		scheduler: true,
 		corporate: true,
-		certifiers: true
+		certifiers: true,
+		corporateMarketplace: false
 	},
 	testWalletAddress: '0x23d233933c86f93b74705cf0d236b39f474249f8',
 	testDidAddress: '0xee10a3335f48e10b444e299cf017d57879109c1e32cec3e31103ceca7718d0ec',
@@ -168,7 +170,9 @@ const prod = {
 	features: {
 		paymentContract: false,
 		scheduler: true,
-		corporate: true
+		corporate: true,
+		certifiers: false,
+		corporateMarketplace: false
 	},
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'
 };
