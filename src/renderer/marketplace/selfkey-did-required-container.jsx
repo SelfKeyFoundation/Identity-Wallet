@@ -4,7 +4,7 @@ import { push } from 'connected-react-router';
 import { MarketplaceDIDRequired } from './selfkey-did-required';
 import { didOperations } from 'common/did';
 
-const MARKETPLACE_PATH = '/main/marketplace-categories';
+const MARKETPLACE_PATH = '/main/marketplace';
 
 class MarketplaceSelfkeyDIDRequiredContainer extends Component {
 	handleConfirm = evt => {

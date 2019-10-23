@@ -6,7 +6,7 @@ import { Typography } from '@material-ui/core';
 import { MarketplaceProcessStarted } from '../../common/marketplace-process-started';
 
 const styles = theme => ({});
-const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = `/main/marketplace-bank-accounts`;
+const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = `/main/marketplace/bank-accounts`;
 const SELFKEY_PATH = `/main/selfkeyId`;
 
 // TODO: future improvement load from rp config

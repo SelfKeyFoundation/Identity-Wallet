@@ -16,7 +16,7 @@ import { fiatCurrencySelectors } from '../../fiatCurrency';
 const hardwalletConfirmationTime = '30000';
 const log = new Logger('orders-duck');
 
-const MARKETPLACE_ORDERS_ROOT_PATH = '/main/marketplace-orders';
+const MARKETPLACE_ORDERS_ROOT_PATH = '/main/marketplace/orders';
 
 export const orderStatus = {
 	PENDING: 'PENDING',
