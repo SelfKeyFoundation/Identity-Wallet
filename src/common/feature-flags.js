@@ -12,4 +12,6 @@ const featureIsEnabled = featureName => {
 	return !!config.features[featureName];
 };
 
-export { featureIsEnabled };
+const featureIsDisabled = featureName => !featureIsEnabled(featureName);
+
+export { featureIsEnabled, featureIsDisabled };
