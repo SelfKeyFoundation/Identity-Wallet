@@ -61,7 +61,7 @@ const renderAddressAtr = profile => {
 	const addressAtr = profile.allAttributes.find(a => a.name === 'Address');
 	if (addressAtr) {
 		const value = addressAtr.data.value;
-		return renderAttr(!value ? `${value.address_line_1} ${value.address_line_2}` : '');
+		return renderAttr(value ? `${value.address_line_1} ${value.address_line_2}` : '');
 	} else return renderAttr('');
 };
 
