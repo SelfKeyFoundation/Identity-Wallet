@@ -144,6 +144,8 @@ export class FlagtheoryIncorporationsInventoryFetcher extends InventoryFetcher {
 
 			let items = fetched.Main.map(itm => {
 				const data = _.mapKeys(itm.data.fields, (value, key) => _.camelCase(key));
+				data.companyCode = ('' + data.companyCode || null).trim();
+				data.countryCode = ('' + data.countryCode || null).trim();
 				const sku = `FT-INC-${data.companyCode}`;
 				let name = data.region;
 				if (data.acronym && data.acronym.length) {
@@ -195,6 +197,8 @@ export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
 			)
 				.filter(itm => itm.region && (itm.accountCode || itm.countryCode))
 				.map(itm => {
+					itm.accountCode = ('' + itm.accountCode || null).trim();
+					itm.countryCode = ('' + itm.countryCode || null).trim();
 					const sku = `FT-BNK-${itm.accountCode || itm.countryCode}`;
 					const name = `${itm.region} ${itm.accountCode || itm.countryCode}`;
 					let price = itm.activeTestPrice ? itm.testPrice : itm.price;

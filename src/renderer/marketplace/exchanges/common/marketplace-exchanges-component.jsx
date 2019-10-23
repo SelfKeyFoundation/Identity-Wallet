@@ -1,6 +1,6 @@
 import { MarketplaceComponent } from '../../common/marketplace-component';
 
-const MARKETPLACE_EXCHANGES_ROOT_PATH = '/main/marketplace-exchanges';
+const MARKETPLACE_EXCHANGES_ROOT_PATH = '/main/marketplace/exchanges';
 
 export default class MarketplaceExchangesComponent extends MarketplaceComponent {
 	detailsRoute = vendorId => `${MARKETPLACE_EXCHANGES_ROOT_PATH}/details/${vendorId}`;

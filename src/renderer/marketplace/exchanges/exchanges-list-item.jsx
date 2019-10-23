@@ -3,27 +3,25 @@ import { Button, TableRow, TableCell, Typography, Grid, withStyles } from '@mate
 import { Tag } from 'selfkey-ui';
 
 const styles = theme => ({
-	icon: {
+	defaultIcon: {
 		alignItems: 'center',
 		borderRadius: '5px',
 		display: 'flex',
 		justifyContent: 'center',
-		height: '30px',
-		width: '30px'
+		maxWidth: '30px'
 	},
-
+	generatedIcon: {
+		height: '30px'
+	},
 	noRightPadding: {
 		padding: '0 0 0 20px'
 	},
-
 	link: {
 		cursor: 'pointer'
 	},
-
 	footer: {
 		margin: '20px'
 	},
-
 	button: {
 		fontSize: '14px',
 		fontWeight: 400,
@@ -36,26 +34,22 @@ const styles = theme => ({
 		wordBreak: 'break-word',
 		wordWrap: 'normal'
 	},
-
 	inline: {
 		display: 'flex',
 		flexWrap: 'wrap'
 	},
-
 	smallCell: {
 		padding: '0 10px',
 		whiteSpace: 'normal',
 		width: '100px',
 		wordBreak: 'break-word'
 	},
-
 	excluded: {
 		padding: '10px',
 		whiteSpace: 'normal',
 		width: '100px',
 		wordBreak: 'break-word'
 	},
-
 	goodForCell: {
 		alignItems: 'center',
 		display: 'flex',
@@ -67,30 +61,25 @@ const styles = theme => ({
 		padding: '10px',
 		width: '143px'
 	},
-
 	fee: {
 		overflow: 'hidden',
 		textOverflow: 'ellipsis'
 	},
-
 	feeWrap: {
 		textOverflow: 'ellipsis',
 		overflow: 'hidden',
 		maxWidth: '90px'
 	},
-
 	resident: {
 		marginBottom: '3px',
 		marginRight: '5px',
 		marginTop: '3px'
 	},
-
 	exchangeName: {
 		maxWidth: '120px',
 		paddingLeft: '15px',
 		whiteSpace: 'pre-line'
 	},
-
 	tableRow: {
 		'& td': {
 			padding: '0 15px'
@@ -121,10 +110,10 @@ export const ExchangesListItem = withStyles(styles)(
 		let random = Math.floor(Math.random() * 4);
 
 		const icon = logoUrl ? (
-			<img src={logoUrl} className={classes.icon} />
+			<img src={logoUrl} className={classes.defaultIcon} />
 		) : (
 			<div
-				className={classes.icon}
+				className={`${classes.defaultIcon} ${classes.generatedIcon}`}
 				style={{
 					backgroundColor: getColors()[random]
 				}}

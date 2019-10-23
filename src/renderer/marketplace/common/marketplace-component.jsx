@@ -8,8 +8,8 @@ import {
 import { kycOperations } from 'common/kyc';
 import ReactPiwik from 'react-piwik';
 
-export default class MarketplaceComponent extends Component {
-	marketplaceRootPath = () => `/main/marketplace-categories`;
+class MarketplaceComponent extends Component {
+	marketplaceRootPath = () => `/main/marketplace`;
 
 	manageApplicationsRoute = () => `/main/selfkeyIdApplications`;
 
@@ -148,3 +148,4 @@ export default class MarketplaceComponent extends Component {
 }
 
 export { MarketplaceComponent };
+export default MarketplaceComponent;

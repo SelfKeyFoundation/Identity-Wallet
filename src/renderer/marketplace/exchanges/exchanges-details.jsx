@@ -23,11 +23,7 @@ const styles = theme => ({
 	},
 
 	title: {
-		margin: '20px'
-	},
-
-	icon: {
-		marginLeft: '20px'
+		margin: '20px 20px 20px 12px'
 	},
 
 	header: {
@@ -182,7 +178,7 @@ const styles = theme => ({
 	signUpButton: {
 		display: 'flex',
 		justifyContent: 'space-between',
-		maxWidth: '200px',
+		maxWidth: '100%',
 		marginLeft: 'auto',
 		marginRight: '0'
 	},
@@ -224,23 +220,41 @@ const styles = theme => ({
 	leftAlign: {
 		textAlign: 'left'
 	},
+	icon: {
+		alignItems: 'center',
+		display: 'flex',
+		height: '44px',
+		marginLeft: '12px'
+	},
 	defaultIcon: {
 		alignItems: 'center',
 		borderRadius: '8px',
 		color: '#FFFFFF',
 		display: 'flex',
-		height: '44px',
 		justifyContent: 'center',
+		maxWidth: '44px',
+		padding: '0 8px'
+	},
+	generatedIcon: {
+		height: 'inherit',
+		maxWidth: '28px',
 		width: '44px'
 	},
 	disclaimer: {
 		margin: '20px auto',
 		textAlign: 'center',
 		maxWidth: '80%'
+	},
+	affiliateMessage: {
+		textAlign: 'left'
 	}
 });
 
 class ExchangesDetailsComponent extends Component {
+	async componentDidMount() {
+		window.scrollTo(0, 0);
+	}
+
 	getLastApplication = () => {
 		const { relyingParty } = this.props;
 		// const { templateId } = this.props.match.params;
@@ -306,16 +320,27 @@ class ExchangesDetailsComponent extends Component {
 	};
 
 	renderAffiliateLinkButton = url => (
-		<Button
-			variant="contained"
-			size="large"
-			className={`${this.props.classes.signUpButton} ${this.props.classes.ctaButton}`}
-			onClick={() => this.linkToAffiliateUrl(url)}
-		>
-			<UserPlusIcon />
-			<span>SIGN UP</span>
-			<span />
-		</Button>
+		<React.Fragment>
+			<Button
+				variant="contained"
+				size="large"
+				className={`${this.props.classes.signUpButton} ${this.props.classes.ctaButton}`}
+				onClick={() => this.linkToAffiliateUrl(url)}
+			>
+				<UserPlusIcon />
+				<span>SIGN UP</span>
+				<span />
+			</Button>
+			<Typography
+				className={this.props.classes.affiliateMessage}
+				variant="subtitle2"
+				color="secondary"
+				gutterBottom
+			>
+				Disclosure: the button above is an affiliate link, we may receive a commission for
+				purchases made through these link.
+			</Typography>
+		</React.Fragment>
 	);
 
 	renderApplicationButton = application => {
@@ -414,7 +439,7 @@ class ExchangesDetailsComponent extends Component {
 		const { item, templates, wallet } = this.props;
 
 		if (!wallet.isSetupFinished) {
-			return this.props.dispatch(push('/main/marketplace-selfkey-id-required'));
+			return this.props.dispatch(push('/main/marketplace/selfkey-id-required'));
 		}
 
 		// TODO: hardware wallet support
@@ -449,7 +474,7 @@ class ExchangesDetailsComponent extends Component {
 				<img src={item.data.logo[0].url} className={classes.defaultIcon} />
 			) : (
 				<div
-					className={classes.defaultIcon}
+					className={`${classes.defaultIcon} ${classes.generatedIcon}`}
 					style={{
 						backgroundColor: getColors()[random]
 					}}
