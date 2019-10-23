@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { featureIsDisabled } from 'common/feature-flags';
 import { identitySelectors } from 'common/identity';
 import { ordersOperations } from 'common/marketplace/orders';
 import {
@@ -22,7 +23,7 @@ class MarketplaceContainerComponent extends Component {
 	render() {
 		const { match, identity } = this.props;
 
-		if (identity.type !== 'individual') {
+		if (identity.type !== 'individual' && featureIsDisabled('corporateMarketplace')) {
 			return <MarketplaceCorporatePreviewContainer />;
 		}
 
