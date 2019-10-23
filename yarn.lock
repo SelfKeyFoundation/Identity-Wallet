@@ -19027,9 +19027,9 @@ select@^1.1.2:
   resolved "https://registry.yarnpkg.com/select/-/select-1.1.2.tgz#0e7350acdec80b1108528786ec1d4418d11b396d"
   integrity sha1-DnNQrN7ICxEIUoeG7B1EGNEbOW0=
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#fee59787132eafe315352b9d21e95cc7b448a422":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#ffa62469e9bdfabbf5f31e30f5ed48ca6aad2ae7":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#fee59787132eafe315352b9d21e95cc7b448a422"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#ffa62469e9bdfabbf5f31e30f5ed48ca6aad2ae7"
   dependencies:
     "@material-ui/core" "3.9.2"
     "@material-ui/icons" "3.0.2"
@@ -19046,7 +19046,7 @@ select@^1.1.2:
     jss-global "3.0.0"
     jss-preset-default "4.5.0"
     jss-template "1.0.1"
-    lodash "4.17.11"
+    lodash "4.17.13"
     moment "^2.23.0"
     react "16.6.3"
     react-copy-to-clipboard "5.0.1"
