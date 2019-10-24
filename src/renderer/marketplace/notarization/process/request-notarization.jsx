@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Typography, Button, Divider, withStyles, IconButton } from '@material-ui/core';
 import { CloseButtonIcon, baseDark, grey, KeyTooltip, TooltipArrow, InfoTooltip } from 'selfkey-ui';
 import NotarizationDocuments from './notarization-documents';
+import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({
 	container: {
@@ -316,6 +318,12 @@ class RequestNotarizationComponent extends Component {
 	}
 }
 
-const RequestNotarization = withStyles(styles)(RequestNotarizationComponent);
+const mapStateToProps = (state, props) => {
+	return {
+		...identitySelectors.selectSelfkeyId(state)
+	};
+};
+
+const styledComponent = withStyles(styles)(RequestNotarizationComponent);
+export const RequestNotarization = connect(mapStateToProps)(styledComponent);
 export default RequestNotarization;
-export { RequestNotarization };
