@@ -338,7 +338,7 @@ class ExchangesDetailsComponent extends Component {
 				gutterBottom
 			>
 				Disclosure: the button above is an affiliate link, we may receive a commission for
-				purchases made through these link.
+				purchases made through this link.
 			</Typography>
 		</React.Fragment>
 	);
