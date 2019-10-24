@@ -72,12 +72,6 @@ const styles = theme => ({
 });
 
 class NotarizationDocumentsComponent extends Component {
-	// componentDidMount() {
-	// 	this.props.onRef(this);
-	// }
-	// componentWillUnmount() {
-	// 	this.props.onRef(undefined);
-	// }
 	renderLastUpdateDate({ updatedAt }) {
 		return moment(updatedAt).format('DD MMM YYYY, hh:mm a');
 	}
