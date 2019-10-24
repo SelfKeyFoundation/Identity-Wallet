@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import { Typography, Button, Divider, withStyles, IconButton } from '@material-ui/core';
 import { CloseButtonIcon, baseDark, grey, KeyTooltip, TooltipArrow, InfoTooltip } from 'selfkey-ui';
 import NotarizationDocuments from './notarization-documents';
 import { identitySelectors } from 'common/identity';
 import { CreateAttributeContainer } from '../../../attributes';
+import MarketplaceNotariesComponent from '../common/marketplace-notaries-component';
 
 const styles = theme => ({
 	container: {
@@ -220,10 +222,12 @@ export const ServiceCost = withStyles(serviceCostStyle)(({ classes }) => (
 	</div>
 ));
 
-class RequestNotarizationComponent extends Component {
+class RequestNotarizationComponent extends MarketplaceNotariesComponent {
 	state = {
 		popup: null
 	};
+
+	onBackClick = () => this.props.dispatch(push(this.rootPath()));
 
 	handleAddDocument = () => {
 		this.setState({ popup: 'create-attribute', isDocument: true });
@@ -234,7 +238,7 @@ class RequestNotarizationComponent extends Component {
 	};
 
 	render() {
-		const { classes, onBackClick, documents } = this.props;
+		const { classes, documents } = this.props;
 		const { popup } = this.state;
 
 		return (
@@ -247,7 +251,7 @@ class RequestNotarizationComponent extends Component {
 					/>
 				)}
 				<div className={classes.container}>
-					<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
+					<CloseButtonIcon onClick={this.onBackClick} className={classes.closeIcon} />
 					<div className={classes.containerHeader}>
 						<Typography variant="h2" className="region">
 							Notarization Service
@@ -334,7 +338,7 @@ class RequestNotarizationComponent extends Component {
 							>
 								Request Notarization
 							</Button>
-							<Button variant="outlined" size="large" onClick={onBackClick}>
+							<Button variant="outlined" size="large" onClick={this.onBackClick}>
 								Cancel
 							</Button>
 						</div>
