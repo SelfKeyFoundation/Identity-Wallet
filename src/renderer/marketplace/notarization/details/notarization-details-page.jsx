@@ -125,10 +125,10 @@ const styles = theme => ({
 });
 
 export const NotarizeApplicationButton = withStyles(styles)(
-	({ classes, canNotarizeApplication, startApplication, loading }) => (
+	({ classes, canNotarizeApplication, startNotarize, loading }) => (
 		<React.Fragment>
 			{canNotarizeApplication && !loading && (
-				<Button variant="contained" size="large" onClick={startApplication}>
+				<Button variant="contained" size="large" onClick={startNotarize}>
 					<NotarizeDocumentIcon className={classes.documentIcon} />
 					Notarize Documents
 				</Button>
@@ -144,7 +144,15 @@ export const NotarizeApplicationButton = withStyles(styles)(
 );
 
 export const NotarizationDetailsPage = withStyles(styles)(props => {
-	const { classes, tab, onTabChange, onBackClick, loading, keyRate = 1500000 } = props;
+	const {
+		classes,
+		tab,
+		onTabChange,
+		startNotarize,
+		onBackClick,
+		loading,
+		keyRate = 1500000
+	} = props;
 	return (
 		<div>
 			<div className={classes.backButtonContainer}>
@@ -195,6 +203,7 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 									<NotarizeApplicationButton
 										canNotarizeApplication={true}
 										loading={loading}
+										startNotarize={startNotarize}
 									/>
 									<ProgramPrice
 										id="fees"

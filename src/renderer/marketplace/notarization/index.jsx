@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { marketplaceOperations } from 'common/marketplace';
 import { NotarizationDetailsContainer } from './details/notarization-details-container';
+import { RequestNotarization } from './process/request-notarization';
 
 class MarketplaceNotariesComponent extends Component {
 	async componentDidMount() {
@@ -15,6 +16,7 @@ class MarketplaceNotariesComponent extends Component {
 		return (
 			<div>
 				<Route exact path={`${path}`} component={NotarizationDetailsContainer} />
+				<Route path={`${path}/process`} component={RequestNotarization} />
 			</div>
 		);
 	}
