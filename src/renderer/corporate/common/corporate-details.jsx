@@ -58,7 +58,11 @@ const renderAttr = attr =>
 	);
 
 const renderAddressAtr = profile => {
-	const addressAtr = profile.allAttributes.find(a => a.name === 'Address');
+	const addressAtr = profile.allAttributes.find(
+		attr =>
+			attr.type.content.$id ===
+			'http://platform.selfkey.org/schema/attribute/physical-address.json'
+	);
 	if (addressAtr) {
 		const value = addressAtr.data.value;
 		return renderAttr(value ? `${value.address_line_1} ${value.address_line_2}` : '');
