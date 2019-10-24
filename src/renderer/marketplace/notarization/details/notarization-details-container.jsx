@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { pricesSelectors } from 'common/prices';
 import { identitySelectors } from 'common/identity';
-// import { kycSelectors } from 'common/kyc';
 import { withStyles } from '@material-ui/core/styles';
 import { marketplaceSelectors } from 'common/marketplace';
 import { MarketplaceNotariesComponent } from '../common/marketplace-notaries-component';
@@ -32,12 +31,6 @@ class NotarizationDetailsContainer extends MarketplaceNotariesComponent {
 		const selfkeyDIDRequiredRoute = '/main/marketplace/selfkey-did-required';
 		const requestNotarizationRoute = '/main/marketplace/notaries/process';
 
-		// When clicking the start process,
-		// we check if an authenticated kyc-chain session exists
-		// If it doesn't we trigger a new authenticated rp session
-		// and redirect to checkout route
-		// The loading state is used to disable the button while data is being loaded
-		console.log(`${identity}`);
 		this.setState({ loading: true }, async () => {
 			if (!identity.isSetupFinished) {
 				return this.props.dispatch(push(selfkeyIdRequiredRoute));
