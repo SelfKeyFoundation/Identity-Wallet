@@ -8,6 +8,7 @@ import {
 	Divider
 } from '@material-ui/core';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import supportedDocumentTypes from './supported-document-types.json';
 
 const styles = theme => ({
 	tabContainer: {
@@ -32,7 +33,7 @@ const styles = theme => ({
 		}
 	},
 	gridPadding: {
-		padding: '15px 0 !important'
+		padding: '0 0 25px !important'
 	},
 	panelBox: {
 		alignItems: 'unset',
@@ -64,37 +65,6 @@ const styles = theme => ({
 		marginBottom: '5px'
 	}
 });
-
-export const panelDetails = [
-	{
-		title: 'Identity Documents',
-		subtitle: 'Certified True Copies',
-		panelTitle: 'Documents may include, but are not limited to:',
-		list: [
-			'Wills',
-			'Trusts',
-			'Advanced directives',
-			'Executorships',
-			'Custody and guardianship agreements',
-			'Power of attorney',
-			'Court documents'
-		]
-	},
-	{
-		title: 'Legal Documents',
-		subtitle: 'Legal forms often require notarized signatures.',
-		panelTitle: '2 ----- Documents may include, but are not limited to:',
-		list: [
-			'2 - Wills',
-			'2 - Trusts',
-			'2 - Advanced directives',
-			'2 - Executorships',
-			'2 - Custody and guardianship agreements',
-			'2 - Power of attorney',
-			'2 - Court documents'
-		]
-	}
-];
 
 export const PanelDetails = withStyles(styles)(({ classes, panelDetails }) => {
 	return (
@@ -133,27 +103,29 @@ class NotarizationTypesTabComponent extends Component {
 						have any doubts you can contact us at help@sekfley.org
 					</Typography>
 				</div>
-				{panelDetails.map((panel, indx) => {
+				{supportedDocumentTypes.map((supportedDocument, indx) => {
 					return (
 						<div key={indx} className={classes.panelBox}>
 							<ExpansionPanel
-								onChange={(e, expanded) => toggleOpen(expanded)}
+								onChange={(e, expanded) => this.toggleOption(expanded)}
 								className={classes.expansionPanel}
 							>
 								<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
 									<div className={classes.panelTextWrap}>
 										<div className={classes.panelText}>
-											<Typography variant="h2">{panel.title}</Typography>
+											<Typography variant="h2">
+												{supportedDocument.title}
+											</Typography>
 										</div>
 										<div className={classes.panelText}>
 											<Typography variant="body2" color="secondary">
-												{panel.subtitle}
+												{supportedDocument.subtitle}
 											</Typography>
 										</div>
 									</div>
 								</ExpansionPanelSummary>
 								<Divider />
-								<PanelDetails panelDetails={panel} />
+								<PanelDetails panelDetails={supportedDocument} />
 							</ExpansionPanel>
 						</div>
 					);

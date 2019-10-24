@@ -1,9 +1,9 @@
 import React from 'react';
 import { Typography, Button, withStyles } from '@material-ui/core';
 import { PageLoading, ProgramPrice } from '../../common';
-import { MarketplaceNotariesIcon, CertificateIcon } from 'selfkey-ui';
+import { MarketplaceNotariesIcon, NotarizeDocumentIcon } from 'selfkey-ui';
 import { Alert } from '../../../common';
-import NotarizationDetailsPageTabs from './details-tabs';
+import NotarizationDetailsPageTabs from './notarization-details-tabs';
 import KycRequirementsList from '../../../kyc/requirements/requirements-list';
 import KYCRequirementData from '../../../../../stories/kyc-requirements-data';
 
@@ -129,7 +129,7 @@ export const NotarizeApplicationButton = withStyles(styles)(
 		<React.Fragment>
 			{canNotarizeApplication && !loading && (
 				<Button variant="contained" size="large" onClick={startApplication}>
-					<CertificateIcon className={classes.documentIcon} />
+					<NotarizeDocumentIcon className={classes.documentIcon} />
 					Notarize Documents
 				</Button>
 			)}
@@ -163,7 +163,7 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 			{loading && <PageLoading />}
 			{!loading && (
 				<div>
-					<div id="bankAccounts" className={classes.pageContent}>
+					<div id="notarizeDocuments" className={classes.pageContent}>
 						<div id="header" className={classes.header}>
 							<MarketplaceNotariesIcon className={classes.icon} />
 							<Typography variant="h1" className={classes.headerTitle}>
@@ -172,7 +172,7 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 						</div>
 					</div>
 					<div className={classes.container}>
-						<div id="bankAccountDetails" className={classes.title}>
+						<div id="notarizeDocumentsDetails" className={classes.title}>
 							<Typography variant="body2" className="region">
 								Get your documents notarized!
 							</Typography>
@@ -194,15 +194,14 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 								<div className={classes.applyButton}>
 									<NotarizeApplicationButton
 										canNotarizeApplication={true}
-										price="1500"
 										loading={loading}
-										keyRate={keyRate}
 									/>
 									<ProgramPrice
 										id="fees"
-										price="122330"
+										price="25"
 										rate={keyRate}
-										label="Pricing: $"
+										label="From $"
+										extraLabel="/ Document"
 									/>
 								</div>
 							</div>
