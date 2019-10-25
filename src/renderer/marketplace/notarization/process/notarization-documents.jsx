@@ -72,21 +72,6 @@ const styles = theme => ({
 });
 
 class NotarizationDocumentsComponent extends Component {
-	state = {
-		popup: null
-	};
-	// componentDidMount() {
-	// 	this.props.onRef(this);
-	// }
-	// componentWillUnmount() {
-	// 	this.props.onRef(undefined);
-	// }
-	handleAddDocument = () => {
-		this.setState({ popup: 'create-attribute', isDocument: true });
-	};
-	handlePopupClose = () => {
-		this.setState({ popup: null });
-	};
 	renderLastUpdateDate({ updatedAt }) {
 		return moment(updatedAt).format('DD MMM YYYY, hh:mm a');
 	}
@@ -189,7 +174,7 @@ class NotarizationDocumentsComponent extends Component {
 						variant="outlined"
 						size="large"
 						color="secondary"
-						onClick={this.handleAddDocument}
+						onClick={this.props.onAddDocument}
 						className={classes.button}
 					>
 						Add Documents

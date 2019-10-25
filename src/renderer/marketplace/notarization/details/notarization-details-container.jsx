@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { pricesSelectors } from 'common/prices';
+import { identitySelectors } from 'common/identity';
 import { withStyles } from '@material-ui/core/styles';
 import { marketplaceSelectors } from 'common/marketplace';
 import { MarketplaceNotariesComponent } from '../common/marketplace-notaries-component';
@@ -12,7 +13,8 @@ const styles = theme => ({});
 
 class NotarizationDetailsContainer extends MarketplaceNotariesComponent {
 	state = {
-		tab: 'types'
+		tab: 'types',
+		loading: false
 	};
 
 	componentDidMount() {
@@ -23,34 +25,51 @@ class NotarizationDetailsContainer extends MarketplaceNotariesComponent {
 
 	onTabChange = tab => this.setState({ tab });
 
-	render() {
-		const { isLoading, keyRate } = this.props;
+	onApplyClick = () => {
+		const { identity } = this.props;
+		const selfkeyIdRequiredRoute = '/main/marketplace/selfkey-id-required';
+		const selfkeyDIDRequiredRoute = '/main/marketplace/selfkey-did-required';
+		const requestNotarizationRoute = '/main/marketplace/notaries/process';
 
+		this.setState({ loading: true }, async () => {
+			if (!identity.isSetupFinished) {
+				return this.props.dispatch(push(selfkeyIdRequiredRoute));
+			}
+			if (!identity.did) {
+				return this.props.dispatch(push(selfkeyDIDRequiredRoute));
+			} else {
+				await this.props.dispatch(push(requestNotarizationRoute));
+			}
+		});
+	};
+
+	render() {
+		const { keyRate, kycRequirements, templateId } = this.props;
 		return (
 			<NotarizationDetailsPage
 				onBackClick={this.onBackClick}
 				keyRate={keyRate}
-				loading={isLoading}
+				loading={this.state.loading || this.props.isLoading}
 				tab={this.state.tab}
+				kycRequirements={kycRequirements}
+				templateId={templateId}
 				onTabChange={this.onTabChange}
+				startNotarize={this.onApplyClick}
 			/>
 		);
 	}
 }
 
 NotarizationDetailsContainer.propTypes = {
-	// inventory: PropTypes.array,
-	// vendors: PropTypes.array,
 	isLoading: PropTypes.bool,
 	keyRate: PropTypes.number
 };
 
 const mapStateToProps = (state, props) => {
 	return {
-		// vendors: marketplaceSelectors.selectVendorsForCategory(state, 'banking'),
-		// inventory: marketplaceSelectors.selectBanks(state),
 		isLoading: marketplaceSelectors.isLoading(state),
-		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
+		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
+		identity: identitySelectors.selectCurrentIdentity(state)
 	};
 };
 

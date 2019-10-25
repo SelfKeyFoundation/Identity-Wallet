@@ -94,7 +94,6 @@ class NotarizationTypesTabComponent extends Component {
 	};
 	render() {
 		const { classes } = this.props;
-		// const { option } = this.state;
 		return (
 			<div className={classes.tabContainer}>
 				<div className={classes.gridPadding}>
