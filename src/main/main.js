@@ -19,6 +19,9 @@ import { createMainWindow } from './main-window';
 import { asValue } from 'awilix';
 import { featureIsEnabled } from 'common/feature-flags';
 
+// Load face-api weights
+require('../idv-ocr/weights');
+
 const log = new Logger('main');
 
 log.info('starting: %s', electron.app.getName());
