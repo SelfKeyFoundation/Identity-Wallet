@@ -52,7 +52,7 @@ class NotarizationTOCComponent extends MarketplaceNotariesComponent {
 
 	onBackClick = () => this.props.dispatch(push(this.processPath()));
 	onDisagreeClick = () => this.props.dispatch(push(this.tocDisagreementPath()));
-	onStartClick = () => this.props.dispatch(push(this.rootPath()));
+	// onAgreeClick = () => this.props.dispatch(push(this.rootPath()));
 
 	render() {
 		const { classes } = this.props;
@@ -122,7 +122,7 @@ class NotarizationTOCComponent extends MarketplaceNotariesComponent {
 								className={classes.requestBtn}
 								variant="contained"
 								size="large"
-								onClick={this.onStartClick}
+								onClick={this.onAgreeClick}
 							>
 								I agree to the terms of service
 							</Button>
