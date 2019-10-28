@@ -31,6 +31,7 @@ const styles = theme => ({
 	contentContainer: {
 		border: '1px solid #303C49',
 		borderRadius: '4px',
+		boxShadow: '0 50px 70px -50px black',
 		padding: '30px'
 	},
 	text: {
