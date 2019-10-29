@@ -39,7 +39,7 @@ export class InventorySyncJobHandler {
 				if (!inventoryBySKU[curr.sku]) {
 					const vendor = vendorsById[curr.vendorId];
 					if (
-						vendor.inventorySource === data.fetcherName ||
+						(vendor && vendor.inventorySource === data.fetcherName) ||
 						curr.vendorId === data.fetcherName
 					) {
 						acc.toRemove.push(curr.id);
