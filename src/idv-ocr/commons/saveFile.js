@@ -3,7 +3,7 @@ import * as path from 'path';
 
 const baseDir = path.resolve(__dirname, '../../output');
 
-export function saveFile(fileName: string, buf: Buffer) {
+export function saveFile(fileName, buf) {
 	if (!fs.existsSync(baseDir)) {
 		fs.mkdirSync(baseDir);
 	}

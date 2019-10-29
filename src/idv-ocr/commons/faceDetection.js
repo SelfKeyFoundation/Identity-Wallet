@@ -15,7 +15,7 @@ const scoreThreshold = 0.5;
 const minFaceSize = 50;
 const scaleFactor = 0.8;
 
-function getFaceDetectorOptions(net: faceapi.NeuralNetwork<any>) {
+function getFaceDetectorOptions(net) {
 	return net === faceapi.nets.ssdMobilenetv1
 		? new faceapi.SsdMobilenetv1Options({ minConfidence })
 		: net === faceapi.nets.tinyFaceDetector

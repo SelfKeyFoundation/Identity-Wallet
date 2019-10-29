@@ -18,9 +18,7 @@ import { handleSquirrelEvent } from './squirrelevent';
 import { createMainWindow } from './main-window';
 import { asValue } from 'awilix';
 import { featureIsEnabled } from 'common/feature-flags';
-
-// Load face-api weights
-require('../idv-ocr/weights');
+import { loadIdvOcr } from '../idv-ocr/weights';
 
 const log = new Logger('main');
 
@@ -177,6 +175,17 @@ async function loadIdentity(ctx) {
 		await ctx.store.dispatch(identityOperations.updateExpiredUiSchemasOperation());
 	} catch (error) {
 		log.error('failed to update ui schemas from remote %s', error);
+	}
+	try {
+		// Load face-api weights
+		await loadIdvOcr();
+	} catch (error) {
+		log.error(
+			`failed to load identity verification models and weights\n:${JSON.stringify(
+				error
+			)}\n%s`,
+			error
+		);
 	}
 }
 
