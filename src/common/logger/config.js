@@ -1,3 +1,4 @@
+import 'common/config';
 import { createFilter } from './utils';
 import is from 'electron-is';
 import log from 'electron-log';

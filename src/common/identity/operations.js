@@ -18,10 +18,12 @@ const loadRepositoriesOperation = () => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
 	let repos = await identityService.loadRepositories();
 	await dispatch(identityActions.setRepositoriesAction(repos));
+	log.debug('Repositories loaded %2j', repos.map(r => r.url));
 };
 
 const updateExpiredRepositoriesOperation = () => async (dispatch, getState) => {
 	let expired = identitySelectors.selectExpiredRepositories(getState());
+	log.debug('Detected expired repositories %2j', expired.map(e => e.url));
 	const identityService = getGlobalContext().identityService;
 	await identityService.updateRepositories(expired);
 	await dispatch(operations.loadRepositoriesOperation());
@@ -31,10 +33,12 @@ const loadIdAttributeTypesOperation = () => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
 	let attributeTypes = await identityService.loadIdAttributeTypes();
 	await dispatch(identityActions.setIdAttributeTypesAction(attributeTypes));
+	log.debug('Identity attribute types loaded %2j', attributeTypes.map(t => t.url));
 };
 
 const updateExpiredIdAttributeTypesOperation = () => async (dispatch, getState) => {
 	let expired = identitySelectors.selectExpiredIdAttributeTypes(getState());
+	log.debug('Detected expired identity attribute types %2j', expired.map(e => e.url));
 	const identityService = getGlobalContext().identityService;
 	await identityService.updateIdAttributeTypes(expired);
 	await dispatch(operations.loadIdAttributeTypesOperation());
