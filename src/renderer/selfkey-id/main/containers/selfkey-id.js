@@ -37,7 +37,6 @@ class SelfkeyIdContainerComponent extends Component {
 	handleMarketplaceAccessClick = _ => this.props.dispatch(push(MARKETPLACE_ROOT_PATH));
 
 	render() {
-		console.log(this.props);
 		const { tab } = this.state;
 		let component = (
 			<SelfkeyIdOverview
