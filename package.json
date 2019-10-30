@@ -39,7 +39,7 @@
 		"dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
 		"test": "yarn test:unit",
 		"test:unit": "jest -i --forceExit",
-		"test:unit:coverage": "yarn test:unit --testPathPattern='src' --coverage",
+		"test:unit:coverage": "yarn test:unit --testPathPattern='identity.spec' --coverage",
 		"test:unit:ci": "yarn test:unit:coverage --ci  --reporters=default --reporters=jest-junit",
 		"test:e2e": "jest -i --config='jest.e2e.config.js'",
 		"publish-build": "yarn compile && electron-builder -p always",
