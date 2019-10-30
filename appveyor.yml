@@ -2,7 +2,7 @@ image: Visual Studio 2017
 environment:
   OSENV: windows
   NO_PROXY: 127.0.0.1,localhost
-  JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
+  JEST_JUNIT_OUTPUT: 'reports/junit/TEST-results.xml'
   encryptedkey:
     secure: 8HCeZ0WW/f09cU7PgV31q14Xy46vU/2dYHnP0ZCpi/tLvVzr2gnY+BZ99S1u1cAHJNdAyRX/pp91L91KiXdh/2ZuE1fqAXcaVo2/j4VB01c=
   encryptediv:
@@ -49,7 +49,10 @@ after_finish:
 # upload test results via rest-api
   - ps: |
         $wc = New-Object 'System.Net.WebClient'
-        $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path "$($env:JEST_JUNIT_OUTPUT)"))
+        Get-ChildItem . -Name -Recurse 'TEST-*.xml'  |
+        Foreach-Object {
+            $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path $_))
+        }
 deploy_script:
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[dev] set _tempvar=1
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[release] set _tempvar=1
