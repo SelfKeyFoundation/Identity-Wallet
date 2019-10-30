@@ -55,10 +55,21 @@ describe('Identity model', () => {
 
 	it('create', async () => {
 		const idnt = await Identity.create(testIdentity);
-		const idnt2 = await Identity.create(testIdentity);
+		const idnt2 = await Identity.create({
+			...testIdentity,
+			rootIdentity: false,
+			positions: ['shareholder', 'director'],
+			equity: 50.2
+		});
 		expect(idnt.id).toBeGreaterThan(0);
 		expect(idnt2.id).toBeGreaterThan(0);
 		expect(idnt.id).not.toBe(idnt2.id);
+		expect(idnt.rootIdentity).toBe(true);
+		expect(idnt.positions).toEqual([]);
+		expect(idnt.equity).toBe(0);
+		expect(idnt2.rootIdentity).toBe(false);
+		expect(idnt2.positions).toEqual(['shareholder', 'director']);
+		expect(idnt2.equity).toBe(50.2);
 	});
 
 	it('updateDID', async () => {
