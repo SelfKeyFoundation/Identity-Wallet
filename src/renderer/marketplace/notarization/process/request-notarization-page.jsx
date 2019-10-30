@@ -1,12 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
-import { Typography, Button, Divider, withStyles, IconButton } from '@material-ui/core';
-import { CloseButtonIcon, baseDark, grey, KeyTooltip, TooltipArrow, InfoTooltip } from 'selfkey-ui';
-import NotarizationDocuments from './notarization-documents';
-import { identitySelectors } from 'common/identity';
-import { CreateAttributeContainer } from '../../../attributes';
-import MarketplaceNotariesComponent from '../common/marketplace-notaries-component';
+import { withStyles } from '@material-ui/core/styles';
+import { Button, Typography, IconButton, Divider } from '@material-ui/core';
+import { KeyTooltip, TooltipArrow, InfoTooltip, baseDark, grey, CloseButtonIcon } from 'selfkey-ui';
+import RequestDocumentsList from './request-documents-list-container';
 
 const styles = theme => ({
 	container: {
@@ -222,140 +218,105 @@ export const ServiceCost = withStyles(serviceCostStyle)(({ classes }) => (
 	</div>
 ));
 
-class RequestNotarizationComponent extends MarketplaceNotariesComponent {
-	state = {
-		popup: null
-	};
+export const RequestNotarizationPage = withStyles(styles)(props => {
+	const { classes, documents, onBackClick, handleAddDocument, onStartClick } = props;
 
-	onBackClick = () => this.props.dispatch(push(this.rootPath()));
-	onStartClick = () => this.props.dispatch(push(this.tocPath()));
-
-	handleAddDocument = () => {
-		this.setState({ popup: 'create-attribute', isDocument: true });
-	};
-
-	handlePopupClose = () => {
-		this.setState({ popup: null });
-	};
-
-	render() {
-		const { classes, documents } = this.props;
-		const { popup } = this.state;
-
-		return (
-			<React.Fragment>
-				{popup === 'create-attribute' && (
-					<CreateAttributeContainer
-						open={true}
-						onClose={this.handlePopupClose}
-						isDocument={this.state.isDocument}
-					/>
-				)}
-				<div className={classes.container}>
-					<CloseButtonIcon onClick={this.onBackClick} className={classes.closeIcon} />
-					<div className={classes.containerHeader}>
-						<Typography variant="h2" className="region">
-							Notarization Service
-						</Typography>
+	return (
+		<div className={classes.container}>
+			<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
+			<div className={classes.containerHeader}>
+				<Typography variant="h2" className="region">
+					Notarization Service
+				</Typography>
+			</div>
+			<div className={classes.contentContainer}>
+				<Typography variant="h2" gutterBottom>
+					How the process works
+				</Typography>
+				<div className={classes.howItWorks}>
+					<div className={classes.howItWorksBox}>
+						<header className={classes.header}>
+							<span>1</span>
+							<Typography variant="h4" gutterBottom>
+								Provide documents you want notarized
+							</Typography>
+						</header>
+						<div>
+							<Typography variant="subtitle2" color="secondary">
+								You will be required to provide standard information about yourself,
+								and the documents you wished notarized.
+							</Typography>
+						</div>
 					</div>
-					<div className={classes.contentContainer}>
-						<Typography variant="h2" gutterBottom>
-							How the process works
-						</Typography>
-						<div className={classes.howItWorks}>
-							<div className={classes.howItWorksBox}>
-								<header className={classes.header}>
-									<span>1</span>
-									<Typography variant="h4" gutterBottom>
-										Provide documents you want notarized
-									</Typography>
-								</header>
-								<div>
-									<Typography variant="subtitle2" color="secondary">
-										You will be required to provide standard information about
-										yourself, and the documents you wished notarized.
-									</Typography>
-								</div>
-							</div>
-							<div className={classes.howItWorksBox}>
-								<header className={classes.header}>
-									<span>2</span>
-									<Typography variant="h4" gutterBottom>
-										Video Call
-									</Typography>
-								</header>
-								<div>
-									<Typography variant="subtitle2" color="secondary">
-										You will be connected live with a notary, so they can
-										confirm your identity face-to-face on a webcam. Please make
-										sure your device has a camera.
-									</Typography>
-								</div>
-							</div>
-							<div className={classes.howItWorksBox}>
-								<header className={classes.header}>
-									<span>3</span>
-									<Typography variant="h4" gutterBottom>
-										Receive the notarized documents
-									</Typography>
-								</header>
-								<div>
-									<Typography variant="subtitle2" color="secondary">
-										Once the notarization process is done you will receive all
-										the documents notarized in your Selfkey wallet.
-									</Typography>
-								</div>
-							</div>
-						</div>
-						<Divider className={classes.divider} />
-						<div>
-							<Typography variant="h2" gutterBottom>
-								Select the documents you want notarized
+					<div className={classes.howItWorksBox}>
+						<header className={classes.header}>
+							<span>2</span>
+							<Typography variant="h4" gutterBottom>
+								Video Call
 							</Typography>
-							<NotarizationDocuments
-								documents={documents}
-								onAddDocument={this.handleAddDocument}
-								{...this.props}
-							/>
-						</div>
+						</header>
 						<div>
-							<Typography variant="overline" gutterBottom>
-								Message for Notary*
+							<Typography variant="subtitle2" color="secondary">
+								You will be connected live with a notary, so they can confirm your
+								identity face-to-face on a webcam. Please make sure your device has
+								a camera.
 							</Typography>
-							<textarea
-								className={classes.textArea}
-								rows="5"
-								placeholder="Please describe the work that needs to be done…."
-							/>
 						</div>
-						<Divider className={classes.divider} />
-						<ServiceCost />
+					</div>
+					<div className={classes.howItWorksBox}>
+						<header className={classes.header}>
+							<span>3</span>
+							<Typography variant="h4" gutterBottom>
+								Receive the notarized documents
+							</Typography>
+						</header>
 						<div>
-							<Button
-								className={classes.requestBtn}
-								variant="contained"
-								size="large"
-								onClick={this.onStartClick}
-							>
-								Request Notarization
-							</Button>
-							<Button variant="outlined" size="large" onClick={this.onBackClick}>
-								Cancel
-							</Button>
+							<Typography variant="subtitle2" color="secondary">
+								Once the notarization process is done you will receive all the
+								documents notarized in your Selfkey wallet.
+							</Typography>
 						</div>
 					</div>
 				</div>
-			</React.Fragment>
-		);
-	}
-}
+				<Divider className={classes.divider} />
+				<div>
+					<Typography variant="h2" gutterBottom>
+						Select the documents you want notarized
+					</Typography>
+					<RequestDocumentsList
+						documents={documents}
+						onAddDocument={handleAddDocument}
+						{...props}
+					/>
+				</div>
+				<div>
+					<Typography variant="overline" gutterBottom>
+						Message for Notary*
+					</Typography>
+					<textarea
+						className={classes.textArea}
+						rows="5"
+						placeholder="Please describe the work that needs to be done…."
+					/>
+				</div>
+				<Divider className={classes.divider} />
+				<ServiceCost />
+				<div>
+					<Button
+						className={classes.requestBtn}
+						variant="contained"
+						size="large"
+						onClick={onStartClick}
+					>
+						Request Notarization
+					</Button>
+					<Button variant="outlined" size="large" onClick={onBackClick}>
+						Cancel
+					</Button>
+				</div>
+			</div>
+		</div>
+	);
+});
 
-const mapStateToProps = (state, props) => {
-	return {
-		...identitySelectors.selectSelfkeyId(state)
-	};
-};
-
-const styledComponent = withStyles(styles)(RequestNotarizationComponent);
-export const RequestNotarization = connect(mapStateToProps)(styledComponent);
-export default RequestNotarization;
+export default RequestNotarizationPage;
