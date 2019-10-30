@@ -2,7 +2,8 @@ image: Visual Studio 2017
 environment:
   OSENV: windows
   NO_PROXY: 127.0.0.1,localhost
-  JEST_JUNIT_OUTPUT: 'reports/junit/TEST-results.xml'
+  JEST_JUNIT_OUTPUT_DIR: dist\junit'
+  JEST_JUNIT_UNIQUE_OUTPUT_NAME: "true"
   encryptedkey:
     secure: 8HCeZ0WW/f09cU7PgV31q14Xy46vU/2dYHnP0ZCpi/tLvVzr2gnY+BZ99S1u1cAHJNdAyRX/pp91L91KiXdh/2ZuE1fqAXcaVo2/j4VB01c=
   encryptediv:
@@ -49,7 +50,7 @@ on_finish:
 # upload test results via rest-api
   - ps: |
         $wc = New-Object 'System.Net.WebClient'
-        Get-ChildItem . -Name -Recurse 'TEST-*.xml'  |
+        Get-ChildItem . -Name -Recurse 'junit-*.xml'  |
         Foreach-Object {
             $wc.UploadFile("https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path $_))
         }
