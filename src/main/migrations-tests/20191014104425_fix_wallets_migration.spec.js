@@ -1,7 +1,5 @@
 import TestDb from '../db/test-db';
-
-// const selfkeyPlatform = require('./assets/data/selfkey-platform.json');
-const path = require('path');
+import { setupTestDb, hasTable } from './migration-test-utils';
 
 const insertWalletData = async walletId => {
 	await TestDb.knex('wallet_tokens').insert([
@@ -99,11 +97,6 @@ const hasWalletData = async (walletId, expected) => {
 	expect(documents.length).toBe(1);
 };
 
-const hasTable = async (table, expected) => {
-	let has = await TestDb.knex.schema.hasTable(table);
-	expect(has).toBe(expected);
-};
-
 const createOldWallets = async () => {
 	await TestDb.knex.schema.createTable('wallets_old', table => {
 		table.increments('id');
@@ -131,18 +124,7 @@ const createOldWallets = async () => {
 };
 
 describe('migrations', () => {
-	const dbFile = path.join('migrationsTest.sqlite');
-	beforeEach(async () => {
-		await TestDb.initRaw(dbFile);
-	});
-
-	afterEach(async () => {
-		await TestDb.reset();
-	});
-
-	afterAll(async () => {
-		await TestDb.destroy();
-	});
+	setupTestDb(jest);
 	describe('up 20191014104425_fix_wallets_migration', () => {
 		const currMigration = '20191014104425';
 		const prevMigration = '20191001161321';

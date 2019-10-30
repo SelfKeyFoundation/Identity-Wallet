@@ -28,9 +28,7 @@ describe('MarketplaceTransactions', () => {
 		let txs = await MarketplaceTransactions.query();
 		expect(txs.length).toBe(0);
 		let txId = await MarketplaceTransactions.query().insert(tx);
-		let createdTX = await MarketplaceTransactions.query()
-			.findById(txId.$id())
-			.debug();
+		let createdTX = await MarketplaceTransactions.query().findById(txId.$id());
 		expect(createdTX).toMatchObject(tx);
 		txs = await MarketplaceTransactions.query();
 		expect(txs.length).toBe(1);
