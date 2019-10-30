@@ -51,6 +51,7 @@ jobs:
             - image: circleci/node:10.12.0-stretch-browsers
         environment:
             CACHE_VERSION: *cache_version
+            JEST_JUNIT_OUTPUT: 'reports/junit/js-test-results.xml'
         steps:
             - checkout
             - attach_workspace:
@@ -68,10 +69,10 @@ jobs:
                   command: yarn install-all
             - run:
                   name: Unit Tests
-                  command: yarn test:unit:coverage
-            # - run:
-            #       name: Coveralls
-            #       command: yarn coveralls
+                  command: yarn test:unit:ci
+            - run:
+                  name: Coveralls
+                  command: yarn coveralls
             - store_artifacts:
                   path: dist
             - *step_save_cache
