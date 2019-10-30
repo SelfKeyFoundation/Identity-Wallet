@@ -13,7 +13,7 @@ module.exports = {
 	testURL: 'http://localhost/',
 	collectCoverageFrom: ['src/{main,common}/**/*.js'],
 	coverageReporters: ['json', 'lcov', 'text'],
-	coveragePathIgnorePatterns: ['src/main/(seed|assets|migrations)', 'src/common/config.js'],
+	coveragePathIgnorePatterns: ['src/main/(seed|assets|migrations)'],
 	coverageDirectory: 'dist/coverage',
 	coverageThreshold: {},
 	transform: {
