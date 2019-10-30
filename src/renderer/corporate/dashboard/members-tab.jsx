@@ -1,9 +1,16 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core';
+import { withStyles, Grid } from '@material-ui/core';
+import { CorporateMembers } from '../common/corporate-members';
 
 const styles = theme => ({});
 
-const CorporateMembersTab = withStyles(styles)(({ classes }) => <div />);
+const CorporateMembersTab = withStyles(styles)(({ classes }) => (
+	<Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={16}>
+		<Grid item>
+			<CorporateMembers />
+		</Grid>
+	</Grid>
+));
 
 export { CorporateMembersTab };
 export default CorporateMembersTab;
