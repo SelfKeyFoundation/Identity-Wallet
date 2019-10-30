@@ -5,7 +5,7 @@ const DEV_ENV = 'development';
 
 const isStorybook = () => !!process.env.STORYBOOK;
 
-if (!isStorybook) {
+if (!isStorybook()) {
 	electron = require('electron');
 }
 
