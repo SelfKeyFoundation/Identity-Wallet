@@ -18,9 +18,6 @@ describe('Identity model', () => {
 	afterAll(async () => {
 		await TestDb.destroy();
 	});
-	it('failedTest', () => {
-		expect(false).toBe(true);
-	});
 	it('findById', async () => {
 		const idnt = await Identity.query().insert(testIdentity);
 		expect(idnt.id).toBeGreaterThan(0);
