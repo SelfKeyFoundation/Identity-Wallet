@@ -62,31 +62,40 @@ const selectExpiredRepositories = state => {
 		.filter(repo => forceUpdateAttributes || repo.expires <= now);
 };
 
-const selectIdAttributeTypes = (state, entityType = 'individual') =>
-	identitySelectors
+const selectIdAttributeTypes = (state, entityType = ['individual'], includeSystem = false) => {
+	if (!Array.isArray(entityType)) {
+		entityType = [entityType];
+	}
+	return identitySelectors
 		.selectIdentity(state)
 		.idAtrributeTypes.map(
 			id => identitySelectors.selectIdentity(state).idAtrributeTypesById[id]
 		)
 		.filter(t => {
-			if (!t || !t.content) return false;
+			if (!t || !t.content || (t.content.system && !includeSystem)) return false;
 
-			if (!t.content.entityType && entityType !== 'individual') {
+			if (!t.content.entityType && !entityType.includes('individual')) {
 				return false;
 			}
-
-			return (t.content.entityType || ['individual']).includes(entityType);
+			let hasEntityType = entityType.reduce((acc, curr) => {
+				if (acc) return acc;
+				return (t.content.entityType || ['individual']).includes(curr);
+			}, false);
+			return hasEntityType;
 		});
+};
 
 const selectExpiredIdAttributeTypes = state => {
 	let now = Date.now();
 	return identitySelectors
-		.selectIdAttributeTypes(state)
+		.selectIdAttributeTypes(state, ['individual', 'corporate'], true)
 		.filter(attributeType => forceUpdateAttributes || attributeType.expires <= now);
 };
 
-const selectIdAttributeTypeByUrl = (state, url, entityType) =>
-	identitySelectors.selectIdAttributeTypes(state, entityType).find(t => t.url === url);
+const selectIdAttributeTypeByUrl = (state, url, entityType, includeSystem) =>
+	identitySelectors
+		.selectIdAttributeTypes(state, entityType, includeSystem)
+		.find(t => t.url === url);
 
 const selectUiSchemas = state =>
 	identitySelectors
@@ -183,7 +192,6 @@ const selectSelfkeyId = state => {
 		if (!attr || !attr.data || !attr.data.value) return '';
 		return attr.data.value;
 	};
-	// TODO max: move profile picture to identity model
 	return {
 		identity,
 		wallet,

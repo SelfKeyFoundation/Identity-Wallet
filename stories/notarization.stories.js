@@ -1,8 +1,8 @@
 /*
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import NotarizationDetailsPage from '../src/renderer/marketplace/notarization/details/details-page';
-import RequestNotarization from '../src/renderer/marketplace/notarization/process/request-notarization';
+import NotarizationDetailsPage from '../src/renderer/marketplace/notarization/details/notarization-details-page';
+import RequestNotarizationPage from '../src/renderer/marketplace/notarization/process/request-notarization-page';
 
 const documents = [
 	{
@@ -53,6 +53,6 @@ storiesOf('Notarization/Tabs', module)
 	.add('Key Informations', () => <NotarizationDetailsPage tab="informations" />);
 
 storiesOf('Notarization', module).add('Request Notarization', () => (
-	<RequestNotarization documents={documents} />
+	<RequestNotarizationPage documents={documents} />
 ));
 */
