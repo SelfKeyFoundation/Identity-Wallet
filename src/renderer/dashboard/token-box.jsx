@@ -4,6 +4,7 @@ import { getWallet } from 'common/wallet/selectors';
 import { Copy, TransferIcon } from 'selfkey-ui';
 import { Grid, Paper, IconButton, Typography, Divider } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { AddressShortener } from '../common/address-shortener';
 
 const styles = theme => ({
 	paper: {
@@ -25,9 +26,6 @@ const styles = theme => ({
 		marginTop: '7px'
 	},
 	publicKey: {
-		color: '#93B0C1',
-		fontSize: '12px',
-		lineHeight: '19px',
 		maxWidth: '250px',
 		overflow: 'hidden',
 		textOverflow: 'ellipsis',
@@ -45,10 +43,6 @@ const TokenBox = props => {
 		children,
 		address
 	} = props;
-	const shortAddress = `${address.substring(0, 12)}...${address.substring(
-		address.length - 10,
-		address.length
-	)}`;
 	return (
 		<Paper className={classes.paper}>
 			<Grid container spacing={8}>
@@ -74,9 +68,7 @@ const TokenBox = props => {
 				</Grid>
 				<Grid xs={12} container justify="space-between" className={classes.marginSpace}>
 					<Grid item>
-						<p className={classes.publicKey} title={address}>
-							{shortAddress}
-						</p>
+						<AddressShortener address={address} extraClasses={classes.publicKey} />
 					</Grid>
 					<Grid item>
 						<Copy text={address} />

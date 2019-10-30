@@ -228,6 +228,7 @@ class RequestNotarizationComponent extends MarketplaceNotariesComponent {
 	};
 
 	onBackClick = () => this.props.dispatch(push(this.rootPath()));
+	onStartClick = () => this.props.dispatch(push(this.tocPath()));
 
 	handleAddDocument = () => {
 		this.setState({ popup: 'create-attribute', isDocument: true });
