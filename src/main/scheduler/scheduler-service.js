@@ -9,11 +9,11 @@ export class SchedulerService {
 		this.registry = {};
 	}
 	queueJob(id = null, category, at = 0, data) {
-		log.info('queuing job %s', category);
+		log.debug('queuing job %s', category);
 		this.store.dispatch(schedulerOperations.queueJobAction(id, category, at, data));
 	}
 	registerJobHandler(category, handler) {
-		log.info('registering new handler: %s', category);
+		log.debug('registering new handler: %s', category);
 		this.registry[category] = handler;
 	}
 	unregisterJobHandler(category) {
