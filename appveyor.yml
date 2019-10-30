@@ -45,7 +45,7 @@ build_script:
 test_script:
   - yarn test:unit:ci
  # - yarn test:e2e disabling it for now as it may be leaving an electron app open and the release script cannot release because a file locked
-after_finish:
+on_finish:
 # upload test results via rest-api
   - ps: |
         $wc = New-Object 'System.Net.WebClient'
