@@ -1,7 +1,13 @@
-const electron = require('electron');
+let electron = null;
 const path = require('path');
 
 const DEV_ENV = 'development';
+
+const isStorybook = () => !!process.env.STORYBOOK;
+
+if (!isStorybook) {
+	electron = require('electron');
+}
 
 const isDevMode = () => process.env.NODE_ENV === DEV_ENV;
 
@@ -9,12 +15,12 @@ const isTestMode = () => process.env.MODE === 'test';
 
 const isDebugMode = () => process.env.DEV_TOOLS === 'yes';
 
-const isElectronApp = () => !!electron.app;
+const isElectronApp = () => !isStorybook() && !!electron && electron.app;
 
 const getUserDataPath = () => (isElectronApp() ? electron.app.getPath('userData') : '');
 
 const getSetupFilePath = () => {
-	if (isDevMode() || !isElectronApp()) {
+	if (isDevMode() || !isElectronApp() || isStorybook()) {
 		return path.join(__dirname, '..', '..');
 	}
 	return path.join(electron.app.getAppPath(), 'dist');
@@ -54,5 +60,6 @@ module.exports = {
 	getWalletsDir,
 	mapKeysAsync,
 	arrayChunks,
-	setImmediatePromise
+	setImmediatePromise,
+	isStorybook
 };
