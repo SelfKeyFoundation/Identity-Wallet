@@ -562,5 +562,36 @@ export const corporateMembers = [
 				position: 'observer'
 			}
 		]
+	},
+	{
+		entity: {
+			type: 'corporate',
+			companyType: 'Company Limited by Shares (LTD)',
+			companyName: 'Selfkey Org',
+			email: 'info@selfkeyorg'
+		},
+		attributes: [
+			{
+				title: 'incorporation',
+				name: 'incorporation',
+				type: {
+					content: {
+						$id: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json',
+						title: 'Legal Jurisdiction'
+					},
+					url: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json'
+				},
+				data: {
+					value: 'Singapore'
+				}
+			}
+		],
+		documents: [],
+		positions: [
+			{
+				position: 'shareholder',
+				equity: 81
+			}
+		]
 	}
 ];

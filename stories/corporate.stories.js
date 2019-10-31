@@ -151,7 +151,7 @@ storiesOf('Corporate/Components', module)
 	))
 	.add('Corporate Shareholding', () => (
 		<div style={{ width: '650px' }}>
-			<CorporateShareholding cap={corporateCapTable} />
+			<CorporateShareholding members={corporateMembers} />
 		</div>
 	))
 	.add('Corporate Org Chart', () => (

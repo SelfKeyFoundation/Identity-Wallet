@@ -78,9 +78,20 @@ const chartOptions = {
 	}
 };
 
-const getChartData = cap => {
+const getEquity = shareholder => {
+	const position = shareholder.positions.find(p => p.position === 'shareholder');
+	return position ? position.equity : 0;
+};
+
+const getName = shareholder => {
+	return shareholder.entity.type === 'individual'
+		? `${shareholder.entity.lastName}, ${shareholder.entity.firstName}`
+		: `${shareholder.entity.companyName}`;
+};
+
+const getChartData = shareholders => {
 	const data = [['Content', 'percents']];
-	const dataPoints = cap.map(shareholder => [shareholder.name, shareholder.shares]);
+	const dataPoints = shareholders.map(s => [getName(s), getEquity(s)]);
 	return data.concat(dataPoints);
 };
 
@@ -108,7 +119,9 @@ ref={c => {
 */
 
 const CorporateShareholding = withStyles(styles)(props => {
-	const { classes, cap = [] } = props;
+	const { classes, members = [] } = props;
+	const shareholders = members.filter(m => m.positions.find(p => p.position === 'shareholder'));
+
 	return (
 		<Card>
 			<CardHeader title="Shareholding" className={classes.regularText} />
@@ -117,7 +130,7 @@ const CorporateShareholding = withStyles(styles)(props => {
 				<div className={classes.chartWrap}>
 					<Chart
 						chartType="PieChart"
-						data={getChartData(cap)}
+						data={getChartData(shareholders)}
 						options={chartOptions}
 						graph_id="PieChart"
 						width="100%"
@@ -126,13 +139,13 @@ const CorporateShareholding = withStyles(styles)(props => {
 						chartEvents={[selectEvent, readyEvent]}
 					/>
 					<Grid item xs={4} className={classes.legend}>
-						{cap.map((shareholder, index) => (
+						{shareholders.map((shareholder, index) => (
 							<div key={`shareholder-${index}`}>
 								<div
 									className={classes.coloredBox}
 									style={{ backgroundColor: getColors()[index] }}
 								/>
-								<span>{shareholder.name}</span>
+								<span>{getName(shareholder)}</span>
 							</div>
 						))}
 					</Grid>
