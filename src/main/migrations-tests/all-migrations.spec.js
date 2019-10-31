@@ -9,7 +9,7 @@ describe('all-migrations', () => {
 
 		for (let migration of pendingMigrations) {
 			let success = true;
-			let number = migration.match(/\/([0-9]+)/)[1];
+			let number = migration.match(/[/,\\]([0-9]+)/)[1];
 			try {
 				if (!number) throw new Error('Invalid migration');
 				await TestDb.migrate('up', {
