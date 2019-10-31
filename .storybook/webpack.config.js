@@ -40,6 +40,6 @@ module.exports = async ({ config }) => {
 	];
 
 	config.resolve.extensions = ['.js', '.jsx', '.css', '.svg'];
-	config.node = { fs: 'empty' };
+	config.node = { fs: 'empty', net: 'mock', tls: 'mock', child_process: 'empty' };
 	return config;
 };
