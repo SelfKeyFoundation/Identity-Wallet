@@ -1,36 +1,8 @@
 import TestDb from '../db/test-db';
-
-// const selfkeyPlatform = require('./assets/data/selfkey-platform.json');
-const path = require('path');
-
-const hasColumn = async (table, column, expected) => {
-	let has = await TestDb.knex.schema.hasColumn(table, column);
-	expect(has).toBe(expected);
-};
-
-const hasTable = async (table, expected) => {
-	let has = await TestDb.knex.schema.hasTable(table);
-	expect(has).toBe(expected);
-};
-
-// const getAttribute = url => {
-// 	let found = selfkeyPlatform.jsonSchemas.filter(attr => attr.url === url);
-// 	return found[0] || null;
-// };
+import { setupTestDb, hasTable, hasColumn } from './migration-test-utils';
 
 describe('migrations', () => {
-	const dbFile = path.join('migrationsTest.sqlite');
-	beforeEach(async () => {
-		await TestDb.initRaw(dbFile);
-	});
-
-	afterEach(async () => {
-		await TestDb.reset();
-	});
-
-	afterAll(async () => {
-		await TestDb.destroy();
-	});
+	setupTestDb(jest);
 
 	describe('up 20181108183529_json-schema-attributes', () => {
 		const currMigration = '20181108183529';

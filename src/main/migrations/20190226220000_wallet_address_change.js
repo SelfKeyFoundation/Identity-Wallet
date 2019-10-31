@@ -1,13 +1,18 @@
 /* istanbul ignore file */
 exports.up = async (knex, Promise) => {
-	const wallets = await knex('wallets').select();
-	wallets.map(async wallet => {
-		if (wallet.publicKey.indexOf('0x') === -1) {
-			await knex('wallets')
-				.update({ publicKey: `0x${wallet.publicKey}` })
-				.where({ id: wallet.id });
-		}
-	});
+	try {
+		const wallets = await knex('wallets').select();
+		wallets.map(async wallet => {
+			if (wallet.publicKey.indexOf('0x') === -1) {
+				await knex('wallets')
+					.update({ publicKey: `0x${wallet.publicKey}` })
+					.where({ id: wallet.id });
+			}
+		});
+	} catch (error) {
+		console.error(error);
+		throw error;
+	}
 };
 
 exports.down = async (knex, Promise) => {
