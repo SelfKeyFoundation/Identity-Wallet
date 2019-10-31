@@ -122,6 +122,10 @@ const CorporateShareholding = withStyles(styles)(props => {
 	const { classes, members = [] } = props;
 	const shareholders = members.filter(m => m.positions.find(p => p.position === 'shareholder'));
 
+	if (shareholders.length === 0) {
+		return null;
+	}
+
 	return (
 		<Card>
 			<CardHeader title="Shareholding" className={classes.regularText} />
