@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import NotarizationDetailsPage from '../src/renderer/marketplace/notarization/details/notarization-details-page';
@@ -54,3 +55,4 @@ storiesOf('Notarization/Tabs', module)
 storiesOf('Notarization', module).add('Request Notarization', () => (
 	<RequestNotarizationPage documents={documents} />
 ));
+*/
