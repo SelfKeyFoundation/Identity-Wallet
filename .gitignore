@@ -30,3 +30,4 @@ storybook-static/
 client-secret.json
 **/.env
 .history
+junit.xml
