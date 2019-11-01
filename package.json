@@ -62,7 +62,7 @@
 		"@ledgerhq/hw-app-eth": "4.48.0",
 		"@ledgerhq/hw-transport-node-hid": "4.48.0",
 		"@ledgerhq/web3-subprovider": "4.48.0",
-		"@sentry/electron": "0.17.1",
+		"@sentry/electron": "1.0.0",
 		"@trodi/electron-splashscreen": "0.3.4",
 		"ajv": "6.10.0",
 		"async": "2.6.2",
