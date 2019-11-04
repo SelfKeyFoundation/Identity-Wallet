@@ -10,31 +10,33 @@ export const setGlobalContext = ctx => {
 };
 export const getGlobalContext = () => globalContext;
 
-export const registerCommonServices = (container, thread) => {
+export const registerCommonServices = (container, thread, options) => {
 	container.register({
 		initialState: asValue(global.state),
 		threadName: asValue(thread),
-		store: asFunction(({ initialState, threadName }) =>
-			configureStore(initialState, threadName)
-		).singleton(),
+		store: options.store
+			? options.store
+			: asFunction(({ initialState, threadName }) =>
+					configureStore(initialState, threadName)
+			  ).singleton(),
 		ethGasStationService: asClass(EthGasStationService).singleton(),
 		config: asValue(config)
 	});
 	return container;
 };
 
-export const configureContext = thread => {
+export const configureContext = (thread, options = {}) => {
 	const container = createContainer({
 		injectionMode: InjectionMode.PROXY
 	});
 
-	registerCommonServices(container, thread);
+	registerCommonServices(container, thread, options);
 
 	if (thread === 'main') {
-		require('../main/context').registerMainServices(container);
+		require('../main/context').registerMainServices(container, options);
 	}
 	if (thread === 'renderer') {
-		require('../renderer/context').registerRendererServices(container);
+		require('../renderer/context').registerRendererServices(container, options);
 	}
 
 	return container;

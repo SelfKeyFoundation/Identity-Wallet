@@ -142,9 +142,9 @@ storiesOf('Corporate/Components', module)
 		</div>
 	))
 	.add('Corporate Cap Table', () => (
-		<div style={{ width: '650px' }}>
+		<div style={{ width: '1024px' }}>
 			<CorporateCapTable
-				cap={corporateCapTable}
+				members={corporateMembers}
 				onEdit={action('corporate cap edit click')}
 			/>
 		</div>
