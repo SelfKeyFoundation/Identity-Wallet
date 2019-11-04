@@ -92,7 +92,7 @@ const createIdAttributeOperation = (attribute, identityId) => async (dispatch, g
 			throw new Error('identity not loaded');
 		}
 	} else {
-		identitySelectors.selectCurrentIdentity(getState());
+		identity = identitySelectors.selectCurrentIdentity(getState());
 		identityId = identity.id;
 	}
 
