@@ -48,7 +48,7 @@ export default (initialState, scope = 'main') => {
 		replayActionRenderer(store);
 	}
 
-	if (scope === 'renderer' && module.hot) {
+	if (module.hot) {
 		module.hot.accept('./reducers', () => {
 			store.replaceReducer(createReducers(scope));
 		});
