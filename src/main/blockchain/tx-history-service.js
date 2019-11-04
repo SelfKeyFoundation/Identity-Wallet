@@ -294,7 +294,7 @@ export class TxHistoryService {
 				let ethTxList = await that.loadEthTxHistory(address, startBlock, endblock, page);
 				let tokenTxList = await that.loadERCTxHistory(address, startBlock, endblock, page);
 
-				ethTxList.concat(tokenTxList).forEach((tx, index) => {
+				(ethTxList || []).concat(tokenTxList || []).forEach((tx, index) => {
 					let hash = tx.hash;
 					txHashes[hash] = txHashes[hash] || {};
 					let isToken = index >= ethTxList.length;

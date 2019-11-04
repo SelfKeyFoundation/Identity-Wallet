@@ -32,7 +32,7 @@ class MarketplaceIncorporationComponent extends Component {
 					component={IncorporationsPaymentContainer}
 				/>
 				<Route
-					path={`${path}/payment-complete/:companyCode/:countryCode/:templateId/:vendorId`}
+					path={`${path}/payment-complete/:companyCode/:countryCode/:templateId/:vendorId/:orderId?`}
 					component={IncorporationsPaymentCompleteContainer}
 				/>
 			</div>

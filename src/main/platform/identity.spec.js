@@ -33,13 +33,13 @@ describe('identity', () => {
 	});
 	describe('unlock', () => {
 		it('should unlock ledger', async () => {
+			sinon.stub(Identity.prototype, 'getPublicKeyFromHardwareWallet').returns(address);
 			let id1 = new Identity(
 				{
 					profile: 'ledger'
 				},
 				ident
 			);
-			sinon.stub(id1, 'getPublicKeyFromHardwareWallet').returns(address);
 			await id1.unlock();
 			expect(id1.publicKey).toEqual(address);
 		});

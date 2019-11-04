@@ -1,16 +1,20 @@
 /* istanbul ignore file */
 'use strict';
 const path = require('path');
-let electron;
-if (!process.env.STORYBOOK) {
+const {
+	isDevMode,
+	isTestMode,
+	getSetupFilePath,
+	getUserDataPath,
+	isStorybook
+} = require('./utils/common');
+if (!isStorybook()) {
 	const dotenv = require('dotenv');
 	dotenv.config();
-	electron = require('electron');
 }
-const { isDevMode, isTestMode, getSetupFilePath, getUserDataPath } = require('./utils/common');
 const pkg = require('../../package.json');
 
-const DEBUG_REQUEST = process.env.DEBUG_REQUEST === '1';
+const DEBUG_REQUEST = process.env.DEBUG_REQUEST === '1' && !isStorybook();
 if (DEBUG_REQUEST) {
 	require('request').debug = true;
 }
@@ -40,10 +44,9 @@ const ATTRIBUTE_TYPE_SOURCE_OVERRIDE = process.env.ATTRIBUTE_TYPE_SOURCE_OVERRID
 
 let userDataDirectoryPath = '';
 let walletsDirectoryPath = '';
-if (electron && electron.app) {
-	userDataDirectoryPath = electron.app.getPath('userData');
-	walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
-}
+
+userDataDirectoryPath = getUserDataPath();
+walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
 
 const common = {
 	defaultLanguage: 'en',
@@ -120,7 +123,8 @@ const common = {
 		paymentContract: false,
 		scheduler: true,
 		corporate: false,
-		certifiers: false
+		certifiers: false,
+		corporateMarketplace: false
 	}
 };
 
@@ -142,7 +146,8 @@ const dev = {
 		paymentContract: false,
 		scheduler: true,
 		corporate: true,
-		certifiers: true
+		certifiers: true,
+		corporateMarketplace: false
 	},
 	testWalletAddress: '0x23d233933c86f93b74705cf0d236b39f474249f8',
 	testDidAddress: '0xee10a3335f48e10b444e299cf017d57879109c1e32cec3e31103ceca7718d0ec',
@@ -166,7 +171,9 @@ const prod = {
 	features: {
 		paymentContract: false,
 		scheduler: true,
-		corporate: true
+		corporate: true,
+		certifiers: false,
+		corporateMarketplace: false
 	},
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'
 };

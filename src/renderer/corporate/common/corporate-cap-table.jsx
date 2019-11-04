@@ -10,6 +10,14 @@ import {
 	withStyles
 } from '@material-ui/core';
 import { SmallTableRow, SmallTableCell, EditTransparentIcon, SmallTableHeadRow } from 'selfkey-ui';
+import {
+	getEntityName,
+	getEntityEmail,
+	getEntityRoles,
+	getEntityJurisdiction,
+	getEntityResidency,
+	getEntityEquity
+} from './common-helpers.jsx';
 
 const styles = theme => ({
 	hr: {
@@ -45,7 +53,14 @@ const editAction = onEdit => (
 );
 
 const CorporateCapTable = withStyles(styles)(props => {
-	const { classes, cap = [], onEdit } = props;
+	const { classes, members = [], onEdit } = props;
+
+	const shareholders = members.filter(m => m.positions.find(p => p.position === 'shareholder'));
+
+	if (shareholders.length === 0) {
+		return null;
+	}
+
 	return (
 		<Card>
 			<CardHeader
@@ -89,38 +104,43 @@ const CorporateCapTable = withStyles(styles)(props => {
 							</SmallTableHeadRow>
 						</TableHead>
 						<TableBody>
-							{cap &&
-								cap.map((c, idx) => (
-									<SmallTableRow key={`cap-${idx}`}>
-										<SmallTableCell>
-											<Typography variant="subtitle1">{c.type}</Typography>
-										</SmallTableCell>
-										<SmallTableCell>
-											<Typography variant="subtitle1">{c.role}</Typography>
-										</SmallTableCell>
-										<SmallTableCell>
-											<Typography variant="subtitle1">{c.name}</Typography>
-										</SmallTableCell>
-										<SmallTableCell>
-											<Typography variant="subtitle1">
-												{c.email ? c.email : '-'}
-											</Typography>
-										</SmallTableCell>
-										<SmallTableCell>
-											<Typography variant="subtitle1">
-												{c.citizenship}
-											</Typography>
-										</SmallTableCell>
-										<SmallTableCell>
-											<Typography variant="subtitle1">
-												{c.residency}
-											</Typography>
-										</SmallTableCell>
-										<SmallTableCell>
-											<Typography variant="subtitle1">{c.shares}</Typography>
-										</SmallTableCell>
-									</SmallTableRow>
-								))}
+							{shareholders.map((s, idx) => (
+								<SmallTableRow key={`cap-${idx}`}>
+									<SmallTableCell>
+										<Typography variant="subtitle1">{s.entity.type}</Typography>
+									</SmallTableCell>
+									<SmallTableCell>
+										<Typography variant="subtitle1">
+											{getEntityRoles(s)}
+										</Typography>
+									</SmallTableCell>
+									<SmallTableCell>
+										<Typography variant="subtitle1">
+											{getEntityName(s)}
+										</Typography>
+									</SmallTableCell>
+									<SmallTableCell>
+										<Typography variant="subtitle1">
+											{getEntityEmail(s)}
+										</Typography>
+									</SmallTableCell>
+									<SmallTableCell>
+										<Typography variant="subtitle1">
+											{getEntityJurisdiction(s)}
+										</Typography>
+									</SmallTableCell>
+									<SmallTableCell>
+										<Typography variant="subtitle1">
+											{getEntityResidency(s)}
+										</Typography>
+									</SmallTableCell>
+									<SmallTableCell>
+										<Typography variant="subtitle1">
+											{getEntityEquity(s)}
+										</Typography>
+									</SmallTableCell>
+								</SmallTableRow>
+							))}
 						</TableBody>
 					</Table>
 				</div>

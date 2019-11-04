@@ -16,6 +16,7 @@ import { CorporateInformation } from '../src/renderer/corporate/common/corporate
 import { CorporateWizard } from '../src/renderer/corporate/wizard/corporate-wizard';
 import { CorporateAddMember } from '../src/renderer/corporate/member/corporate-add-member';
 import { CorporateDocuments } from '../src/renderer/corporate/common/corporate-documents';
+import { CorporateMembers } from '../src/renderer/corporate/common/corporate-members';
 
 import {
 	dummyProfile,
@@ -26,7 +27,8 @@ import {
 	entityTypes,
 	legalJurisdictions,
 	corporateAttributes,
-	corporateDocuments
+	corporateDocuments,
+	corporateMembers
 } from './corporate-data';
 
 storiesOf('Corporate', module).add('Dashboard', () => (
@@ -140,16 +142,16 @@ storiesOf('Corporate/Components', module)
 		</div>
 	))
 	.add('Corporate Cap Table', () => (
-		<div style={{ width: '650px' }}>
+		<div style={{ width: '1024px' }}>
 			<CorporateCapTable
-				cap={corporateCapTable}
+				members={corporateMembers}
 				onEdit={action('corporate cap edit click')}
 			/>
 		</div>
 	))
 	.add('Corporate Shareholding', () => (
 		<div style={{ width: '650px' }}>
-			<CorporateShareholding cap={corporateCapTable} />
+			<CorporateShareholding members={corporateMembers} />
 		</div>
 	))
 	.add('Corporate Org Chart', () => (
@@ -178,6 +180,29 @@ storiesOf('Corporate/Components', module)
 				onAddDocument={action('on add document')}
 				onEditDocument={action('on edit document')}
 				onDeleteDocument={action('on delete document')}
+			/>
+		</div>
+	))
+	.add('Corporate Members', () => (
+		<div>
+			<CorporateMembers
+				members={corporateMembers}
+				onOpenEntityDetails={action('on open entity details')}
+				onAddMember={action('on add new member')}
+				onDeleteMember={action('on delete member')}
+				onEditMember={action('on edit member')}
+			/>
+		</div>
+	))
+	.add('Corporate Members with Selected Entity', () => (
+		<div>
+			<CorporateMembers
+				members={corporateMembers}
+				onOpenEntityDetails={action('on open entity details')}
+				onAddMember={action('on add new member')}
+				onDeleteMember={action('on delete member')}
+				onEditMember={action('on edit member')}
+				selectedEntity={corporateMembers[1]}
 			/>
 		</div>
 	));

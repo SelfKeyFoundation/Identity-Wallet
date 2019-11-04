@@ -36,6 +36,7 @@ exports.up = async (knex, Promise) => {
 		await knex.schema.dropTable('wallets_old');
 	} catch (error) {
 		console.error(error);
+		throw error;
 	}
 };
 

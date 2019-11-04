@@ -9,15 +9,7 @@ import { walletTokensOperations } from 'common/wallet-tokens';
 import { walletSelectors } from 'common/wallet';
 import { appSelectors } from 'common/app';
 
-import {
-	MarketplaceCategoriesContainer,
-	MarketplaceExchangesContainer,
-	MarketplaceIncorporationPage,
-	MarketplaceBankAccountsPage,
-	MarketplaceSelfkeyIdRequired,
-	MarketplaceSelfkeyDIDRequiredContainer,
-	MarketplaceOrdersPage
-} from '../../marketplace';
+import { MarketplaceContainer } from '../../marketplace';
 
 import { SelfkeyIdContainer } from '../../selfkey-id/main';
 import {
@@ -126,34 +118,7 @@ class Main extends Component {
 					<Route path={`${match.path}/enter-did`} component={AssociateDIDContainer} />
 					<Route path={`${match.path}/addressBookAdd`} component={AddressBookAdd} />
 					<Route path={`${match.path}/addressBookEdit/:id`} component={AddressBookEdit} />
-					<Route
-						path={`${match.path}/marketplace-selfkey-id-required`}
-						component={MarketplaceSelfkeyIdRequired}
-					/>
-					<Route
-						path={`${match.path}/marketplace-selfkey-did-required`}
-						component={MarketplaceSelfkeyDIDRequiredContainer}
-					/>
-					<Route
-						path={`${match.path}/marketplace-categories`}
-						component={MarketplaceCategoriesContainer}
-					/>
-					<Route
-						path={`${match.path}/marketplace-exchanges`}
-						component={MarketplaceExchangesContainer}
-					/>
-					<Route
-						path={`${match.path}/marketplace-incorporation`}
-						component={MarketplaceIncorporationPage}
-					/>
-					<Route
-						path={`${match.path}/marketplace-bank-accounts`}
-						component={MarketplaceBankAccountsPage}
-					/>
-					<Route
-						path={`${match.path}/marketplace-orders`}
-						component={MarketplaceOrdersPage}
-					/>
+					<Route path={`${match.path}/marketplace`} component={MarketplaceContainer} />
 					<Route
 						path={`${match.path}/transfer/:crypto`}
 						render={props => (

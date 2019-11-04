@@ -1,17 +1,15 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core';
+import { withStyles, Typography } from '@material-ui/core';
 
 const styles = theme => ({
 	key: {
-		color: '#93B0C1',
-		fontSize: '12px',
 		display: 'block',
 		whiteSpace: 'nowrap',
 		margin: '5px auto 0'
 	}
 });
 
-export const ProgramPrice = withStyles(styles)(({ classes, price, rate, label }) => {
+export const ProgramPrice = withStyles(styles)(({ classes, price, rate, label, extraLabel }) => {
 	if (!price || !rate) {
 		return null;
 	}
@@ -19,11 +17,17 @@ export const ProgramPrice = withStyles(styles)(({ classes, price, rate, label })
 	const numeric = +price;
 	const key = numeric / rate;
 	const formattedLabel = label ? `${label} ` : '';
+	const formattedExtraLabel = extraLabel ? ` ${extraLabel}` : '';
 	return (
 		<div className="price">
 			{formattedLabel}
 			{numeric.toLocaleString()}
-			<span className={classes.key}>{key.toLocaleString()} KEY</span>
+			{formattedExtraLabel}
+			<span className={classes.key}>
+				<Typography variant="subtitle2" color="secondary">
+					{key.toLocaleString()} KEY
+				</Typography>
+			</span>
 		</div>
 	);
 });

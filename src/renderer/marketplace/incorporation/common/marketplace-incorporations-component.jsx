@@ -1,6 +1,6 @@
 import { MarketplaceComponent } from '../../common/marketplace-component';
 
-const MARKETPLACE_INCORPORATIONS_ROOT_PATH = '/main/marketplace-incorporation';
+const MARKETPLACE_INCORPORATIONS_ROOT_PATH = '/main/marketplace/incorporation';
 
 export default class MarketplaceIncorporationsComponent extends MarketplaceComponent {
 	paymentCompleteRoute = () => {

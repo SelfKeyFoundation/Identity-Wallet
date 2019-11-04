@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid, CardHeader, Card, CardContent, withStyles } from '@material-ui/core';
 import { Chart } from 'react-google-charts';
+import { getEntityName, getEntityEquity } from './common-helpers.jsx';
 
 const styles = theme => ({
 	hr: {
@@ -78,9 +79,9 @@ const chartOptions = {
 	}
 };
 
-const getChartData = cap => {
+const getChartData = shareholders => {
 	const data = [['Content', 'percents']];
-	const dataPoints = cap.map(shareholder => [shareholder.name, shareholder.shares]);
+	const dataPoints = shareholders.map(s => [getEntityName(s), getEntityEquity(s)]);
 	return data.concat(dataPoints);
 };
 
@@ -108,7 +109,13 @@ ref={c => {
 */
 
 const CorporateShareholding = withStyles(styles)(props => {
-	const { classes, cap = [] } = props;
+	const { classes, members = [] } = props;
+	const shareholders = members.filter(m => m.positions.find(p => p.position === 'shareholder'));
+
+	if (shareholders.length === 0) {
+		return null;
+	}
+
 	return (
 		<Card>
 			<CardHeader title="Shareholding" className={classes.regularText} />
@@ -117,7 +124,7 @@ const CorporateShareholding = withStyles(styles)(props => {
 				<div className={classes.chartWrap}>
 					<Chart
 						chartType="PieChart"
-						data={getChartData(cap)}
+						data={getChartData(shareholders)}
 						options={chartOptions}
 						graph_id="PieChart"
 						width="100%"
@@ -126,13 +133,13 @@ const CorporateShareholding = withStyles(styles)(props => {
 						chartEvents={[selectEvent, readyEvent]}
 					/>
 					<Grid item xs={4} className={classes.legend}>
-						{cap.map((shareholder, index) => (
+						{shareholders.map((shareholder, index) => (
 							<div key={`shareholder-${index}`}>
 								<div
 									className={classes.coloredBox}
 									style={{ backgroundColor: getColors()[index] }}
 								/>
-								<span>{shareholder.name}</span>
+								<span>{getEntityName(shareholder)}</span>
 							</div>
 						))}
 					</Grid>

@@ -1,0 +1,58 @@
+[
+	{
+		"title": "Identity Documents",
+		"subtitle": "Certified True Copies",
+		"panelTitle": "Documents may include, but are not limited to:",
+		"list": [
+			"Wills",
+			"Trusts",
+			"Advanced directives",
+			"Executorships",
+			"Custody and guardianship agreements",
+			"Power of attorney",
+			"Court documents"
+		]
+	},
+	{
+		"title": "Legal Documents",
+		"subtitle": "Legal forms often require notarized signatures",
+		"panelTitle": "2 ----- Documents may include, but are not limited to:",
+		"list": [
+			"2 - Wills",
+			"2 - Trusts",
+			"2 - Advanced directives",
+			"2 - Executorships",
+			"2 - Custody and guardianship agreements",
+			"2 - Power of attorney",
+			"2 - Court documents"
+		]
+	},
+	{
+		"title": "Financial Documents",
+		"subtitle": "Overseeing important document signing processes",
+		"panelTitle": "3 ----- Documents may include, but are not limited to:",
+		"list": [
+			"3 - Wills",
+			"3 - Trusts",
+			"3 - Advanced directives",
+			"3 - Executorships",
+			"3 - Custody and guardianship agreements",
+			"3 - Power of attorney",
+			"3 - Court documents"
+		]
+	},
+	{
+		"title": "Business Documents",
+		"subtitle": "Verified signing process",
+		"panelTitle": "4 ----- Documents may include, but are not limited to:",
+		"list": [
+			"4 - Wills",
+			"4 - Trusts",
+			"4 - Advanced directives",
+			"4 - Executorships",
+			"4 - Custody and guardianship agreements",
+			"4 - Power of attorney",
+			"4 - Court documents"
+		]
+	}
+]

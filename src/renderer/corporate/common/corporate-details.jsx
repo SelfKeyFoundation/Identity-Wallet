@@ -1,5 +1,5 @@
 import React from 'react';
-import { CardHeader, Card, CardContent, Typography, withStyles } from '@material-ui/core';
+import { CardHeader, Card, CardContent, Typography, withStyles, Grid } from '@material-ui/core';
 import { CheckMaIcon, AttributeAlertIcon, EditTransparentIcon } from 'selfkey-ui';
 
 const styles = theme => ({
@@ -28,8 +28,9 @@ const styles = theme => ({
 		}
 	},
 	attr: {
-		display: 'block',
+		display: 'flex',
 		marginBottom: '20px',
+		flexWrap: 'nowrap',
 		'& .label': {
 			display: 'inline-block',
 			minWidth: '12em'
@@ -41,29 +42,45 @@ const styles = theme => ({
 			marginRight: '0.5em',
 			verticalAlign: 'middle'
 		}
+	},
+	attrValue: {
+		maxWidth: '12em'
 	}
 });
 
-const renderAttr = attr =>
+const DetailsAttribute = withStyles(styles)(({ attr, classes }) =>
 	attr ? (
-		<Typography variant="h5">
-			<CheckMaIcon />
-			{attr}
-		</Typography>
+		<Grid container direction="row" justify="flex-start" alignItems="flex-start">
+			<Grid item>
+				<CheckMaIcon />
+			</Grid>
+			<Grid item className={classes.attrValue}>
+				<Typography variant="h5">{attr}</Typography>
+			</Grid>
+		</Grid>
 	) : (
 		<Typography variant="h5">
 			<AttributeAlertIcon />
 			Missing
 		</Typography>
-	);
+	)
+);
 
-const renderAddressAtr = profile => {
-	const addressAtr = profile.allAttributes.find(a => a.name === 'Address');
+const AddressDetailsAttribute = withStyles(styles)(({ profile }) => {
+	const addressAtr = profile.allAttributes.find(
+		attr =>
+			attr.type.content.$id ===
+			'http://platform.selfkey.org/schema/attribute/physical-address.json'
+	);
+	let attr = '';
+
 	if (addressAtr) {
 		const value = addressAtr.data.value;
-		return renderAttr(!value ? `${value.address_line_1} ${value.address_line_2}` : '');
-	} else return renderAttr('');
-};
+		attr = value ? `${value.address_line_1 || ''} ${value.address_line_2 || ''}` : '';
+	}
+
+	return <DetailsAttribute attr={attr} />;
+});
 
 const editAction = onEdit => (
 	<div onClick={onEdit}>
@@ -90,25 +107,25 @@ const CorporateDetails = withStyles(styles)(props => {
 						<Typography className="label" color="secondary">
 							Jurisdiction
 						</Typography>
-						{renderAttr(profile.jurisdiction)}
+						<DetailsAttribute attr={profile.jurisdiction} />
 					</div>
 					<div className={classes.attr}>
 						<Typography className="label" color="secondary">
 							Entity Type
 						</Typography>
-						{renderAttr(profile.entityType)}
+						<DetailsAttribute attr={profile.entityType} />
 					</div>
 					<div className={classes.attr}>
 						<Typography className="label" color="secondary">
 							Incorporation Date
 						</Typography>
-						{renderAttr(profile.creationDate)}
+						<DetailsAttribute attr={profile.creationDate} />
 					</div>
 					<div className={classes.attr}>
 						<Typography className="label" color="secondary">
 							Address
 						</Typography>
-						{renderAddressAtr(profile)}
+						<AddressDetailsAttribute profile={profile} />
 					</div>
 					{profile.did && (
 						<div className={classes.attr}>

@@ -90,7 +90,7 @@ const styles = theme => ({
 
 const renderLastUpdateDate = ({ updatedAt }) => moment(updatedAt).format('DD MMM YYYY, hh:mm a');
 
-// const renderAttributeLabel = ({ name }) => name || 'No label provided';
+const renderAttributeLabel = ({ name }) => name || 'No label provided';
 
 const renderAttributeValue = ({ data, type }) => {
 	let valueToString = '';
@@ -158,7 +158,7 @@ const CorporateInformation = withStyles(styles)(props => {
 													className={classes.noOverflow}
 													title={renderAttributeValue(attr)}
 												>
-													{renderAttributeValue(attr)}
+													{renderAttributeLabel(attr)}
 												</Typography>
 											</SmallTableCell>
 											<SmallTableCell>

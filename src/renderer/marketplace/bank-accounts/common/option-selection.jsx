@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { CloseButtonIcon } from 'selfkey-ui';

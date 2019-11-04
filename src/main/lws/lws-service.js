@@ -180,7 +180,7 @@ export class LWSService {
 		let payload = { publicKey, unlocked: false };
 		let wallet = await Wallet.findByPublicKey(publicKey).eager('identities');
 		const ident = wallet.getDefaultIdentity();
-		log.debug('XXX reqUnlock ident %2j', ident);
+		log.debug('reqUnlock ident %2j', ident);
 		wallet = !wallet
 			? await Wallet.create({
 					address: publicKey,

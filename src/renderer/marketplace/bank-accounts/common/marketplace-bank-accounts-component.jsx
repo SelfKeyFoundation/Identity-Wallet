@@ -1,6 +1,6 @@
 import { MarketplaceComponent } from '../../common/marketplace-component';
 
-const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
+const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace/bank-accounts';
 
 export default class MarketplaceBankAccountsComponent extends MarketplaceComponent {
 	processStartedRoute = () => {

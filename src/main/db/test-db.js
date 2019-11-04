@@ -5,8 +5,12 @@ import { Model } from 'objection';
 import Knex from 'knex';
 import { db as config } from 'common/config';
 
+const DEBUG_MIGRATIONS = process.env.DEBUG_MIGRATIONS;
+
 export class TestDb {
 	static config = config;
+	static lock = false;
+	static locks = [];
 	static async init() {
 		try {
 			await this.initRaw();
@@ -16,7 +20,7 @@ export class TestDb {
 			console.log(error);
 		}
 	}
-	static async initRaw(dbName) {
+	static async initRaw(dbName, lock) {
 		try {
 			if (dbName) {
 				this.config.connection = dbName;
@@ -29,11 +33,25 @@ export class TestDb {
 		}
 	}
 
+	static async waitForLock(lock = true) {
+		if (this.lock) {
+			let lockPromise = new Promise();
+			this.locks.push(lockPromise);
+			await lockPromise;
+		}
+		this.lock = lock;
+	}
+
 	static migrate(cmd, flags = {}) {
+		const log = ({ action, migration }) => console.log('Doing ' + action + ' on ' + migration);
 		if (!flags.config) {
 			flags.config = this.config;
 		}
-		return knexMigrate(cmd, flags);
+		if (DEBUG_MIGRATIONS) {
+			flags.debug = DEBUG_MIGRATIONS;
+			flags.verbose = DEBUG_MIGRATIONS;
+		}
+		return knexMigrate(cmd, flags, DEBUG_MIGRATIONS ? log : null);
 	}
 
 	static async aquireConnection(attempt = 0) {
@@ -73,6 +91,11 @@ export class TestDb {
 		try {
 			await this.knex.destroy();
 			this.knex = null;
+			this.lock = false;
+			if (this.locks.length > 0) {
+				let promise = this.locks.unshift();
+				promise.resolve();
+			}
 		} catch (error) {
 			console.log(error);
 		}

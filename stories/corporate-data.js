@@ -484,3 +484,114 @@ export const corporateDocuments = [
 		}
 	}
 ];
+
+export const corporateMembers = [
+	{
+		entity: {
+			type: 'individual',
+			firstName: 'John',
+			lastName: 'Doe',
+			email: 'test@gmail.com'
+		},
+		attributes: [
+			{
+				name: 'residence',
+				type: {
+					content: {
+						$id:
+							'http://platform.selfkey.org/schema/attribute/country-of-residency.json',
+						title: 'Country of Residence'
+					},
+					url: 'http://platform.selfkey.org/schema/attribute/country-of-residency.json'
+				},
+				data: {
+					value: 'Russia'
+				}
+			},
+			{
+				name: 'nationality',
+				type: {
+					content: {
+						$id: 'http://platform.selfkey.org/schema/attribute/nationality.json',
+						title: 'Nationality'
+					},
+					url: 'http://platform.selfkey.org/schema/attribute/nationality.json'
+				},
+				data: {
+					value: 'Australia'
+				}
+			}
+		],
+		documents: [],
+		positions: [
+			{
+				position: 'director'
+			},
+			{
+				position: 'shareholder',
+				equity: 19
+			}
+		]
+	},
+	{
+		entity: {
+			type: 'corporate',
+			companyType: 'Company Limited by Shares (LTD)',
+			companyName: 'Test Company name',
+			email: 'test@company.org'
+		},
+		attributes: [
+			{
+				title: 'incorporation',
+				name: 'incorporation',
+				type: {
+					content: {
+						$id: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json',
+						title: 'Legal Jurisdiction'
+					},
+					url: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json'
+				},
+				data: {
+					value: 'Hong Kong'
+				}
+			}
+		],
+		documents: [],
+		positions: [
+			{
+				position: 'observer'
+			}
+		]
+	},
+	{
+		entity: {
+			type: 'corporate',
+			companyType: 'Company Limited by Shares (LTD)',
+			companyName: 'Selfkey Org',
+			email: 'info@selfkeyorg'
+		},
+		attributes: [
+			{
+				title: 'incorporation',
+				name: 'incorporation',
+				type: {
+					content: {
+						$id: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json',
+						title: 'Legal Jurisdiction'
+					},
+					url: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json'
+				},
+				data: {
+					value: 'Singapore'
+				}
+			}
+		],
+		documents: [],
+		positions: [
+			{
+				position: 'shareholder',
+				equity: 81
+			}
+		]
+	}
+];
