@@ -123,13 +123,19 @@ const updateProfilePictureOperation = (picture, identityId) => async (dispatch, 
 };
 
 const lockIdentityOperation = identityId => async (dispatch, getState) => {
-	const identity = identitySelectors.selectCurrentIdentity(getState());
+	let identity = null;
+	if (identityId) {
+		identity = identitySelectors.selectIdentityById(getState(), identityId);
+	} else {
+		identity = identitySelectors.selectCurrentIdentity(getState());
+	}
 	if (!identity) {
 		return;
 	}
 	if (identity.rootIdentity) {
 		await dispatch(identityOperations.setCurrentIdentityAction(null));
 	}
+	identityId = identity.id;
 	await dispatch(identityActions.deleteIdAttributesAction(identityId));
 	await dispatch(identityActions.deleteDocumentsAction(identityId));
 	if (!identity.rootIdentity) {
