@@ -12,10 +12,16 @@ class NotarizationTOCComponent extends MarketplaceNotariesComponent {
 
 	onBackClick = () => this.props.dispatch(push(this.processPath()));
 	onDisagreeClick = () => this.props.dispatch(push(this.tocDisagreementPath()));
-	// onAgreeClick = () => this.props.dispatch(push(this.rootPath()));
+	onAgreeClick = () => this.props.dispatch(push(this.paymentPath()));
 
 	render() {
-		return <TOCPopup onBackClick={this.onBackClick} onDisagreeClick={this.onDisagreeClick} />;
+		return (
+			<TOCPopup
+				onBack={this.onBackClick}
+				onDisagree={this.onDisagreeClick}
+				onAgree={this.onAgreeClick}
+			/>
+		);
 	}
 }
 

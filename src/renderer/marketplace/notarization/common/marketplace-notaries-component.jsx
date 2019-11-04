@@ -7,6 +7,7 @@ export default class MarketplaceNotariesComponent extends MarketplaceComponent {
 	processPath = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}/process`;
 	tocPath = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}/toc`;
 	tocDisagreementPath = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}/tocDisagreement`;
+	paymentPath = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}/pay`;
 
 	getApplicationStatus = () => {
 		if (this.props.rp && this.props.rp.authenticated && this.userHasApplied()) {
