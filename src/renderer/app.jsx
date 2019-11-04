@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Logger } from 'common/logger';
-import { Provider, connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { Route, HashRouter } from 'react-router-dom';
 import { ConnectedRouter, push } from 'connected-react-router';
 import ReactPiwik from 'react-piwik';
@@ -118,9 +118,7 @@ const AppContainer = connect()(AppContainerComponent);
 
 const App = ({ store, history }) => (
 	<SelfkeyDarkTheme>
-		<Provider store={store}>
-			<AppContainer history={history} />
-		</Provider>
+		<AppContainer history={history} />
 	</SelfkeyDarkTheme>
 );
 
