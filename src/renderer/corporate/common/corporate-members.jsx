@@ -14,16 +14,17 @@ import {
 	Button,
 	withStyles
 } from '@material-ui/core';
-import {
-	SmallTableHeadRow,
-	EditTransparentIcon,
-	DeleteIcon,
-	DropdownIcon,
-	SmallRoundCompany,
-	SmallRoundPerson
-} from 'selfkey-ui';
+import { SmallTableHeadRow, EditTransparentIcon, DeleteIcon, DropdownIcon } from 'selfkey-ui';
 import CorporateDocuments from './corporate-documents';
 import CorporateInformation from './corporate-information';
+import {
+	getEntityIcon,
+	getEntityName,
+	getEntityRoles,
+	getEntityJurisdiction,
+	getEntityResidency,
+	getEntityEquity
+} from './common-helpers.jsx';
 
 const styles = theme => ({
 	hr: {
@@ -76,55 +77,6 @@ const styles = theme => ({
 		transform: 'rotate(-90deg)'
 	}
 });
-
-const getEntityIcon = entry => {
-	if (entry.entity.type === 'individual') {
-		return <SmallRoundPerson />;
-	} else {
-		return <SmallRoundCompany />;
-	}
-};
-
-const getEntityName = entry => {
-	if (entry.entity.type === 'individual') {
-		return `${entry.entity.lastName}, ${entry.entity.firstName}`;
-	} else {
-		return `${entry.entity.companyName}`;
-	}
-};
-
-const getEntityRoles = entry => entry.positions.map(p => p.position).join(', ');
-
-const getEntityJurisdiction = entry => {
-	const idAttribute =
-		entry.entity.type === 'individual'
-			? 'http://platform.selfkey.org/schema/attribute/nationality.json'
-			: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json';
-	const attribute = entry.attributes.find(a => a.type.content.$id === idAttribute);
-	if (attribute && attribute.data.value) {
-		return attribute.data.value;
-	}
-};
-
-const getEntityResidency = entry => {
-	const idAttribute =
-		entry.entity.type === 'individual'
-			? 'http://platform.selfkey.org/schema/attribute/country-of-residency.json'
-			: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json';
-	const attribute = entry.attributes.find(a => a.type.content.$id === idAttribute);
-	if (attribute && attribute.data.value) {
-		return attribute.data.value;
-	}
-};
-
-const getEntityShares = entry => {
-	const shareholder = entry.positions.find(p => p.position === 'shareholder');
-	if (shareholder) {
-		return shareholder.equity;
-	} else {
-		return '';
-	}
-};
 
 const CorporateMembers = withStyles(styles)(props => {
 	const {
@@ -221,7 +173,7 @@ const CorporateMembers = withStyles(styles)(props => {
 										</TableCell>
 										<TableCell>
 											<Typography variant="h6">
-												{getEntityShares(entry)}
+												{getEntityEquity(entry)}
 											</Typography>
 										</TableCell>
 										<TableCell>
