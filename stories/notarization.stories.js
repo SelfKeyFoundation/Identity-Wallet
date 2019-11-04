@@ -1,8 +1,10 @@
-/*
 import React from 'react';
 import { storiesOf } from '@storybook/react';
+import { linkTo } from '@storybook/addon-links';
 import NotarizationDetailsPage from '../src/renderer/marketplace/notarization/details/notarization-details-page';
 import RequestNotarizationPage from '../src/renderer/marketplace/notarization/process/request-notarization-page';
+import TOCPopup from '../src/renderer/marketplace/notarization/common/toc-popup';
+import TOCDisagreementPopup from '../src/renderer/marketplace/notarization/common/toc-disagreement-popup';
 
 const documents = [
 	{
@@ -49,10 +51,41 @@ const documents = [
 ];
 
 storiesOf('Notarization/Tabs', module)
-	.add('Supported Doc Types', () => <NotarizationDetailsPage tab="types" />)
-	.add('Key Informations', () => <NotarizationDetailsPage tab="informations" />);
+	.add('types', () => (
+		<NotarizationDetailsPage
+			tab="types"
+			keyRate="0.0001297225"
+			onTabChange={linkTo('Notarization/Tabs', tab => tab)}
+			startNotarize={linkTo('Notarization', 'Request Notarization')}
+		/>
+	))
+	.add('informations', () => (
+		<NotarizationDetailsPage
+			tab="informations"
+			keyRate="0.0001297225"
+			onTabChange={linkTo('Notarization/Tabs', tab => tab)}
+			startNotarize={linkTo('Notarization', 'Request Notarization')}
+		/>
+	));
+
+storiesOf('Notarization/Popups', module)
+	.add('toc', () => (
+		<TOCPopup
+			onBackClick={linkTo('Notarization', 'Request Notarization')}
+			onDisagreeClick={linkTo('Notarization/Popups', 'toc disagreement')}
+		/>
+	))
+	.add('toc disagreement', () => (
+		<TOCDisagreementPopup
+			onBackClick={linkTo('Notarization', 'Request Notarization')}
+			onReturnClick={linkTo('Notarization/Popups', 'toc')}
+		/>
+	));
 
 storiesOf('Notarization', module).add('Request Notarization', () => (
-	<RequestNotarizationPage documents={documents} />
+	<RequestNotarizationPage
+		documents={documents}
+		onBackClick={linkTo('Notarization/Tabs', 'types')}
+		onStartClick={linkTo('Notarization/Popups', 'toc')}
+	/>
 ));
-*/
