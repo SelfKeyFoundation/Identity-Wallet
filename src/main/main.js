@@ -61,15 +61,21 @@ if (!gotTheLock) {
 	});
 }
 
+function initCtx(options = {}) {
+	const container = configureContext('main');
+	const ctx = container.cradle;
+	setGlobalContext(ctx);
+	return container;
+}
+
 function onReady() {
 	return async () => {
 		let ctx = getGlobalContext();
 		if (ctx && ctx.app.win) return;
 		global.__static = __static;
 		await db.init();
-		const container = configureContext('main');
-		ctx = container.cradle;
-		setGlobalContext(ctx);
+		const container = initCtx();
+		ctx = getGlobalContext();
 		const store = ctx.store;
 		const app = ctx.app;
 		try {
@@ -100,6 +106,16 @@ function onReady() {
 		container.register({
 			mainWindow: asValue(mainWindow)
 		});
+
+		if (module.hot) {
+			module.hot.accept('../common/context', () => {
+				const container = initCtx('main', { store });
+				container.register({
+					mainWindow: asValue(mainWindow)
+				});
+				ctx = getGlobalContext();
+			});
+		}
 
 		mainWindow.webContents.on('did-finish-load', async () => {
 			try {
