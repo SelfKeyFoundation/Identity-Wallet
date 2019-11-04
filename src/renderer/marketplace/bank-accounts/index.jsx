@@ -32,7 +32,7 @@ class MarketplaceBankAccountsComponent extends Component {
 					component={BankAccountsPaymentContainer}
 				/>
 				<Route
-					path={`${path}/payment-complete/:accountCode/:countryCode/:templateId/:vendorId`}
+					path={`${path}/payment-complete/:accountCode/:countryCode/:templateId/:vendorId/:orderId?`}
 					component={BankAccountsPaymentCompleteContainer}
 				/>
 				<Route

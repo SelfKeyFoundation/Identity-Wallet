@@ -7,6 +7,7 @@ import { getWallet } from 'common/wallet/selectors';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { incorporationsSelectors } from 'common/incorporations';
 import { transactionSelectors } from 'common/transaction';
+import { ordersSelectors } from 'common/marketplace/orders';
 import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorporations-component';
 import { MarketplaceProcessStarted } from '../../common/marketplace-process-started';
 
@@ -20,13 +21,13 @@ class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsCo
 	}
 
 	async componentDidMount() {
-		const { transaction, companyCode, program, vendorId } = this.props;
+		const { order, companyCode, program, vendorId } = this.props;
 
 		this.saveTransactionHash();
 		this.clearRelyingParty();
 
 		this.trackEcommerceTransaction({
-			transactionHash: transaction.transactionHash,
+			transactionHash: order.paymentHash,
 			price: program.price,
 			code: companyCode,
 			jurisdiction: program.data.region,
@@ -35,15 +36,18 @@ class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsCo
 	}
 
 	saveTransactionHash = async () => {
-		const { transaction, program, vendorId } = this.props;
+		const { order, transaction, program, vendorId } = this.props;
 		const application = this.getLastApplication();
 
-		if (!this.userHasPaid() && transaction) {
+		const transactionHash = order ? order.paymentHash : transaction.transactionHash;
+		const amountKey = order ? order.amount : transaction.amount;
+
+		if (!this.userHasPaid() && transactionHash) {
 			await this.props.dispatch(
 				kycOperations.updateRelyingPartyKYCApplicationPayment(
 					vendorId,
 					application.id,
-					transaction.transactionHash
+					transactionHash
 				)
 			);
 
@@ -52,16 +56,16 @@ class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsCo
 					id: application.id,
 					payments: {
 						amount: program.price,
-						amountKey: transaction.amount,
-						transactionHash: transaction.transactionHash,
+						amountKey,
+						transactionHash,
 						date: Date.now(),
 						status: 'Sent KEY'
 					}
 				})
 			);
 		} else {
-			// TODO: what to do if no transaction or currentApplication exists?
-			console.error('No current application or transaction');
+			// TODO: what to do if no order or currentApplication exists?
+			console.error('No current application or order');
 			this.props.dispatch(push(this.cancelRoute()));
 		}
 	};
@@ -106,7 +110,7 @@ class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsCo
 }
 
 const mapStateToProps = (state, props) => {
-	const { companyCode, vendorId } = props.match.params;
+	const { companyCode, vendorId, orderId } = props.match.params;
 	const authenticated = true;
 	return {
 		companyCode,
@@ -115,6 +119,7 @@ const mapStateToProps = (state, props) => {
 		transaction: transactionSelectors.getTransaction(state),
 		address: getWallet(state).address,
 		currentApplication: kycSelectors.selectCurrentApplication(state),
+		order: ordersSelectors.getOrder(state, orderId),
 		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
