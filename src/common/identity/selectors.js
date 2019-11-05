@@ -212,9 +212,13 @@ const selectIdentityById = (state, id) => {
 	return tree.identitiesById[id];
 };
 
-const selectAllIdentities = state => {
+const selectAllIdentities = (state, onlyRoot = true) => {
 	const tree = selectIdentity(state);
-	return tree.identities.map(id => tree.identitiesById[id]);
+	const identities = tree.identities.map(id => tree.identitiesById[id]);
+	if (onlyRoot) {
+		return identities.filter(ident => ident.rootIdentity);
+	}
+	return identities;
 };
 
 const selectCurrentIdentity = state => {
@@ -287,6 +291,35 @@ const selectBasicCorporateAttributeTypes = state => {
 		}, {});
 };
 
+const selectChildrenIdentities = (state, identityId) => {
+	const identity = selectIdentityById(state, identityId);
+
+	if (!identity || identity.type === 'individual') {
+		return [];
+	}
+
+	return selectAllIdentities(state, false).filter(idnt => idnt.parentId === identityId);
+};
+
+const selectMemberIdentities = (state, identityId, circleMap = {}) => {
+	if (circleMap[identityId]) {
+		return [];
+	}
+
+	circleMap[identityId] = true;
+
+	const identities = selectChildrenIdentities(state, identityId);
+
+	return identities.reduce((acc, curr) => {
+		if (curr.type === 'individual') {
+			return acc;
+		}
+		const members = selectMemberIdentities(state, curr.id, circleMap);
+
+		return acc.concat(members);
+	}, []);
+};
+
 const selectCorporateProfile = (state, id) => {
 	const identity = identitySelectors.selectIdentityById(state, id);
 	if (!identity) return {};
@@ -356,7 +389,9 @@ export const identitySelectors = {
 	selectCorporateLegalEntityTypes,
 	selectCorporateProfile,
 	selectCurrentCorporateProfile,
-	selectBasicCorporateAttributeTypes
+	selectBasicCorporateAttributeTypes,
+	selectChildrenIdentities,
+	selectMemberIdentities
 };
 
 export default identitySelectors;
