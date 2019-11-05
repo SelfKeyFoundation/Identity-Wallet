@@ -46,6 +46,9 @@ describe('Identity Duck', () => {
 				sinon.stub(store, 'dispatch');
 				sinon.stub(identityActions, 'deleteIdAttributesAction').returns(testAction);
 				sinon.stub(identityActions, 'deleteDocumentsAction').returns(testAction);
+				sinon
+					.stub(identitySelectors, 'selectIdentityById')
+					.returns({ id: testWalletId, rootIdentity: true });
 
 				await testExports.operations.lockIdentityOperation(testWalletId)(
 					store.dispatch,
@@ -63,6 +66,9 @@ describe('Identity Duck', () => {
 			it('unlockIdentityOperation', async () => {
 				sinon.stub(identityOperations, 'loadIdAttributesOperation').returns(() => {});
 				sinon.stub(identityOperations, 'loadDocumentsOperation').returns(() => {});
+				sinon
+					.stub(identitySelectors, 'selectIdentityById')
+					.returns({ id: 1, rootIdentity: true });
 
 				await testExports.operations.unlockIdentityOperation(testWalletId)(
 					store.dispatch,

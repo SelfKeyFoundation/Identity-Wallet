@@ -256,8 +256,8 @@ const checkOrderAllowanceOperation = orderId => async (dispatch, getState) => {
 };
 
 const finishCurrentOrderOperation = () => async (dispatch, getState) => {
-	const { completeUrl } = ordersSelectors.getCurrentOrder(getState());
-	await dispatch(push(completeUrl));
+	const { completeUrl, orderId } = ordersSelectors.getCurrentOrder(getState());
+	await dispatch(push(`${completeUrl}/${orderId}`));
 	await dispatch(ordersOperations.setCurrentOrderAction(null));
 };
 
