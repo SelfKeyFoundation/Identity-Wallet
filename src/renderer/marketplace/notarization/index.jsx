@@ -6,7 +6,7 @@ import { NotarizationDetailsContainer } from './details/notarization-details-con
 import { RequestNotarizationContainer } from './process/request-notarization-container';
 import { NotarizationTOC } from './common/toc-container';
 import { NotarizationTOCdisagreement } from './common/toc-disagreement-container';
-import { NotarizationCheckoutContainer } from './checkout/notarization-checkout-container';
+import { NotarizationPaymentContainer } from './checkout/payment-container';
 
 class MarketplaceNotariesComponent extends Component {
 	async componentDidMount() {
@@ -22,7 +22,7 @@ class MarketplaceNotariesComponent extends Component {
 				<Route path={`${path}/process`} component={RequestNotarizationContainer} />
 				<Route path={`${path}/toc`} component={NotarizationTOC} />
 				<Route path={`${path}/tocDisagreement`} component={NotarizationTOCdisagreement} />
-				<Route path={`${path}/pay`} component={NotarizationCheckoutContainer} />
+				<Route path={`${path}/pay`} component={NotarizationPaymentContainer} />
 			</div>
 		);
 	}
