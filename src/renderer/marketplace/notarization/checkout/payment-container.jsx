@@ -58,8 +58,6 @@ class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 const mapStateToProps = (state, props) => {
 	const { companyCode, templateId, vendorId } = props.match.params;
 	const authenticated = true;
-	console.log('lofasz: ');
-	console.log(props.match.params);
 	return {
 		companyCode,
 		templateId,
