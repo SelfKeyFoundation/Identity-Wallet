@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import moment from 'moment';
 import {
 	withStyles,
@@ -158,7 +158,7 @@ export const EmptyTableStatus = withStyles(emptyTableStyle)(({ classes }) => {
 		<TableRow className={classes.tableRow}>
 			<TableCell colSpan="6" className="tableCell">
 				<Typography variant="body1" color="secondary">
-					You'll see here all your recent requests for notarization, and you can start
+					You`ll see here all your recent requests for notarization, and you can start
 					working on them imediatly.
 				</Typography>
 			</TableCell>
@@ -166,90 +166,81 @@ export const EmptyTableStatus = withStyles(emptyTableStyle)(({ classes }) => {
 	);
 });
 
-class CertifiersDashboardOverview extends Component {
-	renderDate(date) {
-		if (!date) return '-';
-		return moment(date).format('DD MMM YYYY');
-	}
-
-	render() {
-		const {
-			classes,
-			documents,
-			requestedProcesses,
-			completedRequests,
-			total,
-			totalRevenueInKey
-		} = this.props;
-		return (
-			<div className={classes.certifiersDashboard}>
-				<div className={classes.papers}>
-					<PaperItem
-						title="In Progress Requests"
-						value={requestedProcesses}
-						info="Number of in progress certification processes"
-					/>
-					<PaperItem
-						title="Total Completed Requests"
-						value={completedRequests}
-						info="Total number of completed requests since you joined"
-						extraInfo="From December 2007"
-					/>
-					<PaperItem
-						title="Total Revenue"
-						value={total}
-						info="0 KEY"
-						totalRevenueInKey={totalRevenueInKey}
-					/>
-				</div>
-				<Paper className={classes.newRequests}>
-					<div>
-						<div className={classes.flex}>
-							<Typography variant="h2">New Requests</Typography>
-							<RefreshIcon className={classes.icon} />
-						</div>
-						<Divider className={classes.divider} />
-						<Table>
-							<TableHead>
-								<SmallTableHeadRow>
-									<TableCell>
-										<Typography variant="overline">Date</Typography>
-									</TableCell>
-									<TableCell>
-										<Typography variant="overline">User</Typography>
-									</TableCell>
-									<TableCell className={classes.type}>
-										<Typography variant="overline">Type</Typography>
-									</TableCell>
-									<TableCell>
-										<Typography variant="overline">No. of documents</Typography>
-									</TableCell>
-									<TableCell>
-										<Typography variant="overline">Status</Typography>
-									</TableCell>
-									<TableCell>
-										<Typography variant="overline">Actions</Typography>
-									</TableCell>
-								</SmallTableHeadRow>
-							</TableHead>
-							<TableBody>
-								{documents ? (
-									documents &&
-									documents.map(entry => {
-										return <RequestsTableRow data={entry} />;
-									})
-								) : (
-									<EmptyTableStatus />
-								)}
-							</TableBody>
-						</Table>
-					</div>
-				</Paper>
+export const CertifiersDashboardOverviewPage = withStyles(styles)(props => {
+	const {
+		classes,
+		documents,
+		requestedProcesses,
+		completedRequests,
+		total,
+		totalRevenueInKey
+	} = props;
+	return (
+		<div className={classes.certifiersDashboard}>
+			<div className={classes.papers}>
+				<PaperItem
+					title="In Progress Requests"
+					value={requestedProcesses}
+					info="Number of in progress certification processes"
+				/>
+				<PaperItem
+					title="Total Completed Requests"
+					value={completedRequests}
+					info="Total number of completed requests since you joined"
+					extraInfo="From December 2007"
+				/>
+				<PaperItem
+					title="Total Revenue"
+					value={total}
+					info="0 KEY"
+					totalRevenueInKey={totalRevenueInKey}
+				/>
 			</div>
-		);
-	}
-}
+			<Paper className={classes.newRequests}>
+				<div>
+					<div className={classes.flex}>
+						<Typography variant="h2">New Requests</Typography>
+						<RefreshIcon className={classes.icon} />
+					</div>
+					<Divider className={classes.divider} />
+					<Table>
+						<TableHead>
+							<SmallTableHeadRow>
+								<TableCell>
+									<Typography variant="overline">Date</Typography>
+								</TableCell>
+								<TableCell>
+									<Typography variant="overline">User</Typography>
+								</TableCell>
+								<TableCell className={classes.type}>
+									<Typography variant="overline">Type</Typography>
+								</TableCell>
+								<TableCell>
+									<Typography variant="overline">No. of documents</Typography>
+								</TableCell>
+								<TableCell>
+									<Typography variant="overline">Status</Typography>
+								</TableCell>
+								<TableCell>
+									<Typography variant="overline">Actions</Typography>
+								</TableCell>
+							</SmallTableHeadRow>
+						</TableHead>
+						<TableBody>
+							{documents ? (
+								documents &&
+								documents.map((entry, indx) => {
+									return <RequestsTableRow key={indx} data={entry} />;
+								})
+							) : (
+								<EmptyTableStatus />
+							)}
+						</TableBody>
+					</Table>
+				</div>
+			</Paper>
+		</div>
+	);
+});
 
-export const CertifiersDashboardOverviewTab = withStyles(styles)(CertifiersDashboardOverview);
-
-export default CertifiersDashboardOverviewTab;
+export default CertifiersDashboardOverviewPage;

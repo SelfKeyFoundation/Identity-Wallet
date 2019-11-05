@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import moment from 'moment';
 import {
 	withStyles,
@@ -129,90 +129,81 @@ export const RequestsTableRow = withStyles(styles)(({ classes, data }) => {
 	);
 });
 
-class CertifiersDashboardHistory extends Component {
-	renderDate(date) {
-		if (!date) return '-';
-		return moment(date).format('DD MMM YYYY');
-	}
-
-	render() {
-		const { classes, documents } = this.props;
-		return (
-			<div className={classes.notarizationRequests}>
-				<div className="notarizationRequestsBox">
-					<Paper className={classes.newRequests}>
-						<div>
-							<div className={classes.flex}>
-								<Typography variant="h2">Notarization Requests</Typography>
-								<RefreshIcon className={classes.icon} />
-							</div>
-							<Divider className={classes.divider} />
-							<Table>
-								<RequestTableHead />
-								<TableBody>
-									{documents &&
-										documents.map(entry => {
-											return <RequestsTableRow data={entry} />;
-										})}
-								</TableBody>
-							</Table>
-							<TablePagination
-								className={classes.topSpace}
-								rowsPerPageOptions={[5, 10, 25]}
-								component="div"
-								count={documents.length}
-								rowsPerPage={5}
-								page={1}
-								backIconButtonProps={{
-									'aria-label': 'previous page'
-								}}
-								nextIconButtonProps={{
-									'aria-label': 'next page'
-								}}
-							/>
+export const CertifiersDashboardHistoryPage = withStyles(styles)(props => {
+	const { classes, documents } = props;
+	return (
+		<div className={classes.notarizationRequests}>
+			<div className="notarizationRequestsBox">
+				<Paper className={classes.newRequests}>
+					<div>
+						<div className={classes.flex}>
+							<Typography variant="h2">Notarization Requests</Typography>
+							<RefreshIcon className={classes.icon} />
 						</div>
-					</Paper>
-				</div>
-
-				<div className={classes.identityValidation}>
-					<Paper className={classes.newRequests}>
-						<div>
-							<div className={classes.flex}>
-								<Typography variant="h2">Identity Validation Requests</Typography>
-								<RefreshIcon className={classes.icon} />
-							</div>
-							<Divider className={classes.divider} />
-							<Table>
-								<RequestTableHead />
-								<TableBody>
-									{documents &&
-										documents.map(entry => {
-											return <RequestsTableRow data={entry} />;
-										})}
-								</TableBody>
-							</Table>
-							<TablePagination
-								className={classes.topSpace}
-								rowsPerPageOptions={[5, 10, 25]}
-								component="div"
-								count={documents.length}
-								rowsPerPage={5}
-								page={1}
-								backIconButtonProps={{
-									'aria-label': 'previous page'
-								}}
-								nextIconButtonProps={{
-									'aria-label': 'next page'
-								}}
-							/>
-						</div>
-					</Paper>
-				</div>
+						<Divider className={classes.divider} />
+						<Table>
+							<RequestTableHead />
+							<TableBody>
+								{documents &&
+									documents.map((entry, indx) => {
+										return <RequestsTableRow key={indx} data={entry} />;
+									})}
+							</TableBody>
+						</Table>
+						<TablePagination
+							className={classes.topSpace}
+							rowsPerPageOptions={[5, 10, 25]}
+							component="div"
+							count={documents && documents.length}
+							rowsPerPage={5}
+							page={1}
+							backIconButtonProps={{
+								'aria-label': 'previous page'
+							}}
+							nextIconButtonProps={{
+								'aria-label': 'next page'
+							}}
+						/>
+					</div>
+				</Paper>
 			</div>
-		);
-	}
-}
 
-export const CertifiersDashboardHistoryTab = withStyles(styles)(CertifiersDashboardHistory);
+			<div className={classes.identityValidation}>
+				<Paper className={classes.newRequests}>
+					<div>
+						<div className={classes.flex}>
+							<Typography variant="h2">Identity Validation Requests</Typography>
+							<RefreshIcon className={classes.icon} />
+						</div>
+						<Divider className={classes.divider} />
+						<Table>
+							<RequestTableHead />
+							<TableBody>
+								{documents &&
+									documents.map((entry, indx) => {
+										return <RequestsTableRow key={indx} data={entry} />;
+									})}
+							</TableBody>
+						</Table>
+						<TablePagination
+							className={classes.topSpace}
+							rowsPerPageOptions={[5, 10, 25]}
+							component="div"
+							count={documents && documents.length}
+							rowsPerPage={5}
+							page={1}
+							backIconButtonProps={{
+								'aria-label': 'previous page'
+							}}
+							nextIconButtonProps={{
+								'aria-label': 'next page'
+							}}
+						/>
+					</div>
+				</Paper>
+			</div>
+		</div>
+	);
+});
 
-export default CertifiersDashboardHistoryTab;
+export default CertifiersDashboardHistoryPage;
