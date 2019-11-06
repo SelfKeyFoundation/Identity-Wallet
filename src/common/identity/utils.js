@@ -248,7 +248,7 @@ jsonSchema.loadRemoteSchema = async (url, options, attempt = 1) => {
 jsonSchema.dereference = (schema, options) => {
 	const resolver = {
 		order: 1,
-		canRead: /^platform\.selfkey\.org:/i,
+		canRead: /platform\.selfkey\.org/i,
 		async read(file) {
 			return jsonSchema.loadRemoteSchema(file, options);
 		}
