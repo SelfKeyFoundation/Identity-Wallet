@@ -57,7 +57,7 @@ class RequestNotarizationContainer extends MarketplaceNotariesComponent {
 
 const mapStateToProps = (state, props) => {
 	return {
-		...identitySelectors.selectSelfkeyId(state)
+		...identitySelectors.selectIndividualProfile(state)
 	};
 };
 

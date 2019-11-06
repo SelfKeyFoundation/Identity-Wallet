@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
 	withStyles,
 	Button,
@@ -149,7 +149,7 @@ const IDType = withStyles(styles)(({ dataIDType, classes }) => {
 	);
 });
 
-class SidebarSwitchAccount extends Component {
+class SidebarSwitchAccount extends PureComponent {
 	state = {
 		open: true
 	};

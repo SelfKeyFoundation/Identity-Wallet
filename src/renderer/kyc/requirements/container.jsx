@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { KycRequirementsList } from './requirements-list';
 import { connect } from 'react-redux';
 import { kycSelectors, kycOperations } from '../../../common/kyc';
 
-class KycRequirementsComponent extends Component {
+class KycRequirementsComponent extends PureComponent {
 	componentDidMount() {
 		if (this.props.rpShouldUpdate) {
 			this.props.dispatch(kycOperations.loadRelyingParty(this.props.relyingPartyName));

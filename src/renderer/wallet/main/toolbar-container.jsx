@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Toolbar from './toolbar';
 import config from 'common/config';
 import { connect } from 'react-redux';
@@ -7,7 +7,7 @@ import { walletSelectors } from 'common/wallet';
 import { push } from 'connected-react-router';
 import { featureIsEnabled } from 'common/feature-flags';
 
-class ToolbarContainer extends Component {
+class ToolbarContainer extends PureComponent {
 	state = {
 		isSidebarOpen: false,
 		isProfileOpen: false

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Avatar, Input, Button, Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -26,7 +26,7 @@ const styles = theme => ({
 	}
 });
 
-class NewAddress extends Component {
+class NewAddress extends PureComponent {
 	state = {
 		password: '',
 		filePath: '',

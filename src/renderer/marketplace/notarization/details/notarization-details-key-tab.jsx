@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { withStyles, Typography, List, ListItem } from '@material-ui/core';
 
 const styles = theme => ({
@@ -53,7 +53,7 @@ export const KeyInformationList = withStyles(listItemStyles)(({ classes }) => (
 	</div>
 ));
 
-class NotarizationKeyTabComponent extends Component {
+class NotarizationKeyTabComponent extends PureComponent {
 	render() {
 		const { classes } = this.props;
 		return (

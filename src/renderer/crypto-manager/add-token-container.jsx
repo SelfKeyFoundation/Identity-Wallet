@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { tokensOperations, tokensSelectors } from 'common/tokens';
@@ -97,7 +97,7 @@ const styles = theme => ({
 	}
 });
 
-class AddTokenContainerComponent extends Component {
+class AddTokenContainerComponent extends PureComponent {
 	state = {
 		address: '',
 		symbol: '',

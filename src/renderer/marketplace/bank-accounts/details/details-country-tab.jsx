@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { withStyles, Typography, Grid, List, ListItem } from '@material-ui/core';
 import { PageLoading, sanitize } from '../../common';
 import 'flag-icon-css/css/flag-icon.css';
@@ -67,7 +67,7 @@ const styles = theme => ({
 	}
 });
 
-class BankingCountryTabComponent extends Component {
+class BankingCountryTabComponent extends PureComponent {
 	async componentDidMount() {
 		window.scrollTo(0, 0);
 	}

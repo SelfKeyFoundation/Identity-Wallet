@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { withStyles } from '@material-ui/core';
 import CertifiersDashboardOverviewPage from './dashboard-overview-page';
 
 const styles = theme => ({});
 
-class CertifiersDashboardOverviewContainer extends Component {
+class CertifiersDashboardOverviewContainer extends PureComponent {
 	renderDate(date) {
 		if (!date) return '-';
 		return moment(date).format('DD MMM YYYY');

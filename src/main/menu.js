@@ -12,7 +12,7 @@ const version = electron.app.getVersion();
  * Create the Application's main menu
  */
 const getMenuTemplate = mainWindow => {
-	log.info('generating menu template');
+	log.debug('generating menu template');
 	const defaultMenu = [
 		{
 			label: electron.app.getName(),

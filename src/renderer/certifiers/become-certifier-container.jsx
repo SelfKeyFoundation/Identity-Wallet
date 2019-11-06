@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core';
@@ -6,7 +6,7 @@ import BecomeCertifierPage from './become-certifier-page';
 
 const styles = theme => ({});
 
-class BecomeCertifierComponent extends Component {
+class BecomeCertifierComponent extends PureComponent {
 	handleWhatsThisClicked = e => {
 		window.openExternal(e, 'https://help.selfkey.org/');
 	};

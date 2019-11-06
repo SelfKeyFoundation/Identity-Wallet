@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Grid, Button, Typography, withStyles, List } from '@material-ui/core';
 import { connect } from 'react-redux';
 import CryptoPriceTableContainer from './crypto-price-table-container';
@@ -43,7 +43,7 @@ const styles = theme => ({
 	}
 });
 
-class CryptoManagerContainerComponent extends Component {
+class CryptoManagerContainerComponent extends PureComponent {
 	state = {
 		showAddedModal: false,
 		tokenAdded: undefined,

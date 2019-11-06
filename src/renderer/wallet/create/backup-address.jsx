@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Grid, Typography, Paper, Modal, Input, Button, InputAdornment } from '@material-ui/core';
 import {
 	ModalWrap,
@@ -50,7 +50,7 @@ const styles = theme => ({
 
 const backupPrivateKey = props => <Link to="/backupPrivateKey" {...props} />;
 
-class BackupAddress extends Component {
+class BackupAddress extends PureComponent {
 	state = {
 		showFileDownloadedResult: false
 	};

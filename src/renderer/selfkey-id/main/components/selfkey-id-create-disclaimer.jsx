@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Grid, Modal, Typography, Paper, Button, withStyles } from '@material-ui/core';
 import { SelfkeyLogoTemp, ModalWrap, ModalHeader, ModalBody } from 'selfkey-ui';
 import { Link } from 'react-router-dom';
@@ -26,7 +26,7 @@ const styles = theme => ({
 const selfkeyId = props => <Link to="/main/selfkeyId" {...props} />;
 const main = props => <Link to="/main/dashboard" {...props} />;
 
-class SelfKeyIdCreateDisclaimerComponent extends Component {
+class SelfKeyIdCreateDisclaimerComponent extends PureComponent {
 	handleBackClick = evt => {
 		evt && evt.preventDefault();
 		history.getHistory().goBack();

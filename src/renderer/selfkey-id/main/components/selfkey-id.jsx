@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Grid, Typography, Tabs, Tab } from '@material-ui/core';
 
-class SelfkeyIdComponent extends Component {
+class SelfkeyIdComponent extends PureComponent {
 	render() {
 		return (
 			<Grid container direction="column" spacing={32}>

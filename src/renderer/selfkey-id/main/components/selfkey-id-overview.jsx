@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import moment from 'moment';
 
 import {
@@ -108,7 +108,7 @@ const DocumentExpiryDate = ({ doc }) => {
 	return <span>{date}</span>;
 };
 
-class SelfkeyIdOverviewComponent extends Component {
+class SelfkeyIdOverviewComponent extends PureComponent {
 	renderLastUpdateDate({ updatedAt }) {
 		return moment(updatedAt).format('DD MMM YYYY, hh:mm a');
 	}

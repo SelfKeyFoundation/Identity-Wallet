@@ -18,6 +18,7 @@ import {
 
 export default (initialState, scope = 'main') => {
 	let middleware = [thunk, promise];
+	let composeFunction = compose;
 	if (scope === 'renderer') {
 		if (process.env.ENABLE_REDUX_LOGGER) {
 			const logger = createLogger({ collapsed: (getState, actions) => true });
@@ -30,6 +31,9 @@ export default (initialState, scope = 'main') => {
 		}
 
 		middleware = [forwardToMain, ...middleware, routerMiddleware(history.getHistory())];
+		if (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
+			composeFunction = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+		}
 	}
 
 	if (scope === 'main') {
@@ -39,7 +43,7 @@ export default (initialState, scope = 'main') => {
 	const enhanced = [applyMiddleware(...middleware)];
 
 	const rootReducer = createReducers(scope);
-	const enhancer = compose(...enhanced);
+	const enhancer = composeFunction(...enhanced);
 	const store = createStore(rootReducer, initialState, enhancer);
 
 	if (scope === 'main') {

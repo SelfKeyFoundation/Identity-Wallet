@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { kycOperations } from 'common/kyc';
 import { push } from 'connected-react-router';
@@ -70,7 +70,7 @@ const styles = theme => ({
 	}
 });
 
-class ApplicationInProgressComponent extends Component {
+class ApplicationInProgressComponent extends PureComponent {
 	componentDidMount() {
 		this.clearRelyingParty();
 	}

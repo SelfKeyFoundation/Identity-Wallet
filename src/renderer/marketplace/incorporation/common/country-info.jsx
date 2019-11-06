@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
@@ -50,7 +50,7 @@ const styles = theme => ({
    ==========================================================================
 */
 
-class IncorporationsCountryInfo extends Component {
+class IncorporationsCountryInfo extends PureComponent {
 	componentDidMount() {
 		if (!this.props.country) {
 			this.props.dispatch(

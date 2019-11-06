@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { Typography, withStyles } from '@material-ui/core';
 import DashboardPageTabs from './dashboard-tabs';
@@ -20,7 +20,7 @@ const styles = theme => ({
 	}
 });
 
-class CertifiersDashboardContainer extends Component {
+class CertifiersDashboardContainer extends PureComponent {
 	state = {
 		tab: 'overview'
 	};

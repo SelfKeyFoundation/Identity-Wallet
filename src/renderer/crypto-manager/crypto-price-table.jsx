@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
 	withStyles,
 	Table,
@@ -66,7 +66,7 @@ export const styles = theme => ({
 	}
 });
 
-class CryptoPriceTableComponent extends Component {
+class CryptoPriceTableComponent extends PureComponent {
 	state = {
 		showConfirmationModal: false,
 		token: null

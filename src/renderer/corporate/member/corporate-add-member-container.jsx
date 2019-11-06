@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { CorporateAddMember } from './corporate-add-member';
 import { connect } from 'react-redux';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
@@ -11,7 +11,7 @@ const styles = theme => ({
 	}
 });
 
-class CorporateAddMemberContainer extends Component {
+class CorporateAddMemberContainer extends PureComponent {
 	state = {
 		label: '',
 		address: ''

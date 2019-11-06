@@ -11,7 +11,7 @@ import { initSplashScreen } from '@trodi/electron-splashscreen';
 
 const log = new Logger('main-window');
 
-export const createMainWindow = () => {
+export const createMainWindow = async () => {
 	const windowOptions = {
 		id: 'main-window',
 		title: electron.app.getName(),
@@ -54,16 +54,27 @@ export const createMainWindow = () => {
 	mainWindow.setMenu(null); // in order to don't show electron default menu bar
 
 	if (isDebugMode()) {
-		log.info('app is running in debug mode');
+		log.debug('app is running in debug mode');
 		mainWindow.webContents.openDevTools();
 	}
 
-	if (isDevMode() && process.argv.indexOf('--noDevServer') === -1) {
+	if (process.env.FULL_SCREEN) {
+		log.debug('app is running in full screen mode');
+		mainWindow.setFullScreen(true);
+	}
+
+	if (
+		isDevMode() &&
+		process.argv.indexOf('--noDevServer') === -1 &&
+		process.env.ENABLE_EXTENSIONS
+	) {
 		const installer = require('electron-devtools-installer');
 		const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-		const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS', 'DEVTRON'];
+		const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
 
-		extensions.map(name => installer.default(installer[name], forceDownload));
+		await Promise.all(
+			extensions.map(name => installer.default(installer[name], forceDownload))
+		);
 	}
 
 	mainWindow.on('close', event => {

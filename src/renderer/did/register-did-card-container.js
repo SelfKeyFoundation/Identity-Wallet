@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { RegisterDidCard } from './register-did-card';
 import { didOperations, didSelectors } from 'common/did';
 
 const SELFKEY_ID_PATH = '/main/selfkeyId';
 
-class RegisterDidCardContainerComponent extends Component {
+class RegisterDidCardContainerComponent extends PureComponent {
 	handleRegisterDidClick = _ =>
 		this.props.dispatch(
 			didOperations.startCreateDidFlowOperation(

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Button, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -11,7 +11,7 @@ const styles = theme => ({
 	}
 });
 
-class Trezor extends Component {
+class Trezor extends PureComponent {
 	handleConnectAction = async () => {
 		await this.props.dispatch(push('/connectingToTrezor'));
 	};

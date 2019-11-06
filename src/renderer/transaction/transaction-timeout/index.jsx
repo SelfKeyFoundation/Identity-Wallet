@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Typography, Button, Grid, withStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
 import Popup from '../../common/popup';
@@ -8,7 +8,7 @@ import { push } from 'connected-react-router';
 
 const styles = theme => ({});
 
-class TransactionTimeout extends Component {
+class TransactionTimeout extends PureComponent {
 	handleClose = async () => {
 		await this.props.dispatch(push(this.props.goBackPath));
 	};

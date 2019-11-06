@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
 	CardContent,
 	Card,
@@ -38,7 +38,7 @@ const styles = theme => ({
 	}
 });
 
-class RegisterDidCardComponent extends Component {
+class RegisterDidCardComponent extends PureComponent {
 	render() {
 		const { classes } = this.props;
 		return (

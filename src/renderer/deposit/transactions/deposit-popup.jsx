@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { marketplacesOperations, marketplacesSelectors } from 'common/marketplaces';
@@ -12,7 +12,7 @@ const mapStateToProps = state => {
 	};
 };
 
-class DepositPopupComponent extends Component {
+class DepositPopupComponent extends PureComponent {
 	componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 		this.props.dispatch(marketplacesOperations.loadTransactions());

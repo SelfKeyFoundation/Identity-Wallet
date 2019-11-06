@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { TransactionFeeBox } from 'renderer/transaction/send/containers/transaction-fee-box';
 import { NumberFormat } from 'selfkey-ui';
@@ -146,7 +146,7 @@ const styles = theme => ({
 	}
 });
 
-class TransactionSendBoxContainer extends Component {
+class TransactionSendBoxContainer extends PureComponent {
 	static UPDATE_DELAY = 1000;
 
 	state = {

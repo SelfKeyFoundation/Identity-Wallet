@@ -167,7 +167,7 @@ export class Repository extends BaseModel {
 	}
 
 	async deleteAttribute(attr, tx) {
-		log.info('deleting attribute type %j', attr);
+		log.debug('deleting attribute type %j', attr);
 		if (attr.ui) {
 			let uiSchema = await UiSchema.findByUrl(attr.ui, this.id, tx);
 			if (uiSchema) await uiSchema.$query(tx).delete();

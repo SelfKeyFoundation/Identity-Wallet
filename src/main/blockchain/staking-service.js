@@ -78,7 +78,7 @@ export class StakingService {
 		return hashes;
 	}
 	async withdrawStake(serviceAddress, serviceId, options) {
-		log.info('withdrawing stake for %s, %s, %2j', serviceAddress, serviceId, options);
+		log.debug('withdrawing stake for %s, %s, %2j', serviceAddress, serviceId, options);
 		serviceId = this.web3.ensureStrHex(serviceId);
 		let info = await this.getStakingInfo(serviceAddress, serviceId, options);
 		if (!info.contract) throw new Error('no contract to withdraw from');
