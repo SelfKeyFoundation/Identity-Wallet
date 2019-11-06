@@ -2,9 +2,6 @@ import { Logger } from '../logger/logger';
 import { jsonSchema } from './utils';
 
 const log = new Logger('corporate-schema');
-
-log.error = (...args) => console.error('XXX', ...args);
-
 export class CorporateStructureSchema {
 	constructor(schema) {
 		this.schema = schema;

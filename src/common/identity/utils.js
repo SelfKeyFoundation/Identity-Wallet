@@ -246,7 +246,7 @@ jsonSchema.dereference = (schema, options) => {
 		order: 1,
 		canRead: /platform\.selfkey\.org/i,
 		async read(file) {
-			return jsonSchema.loadRemoteSchema(file, options);
+			return jsonSchema.loadRemoteSchema(file.url, options);
 		}
 	};
 	return RefParser.dereference(schema, { resolve: { selfkey: resolver } });
