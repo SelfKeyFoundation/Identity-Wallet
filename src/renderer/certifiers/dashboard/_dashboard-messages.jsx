@@ -142,8 +142,8 @@ class CertifiersDashboardMessages extends Component {
 								</TableHead>
 								<TableBody>
 									{documents &&
-										documents.map(entry => {
-											return <RequestsTableRow data={entry} />;
+										documents.map((entry, indx) => {
+											return <RequestsTableRow key={indx} data={entry} />;
 										})}
 								</TableBody>
 							</Table>
@@ -151,7 +151,7 @@ class CertifiersDashboardMessages extends Component {
 								className={classes.topSpace}
 								rowsPerPageOptions={[5, 10, 25]}
 								component="div"
-								count={documents.length}
+								count={documents && documents.length}
 								rowsPerPage={5}
 								page={1}
 								backIconButtonProps={{
