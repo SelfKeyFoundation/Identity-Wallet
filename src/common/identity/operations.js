@@ -82,10 +82,20 @@ const removeDocumentOperation = documentId => async (dispatch, getState) => {
 	await dispatch(identityActions.deleteDocumentAction(documentId));
 };
 
-const createIdAttributeOperation = attribute => async (dispatch, getState) => {
+const createIdAttributeOperation = (attribute, identityId) => async (dispatch, getState) => {
 	let identityService = getGlobalContext().identityService;
-	const identity = identitySelectors.selectCurrentIdentity(getState());
-	const identityId = attribute.identityId || identity.id;
+	let identity = null;
+
+	if (identityId) {
+		identity = identitySelectors.selectIdentityById(getState(), identityId);
+		if (!identity) {
+			throw new Error('identity not loaded');
+		}
+	} else {
+		identity = identitySelectors.selectCurrentIdentity(getState());
+		identityId = identity.id;
+	}
+
 	attribute = { ...attribute, identityId };
 	attribute = await identityService.createIdAttribute(attribute);
 	await dispatch(operations.loadDocumentsForAttributeOperation(attribute.id));
@@ -113,13 +123,31 @@ const updateProfilePictureOperation = (picture, identityId) => async (dispatch, 
 };
 
 const lockIdentityOperation = identityId => async (dispatch, getState) => {
-	await dispatch(identityOperations.setCurrentIdentityAction(null));
+	let identity = null;
+	if (identityId) {
+		identity = identitySelectors.selectIdentityById(getState(), identityId);
+	} else {
+		identity = identitySelectors.selectCurrentIdentity(getState());
+	}
+	if (!identity) {
+		return;
+	}
+	if (identity.rootIdentity) {
+		await dispatch(identityOperations.setCurrentIdentityAction(null));
+	}
+	identityId = identity.id;
 	await dispatch(identityActions.deleteIdAttributesAction(identityId));
 	await dispatch(identityActions.deleteDocumentsAction(identityId));
+	if (!identity.rootIdentity) {
+		return;
+	}
+	const members = identitySelectors.selectMemberIdentities(getState(), identity.id);
+	await Promise.all(members.map(m => dispatch(identityOperations.lockIdentityOperation(m.id))));
 };
 const unlockIdentityOperation = identityId => async (dispatch, getState) => {
+	const state = getState();
 	if (!identityId) {
-		const identities = identitySelectors.selectAllIdentities(getState());
+		const identities = identitySelectors.selectAllIdentities(state);
 		const defaultIdentity =
 			identities.find(ident => ident.default || ident.type === 'individual') || identities[0];
 
@@ -131,8 +159,14 @@ const unlockIdentityOperation = identityId => async (dispatch, getState) => {
 	if (!identityId) {
 		throw new Error('could not unlock identity');
 	}
+	const identity = identitySelectors.selectIdentityById(state, identityId);
 	await dispatch(identityOperations.loadDocumentsOperation(identityId));
 	await dispatch(identityOperations.loadIdAttributesOperation(identityId));
+	if (!identity.rootIdentity) {
+		return;
+	}
+	const members = identitySelectors.selectMemberIdentities(state, identityId);
+	await Promise.all(members.map(m => dispatch(identityOperations.unlockIdentityOperation(m.id))));
 	await dispatch(identityOperations.setCurrentIdentityAction(identityId));
 };
 

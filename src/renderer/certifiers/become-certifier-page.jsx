@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Typography, Button, Divider, withStyles, IconButton } from '@material-ui/core';
 import { CloseButtonIcon, KeyTooltip, TooltipArrow, InfoTooltip } from 'selfkey-ui';
 
@@ -195,92 +195,84 @@ export const StepItem = withStyles(stepItemStyle)(
 	}
 );
 
-class BecomeCertifierComponent extends Component {
-	handleWhatsThisClicked = e => {
-		window.openExternal(e, 'https://help.selfkey.org/');
-	};
+export const BecomeCertifierPage = withStyles(styles)(props => {
+	const { classes, onBackClick, handleWhatsThisClicked, onStartClick } = props;
 
-	render() {
-		const { classes, onBackClick } = this.props;
-
-		return (
-			<div className={classes.container}>
-				<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
-				<div className={classes.containerHeader}>
-					<Typography variant="h2" className="region">
-						Become a Certifier
+	return (
+		<div className={classes.container}>
+			<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
+			<div className={classes.containerHeader}>
+				<Typography variant="h2" className="region">
+					Become a Certifier
+				</Typography>
+			</div>
+			<div className={classes.contentContainer}>
+				<div className={classes.whyText}>
+					<Typography variant="h2" gutterBottom>
+						Why you get
+					</Typography>
+					<Typography variant="body2">
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id nulla
+						purus. Pellentesque nisl metus, finibus a lectus quis, tempus hendrerit
+						lectus. Praesent nunc magna, porttitor id justo non, vulputate laoreet
+						massa. Aenean commodo in justo vel consectetur. Curabitur finibus sem vitae
+						urna cursus condimentum. Fusce enim arcu, pharetra in ornare a, congue vitae
+						nibh. Cras tincidunt diam quis sem ultrices pulvinar. Maecenas sed velit
+						tincidunt, egestas magna ac, commodo ante. Duis molestie libero vitae lorem
+						volutpat, a tempor erat fringilla. <br />
+						<br />
+						Nam eu consequat diam. In hac habitasse platea dictumst. Vivamus lacinia,
+						erat non lobortis vestibulum, ligula enim hendrerit lectus, non maximus mi
+						ex ac dolor. Curabitur sit amet gravida augue. In vitae felis bibendum,
+						feugiat mi a, condimentum tellus. Cras porttitor laoreet mauris eget
+						fermentum. Nunc pellentesque non quam eu fermentum. Mauris nec metus non
+						massa viverra vestibulum eu vel arcu. Vestibulum ante ipsum primis in
+						faucibus orci luctus et ultrices posuere cubilia Curae.
 					</Typography>
 				</div>
-				<div className={classes.contentContainer}>
-					<div className={classes.whyText}>
-						<Typography variant="h2" gutterBottom>
-							Why you get
-						</Typography>
-						<Typography variant="body2">
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id nulla
-							purus. Pellentesque nisl metus, finibus a lectus quis, tempus hendrerit
-							lectus. Praesent nunc magna, porttitor id justo non, vulputate laoreet
-							massa. Aenean commodo in justo vel consectetur. Curabitur finibus sem
-							vitae urna cursus condimentum. Fusce enim arcu, pharetra in ornare a,
-							congue vitae nibh. Cras tincidunt diam quis sem ultrices pulvinar.
-							Maecenas sed velit tincidunt, egestas magna ac, commodo ante. Duis
-							molestie libero vitae lorem volutpat, a tempor erat fringilla. <br />
-							<br />
-							Nam eu consequat diam. In hac habitasse platea dictumst. Vivamus
-							lacinia, erat non lobortis vestibulum, ligula enim hendrerit lectus, non
-							maximus mi ex ac dolor. Curabitur sit amet gravida augue. In vitae felis
-							bibendum, feugiat mi a, condimentum tellus. Cras porttitor laoreet
-							mauris eget fermentum. Nunc pellentesque non quam eu fermentum. Mauris
-							nec metus non massa viverra vestibulum eu vel arcu. Vestibulum ante
-							ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.
-						</Typography>
-					</div>
-					<Divider className={classes.divider} />
-					<Typography variant="h2" gutterBottom>
-						How the process works
-					</Typography>
-					<div className={classes.steps}>
-						<StepItem
-							number={1}
-							title="Join the maketplace"
-							description="Joining our marketplace is FREE, you are paying only once for the Network Transaction Fee "
-							onWhatsThisClicked={this.handleWhatsThisClicked}
-						/>
-						<StepItem
-							number={2}
-							title="Pick the certifications requests you want"
-							description="You get to see all the certifications requests from our users, and you can pick to work on whatever you wish."
-						/>
-						<StepItem
-							number={3}
-							title="Earn Money"
-							description="For each certification process you complete you earn money, as KEY tokens. You can swap the token for any currency you need."
-						/>
-					</div>
+				<Divider className={classes.divider} />
+				<Typography variant="h2" gutterBottom>
+					How the process works
+				</Typography>
+				<div className={classes.steps}>
+					<StepItem
+						number={1}
+						title="Join the maketplace"
+						description="Joining our marketplace is FREE, you are paying only once for the Network Transaction Fee "
+						onWhatsThisClicked={handleWhatsThisClicked}
+					/>
+					<StepItem
+						number={2}
+						title="Pick the certifications requests you want"
+						description="You get to see all the certifications requests from our users, and you can pick to work on whatever you wish."
+					/>
+					<StepItem
+						number={3}
+						title="Earn Money"
+						description="For each certification process you complete you earn money, as KEY tokens. You can swap the token for any currency you need."
+					/>
+				</div>
 
-					<Divider className={classes.divider} />
+				<Divider className={classes.divider} />
 
-					<SimpleServiceCost />
+				<SimpleServiceCost />
 
-					<div>
-						<Button
-							className={classes.applyBtn}
-							variant="contained"
-							size="large"
-							onClick={this.onStartClick}
-						>
-							Apply as a Certifier
-						</Button>
-						<Button variant="outlined" size="large" onClick={onBackClick}>
-							Cancel
-						</Button>
-					</div>
+				<div>
+					<Button
+						className={classes.applyBtn}
+						variant="contained"
+						size="large"
+						onClick={onStartClick}
+					>
+						Apply as a Certifier
+					</Button>
+					<Button variant="outlined" size="large" onClick={onBackClick}>
+						Cancel
+					</Button>
 				</div>
 			</div>
-		);
-	}
-}
+		</div>
+	);
+});
 
-const BecomeCertifier = withStyles(styles)(BecomeCertifierComponent);
-export default BecomeCertifier;
-export { BecomeCertifier };
+export default BecomeCertifierPage;
