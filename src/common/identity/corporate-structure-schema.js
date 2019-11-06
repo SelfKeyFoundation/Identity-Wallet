@@ -1,4 +1,5 @@
 import { Logger } from '../logger/logger';
+import { jsonSchema } from './utils';
 
 const log = new Logger('corporate-schema');
 
@@ -95,7 +96,60 @@ export class CorporateStructureSchema {
 		}
 		return existingPosition.equity;
 	}
-	buildPayload(company, members, attributes) {}
+	buildValue(profile) {
+		const { identity, entityType, members = [] } = profile;
+		if (identity.type === 'individual') {
+			throw new Error('Cannot build corporate structure for individuals');
+		}
+		const buildPositions = m => {
+			const { identity } = m;
+			const { positions = [], equity = 0 } = identity;
+
+			return positions.map(p => {
+				const newPos = {
+					position: p
+				};
+				if (this.getEquityForPosition(p)) {
+					newPos.equity = equity;
+				}
+				return newPos;
+			});
+		};
+		const buildCorporateEntity = m => {
+			return {
+				type: 'corporate',
+				companyType: m.entityType,
+				companyName: m.entityName,
+				email: m.email
+			};
+		};
+		const buildIndividualEntity = m => {
+			return {
+				type: 'individual',
+				firstName: m.firstName,
+				lastName: m.lastName,
+				email: m.email
+			};
+		};
+		const buildMember = m => {
+			const { identity } = m;
+			const entity =
+				identity.type === 'individual' ? buildIndividualEntity(m) : buildCorporateEntity(m);
+			return {
+				entity,
+				positions: buildPositions(m)
+			};
+		};
+
+		return {
+			companyType: entityType,
+			members: members.map(buildMember)
+		};
+	}
+
+	validate(value) {
+		return jsonSchema.validate(this.schema, value);
+	}
 }
 
 export default CorporateStructureSchema;

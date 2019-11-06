@@ -6,6 +6,7 @@ import {
 	companyEquity,
 	positionEquity
 } from './__fixtures__/corporate-structure-schema';
+import { corporateProfiles } from './__fixtures__/corporate-profile-to-attribute';
 
 describe('CorporateStructureSchema', () => {
 	let csSchema = null;
@@ -77,5 +78,35 @@ describe('CorporateStructureSchema', () => {
 			});
 
 		Object.keys(positionEquity).forEach(t);
+	});
+
+	describe('buildValue', () => {
+		const t = testCase =>
+			it(`should build value for ${testCase.name}`, () => {
+				if (testCase.throws) {
+					expect(() => {
+						csSchema.buildValue(testCase.profile);
+					}).toThrow(testCase.throws);
+				} else {
+					expect(csSchema.buildValue(testCase.profile)).toEqual(testCase.attribute);
+				}
+			});
+
+		corporateProfiles.filter(c => c.profile).forEach(t);
+	});
+
+	describe('validate', () => {
+		const t = testCase =>
+			it(`should validate attribute for ${testCase.name}`, () => {
+				if (testCase.throws) {
+					expect(() => {
+						csSchema.validate(testCase.attribute);
+					}).toThrow(testCase.throws);
+				} else {
+					expect(csSchema.validate(testCase.attribute)).toBe(testCase.validAttribute);
+				}
+			});
+
+		corporateProfiles.filter(c => c.attribute).forEach(t);
 	});
 });

@@ -153,17 +153,13 @@ identityAttributes.normalizeDocumentsSchema = (
 };
 
 identityAttributes.validate = (schema, attribute, documents) => {
-	const ajv = new Ajv({ validateSchema: true, allErrors: true });
-	ajv.addFormat('file', () => {});
 	try {
-		schema = jsonSchema.removeMeta(schema);
-		if (!ajv.validateSchema(schema)) return false;
 		const denormalized = identityAttributes.denormalizeDocumentsSchema(
 			schema,
 			attribute,
 			documents
 		);
-		return ajv.validate(schema, denormalized.value);
+		return jsonSchema.validate(schema, denormalized.value);
 	} catch (error) {
 		log.error(error);
 		return false;
@@ -283,6 +279,18 @@ jsonSchema.loadRemoteRepository = async (url, options, attempt = 1) => {
 		}
 		throw error;
 	}
+};
+
+jsonSchema.validate = (schema, value) => {
+	const ajv = new Ajv({ validateSchema: true, allErrors: true });
+	ajv.addFormat('file', () => {});
+	schema = jsonSchema.removeMeta(schema);
+	if (!ajv.validateSchema(schema)) return false;
+	const ret = ajv.validate(schema, value);
+	if (!ret) {
+		log.error('validation error %2j', ajv.errors);
+	}
+	return ret;
 };
 
 export default { identityAttributes, jsonSchema };
