@@ -5,7 +5,6 @@ import { featureIsEnabled } from 'common/feature-flags';
 import { getWallet } from 'common/wallet/selectors';
 import { kycSelectors } from 'common/kyc';
 import { pricesSelectors } from 'common/prices';
-import { marketplaceSelectors } from 'common/marketplace';
 import { ordersOperations } from 'common/marketplace/orders';
 import { MarketplaceNotariesComponent } from '../common/marketplace-notaries-component';
 
@@ -62,10 +61,6 @@ const mapStateToProps = (state, props) => {
 		companyCode,
 		templateId,
 		vendorId,
-		program: marketplaceSelectors.selectIncorporationByFilter(
-			state,
-			c => c.data.companyCode === companyCode
-		),
 		address: getWallet(state).address,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		currentApplication: kycSelectors.selectCurrentApplication(state),
