@@ -50,6 +50,15 @@ const arrayChunks = (arr, size) =>
 		arr.slice(i * size, i * size + size)
 	);
 
+const accessDeepProp = (func, fallbackValue) => {
+	try {
+		var value = func();
+		return value === null || value === undefined ? fallbackValue : value;
+	} catch (e) {
+		return fallbackValue;
+	}
+};
+
 module.exports = {
 	isDevMode,
 	isTestMode,
@@ -61,5 +70,6 @@ module.exports = {
 	mapKeysAsync,
 	arrayChunks,
 	setImmediatePromise,
-	isStorybook
+	isStorybook,
+	accessDeepProp
 };

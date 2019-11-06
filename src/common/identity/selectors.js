@@ -1,5 +1,6 @@
 import { jsonSchema, identityAttributes } from './utils';
 import { forceUpdateAttributes } from 'common/config';
+import { accessDeepProp } from 'common/utils/common';
 import { walletSelectors } from 'common/wallet';
 
 const EMAIL_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/email.json';
@@ -246,6 +247,20 @@ const selectCorporateLegalEntityTypes = state => {
 	return idType.content.enum;
 };
 
+const selectAvailableMembersForCompanyType = (state, type) => {
+	const idType = selectIdAttributeTypeByUrl(
+		state,
+		'http://platform.selfkey.org/schema/attribute/corporate-structure.json',
+		'corporate',
+		true
+	);
+	if (!idType) return false;
+	return accessDeepProp(
+		() => idType.content.definitions.members[type].items.properties.positions.items.oneOf,
+		false
+	);
+};
+
 const selectCurrentCorporateProfile = state => {
 	const identity = identitySelectors.selectCurrentIdentity(state);
 	return identitySelectors.selectCorporateProfile(state, identity.id);
@@ -387,6 +402,7 @@ export const identitySelectors = {
 	selectAllIdentities,
 	selectCorporateJurisdictions,
 	selectCorporateLegalEntityTypes,
+	selectAvailableMembersForCompanyType,
 	selectCorporateProfile,
 	selectCurrentCorporateProfile,
 	selectBasicCorporateAttributeTypes,

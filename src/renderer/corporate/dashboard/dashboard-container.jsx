@@ -124,6 +124,7 @@ class CorporateDashboardContainer extends Component {
 
 	render() {
 		const { popup } = this.state;
+		console.log(this.props);
 		return (
 			<React.Fragment>
 				{popup === 'create-attribute' && (

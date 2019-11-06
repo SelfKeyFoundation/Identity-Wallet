@@ -230,4 +230,4 @@ storiesOf('Corporate/Wizard', module)
 		/>
 	));
 
-storiesOf('Corporate', module).add('Add Member', () => <CorporateAddMember />);
+storiesOf('Corporate/Members', module).add('Add Member', () => <CorporateAddMember />);

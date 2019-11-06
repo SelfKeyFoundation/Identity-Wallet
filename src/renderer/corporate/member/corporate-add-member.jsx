@@ -90,10 +90,10 @@ const styles = theme => ({
 	},
 	radio: {
 		margin: '0 15px',
-		'& input[type="radio"]': {
+		'& input[type="checkbox"]': {
 			opacity: 0
 		},
-		'& input[type="radio"] + label::after': {
+		'& input[type="checkbox"] + label::after': {
 			content: 'none'
 		},
 		'& label::before': {
@@ -112,13 +112,13 @@ const styles = theme => ({
 			borderBottom: '2px solid',
 			transform: 'rotate(-45deg)'
 		},
-		'& input[type="radio"] + label': {
+		'& input[type="checkbox"] + label': {
 			'& div': {
 				border: '2px solid #1D505F',
 				cursor: 'pointer'
 			}
 		},
-		'& input[type="radio"]:checked + label': {
+		'& input[type="checkbox"]:checked + label': {
 			'& div': {
 				border: '2px solid #1CA9BA',
 				cursor: 'pointer'
@@ -175,12 +175,7 @@ class CorporateAddMemberComponent extends Component {
 								spacing={0}
 								xs={12}
 							>
-								<Grid
-									spacing={0}
-									style={{
-										width: '100%'
-									}}
-								>
+								<Grid spacing={0}>
 									<Grid container direction="column" spacing={8}>
 										<Grid item>
 											<Typography
@@ -188,7 +183,7 @@ class CorporateAddMemberComponent extends Component {
 												align="center"
 												className={classes.title}
 											>
-												Select a role
+												Select one or multiple roles
 											</Typography>
 										</Grid>
 										<Grid item>
@@ -198,8 +193,12 @@ class CorporateAddMemberComponent extends Component {
 												className={classes.radioBoxContainer}
 											>
 												<div className={classes.radio}>
-													<input type="radio" id="radio_1" name="role" />
-													<label htmlFor="radio_1">
+													<input
+														type="checkbox"
+														id="role_1"
+														name="roles[]"
+													/>
+													<label htmlFor="role_1">
 														<Grid
 															container
 															className={classes.radiobox}
@@ -230,8 +229,12 @@ class CorporateAddMemberComponent extends Component {
 													</label>
 												</div>
 												<div className={classes.radio}>
-													<input type="radio" id="radio_2" name="role" />
-													<label htmlFor="radio_2">
+													<input
+														type="checkbox"
+														id="role_2"
+														name="roles[]"
+													/>
+													<label htmlFor="role_2">
 														<Grid
 															container
 															className={classes.radiobox}
