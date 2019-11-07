@@ -1,3 +1,4 @@
+import 'common/config';
 import { isStorybook } from 'common/utils/common';
 import { createFilter } from './utils';
 import is from 'electron-is';

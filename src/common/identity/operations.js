@@ -193,7 +193,6 @@ const createCorporateProfileOperation = data => async (dispatch, getState) => {
 	const getTypeId = url => {
 		return idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
 	};
-	// TODO: XXX update to entity operations
 	await dispatch(identityOperations.updateIdentityNameOperation(data.entityName, identity.id));
 	try {
 		await dispatch(
