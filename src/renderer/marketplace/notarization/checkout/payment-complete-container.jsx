@@ -84,7 +84,7 @@ class NotarizationPaymentCompleteContainer extends MarketplaceNotariesComponent 
 				<Typography variant="body1" gutterBottom>
 					Thank you for payment!
 				</Typography>
-				<Typography variant="body2" gutterBottom>
+				<Typography variant="body1" gutterBottom>
 					One of our our notaries is reviewing the information you submitted and{' '}
 					<strong>
 						will contact you shortly to continue the process and set up a live call with
@@ -102,7 +102,7 @@ class NotarizationPaymentCompleteContainer extends MarketplaceNotariesComponent 
 
 		return (
 			<MarketplaceProcessStarted
-				title={`KYC Process Started`}
+				title={`Notarization KYC Process`}
 				body={body}
 				onBackClick={this.onBackClick}
 				onSelfKeyClick={this.onContinueClick}
