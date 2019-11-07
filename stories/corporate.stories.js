@@ -28,7 +28,8 @@ import {
 	legalJurisdictions,
 	corporateAttributes,
 	corporateDocuments,
-	corporateMembers
+	corporateMembers,
+	corporatePositionsLLC
 } from './corporate-data';
 
 storiesOf('Corporate', module).add('Dashboard', () => (
@@ -230,4 +231,6 @@ storiesOf('Corporate/Wizard', module)
 		/>
 	));
 
-storiesOf('Corporate/Members', module).add('Add Member', () => <CorporateAddMember />);
+storiesOf('Corporate/Members', module).add('Add Member', () => (
+	<CorporateAddMember positions={corporatePositionsLLC} />
+));

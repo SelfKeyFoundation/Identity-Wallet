@@ -1,7 +1,7 @@
 import { jsonSchema, identityAttributes } from './utils';
 import { forceUpdateAttributes } from 'common/config';
-import { accessDeepProp } from 'common/utils/common';
 import { walletSelectors } from 'common/wallet';
+import { CorporateStructureSchema } from './corporate-structure-schema';
 
 const EMAIL_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/email.json';
 const FIRST_NAME_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/first-name.json';
@@ -14,6 +14,8 @@ const ENTITY_TYPE = 'http://platform.selfkey.org/schema/attribute/legal-entity-t
 const JURISDICTION = 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json';
 const CREATION_DATE = 'http://platform.selfkey.org/schema/attribute/incorporation-date.json';
 const TAX_ID = 'http://platform.selfkey.org/schema/attribute/tax-id-number.json';
+
+const CORPORATE_STRUCTURE = 'http://platform.selfkey.org/schema/attribute/corporate-structure.json';
 
 const BASIC_ATTRIBUTES = {
 	[FIRST_NAME_ATTRIBUTE]: 1,
@@ -247,20 +249,6 @@ const selectCorporateLegalEntityTypes = state => {
 	return idType.content.enum;
 };
 
-const selectAvailableMembersForCompanyType = (state, type) => {
-	const idType = selectIdAttributeTypeByUrl(
-		state,
-		'http://platform.selfkey.org/schema/attribute/corporate-structure.json',
-		'corporate',
-		true
-	);
-	if (!idType) return false;
-	return accessDeepProp(
-		() => idType.content.definitions.members[type].items.properties.positions.items.oneOf,
-		false
-	);
-};
-
 const selectCurrentCorporateProfile = state => {
 	const identity = identitySelectors.selectCurrentIdentity(state);
 	return identitySelectors.selectCorporateProfile(state, identity.id);
@@ -381,6 +369,17 @@ const selectCorporateProfile = (state, id) => {
 	};
 };
 
+const selectPositionsForCompanyType = (state, companyType) => {
+	const corporateSchema = identitySelectors.selectIdAttributeTypeByUrl(
+		state,
+		CORPORATE_STRUCTURE,
+		'corporate',
+		true
+	);
+	const schemaQuery = new CorporateStructureSchema(corporateSchema.content);
+	return schemaQuery.getPositionsForCompanyType(companyType);
+};
+
 export const identitySelectors = {
 	selectIdentity,
 	selectCountries,
@@ -402,12 +401,12 @@ export const identitySelectors = {
 	selectAllIdentities,
 	selectCorporateJurisdictions,
 	selectCorporateLegalEntityTypes,
-	selectAvailableMembersForCompanyType,
 	selectCorporateProfile,
 	selectCurrentCorporateProfile,
 	selectBasicCorporateAttributeTypes,
 	selectChildrenIdentities,
-	selectMemberIdentities
+	selectMemberIdentities,
+	selectPositionsForCompanyType
 };
 
 export default identitySelectors;

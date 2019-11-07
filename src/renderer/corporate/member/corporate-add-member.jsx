@@ -7,7 +7,7 @@ import {
 	ModalBody,
 	StyledButton,
 	DirectorIcon,
-	ChartIcon,
+	// ChartIcon,
 	ProfileIcon,
 	CompanyIcon
 } from 'selfkey-ui';
@@ -83,13 +83,18 @@ const styles = theme => ({
 		boxSizing: 'border-box',
 		maxWidth: '280px',
 		minWidth: '215px',
-		padding: '25px'
+		padding: '25px',
+		'& > div': {
+			display: 'flex'
+		}
 	},
 	radioBoxContainer: {
 		margin: '10px 0 40px'
 	},
 	radio: {
 		margin: '0 15px',
+		width: '200px',
+		minHeight: '158px',
 		'& input[type="checkbox"]': {
 			opacity: 0
 		},
@@ -152,6 +157,8 @@ class CorporateAddMemberComponent extends PureComponent {
 		const hasLabelError = labelError !== '' && labelError !== undefined;
 		const hasAddressError = addressError !== '' && addressError !== undefined;
 
+		const { positions } = this.props;
+
 		return (
 			<Modal open={true}>
 				<ModalWrap>
@@ -192,78 +199,40 @@ class CorporateAddMemberComponent extends PureComponent {
 												justify="center"
 												className={classes.radioBoxContainer}
 											>
-												<div className={classes.radio}>
-													<input
-														type="checkbox"
-														id="role_1"
-														name="roles[]"
-													/>
-													<label htmlFor="role_1">
-														<Grid
-															container
-															className={classes.radiobox}
-															style={{ minHeight: '158px' }}
+												{positions &&
+													positions.map((p, idx) => (
+														<div
+															key={`role_${idx}`}
+															className={classes.radio}
 														>
-															<Grid
-																container
-																alignItems="center"
-																style={{ border: 'none' }}
-															>
-																<DirectorIcon
-																	className={classes.icon}
-																/>
-																<Typography variant="body2">
-																	Director
-																</Typography>
-															</Grid>
-															<Typography
-																variant="subtitle2"
-																color="secondary"
-																style={{ marginTop: '15px' }}
-															>
-																Person from a group of managers who
-																leads or supervises a particular
-																area of your company.
-															</Typography>
-														</Grid>
-													</label>
-												</div>
-												<div className={classes.radio}>
-													<input
-														type="checkbox"
-														id="role_2"
-														name="roles[]"
-													/>
-													<label htmlFor="role_2">
-														<Grid
-															container
-															className={classes.radiobox}
-															style={{ minHeight: '158px' }}
-														>
-															<Grid
-																container
-																alignItems="center"
-																style={{ border: 'none' }}
-															>
-																<ChartIcon
-																	className={classes.icon}
-																/>
-																<Typography variant="body2">
-																	Shareholder
-																</Typography>
-															</Grid>
-															<Typography
-																variant="subtitle2"
-																color="secondary"
-																style={{ marginTop: '15px' }}
-															>
-																Individual or institution that
-																legally owns one or more shares of
-																stock in your company.
-															</Typography>
-														</Grid>
-													</label>
-												</div>
+															<input
+																type="checkbox"
+																id={`role_${idx}`}
+																name="roles[]"
+															/>
+															<label htmlFor={`role_${idx}`}>
+																<Grid className={classes.radiobox}>
+																	<div>
+																		<DirectorIcon
+																			className={classes.icon}
+																		/>
+																		<Typography variant="body2">
+																			{p.position}
+																		</Typography>
+																	</div>
+																	<Typography
+																		variant="subtitle2"
+																		color="secondary"
+																		style={{
+																			marginTop: '15px'
+																		}}
+																	>
+																		{p.description}
+																	</Typography>
+																</Grid>
+															</label>
+														</div>
+													))}
 											</Grid>
 										</Grid>
 									</Grid>

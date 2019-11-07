@@ -83,9 +83,13 @@ const dummyCorporateCapTable = [
 ];
 
 const mapStateToProps = (state, props) => {
+	const identity = identitySelectors.selectCurrentIdentity(state);
+	const profile = identitySelectors.selectCurrentCorporateProfile(state);
+
 	return {
-		identity: identitySelectors.selectCurrentIdentity(state),
-		profile: identitySelectors.selectCurrentCorporateProfile(state),
+		identity,
+		profile,
+		// positions: identitySelectors.selectPositionsForCompanyType(state, profile.entityType),
 		applications: [], // marketplace applications,
 		members: dummyMembers,
 		cap: dummyCorporateCapTable
@@ -124,7 +128,6 @@ class CorporateDashboardContainer extends PureComponent {
 
 	render() {
 		const { popup } = this.state;
-		console.log(this.props);
 		return (
 			<React.Fragment>
 				{popup === 'create-attribute' && (
