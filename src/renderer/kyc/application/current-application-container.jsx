@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { kycSelectors, kycOperations } from '../../../common/kyc';
 import { CurrentApplicationPopup } from './current-application-popup';
@@ -7,7 +7,7 @@ import { jsonSchema } from 'common/identity/utils';
 import { push } from 'connected-react-router';
 import qs from 'query-string';
 
-class CurrentApplicationComponent extends Component {
+class CurrentApplicationComponent extends PureComponent {
 	state = {
 		selected: {},
 		showCreateAttribute: false,

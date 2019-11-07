@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
 	Avatar,
 	Input,
@@ -32,7 +32,7 @@ const styles = theme => ({
 	}
 });
 
-class ExistingAddress extends Component {
+class ExistingAddress extends PureComponent {
 	state = {
 		wallet: -1,
 		password: '',

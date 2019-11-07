@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { marketplaceOperations } from 'common/marketplace';
@@ -9,7 +9,7 @@ import { NotarizationTOCdisagreement } from './common/toc-disagreement-container
 import { NotarizationPaymentContainer } from './checkout/payment-container';
 import { NotarizationPaymentCompleteContainer } from './checkout/payment-complete-container';
 
-class MarketplaceNotariesComponent extends Component {
+class MarketplaceNotariesComponent extends PureComponent {
 	async componentDidMount() {
 		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
 	}

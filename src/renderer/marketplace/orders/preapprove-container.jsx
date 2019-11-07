@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { MarketplacePaymentPreapprove } from './preapprove';
 import { ordersSelectors, ordersOperations } from '../../../common/marketplace/orders';
 
-class MarketplacePaymentPreapproveContainer extends Component {
+class MarketplacePaymentPreapproveContainer extends PureComponent {
 	handleBackClick = () => {
 		this.props.dispatch(ordersOperations.hideCurrentPaymentUIOperation());
 	};

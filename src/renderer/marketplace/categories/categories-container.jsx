@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { marketplacesSelectors } from 'common/marketplaces';
 import { MarketplaceCategoriesList } from './categories-list';
 import { push } from 'connected-react-router';
 
-class MarketplaceCategoriesContainer extends Component {
+class MarketplaceCategoriesContainer extends PureComponent {
 	componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 	}

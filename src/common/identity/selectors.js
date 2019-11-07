@@ -163,7 +163,7 @@ const selectFullIdAttributesByIds = (state, identityId, attributeIds = null) => 
 		.filter(attr => attr.type && attr.type.content);
 };
 
-const selectSelfkeyId = state => {
+const selectIndividualProfile = state => {
 	const identity = identitySelectors.selectCurrentIdentity(state);
 	const wallet = walletSelectors.getWallet(state);
 	const allAttributes = identitySelectors.selectFullIdAttributesByIds(state, identity.id);
@@ -380,7 +380,7 @@ export const identitySelectors = {
 	selectIdAttributes,
 	selectDocumentsByAttributeIds,
 	selectFullIdAttributesByIds,
-	selectSelfkeyId,
+	selectIndividualProfile,
 	selectUiSchema,
 	selectCurrentIdentity,
 	selectIdentityById,

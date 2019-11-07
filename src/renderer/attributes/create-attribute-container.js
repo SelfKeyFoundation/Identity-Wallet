@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { identitySelectors, identityOperations } from 'common/identity';
 import CreateAttribute from './create-attribute';
 
-class CreateAttributeContainerComponent extends Component {
+class CreateAttributeContainerComponent extends PureComponent {
 	handleSave = attribute => {
 		this.props.dispatch(identityOperations.createIdAttributeOperation(attribute));
 	};

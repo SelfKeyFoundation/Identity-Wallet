@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Typography, Button, Grid, withStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
 import Popup from '../../../common/popup';
@@ -9,7 +9,7 @@ import { appSelectors } from 'common/app';
 
 const styles = theme => ({});
 
-class HardwareWalletTimeout extends Component {
+class HardwareWalletTimeout extends PureComponent {
 	handleClose = () => {
 		this.props.dispatch(push(this.props.cancelRoute));
 	};

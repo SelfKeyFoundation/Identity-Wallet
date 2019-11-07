@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
@@ -12,7 +12,7 @@ const SELFKEY_PATH = `/main/selfkeyId`;
 // TODO: future improvement load from rp config
 const VENDOR_EMAIL = `support@flagtheory.com`;
 
-class BankAccountsProcessStartedContainer extends Component {
+class BankAccountsProcessStartedContainer extends PureComponent {
 	onBackClick = () => this.props.dispatch(push(MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH));
 
 	onSelfKeyClick = () => this.props.dispatch(push(SELFKEY_PATH));

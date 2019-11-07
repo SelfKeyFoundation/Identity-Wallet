@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { appSelectors } from 'common/app';
@@ -9,7 +9,7 @@ import { identityOperations, identitySelectors } from 'common/identity';
 
 const fields = ['jurisdiction', 'taxId', 'entityType', 'email', 'entityName', 'creationDate'];
 
-class CorporateWizardContainerComponent extends Component {
+class CorporateWizardContainerComponent extends PureComponent {
 	constructor(props) {
 		super(props);
 		const { basicIdentity = {} } = props;

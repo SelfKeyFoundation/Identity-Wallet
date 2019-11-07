@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Grid, Typography, Paper, Modal, Divider } from '@material-ui/core';
 import { appOperations, appSelectors } from 'common/app';
 import {
@@ -127,7 +127,7 @@ const UnlockOption = props => {
 
 const UnlockOptionWrapped = withStyles(unlockOptionStyle)(UnlockOption);
 
-class Unlock extends Component {
+class Unlock extends PureComponent {
 	state = {
 		selected: 0
 	};

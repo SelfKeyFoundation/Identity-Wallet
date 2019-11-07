@@ -98,7 +98,7 @@ export class RelyingPartyRest {
 			? ctx.identity.getDidWithParams()
 			: await ctx.identity.publicKey;
 		url = urljoin(url, did);
-		log.info('XXX challenge url %s', url);
+		log.debug('XXX challenge url %s', url);
 		return request.get({
 			url,
 			headers: { 'User-Agent': this.userAgent, Origin: ctx.getOrigin() },
@@ -219,7 +219,7 @@ export class RelyingPartyRest {
 	static getKYCTemplate(ctx, id) {
 		let url = ctx.getEndpoint('/templates/:id');
 		url = url.replace(':id', id);
-		log.info(`[getKYCTemplate] GET ${url}`);
+		log.debug(`[getKYCTemplate] GET ${url}`);
 		return request.get({
 			url,
 			headers: {
@@ -231,7 +231,7 @@ export class RelyingPartyRest {
 	}
 	static createKYCApplication(ctx, templateId, attributes) {
 		let url = ctx.getEndpoint('/applications');
-		log.info(`[createKYCApplication] POST ${url}`);
+		log.debug(`[createKYCApplication] POST ${url}`);
 		return request.post({
 			url,
 			body: { attributes, templateId },
@@ -246,7 +246,7 @@ export class RelyingPartyRest {
 	static updateKYCApplication(ctx, application) {
 		let url = ctx.getEndpoint('/applications/:id');
 		url = url.replace(':id', application.id);
-		log.info(`[updateKYCApplication] PATCH ${url}`);
+		log.debug(`[updateKYCApplication] PATCH ${url}`);
 		return request.patch({
 			url,
 			body: application,
@@ -261,7 +261,7 @@ export class RelyingPartyRest {
 	static updateKYCApplicationPayment(ctx, applicationId, transactionHash) {
 		let url = ctx.getEndpoint('/applications/:id/payments');
 		url = url.replace(':id', applicationId);
-		log.info(`[updateKYCApplicationPayment] POST ${url} : ${transactionHash}`);
+		log.debug(`[updateKYCApplicationPayment] POST ${url} : ${transactionHash}`);
 		return request.post({
 			url,
 			body: { transactionHash },
@@ -275,7 +275,7 @@ export class RelyingPartyRest {
 	}
 	static listKYCApplications(ctx) {
 		let url = ctx.getEndpoint('/applications');
-		log.info(`[listKYCApplications] GET ${url}`);
+		log.debug(`[listKYCApplications] GET ${url}`);
 		return request.get({
 			url,
 			headers: {

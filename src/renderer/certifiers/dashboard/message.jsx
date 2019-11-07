@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Typography, Button, withStyles } from '@material-ui/core';
 import { CloseButtonIcon, RoundCompany, RoundPerson, baseDark, grey } from 'selfkey-ui';
 import moment from 'moment';
@@ -150,7 +150,7 @@ export const DirectMessage = withStyles(messageStyles)(({ classes, data, index }
 	);
 });
 
-class MessageComponent extends Component {
+class MessageComponent extends PureComponent {
 	render() {
 		const { classes, onBackClick, messages } = this.props;
 		return (

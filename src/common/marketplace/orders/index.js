@@ -141,7 +141,7 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 	dispatch,
 	getState
 ) => {
-	log.info('[showOrderPaymentUIOperation] %d %s %s', orderId, backUrl, completeUrl);
+	log.debug('[showOrderPaymentUIOperation] %d %s %s', orderId, backUrl, completeUrl);
 	await dispatch(
 		ordersActions.setCurrentOrderAction({
 			orderId,

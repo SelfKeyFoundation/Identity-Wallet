@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { withStyles, Typography } from '@material-ui/core';
 import { sanitize } from '../../common';
 
@@ -35,7 +35,7 @@ const styles = theme => ({
 	}
 });
 
-class BankingDescriptionTabComponent extends Component {
+class BankingDescriptionTabComponent extends PureComponent {
 	async componentDidMount() {
 		window.scrollTo(0, 0);
 	}

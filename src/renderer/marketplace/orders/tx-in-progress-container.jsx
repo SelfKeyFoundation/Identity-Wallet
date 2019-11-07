@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { TransactionProcessingPopup } from '../../common/transaction-processing-popup';
 import { ordersOperations } from '../../../common/marketplace/orders';
 
-class MarketplaceOrderTxInProgressContainer extends Component {
+class MarketplaceOrderTxInProgressContainer extends PureComponent {
 	handleCloseAction = _ => {
 		this.props.dispatch(ordersOperations.hideCurrentPaymentUIOperation());
 	};

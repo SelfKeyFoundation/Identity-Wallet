@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import { Input, Typography, withStyles, Button, Grid } from '@material-ui/core';
 import { Popup } from '../common/popup';
@@ -19,7 +19,7 @@ const styles = theme => ({
 	}
 });
 
-class DeleteAttributeComponent extends Component {
+class DeleteAttributeComponent extends PureComponent {
 	state = { typeId: -1, label: '', value: null };
 	handleConfirm = evt => {
 		evt.preventDefault();
