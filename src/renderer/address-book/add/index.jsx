@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import {
 	StyledButton,
@@ -50,7 +50,7 @@ const styles = theme => ({
 	}
 });
 
-class AddressBookAddContainer extends Component {
+class AddressBookAddContainer extends PureComponent {
 	state = {
 		label: '',
 		address: ''

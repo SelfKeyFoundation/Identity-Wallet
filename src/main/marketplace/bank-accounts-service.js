@@ -18,7 +18,7 @@ const fieldMap = corp => {
 export class BankAccountsService {
 	loadBankAccounts() {
 		return new Promise((resolve, reject) => {
-			log.info(`Loading bank accounts main API data: ${URL}`);
+			log.debug(`Loading bank accounts main API data: ${URL}`);
 			request.get({ url: URL, json: true }, (error, httpResponse, response) => {
 				if (error) {
 					log.error(error);

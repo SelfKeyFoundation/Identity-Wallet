@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
 	createStyles,
 	withStyles,
@@ -337,7 +337,7 @@ const Profile = withStyles(styles)(
 	)
 );
 
-class Toolbar extends Component {
+class Toolbar extends PureComponent {
 	render() {
 		const {
 			classes,

@@ -13,7 +13,7 @@ const COUNTRY_INFO_URL = config.countryInfoUrl;
 export class IncorporationsService {
 	loadIncorporations() {
 		return new Promise((resolve, reject) => {
-			log.info(`Loading incorporations main API data: ${URL}`);
+			log.debug(`Loading incorporations main API data: ${URL}`);
 			request.get({ url: URL, json: true }, (error, httpResponse, response) => {
 				if (error) {
 					log.error(error);
@@ -70,7 +70,7 @@ export class IncorporationsService {
 
 	loadTreatiesData(countryCode) {
 		return new Promise((resolve, reject) => {
-			log.info(
+			log.debug(
 				`Loading incorporations tax treaties API data for country ${countryCode}: ${TREATIES_URL}/${countryCode}`
 			);
 			request.get(
@@ -98,7 +98,7 @@ export class IncorporationsService {
 
 	loadCountryInfo(countryCode) {
 		return new Promise((resolve, reject) => {
-			log.info(
+			log.debug(
 				`Loading incorporations country details for ${countryCode}: ${COUNTRY_INFO_URL}/${countryCode}`
 			);
 			request.get(

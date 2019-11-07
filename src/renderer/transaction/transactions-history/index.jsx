@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
 	transactionHistoryOperations,
 	transactionHistorySelectors
@@ -210,7 +210,7 @@ const filterTransactionByToken = (transaction, token) => {
 	return valid;
 };
 
-class TransactionsHistory extends Component {
+class TransactionsHistory extends PureComponent {
 	state = {
 		rowsPerPage: 10,
 		page: 0

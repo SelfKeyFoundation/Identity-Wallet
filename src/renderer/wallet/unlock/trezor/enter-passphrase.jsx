@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Modal, Typography, Grid, Button, Input, InputAdornment } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -31,7 +31,7 @@ const styles = theme => ({
 	}
 });
 
-class EnterPassphrase extends Component {
+class EnterPassphrase extends PureComponent {
 	state = {
 		passphrase: '',
 		rePassphrase: '',

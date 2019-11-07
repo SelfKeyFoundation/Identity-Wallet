@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { UserPlusIcon, primary, CalendarDepositIcon, typography } from 'selfkey-ui';
 import { MarketplaceDisclaimer } from '../common/disclaimer';
@@ -250,7 +250,7 @@ const styles = theme => ({
 	}
 });
 
-class ExchangesDetailsComponent extends Component {
+class ExchangesDetailsComponent extends PureComponent {
 	async componentDidMount() {
 		window.scrollTo(0, 0);
 	}

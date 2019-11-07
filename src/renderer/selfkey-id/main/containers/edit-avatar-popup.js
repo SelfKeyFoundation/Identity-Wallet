@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { identityOperations } from 'common/identity';
 import { Popup } from '../../../common/popup';
 import EditAvatar from '../components/edit-avatar';
 
-class EditAvatarPopupComponent extends Component {
+class EditAvatarPopupComponent extends PureComponent {
 	handleSave = (avatar, identityId) => {
 		this.props.dispatch(identityOperations.updateProfilePictureOperation(avatar, identityId));
 	};

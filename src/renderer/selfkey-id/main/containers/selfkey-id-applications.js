@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { walletSelectors } from 'common/wallet';
 import { kycOperations } from 'common/kyc';
@@ -7,7 +7,7 @@ import { appSelectors } from 'common/app';
 import SelfkeyIdApplications from '../components/selfkey-id-applications';
 import { kycSelectors } from '../../../../common/kyc';
 
-class SelfkeyIdApplicationsContainerComponent extends Component {
+class SelfkeyIdApplicationsContainerComponent extends PureComponent {
 	state = {
 		showApplicationRefreshModal: false,
 		loading: true

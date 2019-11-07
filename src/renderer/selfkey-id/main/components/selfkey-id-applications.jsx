@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import {
 	Button,
@@ -256,7 +256,7 @@ const HeaderIcon = withStyles(styles)(({ status, classes }) => {
 	return icon;
 });
 
-class SelfkeyIdApplicationsComponent extends Component {
+class SelfkeyIdApplicationsComponent extends PureComponent {
 	renderLoadingScreen = () => (
 		<Grid container justify="center" alignItems="center">
 			<CircularProgress size={50} className={this.props.classes.loading} />

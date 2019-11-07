@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { identityOperations } from 'common/identity';
 import SelfkeyIdOverview from '../components/selfkey-id-overview';
@@ -12,7 +12,7 @@ import {
 import { EditAvatarPopup } from './edit-avatar-popup';
 import { RegisterDidCardContainer } from '../../../did';
 
-class SelfkeyIdOverviewContainerComponent extends Component {
+class SelfkeyIdOverviewContainerComponent extends PureComponent {
 	state = {
 		popup: null
 	};

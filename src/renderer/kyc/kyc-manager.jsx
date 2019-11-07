@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { ListItem, List, withStyles } from '@material-ui/core';
 import { KycRequirements } from './requirements/container';
@@ -6,7 +6,7 @@ import { kycSelectors, kycOperations } from '../../common/kyc';
 
 const styles = theme => () => {};
 
-class KycManagerComponent extends Component {
+class KycManagerComponent extends PureComponent {
 	componentDidMount() {
 		if (this.props.rpShouldUpdate) {
 			this.props.dispatch(kycOperations.loadRelyingParty(this.props.relyingPartyName));

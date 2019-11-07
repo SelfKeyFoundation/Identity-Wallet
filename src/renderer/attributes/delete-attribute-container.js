@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { identityOperations } from 'common/identity';
 import DeleteAttribute from './delete-attribute';
 
-class DeleteAttributeContainerComponent extends Component {
+class DeleteAttributeContainerComponent extends PureComponent {
 	handleConfirm = attributeId => {
 		this.props.dispatch(identityOperations.removeIdAttributeOperation(attributeId));
 	};

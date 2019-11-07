@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { WarningShieldIcon } from 'selfkey-ui';
 import { Popup } from '../common/popup';
 import { Typography, withStyles, Button, Grid } from '@material-ui/core';
@@ -12,7 +12,7 @@ const styles = theme => ({
 	}
 });
 
-class MarketplaceSelfkeyDIDRequiredComponent extends Component {
+class MarketplaceSelfkeyDIDRequiredComponent extends PureComponent {
 	render() {
 		const { classes, onConfirm, onClose, onEnterDid } = this.props;
 		return (

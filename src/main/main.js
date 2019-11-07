@@ -21,7 +21,7 @@ import { featureIsEnabled } from 'common/feature-flags';
 
 const log = new Logger('main');
 
-log.info('starting: %s', electron.app.getName());
+log.debug('starting: %s', electron.app.getName());
 
 const userDataDirectoryPath = getUserDataPath();
 const walletsDirectoryPath = getWalletsDir();
@@ -36,7 +36,7 @@ process.on('unhandledRejection', err => {
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
-	log.info('missing: electron-squirrel-startup');
+	log.debug('missing: electron-squirrel-startup');
 	process.exit(0);
 }
 
@@ -101,7 +101,7 @@ function onReady() {
 			electron.app.dock.setIcon(__static + '/assets/icons/png/newlogo-256x256.png');
 		}
 
-		let mainWindow = (app.win = createMainWindow());
+		let mainWindow = (app.win = await createMainWindow());
 
 		container.register({
 			mainWindow: asValue(mainWindow)
@@ -119,7 +119,7 @@ function onReady() {
 
 		mainWindow.webContents.on('did-finish-load', async () => {
 			try {
-				log.info('did-finish-load');
+				log.debug('did-finish-load');
 				mainWindow.webContents.send('APP_START_LOADING');
 				ctx.networkService.start();
 				// start update cmc data
@@ -147,7 +147,7 @@ function onReady() {
 
 		// TODO - check
 		electron.ipcMain.on('ON_CONFIG_CHANGE', (event, userConfig) => {
-			log.info('ON_CONFIG_CHANGE');
+			log.debug('ON_CONFIG_CHANGE');
 			app.config.user = userConfig;
 		});
 
@@ -198,7 +198,7 @@ async function loadIdentity(ctx) {
 
 function onWindowAllClosed() {
 	return () => {
-		log.info('all windows closed, quitting');
+		log.debug('all windows closed, quitting');
 		return electron.app.quit();
 	};
 }

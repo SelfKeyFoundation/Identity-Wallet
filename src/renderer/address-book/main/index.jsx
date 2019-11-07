@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
@@ -38,7 +38,7 @@ const styles = theme => ({
 	}
 });
 
-class AddressBookContainer extends Component {
+class AddressBookContainer extends PureComponent {
 	state = {
 		addresses: []
 	};

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { withStyles, Typography } from '@material-ui/core';
 import { BankingAccountOption } from '../common/account-option';
 
@@ -41,7 +41,7 @@ const styles = theme => ({
 	}
 });
 
-class BankingTypesTabComponent extends Component {
+class BankingTypesTabComponent extends PureComponent {
 	state = { option: null };
 
 	async componentDidMount() {

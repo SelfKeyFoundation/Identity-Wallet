@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { withStyles, Button } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { UnlockIcon, ReturnIcon, HourGlassSmallIcon, CalendarIcon } from 'selfkey-ui';
@@ -48,7 +48,7 @@ const styles = theme => ({
 	}
 });
 
-class DepositMangerComponent extends Component {
+class DepositMangerComponent extends PureComponent {
 	async componentDidMount() {
 		await Promise.all([
 			this.props.dispatch(marketplacesOperations.loadTransactions()),
@@ -73,7 +73,7 @@ class DepositMangerComponent extends Component {
 			return;
 		}
 		if (this.timeout) return;
-		log.info('Will check transaction status in 5 sec');
+		log.debug('Will check transaction status in 5 sec');
 		this.timeout = setTimeout(() => {
 			this.props.dispatch(
 				marketplacesOperations.updateTransactionStatus(this.props.pendingTransaction)

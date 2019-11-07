@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { withStyles, Typography } from '@material-ui/core';
 const styles = theme => ({
 	tabContainer: {
@@ -33,7 +33,7 @@ const styles = theme => ({
 	}
 });
 
-class BankingServicesTabComponent extends Component {
+class BankingServicesTabComponent extends PureComponent {
 	async componentDidMount() {
 		window.scrollTo(0, 0);
 	}

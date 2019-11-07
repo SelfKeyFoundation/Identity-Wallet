@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Grid, Typography, Paper, Modal, Input, Button, InputAdornment } from '@material-ui/core';
 import {
 	ModalWrap,
@@ -55,7 +55,7 @@ const styles = theme => ({
 
 const main = props => <Link to="/main/dashboard" {...props} />;
 
-class BackupPK extends Component {
+class BackupPK extends PureComponent {
 	state = {
 		inputType: 'password',
 		visibilityComponent: <VisibilityOffIcon />

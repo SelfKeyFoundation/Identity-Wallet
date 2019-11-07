@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { marketplaceOperations } from 'common/marketplace';
@@ -7,7 +7,7 @@ import { RequestNotarizationContainer } from './process/request-notarization-con
 import { NotarizationTOC } from './common/toc-container';
 import { NotarizationTOCdisagreement } from './common/toc-disagreement-container';
 
-class MarketplaceNotariesComponent extends Component {
+class MarketplaceNotariesComponent extends PureComponent {
 	async componentDidMount() {
 		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
 	}

@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { TransactionSendProgressBox } from '../components/transaction-send-progress-box';
 import { transactionSelectors } from 'common/transaction';
 import { getLocale } from 'common/locale/selectors';
 import { push } from 'connected-react-router';
 
-class TransactionSendProgressBoxContainer extends Component {
+class TransactionSendProgressBoxContainer extends PureComponent {
 	openLink = url => {
 		window.openExternal(null, url);
 	};

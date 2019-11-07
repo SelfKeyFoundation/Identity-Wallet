@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { marketplaceOperations } from 'common/marketplace';
@@ -8,7 +8,7 @@ import { IncorporationsCheckoutContainer } from './checkout/incorporations-check
 import { IncorporationsPaymentContainer } from './checkout/incorporations-payment-container';
 import { IncorporationsPaymentCompleteContainer } from './checkout/incorporations-payment-complete-container';
 
-class MarketplaceIncorporationComponent extends Component {
+class MarketplaceIncorporationComponent extends PureComponent {
 	async componentDidMount() {
 		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
 	}

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Modal, Typography, Button, Grid, withStyles } from '@material-ui/core';
 import {
 	ModalWrap,
@@ -19,7 +19,7 @@ const styles = theme => ({
 	}
 });
 
-class TransactionUnlock extends Component {
+class TransactionUnlock extends PureComponent {
 	handleTryAgain = async () => {
 		await this.handleClose();
 	};

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
 	withStyles,
 	Typography,
@@ -81,7 +81,7 @@ export const PanelDetails = withStyles(styles)(({ classes, panelDetails }) => {
 	);
 });
 
-class NotarizationTypesTabComponent extends Component {
+class NotarizationTypesTabComponent extends PureComponent {
 	state = { option: null };
 	toggleOption = optionIdx => expanded => {
 		const { option } = this.state;

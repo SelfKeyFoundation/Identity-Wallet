@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
 	CardHeader,
 	Card,
@@ -390,7 +390,7 @@ const CompanyInformation = withStyles(styles)(props => {
 // 	);
 // });
 
-class CorporateWizardComponent extends Component {
+class CorporateWizardComponent extends PureComponent {
 	render() {
 		const { classes, isDisabled } = this.props;
 		return (

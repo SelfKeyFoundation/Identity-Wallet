@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
 	withStyles,
 	List,
@@ -188,7 +188,7 @@ const marketplace = props => <Link to="/main/marketplace" {...props} />;
 const addressBook = props => <Link to="/main/addressBook" {...props} />;
 const switchAccount = props => <Link to="/home" {...props} />;
 
-class Sidebar extends Component {
+class Sidebar extends PureComponent {
 	state = {
 		open: false
 	};
