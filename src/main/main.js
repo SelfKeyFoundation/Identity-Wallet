@@ -169,6 +169,9 @@ function onReady() {
 }
 
 async function loadIdentity(ctx) {
+	if (config.forceUpdateAttributes) {
+		log.info('Force reloading of identity attributes is enabled');
+	}
 	// TODO, this probably should be initialized in root of react app
 	await ctx.store.dispatch(identityOperations.loadRepositoriesOperation());
 	try {
