@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Route } from 'react-router-dom';
 import Dashboard from '../../dashboard';
 import { CryptoMangerContainer, AddTokenContainer } from '../../crypto-manager';
@@ -71,7 +71,7 @@ const contentWrapperStyle = {
 	marginTop: '128px'
 };
 
-class Main extends Component {
+class Main extends PureComponent {
 	setMatomoId = () => {
 		ReactPiwik.push(['setUserId', md5(this.props.address)]);
 		ReactPiwik.push(['setCustomVariable', 1, 'machineId', window.machineId, 'visit']);

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { Typography, withStyles } from '@material-ui/core';
 import {
@@ -61,7 +61,7 @@ const styles = theme => ({
 	}
 });
 
-class RequestDocumentsListContainer extends Component {
+class RequestDocumentsListContainer extends PureComponent {
 	renderDocumentName({ entry, classes }) {
 		let fileType = null;
 		let fileName = null;

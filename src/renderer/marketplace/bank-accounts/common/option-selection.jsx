@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { CloseButtonIcon } from 'selfkey-ui';
@@ -37,7 +37,7 @@ const styles = theme => ({
 		padding: '30px'
 	}
 });
-class OptionSelectionComponent extends Component {
+class OptionSelectionComponent extends PureComponent {
 	state = { selectedValue: this.props.selected || '' };
 
 	onSelectOption = event => {

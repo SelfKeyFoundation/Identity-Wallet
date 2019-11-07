@@ -521,7 +521,7 @@ export class LWSService {
 	}
 
 	handleConn(conn) {
-		log.info('ws connection established');
+		log.debug('ws connection established');
 		let wsConn = new WSConnection(conn, this);
 		wsConn.listen();
 	}
@@ -530,10 +530,10 @@ export class LWSService {
 		const clientIp = info.req.connection.remoteAddress;
 		const clientOrigin = info.req.headers.origin;
 		if (!WS_IP_WHITELIST.includes(clientIp) || !WS_ORIGINS_WHITELIST.includes(clientOrigin)) {
-			log.info(`rejecting ws from ip:${clientIp} origin:${clientOrigin}`);
+			log.debug(`rejecting ws from ip:${clientIp} origin:${clientOrigin}`);
 			return false;
 		}
-		log.info(`accepting ws from ip:${clientIp} origin:${clientOrigin}`);
+		log.debug(`accepting ws from ip:${clientIp} origin:${clientOrigin}`);
 		return true;
 	}
 

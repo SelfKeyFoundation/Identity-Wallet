@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Avatar, Input, Button, Grid, Typography, InputAdornment } from '@material-ui/core';
 import { VisibilityOffIcon, VisibilityOnIcon } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
@@ -20,7 +20,7 @@ const styles = theme => ({
 	}
 });
 
-class PrivateKey extends Component {
+class PrivateKey extends PureComponent {
 	state = {
 		privateKey: '',
 		error: '',

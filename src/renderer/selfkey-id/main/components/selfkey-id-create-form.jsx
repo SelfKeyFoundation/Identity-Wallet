@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
 	Grid,
 	Button,
@@ -93,7 +93,7 @@ const styles = theme => ({
 	}
 });
 
-class SelfKeyIdCreateFormComponent extends Component {
+class SelfKeyIdCreateFormComponent extends PureComponent {
 	state = {
 		error: '',
 		errorEmail: false,

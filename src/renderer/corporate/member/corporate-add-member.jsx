@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
 	ModalWrap,
 	ModalCloseButton,
@@ -127,7 +127,7 @@ const styles = theme => ({
 	}
 });
 
-class CorporateAddMemberComponent extends Component {
+class CorporateAddMemberComponent extends PureComponent {
 	state = {
 		error: '',
 		errorEmail: false,

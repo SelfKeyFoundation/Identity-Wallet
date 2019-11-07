@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Grid, Typography, Paper, Modal, Input, LinearProgress, Button } from '@material-ui/core';
 import {
 	PasswordConfirmIcon,
@@ -65,7 +65,7 @@ const styles = theme => ({
 
 const goBackCreatePassword = props => <Link to="/createPassword" {...props} />;
 
-class PasswordConfirmation extends Component {
+class PasswordConfirmation extends PureComponent {
 	state = {
 		password: '',
 		passwordScore: 0,

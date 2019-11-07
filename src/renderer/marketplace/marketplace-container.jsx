@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { featureIsDisabled } from 'common/feature-flags';
@@ -16,7 +16,7 @@ import {
 } from '../marketplace';
 import { MarketplaceCorporatePreviewContainer } from './corporate-preview-container';
 
-class MarketplaceContainerComponent extends Component {
+class MarketplaceContainerComponent extends PureComponent {
 	componentDidMount() {
 		this.props.dispatch(ordersOperations.ordersLoadOperation());
 	}

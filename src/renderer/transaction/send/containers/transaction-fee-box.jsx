@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { ActualTransactionFeeBox } from 'renderer/transaction/send/containers/actual-transaction-fee-box';
 import { Grid, withStyles } from '@material-ui/core';
 import { Loop as LoopIcon } from '@material-ui/icons';
@@ -119,7 +119,7 @@ const styles = theme => ({
 	checked: {}
 });
 
-export class TransactionFeeBoxComponent extends Component {
+export class TransactionFeeBoxComponent extends PureComponent {
 	state = {
 		showAdvanced: this.props.showAdvanced || false,
 		gasLimit: this.props.gasLimit,

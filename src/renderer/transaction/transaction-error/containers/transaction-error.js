@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { TransactionError } from '../components/transaction-error';
 import { getWallet } from 'common/wallet/selectors';
 import { push } from 'connected-react-router';
 import { kycOperations } from 'common/kyc';
 
-class TransactionErrorContainer extends Component {
+class TransactionErrorContainer extends PureComponent {
 	componentDidMount() {
 		this.clearRelyingParty();
 	}

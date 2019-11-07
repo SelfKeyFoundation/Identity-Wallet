@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Logger } from 'common/logger';
 import { connect } from 'react-redux';
 import { Route, HashRouter } from 'react-router-dom';
@@ -48,7 +48,7 @@ ReactPiwik.push(['trackPageView']);
 ReactPiwik.push(['enableHeartBeatTimer']);
 ReactPiwik.push(['trackAllContentImpressions']);
 
-class AppContainerComponent extends Component {
+class AppContainerComponent extends PureComponent {
 	state = { hasError: false };
 	handleRefresh = async () => {
 		await this.props.dispatch(push('/'));

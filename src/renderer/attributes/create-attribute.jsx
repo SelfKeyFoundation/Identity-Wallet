@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { withStyles, Divider, Button, Grid, Select, Typography, Input } from '@material-ui/core';
 import { identityAttributes, jsonSchema } from 'common/identity/utils';
 import Form from 'react-jsonschema-form-material-theme';
@@ -32,7 +32,7 @@ const styles = theme => ({
 	}
 });
 
-class CreateAttributeComponent extends Component {
+class CreateAttributeComponent extends PureComponent {
 	state = {
 		typeId: -1,
 		label: '',

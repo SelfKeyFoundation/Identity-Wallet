@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Route } from 'react-router-dom';
 
 import { PageLoading } from '../common/page-loading';
@@ -8,7 +8,7 @@ import { MarketplacePaymentCompleteContainer } from './payment-complete-containe
 import { MarketplaceOrderTxInProgressContainer } from './tx-in-progress-container';
 import { MarketplaceOrderTxErrorContainer } from './tx-error-container';
 
-class MarketplaceOrdersPage extends Component {
+class MarketplaceOrdersPage extends PureComponent {
 	render() {
 		const { path } = this.props.match;
 		return (

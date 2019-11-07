@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
 	Grid,
 	Typography,
@@ -54,7 +54,7 @@ const styles = theme => ({
 	}
 });
 
-class Terms extends Component {
+class Terms extends PureComponent {
 	state = {
 		crashReportAgreement: true
 	};

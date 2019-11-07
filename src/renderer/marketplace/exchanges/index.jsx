@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { marketplaceOperations } from 'common/marketplace';
 import { ExchangesListContainer } from './exchanges-list-container.jsx';
 import { ExchangesDetailsContainer } from './exchanges-details-container.jsx';
 
-class MarketplaceExchangesContainerComponent extends Component {
+class MarketplaceExchangesContainerComponent extends PureComponent {
 	async componentDidMount() {
 		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
 	}

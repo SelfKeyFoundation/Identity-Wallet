@@ -172,7 +172,7 @@ export class WalletService {
 		return new Promise((resolve, reject) => {
 			this.web3Service.web3.eth.getAccounts((error, accounts) => {
 				if (error) {
-					log.info('error: %j', error);
+					log.debug('error: %j', error);
 					reject(error);
 				} else {
 					const promises = accounts.map(async (address, index) => {

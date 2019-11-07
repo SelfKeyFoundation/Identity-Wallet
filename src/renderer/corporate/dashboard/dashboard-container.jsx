@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { identitySelectors, identityOperations } from 'common/identity';
 import { CorporateDashboardPage } from './dashboard-page';
@@ -92,7 +92,7 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-class CorporateDashboardContainer extends Component {
+class CorporateDashboardContainer extends PureComponent {
 	state = {
 		popup: null
 	};

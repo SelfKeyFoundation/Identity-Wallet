@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import AutoUpdateContent from './auto-update';
 import { appSelectors, appOperations } from 'common/app';
 import history from 'common/store/history';
 
-class AutoUpdateContainer extends Component {
+class AutoUpdateContainer extends PureComponent {
 	handleDownloadInstallAction = async () => {
 		await this.props.dispatch(appOperations.downloadUpdateOperation());
 	};

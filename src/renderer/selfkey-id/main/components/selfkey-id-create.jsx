@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Grid, Modal, Button, Typography, Card, CardContent, withStyles } from '@material-ui/core';
 import { IdCardIcon, SKIDIcon, ModalWrap } from 'selfkey-ui';
 import { Link } from 'react-router-dom';
@@ -37,7 +37,7 @@ const styles = theme => ({
 const selfkeyIdForm = props => <Link to="/selfkeyIdForm" {...props} />;
 const back = props => <Link to="/main/dashboard" {...props} />;
 
-class SelfKeyIdCreateComponent extends Component {
+class SelfKeyIdCreateComponent extends PureComponent {
 	render() {
 		const { classes } = this.props;
 		return (
