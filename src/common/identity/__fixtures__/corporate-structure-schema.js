@@ -32,52 +32,135 @@ export const positionEquity = {
 	'limited-partner': 'Percentage'
 };
 
+const director = {
+	title: 'Director',
+	description: 'The person that is chief executive of the organization.',
+	position: 'director'
+};
+
+const shareholder = {
+	position: 'shareholder',
+	equity: 'Shares',
+	title: 'Shareholder',
+	description:
+		'Individual or institution that legally owns one or more shares of stock in your company.'
+};
+const ubo = {
+	position: 'ubo',
+	title: 'UBO',
+	description: 'The person or entity that is the ultimate beneficiary of the company.'
+};
+const observer = {
+	position: 'observer',
+	title: 'Observer',
+	description: 'Individual who attends company board meetings but is not an official member.'
+};
+const authorizedSignatory = {
+	position: 'authorizedSignatory',
+	title: 'Authorized Signatory',
+	description: 'Director or person who has been authorized to sign documents.'
+};
+const other = {
+	position: 'other',
+	title: 'Other',
+	description: 'Designated nonmembers or outsiders.'
+};
+const member = {
+	position: 'member',
+	equity: 'Membership Interest',
+	title: 'Member',
+	description: 'Co-owner of a business, who oversees and runs the that business.'
+};
+const manager = {
+	position: 'manager',
+	title: 'Manager',
+	description: 'Person in charge of the LLC for day-to-day and long-term decisions.'
+};
+const grantor = {
+	position: 'grantor',
+	title: 'Grantor',
+	description: 'Person or entity that establishes the trust.'
+};
+const beneficiary = {
+	position: 'beneficiary',
+	title: 'Beneficiary',
+	description: 'Person or entity that establishes the trust.'
+};
+const trustee = {
+	position: 'trustee',
+	title: 'Trustee',
+	description: 'The person who acts as the legal owner of trust assets.'
+};
+const protector = {
+	position: 'protector',
+	title: 'Protector',
+	description:
+		'Person who directs or restrain the trustees in relation to their administration of the trust.'
+};
+const founder = {
+	position: 'founder',
+	title: 'Founder',
+	description: 'Person or entity that establishes the foundation.'
+};
+const generalPartner = {
+	position: 'general-partner',
+	equity: 'Percentage',
+	title: 'General Partner',
+	description: 'Co-owner of a business, who oversees and runs the that business.'
+};
+const limitedPartner = {
+	position: 'limited-partner',
+	equity: 'Percentage',
+	title: 'Limited Partner',
+	description: 'Co-owners of a business, that does not participate in the management.'
+};
+
+const supervisor = {
+	position: 'supervisor',
+	title: 'Supervisor',
+	description:
+		'Person  who monitors and regulates employees in their performance of assigned or delegated tasks.'
+};
+
 export const companyPositions = {
 	'Company Limited by Shares (LTD)': [
-		{ position: 'director' },
-		{ position: 'shareholder', equity: 'Shares' },
-		{ position: 'ubo' },
-		{ position: 'observer' },
-		{ position: 'authorizedSignatory' }
+		director,
+		shareholder,
+		ubo,
+		observer,
+		authorizedSignatory,
+		other
 	],
-	'Limited Liability Company (LLC)': [
-		{ position: 'manager' },
-		{ position: 'member', equity: 'Membership Interest' },
-		{ position: 'ubo' },
-		{ position: 'observer' },
-		{ position: 'authorizedSignatory' }
-	],
+	'Limited Liability Company (LLC)': [manager, member, ubo, observer, authorizedSignatory, other],
 	'Trust (TST)': [
-		{ position: 'grantor' },
-		{ position: 'beneficiary' },
-		{ position: 'trustee' },
-		{ position: 'protector' },
-		{ position: 'ubo' },
-		{ position: 'observer' },
-		{ position: 'authorizedSignatory' }
+		grantor,
+		beneficiary,
+		trustee,
+		protector,
+		ubo,
+		observer,
+		authorizedSignatory,
+		other
 	],
 	'Foundation (FND)': [
-		{ position: 'founder' },
-		{ position: 'director' },
-		{ position: 'protector' },
-		{ position: 'beneficiary' },
-		{ position: 'ubo' },
-		{ position: 'observer' },
-		{ position: 'authorizedSignatory' }
+		founder,
+		director,
+		supervisor,
+		beneficiary,
+		ubo,
+		observer,
+		authorizedSignatory,
+		other
 	],
 	'Limited Partnership (LLP)': [
-		{ position: 'general-partner', equity: 'Percentage' },
-		{ position: 'limited-partner', equity: 'Percentage' },
-		{ position: 'ubo' },
-		{ position: 'observer' },
-		{ position: 'authorizedSignatory' }
+		generalPartner,
+		limitedPartner,
+		ubo,
+		observer,
+		authorizedSignatory,
+		other
 	],
-	Other: [
-		{ position: 'member', equity: 'Membership Interest' },
-		{ position: 'ubo' },
-		{ position: 'observer' },
-		{ position: 'authorizedSignatory' }
-	]
+	Other: [member, ubo, observer, authorizedSignatory, other]
 };
 export const resolvedCorporateSchema = {
 	url: 'http://platform.selfkey.org/schema/attribute/corporate-structure.json',
@@ -331,6 +414,9 @@ export const resolvedCorporateSchema = {
 						},
 						{
 							$ref: '#/definitions/positions/authorizedSignatory'
+						},
+						{
+							$ref: '#/definitions/positions/other'
 						}
 					]
 				},
@@ -350,6 +436,9 @@ export const resolvedCorporateSchema = {
 						},
 						{
 							$ref: '#/definitions/positions/authorizedSignatory'
+						},
+						{
+							$ref: '#/definitions/positions/other'
 						}
 					]
 				},
@@ -375,6 +464,9 @@ export const resolvedCorporateSchema = {
 						},
 						{
 							$ref: '#/definitions/positions/authorizedSignatory'
+						},
+						{
+							$ref: '#/definitions/positions/other'
 						}
 					]
 				},
@@ -400,6 +492,9 @@ export const resolvedCorporateSchema = {
 						},
 						{
 							$ref: '#/definitions/positions/authorizedSignatory'
+						},
+						{
+							$ref: '#/definitions/positions/other'
 						}
 					]
 				},
@@ -419,6 +514,9 @@ export const resolvedCorporateSchema = {
 						},
 						{
 							$ref: '#/definitions/positions/authorizedSignatory'
+						},
+						{
+							$ref: '#/definitions/positions/other'
 						}
 					]
 				},
@@ -435,6 +533,9 @@ export const resolvedCorporateSchema = {
 						},
 						{
 							$ref: '#/definitions/positions/authorizedSignatory'
+						},
+						{
+							$ref: '#/definitions/positions/other'
 						}
 					]
 				},
@@ -442,6 +543,8 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Director',
+							description: 'The person that is chief executive of the organization.',
 							const: 'director'
 						}
 					}
@@ -450,6 +553,9 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'UBO',
+							description:
+								'The person or entity that is the ultimate beneficiary of the company.',
 							const: 'ubo'
 						}
 					}
@@ -458,6 +564,9 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Observer',
+							description:
+								'Individual who attends company board meetings but is not an official member.',
 							const: 'observer'
 						}
 					}
@@ -466,6 +575,9 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Authorized Signatory',
+							description:
+								'Director or person who has been authorized to sign documents.',
 							const: 'authorizedSignatory'
 						}
 					}
@@ -474,6 +586,9 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Shareholder',
+							description:
+								'Individual or institution that legally owns one or more shares of stock in your company.',
 							const: 'shareholder'
 						},
 						equity: {
@@ -486,6 +601,9 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Member',
+							description:
+								'Co-owner of a business, who oversees and runs the that business.',
 							const: 'member'
 						},
 						equity: {
@@ -498,6 +616,9 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Manager',
+							description:
+								'Person in charge of the LLC for day-to-day and long-term decisions.',
 							const: 'manager'
 						}
 					}
@@ -506,6 +627,8 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Grantor',
+							description: 'Person or entity that establishes the trust.',
 							const: 'grantor'
 						}
 					}
@@ -514,6 +637,8 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Beneficiary',
+							description: 'Person or entity that establishes the trust.',
 							const: 'beneficiary'
 						}
 					}
@@ -522,6 +647,8 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Trustee',
+							description: 'The person who acts as the legal owner of trust assets.',
 							const: 'trustee'
 						}
 					}
@@ -530,6 +657,9 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Protector',
+							description:
+								'Person who directs or restrain the trustees in relation to their administration of the trust.',
 							const: 'protector'
 						}
 					}
@@ -538,6 +668,8 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Founder',
+							description: 'Person or entity that establishes the foundation.',
 							const: 'founder'
 						}
 					}
@@ -546,7 +678,10 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
-							const: 'protector'
+							title: 'Supervisor',
+							description:
+								'Person  who monitors and regulates employees in their performance of assigned or delegated tasks.',
+							const: 'supervisor'
 						}
 					}
 				},
@@ -554,6 +689,9 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'General Partner',
+							description:
+								'Co-owner of a business, who oversees and runs the that business.',
 							const: 'general-partner'
 						},
 						equity: {
@@ -565,10 +703,23 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Limited Partner',
+							description:
+								'Co-owners of a business, that does not participate in the management.',
 							const: 'limited-partner'
 						},
 						equity: {
 							$ref: '#/definitions/equity'
+						}
+					}
+				},
+				other: {
+					type: 'object',
+					properties: {
+						position: {
+							title: 'Other',
+							description: 'Designated nonmembers or outsiders.',
+							const: 'other'
 						}
 					}
 				}
@@ -677,6 +828,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Director',
+																description:
+																	'The person that is chief executive of the organization.',
 																const: 'director'
 															}
 														}
@@ -685,6 +839,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Shareholder',
+																description:
+																	'Individual or institution that legally owns one or more shares of stock in your company.',
 																const: 'shareholder'
 															},
 															equity: {
@@ -700,6 +857,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'UBO',
+																description:
+																	'The person or entity that is the ultimate beneficiary of the company.',
 																const: 'ubo'
 															}
 														}
@@ -708,6 +868,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Observer',
+																description:
+																	'Individual who attends company board meetings but is not an official member.',
 																const: 'observer'
 															}
 														}
@@ -716,7 +879,21 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Authorized Signatory',
+																description:
+																	'Director or person who has been authorized to sign documents.',
 																const: 'authorizedSignatory'
+															}
+														}
+													},
+													{
+														type: 'object',
+														properties: {
+															position: {
+																title: 'Other',
+																description:
+																	'Designated nonmembers or outsiders.',
+																const: 'other'
 															}
 														}
 													}
@@ -869,6 +1046,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Manager',
+																description:
+																	'Person in charge of the LLC for day-to-day and long-term decisions.',
 																const: 'manager'
 															}
 														}
@@ -877,6 +1057,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Member',
+																description:
+																	'Co-owner of a business, who oversees and runs the that business.',
 																const: 'member'
 															},
 															equity: {
@@ -892,6 +1075,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'UBO',
+																description:
+																	'The person or entity that is the ultimate beneficiary of the company.',
 																const: 'ubo'
 															}
 														}
@@ -900,6 +1086,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Observer',
+																description:
+																	'Individual who attends company board meetings but is not an official member.',
 																const: 'observer'
 															}
 														}
@@ -908,7 +1097,21 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Authorized Signatory',
+																description:
+																	'Director or person who has been authorized to sign documents.',
 																const: 'authorizedSignatory'
+															}
+														}
+													},
+													{
+														type: 'object',
+														properties: {
+															position: {
+																title: 'Other',
+																description:
+																	'Designated nonmembers or outsiders.',
+																const: 'other'
 															}
 														}
 													}
@@ -1061,6 +1264,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Grantor',
+																description:
+																	'Person or entity that establishes the trust.',
 																const: 'grantor'
 															}
 														}
@@ -1069,6 +1275,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Beneficiary',
+																description:
+																	'Person or entity that establishes the trust.',
 																const: 'beneficiary'
 															}
 														}
@@ -1077,6 +1286,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Trustee',
+																description:
+																	'The person who acts as the legal owner of trust assets.',
 																const: 'trustee'
 															}
 														}
@@ -1085,6 +1297,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Protector',
+																description:
+																	'Person who directs or restrain the trustees in relation to their administration of the trust.',
 																const: 'protector'
 															}
 														}
@@ -1093,6 +1308,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'UBO',
+																description:
+																	'The person or entity that is the ultimate beneficiary of the company.',
 																const: 'ubo'
 															}
 														}
@@ -1101,6 +1319,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Observer',
+																description:
+																	'Individual who attends company board meetings but is not an official member.',
 																const: 'observer'
 															}
 														}
@@ -1109,7 +1330,21 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Authorized Signatory',
+																description:
+																	'Director or person who has been authorized to sign documents.',
 																const: 'authorizedSignatory'
+															}
+														}
+													},
+													{
+														type: 'object',
+														properties: {
+															position: {
+																title: 'Other',
+																description:
+																	'Designated nonmembers or outsiders.',
+																const: 'other'
 															}
 														}
 													}
@@ -1262,6 +1497,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Founder',
+																description:
+																	'Person or entity that establishes the foundation.',
 																const: 'founder'
 															}
 														}
@@ -1270,6 +1508,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Director',
+																description:
+																	'The person that is chief executive of the organization.',
 																const: 'director'
 															}
 														}
@@ -1278,7 +1519,10 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
-																const: 'protector'
+																title: 'Supervisor',
+																description:
+																	'Person  who monitors and regulates employees in their performance of assigned or delegated tasks.',
+																const: 'supervisor'
 															}
 														}
 													},
@@ -1286,6 +1530,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Beneficiary',
+																description:
+																	'Person or entity that establishes the trust.',
 																const: 'beneficiary'
 															}
 														}
@@ -1294,6 +1541,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'UBO',
+																description:
+																	'The person or entity that is the ultimate beneficiary of the company.',
 																const: 'ubo'
 															}
 														}
@@ -1302,6 +1552,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Observer',
+																description:
+																	'Individual who attends company board meetings but is not an official member.',
 																const: 'observer'
 															}
 														}
@@ -1310,7 +1563,21 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Authorized Signatory',
+																description:
+																	'Director or person who has been authorized to sign documents.',
 																const: 'authorizedSignatory'
+															}
+														}
+													},
+													{
+														type: 'object',
+														properties: {
+															position: {
+																title: 'Other',
+																description:
+																	'Designated nonmembers or outsiders.',
+																const: 'other'
 															}
 														}
 													}
@@ -1463,6 +1730,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'General Partner',
+																description:
+																	'Co-owner of a business, who oversees and runs the that business.',
 																const: 'general-partner'
 															},
 															equity: {
@@ -1477,6 +1747,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Limited Partner',
+																description:
+																	'Co-owners of a business, that does not participate in the management.',
 																const: 'limited-partner'
 															},
 															equity: {
@@ -1491,6 +1764,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'UBO',
+																description:
+																	'The person or entity that is the ultimate beneficiary of the company.',
 																const: 'ubo'
 															}
 														}
@@ -1499,6 +1775,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Observer',
+																description:
+																	'Individual who attends company board meetings but is not an official member.',
 																const: 'observer'
 															}
 														}
@@ -1507,7 +1786,21 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Authorized Signatory',
+																description:
+																	'Director or person who has been authorized to sign documents.',
 																const: 'authorizedSignatory'
+															}
+														}
+													},
+													{
+														type: 'object',
+														properties: {
+															position: {
+																title: 'Other',
+																description:
+																	'Designated nonmembers or outsiders.',
+																const: 'other'
 															}
 														}
 													}
@@ -1660,6 +1953,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Member',
+																description:
+																	'Co-owner of a business, who oversees and runs the that business.',
 																const: 'member'
 															},
 															equity: {
@@ -1675,6 +1971,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'UBO',
+																description:
+																	'The person or entity that is the ultimate beneficiary of the company.',
 																const: 'ubo'
 															}
 														}
@@ -1683,6 +1982,9 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Observer',
+																description:
+																	'Individual who attends company board meetings but is not an official member.',
 																const: 'observer'
 															}
 														}
@@ -1691,7 +1993,21 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
+																title: 'Authorized Signatory',
+																description:
+																	'Director or person who has been authorized to sign documents.',
 																const: 'authorizedSignatory'
+															}
+														}
+													},
+													{
+														type: 'object',
+														properties: {
+															position: {
+																title: 'Other',
+																description:
+																	'Designated nonmembers or outsiders.',
+																const: 'other'
 															}
 														}
 													}
@@ -1854,6 +2170,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Director',
+														description:
+															'The person that is chief executive of the organization.',
 														const: 'director'
 													}
 												}
@@ -1862,6 +2181,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Shareholder',
+														description:
+															'Individual or institution that legally owns one or more shares of stock in your company.',
 														const: 'shareholder'
 													},
 													equity: {
@@ -1877,6 +2199,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'UBO',
+														description:
+															'The person or entity that is the ultimate beneficiary of the company.',
 														const: 'ubo'
 													}
 												}
@@ -1885,6 +2210,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Observer',
+														description:
+															'Individual who attends company board meetings but is not an official member.',
 														const: 'observer'
 													}
 												}
@@ -1893,7 +2221,21 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Authorized Signatory',
+														description:
+															'Director or person who has been authorized to sign documents.',
 														const: 'authorizedSignatory'
+													}
+												}
+											},
+											{
+												type: 'object',
+												properties: {
+													position: {
+														title: 'Other',
+														description:
+															'Designated nonmembers or outsiders.',
+														const: 'other'
 													}
 												}
 											}
@@ -2046,6 +2388,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Manager',
+														description:
+															'Person in charge of the LLC for day-to-day and long-term decisions.',
 														const: 'manager'
 													}
 												}
@@ -2054,6 +2399,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Member',
+														description:
+															'Co-owner of a business, who oversees and runs the that business.',
 														const: 'member'
 													},
 													equity: {
@@ -2069,6 +2417,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'UBO',
+														description:
+															'The person or entity that is the ultimate beneficiary of the company.',
 														const: 'ubo'
 													}
 												}
@@ -2077,6 +2428,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Observer',
+														description:
+															'Individual who attends company board meetings but is not an official member.',
 														const: 'observer'
 													}
 												}
@@ -2085,7 +2439,21 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Authorized Signatory',
+														description:
+															'Director or person who has been authorized to sign documents.',
 														const: 'authorizedSignatory'
+													}
+												}
+											},
+											{
+												type: 'object',
+												properties: {
+													position: {
+														title: 'Other',
+														description:
+															'Designated nonmembers or outsiders.',
+														const: 'other'
 													}
 												}
 											}
@@ -2238,6 +2606,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Grantor',
+														description:
+															'Person or entity that establishes the trust.',
 														const: 'grantor'
 													}
 												}
@@ -2246,6 +2617,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Beneficiary',
+														description:
+															'Person or entity that establishes the trust.',
 														const: 'beneficiary'
 													}
 												}
@@ -2254,6 +2628,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Trustee',
+														description:
+															'The person who acts as the legal owner of trust assets.',
 														const: 'trustee'
 													}
 												}
@@ -2262,6 +2639,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Protector',
+														description:
+															'Person who directs or restrain the trustees in relation to their administration of the trust.',
 														const: 'protector'
 													}
 												}
@@ -2270,6 +2650,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'UBO',
+														description:
+															'The person or entity that is the ultimate beneficiary of the company.',
 														const: 'ubo'
 													}
 												}
@@ -2278,6 +2661,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Observer',
+														description:
+															'Individual who attends company board meetings but is not an official member.',
 														const: 'observer'
 													}
 												}
@@ -2286,7 +2672,21 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Authorized Signatory',
+														description:
+															'Director or person who has been authorized to sign documents.',
 														const: 'authorizedSignatory'
+													}
+												}
+											},
+											{
+												type: 'object',
+												properties: {
+													position: {
+														title: 'Other',
+														description:
+															'Designated nonmembers or outsiders.',
+														const: 'other'
 													}
 												}
 											}
@@ -2439,6 +2839,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Founder',
+														description:
+															'Person or entity that establishes the foundation.',
 														const: 'founder'
 													}
 												}
@@ -2447,6 +2850,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Director',
+														description:
+															'The person that is chief executive of the organization.',
 														const: 'director'
 													}
 												}
@@ -2455,7 +2861,10 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
-														const: 'protector'
+														title: 'Supervisor',
+														description:
+															'Person  who monitors and regulates employees in their performance of assigned or delegated tasks.',
+														const: 'supervisor'
 													}
 												}
 											},
@@ -2463,6 +2872,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Beneficiary',
+														description:
+															'Person or entity that establishes the trust.',
 														const: 'beneficiary'
 													}
 												}
@@ -2471,6 +2883,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'UBO',
+														description:
+															'The person or entity that is the ultimate beneficiary of the company.',
 														const: 'ubo'
 													}
 												}
@@ -2479,6 +2894,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Observer',
+														description:
+															'Individual who attends company board meetings but is not an official member.',
 														const: 'observer'
 													}
 												}
@@ -2487,7 +2905,21 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Authorized Signatory',
+														description:
+															'Director or person who has been authorized to sign documents.',
 														const: 'authorizedSignatory'
+													}
+												}
+											},
+											{
+												type: 'object',
+												properties: {
+													position: {
+														title: 'Other',
+														description:
+															'Designated nonmembers or outsiders.',
+														const: 'other'
 													}
 												}
 											}
@@ -2640,6 +3072,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'General Partner',
+														description:
+															'Co-owner of a business, who oversees and runs the that business.',
 														const: 'general-partner'
 													},
 													equity: {
@@ -2654,6 +3089,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Limited Partner',
+														description:
+															'Co-owners of a business, that does not participate in the management.',
 														const: 'limited-partner'
 													},
 													equity: {
@@ -2668,6 +3106,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'UBO',
+														description:
+															'The person or entity that is the ultimate beneficiary of the company.',
 														const: 'ubo'
 													}
 												}
@@ -2676,6 +3117,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Observer',
+														description:
+															'Individual who attends company board meetings but is not an official member.',
 														const: 'observer'
 													}
 												}
@@ -2684,7 +3128,21 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Authorized Signatory',
+														description:
+															'Director or person who has been authorized to sign documents.',
 														const: 'authorizedSignatory'
+													}
+												}
+											},
+											{
+												type: 'object',
+												properties: {
+													position: {
+														title: 'Other',
+														description:
+															'Designated nonmembers or outsiders.',
+														const: 'other'
 													}
 												}
 											}
@@ -2837,6 +3295,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Member',
+														description:
+															'Co-owner of a business, who oversees and runs the that business.',
 														const: 'member'
 													},
 													equity: {
@@ -2852,6 +3313,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'UBO',
+														description:
+															'The person or entity that is the ultimate beneficiary of the company.',
 														const: 'ubo'
 													}
 												}
@@ -2860,6 +3324,9 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Observer',
+														description:
+															'Individual who attends company board meetings but is not an official member.',
 														const: 'observer'
 													}
 												}
@@ -2868,7 +3335,21 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
+														title: 'Authorized Signatory',
+														description:
+															'Director or person who has been authorized to sign documents.',
 														const: 'authorizedSignatory'
+													}
+												}
+											},
+											{
+												type: 'object',
+												properties: {
+													position: {
+														title: 'Other',
+														description:
+															'Designated nonmembers or outsiders.',
+														const: 'other'
 													}
 												}
 											}
@@ -3016,6 +3497,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Director',
+													description:
+														'The person that is chief executive of the organization.',
 													const: 'director'
 												}
 											}
@@ -3024,6 +3508,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Shareholder',
+													description:
+														'Individual or institution that legally owns one or more shares of stock in your company.',
 													const: 'shareholder'
 												},
 												equity: {
@@ -3039,6 +3526,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'UBO',
+													description:
+														'The person or entity that is the ultimate beneficiary of the company.',
 													const: 'ubo'
 												}
 											}
@@ -3047,6 +3537,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Observer',
+													description:
+														'Individual who attends company board meetings but is not an official member.',
 													const: 'observer'
 												}
 											}
@@ -3055,7 +3548,21 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Authorized Signatory',
+													description:
+														'Director or person who has been authorized to sign documents.',
 													const: 'authorizedSignatory'
+												}
+											}
+										},
+										{
+											type: 'object',
+											properties: {
+												position: {
+													title: 'Other',
+													description:
+														'Designated nonmembers or outsiders.',
+													const: 'other'
 												}
 											}
 										}
@@ -3193,6 +3700,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Manager',
+													description:
+														'Person in charge of the LLC for day-to-day and long-term decisions.',
 													const: 'manager'
 												}
 											}
@@ -3201,6 +3711,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Member',
+													description:
+														'Co-owner of a business, who oversees and runs the that business.',
 													const: 'member'
 												},
 												equity: {
@@ -3216,6 +3729,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'UBO',
+													description:
+														'The person or entity that is the ultimate beneficiary of the company.',
 													const: 'ubo'
 												}
 											}
@@ -3224,6 +3740,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Observer',
+													description:
+														'Individual who attends company board meetings but is not an official member.',
 													const: 'observer'
 												}
 											}
@@ -3232,7 +3751,21 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Authorized Signatory',
+													description:
+														'Director or person who has been authorized to sign documents.',
 													const: 'authorizedSignatory'
+												}
+											}
+										},
+										{
+											type: 'object',
+											properties: {
+												position: {
+													title: 'Other',
+													description:
+														'Designated nonmembers or outsiders.',
+													const: 'other'
 												}
 											}
 										}
@@ -3370,6 +3903,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Grantor',
+													description:
+														'Person or entity that establishes the trust.',
 													const: 'grantor'
 												}
 											}
@@ -3378,6 +3914,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Beneficiary',
+													description:
+														'Person or entity that establishes the trust.',
 													const: 'beneficiary'
 												}
 											}
@@ -3386,6 +3925,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Trustee',
+													description:
+														'The person who acts as the legal owner of trust assets.',
 													const: 'trustee'
 												}
 											}
@@ -3394,6 +3936,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Protector',
+													description:
+														'Person who directs or restrain the trustees in relation to their administration of the trust.',
 													const: 'protector'
 												}
 											}
@@ -3402,6 +3947,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'UBO',
+													description:
+														'The person or entity that is the ultimate beneficiary of the company.',
 													const: 'ubo'
 												}
 											}
@@ -3410,6 +3958,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Observer',
+													description:
+														'Individual who attends company board meetings but is not an official member.',
 													const: 'observer'
 												}
 											}
@@ -3418,7 +3969,21 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Authorized Signatory',
+													description:
+														'Director or person who has been authorized to sign documents.',
 													const: 'authorizedSignatory'
+												}
+											}
+										},
+										{
+											type: 'object',
+											properties: {
+												position: {
+													title: 'Other',
+													description:
+														'Designated nonmembers or outsiders.',
+													const: 'other'
 												}
 											}
 										}
@@ -3556,6 +4121,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Founder',
+													description:
+														'Person or entity that establishes the foundation.',
 													const: 'founder'
 												}
 											}
@@ -3564,6 +4132,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Director',
+													description:
+														'The person that is chief executive of the organization.',
 													const: 'director'
 												}
 											}
@@ -3572,7 +4143,10 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
-													const: 'protector'
+													title: 'Supervisor',
+													description:
+														'Person  who monitors and regulates employees in their performance of assigned or delegated tasks.',
+													const: 'supervisor'
 												}
 											}
 										},
@@ -3580,6 +4154,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Beneficiary',
+													description:
+														'Person or entity that establishes the trust.',
 													const: 'beneficiary'
 												}
 											}
@@ -3588,6 +4165,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'UBO',
+													description:
+														'The person or entity that is the ultimate beneficiary of the company.',
 													const: 'ubo'
 												}
 											}
@@ -3596,6 +4176,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Observer',
+													description:
+														'Individual who attends company board meetings but is not an official member.',
 													const: 'observer'
 												}
 											}
@@ -3604,7 +4187,21 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Authorized Signatory',
+													description:
+														'Director or person who has been authorized to sign documents.',
 													const: 'authorizedSignatory'
+												}
+											}
+										},
+										{
+											type: 'object',
+											properties: {
+												position: {
+													title: 'Other',
+													description:
+														'Designated nonmembers or outsiders.',
+													const: 'other'
 												}
 											}
 										}
@@ -3742,6 +4339,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'General Partner',
+													description:
+														'Co-owner of a business, who oversees and runs the that business.',
 													const: 'general-partner'
 												},
 												equity: {
@@ -3756,6 +4356,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Limited Partner',
+													description:
+														'Co-owners of a business, that does not participate in the management.',
 													const: 'limited-partner'
 												},
 												equity: {
@@ -3770,6 +4373,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'UBO',
+													description:
+														'The person or entity that is the ultimate beneficiary of the company.',
 													const: 'ubo'
 												}
 											}
@@ -3778,6 +4384,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Observer',
+													description:
+														'Individual who attends company board meetings but is not an official member.',
 													const: 'observer'
 												}
 											}
@@ -3786,7 +4395,21 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Authorized Signatory',
+													description:
+														'Director or person who has been authorized to sign documents.',
 													const: 'authorizedSignatory'
+												}
+											}
+										},
+										{
+											type: 'object',
+											properties: {
+												position: {
+													title: 'Other',
+													description:
+														'Designated nonmembers or outsiders.',
+													const: 'other'
 												}
 											}
 										}
@@ -3924,6 +4547,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Member',
+													description:
+														'Co-owner of a business, who oversees and runs the that business.',
 													const: 'member'
 												},
 												equity: {
@@ -3939,6 +4565,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'UBO',
+													description:
+														'The person or entity that is the ultimate beneficiary of the company.',
 													const: 'ubo'
 												}
 											}
@@ -3947,6 +4576,9 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Observer',
+													description:
+														'Individual who attends company board meetings but is not an official member.',
 													const: 'observer'
 												}
 											}
@@ -3955,7 +4587,21 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
+													title: 'Authorized Signatory',
+													description:
+														'Director or person who has been authorized to sign documents.',
 													const: 'authorizedSignatory'
+												}
+											}
+										},
+										{
+											type: 'object',
+											properties: {
+												position: {
+													title: 'Other',
+													description:
+														'Designated nonmembers or outsiders.',
+													const: 'other'
 												}
 											}
 										}
@@ -4088,6 +4734,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Director',
+									description:
+										'The person that is chief executive of the organization.',
 									const: 'director'
 								}
 							}
@@ -4096,6 +4745,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Shareholder',
+									description:
+										'Individual or institution that legally owns one or more shares of stock in your company.',
 									const: 'shareholder'
 								},
 								equity: {
@@ -4111,6 +4763,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'UBO',
+									description:
+										'The person or entity that is the ultimate beneficiary of the company.',
 									const: 'ubo'
 								}
 							}
@@ -4119,6 +4774,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Observer',
+									description:
+										'Individual who attends company board meetings but is not an official member.',
 									const: 'observer'
 								}
 							}
@@ -4127,7 +4785,20 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Authorized Signatory',
+									description:
+										'Director or person who has been authorized to sign documents.',
 									const: 'authorizedSignatory'
+								}
+							}
+						},
+						{
+							type: 'object',
+							properties: {
+								position: {
+									title: 'Other',
+									description: 'Designated nonmembers or outsiders.',
+									const: 'other'
 								}
 							}
 						}
@@ -4139,6 +4810,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Manager',
+									description:
+										'Person in charge of the LLC for day-to-day and long-term decisions.',
 									const: 'manager'
 								}
 							}
@@ -4147,6 +4821,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Member',
+									description:
+										'Co-owner of a business, who oversees and runs the that business.',
 									const: 'member'
 								},
 								equity: {
@@ -4162,6 +4839,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'UBO',
+									description:
+										'The person or entity that is the ultimate beneficiary of the company.',
 									const: 'ubo'
 								}
 							}
@@ -4170,6 +4850,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Observer',
+									description:
+										'Individual who attends company board meetings but is not an official member.',
 									const: 'observer'
 								}
 							}
@@ -4178,7 +4861,20 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Authorized Signatory',
+									description:
+										'Director or person who has been authorized to sign documents.',
 									const: 'authorizedSignatory'
+								}
+							}
+						},
+						{
+							type: 'object',
+							properties: {
+								position: {
+									title: 'Other',
+									description: 'Designated nonmembers or outsiders.',
+									const: 'other'
 								}
 							}
 						}
@@ -4190,6 +4886,8 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Grantor',
+									description: 'Person or entity that establishes the trust.',
 									const: 'grantor'
 								}
 							}
@@ -4198,6 +4896,8 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Beneficiary',
+									description: 'Person or entity that establishes the trust.',
 									const: 'beneficiary'
 								}
 							}
@@ -4206,6 +4906,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Trustee',
+									description:
+										'The person who acts as the legal owner of trust assets.',
 									const: 'trustee'
 								}
 							}
@@ -4214,6 +4917,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Protector',
+									description:
+										'Person who directs or restrain the trustees in relation to their administration of the trust.',
 									const: 'protector'
 								}
 							}
@@ -4222,6 +4928,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'UBO',
+									description:
+										'The person or entity that is the ultimate beneficiary of the company.',
 									const: 'ubo'
 								}
 							}
@@ -4230,6 +4939,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Observer',
+									description:
+										'Individual who attends company board meetings but is not an official member.',
 									const: 'observer'
 								}
 							}
@@ -4238,7 +4950,20 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Authorized Signatory',
+									description:
+										'Director or person who has been authorized to sign documents.',
 									const: 'authorizedSignatory'
+								}
+							}
+						},
+						{
+							type: 'object',
+							properties: {
+								position: {
+									title: 'Other',
+									description: 'Designated nonmembers or outsiders.',
+									const: 'other'
 								}
 							}
 						}
@@ -4250,6 +4975,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Founder',
+									description:
+										'Person or entity that establishes the foundation.',
 									const: 'founder'
 								}
 							}
@@ -4258,6 +4986,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Director',
+									description:
+										'The person that is chief executive of the organization.',
 									const: 'director'
 								}
 							}
@@ -4266,7 +4997,10 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
-									const: 'protector'
+									title: 'Supervisor',
+									description:
+										'Person  who monitors and regulates employees in their performance of assigned or delegated tasks.',
+									const: 'supervisor'
 								}
 							}
 						},
@@ -4274,6 +5008,8 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Beneficiary',
+									description: 'Person or entity that establishes the trust.',
 									const: 'beneficiary'
 								}
 							}
@@ -4282,6 +5018,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'UBO',
+									description:
+										'The person or entity that is the ultimate beneficiary of the company.',
 									const: 'ubo'
 								}
 							}
@@ -4290,6 +5029,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Observer',
+									description:
+										'Individual who attends company board meetings but is not an official member.',
 									const: 'observer'
 								}
 							}
@@ -4298,7 +5040,20 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Authorized Signatory',
+									description:
+										'Director or person who has been authorized to sign documents.',
 									const: 'authorizedSignatory'
+								}
+							}
+						},
+						{
+							type: 'object',
+							properties: {
+								position: {
+									title: 'Other',
+									description: 'Designated nonmembers or outsiders.',
+									const: 'other'
 								}
 							}
 						}
@@ -4310,6 +5065,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'General Partner',
+									description:
+										'Co-owner of a business, who oversees and runs the that business.',
 									const: 'general-partner'
 								},
 								equity: {
@@ -4324,6 +5082,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Limited Partner',
+									description:
+										'Co-owners of a business, that does not participate in the management.',
 									const: 'limited-partner'
 								},
 								equity: {
@@ -4338,6 +5099,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'UBO',
+									description:
+										'The person or entity that is the ultimate beneficiary of the company.',
 									const: 'ubo'
 								}
 							}
@@ -4346,6 +5110,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Observer',
+									description:
+										'Individual who attends company board meetings but is not an official member.',
 									const: 'observer'
 								}
 							}
@@ -4354,7 +5121,20 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Authorized Signatory',
+									description:
+										'Director or person who has been authorized to sign documents.',
 									const: 'authorizedSignatory'
+								}
+							}
+						},
+						{
+							type: 'object',
+							properties: {
+								position: {
+									title: 'Other',
+									description: 'Designated nonmembers or outsiders.',
+									const: 'other'
 								}
 							}
 						}
@@ -4366,6 +5146,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Member',
+									description:
+										'Co-owner of a business, who oversees and runs the that business.',
 									const: 'member'
 								},
 								equity: {
@@ -4381,6 +5164,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'UBO',
+									description:
+										'The person or entity that is the ultimate beneficiary of the company.',
 									const: 'ubo'
 								}
 							}
@@ -4389,6 +5175,9 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Observer',
+									description:
+										'Individual who attends company board meetings but is not an official member.',
 									const: 'observer'
 								}
 							}
@@ -4397,7 +5186,20 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
+									title: 'Authorized Signatory',
+									description:
+										'Director or person who has been authorized to sign documents.',
 									const: 'authorizedSignatory'
+								}
+							}
+						},
+						{
+							type: 'object',
+							properties: {
+								position: {
+									title: 'Other',
+									description: 'Designated nonmembers or outsiders.',
+									const: 'other'
 								}
 							}
 						}
@@ -4407,6 +5209,8 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Director',
+							description: 'The person that is chief executive of the organization.',
 							const: 'director'
 						}
 					}
@@ -4415,6 +5219,9 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'UBO',
+							description:
+								'The person or entity that is the ultimate beneficiary of the company.',
 							const: 'ubo'
 						}
 					}
@@ -4423,6 +5230,9 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Observer',
+							description:
+								'Individual who attends company board meetings but is not an official member.',
 							const: 'observer'
 						}
 					}
@@ -4431,6 +5241,9 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Authorized Signatory',
+							description:
+								'Director or person who has been authorized to sign documents.',
 							const: 'authorizedSignatory'
 						}
 					}
@@ -4439,6 +5252,9 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Shareholder',
+							description:
+								'Individual or institution that legally owns one or more shares of stock in your company.',
 							const: 'shareholder'
 						},
 						equity: {
@@ -4454,6 +5270,9 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Member',
+							description:
+								'Co-owner of a business, who oversees and runs the that business.',
 							const: 'member'
 						},
 						equity: {
@@ -4469,6 +5288,9 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Manager',
+							description:
+								'Person in charge of the LLC for day-to-day and long-term decisions.',
 							const: 'manager'
 						}
 					}
@@ -4477,6 +5299,8 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Grantor',
+							description: 'Person or entity that establishes the trust.',
 							const: 'grantor'
 						}
 					}
@@ -4485,6 +5309,8 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Beneficiary',
+							description: 'Person or entity that establishes the trust.',
 							const: 'beneficiary'
 						}
 					}
@@ -4493,6 +5319,8 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Trustee',
+							description: 'The person who acts as the legal owner of trust assets.',
 							const: 'trustee'
 						}
 					}
@@ -4501,6 +5329,9 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Protector',
+							description:
+								'Person who directs or restrain the trustees in relation to their administration of the trust.',
 							const: 'protector'
 						}
 					}
@@ -4509,6 +5340,8 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Founder',
+							description: 'Person or entity that establishes the foundation.',
 							const: 'founder'
 						}
 					}
@@ -4517,7 +5350,10 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
-							const: 'protector'
+							title: 'Supervisor',
+							description:
+								'Person  who monitors and regulates employees in their performance of assigned or delegated tasks.',
+							const: 'supervisor'
 						}
 					}
 				},
@@ -4525,6 +5361,9 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'General Partner',
+							description:
+								'Co-owner of a business, who oversees and runs the that business.',
 							const: 'general-partner'
 						},
 						equity: {
@@ -4539,6 +5378,9 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
+							title: 'Limited Partner',
+							description:
+								'Co-owners of a business, that does not participate in the management.',
 							const: 'limited-partner'
 						},
 						equity: {
@@ -4546,6 +5388,16 @@ export const resolvedCorporateSchema = {
 							default: 0,
 							minimum: 0,
 							maximum: 100
+						}
+					}
+				},
+				other: {
+					type: 'object',
+					properties: {
+						position: {
+							title: 'Other',
+							description: 'Designated nonmembers or outsiders.',
+							const: 'other'
 						}
 					}
 				}
