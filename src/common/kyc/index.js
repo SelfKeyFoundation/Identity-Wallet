@@ -334,13 +334,13 @@ const loadRelyingPartyOperation = (
 	let rp = marketplaceSelectors.selectRPDetails(state, rpName);
 
 	if (devRPDetails.status === 'active') {
-		console.log('Selecting dev RP');
+		log.debug('Selecting dev RP');
 		rp = { ...devRPDetails };
 	}
 
 	const config = rp.relyingPartyConfig;
 	if (!config.rootEndpoint) {
-		console.log('Empty RP config object');
+		log.warn('Empty RP config object');
 		return;
 	}
 
