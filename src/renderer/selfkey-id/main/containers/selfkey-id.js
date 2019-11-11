@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { identitySelectors, identityOperations } from 'common/identity';
+import { memoizedIdentitySelectors, identityOperations } from 'common/identity';
 import SelfkeyId from '../components/selfkey-id';
 import SelfkeyIdOverview from './selfkey-id-overview';
 import SelfkeyIdApplications from './selfkey-id-applications';
@@ -73,7 +73,7 @@ class SelfkeyIdContainerComponent extends PureComponent {
 
 const mapStateToProps = (state, props) => {
 	return {
-		...identitySelectors.selectIndividualProfile(state)
+		...memoizedIdentitySelectors.selectIndividualProfile(state)
 	};
 };
 export const SelfkeyIdContainer = connect(mapStateToProps)(SelfkeyIdContainerComponent);
