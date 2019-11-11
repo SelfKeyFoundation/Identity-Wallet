@@ -380,7 +380,7 @@ export const selectFullIdentityHierarchy = createSelector(
 				parentId = 'root';
 			}
 			acc[parentId] = acc[parentId] || [];
-			acc.parentId.push(curr);
+			acc[parentId].push(curr);
 			return acc;
 		}, {})
 );
