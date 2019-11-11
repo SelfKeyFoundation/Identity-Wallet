@@ -6,7 +6,7 @@ import { push } from 'connected-react-router';
 import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorporations-component';
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
-import { identitySelectors } from 'common/identity';
+import { memoizedIdentitySelectors } from 'common/identity';
 import { withStyles } from '@material-ui/core/styles';
 import { marketplaceSelectors } from 'common/marketplace';
 import { IncorporationsDetailsPage } from './incorporations-details-page';
@@ -208,7 +208,7 @@ const mapStateToProps = (state, props) => {
 			notAuthenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(state, vendorId, templateId),
-		identity: identitySelectors.selectCurrentIdentity(state),
+		identity: memoizedIdentitySelectors.selectIdentity(state),
 		cryptoValue: getCryptoValue(state, primaryToken)
 	};
 };

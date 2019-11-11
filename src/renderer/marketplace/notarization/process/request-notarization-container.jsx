@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core';
-import { identitySelectors } from 'common/identity';
+import { memoizedIdentitySelectors } from 'common/identity';
 import MarketplaceNotariesComponent from '../common/marketplace-notaries-component';
 import RequestNotarizationPage from './request-notarization-page';
 import { CreateAttributeContainer } from '../../../attributes';
@@ -57,7 +57,7 @@ class RequestNotarizationContainer extends MarketplaceNotariesComponent {
 
 const mapStateToProps = (state, props) => {
 	return {
-		...identitySelectors.selectIndividualProfile(state)
+		...memoizedIdentitySelectors.selectIndividualProfile(state)
 	};
 };
 

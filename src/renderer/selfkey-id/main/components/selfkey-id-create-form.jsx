@@ -22,7 +22,7 @@ import {
 } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import history from 'common/store/history';
-import { identityOperations, identitySelectors } from 'common/identity';
+import { identityOperations, memoizedIdentitySelectors } from 'common/identity';
 import { matomoGoalTracking, matomoGoals } from 'common/matomo';
 
 const styles = theme => ({
@@ -170,7 +170,7 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 	render() {
 		const { classes } = this.props;
 		return (
-			<>
+			<React.Fragment>
 				<div className={classes.backButtonContainer}>
 					<BackButton onclick={this.handleBackClick} className={classes.bb} />
 					{/* <Button
@@ -473,14 +473,14 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 						</Grid>
 					</ModalWrap>
 				</Modal>
-			</>
+			</React.Fragment>
 		);
 	}
 }
 
 const mapStateToProps = (state, props) => {
 	return {
-		identity: identitySelectors.selectCurrentIdentity(state)
+		identity: memoizedIdentitySelectors.selectIdentity(state)
 	};
 };
 

@@ -6,7 +6,7 @@ import { push } from 'connected-react-router';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
-import { identitySelectors } from 'common/identity';
+import { memoizedIdentitySelectors } from 'common/identity';
 import { withStyles } from '@material-ui/core/styles';
 import { BankingDetailsPage } from './details-page';
 import { marketplaceSelectors } from 'common/marketplace';
@@ -212,7 +212,7 @@ const mapStateToProps = (state, props) => {
 			authenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(state, vendorId, templateId),
-		identity: identitySelectors.selectCurrentIdentity(state),
+		identity: memoizedIdentitySelectors.selectIdentity(state),
 		cryptoValue: getCryptoValue(state, primaryToken)
 	};
 };
