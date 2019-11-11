@@ -1,36 +1,20 @@
 import { jsonSchema, identityAttributes } from './utils';
 import { forceUpdateAttributes } from 'common/config';
 import { walletSelectors } from 'common/wallet';
-
-const EMAIL_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/email.json';
-const FIRST_NAME_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/first-name.json';
-const LAST_NAME_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/last-name.json';
-const MIDDLE_NAME_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/middle-name.json';
-const COUNTRY_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/country-of-residency.json';
-
-const ENTITY_NAME = 'http://platform.selfkey.org/schema/attribute/company-name.json';
-const ENTITY_TYPE = 'http://platform.selfkey.org/schema/attribute/legal-entity-type.json';
-const JURISDICTION = 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json';
-const CREATION_DATE = 'http://platform.selfkey.org/schema/attribute/incorporation-date.json';
-const TAX_ID = 'http://platform.selfkey.org/schema/attribute/tax-id-number.json';
-
-const BASIC_ATTRIBUTES = {
-	[FIRST_NAME_ATTRIBUTE]: 1,
-	[LAST_NAME_ATTRIBUTE]: 1,
-	[MIDDLE_NAME_ATTRIBUTE]: 1,
-	[EMAIL_ATTRIBUTE]: 1,
-	[COUNTRY_ATTRIBUTE]: 1,
-	'http://platform.selfkey.org/schema/attribute/address.json': 1
-};
-
-const BASIC_CORPORATE_ATTRIBUTES = {
-	[ENTITY_NAME]: 1,
-	[ENTITY_TYPE]: 1,
-	[JURISDICTION]: 1,
-	[EMAIL_ATTRIBUTE]: 1,
-	[CREATION_DATE]: 1,
-	[TAX_ID]: 1
-};
+import {
+	BASIC_ATTRIBUTES,
+	BASIC_CORPORATE_ATTRIBUTES,
+	COUNTRY_ATTRIBUTE,
+	EMAIL_ATTRIBUTE,
+	FIRST_NAME_ATTRIBUTE,
+	LAST_NAME_ATTRIBUTE,
+	MIDDLE_NAME_ATTRIBUTE,
+	TAX_ID_ATTRIBUTE,
+	ENTITY_NAME_ATTRIBUTE,
+	ENTITY_TYPE_ATTRIBUTE,
+	CREATION_DATE_ATTRIBUTE,
+	JURISDICTION_ATTRIBUTE
+} from './constants';
 
 const selectIdentity = state => state.identity;
 
@@ -265,23 +249,23 @@ const selectBasicCorporateAttributeTypes = state => {
 					acc.email = curr;
 					curr.required = false;
 					return acc;
-				case TAX_ID:
+				case TAX_ID_ATTRIBUTE:
 					acc.taxId = curr;
 					curr.required = false;
 					return acc;
-				case ENTITY_NAME:
+				case ENTITY_NAME_ATTRIBUTE:
 					acc.entityName = curr;
 					curr.required = true;
 					return acc;
-				case ENTITY_TYPE:
+				case ENTITY_TYPE_ATTRIBUTE:
 					acc.entityType = curr;
 					curr.required = true;
 					return acc;
-				case CREATION_DATE:
+				case CREATION_DATE_ATTRIBUTE:
 					acc.creationDate = curr;
 					curr.required = true;
 					return acc;
-				case JURISDICTION:
+				case JURISDICTION_ATTRIBUTE:
 					acc.jurisdiction = curr;
 					curr.required = true;
 					return acc;
@@ -358,11 +342,11 @@ const selectCorporateProfile = (state, id) => {
 		basicAttributes,
 		documents,
 		email: getBasicInfo(EMAIL_ATTRIBUTE, basicAttributes),
-		taxId: getBasicInfo(TAX_ID, basicAttributes),
-		entityName: getBasicInfo(ENTITY_NAME, basicAttributes),
-		entityType: getBasicInfo(ENTITY_TYPE, basicAttributes),
-		creationDate: getBasicInfo(CREATION_DATE, basicAttributes),
-		jurisdiction: getBasicInfo(JURISDICTION, basicAttributes)
+		taxId: getBasicInfo(TAX_ID_ATTRIBUTE, basicAttributes),
+		entityName: getBasicInfo(ENTITY_NAME_ATTRIBUTE, basicAttributes),
+		entityType: getBasicInfo(ENTITY_TYPE_ATTRIBUTE, basicAttributes),
+		creationDate: getBasicInfo(CREATION_DATE_ATTRIBUTE, basicAttributes),
+		jurisdiction: getBasicInfo(JURISDICTION_ATTRIBUTE, basicAttributes)
 	};
 };
 
