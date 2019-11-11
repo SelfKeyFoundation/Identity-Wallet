@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
-import { memoizedIdentitySelectors } from 'common/identity';
+import { identitySelectors } from 'common/identity';
 import { didSelectors, didOperations } from 'common/did';
 import { AssociateDid } from './associate-did';
 
@@ -76,7 +76,7 @@ class AssociateDIDContainerComponent extends PureComponent {
 
 const mapStateToProps = (state, props) => {
 	return {
-		identity: memoizedIdentitySelectors.selectIdentity(state),
+		identity: identitySelectors.selectIdentity(state),
 		associateError: didSelectors.selectAssociateError(state),
 		didOriginUrl: didSelectors.selectOriginUrl(state)
 	};

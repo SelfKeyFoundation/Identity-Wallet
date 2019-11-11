@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { MarketplacePayment } from './payment';
 import { ordersSelectors, ordersOperations } from '../../../common/marketplace/orders';
-import { memoizedIdentitySelectors } from '../../../common/identity';
+import { identitySelectors } from '../../../common/identity';
 import { featureIsEnabled } from 'common/feature-flags';
 
 const LEARN_HOW_URL = 'https://help.selfkey.org';
@@ -47,7 +47,7 @@ const mapStateToProps = (state, props) => ({
 	priceUSD: ordersSelectors.getOrderPriceUsd(state, props.match.params.orderId),
 	feeUSD: ordersSelectors.getCurrentPaymentFeeUsd(state),
 	feeETH: ordersSelectors.getCurrentPaymentFeeEth(state),
-	identity: memoizedIdentitySelectors.selectIdentity(state),
+	identity: identitySelectors.selectIdentity(state),
 	currentOrder: ordersSelectors.getCurrentOrder(state)
 });
 

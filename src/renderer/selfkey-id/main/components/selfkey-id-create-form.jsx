@@ -22,7 +22,7 @@ import {
 } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import history from 'common/store/history';
-import { identityOperations, memoizedIdentitySelectors } from 'common/identity';
+import { identityOperations, identitySelectors } from 'common/identity';
 import { matomoGoalTracking, matomoGoals } from 'common/matomo';
 
 const styles = theme => ({
@@ -480,7 +480,7 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 
 const mapStateToProps = (state, props) => {
 	return {
-		identity: memoizedIdentitySelectors.selectIdentity(state)
+		identity: identitySelectors.selectIdentity(state)
 	};
 };
 

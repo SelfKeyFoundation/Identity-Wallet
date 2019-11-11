@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { pricesSelectors } from 'common/prices';
-import { memoizedIdentitySelectors } from 'common/identity';
+import { identitySelectors } from 'common/identity';
 import { withStyles } from '@material-ui/core/styles';
 import { marketplaceSelectors } from 'common/marketplace';
 import { MarketplaceNotariesComponent } from '../common/marketplace-notaries-component';
@@ -69,7 +69,7 @@ const mapStateToProps = (state, props) => {
 	return {
 		isLoading: marketplaceSelectors.isLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
-		identity: memoizedIdentitySelectors.selectIdentity(state)
+		identity: identitySelectors.selectIdentity(state)
 	};
 };
 

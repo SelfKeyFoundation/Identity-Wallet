@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import Toolbar from './toolbar';
 import config from 'common/config';
 import { connect } from 'react-redux';
-import { memoizedIdentitySelectors, identityOperations } from 'common/identity';
+import { identitySelectors, identityOperations } from 'common/identity';
 import { walletSelectors } from 'common/wallet';
 import { push } from 'connected-react-router';
 import { featureIsEnabled } from 'common/feature-flags';
@@ -74,7 +74,7 @@ class ToolbarContainer extends PureComponent {
 }
 
 export default connect(state => ({
-	profiles: memoizedIdentitySelectors.selectIdentities(state) || [],
-	selectedProfile: memoizedIdentitySelectors.selectIdentity(state) || {},
+	profiles: identitySelectors.selectIdentities(state) || [],
+	selectedProfile: identitySelectors.selectIdentity(state) || {},
 	wallet: walletSelectors.getWallet(state)
 }))(ToolbarContainer);

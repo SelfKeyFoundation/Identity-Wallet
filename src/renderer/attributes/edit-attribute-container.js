@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { identityOperations, memoizedIdentitySelectors } from 'common/identity';
+import { identityOperations, identitySelectors } from 'common/identity';
 import EditAttribute from './edit-attribute';
 
 class EditAttributeContainerComponent extends PureComponent {
@@ -29,7 +29,7 @@ const mapStateToProps = (state, props) => {
 	const { attribute } = props;
 	let uiSchema = null;
 	if (attribute) {
-		uiSchema = memoizedIdentitySelectors.selectUiSchema(state, {
+		uiSchema = identitySelectors.selectUiSchema(state, {
 			typeId: attribute.type.id,
 			repositoryId: attribute.type.defaultRepositoryId
 		});

@@ -5,7 +5,7 @@ import { appSelectors } from 'common/app';
 import { CorporateWizard } from './corporate-wizard';
 import { push } from 'connected-react-router';
 import { identityAttributes } from 'common/identity/utils';
-import { identityOperations, memoizedIdentitySelectors } from 'common/identity';
+import { identityOperations, identitySelectors } from 'common/identity';
 
 const fields = ['jurisdiction', 'taxId', 'entityType', 'email', 'entityName', 'creationDate'];
 
@@ -194,13 +194,13 @@ class CorporateWizardContainerComponent extends PureComponent {
 
 const mapStateToProps = (state, props) => {
 	return {
-		basicAttributeTypes: memoizedIdentitySelectors.selectBasicCorporateAttributeTypes(state),
-		basicIdentity: memoizedIdentitySelectors.selectCorporateProfile(state, {
+		basicAttributeTypes: identitySelectors.selectBasicCorporateAttributeTypes(state),
+		basicIdentity: identitySelectors.selectCorporateProfile(state, {
 			identityId: props.match.params.identityId
 		}),
 		walletType: appSelectors.selectWalletType(state),
-		jurisdictions: memoizedIdentitySelectors.selectCorporateJurisdictions(state),
-		entityTypes: memoizedIdentitySelectors.selectCorporateLegalEntityTypes(state)
+		jurisdictions: identitySelectors.selectCorporateJurisdictions(state),
+		entityTypes: identitySelectors.selectCorporateLegalEntityTypes(state)
 		// members: dummyMembers
 	};
 };

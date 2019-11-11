@@ -29,7 +29,7 @@ describe('KYC Duck', () => {
 		describe('Operations', () => {
 			it('loadApplicationsOperation', async () => {
 				sinon.stub(kycApplicationService, 'load').resolves(testApplications);
-				sinon.stub(identitySelectors, 'selectCurrentIdentity').returns({ id: 1 });
+				sinon.stub(identitySelectors, 'selectIdentity').returns({ id: 1 });
 				sinon.stub(store, 'dispatch');
 
 				await testExports.operations.loadApplicationsOperation()(

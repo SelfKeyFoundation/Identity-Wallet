@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { featureIsDisabled } from 'common/feature-flags';
-import { memoizedIdentitySelectors } from 'common/identity';
+import { identitySelectors } from 'common/identity';
 import { ordersOperations } from 'common/marketplace/orders';
 import {
 	MarketplaceCategoriesContainer,
@@ -64,7 +64,7 @@ class MarketplaceContainerComponent extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-	identity: memoizedIdentitySelectors.selectIdentity(state)
+	identity: identitySelectors.selectIdentity(state)
 });
 
 const connectedComponent = connect(mapStateToProps)(MarketplaceContainerComponent);

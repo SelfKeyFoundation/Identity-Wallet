@@ -43,11 +43,14 @@ describe('Identity Duck', () => {
 		describe('Operations', () => {
 			const testWalletId = 1;
 			it('lockIdentityOperation', async () => {
+				state.identity.currentIdentity = testWalletId;
+				state.identity.identities.push(testWalletId);
+				state.identity.identitiesById[testWalletId] = { id: testWalletId };
 				sinon.stub(store, 'dispatch');
 				sinon.stub(identityActions, 'deleteIdAttributesAction').returns(testAction);
 				sinon.stub(identityActions, 'deleteDocumentsAction').returns(testAction);
 				sinon
-					.stub(identitySelectors, 'selectIdentityById')
+					.stub(identitySelectors, 'selectIdentity')
 					.returns({ id: testWalletId, rootIdentity: true });
 
 				await testExports.operations.lockIdentityOperation(testWalletId)(
@@ -64,10 +67,12 @@ describe('Identity Duck', () => {
 				expect(store.dispatch.callCount).toBe(3);
 			});
 			it('unlockIdentityOperation', async () => {
+				state.identity.identities.push(testWalletId);
+				state.identity.identitiesById[testWalletId] = { id: testWalletId };
 				sinon.stub(identityOperations, 'loadIdAttributesOperation').returns(() => {});
 				sinon.stub(identityOperations, 'loadDocumentsOperation').returns(() => {});
 				sinon
-					.stub(identitySelectors, 'selectIdentityById')
+					.stub(identitySelectors, 'selectIdentity')
 					.returns({ id: 1, rootIdentity: true });
 
 				await testExports.operations.unlockIdentityOperation(testWalletId)(
@@ -648,7 +653,7 @@ describe('Identity Duck', () => {
 				sinon
 					.stub(testExports.operations, 'loadDocumentsForAttributeOperation')
 					.returns(() => {});
-				sinon.stub(identitySelectors, 'selectCurrentIdentity').returns({ id: 1 });
+				sinon.stub(identitySelectors, 'selectIdentity').returns({ id: 1 });
 
 				await testExports.operations.createIdAttributeOperation(testAttribute)(
 					store.dispatch,
@@ -843,6 +848,9 @@ describe('Identity Duck', () => {
 		});
 		describe('Selectors', () => {
 			beforeEach(() => {
+				state.identity.identitiesById[1] = { id: 1 };
+				state.identity.identities.push(1);
+				state.identity.currentIdentity = testWalletId;
 				state.identity.attributes = [
 					...testIdAttributes,
 					{ id: 3, identityId: 2, typeId: 3 }
@@ -855,11 +863,14 @@ describe('Identity Duck', () => {
 					acc[curr.id] = curr;
 					return acc;
 				}, {});
+				state = { ...state };
 			});
 			it('selectIdAttributes', () => {
-				expect(identitySelectors.selectIdAttributes(state, testWalletId)).toEqual(
-					testIdAttributes
-				);
+				expect(
+					identitySelectors.selectIdAttributes(state, {
+						identityId: testWalletId
+					})
+				).toEqual(testIdAttributes);
 			});
 		});
 	});
