@@ -8,7 +8,7 @@ const styles = theme => ({
 		position: 'relative',
 		width: '100%',
 		margin: '0 auto',
-		maxWidth: '960px'
+		maxWidth: '780px'
 	},
 	containerHeader: {
 		padding: '22px 30px',
@@ -16,12 +16,6 @@ const styles = theme => ({
 		'& div': {
 			display: 'inline-block',
 			color: '#FFF'
-		},
-		'& .region': {
-			marginLeft: '1em',
-			marginTop: '0.25em',
-			marginBottom: '0',
-			fontSize: '24px'
 		}
 	},
 	closeIcon: {
@@ -38,7 +32,10 @@ const styles = theme => ({
 		width: '120px'
 	},
 	content: {
-		width: 'calc(100% - 120px)'
+		width: '100%'
+	},
+	insideContent: {
+		width: 'calc(100% - 160px)'
 	},
 	description: {
 		fontFamily: 'Lato, arial',
@@ -78,9 +75,7 @@ const MarketplaceProcessStarted = withStyles(styles)(
 				alignItems="flex-start"
 				className={classes.containerHeader}
 			>
-				<Typography variant="body2" gutterBottom className="region">
-					{title}
-				</Typography>
+				<Typography variant="h2">{title}</Typography>
 			</Grid>
 			<div className={classes.contentContainer}>
 				<Grid
@@ -92,7 +87,7 @@ const MarketplaceProcessStarted = withStyles(styles)(
 					<div className={classes.icon}>
 						<HourGlassLargeIcon />
 					</div>
-					<div className={classes.content}>
+					<div className={classes.insideContent}>
 						<div className={classes.description}>{body}</div>
 						<div className={classes.instructions} style={{ display: 'none' }}>
 							<Typography variant="subtitle2" color="secondary" gutterBottom>
