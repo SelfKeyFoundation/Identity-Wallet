@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { identitySelectors, identityOperations } from 'common/identity';
+import { memoizedIdentitySelectors, identityOperations } from 'common/identity';
 import CreateAttribute from './create-attribute';
 
 class CreateAttributeContainerComponent extends PureComponent {
@@ -47,11 +47,10 @@ class CreateAttributeContainerComponent extends PureComponent {
 
 const mapStateToProps = (state, props) => {
 	return {
-		types: identitySelectors.selectIdAttributeTypes(
-			state,
-			props.corporate ? 'corporate' : 'individual'
-		),
-		uiSchemas: identitySelectors.selectUiSchemas(state)
+		types: memoizedIdentitySelectors.selectAttributeTypesFiltered(state, {
+			entityType: props.corporate ? 'corporate' : 'individual'
+		}),
+		uiSchemas: memoizedIdentitySelectors.selectUiSchemas(state)
 	};
 };
 
