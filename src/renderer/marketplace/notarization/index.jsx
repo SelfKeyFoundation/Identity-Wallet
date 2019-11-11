@@ -6,6 +6,8 @@ import { NotarizationDetailsContainer } from './details/notarization-details-con
 import { RequestNotarizationContainer } from './process/request-notarization-container';
 import { NotarizationTOC } from './common/toc-container';
 import { NotarizationTOCdisagreement } from './common/toc-disagreement-container';
+import { NotarizationPaymentContainer } from './checkout/payment-container';
+import { NotarizationPaymentCompleteContainer } from './checkout/payment-complete-container';
 
 class MarketplaceNotariesComponent extends PureComponent {
 	async componentDidMount() {
@@ -21,6 +23,11 @@ class MarketplaceNotariesComponent extends PureComponent {
 				<Route path={`${path}/process`} component={RequestNotarizationContainer} />
 				<Route path={`${path}/toc`} component={NotarizationTOC} />
 				<Route path={`${path}/tocDisagreement`} component={NotarizationTOCdisagreement} />
+				<Route path={`${path}/pay`} component={NotarizationPaymentContainer} />
+				<Route
+					path={`${path}/paymentComplete`}
+					component={NotarizationPaymentCompleteContainer}
+				/>
 			</div>
 		);
 	}
