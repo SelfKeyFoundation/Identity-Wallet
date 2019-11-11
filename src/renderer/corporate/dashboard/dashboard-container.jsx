@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { identitySelectors, identityOperations } from 'common/identity';
+import { identityOperations, identitySelectors } from 'common/identity';
 import { CorporateDashboardPage } from './dashboard-page';
 import { RegisterDidCardContainer } from '../../did';
 import {
@@ -84,8 +84,8 @@ const dummyCorporateCapTable = [
 
 const mapStateToProps = (state, props) => {
 	return {
-		identity: identitySelectors.selectCurrentIdentity(state),
-		profile: identitySelectors.selectCurrentCorporateProfile(state),
+		identity: identitySelectors.selectIdentity(state),
+		profile: identitySelectors.selectCorporateProfile(state),
 		applications: [], // marketplace applications,
 		members: dummyMembers,
 		cap: dummyCorporateCapTable

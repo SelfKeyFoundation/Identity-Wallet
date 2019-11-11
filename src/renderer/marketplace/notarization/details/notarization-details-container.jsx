@@ -69,7 +69,7 @@ const mapStateToProps = (state, props) => {
 	return {
 		isLoading: marketplaceSelectors.isLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
-		identity: identitySelectors.selectCurrentIdentity(state)
+		identity: identitySelectors.selectIdentity(state)
 	};
 };
 

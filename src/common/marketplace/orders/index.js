@@ -85,7 +85,7 @@ const createOrderOperation = ({
 }) => async (dispatch, getState) => {
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const wallet = walletSelectors.getWallet(getState());
-	const identity = identitySelectors.selectCurrentIdentity(getState());
+	const identity = identitySelectors.selectIdentity(getState());
 	const order = await ordersService.createOrder({
 		amount: '' + amount,
 		applicationId,
@@ -206,7 +206,7 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 };
 
 const ordersLoadOperation = () => async (dispatch, getState) => {
-	const identity = identitySelectors.selectCurrentIdentity(getState());
+	const identity = identitySelectors.selectIdentity(getState());
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const orders = await ordersService.loadOrders(identity.id);
 	await dispatch(ordersActions.setOrdersAction(orders));

@@ -195,10 +195,9 @@ class CorporateWizardContainerComponent extends PureComponent {
 const mapStateToProps = (state, props) => {
 	return {
 		basicAttributeTypes: identitySelectors.selectBasicCorporateAttributeTypes(state),
-		basicIdentity: identitySelectors.selectCorporateProfile(
-			state,
-			props.match.params.identityId
-		),
+		basicIdentity: identitySelectors.selectCorporateProfile(state, {
+			identityId: props.match.params.identityId
+		}),
 		walletType: appSelectors.selectWalletType(state),
 		jurisdictions: identitySelectors.selectCorporateJurisdictions(state),
 		entityTypes: identitySelectors.selectCorporateLegalEntityTypes(state)

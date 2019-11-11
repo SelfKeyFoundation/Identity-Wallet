@@ -76,7 +76,7 @@ class AssociateDIDContainerComponent extends PureComponent {
 
 const mapStateToProps = (state, props) => {
 	return {
-		identity: identitySelectors.selectCurrentIdentity(state),
+		identity: identitySelectors.selectIdentity(state),
 		associateError: didSelectors.selectAssociateError(state),
 		didOriginUrl: didSelectors.selectOriginUrl(state)
 	};
