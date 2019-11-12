@@ -136,7 +136,11 @@ const mapStateToProps = (state, props) => {
 		walletType: appSelectors.selectWalletType(state),
 		jurisdictions: identitySelectors.selectCorporateJurisdictions(state),
 		entityTypes: identitySelectors.selectCorporateLegalEntityTypes(state),
-		positions: identitySelectors.selectPositionsForCompanyType(state, 'llc')
+		// FIXME: load company type from props
+		positions: identitySelectors.selectPositionsForCompanyType(
+			state,
+			'Company Limited by Shares (LTD)'
+		)
 	};
 };
 

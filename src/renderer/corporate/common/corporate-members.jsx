@@ -94,6 +94,7 @@ const CorporateMembers = withStyles(styles)(props => {
 		members = [],
 		selectedEntity = false
 	} = props;
+	console.log(selectedEntity);
 	return (
 		<Card className={classes.card}>
 			<CardHeader title="Entity Membership" className={classes.regularText} />
@@ -134,20 +135,18 @@ const CorporateMembers = withStyles(styles)(props => {
 					</TableHead>
 					<TableBody>
 						{members.map(entry => {
-							const isOpen =
-								selectedEntity &&
-								selectedEntity.entity.email === entry.entity.email;
+							const isOpen = selectedEntity && selectedEntity.entity.id === entry.id;
 							return (
-								<React.Fragment key={entry.entity.email}>
+								<React.Fragment key={entry.id}>
 									<TableRow>
-										<TableCell onClick={onOpenEntityDetails(entry)}>
+										<TableCell onClick={() => onOpenEntityDetails(entry)}>
 											<DropdownIcon
 												className={
 													isOpen ? classes.openIcon : classes.closedIcon
 												}
 											/>
 										</TableCell>
-										<TableCell>{getEntityIcon(entry)}</TableCell>
+										<TableCell>{getEntityIcon(entry.type)}</TableCell>
 										<TableCell>
 											<Typography variant="h6">
 												{getEntityName(entry)}

@@ -480,12 +480,9 @@ export const selectCorporateProfile = createSelector(
 );
 
 export const selectPositionsForCompanyType = (state, companyType) => {
-	const corporateSchema = selectIdAttributeTypeByUrl(
-		state,
-		CORPORATE_STRUCTURE,
-		'corporate',
-		true
-	);
+	const corporateSchema = selectIdAttributeTypeByUrl(state, {
+		attributeTypeUrl: CORPORATE_STRUCTURE
+	});
 	const schemaQuery = new CorporateStructureSchema(corporateSchema.content);
 	return schemaQuery.getPositionsForCompanyType(companyType);
 };

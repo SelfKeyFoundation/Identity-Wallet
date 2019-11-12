@@ -81,7 +81,7 @@ class CorporateAddMemberComponent extends PureComponent {
 		return (
 			<Modal open={true}>
 				<ModalWrap>
-					<ModalCloseButton onClick={this.onCancelClick}>
+					<ModalCloseButton onClick={onCancelClick}>
 						<ModalCloseIcon style={{ marginTop: '20px' }} />
 					</ModalCloseButton>
 					<ModalHeader>
