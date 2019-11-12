@@ -50,6 +50,9 @@ const styles = theme => ({
 	},
 	viewIcon: {
 		marginRight: '10px'
+	},
+	refreshIcon: {
+		height: '16px'
 	}
 });
 
@@ -96,7 +99,7 @@ export const DocumentsListPage = withStyles(styles)(props => {
 											<TableCell> {renderExpiryDate(entry)} </TableCell>
 											<TableCell>
 												<ViewIcon className={classes.viewIcon} />
-												<RefreshIcon />
+												<RefreshIcon className={classes.refreshIcon} />
 											</TableCell>
 										</TableRow>
 									);
