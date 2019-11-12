@@ -10,6 +10,7 @@ import { walletSelectors } from 'common/wallet';
 import { appSelectors } from 'common/app';
 
 import { MarketplaceContainer } from '../../marketplace';
+import { CorporateContainer } from '../../corporate';
 
 import { SelfkeyIdContainer } from '../../selfkey-id/main';
 import {
@@ -43,9 +44,6 @@ import { CurrentApplication, ApplicationInProgress } from '../../kyc';
 import md5 from 'md5';
 import ReactPiwik from 'react-piwik';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
-import CorporateWizardContainer from '../../corporate/wizard/corporate-wizard-container';
-import CorporateAddMemberContainer from '../../corporate/member/corporate-add-member-container';
-import { CorporateDashboardContainer } from '../../corporate';
 
 const styles = theme => ({
 	headerSection: {
@@ -186,22 +184,8 @@ class Main extends PureComponent {
 						path={`${match.path}/create-did-processing`}
 						component={CreateDIDProcessingContainer}
 					/>
-					<Route
-						path={`${match.path}/create-corporate-profile`}
-						component={CorporateWizardContainer}
-					/>
-					<Route
-						path={`${match.path}/:identityId/setup-corporate-profile`}
-						component={CorporateWizardContainer}
-					/>
-					<Route
-						path={`${match.path}/corporate-add-member`}
-						component={CorporateAddMemberContainer}
-					/>
-					<Route
-						path={`${match.path}/corporate-dashboard`}
-						component={CorporateDashboardContainer}
-					/>
+
+					<Route path={`${match.path}/corporate`} component={CorporateContainer} />
 				</Grid>
 			</Grid>
 		);
