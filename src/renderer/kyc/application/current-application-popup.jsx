@@ -186,7 +186,7 @@ const KycChecklistItem = withStyles(styles)(
 			<SmallTableRow>
 				<SmallTableCell className={warningClassname}>{icon}</SmallTableCell>
 				<SmallTableCell>
-					<Typography variant="subtitle1" gutterBottom className={warningClassname}>
+					<Typography variant="subtitle1" className={warningClassname}>
 						{type}
 					</Typography>
 				</SmallTableCell>
@@ -200,7 +200,7 @@ const KycChecklistItem = withStyles(styles)(
 					/>
 				</SmallTableCell>
 				<SmallTableCell className={classes.editColumn}>
-					<Typography variant="subtitle1" gutterBottom>
+					<Typography variant="subtitle1">
 						<IconButton aria-label="Add" onClick={event => addItem(item)}>
 							<MuiAddIcon />
 						</IconButton>
@@ -224,19 +224,13 @@ const KycChecklist = withStyles(styles)(
 					<SmallTableHeadRow>
 						<TableCell className={classes.headCell}> </TableCell>
 						<TableCell className={classes.headCell}>
-							<Typography variant="overline" gutterBottom>
-								Information
-							</Typography>
+							<Typography variant="overline">Information</Typography>
 						</TableCell>
 						<TableCell className={classes.headCell}>
-							<Typography variant="overline" gutterBottom>
-								Label
-							</Typography>
+							<Typography variant="overline">Label</Typography>
 						</TableCell>
 						<TableCell className={classes.editColumn}>
-							<Typography variant="overline" gutterBottom>
-								Actions
-							</Typography>
+							<Typography variant="overline">Actions</Typography>
 						</TableCell>
 					</SmallTableHeadRow>
 				</TableHead>

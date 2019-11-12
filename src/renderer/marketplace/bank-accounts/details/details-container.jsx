@@ -212,7 +212,7 @@ const mapStateToProps = (state, props) => {
 			authenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(state, vendorId, templateId),
-		identity: identitySelectors.selectCurrentIdentity(state),
+		identity: identitySelectors.selectIdentity(state),
 		cryptoValue: getCryptoValue(state, primaryToken)
 	};
 };

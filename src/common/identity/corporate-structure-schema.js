@@ -29,6 +29,9 @@ export class CorporateStructureSchema {
 					if (p.properties.equity) {
 						positionObj.equity = p.properties.equity.title || 'Percentage';
 					}
+					positionObj.title = p.properties.position.title || positionObj.position;
+					positionObj.description =
+						p.properties.position.description || positionObj.position;
 					return positionObj;
 				}
 			);

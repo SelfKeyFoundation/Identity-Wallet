@@ -2,7 +2,7 @@ import { walletOperations, walletSelectors } from '../wallet';
 import { getGlobalContext } from '../context';
 import { createAliasedAction } from 'electron-redux';
 import { push } from 'connected-react-router';
-import identitySelectors from './selectors';
+import { identitySelectors } from './index';
 import identityActions from './actions';
 import identityTypes from './types';
 import { Logger } from 'common/logger';
@@ -87,12 +87,12 @@ const createIdAttributeOperation = (attribute, identityId) => async (dispatch, g
 	let identity = null;
 
 	if (identityId) {
-		identity = identitySelectors.selectIdentityById(getState(), identityId);
+		identity = identitySelectors.selectIdentity(getState(), { identityId });
 		if (!identity) {
 			throw new Error('identity not loaded');
 		}
 	} else {
-		identity = identitySelectors.selectCurrentIdentity(getState());
+		identity = identitySelectors.selectIdentity(getState());
 		identityId = identity.id;
 	}
 
@@ -125,7 +125,7 @@ const updateProfilePictureOperation = (picture, identityId) => async (dispatch, 
 const lockIdentityOperation = identityId => async (dispatch, getState) => {
 	let identity = null;
 	if (identityId) {
-		identity = identitySelectors.selectIdentityById(getState(), identityId);
+		identity = identitySelectors.selectIdentity(getState(), { identityId });
 	} else {
 		identity = identitySelectors.selectCurrentIdentity(getState());
 	}
@@ -141,13 +141,15 @@ const lockIdentityOperation = identityId => async (dispatch, getState) => {
 	if (!identity.rootIdentity) {
 		return;
 	}
-	const members = identitySelectors.selectMemberIdentities(getState(), identity.id);
+	const members = identitySelectors.selectMemberIdentities(getState(), {
+		identityId: identity.id
+	});
 	await Promise.all(members.map(m => dispatch(identityOperations.lockIdentityOperation(m.id))));
 };
 const unlockIdentityOperation = identityId => async (dispatch, getState) => {
 	const state = getState();
 	if (!identityId) {
-		const identities = identitySelectors.selectAllIdentities(state);
+		const identities = identitySelectors.selectIdentities(state);
 		const defaultIdentity =
 			identities.find(ident => ident.default || ident.type === 'individual') || identities[0];
 
@@ -159,13 +161,13 @@ const unlockIdentityOperation = identityId => async (dispatch, getState) => {
 	if (!identityId) {
 		throw new Error('could not unlock identity');
 	}
-	const identity = identitySelectors.selectIdentityById(state, identityId);
+	const identity = identitySelectors.selectIdentity(state, { identityId });
 	await dispatch(identityOperations.loadDocumentsOperation(identityId));
 	await dispatch(identityOperations.loadIdAttributesOperation(identityId));
 	if (!identity.rootIdentity) {
 		return;
 	}
-	const members = identitySelectors.selectMemberIdentities(state, identityId);
+	const members = identitySelectors.selectMemberIdentities(state, { identityId });
 	await Promise.all(members.map(m => dispatch(identityOperations.unlockIdentityOperation(m.id))));
 	await dispatch(identityOperations.setCurrentIdentityAction(identityId));
 };
@@ -181,9 +183,13 @@ const createCorporateProfileOperation = data => async (dispatch, getState) => {
 	const wallet = walletSelectors.getWallet(getState());
 	let identity = null;
 	if (data.identityId) {
-		identity = identitySelectors.selectIdentityById(getState(), data.identityId);
+		identity = identitySelectors.selectIdentity(getState(), {
+			identityId: data.identityId
+		});
 	}
-	const idAttributeTypes = identitySelectors.selectIdAttributeTypes(getState(), 'corporate');
+	const idAttributeTypes = identitySelectors.selectIdAttributeTypes(getState(), {
+		entityType: 'corporate'
+	});
 	if (!identity) {
 		identity = await dispatch(
 			identityOperations.createIdentityOperation(wallet.id, 'corporate')
@@ -265,7 +271,7 @@ const createCorporateProfileOperation = data => async (dispatch, getState) => {
 
 const createSelfkeyIdOperation = (identityId, data) => async (dispatch, getState) => {
 	const idAttributeTypes = identitySelectors.selectIdAttributeTypes(getState(), 'individual');
-	const identity = identitySelectors.selectIdentityById(getState(), identityId);
+	const identity = identitySelectors.selectIdentity(getState(), { identityId });
 	const getTypeId = url => {
 		return idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
 	};
@@ -330,7 +336,7 @@ const switchProfileOperation = identity => async (dispatch, getState) => {
 };
 
 const navigateToProfileOperation = () => async (dispatch, getState) => {
-	const identity = identitySelectors.selectCurrentIdentity(getState());
+	const identity = identitySelectors.selectIdentity(getState());
 
 	if (identity.type === 'individual' && !identity.isSetupFinished) {
 		return dispatch(push('/selfkeyIdCreate'));

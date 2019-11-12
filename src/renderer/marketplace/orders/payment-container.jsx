@@ -47,7 +47,7 @@ const mapStateToProps = (state, props) => ({
 	priceUSD: ordersSelectors.getOrderPriceUsd(state, props.match.params.orderId),
 	feeUSD: ordersSelectors.getCurrentPaymentFeeUsd(state),
 	feeETH: ordersSelectors.getCurrentPaymentFeeEth(state),
-	identity: identitySelectors.selectCurrentIdentity(state),
+	identity: identitySelectors.selectIdentity(state),
 	currentOrder: ordersSelectors.getCurrentOrder(state)
 });
 
