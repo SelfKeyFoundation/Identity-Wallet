@@ -52,7 +52,7 @@ class CorporateAddMemberContainer extends PureComponent {
 	};
 
 	closeAction = () => {
-		this.props.dispatch(push('/main/create-corporate-profile'));
+		this.props.dispatch(push('/main/corporate/create-corporate-profile'));
 	};
 
 	render() {
@@ -74,4 +74,6 @@ const mapStateToProps = (state, props) => {
 };
 
 const styledComponent = withStyles(styles)(CorporateAddMemberContainer);
-export default connect(mapStateToProps)(styledComponent);
+const connectedComponent = connect(mapStateToProps)(styledComponent);
+export { connectedComponent as CorporateAddMemberContainer };
+export default connectedComponent;
