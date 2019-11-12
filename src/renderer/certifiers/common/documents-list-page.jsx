@@ -47,6 +47,9 @@ const styles = theme => ({
 		textOverflow: 'ellipsis',
 		whiteSpace: 'nowrap',
 		maxWidth: '222px'
+	},
+	viewIcon: {
+		marginRight: '10px'
 	}
 });
 
@@ -92,7 +95,7 @@ export const DocumentsListPage = withStyles(styles)(props => {
 											</TableCell>
 											<TableCell> {renderExpiryDate(entry)} </TableCell>
 											<TableCell>
-												<ViewIcon />
+												<ViewIcon className={classes.viewIcon} />
 												<RefreshIcon />
 											</TableCell>
 										</TableRow>
