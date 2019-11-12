@@ -237,7 +237,12 @@ storiesOf('Corporate/Wizard', module)
 	));
 
 storiesOf('Corporate/Members', module).add('Add Member', () => (
-	<CorporateAddMember positions={corporatePositionsLLC} />
+	<CorporateAddMember
+		entityTypes={entityTypes}
+		jurisdictions={legalJurisdictions}
+		positions={corporatePositionsLLC}
+		onFieldChange={name => action(`field change ${name}:`)}
+	/>
 ));
 storiesOf('Corporate/Members/Components', module)
 	.add('Individual Member Form', () => (
@@ -247,7 +252,10 @@ storiesOf('Corporate/Members/Components', module)
 	))
 	.add('Entity Member Form', () => (
 		<div style={{ width: '1140px' }}>
-			<CorporateMemberEntityForm jurisdictions={legalJurisdictions} />
+			<CorporateMemberEntityForm
+				jurisdictions={legalJurisdictions}
+				entityTypes={entityTypes}
+			/>
 		</div>
 	))
 	.add('Parent & Shares Form', () => (
@@ -262,6 +270,9 @@ storiesOf('Corporate/Members/Components', module)
 	))
 	.add('Select Type', () => (
 		<div style={{ width: '720px' }}>
-			<CorporateMemberSelectType />
+			<CorporateMemberSelectType
+				selected={'corporate'}
+				onTypeChange={action(`type changed`)}
+			/>
 		</div>
 	));

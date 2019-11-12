@@ -46,11 +46,11 @@ const styles = theme => ({
 });
 
 export const TOCPopup = withStyles(styles)(props => {
-	const { classes, onBackClick, onDisagreeClick, onAgreeClick } = props;
+	const { classes, onBack, onDisagree, onAgree } = props;
 
 	return (
 		<div className={classes.container}>
-			<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
+			<CloseButtonIcon onClick={onBack} className={classes.closeIcon} />
 			<div className={classes.containerHeader}>
 				<Typography variant="h2" className="region">
 					Terms of Service
@@ -108,11 +108,11 @@ export const TOCPopup = withStyles(styles)(props => {
 						className={classes.requestBtn}
 						variant="contained"
 						size="large"
-						onClick={onAgreeClick}
+						onClick={onAgree}
 					>
 						I agree to the terms of service
 					</Button>
-					<Button variant="outlined" size="large" onClick={onDisagreeClick}>
+					<Button variant="outlined" size="large" onClick={onDisagree}>
 						I don’t agree
 					</Button>
 				</div>

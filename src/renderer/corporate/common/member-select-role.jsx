@@ -1,19 +1,14 @@
 import React from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import {
-	DirectorIcon,
-	// ChartIcon,
-	ProfileIcon
-	// CompanyIcon
-} from 'selfkey-ui';
+import { DirectorIcon, ObserverIcon, MemberIcon, SignatureIcon, ProtectionIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	title: {
 		marginTop: '12px'
 	},
-	icon: {
-		marginRight: '15px'
+	selectionBoxTitle: {
+		marginLeft: '15px'
 	},
 	selectionBoxHeader: {
 		backgroundColor: '#293743',
@@ -36,7 +31,7 @@ const styles = theme => ({
 		margin: '0 15px',
 		width: '200px',
 		minHeight: '158px',
-		'& input, & input': {
+		'& input': {
 			opacity: 0
 		},
 		'& input + label::after': {
@@ -61,7 +56,8 @@ const styles = theme => ({
 		'& input + label': {
 			'& > div': {
 				border: '2px solid #1D505F',
-				cursor: 'pointer'
+				cursor: 'pointer',
+				height: '90%'
 			}
 		},
 		'& input:checked + label': {
@@ -75,6 +71,27 @@ const styles = theme => ({
 		marginTop: '15px'
 	}
 });
+
+const RoleIcon = ({ role }) => {
+	switch (role) {
+		case 'director':
+		case 'manager':
+		case 'grantor':
+		case 'founder':
+		case 'generalPartner':
+			return <DirectorIcon />;
+		case 'member':
+			return <MemberIcon />;
+		case 'observer':
+			return <ObserverIcon />;
+		case 'protector':
+			return <ProtectionIcon />;
+		case 'authorizedSignatory':
+			return <SignatureIcon />;
+		default:
+			return <MemberIcon />;
+	}
+};
 
 const CorporateMemberSelectRoleComponent = withStyles(styles)(props => {
 	const { classes, positions } = props;
@@ -98,8 +115,13 @@ const CorporateMemberSelectRoleComponent = withStyles(styles)(props => {
 							<label htmlFor={`role_${idx}`}>
 								<div className={classes.selectionBoxHeader}>
 									<div>
-										<DirectorIcon className={classes.icon} />
-										<Typography variant="body2">{p.title}</Typography>
+										<RoleIcon role={p.position} />
+										<Typography
+											variant="body2"
+											className={classes.selectionBoxTitle}
+										>
+											{p.title}
+										</Typography>
 									</div>
 									<Typography
 										variant="subtitle2"

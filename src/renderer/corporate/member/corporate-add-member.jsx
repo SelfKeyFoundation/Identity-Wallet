@@ -5,11 +5,7 @@ import {
 	ModalCloseIcon,
 	ModalHeader,
 	ModalBody,
-	StyledButton,
-	DirectorIcon,
-	// ChartIcon,
-	ProfileIcon
-	// CompanyIcon
+	StyledButton
 } from 'selfkey-ui';
 import { Grid, Modal, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -60,13 +56,15 @@ const styles = theme => ({
 
 class CorporateAddMemberComponent extends PureComponent {
 	state = {
-		type: false
+		type: 'individual'
 	};
 
 	render() {
 		const {
+			onContinueClick,
+			onCancelClick,
+			isDisabled,
 			classes,
-			jurisdictions,
 			positions = [],
 			types = [
 				{
@@ -83,7 +81,7 @@ class CorporateAddMemberComponent extends PureComponent {
 		return (
 			<Modal open={true}>
 				<ModalWrap>
-					<ModalCloseButton onClick={this.closeAction}>
+					<ModalCloseButton onClick={this.onCancelClick}>
 						<ModalCloseIcon style={{ marginTop: '20px' }} />
 					</ModalCloseButton>
 					<ModalHeader>
@@ -94,7 +92,7 @@ class CorporateAddMemberComponent extends PureComponent {
 						</Grid>
 					</ModalHeader>
 					<ModalBody>
-						<form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+						<form noValidate>
 							<Grid
 								container
 								direction="column"
@@ -108,29 +106,25 @@ class CorporateAddMemberComponent extends PureComponent {
 								<CorporateMemberSelectType
 									types={types}
 									onTypeChange={type => this.setState({ type })}
+									selected={this.state.type}
 								/>
 
 								<div className={classes.memberForm}>
 									{this.state.type === 'individual' && (
 										<>
 											<hr className={`${classes.hr} ${classes.hrInternal}`} />
-											<CorporateMemberIndividualForm
-												jurisdictions={jurisdictions}
-											/>
-											<hr className={`${classes.hr} ${classes.hrInternal}`} />
-											<CorporateMemberSharesForm />
+											<CorporateMemberIndividualForm {...this.props} />
 										</>
 									)}
 									{this.state.type === 'corporate' && (
 										<>
 											<hr className={`${classes.hr} ${classes.hrInternal}`} />
-											<CorporateMemberEntityForm
-												jurisdictions={jurisdictions}
+											<CorporateMemberEntityForm {...this.props} />
 											/>
-											<hr className={`${classes.hr} ${classes.hrInternal}`} />
-											<CorporateMemberSharesForm />
 										</>
 									)}
+									<hr className={`${classes.hr} ${classes.hrInternal}`} />
+									<CorporateMemberSharesForm {...this.props} />
 								</div>
 								<hr className={classes.hr} />
 
@@ -140,12 +134,8 @@ class CorporateAddMemberComponent extends PureComponent {
 										variant="contained"
 										size="large"
 										type="submit"
-										disabled={
-											!this.state.label ||
-											!this.state.address ||
-											hasAddressError ||
-											hasLabelError
-										}
+										onClick={onContinueClick}
+										disabled={isDisabled}
 									>
 										Continue
 									</StyledButton>
@@ -153,7 +143,7 @@ class CorporateAddMemberComponent extends PureComponent {
 										id="cancelButton"
 										variant="outlined"
 										size="large"
-										onClick={this.closeAction}
+										onClick={onCancelClick}
 									>
 										Cancel
 									</StyledButton>

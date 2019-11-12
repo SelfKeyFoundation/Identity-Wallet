@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import urljoin from 'url-join';
 import { bufferFromDataUrl } from 'common/utils/document';
 import { identityAttributes } from '../../common/identity/utils';
+import { featureIsEnabled } from 'common/feature-flags';
 import { Logger } from 'common/logger';
 
 const log = new Logger('relying-party');
@@ -287,6 +288,9 @@ export class RelyingPartyRest {
 		});
 	}
 	static getKYCApplication(ctx, id) {
+		if (featureIsEnabled('kyccUsersEndpoint')) {
+			log.warn('KYCC users feature is not implemented yet');
+		}
 		let url = ctx.getEndpoint('/applications/:id');
 		url = url.replace(':id', id);
 		return request.get({

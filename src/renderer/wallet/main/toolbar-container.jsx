@@ -74,7 +74,7 @@ class ToolbarContainer extends PureComponent {
 }
 
 export default connect(state => ({
-	profiles: identitySelectors.selectAllIdentities(state) || [],
-	selectedProfile: identitySelectors.selectCurrentIdentity(state) || {},
+	profiles: identitySelectors.selectIdentities(state) || [],
+	selectedProfile: identitySelectors.selectIdentity(state) || {},
 	wallet: walletSelectors.getWallet(state)
 }))(ToolbarContainer);

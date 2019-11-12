@@ -47,10 +47,9 @@ class CreateAttributeContainerComponent extends PureComponent {
 
 const mapStateToProps = (state, props) => {
 	return {
-		types: identitySelectors.selectIdAttributeTypes(
-			state,
-			props.corporate ? 'corporate' : 'individual'
-		),
+		types: identitySelectors.selectAttributeTypesFiltered(state, {
+			entityType: props.corporate ? 'corporate' : 'individual'
+		}),
 		uiSchemas: identitySelectors.selectUiSchemas(state)
 	};
 };

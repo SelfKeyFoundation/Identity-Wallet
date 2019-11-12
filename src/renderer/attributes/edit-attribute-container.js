@@ -29,11 +29,10 @@ const mapStateToProps = (state, props) => {
 	const { attribute } = props;
 	let uiSchema = null;
 	if (attribute) {
-		uiSchema = identitySelectors.selectUiSchema(
-			state,
-			attribute.type.id,
-			attribute.type.defaultRepositoryId
-		);
+		uiSchema = identitySelectors.selectUiSchema(state, {
+			typeId: attribute.type.id,
+			repositoryId: attribute.type.defaultRepositoryId
+		});
 	}
 	return {
 		uiSchema

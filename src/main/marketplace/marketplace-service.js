@@ -18,7 +18,7 @@ export class MarketplaceService {
 	}
 
 	get identity() {
-		return identitySelectors.selectCurrentIdentity(this.store.getState());
+		return identitySelectors.selectIdentity(this.store.getState());
 	}
 
 	get walletAddress() {

@@ -1,6 +1,5 @@
 import React from 'react';
 import { SmallRoundCompany, SmallRoundPerson } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core/styles';
 
 const getEntityIcon = entry => {
 	if (entry.entity.type === 'individual') {

@@ -44,14 +44,14 @@ export const didSelectors = {
 	selectAssociateError: state => didSelectors.selectDIDTree(state).associateError,
 	isPending: (state, identityId) => !!didSelectors.selectDIDTree(state).pending[identityId],
 	isCurrentIdentityPending: state => {
-		const identity = identitySelectors.selectCurrentIdentity(state);
+		const identity = identitySelectors.selectIdentity(state);
 		return didSelectors.isPending(state, identity.id);
 	}
 };
 
 const createDIDOperation = () => async (dispatch, getState) => {
 	const walletFromStore = walletSelectors.getWallet(getState());
-	let identity = identitySelectors.selectCurrentIdentity(getState());
+	let identity = identitySelectors.selectIdentity(getState());
 	const didOriginUrl = didSelectors.selectOriginUrl(getState());
 	try {
 		let hardwalletConfirmationTimeout = null;
@@ -118,7 +118,7 @@ const startAssociateDidFlowOperation = didOriginUrl => async (dispatch, getState
 const updateDIDOperation = did => async (dispatch, getState) => {
 	try {
 		const walletFromStore = walletSelectors.getWallet(getState());
-		let identity = identitySelectors.selectCurrentIdentity(getState());
+		let identity = identitySelectors.selectIdentity(getState());
 		const DIDService = getGlobalContext().didService;
 		const controllerAddress = await DIDService.getControllerAddress(did);
 		if (walletFromStore.address.toLowerCase() === controllerAddress.toLowerCase()) {

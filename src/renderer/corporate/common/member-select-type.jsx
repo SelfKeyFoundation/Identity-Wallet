@@ -1,19 +1,14 @@
 import React from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import {
-	DirectorIcon,
-	// ChartIcon,
-	ProfileIcon
-	// CompanyIcon
-} from 'selfkey-ui';
+import { ProfileIcon, CompanyIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	title: {
 		marginTop: '12px'
 	},
-	icon: {
-		marginRight: '15px'
+	selectionBoxTitle: {
+		marginLeft: '15px'
 	},
 	selectionBoxHeader: {
 		backgroundColor: '#293743',
@@ -76,6 +71,14 @@ const styles = theme => ({
 	}
 });
 
+const EntityIcon = ({ type }) => {
+	if (type === 'corporate') {
+		return <CompanyIcon height="35px" width="40px" viewBox="0 0 35 40" />;
+	} else {
+		return <ProfileIcon height="35px" width="40px" viewBox="0 0 35 40" />;
+	}
+};
+
 const CorporateMemberSelectTypeComponent = withStyles(styles)(props => {
 	const {
 		classes,
@@ -89,7 +92,8 @@ const CorporateMemberSelectTypeComponent = withStyles(styles)(props => {
 				value: 'corporate'
 			}
 		],
-		onTypeChange
+		onTypeChange,
+		selected
 	} = props;
 	return (
 		<Grid container direction="column" spacing={8}>
@@ -107,18 +111,19 @@ const CorporateMemberSelectTypeComponent = withStyles(styles)(props => {
 								id={`type_${idx}`}
 								name="type"
 								value={t.value}
-								onClick={() => onTypeChange(t.value)}
+								onChange={() => onTypeChange(t.value)}
+								defaultChecked={selected === t.value}
 							/>
 							<label htmlFor={`type_${idx}`}>
 								<div className={classes.selectionBoxHeader}>
 									<div>
-										<ProfileIcon
-											height="35px"
-											width="40px"
-											viewBox="0 0 35 40"
-											className={classes.icon}
-										/>
-										<Typography variant="body2">{t.title}</Typography>
+										<EntityIcon type={`${t.value}`} />
+										<Typography
+											variant="body2"
+											className={classes.selectionBoxTitle}
+										>
+											{t.title}
+										</Typography>
 									</div>
 								</div>
 							</label>
