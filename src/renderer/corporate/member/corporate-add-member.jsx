@@ -8,12 +8,16 @@ import {
 	StyledButton,
 	DirectorIcon,
 	// ChartIcon,
-	ProfileIcon,
-	CompanyIcon
+	ProfileIcon
+	// CompanyIcon
 } from 'selfkey-ui';
-import { Grid, Modal, Typography, Input, Select, MenuItem } from '@material-ui/core';
-import { KeyboardArrowDown } from '@material-ui/icons';
+import { Grid, Modal, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { CorporateMemberIndividualForm } from '../common/member-individual-form';
+import { CorporateMemberEntityForm } from '../common/member-entity-form';
+import { CorporateMemberSharesForm } from '../common/member-shares-form';
+import { CorporateMemberSelectRole } from '../common/member-select-role';
+import { CorporateMemberSelectType } from '../common/member-select-type';
 
 const styles = theme => ({
 	errorText: {
@@ -29,14 +33,6 @@ const styles = theme => ({
 		border: '2px solid #FE4B61 !important',
 		backgroundColor: 'rgba(255,46,99,0.09) !important'
 	},
-	input: {
-		height: '46px',
-		width: '722px',
-		'&::-webkit-input-placeholder': {
-			fontSize: '14px',
-			color: '#93B0C1'
-		}
-	},
 	inputError: {
 		borderBottom: '2px solid #FE4B61 !important'
 	},
@@ -46,30 +42,16 @@ const styles = theme => ({
 		fontWeight: 'bold',
 		lineHeight: '15px'
 	},
-	inputBox: {
-		marginBottom: '35px',
-		width: '47%'
-	},
-	optional: {
-		display: 'inline',
-		fontStyle: 'italic',
-		marginLeft: '5px',
-		textTransform: 'lowercase'
-	},
-	shareInput: {
-		maxWidth: '160px',
-		marginRight: '10px',
-		'& input': {
-			textAlign: 'right'
-		}
-	},
 	hr: {
 		backgroundColor: '#303C49',
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
-		margin: '40px 0',
+		marginBottom: '0',
 		width: '100%'
+	},
+	hrInternal: {
+		marginBottom: '20px'
 	},
 	title: {
 		marginTop: '12px'
@@ -77,7 +59,7 @@ const styles = theme => ({
 	icon: {
 		marginRight: '15px'
 	},
-	radiobox: {
+	selectionBoxHeader: {
 		backgroundColor: '#293743',
 		borderRadius: '4px',
 		boxSizing: 'border-box',
@@ -85,20 +67,23 @@ const styles = theme => ({
 		minWidth: '215px',
 		padding: '25px',
 		'& > div': {
-			display: 'flex'
+			display: 'flex',
+			alignItems: 'center',
+			flexWrap: 'nowrap',
+			wordBreak: 'break-word'
 		}
 	},
-	radioBoxContainer: {
+	selectionBoxContainer: {
 		margin: '10px 0 40px'
 	},
-	radio: {
+	input: {
 		margin: '0 15px',
 		width: '200px',
 		minHeight: '158px',
-		'& input[type="checkbox"]': {
+		'& input, & input': {
 			opacity: 0
 		},
-		'& input[type="checkbox"] + label::after': {
+		'& input + label::after': {
 			content: 'none'
 		},
 		'& label::before': {
@@ -117,47 +102,54 @@ const styles = theme => ({
 			borderBottom: '2px solid',
 			transform: 'rotate(-45deg)'
 		},
-		'& input[type="checkbox"] + label': {
-			'& div': {
+		'& input + label': {
+			'& > div': {
 				border: '2px solid #1D505F',
 				cursor: 'pointer'
 			}
 		},
-		'& input[type="checkbox"]:checked + label': {
-			'& div': {
+		'& input:checked + label': {
+			'& > div': {
 				border: '2px solid #1CA9BA',
 				cursor: 'pointer'
 			}
+		}
+	},
+	selectionBoxDescription: {
+		marginTop: '15px'
+	},
+	memberForm: {
+		width: '100%'
+	},
+	formActionArea: {
+		marginTop: '20px',
+		'& button': {
+			marginRight: '1em'
 		}
 	}
 });
 
 class CorporateAddMemberComponent extends PureComponent {
 	state = {
-		error: '',
-		errorEmail: false,
-		nickName: '',
-		firstName: '',
-		lastName: '',
-		email: '',
-		isDisabled: true
-	};
-
-	handleEmailChange = event => {
-		this.setState({ email: event.target.value }, () => {
-			let valid = this.isValidEmail(this.state.email);
-			this.setState({ errorEmail: !valid }, () => {
-				this.isDisabled();
-			});
-		});
+		type: false
 	};
 
 	render() {
-		const { classes, labelError, addressError } = this.props;
-		const hasLabelError = labelError !== '' && labelError !== undefined;
-		const hasAddressError = addressError !== '' && addressError !== undefined;
-
-		const { positions } = this.props;
+		const {
+			classes,
+			jurisdictions,
+			positions = [],
+			types = [
+				{
+					title: 'Individual',
+					value: 'individual'
+				},
+				{
+					title: 'Legal Entity',
+					value: 'corporate'
+				}
+			]
+		} = this.props;
 
 		return (
 			<Modal open={true}>
@@ -182,527 +174,61 @@ class CorporateAddMemberComponent extends PureComponent {
 								spacing={0}
 								xs={12}
 							>
-								<Grid spacing={0}>
-									<Grid container direction="column" spacing={8}>
-										<Grid item>
-											<Typography
-												variant="body1"
-												align="center"
-												className={classes.title}
-											>
-												Select one or multiple roles
-											</Typography>
-										</Grid>
-										<Grid item>
-											<Grid
-												container
-												justify="center"
-												className={classes.radioBoxContainer}
-											>
-												{positions &&
-													positions.map((p, idx) => (
-														<div
-															key={`role_${idx}`}
-															className={classes.radio}
-														>
-															<input
-																type="checkbox"
-																id={`role_${idx}`}
-																name="roles[]"
-															/>
-															<label htmlFor={`role_${idx}`}>
-																<Grid className={classes.radiobox}>
-																	<div>
-																		<DirectorIcon
-																			className={classes.icon}
-																		/>
-																		<Typography variant="body2">
-																			{p.position}
-																		</Typography>
-																	</div>
-																	<Typography
-																		variant="subtitle2"
-																		color="secondary"
-																		style={{
-																			marginTop: '15px'
-																		}}
-																	>
-																		{p.description}
-																	</Typography>
-																</Grid>
-															</label>
-														</div>
-													))}
-											</Grid>
-										</Grid>
-									</Grid>
-								</Grid>
-								<Grid
-									spacing={0}
-									style={{
-										width: '100%'
-									}}
-								>
-									<Grid container direction="column" spacing={8}>
-										<Grid item>
-											<Typography variant="body1" align="center">
-												Type
-											</Typography>
-										</Grid>
-										<Grid item>
-											<Grid
-												container
-												justify="center"
-												className={classes.radioContainer}
-											>
-												<div className={classes.radio}>
-													<input type="radio" id="radio_3" name="type" />
-													<label htmlFor="radio_3">
-														<Grid
-															container
-															alignItems="center"
-															className={classes.radiobox}
-														>
-															<ProfileIcon
-																height="35px"
-																width="40px"
-																viewBox="0 0 35 40"
-																className={classes.icon}
-															/>
-															<Typography variant="body2">
-																Individual
-															</Typography>
-														</Grid>
-													</label>
-												</div>
-												<div className={classes.radio}>
-													<input type="radio" id="radio_4" name="type" />
-													<label htmlFor="radio_4">
-														<Grid
-															container
-															alignItems="center"
-															className={classes.radiobox}
-														>
-															<CompanyIcon className={classes.icon} />
-															<Typography variant="body2">
-																Legal Entity
-															</Typography>
-														</Grid>
-													</label>
-												</div>
-											</Grid>
-										</Grid>
-									</Grid>
-								</Grid>
+								<CorporateMemberSelectRole positions={positions} />
+
+								<CorporateMemberSelectType
+									types={types}
+									onTypeChange={type => this.setState({ type })}
+								/>
+
+								<div className={classes.memberForm}>
+									{this.state.type === 'individual' && (
+										<>
+											<hr className={`${classes.hr} ${classes.hrInternal}`} />
+											<CorporateMemberIndividualForm
+												jurisdictions={jurisdictions}
+											/>
+											<hr className={`${classes.hr} ${classes.hrInternal}`} />
+											<CorporateMemberSharesForm />
+										</>
+									)}
+									{this.state.type === 'corporate' && (
+										<>
+											<hr className={`${classes.hr} ${classes.hrInternal}`} />
+											<CorporateMemberEntityForm
+												jurisdictions={jurisdictions}
+											/>
+											<hr className={`${classes.hr} ${classes.hrInternal}`} />
+											<CorporateMemberSharesForm />
+										</>
+									)}
+								</div>
 								<hr className={classes.hr} />
-								<Grid
-									item
-									spacing={0}
-									style={{
-										width: '100%'
-									}}
-								>
-									<Grid
-										container
-										direction="column"
-										spacing={0}
-										justify="flex-start"
-										alignItems="flex-start"
-										xs={12}
+
+								<div className={classes.formActionArea}>
+									<StyledButton
+										id="saveButton"
+										variant="contained"
+										size="large"
+										type="submit"
+										disabled={
+											!this.state.label ||
+											!this.state.address ||
+											hasAddressError ||
+											hasLabelError
+										}
 									>
-										<Grid
-											item
-											spacing={0}
-											style={{
-												width: '100%'
-											}}
-										>
-											<Grid
-												container
-												direction="column"
-												spacing={0}
-												justify="flex-start"
-												alignItems="flex-start"
-											>
-												<Grid
-													container
-													direction="row"
-													justify="space-between"
-													wrap="nowrap"
-													xs={12}
-												>
-													<Grid
-														container
-														direction="column"
-														className={classes.inputBox}
-													>
-														<Grid item>
-															<Typography
-																variant="overline"
-																gutterBottom
-															>
-																First Name
-															</Typography>
-														</Grid>
-														<Grid item>
-															<Input
-																id="firstName"
-																fullWidth
-																required
-																onChange={
-																	this.handleFirstNameChange
-																}
-																placeholder="First Name"
-															/>
-														</Grid>
-													</Grid>
-													<Grid
-														container
-														direction="column"
-														className={classes.inputBox}
-													>
-														<Grid item>
-															<Typography
-																variant="overline"
-																gutterBottom
-															>
-																Last Name
-															</Typography>
-														</Grid>
-														<Grid item>
-															<Input
-																id="lastName"
-																fullWidth
-																required
-																onChange={
-																	this.handleFirstNameChange
-																}
-																placeholder="Family Name"
-															/>
-														</Grid>
-													</Grid>
-												</Grid>
-												<Grid
-													container
-													direction="row"
-													justify="space-between"
-													wrap="nowrap"
-													xs={12}
-												>
-													<Grid
-														container
-														direction="column"
-														className={classes.inputBox}
-													>
-														<Grid item>
-															<Typography
-																variant="overline"
-																gutterBottom
-															>
-																Citizenship
-															</Typography>
-														</Grid>
-														<Grid item>
-															<Select
-																value="Entity Type"
-																onChange=""
-																displayEmpty
-																name="entitytype"
-																disableUnderline
-																IconComponent={KeyboardArrowDown}
-																input={<Input disableUnderline />}
-																style={{
-																	width: '100%'
-																}}
-															>
-																<MenuItem value="">
-																	<em>Choose...</em>
-																</MenuItem>
-																{[
-																	'Entity Type 1',
-																	'Entity Type 2',
-																	'Entity Type 3',
-																	'Entity Type 4',
-																	'Entity Type 5'
-																].map(item => (
-																	<MenuItem
-																		key={item}
-																		value={item}
-																	>
-																		{item}
-																	</MenuItem>
-																))}
-															</Select>
-														</Grid>
-													</Grid>
-													<Grid
-														container
-														direction="column"
-														className={classes.inputBox}
-													>
-														<Grid item>
-															<Typography
-																variant="overline"
-																gutterBottom
-																className={classes.idNickname}
-															>
-																Residency
-															</Typography>
-														</Grid>
-														<Grid item>
-															<Select
-																value="Value"
-																onChange=""
-																displayEmpty
-																name="jurisdiction"
-																disableUnderline
-																IconComponent={KeyboardArrowDown}
-																input={
-																	<Input
-																		disableUnderline
-																		placeholder="Choose..."
-																	/>
-																}
-																style={{
-																	width: '100%'
-																}}
-															>
-																<MenuItem value="">
-																	<em>Choose...</em>
-																</MenuItem>
-																{[
-																	'Jurisdiction 1',
-																	'Jurisdiction 2',
-																	'Jurisdiction 3',
-																	'Jurisdiction 4',
-																	'Jurisdiction 5'
-																].map(item => (
-																	<MenuItem
-																		key={item}
-																		value={item}
-																	>
-																		{item}
-																	</MenuItem>
-																))}
-															</Select>
-														</Grid>
-													</Grid>
-												</Grid>
-												<Grid
-													container
-													direction="row"
-													justify="space-between"
-													wrap="nowrap"
-													xs={12}
-												>
-													<Grid
-														container
-														direction="column"
-														className={classes.inputBox}
-													>
-														<Grid item>
-															<Typography
-																variant="overline"
-																gutterBottom
-															>
-																Email
-															</Typography>
-														</Grid>
-														<Grid item>
-															<Input
-																id="email"
-																fullWidth
-																type="email"
-																error={this.state.errorEmail}
-																required
-																onChange={this.handleEmailChange}
-																placeholder="Email"
-															/>
-															{this.state.errorEmail && (
-																<Typography
-																	variant="subtitle2"
-																	color="error"
-																	gutterBottom
-																>
-																	{'Email provided is invalid'}
-																</Typography>
-															)}
-														</Grid>
-													</Grid>
-													<Grid
-														container
-														direction="column"
-														className={classes.inputBox}
-													>
-														<Grid item>
-															<Typography
-																variant="overline"
-																gutterBottom
-															>
-																Phone
-																<Typography
-																	variant="overline"
-																	className={classes.optional}
-																>
-																	(optional)
-																</Typography>
-															</Typography>
-														</Grid>
-														<Grid item>
-															<Input
-																id="phone"
-																fullWidth
-																type="number"
-																error={this.state.errorEmail}
-																required
-																onChange={this.handleEmailChange}
-																placeholder="Phone number"
-															/>
-															{this.state.errorEmail && (
-																<Typography
-																	variant="subtitle2"
-																	color="error"
-																	gutterBottom
-																>
-																	{'Phone number is invalid'}
-																</Typography>
-															)}
-														</Grid>
-													</Grid>
-												</Grid>
-												<Grid
-													container
-													direction="row"
-													justify="space-between"
-													wrap="nowrap"
-													xs={12}
-												>
-													<Grid
-														container
-														direction="column"
-														className={classes.inputBox}
-													>
-														<Grid item>
-															<Typography
-																variant="overline"
-																gutterBottom
-															>
-																Shares owned
-															</Typography>
-														</Grid>
-														<Grid item>
-															<Grid
-																container
-																direction="row"
-																wrap="nowrap"
-																alignItems="center"
-															>
-																<Input
-																	id="shares"
-																	fullWidth
-																	type="number"
-																	error={this.state.errorEmail}
-																	required
-																	onChange={
-																		this.handleEmailChange
-																	}
-																	placeholder="0"
-																	className={classes.shareInput}
-																/>
-																<Typography variant="body1">
-																	%
-																</Typography>
-															</Grid>
-															{this.state.errorEmail && (
-																<Typography
-																	variant="subtitle2"
-																	color="error"
-																	gutterBottom
-																>
-																	{'You can use only numbers'}
-																</Typography>
-															)}
-														</Grid>
-													</Grid>
-												</Grid>
-												<Grid
-													container
-													direction="row"
-													justify="space-between"
-													wrap="nowrap"
-													xs={12}
-												>
-													<Grid container direction="column">
-														<Grid item>
-															<Typography
-																variant="overline"
-																gutterBottom
-															>
-																Selfkey DID
-																<Typography
-																	variant="overline"
-																	className={classes.optional}
-																>
-																	(optional)
-																</Typography>
-															</Typography>
-														</Grid>
-														<Grid item>
-															<Input
-																id="did"
-																fullWidth
-																type="text"
-																error={this.state.errorEmail}
-																required
-																onChange={this.handleEmailChange}
-																placeholder="did:selfkey:"
-															/>
-															{this.state.errorEmail && (
-																<Typography
-																	variant="subtitle2"
-																	color="error"
-																	gutterBottom
-																>
-																	{'DID is invalid'}
-																</Typography>
-															)}
-														</Grid>
-													</Grid>
-												</Grid>
-											</Grid>
-										</Grid>
-									</Grid>
-								</Grid>
-							</Grid>
-							<Grid item style={{ marginTop: '60px' }}>
-								<Grid container direction="row">
-									<Grid item style={{ marginRight: '20px' }}>
-										<StyledButton
-											id="saveButton"
-											variant="contained"
-											size="large"
-											type="submit"
-											disabled={
-												!this.state.label ||
-												!this.state.address ||
-												hasAddressError ||
-												hasLabelError
-											}
-										>
-											Continue
-										</StyledButton>
-									</Grid>
-									<Grid item>
-										<StyledButton
-											id="cancelButton"
-											variant="outlined"
-											size="large"
-											onClick={this.closeAction}
-										>
-											Cancel
-										</StyledButton>
-									</Grid>
-								</Grid>
+										Continue
+									</StyledButton>
+									<StyledButton
+										id="cancelButton"
+										variant="outlined"
+										size="large"
+										onClick={this.closeAction}
+									>
+										Cancel
+									</StyledButton>
+								</div>
 							</Grid>
 						</form>
 					</ModalBody>

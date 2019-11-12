@@ -597,8 +597,12 @@ export const corporateMembers = [
 ];
 
 export const corporatePositionsLLC = [
-	{ position: 'member', description: 'Member description' },
-	{ position: 'ubo', description: 'ubo description' },
-	{ position: 'observer', description: 'observer description' },
-	{ position: 'authorizedSignatory', description: 'authorizedSignatory description' }
+	{ position: 'member', title: 'Member', description: 'Member description' },
+	{ position: 'ubo', title: 'UBO', description: 'ubo description' },
+	{ position: 'observer', title: 'Observer', description: 'observer description' },
+	{
+		position: 'authorizedSignatory',
+		title: 'Authorized Signatory',
+		description: 'authorizedSignatory description'
+	}
 ];
