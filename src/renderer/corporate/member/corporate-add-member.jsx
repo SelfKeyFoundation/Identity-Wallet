@@ -36,12 +36,6 @@ const styles = theme => ({
 	inputError: {
 		borderBottom: '2px solid #FE4B61 !important'
 	},
-	label: {
-		color: '#93A4AF',
-		fontSize: '12px',
-		fontWeight: 'bold',
-		lineHeight: '15px'
-	},
 	hr: {
 		backgroundColor: '#303C49',
 		border: 'none',
@@ -52,71 +46,6 @@ const styles = theme => ({
 	},
 	hrInternal: {
 		marginBottom: '20px'
-	},
-	title: {
-		marginTop: '12px'
-	},
-	icon: {
-		marginRight: '15px'
-	},
-	selectionBoxHeader: {
-		backgroundColor: '#293743',
-		borderRadius: '4px',
-		boxSizing: 'border-box',
-		maxWidth: '280px',
-		minWidth: '215px',
-		padding: '25px',
-		'& > div': {
-			display: 'flex',
-			alignItems: 'center',
-			flexWrap: 'nowrap',
-			wordBreak: 'break-word'
-		}
-	},
-	selectionBoxContainer: {
-		margin: '10px 0 40px'
-	},
-	input: {
-		margin: '0 15px',
-		width: '200px',
-		minHeight: '158px',
-		'& input, & input': {
-			opacity: 0
-		},
-		'& input + label::after': {
-			content: 'none'
-		},
-		'& label::before': {
-			content: '',
-			display: 'inline-block',
-			height: '16px',
-			width: '16px',
-			border: '1px solid'
-		},
-		'& label::after': {
-			content: '',
-			display: 'inline-block',
-			height: '6px',
-			width: '9px',
-			borderLeft: '2px solid',
-			borderBottom: '2px solid',
-			transform: 'rotate(-45deg)'
-		},
-		'& input + label': {
-			'& > div': {
-				border: '2px solid #1D505F',
-				cursor: 'pointer'
-			}
-		},
-		'& input:checked + label': {
-			'& > div': {
-				border: '2px solid #1CA9BA',
-				cursor: 'pointer'
-			}
-		}
-	},
-	selectionBoxDescription: {
-		marginTop: '15px'
 	},
 	memberForm: {
 		width: '100%'
