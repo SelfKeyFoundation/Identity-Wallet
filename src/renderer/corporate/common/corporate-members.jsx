@@ -146,7 +146,7 @@ const CorporateMembers = withStyles(styles)(props => {
 												}
 											/>
 										</TableCell>
-										<TableCell>{getEntityIcon(entry.type)}</TableCell>
+										<TableCell>{getEntityIcon(entry)}</TableCell>
 										<TableCell>
 											<Typography variant="h6">
 												{getEntityName(entry)}
