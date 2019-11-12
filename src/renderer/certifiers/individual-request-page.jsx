@@ -15,18 +15,14 @@ import {
 	Grid
 } from '@material-ui/core';
 import {
-	BackButton,
 	success,
 	warning,
 	typography,
 	error,
 	SimpleCheckIcon,
 	SimpleDeniedIcon,
-	AttributeAlertLargeIcon,
 	SimpleHourglassIcon,
-	KeyTooltip,
-	TooltipArrow,
-	NewRefreshIcon
+	HourGlassIcon
 } from 'selfkey-ui';
 import DocumentsList from './common/documents-list-container';
 
@@ -96,6 +92,14 @@ const styles = theme => ({
 	},
 	required: {
 		marginTop: '30px'
+	},
+	currentStatus: {
+		alignItems: 'center',
+		display: 'flex',
+		justifyContent: 'flex-end',
+		'& svg': {
+			marginRight: '5px !important'
+		}
 	}
 });
 
@@ -232,29 +236,28 @@ const StatusInfo = withStyles(statusInfoStyle)(
 		switch (status) {
 			case 2:
 				icon = <SimpleCheckIcon className={classes.statusIcon} />;
-				message =
-					'Application completed. Please check your email to receive relevant documents and information.';
+				message = 'Notarization Completed';
+				button = (
+					<Button variant="contained" size="large" onClick={onClick} disabled={loading}>
+						{loading ? 'Loading' : 'View Notarization Process'}
+					</Button>
+				);
 				break;
 			case 3:
 			case 7:
 			case 8:
 				icon = <SimpleDeniedIcon className={classes.statusIcon} />;
-				message = 'Application denied. Please check your email for the reject reason.';
+				message = 'Application denied.';
 				statusStyle = 'denied';
-				break;
-			case 9:
-				icon = <AttributeAlertLargeIcon className={classes.statusIcon} />;
-				message = 'Application pending. Missing required documents.';
-				button = (
-					<Button variant="contained" size="large" onClick={onClick} disabled={loading}>
-						{loading ? 'Loading' : 'Complete Application'}
-					</Button>
-				);
-				statusStyle = 'required';
 				break;
 			default:
 				icon = <SimpleHourglassIcon className={classes.statusIcon} />;
-				message = 'Application started. Please check your email for further instructions.';
+				message = 'Application started. Documents submitted. Start notarization.';
+				button = (
+					<Button variant="contained" size="large" onClick={onClick} disabled={loading}>
+						{loading ? 'Loading' : 'Start Notarization'}
+					</Button>
+				);
 				statusStyle = 'submitted';
 				break;
 		}
@@ -279,28 +282,6 @@ const StatusInfo = withStyles(statusInfoStyle)(
 							</Typography>
 						</Grid>
 						<Grid item>{button || <span />}</Grid>
-						<Grid item style={{ height: '23px' }}>
-							{status !== 2 && (
-								<KeyTooltip
-									interactive
-									placement="top-start"
-									title={
-										<React.Fragment>
-											<span>{tooltip}</span>
-											<TooltipArrow />
-										</React.Fragment>
-									}
-								>
-									<span
-										className={classes.refresh}
-										onClick={handleRefresh}
-										disabled={loading}
-									>
-										<NewRefreshIcon />
-									</span>
-								</KeyTooltip>
-							)}
-						</Grid>
 					</Grid>
 				</Grid>
 			</div>
@@ -308,41 +289,23 @@ const StatusInfo = withStyles(statusInfoStyle)(
 	}
 );
 
-const item = [
-	{
-		applicationDate: '2019-11-07T12:10:37.655Z',
-		createdAt: 1573128638021,
-		currentStatus: 4,
-		currentStatusName: 'In Progress',
-		id: '5dc409bd39ba9cb7b55e6f89',
-		identityId: '1',
-		nextRoute: null,
-		owner: null,
-		payments: {
-			amount: 0.25,
-			amountKey: '118.19742389097111764263',
-			date: 1573133063725,
-			status: 'Sent KEY',
-			transactionHash: '0xb44e698e2afa54f3a8600547300bcb734254fa357664fd5e02bf9bd371abff38'
-		},
-		rpName: 'flagtheory_banking',
-		scope: null,
-		sub_title: null,
-		title: 'Bank Account in Belize',
-		updatedAt: 1573205235431,
-		walletId: null
-	}
-];
-
 export const IndividualRequestPage = withStyles(styles)(props => {
-	const { classes, documents, did, firstName, lastName, handleBackClick } = props;
-
-	console.log('llllaaaa laaaa');
-	console.log(props);
-
+	const { classes, item, documents, did, firstName, lastName, handleBackClick } = props;
 	return (
-		<React.Fragment>
-			<BackButton onclick={handleBackClick} />
+		<div>
+			<div className={classes.backButtonContainer}>
+				<Button
+					id="backToMarketplace"
+					variant="outlined"
+					color="secondary"
+					size="small"
+					onClick={handleBackClick}
+				>
+					<Typography variant="subtitle2" color="secondary" className={classes.bold}>
+						‹ Back
+					</Typography>
+				</Button>
+			</div>
 			<div className={classes.container}>
 				<div className={classes.containerHeader}>
 					<div className={classes.identity}>
@@ -350,10 +313,15 @@ export const IndividualRequestPage = withStyles(styles)(props => {
 							{firstName} {lastName}
 						</Typography>
 						<Typography className={classes.did} variant="subtitle2" color="secondary">
-							- {did}
+							- did:selfkey:{did}
 						</Typography>
 					</div>
-					<div>status</div>
+					<div className={classes.currentStatus}>
+						<HourGlassIcon />
+						<Typography variant="subtitle2" color="secondary">
+							{item.currentStatusName}
+						</Typography>
+					</div>
 				</div>
 				<div className={classes.contentContainer}>
 					<StatusInfo
@@ -387,7 +355,7 @@ export const IndividualRequestPage = withStyles(styles)(props => {
 					</div>
 				</div>
 			</div>
-		</React.Fragment>
+		</div>
 	);
 });
 
