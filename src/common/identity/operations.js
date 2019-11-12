@@ -149,7 +149,7 @@ const lockIdentityOperation = identityId => async (dispatch, getState) => {
 const unlockIdentityOperation = identityId => async (dispatch, getState) => {
 	const state = getState();
 	if (!identityId) {
-		const identities = identitySelectors.selectAllIdentities(state);
+		const identities = identitySelectors.selectIdentities(state);
 		const defaultIdentity =
 			identities.find(ident => ident.default || ident.type === 'individual') || identities[0];
 
