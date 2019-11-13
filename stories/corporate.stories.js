@@ -17,11 +17,11 @@ import { CorporateWizard } from '../src/renderer/corporate/wizard/corporate-wiza
 import { CorporateDocuments } from '../src/renderer/corporate/common/corporate-documents';
 import { CorporateMembers } from '../src/renderer/corporate/common/corporate-members';
 import { CorporateAddMember } from '../src/renderer/corporate/member/corporate-add-member';
-import { CorporateMemberIndividualForm } from '../src/renderer/corporate/common/member-individual-form';
-import { CorporateMemberEntityForm } from '../src/renderer/corporate/common/member-entity-form';
-import { CorporateMemberSharesForm } from '../src/renderer/corporate/common/member-shares-form';
-import { CorporateMemberSelectRole } from '../src/renderer/corporate/common/member-select-role';
-import { CorporateMemberSelectType } from '../src/renderer/corporate/common/member-select-type';
+import { CorporateMemberIndividualForm } from '../src/renderer/corporate/member/member-individual-form';
+import { CorporateMemberEntityForm } from '../src/renderer/corporate/member/member-entity-form';
+import { CorporateMemberSharesForm } from '../src/renderer/corporate/member/member-shares-form';
+import { CorporateMemberSelectRole } from '../src/renderer/corporate/member/member-select-role';
+import { CorporateMemberSelectType } from '../src/renderer/corporate/member/member-select-type';
 
 import {
 	dummyProfile,

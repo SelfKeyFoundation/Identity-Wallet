@@ -10,8 +10,7 @@ import { identityOperations, identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
 
-/*
-const commonFields = ['shares', 'position', 'type', 'did'];
+const commonFields = ['shares', 'positions', 'type', 'did'];
 const corporateFields = [
 	'jurisdiction',
 	'taxId',
@@ -20,15 +19,25 @@ const corporateFields = [
 	'entityName',
 	'creationDate'
 ];
-const individualFields = ['firstName', 'lastName', 'citizenship', 'residency', 'email', 'phone'];
-*/
-const fields = [];
+const individualFields = [
+	'firstName',
+	'lastName',
+	'nationality',
+	'country',
+	'email',
+	'phoneNumber'
+];
 
 class CorporateAddMemberContainer extends PureComponent {
 	state = {
-		errors: { hasErrors: false }
-		// TODO: validate fields
+		errors: { hasErrors: false },
+		type: 'individual'
 	};
+
+	selectFields = type =>
+		type === 'individual'
+			? [...commonFields, ...individualFields]
+			: [...commonFields, ...corporateFields];
 
 	handleFieldChange = name => evt => {
 		let value = evt;
@@ -54,6 +63,29 @@ class CorporateAddMemberContainer extends PureComponent {
 		});
 	}
 
+	validateAttributeType = type => {
+		return ['individual', 'corporate'].includes(type);
+	};
+
+	validateAttributePositions = selectedPositions => {
+		const acceptablePositions = this.props.positions.map(p => p.position);
+		let isError = false;
+		if (!selectedPositions || selectedPositions.size === 0) {
+			return false;
+		}
+		selectedPositions.forEach(p => {
+			isError = isError || !acceptablePositions.includes(p);
+		});
+		return !isError;
+	};
+
+	validateAttributeShares = shares => {
+		const number = parseInt(shares);
+		return !isNaN(number) && number >= 0 && number <= 100;
+	};
+
+	validateAttributeDid = did => true;
+
 	validateAllAttributes(attrs) {
 		const errorText = {
 			email: 'Email provided is invalid',
@@ -61,15 +93,32 @@ class CorporateAddMemberContainer extends PureComponent {
 			entityName: 'Please enter an entity name',
 			entityType: 'Please select a entity type',
 			creationDate: 'Please enter company creation date',
-			taxId: 'Tax id provided is invalid'
+			taxId: 'Tax id provided is invalid',
+			type: 'Invalid member type',
+			positions: 'Invalid position',
+			country: 'Please select Residency',
+			nationality: 'Please select Nationality',
+			firstName: 'Please enter your first Name',
+			lastName: 'Please enter your last Name',
+			phoneNumber: 'Invalid phone number',
+			shares: 'Shares must be between 0 and 100'
 		};
 		if (!attrs) {
+			const fields = this.selectFields(this.state.type);
 			attrs = fields.map(name => ({ name, value: this.state[name] }));
 		}
 		const errors = attrs.reduce(
 			(acc, curr) => {
 				const { name, value } = curr;
-				const isError = !this.isValidAttribute(name, value);
+				let isError;
+
+				if (['type', 'positions', 'shares', 'did'].includes(name)) {
+					const functionName =
+						'validateAttribute' + (name.charAt(0).toUpperCase() + name.substring(1));
+					isError = !this[functionName](value);
+				} else {
+					isError = !this.isValidAttribute(name, value);
+				}
 
 				if (isError) {
 					acc[name] = errorText[name];
@@ -79,15 +128,14 @@ class CorporateAddMemberContainer extends PureComponent {
 			},
 			{ hasErrors: false }
 		);
-
 		return errors;
 	}
 
 	isValidAttribute(name, value) {
-		const { basicAttributeTypes } = this.props;
-		const type = basicAttributeTypes[name];
+		const { basicCorporateAttributeTypes, basicIndividualAttributeTypes } = this.props;
+		const type = basicCorporateAttributeTypes[name] || basicIndividualAttributeTypes[name];
 		if (!type || !type.content) {
-			throw new Error('Not a basic attribute');
+			throw new Error(`${name} is not a basic attribute`);
 		}
 
 		if (!value) {
@@ -105,6 +153,8 @@ class CorporateAddMemberContainer extends PureComponent {
 		if (errors.hasErrors) {
 			return this.setErrors(errors);
 		}
+
+		const fields = this.selectFields(this.state.type);
 
 		this.props.dispatch(
 			identityOperations.addCorporateMemberOperation({
@@ -124,12 +174,12 @@ class CorporateAddMemberContainer extends PureComponent {
 	}
 
 	render() {
-		console.log(this.props);
 		const membersForm = _.pick(this.state, 'errors');
 		return (
 			<CorporateAddMember
 				{...this.props}
 				{...membersForm}
+				selectedType={this.state.type}
 				isDisabled={this.isDisabled()}
 				onFieldChange={this.handleFieldChange}
 				onContinueClick={this.handleContinueClick}
@@ -140,14 +190,16 @@ class CorporateAddMemberContainer extends PureComponent {
 }
 
 const mapStateToProps = (state, props) => {
-	const profile = identitySelectors.selectCorporateProfile(state, {
-		identityId: props.match.params.identityId
-	});
+	const identityId = props.match.params.identityId;
+	const profile = identitySelectors.selectCorporateProfile(state, { identityId });
 
 	return {
-		basicCorporateAttributeTypes: identitySelectors.selectBasicCorporateAttributeTypes(state),
-		basicIndividualAttributeTypes: identitySelectors.selectAttributeTypesFiltered(state),
+		identityId,
 		profile,
+		basicCorporateAttributeTypes: identitySelectors.selectBasicCorporateAttributeTypes(state),
+		basicIndividualAttributeTypes: identitySelectors.selectBasicIndividualMemberAttributeTypes(
+			state
+		),
 		walletType: appSelectors.selectWalletType(state),
 		jurisdictions: identitySelectors.selectCorporateJurisdictions(state),
 		entityTypes: identitySelectors.selectCorporateLegalEntityTypes(state),

@@ -16,6 +16,10 @@ export const CREATION_DATE_ATTRIBUTE =
 	'http://platform.selfkey.org/schema/attribute/incorporation-date.json';
 export const TAX_ID_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/tax-id-number.json';
 export const ADDRESS_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/address.json';
+export const NATIONALITY_ATTRIBUTE =
+	'http://platform.selfkey.org/schema/attribute/nationality.json';
+export const PHONE_NUMBER_ATTRIBUTE =
+	'http://platform.selfkey.org/schema/attribute/phone-number.json';
 
 export const BASIC_ATTRIBUTES = {
 	[FIRST_NAME_ATTRIBUTE]: 1,
@@ -24,6 +28,15 @@ export const BASIC_ATTRIBUTES = {
 	[EMAIL_ATTRIBUTE]: 1,
 	[COUNTRY_ATTRIBUTE]: 1,
 	[ADDRESS_ATTRIBUTE]: 1
+};
+
+export const CORPORATE_MEMBER_BASIC_ATTRIBUTES = {
+	[FIRST_NAME_ATTRIBUTE]: 1,
+	[LAST_NAME_ATTRIBUTE]: 1,
+	[EMAIL_ATTRIBUTE]: 1,
+	[COUNTRY_ATTRIBUTE]: 1,
+	[NATIONALITY_ATTRIBUTE]: 1,
+	[PHONE_NUMBER_ATTRIBUTE]: 1
 };
 
 export const BASIC_CORPORATE_ATTRIBUTES = {

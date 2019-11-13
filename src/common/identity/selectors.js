@@ -7,6 +7,7 @@ import { CorporateStructureSchema } from './corporate-structure-schema';
 import {
 	BASIC_CORPORATE_ATTRIBUTES,
 	BASIC_ATTRIBUTES,
+	CORPORATE_MEMBER_BASIC_ATTRIBUTES,
 	EMAIL_ATTRIBUTE,
 	FIRST_NAME_ATTRIBUTE,
 	LAST_NAME_ATTRIBUTE,
@@ -16,7 +17,10 @@ import {
 	TAX_ID_ATTRIBUTE,
 	ENTITY_NAME_ATTRIBUTE,
 	CREATION_DATE_ATTRIBUTE,
-	CORPORATE_STRUCTURE
+	CORPORATE_STRUCTURE,
+	COUNTRY_ATTRIBUTE,
+	NATIONALITY_ATTRIBUTE,
+	PHONE_NUMBER_ATTRIBUTE
 } from './constants';
 
 const createRootSelector = rootKey => (...fields) => state => _.pick(state[rootKey], fields);
@@ -381,6 +385,44 @@ export const selectBasicCorporateAttributeTypes = createSelector(
 					case JURISDICTION_ATTRIBUTE:
 						acc.jurisdiction = curr;
 						curr.required = true;
+						return acc;
+					default:
+						return acc;
+				}
+			}, {})
+);
+
+export const selectBasicIndividualMemberAttributeTypes = createSelector(
+	state => selectAttributeTypesFiltered(state, { entityType: 'individual' }),
+	individualTypes =>
+		individualTypes
+			.filter(t => CORPORATE_MEMBER_BASIC_ATTRIBUTES[t.url])
+			.reduce((acc, curr) => {
+				curr = { ...curr };
+				switch (curr.url) {
+					case EMAIL_ATTRIBUTE:
+						acc.email = curr;
+						curr.required = true;
+						return acc;
+					case FIRST_NAME_ATTRIBUTE:
+						acc.firstName = curr;
+						curr.required = true;
+						return acc;
+					case LAST_NAME_ATTRIBUTE:
+						acc.lastName = curr;
+						curr.required = true;
+						return acc;
+					case COUNTRY_ATTRIBUTE:
+						acc.country = curr;
+						curr.required = true;
+						return acc;
+					case NATIONALITY_ATTRIBUTE:
+						acc.nationality = curr;
+						curr.required = true;
+						return acc;
+					case PHONE_NUMBER_ATTRIBUTE:
+						acc.phoneNumber = curr;
+						curr.required = false;
 						return acc;
 					default:
 						return acc;

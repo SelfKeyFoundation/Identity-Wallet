@@ -94,7 +94,6 @@ const CorporateMembers = withStyles(styles)(props => {
 		members = [],
 		selectedEntity = false
 	} = props;
-	console.log(selectedEntity);
 	return (
 		<Card className={classes.card}>
 			<CardHeader title="Entity Membership" className={classes.regularText} />
