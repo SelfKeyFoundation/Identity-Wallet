@@ -5,6 +5,7 @@ import NotarizationDetailsPage from '../src/renderer/marketplace/notarization/de
 import RequestNotarizationPage from '../src/renderer/marketplace/notarization/process/request-notarization-page';
 import TOCPopup from '../src/renderer/marketplace/notarization/common/toc-popup';
 import TOCDisagreementPopup from '../src/renderer/marketplace/notarization/common/toc-disagreement-popup';
+import NotarizationMessageContainer from '../src/renderer/marketplace/notarization/common/message-container';
 
 const documents = [
 	{
@@ -82,10 +83,39 @@ storiesOf('Notarization/Popups', module)
 		/>
 	));
 
-storiesOf('Notarization', module).add('Request Notarization', () => (
-	<RequestNotarizationPage
-		documents={documents}
-		onBackClick={linkTo('Notarization/Tabs', 'types')}
-		onStartClick={linkTo('Notarization/Popups', 'toc')}
-	/>
-));
+const messagesReply = [
+	{
+		id: 809598767582156,
+		name: 'John Paul',
+		type: 'person',
+		date: 1569504593,
+		message:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam dictum ullamcorper purus sit amet convallis. Quisque congue augue quam, dignissim aliquam lorem dignissim ac.'
+	},
+	{
+		id: 2348767582156,
+		name: 'Smith Jhonson Certifier',
+		type: 'certifier',
+		date: 2234104593,
+		message:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam dictum ullamcorper purus sit amet convallis. Quisque congue augue quam, dignissim aliquam lorem dignissim ac.  '
+	},
+	{
+		id: 2348767582156,
+		name: 'Smith Jhonson Certifier',
+		type: 'certifier',
+		date: 2234104593,
+		message:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam dictum ullamcorper purus sit amet convallis. Quisque congue augue quam, dignissim aliquam lorem dignissim ac.  '
+	}
+];
+
+storiesOf('Notarization', module)
+	.add('Request Notarization', () => (
+		<RequestNotarizationPage
+			documents={documents}
+			onBackClick={linkTo('Notarization/Tabs', 'types')}
+			onStartClick={linkTo('Notarization/Popups', 'toc')}
+		/>
+	))
+	.add('Messages', () => <NotarizationMessageContainer messages={messagesReply} />);
