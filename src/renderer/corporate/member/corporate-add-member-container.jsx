@@ -10,6 +10,18 @@ import { identityOperations, identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
 
+/*
+const commonFields = ['shares', 'position', 'type', 'did'];
+const corporateFields = [
+	'jurisdiction',
+	'taxId',
+	'entityType',
+	'email',
+	'entityName',
+	'creationDate'
+];
+const individualFields = ['firstName', 'lastName', 'citizenship', 'residency', 'email', 'phone'];
+*/
 const fields = [];
 
 class CorporateAddMemberContainer extends PureComponent {
@@ -112,8 +124,8 @@ class CorporateAddMemberContainer extends PureComponent {
 	}
 
 	render() {
+		console.log(this.props);
 		const membersForm = _.pick(this.state, 'errors');
-
 		return (
 			<CorporateAddMember
 				{...this.props}
@@ -128,19 +140,18 @@ class CorporateAddMemberContainer extends PureComponent {
 }
 
 const mapStateToProps = (state, props) => {
+	const profile = identitySelectors.selectCorporateProfile(state, {
+		identityId: props.match.params.identityId
+	});
+
 	return {
-		basicAttributeTypes: identitySelectors.selectBasicCorporateAttributeTypes(state),
-		basicIdentity: identitySelectors.selectCorporateProfile(state, {
-			identityId: props.match.params.identityId
-		}),
+		basicCorporateAttributeTypes: identitySelectors.selectBasicCorporateAttributeTypes(state),
+		basicIndividualAttributeTypes: identitySelectors.selectAttributeTypesFiltered(state),
+		profile,
 		walletType: appSelectors.selectWalletType(state),
 		jurisdictions: identitySelectors.selectCorporateJurisdictions(state),
 		entityTypes: identitySelectors.selectCorporateLegalEntityTypes(state),
-		// FIXME: load company type from props
-		positions: identitySelectors.selectPositionsForCompanyType(
-			state,
-			'Company Limited by Shares (LTD)'
-		)
+		positions: identitySelectors.selectPositionsForCompanyType(state, profile.entityType)
 	};
 };
 
