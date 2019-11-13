@@ -263,7 +263,7 @@ const createCorporateProfileOperation = data => async (dispatch, getState) => {
 
 		await dispatch(identityOperations.updateIdentitySetupOperation(true, identity.id));
 		await dispatch(identityOperations.unlockIdentityOperation(identity.id));
-		await dispatch(push('/main/corporate-dashboard'));
+		await dispatch(push('/main/corporate'));
 	} catch (error) {
 		log.error('failed to create corporate identity %s', error);
 	}
@@ -347,9 +347,9 @@ const navigateToProfileOperation = () => async (dispatch, getState) => {
 	}
 
 	if (identity.isSetupFinished) {
-		return dispatch(push('/main/corporate-dashboard'));
+		return dispatch(push('/main/corporate'));
 	}
-	return dispatch(push(`/main/${identity.id}/setup-corporate-profile`));
+	return dispatch(push(`/main/corporate/setup-corporate-profile/${identity.id}`));
 };
 
 export const operations = {

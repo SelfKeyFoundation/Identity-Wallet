@@ -33,7 +33,7 @@ class ToolbarContainer extends PureComponent {
 
 	createCorporateProfile = evt => {
 		this.toggleProfile(!this.state.isProfileOpen);
-		this.props.dispatch(push('/main/create-corporate-profile'));
+		this.props.dispatch(push('/main/corporate/create-corporate-profile'));
 	};
 
 	handleProfileSelect = identity => evt => {
