@@ -1,4 +1,5 @@
 import sinon from 'sinon';
+import _ from 'lodash';
 import { setGlobalContext } from '../context';
 import {
 	identityActions,
@@ -36,7 +37,7 @@ describe('Identity Duck', () => {
 	const testAction = { test: 'test' };
 	beforeEach(() => {
 		sinon.restore();
-		state = { identity: { ...initialState } };
+		state = { identity: _.cloneDeep(initialState) };
 		setGlobalContext({ identityService: identityService });
 	});
 	describe('Identity', () => {
@@ -86,6 +87,29 @@ describe('Identity Duck', () => {
 				expect(
 					identityOperations.loadDocumentsOperation.calledOnceWith(testWalletId)
 				).toBeTruthy();
+			});
+		});
+		describe('selectors', () => {
+			beforeEach(() => {
+				state.identity.identities = [1, 2];
+				state.identity.identitiesById = {
+					1: { id: 1, type: 'individual' },
+					2: { id: 2, type: 'individual' },
+					3: { id: 3, type: 'individual' }
+				};
+			});
+			it('selectIdentity', () => {
+				expect(identitySelectors.selectIdentity(state)).toBeUndefined();
+				expect(
+					identitySelectors.selectIdentity(state, { identityId: 3, type: 'individual' })
+				).toEqual({ id: 3, type: 'individual' });
+			});
+			it('selectIdentity current', () => {
+				state.identity.currentIdentity = 3;
+				expect(identitySelectors.selectIdentity(state)).toEqual({
+					id: 3,
+					type: 'individual'
+				});
 			});
 		});
 	});
