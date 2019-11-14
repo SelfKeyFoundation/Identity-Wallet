@@ -195,7 +195,7 @@ export class LWSService {
 			conn.addIdentity(publicKey, identity);
 			payload.unlocked = true;
 			payload.hasSelfkeyId = ident.isSetupFinished;
-			if (config.did) {
+			if (config.did !== false) {
 				payload.did = identity.did || null;
 			}
 			payload.name = wallet.name;

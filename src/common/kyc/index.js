@@ -7,6 +7,12 @@ import config from 'common/config';
 import { createAliasedAction } from 'electron-redux';
 import uuidv1 from 'uuid/v1';
 import { Logger } from 'common/logger';
+import {
+	EMAIL_ATTRIBUTE,
+	ENTITY_NAME_ATTRIBUTE,
+	FIRST_NAME_ATTRIBUTE,
+	LAST_NAME_ATTRIBUTE
+} from '../identity/constants';
 
 export const RP_UPDATE_INTERVAL = 1000 * 60 * 60 * 3; // 3h
 const log = new Logger('kyc-duck');
@@ -186,6 +192,33 @@ export const kycSelectors = {
 			}
 			return finalAttr;
 		});
+	},
+	selectKYCUserData(state, identityId) {
+		const attributes = identitySelectors.selectAttributesByUrl(state, {
+			identityId,
+			attributeTypeUrls: [
+				EMAIL_ATTRIBUTE,
+				ENTITY_NAME_ATTRIBUTE,
+				FIRST_NAME_ATTRIBUTE,
+				LAST_NAME_ATTRIBUTE
+			]
+		});
+
+		const attrData = attributes.reduce((acc, curr) => {
+			if (acc[curr.type.ur]) return acc;
+			acc[curr.type.url] = curr.data.value;
+			return acc;
+		}, {});
+
+		const data = {
+			email: attrData[EMAIL_ATTRIBUTE],
+			name: attrData[ENTITY_NAME_ATTRIBUTE]
+		};
+
+		if (!data.name) {
+			data.name = `${attrData[FIRST_NAME_ATTRIBUTE]} ${attrData[LAST_NAME_ATTRIBUTE]}`;
+		}
+		return data;
 	},
 	selectCurrentApplication(state) {
 		return this.kycSelector(state).currentApplication;
@@ -434,6 +467,10 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 
 	attributes = kycSelectors.selectKYCAttributes(getState(), identity.id, attributes);
 	try {
+		if (rp.session.ctx.hasKYCUserEndpoint() && !rp.session.ctx.user) {
+			const userData = kycSelectors.selectKYCUserData(getState(), identity.id);
+			await rp.session.createKYCUser(userData);
+		}
 		let application = await rp.session.createKYCApplication(templateId, attributes);
 		application = await rp.session.getKYCApplication(application.id);
 		await dispatch(kycActions.addKYCApplication(rpName, application));
