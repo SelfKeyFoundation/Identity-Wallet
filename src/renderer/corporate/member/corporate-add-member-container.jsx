@@ -63,29 +63,6 @@ class CorporateAddMemberContainer extends PureComponent {
 		});
 	}
 
-	validateAttributeType = type => {
-		return ['individual', 'corporate'].includes(type);
-	};
-
-	validateAttributePositions = selectedPositions => {
-		const acceptablePositions = this.props.positions.map(p => p.position);
-		let isError = false;
-		if (!selectedPositions || selectedPositions.size === 0) {
-			return false;
-		}
-		selectedPositions.forEach(p => {
-			isError = isError || !acceptablePositions.includes(p);
-		});
-		return !isError;
-	};
-
-	validateAttributeShares = shares => {
-		const number = parseInt(shares);
-		return !isNaN(number) && number >= 0 && number <= 100;
-	};
-
-	validateAttributeDid = did => true;
-
 	validateAllAttributes(attrs) {
 		const errorText = {
 			email: 'Email provided is invalid',
@@ -110,16 +87,7 @@ class CorporateAddMemberContainer extends PureComponent {
 		const errors = attrs.reduce(
 			(acc, curr) => {
 				const { name, value } = curr;
-				let isError;
-
-				if (['type', 'positions', 'shares', 'did'].includes(name)) {
-					const functionName =
-						'validateAttribute' + (name.charAt(0).toUpperCase() + name.substring(1));
-					isError = !this[functionName](value);
-				} else {
-					isError = !this.isValidAttribute(name, value);
-				}
-
+				const isError = !this.isValidAttribute(name, value);
 				if (isError) {
 					acc[name] = errorText[name];
 					acc.hasErrors = true;
@@ -134,6 +102,18 @@ class CorporateAddMemberContainer extends PureComponent {
 	isValidAttribute(name, value) {
 		const { basicCorporateAttributeTypes, basicIndividualAttributeTypes } = this.props;
 		const type = basicCorporateAttributeTypes[name] || basicIndividualAttributeTypes[name];
+
+		switch (name) {
+			case 'type':
+				return this.validateAttributeType(value);
+			case 'shares':
+				return this.validateAttributeShares(value);
+			case 'did':
+				return this.validateAttributeDid(value);
+			case 'positions':
+				return true;
+		}
+
 		if (!type || !type.content) {
 			throw new Error(`${name} is not a basic attribute`);
 		}
@@ -144,6 +124,29 @@ class CorporateAddMemberContainer extends PureComponent {
 
 		return identityAttributes.validate(type.content, value, []);
 	}
+
+	validateAttributeType = type => {
+		return ['individual', 'corporate'].includes(type);
+	};
+
+	validateAttributePositions = selectedPositions => {
+		const acceptablePositions = this.props.positions.map(p => p.position);
+		let isError = false;
+		if (!selectedPositions || selectedPositions.size === 0) {
+			return false;
+		}
+		selectedPositions.forEach(p => {
+			isError = isError || !acceptablePositions.includes(p);
+		});
+		return !isError;
+	};
+
+	validateAttributeShares = shares => {
+		const number = parseInt(shares);
+		return !isNaN(number) && number >= 0 && number <= 100;
+	};
+
+	validateAttributeDid = did => true;
 
 	handleContinueClick = evt => {
 		evt && evt.preventDefault();
