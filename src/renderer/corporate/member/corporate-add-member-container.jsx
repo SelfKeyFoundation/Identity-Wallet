@@ -50,6 +50,14 @@ class CorporateAddMemberContainer extends PureComponent {
 		delete stateErrors[name];
 		const errors = this.validateAllAttributes([{ name, value }]);
 
+		console.log({ name, value });
+
+		if (name === 'positions' && value) {
+			value = this.filterAcceptablePositions(Array.from(value));
+		}
+
+		console.log({ name, value });
+
 		this.setState({
 			[name]: value
 		});
@@ -147,6 +155,9 @@ class CorporateAddMemberContainer extends PureComponent {
 	};
 
 	validateAttributeDid = did => true;
+
+	filterAcceptablePositions = positions =>
+		positions.filter(p => this.props.positions.map(pos => pos.position).includes(p));
 
 	handleContinueClick = evt => {
 		evt && evt.preventDefault();
