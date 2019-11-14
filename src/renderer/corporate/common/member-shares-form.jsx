@@ -108,6 +108,7 @@ const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 							onChange={onFieldChange('parentCompany')}
 							name="parentCompany"
 							error={errors.parentCompany}
+							value={parentCompany}
 							disableUnderline
 							IconComponent={KeyboardArrowDown}
 							input={<Input disableUnderline />}
@@ -118,12 +119,6 @@ const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 							<MenuItem key={parentIdentity.id} value={parentIdentity.id}>
 								{parentIdentity.entityName}
 							</MenuItem>
-
-							{/*companies.map(item => (
-								<MenuItem key={item} value={item}>
-									{item}
-								</MenuItem>
-							)) */}
 						</Select>
 						{errors.parentCompany && (
 							<Typography variant="subtitle2" color="error" gutterBottom>
