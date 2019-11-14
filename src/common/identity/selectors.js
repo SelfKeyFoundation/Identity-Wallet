@@ -355,6 +355,14 @@ export const selectNonBasicDocumentAttributes = createSelector(
 		nonBasicAttributes.filter(attr => jsonSchema.containsFile(attr.type.content))
 );
 
+export const selectAttributesByUrl = createSelector(
+	selectFullIdAttributesByIds,
+	selectProps('attributeTypeUrls'),
+	(attributes, { attributeTypeUrls = [] }) => {
+		attributes.filter(attr => attributeTypeUrls.includes(attr.type.url));
+	}
+);
+
 export const selectBasicAttributeInfo = attribute =>
 	createSelector(
 		() => attribute,
