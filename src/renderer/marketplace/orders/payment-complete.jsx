@@ -1,7 +1,8 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
-import { CloseButtonIcon, HourGlassLargeIcon } from 'selfkey-ui';
+import { HourGlassLargeIcon } from 'selfkey-ui';
+import { Popup } from '../../common';
 
 const styles = theme => ({
 	container: {
@@ -37,6 +38,9 @@ const styles = theme => ({
 	icon: {
 		width: '120px'
 	},
+	iconWrap: {
+		paddingLeft: '10px'
+	},
 	content: {
 		width: 'calc(100% - 120px)'
 	},
@@ -71,55 +75,32 @@ const styles = theme => ({
 export const MarketplacePaymentComplete = withStyles(styles)(props => {
 	const { classes, email, onBackClick, onContinueClick } = props;
 	return (
-		<div className={classes.container}>
-			<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
-			<Grid
-				container
-				justify="flex-start"
-				alignItems="flex-start"
-				className={classes.containerHeader}
-			>
-				<Typography variant="body2" gutterBottom className="region">
-					Payment Received
-				</Typography>
-			</Grid>
-			<div className={classes.contentContainer}>
-				<Grid
-					container
-					justify="flex-start"
-					alignItems="flex-start"
-					className={classes.content}
-				>
-					<div className={classes.icon}>
-						<HourGlassLargeIcon />
-					</div>
-					<div className={classes.content}>
-						<div className={classes.description}>
-							<Typography variant="h1" gutterBottom>
-								Payment complete!
-							</Typography>
-							<Typography variant="body2" gutterBottom>
-								Please click the continue button to continue the process. If you
-								have any questions in the meantime, you can reach us at:
-							</Typography>
-							<Typography
-								variant="body2"
-								color="primary"
-								gutterBottom
-								className="email"
-							>
-								{email}
-							</Typography>
-						</div>
-						<div className={classes.footer}>
-							<Button variant="contained" size="large" onClick={onContinueClick}>
-								Continue
-							</Button>
-						</div>
-					</div>
+		<Popup closeAction={onBackClick} open text="Payment Received">
+			<Grid container direction="row" justify="flex-start" alignItems="flex-start">
+				<Grid item xs={2} className={classes.iconWrap}>
+					<HourGlassLargeIcon />
 				</Grid>
-			</div>
-		</div>
+				<div className={classes.content}>
+					<div className={classes.description}>
+						<Typography variant="h1" gutterBottom>
+							Payment Complete!
+						</Typography>
+						<Typography variant="body2" gutterBottom>
+							Please click the continue button to continue the process. If you have
+							any questions in the meantime, you can reach us at:
+						</Typography>
+						<Typography variant="body2" color="primary" gutterBottom className="email">
+							{email}
+						</Typography>
+					</div>
+					<div className={classes.footer}>
+						<Button variant="contained" size="large" onClick={onContinueClick}>
+							Continue
+						</Button>
+					</div>
+				</div>
+			</Grid>
+		</Popup>
 	);
 });
 
