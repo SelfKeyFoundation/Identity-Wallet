@@ -107,8 +107,9 @@ export class IdAttribute extends BaseModel {
 		return this.query().where({ identityId, env });
 	}
 
-	static async delete(id) {
-		const tx = await transaction.start(this.knex());
+	static async delete(id, tx) {
+		const initiator = !tx;
+		tx = tx || (await transaction.start(this.knex()));
 		try {
 			let attr = await this.query(tx)
 				.findById(id)
@@ -116,10 +117,14 @@ export class IdAttribute extends BaseModel {
 			// TODO: fix for multiple documents
 			if (attr.documents) await Promise.all(attr.documents.map(d => d.$query(tx).delete()));
 			await attr.$query(tx).delete();
-			await tx.commit();
+			if (initiator) {
+				await tx.commit();
+			}
 			return attr;
 		} catch (error) {
-			await tx.rollback();
+			if (initiator) {
+				await tx.rollback();
+			}
 			throw error;
 		}
 	}
