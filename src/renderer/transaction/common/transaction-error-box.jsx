@@ -19,14 +19,12 @@ export const TransactionErrorBox = withStyles(styles)(
 						{address && (
 							<>
 								<Divider />
-								<Typography variant="body1">Your Address:</Typography>
-								<Grid container direction="row">
-									<Grid item>
-										<Typography variant="subtitle2">{address}</Typography>
-									</Grid>
-									<Grid item>
-										<Copy text={address} />
-									</Grid>
+								<Typography variant="body1" color="secondary">
+									Your Address:
+								</Typography>
+								<Grid container alignItems="center">
+									<Typography variant="body1">{address}</Typography>
+									<Copy text={address} />
 								</Grid>
 							</>
 						)}
