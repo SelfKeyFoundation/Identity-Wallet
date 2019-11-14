@@ -4,6 +4,7 @@ import { withStyles, Typography } from '@material-ui/core';
 
 const styles = theme => ({
 	bodyText: {
+		marginBottom: '30px',
 		textAlign: 'justify'
 	},
 	learnMoreText: {
@@ -23,8 +24,10 @@ export const TransactionNoKeyError = withStyles(styles)(
 		return (
 			<TransactionErrorBox address={address} closeAction={closeAction}>
 				<div className={classes.bodyText}>
+					<Typography variant="caption" gutterBottom>
+						You do not have enough KEY tokens to pay for this marketplace application.
+					</Typography>
 					<Typography variant="body1">
-						You do not have enough KEY tokens to pay for this Marketplace Application.
 						Please transfer some KEY to this address and try again. Your KEY address of
 						this wallet is listed below.
 					</Typography>
