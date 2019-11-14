@@ -89,10 +89,7 @@ class CorporateDashboardContainer extends PureComponent {
 					onAddDocument={this.handleAddDocument}
 					onEditDocument={this.handleEditAttribute}
 					onDeleteDocument={this.handleDeleteAttribute}
-					onAddMember={this.handleAddMember}
-					didComponent={
-						<RegisterDidCardContainer returnPath={'/main/corporate-dashboard'} />
-					}
+					didComponent={<RegisterDidCardContainer returnPath={'/main/corporate'} />}
 				/>
 			</React.Fragment>
 		);

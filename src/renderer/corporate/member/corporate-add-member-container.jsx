@@ -148,4 +148,6 @@ const mapStateToProps = (state, props) => {
 };
 
 const styledComponent = withStyles(styles)(CorporateAddMemberContainer);
-export default connect(mapStateToProps)(styledComponent);
+const connectedComponent = connect(mapStateToProps)(styledComponent);
+export { connectedComponent as CorporateAddMemberContainer };
+export default connectedComponent;

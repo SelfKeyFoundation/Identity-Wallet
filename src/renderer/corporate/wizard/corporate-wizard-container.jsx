@@ -165,6 +165,6 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-export const CorporateWizardContainer = connect(mapStateToProps)(CorporateWizardContainerComponent);
-
-export default CorporateWizardContainer;
+const connectedComponent = connect(mapStateToProps)(CorporateWizardContainerComponent);
+export { connectedComponent as CorporateWizardContainer };
+export default connectedComponent;
