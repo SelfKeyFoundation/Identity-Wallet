@@ -43,7 +43,7 @@ export class RelyingPartyCtx {
 	}
 	mergeWithConfig() {}
 	supportsDID() {
-		return !!this.config.did;
+		return config.did !== false;
 	}
 	getOrigin() {
 		return this.config.origin || DEFAULT_ORIGIN;
@@ -421,7 +421,7 @@ export class RelyingPartySession {
 			this.ctx.token = token;
 
 			if (this.ctx.hasKYCUserEndpoint()) {
-				this.ctx.user = await RelyingPartyRest.getKYCUser();
+				this.ctx.user = await this.getKYCUser();
 			}
 
 			return token;
