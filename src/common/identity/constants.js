@@ -41,6 +41,9 @@ export const BASIC_CORPORATE_ATTRIBUTES = {
 	[TAX_ID_ATTRIBUTE]: 1
 };
 
+export const CORPORATE_STRUCTURE =
+	'http://platform.selfkey.org/schema/attribute/corporate-structure.json';
+
 export const individualMemberAttributes = [
 	{ key: 'firstName', type: FIRST_NAME_ATTRIBUTE, name: 'First Name', required: true },
 	{ key: 'lastName', type: LAST_NAME_ATTRIBUTE, name: 'Last Name', required: true },
