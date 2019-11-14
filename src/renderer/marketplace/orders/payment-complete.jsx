@@ -80,7 +80,7 @@ export const MarketplacePaymentComplete = withStyles(styles)(props => {
 				<Grid item xs={2} className={classes.iconWrap}>
 					<HourGlassLargeIcon />
 				</Grid>
-				<div className={classes.content}>
+				<Grid item className={classes.content}>
 					<div className={classes.description}>
 						<Typography variant="h1" gutterBottom>
 							Payment Complete!
@@ -98,7 +98,7 @@ export const MarketplacePaymentComplete = withStyles(styles)(props => {
 							Continue
 						</Button>
 					</div>
-				</div>
+				</Grid>
 			</Grid>
 		</Popup>
 	);
