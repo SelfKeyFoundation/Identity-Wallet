@@ -241,6 +241,7 @@ storiesOf('Corporate/Members', module).add('Add Member', () => (
 		entityTypes={entityTypes}
 		jurisdictions={legalJurisdictions}
 		positions={corporatePositionsLLC}
+		parentIdentity={dummyProfile}
 		onFieldChange={name => action(`field change ${name}:`)}
 	/>
 ));
@@ -260,7 +261,7 @@ storiesOf('Corporate/Members/Components', module)
 	))
 	.add('Parent & Shares Form', () => (
 		<div style={{ width: '1140px' }}>
-			<CorporateMemberSharesForm shares={50} />
+			<CorporateMemberSharesForm shares={50} parentIdentity={dummyProfile} />
 		</div>
 	))
 	.add('Select Role', () => (

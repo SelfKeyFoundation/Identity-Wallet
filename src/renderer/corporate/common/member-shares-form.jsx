@@ -89,9 +89,10 @@ const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => 
 const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 	const {
 		classes,
-		companies = [],
+		// companies = [],
 		errors = {},
 		shares,
+		parentIdentity,
 		parentCompany,
 		onFieldChange = () => {},
 		showParentCompany = true
@@ -99,13 +100,13 @@ const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 	return (
 		<div className={`${classes.flexColumn} ${classes.inputContainer}`}>
 			<div className={classes.inputWrap}>
+				{console.log(parentIdentity)}
 				{showParentCompany && (
 					<div className={`${classes.inputBox} ${classes.flexColumn}`}>
 						<InputTitle title="Parent Company" />
 						<Select
 							className={classes.select}
 							onChange={onFieldChange('parentCompany')}
-							value={parentCompany}
 							name="parentCompany"
 							error={errors.parentCompany}
 							disableUnderline
@@ -115,11 +116,15 @@ const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 							<MenuItem value="">
 								<em>Choose...</em>
 							</MenuItem>
-							{companies.map(item => (
+							<MenuItem key={parentIdentity.id} value={parentIdentity.id}>
+								{parentIdentity.entityName}
+							</MenuItem>
+
+							{/*companies.map(item => (
 								<MenuItem key={item} value={item}>
 									{item}
 								</MenuItem>
-							))}
+							)) */}
 						</Select>
 						{errors.parentCompany && (
 							<Typography variant="subtitle2" color="error" gutterBottom>

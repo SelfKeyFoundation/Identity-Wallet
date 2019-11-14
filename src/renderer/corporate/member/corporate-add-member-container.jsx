@@ -128,7 +128,12 @@ class CorporateAddMemberContainer extends PureComponent {
 }
 
 const mapStateToProps = (state, props) => {
+	const parentIdentity = identitySelectors.selectCorporateProfile(state, {
+		identityId: props.match.params.parentId
+	});
+
 	return {
+		parentIdentity,
 		basicAttributeTypes: identitySelectors.selectBasicCorporateAttributeTypes(state),
 		basicIdentity: identitySelectors.selectCorporateProfile(state, {
 			identityId: props.match.params.identityId
@@ -136,11 +141,9 @@ const mapStateToProps = (state, props) => {
 		walletType: appSelectors.selectWalletType(state),
 		jurisdictions: identitySelectors.selectCorporateJurisdictions(state),
 		entityTypes: identitySelectors.selectCorporateLegalEntityTypes(state),
-		// FIXME: load company type from props
-		positions: identitySelectors.selectPositionsForCompanyType(
-			state,
-			'Company Limited by Shares (LTD)'
-		)
+		positions: identitySelectors.selectPositionsForCompanyType(state, {
+			companyType: parentIdentity.profile.entityType
+		})
 	};
 };
 
