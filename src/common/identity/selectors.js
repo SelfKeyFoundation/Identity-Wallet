@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { forceUpdateAttributes } from 'common/config';
-import { createSelector } from 'kashe/reselect';
+import { createSelector } from 'reselect';
 import { jsonSchema, identityAttributes } from './utils';
 import { getWallet } from '../wallet/selectors';
 import { CorporateStructureSchema } from './corporate-structure-schema';

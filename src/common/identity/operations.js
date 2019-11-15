@@ -197,6 +197,9 @@ const unlockIdentityOperation = identityId => async (dispatch, getState) => {
 		throw new Error('could not unlock identity');
 	}
 	const identity = identitySelectors.selectIdentity(state, { identityId });
+	if (!identity) {
+		return;
+	}
 	await dispatch(identityOperations.loadDocumentsOperation(identityId));
 	await dispatch(identityOperations.loadIdAttributesOperation(identityId));
 	if (!identity.rootIdentity) {
