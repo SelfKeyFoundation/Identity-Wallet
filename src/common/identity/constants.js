@@ -20,6 +20,9 @@ export const NATIONALITY_ATTRIBUTE =
 	'http://platform.selfkey.org/schema/attribute/nationality.json';
 export const PHONE_NUMBER_ATTRIBUTE =
 	'http://platform.selfkey.org/schema/attribute/phone-number.json';
+export const RESIDENCY_ATTRIBUTE =
+	'http://platform.selfkey.org/schema/attribute/country-of-residency.json';
+export const PHONE_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/phone-number.json';
 
 export const BASIC_ATTRIBUTES = {
 	[FIRST_NAME_ATTRIBUTE]: 1,
@@ -50,3 +53,31 @@ export const BASIC_CORPORATE_ATTRIBUTES = {
 
 export const CORPORATE_STRUCTURE =
 	'http://platform.selfkey.org/schema/attribute/corporate-structure.json';
+
+export const individualMemberAttributes = [
+	{ key: 'firstName', type: FIRST_NAME_ATTRIBUTE, name: 'First Name', required: true },
+	{ key: 'lastName', type: LAST_NAME_ATTRIBUTE, name: 'Last Name', required: true },
+	{ key: 'citizenship', type: NATIONALITY_ATTRIBUTE, name: 'Citizenship', required: true },
+	{ key: 'residency', type: RESIDENCY_ATTRIBUTE, name: 'Residency', required: true },
+	{ key: 'email', type: EMAIL_ATTRIBUTE, name: 'Email', required: true },
+	{ key: 'phone', type: PHONE_ATTRIBUTE, name: 'Phone' }
+];
+
+export const corporateMemberAttributes = [
+	{ key: 'entityName', type: ENTITY_NAME_ATTRIBUTE, name: 'Legal Entity Name', required: true },
+	{ key: 'entityType', type: ENTITY_TYPE_ATTRIBUTE, name: 'Legal Entity Type', required: true },
+	{
+		key: 'jurisdiction',
+		type: JURISDICTION_ATTRIBUTE,
+		name: 'Legal Jurisdiction',
+		required: true
+	},
+	{
+		key: 'createDate',
+		type: CREATION_DATE_ATTRIBUTE,
+		name: 'Incorporation Date',
+		required: true
+	},
+	{ key: 'email', type: EMAIL_ATTRIBUTE, name: 'Email', required: true },
+	{ key: 'taxId', type: TAX_ID_ATTRIBUTE, name: 'Tax Id' }
+];

@@ -204,11 +204,14 @@ class CorporateAddMemberContainer extends PureComponent {
 }
 
 const mapStateToProps = (state, props) => {
-	const identityId = props.match.params.identityId;
+	const { parentId, identityId } = this.props.match.params;
+	const parentIdentity = identitySelectors.selectCorporateProfile(state, {
+		identityId: parentId
+	});
 	const profile = identitySelectors.selectCorporateProfile(state, { identityId });
 
 	return {
-		identityId,
+		parentIdentity,
 		profile,
 		basicCorporateAttributeTypes: identitySelectors.selectBasicCorporateAttributeTypes(state),
 		basicIndividualAttributeTypes: identitySelectors.selectBasicIndividualMemberAttributeTypes(
@@ -217,9 +220,13 @@ const mapStateToProps = (state, props) => {
 		walletType: appSelectors.selectWalletType(state),
 		jurisdictions: identitySelectors.selectCorporateJurisdictions(state),
 		entityTypes: identitySelectors.selectCorporateLegalEntityTypes(state),
-		positions: identitySelectors.selectPositionsForCompanyType(state, profile.entityType)
+		positions: identitySelectors.selectPositionsForCompanyType(state, {
+			companyType: parentIdentity.profile.entityType
+		})
 	};
 };
 
 const styledComponent = withStyles(styles)(CorporateAddMemberContainer);
-export default connect(mapStateToProps)(styledComponent);
+const connectedComponent = connect(mapStateToProps)(styledComponent);
+export { connectedComponent as CorporateAddMemberContainer };
+export default connectedComponent;

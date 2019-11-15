@@ -1,4 +1,5 @@
 export const dummyProfile = {
+	id: 5,
 	entityName: 'Selfkey, LLC',
 	jurisdiction: 'United States',
 	entityType: 'LLC',
@@ -8,6 +9,7 @@ export const dummyProfile = {
 	allAttributes: []
 };
 export const dummyIncompleteProfile = {
+	id: 6,
 	entityName: 'Selfkey, LLC',
 	entityType: 'LLC',
 	creationDate: '08/08/2018',
