@@ -293,7 +293,7 @@ export const selectIdentities = createSelector(
 );
 
 export const selectFullIdentityHierarchy = createSelector(
-	state => selectIdentities(state, { rootIdentity: false }),
+	state => selectIdentities(state, { rootIdentities: false }),
 	identities =>
 		identities.reduce((acc, curr) => {
 			let parentId = curr.parentId;

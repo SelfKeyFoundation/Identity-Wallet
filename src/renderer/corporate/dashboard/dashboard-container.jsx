@@ -11,11 +11,12 @@ import {
 } from '../../attributes';
 
 const mapStateToProps = (state, props) => {
+	const profile = identitySelectors.selectCorporateProfile(state);
 	return {
 		identity: identitySelectors.selectIdentity(state),
-		profile: identitySelectors.selectCorporateProfile(state),
+		profile,
 		applications: [], // marketplace applications,
-		members: [],
+		members: profile.members,
 		cap: []
 	};
 };
@@ -54,6 +55,7 @@ class CorporateDashboardContainer extends PureComponent {
 
 	render() {
 		const { popup } = this.state;
+		console.log(this.props.members);
 		return (
 			<React.Fragment>
 				{popup === 'create-attribute' && (
