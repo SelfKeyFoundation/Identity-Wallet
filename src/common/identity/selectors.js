@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import { forceUpdateAttributes } from 'common/config';
-import { createSelector } from 'kashe/reselect';
+import { createSelector } from 'reselect';
 import { jsonSchema, identityAttributes } from './utils';
 import { getWallet } from '../wallet/selectors';
+import { CorporateStructureSchema } from './corporate-structure-schema';
 import {
 	BASIC_CORPORATE_ATTRIBUTES,
 	BASIC_ATTRIBUTES,
@@ -14,13 +15,28 @@ import {
 	ENTITY_TYPE_ATTRIBUTE,
 	TAX_ID_ATTRIBUTE,
 	ENTITY_NAME_ATTRIBUTE,
-	CREATION_DATE_ATTRIBUTE
+	CREATION_DATE_ATTRIBUTE,
+	CORPORATE_STRUCTURE
 } from './constants';
 
 const createRootSelector = rootKey => (...fields) => state => _.pick(state[rootKey], fields);
 
 const selectRoot = createRootSelector('identity');
 const selectProps = (...fields) => (state, props = {}) => _.pick(props, fields);
+
+// Repositories
+
+export const selectRepositories = createSelector(
+	selectRoot('repositories', 'repositoriesById'),
+	({ repositories, repositoriesById }) => repositories.map(id => repositoriesById[id])
+);
+
+export const selectExpiredRepositories = state => {
+	let now = Date.now();
+	return selectRepositories(state).filter(repo => forceUpdateAttributes || repo.expires <= now);
+};
+
+// Attribute Types
 
 export const selectIdAttributeTypes = createSelector(
 	selectRoot('idAtrributeTypes', 'idAtrributeTypesById'),
@@ -53,16 +69,6 @@ export const selectAttributeTypesFiltered = createSelector(
 	}
 );
 
-export const selectRepositories = createSelector(
-	selectRoot('repositories', 'repositoriesById'),
-	({ repositories, repositoriesById }) => repositories.map(id => repositoriesById[id])
-);
-
-export const selectExpiredRepositories = state => {
-	let now = Date.now();
-	return selectRepositories(state).filter(repo => forceUpdateAttributes || repo.expires <= now);
-};
-
 export const selectExpiredIdAttributeTypes = state => {
 	let now = Date.now();
 	return selectAttributeTypesFiltered(state, {
@@ -78,6 +84,46 @@ export const selectIdAttributeTypeByUrl = createSelector(
 	(attributeTypes, { attributeTypeUrl }) => attributeTypes.find(t => t.url === attributeTypeUrl)
 );
 
+export const selectBasicCorporateAttributeTypes = createSelector(
+	state => selectAttributeTypesFiltered(state, { entityType: 'corporate' }),
+	corporateTypes =>
+		corporateTypes
+			.filter(t => BASIC_CORPORATE_ATTRIBUTES[t.url])
+			.reduce((acc, curr) => {
+				curr = { ...curr };
+				switch (curr.url) {
+					case EMAIL_ATTRIBUTE:
+						acc.email = curr;
+						curr.required = false;
+						return acc;
+					case TAX_ID_ATTRIBUTE:
+						acc.taxId = curr;
+						curr.required = false;
+						return acc;
+					case ENTITY_NAME_ATTRIBUTE:
+						acc.entityName = curr;
+						curr.required = true;
+						return acc;
+					case ENTITY_TYPE_ATTRIBUTE:
+						acc.entityType = curr;
+						curr.required = true;
+						return acc;
+					case CREATION_DATE_ATTRIBUTE:
+						acc.creationDate = curr;
+						curr.required = true;
+						return acc;
+					case JURISDICTION_ATTRIBUTE:
+						acc.jurisdiction = curr;
+						curr.required = true;
+						return acc;
+					default:
+						return acc;
+				}
+			}, {})
+);
+
+// UI Schemas
+
 export const selectUiSchemas = createSelector(
 	selectRoot('uiSchemas', 'uiSchemasById'),
 	({ uiSchemas = [], uiSchemasById = {} }) => uiSchemas.map(id => uiSchemasById[id])
@@ -89,47 +135,6 @@ export const selectExpiredUiSchemas = state => {
 		uiSchema => forceUpdateAttributes || uiSchema.expires <= now
 	);
 };
-
-export const selectDocuments = createSelector(
-	selectRoot('documents', 'documentsById'),
-	({ documents, documentsById }) => documents.map(docId => documentsById[docId])
-);
-
-export const selectIdentity = createSelector(
-	selectRoot('currentIdentity', 'identitiesById'),
-	selectProps('identityId'),
-	({ currentIdentity, identitiesById }, { identityId }) => {
-		const identity = identitiesById[identityId || currentIdentity];
-		if (identity && !identity.type) {
-			return { ...identity, type: 'individual' };
-		}
-		return identity;
-	}
-);
-
-export const selectIdAttributes = createSelector(
-	selectIdentity,
-	selectRoot('attributes', 'attributesById'),
-	(identity, { attributes = [], attributesById = {} }) => {
-		const selectedAttr = attributes.map(attrId => attributesById[attrId]);
-		if (identity) {
-			return selectedAttr.filter(attr => attr.identityId === identity.id);
-		}
-		return selectedAttr;
-	}
-);
-
-export const selectDocumentsByAttributeIds = createSelector(
-	selectDocuments,
-	selectProps('attributeIds'),
-	(documents, { attributeIds = null }) =>
-		documents.reduce((acc, curr) => {
-			if (attributeIds !== null && !attributeIds.includes(curr.attributeId)) return acc;
-			acc[curr.attributeId] = acc[curr.attributeId] || [];
-			acc[curr.attributeId].push(curr);
-			return acc;
-		}, {})
-);
 
 const _selectUiSchema = (schemas = [], { typeId, repositoryId }) =>
 	schemas.find(s => s.repositoryId === repositoryId && typeId === s.attributeTypeId);
@@ -152,6 +157,109 @@ export const selectRepositoryUiSchemaMap = createSelector(
 			}
 			return acc;
 		}, {})
+);
+
+// Documents
+
+export const selectDocuments = createSelector(
+	selectRoot('documents', 'documentsById'),
+	({ documents, documentsById }) => documents.map(docId => documentsById[docId])
+);
+
+export const selectDocumentsByAttributeIds = createSelector(
+	selectDocuments,
+	selectProps('attributeIds'),
+	(documents, { attributeIds = null }) =>
+		documents.reduce((acc, curr) => {
+			if (attributeIds !== null && !attributeIds.includes(curr.attributeId)) return acc;
+			acc[curr.attributeId] = acc[curr.attributeId] || [];
+			acc[curr.attributeId].push(curr);
+			return acc;
+		}, {})
+);
+
+// Identity
+
+export const selectIdentity = createSelector(
+	selectRoot('currentIdentity', 'identitiesById'),
+	selectProps('identityId'),
+	({ currentIdentity, identitiesById }, { identityId }) => {
+		const identity = identitiesById[identityId || currentIdentity];
+		if (identity && !identity.type) {
+			return { ...identity, type: 'individual' };
+		}
+		return identity;
+	}
+);
+
+export const selectIdentities = createSelector(
+	selectRoot('identities', 'identitiesById'),
+	selectProps('rootIdentities'),
+	({ identities, identitiesById }, { rootIdentities = true }) => {
+		const fullIdentities = identities.map(id => identitiesById[id]);
+		if (rootIdentities) {
+			return fullIdentities.filter(ident => ident.rootIdentity);
+		}
+		return fullIdentities;
+	}
+);
+
+export const selectFullIdentityHierarchy = createSelector(
+	state => selectIdentities(state, { rootIdentity: false }),
+	identities =>
+		identities.reduce((acc, curr) => {
+			let parentId = curr.parentId;
+			if (curr.rootIdentity) {
+				parentId = 'root';
+			}
+			acc[parentId] = acc[parentId] || [];
+			acc[parentId].push(curr);
+			return acc;
+		}, {})
+);
+
+const _selectChildrenIdentities = (identity, hierarchy) => {
+	if (!hierarchy[identity.id]) return [];
+	return hierarchy[identity.id];
+};
+
+// props: identityId
+export const selectChildrenIdentities = createSelector(
+	selectIdentity,
+	selectFullIdentityHierarchy,
+	_selectChildrenIdentities
+);
+
+export const selectMemberIdentities = createSelector(
+	selectIdentity,
+	selectFullIdentityHierarchy,
+	(identity, hierarchy) => {
+		if (!identity || identity.type === 'individual') {
+			return [];
+		}
+		let members = _selectChildrenIdentities(identity, hierarchy);
+		let i = 0;
+		while (i < members.length) {
+			const children = _selectChildrenIdentities(members[i], hierarchy);
+			members = members.concat(children);
+			i++;
+		}
+		return members;
+	}
+);
+
+// Id Attributes
+
+export const selectIdAttributes = createSelector(
+	selectIdentity,
+	selectRoot('attributes', 'attributesById'),
+	(identity, { attributes = [], attributesById = {} }) => {
+		const selectedAttr = attributes.map(attrId => attributesById[attrId]);
+		if (identity) {
+			return selectedAttr.filter(attr => attr.identityId === identity.id);
+		}
+		return selectedAttr;
+	}
 );
 
 const validateAttribute = createSelector(
@@ -197,18 +305,6 @@ export const selectFullIdAttributesByIds = createSelector(
 				};
 			})
 			.filter(attr => attr.type && attr.type.content);
-	}
-);
-
-export const selectIdentities = createSelector(
-	selectRoot('identities', 'identitiesById'),
-	selectProps('rootIdentities'),
-	({ identities, identitiesById }, { rootIdentities = true }) => {
-		const fullIdentities = identities.map(id => identitiesById[id]);
-		if (rootIdentities) {
-			return fullIdentities.filter(ident => ident.rootIdentity);
-		}
-		return fullIdentities;
 	}
 );
 
@@ -259,6 +355,14 @@ export const selectNonBasicDocumentAttributes = createSelector(
 		nonBasicAttributes.filter(attr => jsonSchema.containsFile(attr.type.content))
 );
 
+export const selectAttributesByUrl = createSelector(
+	selectFullIdAttributesByIds,
+	selectProps('attributeTypeUrls'),
+	(attributes, { attributeTypeUrls = [] }) => {
+		attributes.filter(attr => attributeTypeUrls.includes(attr.type.url));
+	}
+);
+
 export const selectBasicAttributeInfo = attribute =>
 	createSelector(
 		() => attribute,
@@ -269,6 +373,22 @@ export const selectBasicAttributeInfo = attribute =>
 			return basicAttr.data.value;
 		}
 	);
+
+// JURISDICTIONS
+
+export const selectCorporateJurisdictions = createSelector(
+	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: JURISDICTION_ATTRIBUTE }),
+	idType => (idType ? idType.content.enum : [])
+);
+
+// Entity Types
+
+export const selectCorporateLegalEntityTypes = createSelector(
+	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: ENTITY_TYPE_ATTRIBUTE }),
+	idType => (idType ? idType.content.enum : [])
+);
+
+// Profile
 
 export const selectProfile = createSelector(
 	selectIdentity,
@@ -338,98 +458,6 @@ export const selectIndividualProfile = createSelector(
 	})
 );
 
-export const selectCorporateJurisdictions = createSelector(
-	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: JURISDICTION_ATTRIBUTE }),
-	idType => (idType ? idType.content.enum : [])
-);
-
-export const selectCorporateLegalEntityTypes = createSelector(
-	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: ENTITY_TYPE_ATTRIBUTE }),
-	idType => (idType ? idType.content.enum : [])
-);
-
-export const selectBasicCorporateAttributeTypes = createSelector(
-	state => selectAttributeTypesFiltered(state, { entityType: 'corporate' }),
-	corporateTypes =>
-		corporateTypes
-			.filter(t => BASIC_CORPORATE_ATTRIBUTES[t.url])
-			.reduce((acc, curr) => {
-				curr = { ...curr };
-				switch (curr.url) {
-					case EMAIL_ATTRIBUTE:
-						acc.email = curr;
-						curr.required = false;
-						return acc;
-					case TAX_ID_ATTRIBUTE:
-						acc.taxId = curr;
-						curr.required = false;
-						return acc;
-					case ENTITY_NAME_ATTRIBUTE:
-						acc.entityName = curr;
-						curr.required = true;
-						return acc;
-					case ENTITY_TYPE_ATTRIBUTE:
-						acc.entityType = curr;
-						curr.required = true;
-						return acc;
-					case CREATION_DATE_ATTRIBUTE:
-						acc.creationDate = curr;
-						curr.required = true;
-						return acc;
-					case JURISDICTION_ATTRIBUTE:
-						acc.jurisdiction = curr;
-						curr.required = true;
-						return acc;
-					default:
-						return acc;
-				}
-			}, {})
-);
-
-export const selectFullIdentityHierarchy = createSelector(
-	state => selectIdentities(state, { rootIdentity: false }),
-	identities =>
-		identities.reduce((acc, curr) => {
-			let parentId = curr.parentId;
-			if (curr.rootIdentity) {
-				parentId = 'root';
-			}
-			acc[parentId] = acc[parentId] || [];
-			acc[parentId].push(curr);
-			return acc;
-		}, {})
-);
-
-const _selectChildrenIdentities = (identity, hierarchy) => {
-	if (!hierarchy[identity.id]) return [];
-	return hierarchy[identity.id];
-};
-
-// props: identityId
-export const selectChildrenIdentities = createSelector(
-	selectIdentity,
-	selectFullIdentityHierarchy,
-	_selectChildrenIdentities
-);
-
-export const selectMemberIdentities = createSelector(
-	selectIdentity,
-	selectFullIdentityHierarchy,
-	(identity, hierarchy) => {
-		if (!identity || identity.type === 'individual') {
-			return [];
-		}
-		let members = _selectChildrenIdentities(identity, hierarchy);
-		let i = 0;
-		while (i < members.length) {
-			const children = _selectChildrenIdentities(members[i], hierarchy);
-			members = members.concat(children);
-			i++;
-		}
-		return members;
-	}
-);
-
 const selectChildrenProfiles = createSelector(
 	state => state,
 	selectChildrenIdentities,
@@ -475,4 +503,11 @@ export const selectCorporateProfile = createSelector(
 		jurisdiction,
 		members
 	})
+);
+
+export const selectPositionsForCompanyType = createSelector(
+	state => selectIdAttributeTypeByUrl({ attributeTypeUrl: CORPORATE_STRUCTURE }),
+	selectProps('companyType'),
+	(attrType, props) =>
+		new CorporateStructureSchema(attrType.content).getPositionsForCompanyType(props.companyType)
 );

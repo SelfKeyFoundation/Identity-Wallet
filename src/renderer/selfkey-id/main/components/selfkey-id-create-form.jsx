@@ -116,7 +116,7 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 	handleSave = evt => {
 		evt.preventDefault();
 		this.props.dispatch(
-			identityOperations.createSelfkeyIdOperation(this.props.identity.id, { ...this.state })
+			identityOperations.createIndividualProfile(this.props.identity.id, { ...this.state })
 		);
 	};
 

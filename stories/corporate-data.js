@@ -1,4 +1,5 @@
 export const dummyProfile = {
+	id: 5,
 	entityName: 'Selfkey, LLC',
 	jurisdiction: 'United States',
 	entityType: 'LLC',
@@ -8,6 +9,7 @@ export const dummyProfile = {
 	allAttributes: []
 };
 export const dummyIncompleteProfile = {
+	id: 6,
 	entityName: 'Selfkey, LLC',
 	entityType: 'LLC',
 	creationDate: '08/08/2018',
@@ -593,5 +595,17 @@ export const corporateMembers = [
 				equity: 81
 			}
 		]
+	}
+];
+
+export const corporatePositionsLLC = [
+	{ position: 'manager', title: 'Manager', description: 'Manager description' },
+	{ position: 'member', title: 'Member', description: 'Member description' },
+	{ position: 'ubo', title: 'UBO', description: 'ubo description' },
+	{ position: 'observer', title: 'Observer', description: 'observer description' },
+	{
+		position: 'authorizedSignatory',
+		title: 'Authorized Signatory',
+		description: 'description'
 	}
 ];
