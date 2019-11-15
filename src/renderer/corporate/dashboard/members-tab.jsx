@@ -4,10 +4,10 @@ import { CorporateMembers } from '../common/corporate-members';
 
 const styles = theme => ({});
 
-const CorporateMembersTab = withStyles(styles)(({ classes }) => (
+const CorporateMembersTab = withStyles(styles)(props => (
 	<Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={16}>
 		<Grid item>
-			<CorporateMembers />
+			<CorporateMembers {...props} />
 		</Grid>
 	</Grid>
 ));

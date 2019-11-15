@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import { forceUpdateAttributes } from 'common/config';
-import { createSelector } from 'kashe/reselect';
+import { createSelector } from 'reselect';
 import { jsonSchema, identityAttributes } from './utils';
 import { getWallet } from '../wallet/selectors';
+import { CorporateStructureSchema } from './corporate-structure-schema';
 import {
 	BASIC_CORPORATE_ATTRIBUTES,
 	BASIC_ATTRIBUTES,
@@ -14,7 +15,8 @@ import {
 	ENTITY_TYPE_ATTRIBUTE,
 	TAX_ID_ATTRIBUTE,
 	ENTITY_NAME_ATTRIBUTE,
-	CREATION_DATE_ATTRIBUTE
+	CREATION_DATE_ATTRIBUTE,
+	CORPORATE_STRUCTURE
 } from './constants';
 
 const createRootSelector = rootKey => (...fields) => state => _.pick(state[rootKey], fields);
@@ -501,4 +503,11 @@ export const selectCorporateProfile = createSelector(
 		jurisdiction,
 		members
 	})
+);
+
+export const selectPositionsForCompanyType = createSelector(
+	state => selectIdAttributeTypeByUrl({ attributeTypeUrl: CORPORATE_STRUCTURE }),
+	selectProps('companyType'),
+	(attrType, props) =>
+		new CorporateStructureSchema(attrType.content).getPositionsForCompanyType(props.companyType)
 );

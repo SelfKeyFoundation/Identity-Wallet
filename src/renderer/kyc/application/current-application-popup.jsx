@@ -113,7 +113,7 @@ const KycChecklistItemLabel = withStyles(styles)(
 		const { options } = item;
 		if (!options || options.length <= 1) {
 			return (
-				<Typography variant="subtitle1" gutterBottom className={className}>
+				<Typography variant="subtitle1" className={className}>
 					{options.length ? options[0].name : '...'}
 					{item.duplicateType && <br />}
 					{item.duplicateType && (
