@@ -23,7 +23,10 @@ class CorporateContainerComponent extends PureComponent {
 					path={`${match.path}/setup-corporate-profile/:identityId`}
 					component={CorporateWizardContainer}
 				/>
-				<Route path={`${match.path}/add-member`} component={CorporateAddMemberContainer} />
+				<Route
+					path={`${match.path}/add-member/:parentId?`}
+					component={CorporateAddMemberContainer}
+				/>
 			</React.Fragment>
 		);
 	}

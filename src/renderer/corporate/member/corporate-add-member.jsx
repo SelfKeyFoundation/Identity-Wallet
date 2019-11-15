@@ -10,7 +10,7 @@ import {
 import { Grid, Modal, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { CorporateMemberIndividualForm } from './member-individual-form';
-import { CorporateMemberEntityForm } from './member-entity-form';
+import { CorporateMemberCorporateForm } from './member-corporate-form';
 import { CorporateMemberSharesForm } from './member-shares-form';
 import { CorporateMemberSelectRole } from './member-select-role';
 import { CorporateMemberSelectType } from './member-select-type';
@@ -74,7 +74,7 @@ class CorporateAddMemberComponent extends PureComponent {
 			isDisabled,
 			classes,
 			onFieldChange = () => {},
-			positions = [],
+			availablePositions = [],
 			types = [
 				{
 					title: 'Individual',
@@ -111,7 +111,7 @@ class CorporateAddMemberComponent extends PureComponent {
 								xs={12}
 							>
 								<CorporateMemberSelectRole
-									positions={positions}
+									availablePositions={availablePositions}
 									onFieldChange={onFieldChange}
 								/>
 
@@ -131,8 +131,7 @@ class CorporateAddMemberComponent extends PureComponent {
 									{this.state.type === 'corporate' && (
 										<>
 											<hr className={`${classes.hr} ${classes.hrInternal}`} />
-											<CorporateMemberEntityForm {...this.props} />
-											/>
+											<CorporateMemberCorporateForm {...this.props} />
 										</>
 									)}
 									<hr className={`${classes.hr} ${classes.hrInternal}`} />

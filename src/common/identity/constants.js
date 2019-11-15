@@ -33,7 +33,16 @@ export const BASIC_ATTRIBUTES = {
 	[ADDRESS_ATTRIBUTE]: 1
 };
 
-export const CORPORATE_MEMBER_BASIC_ATTRIBUTES = {
+export const BASIC_CORPORATE_ATTRIBUTES = {
+	[ENTITY_NAME_ATTRIBUTE]: 1,
+	[ENTITY_TYPE_ATTRIBUTE]: 1,
+	[JURISDICTION_ATTRIBUTE]: 1,
+	[EMAIL_ATTRIBUTE]: 1,
+	[CREATION_DATE_ATTRIBUTE]: 1,
+	[TAX_ID_ATTRIBUTE]: 1
+};
+
+export const CORPORATE_MEMBER_INDIVIDUAL_ATTRIBUTES = {
 	[FIRST_NAME_ATTRIBUTE]: 1,
 	[LAST_NAME_ATTRIBUTE]: 1,
 	[EMAIL_ATTRIBUTE]: 1,
@@ -42,7 +51,7 @@ export const CORPORATE_MEMBER_BASIC_ATTRIBUTES = {
 	[PHONE_NUMBER_ATTRIBUTE]: 1
 };
 
-export const BASIC_CORPORATE_ATTRIBUTES = {
+export const CORPORATE_MEMBER_CORPORATE_ATTRIBUTES = {
 	[ENTITY_NAME_ATTRIBUTE]: 1,
 	[ENTITY_TYPE_ATTRIBUTE]: 1,
 	[JURISDICTION_ATTRIBUTE]: 1,
@@ -73,11 +82,11 @@ export const corporateMemberAttributes = [
 		required: true
 	},
 	{
-		key: 'createDate',
+		key: 'creationDate',
 		type: CREATION_DATE_ATTRIBUTE,
 		name: 'Incorporation Date',
 		required: true
 	},
-	{ key: 'email', type: EMAIL_ATTRIBUTE, name: 'Email', required: true },
+	{ key: 'email', type: EMAIL_ATTRIBUTE, name: 'Email', required: false },
 	{ key: 'taxId', type: TAX_ID_ATTRIBUTE, name: 'Tax Id' }
 ];

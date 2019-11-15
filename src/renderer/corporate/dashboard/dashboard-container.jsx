@@ -31,7 +31,7 @@ class CorporateDashboardContainer extends PureComponent {
 		}
 	}
 
-	handleAddMember = () => this.props.dispatch(push('/main/corporate-add-member'));
+	handleAddMember = () => this.props.dispatch(push('/main/corporate/add-member'));
 
 	handleAttributeDelete = attributeId =>
 		this.props.dispatch(identityOperations.removeIdAttributeOperation(attributeId));
@@ -89,6 +89,7 @@ class CorporateDashboardContainer extends PureComponent {
 					onAddDocument={this.handleAddDocument}
 					onEditDocument={this.handleEditAttribute}
 					onDeleteDocument={this.handleDeleteAttribute}
+					onAddMember={this.handleAddMember}
 					didComponent={<RegisterDidCardContainer returnPath={'/main/corporate'} />}
 				/>
 			</React.Fragment>

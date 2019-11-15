@@ -157,7 +157,7 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 							</MenuItem>
 						))}
 					</Select>
-					{errors.citizenship && (
+					{errors.nationality && (
 						<Typography variant="subtitle2" color="error" gutterBottom>
 							{errors.nationality}
 						</Typography>
@@ -184,7 +184,7 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 							</MenuItem>
 						))}
 					</Select>
-					{errors.residency && (
+					{errors.country && (
 						<Typography variant="subtitle2" color="error" gutterBottom>
 							{errors.country}
 						</Typography>
@@ -221,7 +221,7 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 						onChange={onFieldChange('phoneNumber')}
 						placeholder="Phone"
 					/>
-					{errors.phone && (
+					{errors.phoneNumber && (
 						<Typography variant="subtitle2" color="error" gutterBottom>
 							{errors.phoneNumber}
 						</Typography>

@@ -115,7 +115,8 @@ class CorporateMemberSelectRoleComponent extends PureComponent {
 	};
 
 	render() {
-		const { classes, positions } = this.props;
+		const { classes, availablePositions } = this.props;
+		console.log(availablePositions);
 		return (
 			<Grid container direction="column" spacing={8}>
 				<Grid item>
@@ -125,7 +126,7 @@ class CorporateMemberSelectRoleComponent extends PureComponent {
 				</Grid>
 				<Grid item>
 					<Grid container justify="center" className={classes.selectionBoxContainer}>
-						{positions.map((p, idx) => (
+						{availablePositions.map((p, idx) => (
 							<div key={`role_${idx}`} className={classes.input}>
 								<input
 									type="checkbox"

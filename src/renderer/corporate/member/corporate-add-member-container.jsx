@@ -10,7 +10,7 @@ import { identityOperations, identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
 
-const commonFields = ['shares', 'positions', 'type', 'did'];
+const commonFields = ['equity', 'positions', 'type', 'did', 'parentId'];
 const corporateFields = [
 	'jurisdiction',
 	'taxId',
@@ -29,10 +29,14 @@ const individualFields = [
 ];
 
 class CorporateAddMemberContainer extends PureComponent {
-	state = {
-		errors: { hasErrors: false },
-		type: 'individual'
-	};
+	constructor(props) {
+		super(props);
+		this.state = {
+			errors: { hasErrors: false },
+			type: 'individual',
+			parentId: props.companies[0].identity.id
+		};
+	}
 
 	selectFields = type =>
 		type === 'individual'
@@ -50,13 +54,9 @@ class CorporateAddMemberContainer extends PureComponent {
 		delete stateErrors[name];
 		const errors = this.validateAllAttributes([{ name, value }]);
 
-		console.log({ name, value });
-
 		if (name === 'positions' && value) {
 			value = this.filterAcceptablePositions(Array.from(value));
 		}
-
-		console.log({ name, value });
 
 		this.setState({
 			[name]: value
@@ -77,7 +77,7 @@ class CorporateAddMemberContainer extends PureComponent {
 			jurisdiction: 'Please select a jurisdiction',
 			entityName: 'Please enter an entity name',
 			entityType: 'Please select a entity type',
-			creationDate: 'Please enter company creation date',
+			creationDate: 'Please enter company incorporation date',
 			taxId: 'Tax id provided is invalid',
 			type: 'Invalid member type',
 			positions: 'Invalid position',
@@ -86,7 +86,8 @@ class CorporateAddMemberContainer extends PureComponent {
 			firstName: 'Please enter your first Name',
 			lastName: 'Please enter your last Name',
 			phoneNumber: 'Invalid phone number',
-			shares: 'Shares must be between 0 and 100'
+			equity: 'Shares must be between 0 and 100',
+			parentId: 'Invalid parent company'
 		};
 		if (!attrs) {
 			const fields = this.selectFields(this.state.type);
@@ -108,19 +109,22 @@ class CorporateAddMemberContainer extends PureComponent {
 	}
 
 	isValidAttribute(name, value) {
-		const { basicCorporateAttributeTypes, basicIndividualAttributeTypes } = this.props;
-		const type = basicCorporateAttributeTypes[name] || basicIndividualAttributeTypes[name];
+		const { corporateAttributeTypes, individualAttributeTypes } = this.props;
 
 		switch (name) {
 			case 'type':
 				return this.validateAttributeType(value);
-			case 'shares':
-				return this.validateAttributeShares(value);
+			case 'equity':
+				return this.validateAttributeEquity(value);
 			case 'did':
 				return this.validateAttributeDid(value);
+			case 'parentId':
+				return this.validateAttributeParentId(value);
 			case 'positions':
 				return true;
 		}
+
+		const type = corporateAttributeTypes[name] || individualAttributeTypes[name];
 
 		if (!type || !type.content) {
 			throw new Error(`${name} is not a basic attribute`);
@@ -138,7 +142,7 @@ class CorporateAddMemberContainer extends PureComponent {
 	};
 
 	validateAttributePositions = selectedPositions => {
-		const acceptablePositions = this.props.positions.map(p => p.position);
+		const acceptablePositions = this.props.availablePositions.map(p => p.position);
 		let isError = false;
 		if (!selectedPositions || selectedPositions.size === 0) {
 			return false;
@@ -149,15 +153,20 @@ class CorporateAddMemberContainer extends PureComponent {
 		return !isError;
 	};
 
-	validateAttributeShares = shares => {
+	validateAttributeEquity = shares => {
 		const number = parseInt(shares);
 		return !isNaN(number) && number >= 0 && number <= 100;
 	};
 
 	validateAttributeDid = did => true;
 
-	filterAcceptablePositions = positions =>
-		positions.filter(p => this.props.positions.map(pos => pos.position).includes(p));
+	filterAcceptablePositions = selectedPositions =>
+		selectedPositions.filter(p =>
+			this.props.availablePositions.map(pos => pos.position).includes(p)
+		);
+
+	validateAttributeParentId = parentId =>
+		this.props.companies.find(c => c.identity.id === parentId);
 
 	handleContinueClick = evt => {
 		evt && evt.preventDefault();
@@ -170,10 +179,12 @@ class CorporateAddMemberContainer extends PureComponent {
 
 		const fields = this.selectFields(this.state.type);
 
+		const { parentId } = this.props;
+
 		this.props.dispatch(
-			identityOperations.addCorporateMemberOperation({
+			identityOperations.createMemberProfileOperation({
 				..._.pick(this.state, fields),
-				identityId: this.props.match.params.identityId
+				parentId
 			})
 		);
 	};
@@ -188,7 +199,8 @@ class CorporateAddMemberContainer extends PureComponent {
 	}
 
 	render() {
-		const membersForm = _.pick(this.state, 'errors');
+		const membersForm = _.pick(this.state, 'errors', this.selectFields(this.state.type));
+
 		return (
 			<CorporateAddMember
 				{...this.props}
@@ -204,25 +216,31 @@ class CorporateAddMemberContainer extends PureComponent {
 }
 
 const mapStateToProps = (state, props) => {
-	const { parentId, identityId } = this.props.match.params;
-	const parentIdentity = identitySelectors.selectCorporateProfile(state, {
+	const identity = identitySelectors.selectIdentity(state);
+	let { parentId } = props.match.params;
+	parentId = parentId || identity.id;
+
+	const parentProfile = identitySelectors.selectCorporateProfile(state, {
 		identityId: parentId
 	});
-	const profile = identitySelectors.selectCorporateProfile(state, { identityId });
+
+	if (!parentProfile || parentProfile.identity.type !== 'corporate') {
+		throw new Error(`Invalid parent identity, requires 'corporate' type`);
+	}
 
 	return {
-		parentIdentity,
-		profile,
-		basicCorporateAttributeTypes: identitySelectors.selectBasicCorporateAttributeTypes(state),
-		basicIndividualAttributeTypes: identitySelectors.selectBasicIndividualMemberAttributeTypes(
-			state
-		),
+		parentId,
+		parentProfile,
+		identity,
+		individualAttributeTypes: identitySelectors.selectMemberIndividualAttributeTypes(state),
+		corporateAttributeTypes: identitySelectors.selectMemberCorporateAttributeTypes(state),
 		walletType: appSelectors.selectWalletType(state),
 		jurisdictions: identitySelectors.selectCorporateJurisdictions(state),
 		entityTypes: identitySelectors.selectCorporateLegalEntityTypes(state),
-		positions: identitySelectors.selectPositionsForCompanyType(state, {
-			companyType: parentIdentity.profile.entityType
-		})
+		availablePositions: identitySelectors.selectPositionsForCompanyType(state, {
+			companyType: parentProfile.entityType
+		}),
+		companies: [parentProfile]
 	};
 };
 
