@@ -33,7 +33,7 @@ class ToolbarContainer extends PureComponent {
 
 	createCorporateProfile = evt => {
 		this.toggleProfile(!this.state.isProfileOpen);
-		this.props.dispatch(push('/main/create-corporate-profile'));
+		this.props.dispatch(push('/main/corporate/create-corporate-profile'));
 	};
 
 	handleProfileSelect = identity => evt => {
@@ -74,7 +74,7 @@ class ToolbarContainer extends PureComponent {
 }
 
 export default connect(state => ({
-	profiles: identitySelectors.selectAllIdentities(state) || [],
-	selectedProfile: identitySelectors.selectCurrentIdentity(state) || {},
+	profiles: identitySelectors.selectIdentities(state) || [],
+	selectedProfile: identitySelectors.selectIdentity(state) || {},
 	wallet: walletSelectors.getWallet(state)
 }))(ToolbarContainer);

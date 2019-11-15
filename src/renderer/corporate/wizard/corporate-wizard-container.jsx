@@ -153,59 +153,18 @@ class CorporateWizardContainerComponent extends PureComponent {
 	}
 }
 
-// const dummyMembers = [
-// 	{
-// 		id: '1',
-// 		name: 'Giacomo Guilizzoni',
-// 		type: 'Person',
-// 		role: 'Director, Shareholder',
-// 		citizenship: 'Italy',
-// 		residency: 'Singapore',
-// 		shares: '45%'
-// 	},
-// 	{
-// 		id: '2',
-// 		name: 'Marco Botton Ltd',
-// 		type: 'Corporate',
-// 		role: 'Shareholder',
-// 		citizenship: 'Hong Kong',
-// 		residency: 'Hong Kong',
-// 		shares: '9%'
-// 	},
-// 	{
-// 		id: '3',
-// 		name: 'Big Things Ltd',
-// 		type: 'Corporate',
-// 		role: 'Shareholder',
-// 		citizenship: 'Hong Kong',
-// 		residency: 'Hong Kong',
-// 		shares: '41%'
-// 	},
-// 	{
-// 		id: '4',
-// 		name: 'John Dafoe',
-// 		type: 'Person',
-// 		role: 'Director',
-// 		citizenship: 'France',
-// 		residency: 'France',
-// 		shares: '5%'
-// 	}
-// ];
-
 const mapStateToProps = (state, props) => {
 	return {
 		basicAttributeTypes: identitySelectors.selectBasicCorporateAttributeTypes(state),
-		basicIdentity: identitySelectors.selectCorporateProfile(
-			state,
-			props.match.params.identityId
-		),
+		basicIdentity: identitySelectors.selectCorporateProfile(state, {
+			identityId: props.match.params.identityId
+		}),
 		walletType: appSelectors.selectWalletType(state),
 		jurisdictions: identitySelectors.selectCorporateJurisdictions(state),
 		entityTypes: identitySelectors.selectCorporateLegalEntityTypes(state)
-		// members: dummyMembers
 	};
 };
 
-export const CorporateWizardContainer = connect(mapStateToProps)(CorporateWizardContainerComponent);
-
-export default CorporateWizardContainer;
+const connectedComponent = connect(mapStateToProps)(CorporateWizardContainerComponent);
+export { connectedComponent as CorporateWizardContainer };
+export default connectedComponent;

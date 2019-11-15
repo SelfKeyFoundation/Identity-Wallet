@@ -64,7 +64,7 @@ class MarketplaceContainerComponent extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-	identity: identitySelectors.selectCurrentIdentity(state)
+	identity: identitySelectors.selectIdentity(state)
 });
 
 const connectedComponent = connect(mapStateToProps)(MarketplaceContainerComponent);

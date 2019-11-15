@@ -7,6 +7,12 @@ import config from 'common/config';
 import { createAliasedAction } from 'electron-redux';
 import uuidv1 from 'uuid/v1';
 import { Logger } from 'common/logger';
+import {
+	EMAIL_ATTRIBUTE,
+	ENTITY_NAME_ATTRIBUTE,
+	FIRST_NAME_ATTRIBUTE,
+	LAST_NAME_ATTRIBUTE
+} from '../identity/constants';
 
 export const RP_UPDATE_INTERVAL = 1000 * 60 * 60 * 3; // 3h
 const log = new Logger('kyc-duck');
@@ -120,9 +126,9 @@ export const kycSelectors = {
 			acc[curr.schemaId] = [];
 			return acc;
 		}, {});
-		const identity = identitySelectors.selectCurrentIdentity(state);
+		const identity = identitySelectors.selectIdentity(state);
 		const walletAttributes = identitySelectors
-			.selectFullIdAttributesByIds(state, identity.id)
+			.selectFullIdAttributesByIds(state, { identityId: identity.id })
 			.reduce((acc, curr) => {
 				if (!curr || !curr.type || !curr.type.url) return acc;
 				if (!acc.hasOwnProperty(curr.type.url)) return acc;
@@ -153,18 +159,19 @@ export const kycSelectors = {
 				type:
 					walletAttributes[tplAttr.schemaId] && walletAttributes[tplAttr.schemaId].length
 						? walletAttributes[tplAttr.schemaId][0].type
-						: identitySelectors.selectIdAttributeTypeByUrl(state, tplAttr.schemaId),
+						: identitySelectors.selectIdAttributeTypeByUrl(state, {
+								attributeTypeUrl: tplAttr.schemaId
+						  }),
 				duplicateType: tplOccurrence[tplAttr.schemaId] > 1
 			};
 		});
 	},
 	selectKYCAttributes(state, identityId, attributes = []) {
 		const kycAttributes = identitySelectors
-			.selectFullIdAttributesByIds(
-				state,
+			.selectFullIdAttributesByIds(state, {
 				identityId,
-				attributes.map(attr => attr.attributeId)
-			)
+				attributesIds: attributes.map(attr => attr.attributeId)
+			})
 			.reduce((acc, curr) => {
 				acc[curr.id] = curr;
 				return acc;
@@ -185,6 +192,33 @@ export const kycSelectors = {
 			}
 			return finalAttr;
 		});
+	},
+	selectKYCUserData(state, identityId) {
+		const attributes = identitySelectors.selectAttributesByUrl(state, {
+			identityId,
+			attributeTypeUrls: [
+				EMAIL_ATTRIBUTE,
+				ENTITY_NAME_ATTRIBUTE,
+				FIRST_NAME_ATTRIBUTE,
+				LAST_NAME_ATTRIBUTE
+			]
+		});
+
+		const attrData = attributes.reduce((acc, curr) => {
+			if (acc[curr.type.ur]) return acc;
+			acc[curr.type.url] = curr.data.value;
+			return acc;
+		}, {});
+
+		const data = {
+			email: attrData[EMAIL_ATTRIBUTE],
+			name: attrData[ENTITY_NAME_ATTRIBUTE]
+		};
+
+		if (!data.name) {
+			data.name = `${attrData[FIRST_NAME_ATTRIBUTE]} ${attrData[LAST_NAME_ATTRIBUTE]}`;
+		}
+		return data;
 	},
 	selectCurrentApplication(state) {
 		return this.kycSelector(state).currentApplication;
@@ -326,7 +360,7 @@ const loadRelyingPartyOperation = (
 	const walletType = appSelectors.selectApp(state).walletType;
 	if (!rpName) return null;
 
-	const identity = identitySelectors.selectCurrentIdentity(state);
+	const identity = identitySelectors.selectIdentity(state);
 	if (!identity) return;
 
 	const ts = Date.now();
@@ -334,13 +368,13 @@ const loadRelyingPartyOperation = (
 	let rp = marketplaceSelectors.selectRPDetails(state, rpName);
 
 	if (devRPDetails.status === 'active') {
-		console.log('Selecting dev RP');
+		log.debug('Selecting dev RP');
 		rp = { ...devRPDetails };
 	}
 
 	const config = rp.relyingPartyConfig;
 	if (!config.rootEndpoint) {
-		console.log('Empty RP config object');
+		log.warn('Empty RP config object');
 		return;
 	}
 
@@ -424,7 +458,7 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 		throw new Error('template does not exist');
 	}
 
-	const identity = identitySelectors.selectCurrentIdentity(getState());
+	const identity = identitySelectors.selectIdentity(getState());
 	if (!identity) return;
 
 	if (!rp.session.isActive()) {
@@ -433,6 +467,10 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 
 	attributes = kycSelectors.selectKYCAttributes(getState(), identity.id, attributes);
 	try {
+		if (rp.session.ctx.hasKYCUserEndpoint() && !rp.session.ctx.user) {
+			const userData = kycSelectors.selectKYCUserData(getState(), identity.id);
+			await rp.session.createKYCUser(userData);
+		}
 		let application = await rp.session.createKYCApplication(templateId, attributes);
 		application = await rp.session.getKYCApplication(application.id);
 		await dispatch(kycActions.addKYCApplication(rpName, application));
@@ -489,7 +527,7 @@ const updateRelyingPartyKYCApplication = (
 		throw new Error('template does not exist');
 	}
 
-	const identity = identitySelectors.selectCurrentIdentity(getState());
+	const identity = identitySelectors.selectIdentity(getState());
 	if (!identity) return;
 
 	if (!rp.session.isActive()) {
@@ -673,7 +711,7 @@ const clearRelyingPartyOperation = () => async dispatch => {
 };
 
 const loadApplicationsOperation = () => async (dispatch, getState) => {
-	const identity = identitySelectors.selectCurrentIdentity(getState());
+	const identity = identitySelectors.selectIdentity(getState());
 	let kycApplicationService = getGlobalContext().kycApplicationService;
 	await dispatch(kycActions.setProcessingAction(true));
 	let applications = await kycApplicationService.load(identity.id);

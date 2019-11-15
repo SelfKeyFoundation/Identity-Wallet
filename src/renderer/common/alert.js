@@ -9,7 +9,7 @@ const styles = theme => ({
 		border: `1px solid ${secondary}`,
 		minHeight: '50px',
 		width: '100%',
-		borderRadius: '4px',
+		borderRadius: 0,
 		padding: '15px',
 		boxSizing: 'border-box',
 		color: secondary,
@@ -61,6 +61,14 @@ const styles = theme => ({
 	icon: {
 		height: '20px',
 		marginRight: '15px'
+	},
+	iconWrap: {
+		paddingTop: '3px'
+	},
+	alertWrap: {
+		alignItems: 'center',
+		display: 'flex',
+		justify: 'flex-start'
 	}
 });
 
@@ -74,12 +82,14 @@ export const AlertIcon = withStyles(styles)(({ classes, type = 'success' }) => (
 export const Alert = withStyles(styles)(
 	({ classes, type = 'success', children, icon, className }) => (
 		<div className={classNames(classes.alert, classes[type], className)}>
-			<Grid container direction="row" justify="flex-start" alignItems="center">
-				<Grid item>{icon || <AlertIcon type={type} />}</Grid>
+			<div className={classes.alertWrap}>
+				<Grid item className={classes.iconWrap}>
+					{icon || <AlertIcon type={type} />}
+				</Grid>
 				<Grid item xs>
 					{children}
 				</Grid>
-			</Grid>
+			</div>
 		</div>
 	)
 );
