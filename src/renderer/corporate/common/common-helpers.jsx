@@ -11,7 +11,7 @@ const getEntityIcon = entry => {
 
 const getEntityName = entry => {
 	if (entry.identity.type === 'individual') {
-		return `${entry.lastName}, ${entry.entity.firstName}`;
+		return `${entry.identity.lastName}, ${entry.identity.firstName}`;
 	} else {
 		return `${entry.entityName}`;
 	}
@@ -19,7 +19,7 @@ const getEntityName = entry => {
 
 const getEntityEmail = entry => entry.email;
 
-const getEntityRoles = entry => entry.identity.positions.map(p => p.position).join(', ');
+const getEntityRoles = entry => entry.identity.positions.join(', ');
 
 const getEntityJurisdiction = entry => {
 	const idAttribute =

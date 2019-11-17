@@ -31,6 +31,7 @@ import {
 	dummyMembers,
 	entityTypes,
 	legalJurisdictions,
+	countries,
 	corporateAttributes,
 	corporateDocuments,
 	corporateMembers,
@@ -240,15 +241,23 @@ storiesOf('Corporate/Members', module).add('Add Member', () => (
 	<CorporateAddMember
 		entityTypes={entityTypes}
 		jurisdictions={legalJurisdictions}
-		positions={corporatePositionsLLC}
-		parentIdentity={dummyProfile}
+		countries={countries}
+		availablePositions={corporatePositionsLLC}
+		parentProfile={dummyProfile}
+		companies={corporateMembers}
+		selectedType={`individual`}
+		onContinueClick={action(`continue click`)}
+		onCancelClick={action(`cancel click`)}
 		onFieldChange={name => action(`field change ${name}:`)}
 	/>
 ));
 storiesOf('Corporate/Members/Components', module)
 	.add('Individual Member Form', () => (
 		<div style={{ width: '1140px' }}>
-			<CorporateMemberIndividualForm jurisdictions={legalJurisdictions} />
+			<CorporateMemberIndividualForm
+				countries={countries}
+				onFieldChange={name => action(`field changed ${name}`)}
+			/>
 		</div>
 	))
 	.add('Entity Member Form', () => (
@@ -256,17 +265,25 @@ storiesOf('Corporate/Members/Components', module)
 			<CorporateMemberCorporateForm
 				jurisdictions={legalJurisdictions}
 				entityTypes={entityTypes}
+				onFieldChange={name => action(`field changed ${name}`)}
 			/>
 		</div>
 	))
 	.add('Parent & Shares Form', () => (
 		<div style={{ width: '1140px' }}>
-			<CorporateMemberSharesForm shares={50} parentIdentity={dummyProfile} />
+			<CorporateMemberSharesForm
+				shares={50}
+				companies={corporateMembers}
+				onFieldChange={name => action(`field changed ${name}`)}
+			/>
 		</div>
 	))
 	.add('Select Role', () => (
 		<div style={{ width: '720px' }}>
-			<CorporateMemberSelectRole positions={corporatePositionsLLC} />
+			<CorporateMemberSelectRole
+				availablePositions={corporatePositionsLLC}
+				onFieldChange={name => action(`field changed ${name}`)}
+			/>
 		</div>
 	))
 	.add('Select Type', () => (
