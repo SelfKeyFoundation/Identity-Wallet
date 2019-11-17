@@ -84,7 +84,7 @@ const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => 
 const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 	const {
 		classes,
-		jurisdictions = [],
+		countries = [],
 		errors = {},
 		email,
 		did,
@@ -151,9 +151,9 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 						<MenuItem value="">
 							<em>Choose...</em>
 						</MenuItem>
-						{jurisdictions.map(item => (
-							<MenuItem key={item} value={item}>
-								{item}
+						{countries.map(item => (
+							<MenuItem key={item.country} value={item}>
+								{item.denonym}
 							</MenuItem>
 						))}
 					</Select>
@@ -178,9 +178,9 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 						<MenuItem value="">
 							<em>Choose...</em>
 						</MenuItem>
-						{jurisdictions.map(item => (
-							<MenuItem key={item} value={item}>
-								{item}
+						{countries.map(item => (
+							<MenuItem key={item.country} value={item}>
+								{item.denonym}
 							</MenuItem>
 						))}
 					</Select>

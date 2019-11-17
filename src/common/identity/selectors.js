@@ -462,7 +462,7 @@ export const selectBasicAttributeInfo = attribute =>
 		}
 	);
 
-// JURISDICTIONS
+// Jurisdictions
 
 export const selectCorporateJurisdictions = createSelector(
 	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: JURISDICTION_ATTRIBUTE }),
@@ -474,6 +474,16 @@ export const selectCorporateJurisdictions = createSelector(
 export const selectCorporateLegalEntityTypes = createSelector(
 	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: ENTITY_TYPE_ATTRIBUTE }),
 	idType => (idType ? idType.content.enum : [])
+);
+
+// Countries
+
+export const selectCountries = createSelector(
+	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: COUNTRY_ATTRIBUTE }),
+	idType => {
+		const { enum: codes, enumNames: names } = idType.content.properties.country;
+		return codes.map((country, index) => ({ country, denonym: names[index] }));
+	}
 );
 
 // Profile

@@ -235,6 +235,7 @@ const mapStateToProps = (state, props) => {
 		individualAttributeTypes: identitySelectors.selectMemberIndividualAttributeTypes(state),
 		corporateAttributeTypes: identitySelectors.selectMemberCorporateAttributeTypes(state),
 		walletType: appSelectors.selectWalletType(state),
+		countries: identitySelectors.selectCountries(state),
 		jurisdictions: identitySelectors.selectCorporateJurisdictions(state),
 		entityTypes: identitySelectors.selectCorporateLegalEntityTypes(state),
 		availablePositions: identitySelectors.selectPositionsForCompanyType(state, {
