@@ -10,20 +10,10 @@ import {
 	DeleteAttributeContainer
 } from '../../attributes';
 
-const mapStateToProps = (state, props) => {
-	const profile = identitySelectors.selectCorporateProfile(state);
-	return {
-		identity: identitySelectors.selectIdentity(state),
-		profile,
-		applications: [], // marketplace applications,
-		members: profile.members,
-		cap: []
-	};
-};
-
 class CorporateDashboardContainer extends PureComponent {
 	state = {
-		popup: null
+		popup: null,
+		selectedMember: false
 	};
 
 	componentDidUpdate() {
@@ -33,6 +23,17 @@ class CorporateDashboardContainer extends PureComponent {
 	}
 
 	handleAddMember = () => this.props.dispatch(push('/main/corporate/add-member'));
+
+	handleOpenDetails = member => {
+		if (
+			this.state.selectedMember &&
+			this.state.selectedMember.identity.id === member.identity.id
+		) {
+			this.setState({ selectedMember: false });
+		} else {
+			this.setState({ selectedMember: member });
+		}
+	};
 
 	handleAttributeDelete = attributeId =>
 		this.props.dispatch(identityOperations.removeIdAttributeOperation(attributeId));
@@ -91,12 +92,25 @@ class CorporateDashboardContainer extends PureComponent {
 					onEditDocument={this.handleEditAttribute}
 					onDeleteDocument={this.handleDeleteAttribute}
 					onAddMember={this.handleAddMember}
+					onOpenMemberDetails={this.handleOpenDetails}
+					selectedMember={this.state.selectedMember}
 					didComponent={<RegisterDidCardContainer returnPath={'/main/corporate'} />}
 				/>
 			</React.Fragment>
 		);
 	}
 }
+
+const mapStateToProps = (state, props) => {
+	const profile = identitySelectors.selectCorporateProfile(state);
+	return {
+		identity: identitySelectors.selectIdentity(state),
+		profile,
+		applications: [], // marketplace applications,
+		members: profile.members,
+		cap: []
+	};
+};
 
 const connectedComponent = connect(mapStateToProps)(CorporateDashboardContainer);
 export { connectedComponent as CorporateDashboardContainer };

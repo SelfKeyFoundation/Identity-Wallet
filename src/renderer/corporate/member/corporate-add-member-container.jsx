@@ -241,7 +241,10 @@ const mapStateToProps = (state, props) => {
 		availablePositions: identitySelectors.selectPositionsForCompanyType(state, {
 			companyType: parentProfile.entityType
 		}),
-		companies: [parentProfile]
+		companies: [
+			parentProfile,
+			...parentProfile.members.filter(m => m.identity.type === 'corporate')
+		]
 	};
 };
 

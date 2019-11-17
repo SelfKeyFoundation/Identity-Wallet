@@ -17,11 +17,11 @@ import { CorporateWizard } from '../src/renderer/corporate/wizard/corporate-wiza
 import { CorporateDocuments } from '../src/renderer/corporate/common/corporate-documents';
 import { CorporateMembers } from '../src/renderer/corporate/common/corporate-members';
 import { CorporateAddMember } from '../src/renderer/corporate/member/corporate-add-member';
-import { CorporateMemberIndividualForm } from '../src/renderer/corporate/common/member-individual-form';
-import { CorporateMemberEntityForm } from '../src/renderer/corporate/common/member-entity-form';
-import { CorporateMemberSharesForm } from '../src/renderer/corporate/common/member-shares-form';
-import { CorporateMemberSelectRole } from '../src/renderer/corporate/common/member-select-role';
-import { CorporateMemberSelectType } from '../src/renderer/corporate/common/member-select-type';
+import { CorporateMemberIndividualForm } from '../src/renderer/corporate/member/member-individual-form';
+import { CorporateMemberCorporateForm } from '../src/renderer/corporate/member/member-corporate-form';
+import { CorporateMemberSharesForm } from '../src/renderer/corporate/member/member-shares-form';
+import { CorporateMemberSelectRole } from '../src/renderer/corporate/member/member-select-role';
+import { CorporateMemberSelectType } from '../src/renderer/corporate/member/member-select-type';
 
 import {
 	dummyProfile,
@@ -208,7 +208,7 @@ storiesOf('Corporate/Components', module)
 				onAddMember={action('on add new member')}
 				onDeleteMember={action('on delete member')}
 				onEditMember={action('on edit member')}
-				selectedEntity={corporateMembers[1]}
+				selectedMember={corporateMembers[1]}
 			/>
 		</div>
 	));
@@ -253,7 +253,7 @@ storiesOf('Corporate/Members/Components', module)
 	))
 	.add('Entity Member Form', () => (
 		<div style={{ width: '1140px' }}>
-			<CorporateMemberEntityForm
+			<CorporateMemberCorporateForm
 				jurisdictions={legalJurisdictions}
 				entityTypes={entityTypes}
 			/>
