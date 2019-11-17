@@ -193,7 +193,7 @@ storiesOf('Corporate/Components', module)
 		<div>
 			<CorporateMembers
 				members={corporateMembers}
-				onOpenEntityDetails={action('on open entity details')}
+				onOpenMemberDetails={action('on open entity details')}
 				onAddMember={action('on add new member')}
 				onDeleteMember={action('on delete member')}
 				onEditMember={action('on edit member')}
@@ -204,7 +204,7 @@ storiesOf('Corporate/Components', module)
 		<div>
 			<CorporateMembers
 				members={corporateMembers}
-				onOpenEntityDetails={action('on open entity details')}
+				onOpenMemberDetails={action('on open entity details')}
 				onAddMember={action('on add new member')}
 				onDeleteMember={action('on delete member')}
 				onEditMember={action('on edit member')}

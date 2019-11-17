@@ -55,7 +55,6 @@ class CorporateDashboardContainer extends PureComponent {
 
 	render() {
 		const { popup } = this.state;
-		console.log(this.props.members);
 		return (
 			<React.Fragment>
 				{popup === 'create-attribute' && (

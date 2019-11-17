@@ -84,7 +84,7 @@ const CorporateMembers = withStyles(styles)(props => {
 		onAddMember,
 		onEditMember,
 		onDeleteMember,
-		onOpenEntityDetails,
+		onOpenMemberDetails,
 		onAddAttribute,
 		onEditAttribute,
 		onDeleteAttribute,
@@ -138,7 +138,7 @@ const CorporateMembers = withStyles(styles)(props => {
 							return (
 								<React.Fragment key={entry.id}>
 									<TableRow>
-										<TableCell onClick={() => onOpenEntityDetails(entry)}>
+										<TableCell onClick={() => onOpenMemberDetails(entry)}>
 											<DropdownIcon
 												className={
 													isOpen ? classes.openIcon : classes.closedIcon
