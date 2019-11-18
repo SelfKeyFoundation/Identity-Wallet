@@ -58,6 +58,9 @@ const styles = theme => ({
 		wordBreak: 'break-all',
 		padding: '5px'
 	},
+	labelCell: {
+		paddingLeft: '5px'
+	},
 	editColumn: {
 		textAlign: 'right'
 	},
@@ -226,7 +229,7 @@ const KycChecklist = withStyles(styles)(
 						<TableCell className={classes.headCell}>
 							<Typography variant="overline">Information</Typography>
 						</TableCell>
-						<TableCell className={classes.headCell}>
+						<TableCell className={classes.labelCell}>
 							<Typography variant="overline">Label</Typography>
 						</TableCell>
 						<TableCell className={classes.editColumn}>
