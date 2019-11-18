@@ -302,32 +302,47 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
-	static listKYCApplications(ctx) {
+	static async listKYCApplications(ctx) {
 		let url = ctx.getEndpoint(KYC_APPLICATIONS_LIST_ENDPOINT_NAME);
 		log.debug(`[listKYCApplications] GET ${url}`);
-		return request.get({
-			url,
-			headers: {
-				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
-				'User-Agent': this.userAgent,
-				Origin: ctx.getOrigin()
-			},
-			json: true
-		});
+		try {
+			const applications = await request.get({
+				url,
+				headers: {
+					Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+					'User-Agent': this.userAgent,
+					Origin: ctx.getOrigin()
+				},
+				json: true
+			});
+			return applications;
+		} catch (error) {
+			if (error.statusCode === 404) {
+				return [];
+			}
+			throw error;
+		}
 	}
 
-	static getKYCUser(ctx) {
+	static async getKYCUser(ctx) {
 		let url = ctx.getEndpoint(KYC_USERS_GET_ENDPOINT_NAME);
-
-		return request.get({
-			url,
-			headers: {
-				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
-				'User-Agent': this.userAgent,
-				Origin: ctx.getOrigin()
-			},
-			json: true
-		});
+		try {
+			const user = await request.get({
+				url,
+				headers: {
+					Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+					'User-Agent': this.userAgent,
+					Origin: ctx.getOrigin()
+				},
+				json: true
+			});
+			return user;
+		} catch (error) {
+			if (error.statusCode === 404) {
+				return null;
+			}
+			throw error;
+		}
 	}
 
 	static createKYCUser(ctx, user) {
