@@ -75,6 +75,9 @@ const styles = theme => ({
 	},
 	closedIcon: {
 		transform: 'rotate(-90deg)'
+	},
+	capitalize: {
+		textTransform: 'capitalize'
 	}
 });
 
@@ -148,12 +151,12 @@ const CorporateMembers = withStyles(styles)(props => {
 										</TableCell>
 										<TableCell>{getEntityIcon(entry)}</TableCell>
 										<TableCell>
-											<Typography variant="h6">
+											<Typography variant="h6" className={classes.capitalize}>
 												{getEntityName(entry)}
 											</Typography>
 										</TableCell>
 										<TableCell>
-											<Typography variant="h6">
+											<Typography variant="h6" className={classes.capitalize}>
 												{getEntityRoles(entry)}
 											</Typography>
 										</TableCell>
@@ -161,12 +164,12 @@ const CorporateMembers = withStyles(styles)(props => {
 											<Typography variant="h6" />
 										</TableCell>
 										<TableCell>
-											<Typography variant="h6">
+											<Typography variant="h6" className={classes.capitalize}>
 												{getEntityJurisdiction(entry)}
 											</Typography>
 										</TableCell>
 										<TableCell>
-											<Typography variant="h6">
+											<Typography variant="h6" className={classes.capitalize}>
 												{getEntityResidency(entry)}
 											</Typography>
 										</TableCell>

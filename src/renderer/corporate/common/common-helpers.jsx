@@ -1,6 +1,8 @@
 import React from 'react';
 import { SmallRoundCompany, SmallRoundPerson } from 'selfkey-ui';
 
+const getEntityType = entry => entry.identity.type;
+
 const getEntityIcon = entry => {
 	if (entry.identity.type === 'individual') {
 		return <SmallRoundPerson />;
@@ -11,13 +13,19 @@ const getEntityIcon = entry => {
 
 const getEntityName = entry => {
 	if (entry.identity.type === 'individual') {
-		return `${entry.identity.lastName}, ${entry.identity.firstName}`;
+		return `${entry.lastName}, ${entry.firstName}`;
 	} else {
 		return `${entry.entityName}`;
 	}
 };
 
-const getEntityEmail = entry => entry.email;
+const getEntityEmail = entry => {
+	const idAttribute = 'http://platform.selfkey.org/schema/attribute/email.json';
+	const attribute = entry.attributes.find(a => a.type.content.$id === idAttribute);
+	if (attribute && attribute.data.value) {
+		return attribute.data.value;
+	}
+};
 
 const getEntityRoles = entry => entry.identity.positions.join(', ');
 
@@ -46,6 +54,7 @@ const getEntityResidency = entry => {
 const getEntityEquity = entry => entry.identity.equity;
 
 export {
+	getEntityType,
 	getEntityIcon,
 	getEntityName,
 	getEntityEmail,

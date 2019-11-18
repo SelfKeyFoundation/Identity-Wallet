@@ -200,7 +200,6 @@ class CorporateAddMemberContainer extends PureComponent {
 
 	render() {
 		const membersForm = _.pick(this.state, 'errors', this.selectFields(this.state.type));
-
 		return (
 			<CorporateAddMember
 				{...this.props}

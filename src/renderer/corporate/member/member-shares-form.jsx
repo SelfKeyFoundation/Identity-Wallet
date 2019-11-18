@@ -101,7 +101,6 @@ const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 			<div className={classes.inputWrap}>
 				{showParentCompany && (
 					<div className={`${classes.inputBox} ${classes.flexColumn}`}>
-						{console.log(companies)}
 						<InputTitle title="Parent Company" />
 						<Select
 							className={classes.select}
