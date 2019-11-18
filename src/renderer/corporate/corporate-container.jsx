@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import {
 	CorporateDashboardContainer,
 	CorporateWizardContainer,
-	CorporateAddMemberContainer,
-	CorporateEditMemberContainer
+	CorporateAddMemberContainer
 } from '../corporate';
 
 class CorporateContainerComponent extends PureComponent {
