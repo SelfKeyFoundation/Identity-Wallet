@@ -28,7 +28,7 @@ const individualFields = [
 	'phoneNumber'
 ];
 
-class CorporateEditMemberContainer extends PureComponent {
+class CorporateEditMemberContainerComponent extends PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -217,9 +217,8 @@ class CorporateEditMemberContainer extends PureComponent {
 }
 
 const mapStateToProps = (state, props) => {
-	const identity = identitySelectors.selectIdentity(state);
-	let { parentId } = props.match.params;
-	parentId = parentId || identity.id;
+	let { parentId, identityId } = props.match.params;
+	const identity = identitySelectors.selectIdentity(state, { identityId: identityId });
 
 	const parentProfile = identitySelectors.selectCorporateProfile(state, {
 		identityId: parentId
@@ -249,7 +248,7 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-const styledComponent = withStyles(styles)(CorporateAddMemberContainer);
+const styledComponent = withStyles(styles)(CorporateEditMemberContainerComponent);
 const connectedComponent = connect(mapStateToProps)(styledComponent);
-export { connectedComponent as CorporateAddMemberContainer };
+export { connectedComponent as CorporateEditMemberContainer };
 export default connectedComponent;
