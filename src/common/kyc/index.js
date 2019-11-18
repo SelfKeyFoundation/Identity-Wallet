@@ -193,20 +193,29 @@ export const kycSelectors = {
 			return finalAttr;
 		});
 	},
-	selectKYCUserData(state, identityId) {
-		const attributes = identitySelectors.selectAttributesByUrl(state, {
-			identityId,
-			attributeTypeUrls: [
-				EMAIL_ATTRIBUTE,
-				ENTITY_NAME_ATTRIBUTE,
-				FIRST_NAME_ATTRIBUTE,
-				LAST_NAME_ATTRIBUTE
-			]
+	selectKYCUserData(state, identityId, kycAttributes = []) {
+		const attributes = [
+			EMAIL_ATTRIBUTE,
+			FIRST_NAME_ATTRIBUTE,
+			LAST_NAME_ATTRIBUTE,
+			ENTITY_NAME_ATTRIBUTE
+		].map(url => {
+			let attr = kycAttributes.find(attr => attr.schemaId === url);
+			if (!attr) {
+				attr = (identitySelectors.selectAttributesByUrl(state, {
+					attributeTypeUrls: [url]
+				}) || [])[0];
+			}
+			return {
+				url,
+				value: attr && attr.data ? attr.data.value : null
+			};
 		});
 
 		const attrData = attributes.reduce((acc, curr) => {
-			if (acc[curr.type.ur]) return acc;
-			acc[curr.type.url] = curr.data.value;
+			const { url, value } = curr;
+			if (acc[url]) return acc;
+			acc[url] = value;
 			return acc;
 		}, {});
 
@@ -468,7 +477,7 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 	attributes = kycSelectors.selectKYCAttributes(getState(), identity.id, attributes);
 	try {
 		if (rp.session.ctx.hasKYCUserEndpoint() && !rp.session.ctx.user) {
-			const userData = kycSelectors.selectKYCUserData(getState(), identity.id);
+			const userData = kycSelectors.selectKYCUserData(getState(), identity.id, attributes);
 			await rp.session.createKYCUser(userData);
 		}
 		let application = await rp.session.createKYCApplication(templateId, attributes);

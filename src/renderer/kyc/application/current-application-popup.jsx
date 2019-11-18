@@ -383,6 +383,10 @@ export const CurrentApplicationPopup = withStyles(styles)(
 									? error.message
 									: currentApplication.error && currentApplication.error.message
 									? currentApplication.error.message
+									: currentApplication.error &&
+									  currentApplication.error.details &&
+									  currentApplication.error.details.message
+									? currentApplication.error.details.message
 									: 'You must provide all required information to proceed. Please update any missing details.'}
 							</Typography>
 						</Grid>
