@@ -46,8 +46,8 @@ export const CORPORATE_MEMBER_INDIVIDUAL_ATTRIBUTES = {
 	[FIRST_NAME_ATTRIBUTE]: 1,
 	[LAST_NAME_ATTRIBUTE]: 1,
 	[EMAIL_ATTRIBUTE]: 1,
-	[COUNTRY_ATTRIBUTE]: 1,
 	[NATIONALITY_ATTRIBUTE]: 1,
+	[RESIDENCY_ATTRIBUTE]: 1,
 	[PHONE_NUMBER_ATTRIBUTE]: 1
 };
 
@@ -66,8 +66,8 @@ export const CORPORATE_STRUCTURE =
 export const individualMemberAttributes = [
 	{ key: 'firstName', type: FIRST_NAME_ATTRIBUTE, name: 'First Name', required: true },
 	{ key: 'lastName', type: LAST_NAME_ATTRIBUTE, name: 'Last Name', required: true },
-	{ key: 'citizenship', type: NATIONALITY_ATTRIBUTE, name: 'Citizenship', required: true },
-	{ key: 'residency', type: RESIDENCY_ATTRIBUTE, name: 'Residency', required: true },
+	{ key: 'nationality', type: NATIONALITY_ATTRIBUTE, name: 'Citizenship', required: true },
+	{ key: 'country', type: RESIDENCY_ATTRIBUTE, name: 'Residency', required: true },
 	{ key: 'email', type: EMAIL_ATTRIBUTE, name: 'Email', required: true },
 	{ key: 'phone', type: PHONE_ATTRIBUTE, name: 'Phone' }
 ];

@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import {
 	CorporateDashboardContainer,
 	CorporateWizardContainer,
-	CorporateAddMemberContainer
+	CorporateAddMemberContainer,
+	CorporateEditMemberContainer
 } from '../corporate';
 
 class CorporateContainerComponent extends PureComponent {
@@ -26,6 +27,10 @@ class CorporateContainerComponent extends PureComponent {
 				<Route
 					path={`${match.path}/add-member/:parentId?`}
 					component={CorporateAddMemberContainer}
+				/>
+				<Route
+					path={`${match.path}/edit-member/:id/:parentId?`}
+					component={CorporateEditMemberContainer}
 				/>
 			</React.Fragment>
 		);

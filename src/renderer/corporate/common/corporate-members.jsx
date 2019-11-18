@@ -45,7 +45,10 @@ const styles = theme => ({
 		alignItems: 'center',
 		display: 'flex',
 		flexDirection: 'column',
-		justifyContent: 'center'
+		justifyContent: 'center',
+		'& td': {
+			whiteSpace: 'pre-wrap'
+		}
 	},
 	regularText: {
 		'& span': {
@@ -78,6 +81,11 @@ const styles = theme => ({
 	},
 	capitalize: {
 		textTransform: 'capitalize'
+	},
+	iconColumn: {
+		maxWidth: '1em',
+		padding: '0',
+		textAlign: 'center'
 	}
 });
 
@@ -142,14 +150,19 @@ const CorporateMembers = withStyles(styles)(props => {
 							return (
 								<React.Fragment key={entry.identity.id}>
 									<TableRow>
-										<TableCell onClick={() => onOpenMemberDetails(entry)}>
+										<TableCell
+											onClick={() => onOpenMemberDetails(entry)}
+											className={classes.iconColumn}
+										>
 											<DropdownIcon
 												className={
 													isOpen ? classes.openIcon : classes.closedIcon
 												}
 											/>
 										</TableCell>
-										<TableCell>{getEntityIcon(entry)}</TableCell>
+										<TableCell className={classes.iconColumn}>
+											{getEntityIcon(entry)}
+										</TableCell>
 										<TableCell>
 											<Typography variant="h6" className={classes.capitalize}>
 												{getEntityName(entry)}

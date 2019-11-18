@@ -21,7 +21,7 @@ const getEntityName = entry => {
 
 const getEntityEmail = entry => {
 	const idAttribute = 'http://platform.selfkey.org/schema/attribute/email.json';
-	const attribute = entry.attributes.find(a => a.type.content.$id === idAttribute);
+	const attribute = entry.allAttributes.find(a => a.type.content.$id === idAttribute);
 	if (attribute && attribute.data.value) {
 		return attribute.data.value;
 	}
@@ -34,9 +34,9 @@ const getEntityJurisdiction = entry => {
 		entry.identity.type === 'individual'
 			? 'http://platform.selfkey.org/schema/attribute/nationality.json'
 			: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json';
-	const attribute = entry.attributes.find(a => a.type.content.$id === idAttribute);
+	const attribute = entry.allAttributes.find(a => a.type.content.$id === idAttribute);
 	if (attribute && attribute.data.value) {
-		return attribute.data.value;
+		return attribute.data.value.denonym ? attribute.data.value.denonym : attribute.data.value;
 	}
 };
 
@@ -45,9 +45,9 @@ const getEntityResidency = entry => {
 		entry.identity.type === 'individual'
 			? 'http://platform.selfkey.org/schema/attribute/country-of-residency.json'
 			: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json';
-	const attribute = entry.attributes.find(a => a.type.content.$id === idAttribute);
+	const attribute = entry.allAttributes.find(a => a.type.content.$id === idAttribute);
 	if (attribute && attribute.data.value) {
-		return attribute.data.value;
+		return attribute.data.value.denonym ? attribute.data.value.denonym : attribute.data.value;
 	}
 };
 
