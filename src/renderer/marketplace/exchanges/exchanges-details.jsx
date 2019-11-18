@@ -299,9 +299,12 @@ class ExchangesDetailsComponent extends PureComponent {
 
 		if (!this.props.relyingParty) {
 			if (item.data.affiliateUrl) {
-				return this.renderAffiliateLinkButton(item.data.affiliateUrl);
+				return this.renderLinkButton({ url: item.data.affiliateUrl, isAffiliate: true });
+			} else if (item.data.url) {
+				return this.renderLinkButton({ url: item.data.url, isAffiliate: false });
+			} else {
+				return null;
 			}
-			return null;
 		} else if (
 			!application ||
 			[APPLICATION_REJECTED, APPLICATION_CANCELLED].includes(application.currentStatus)
@@ -319,7 +322,7 @@ class ExchangesDetailsComponent extends PureComponent {
 		}
 	};
 
-	renderAffiliateLinkButton = url => (
+	renderLinkButton = ({ url, isAffiliate = false, text = 'SIGN UP' }) => (
 		<React.Fragment>
 			<Button
 				variant="contained"
@@ -328,18 +331,20 @@ class ExchangesDetailsComponent extends PureComponent {
 				onClick={() => this.linkToAffiliateUrl(url)}
 			>
 				<UserPlusIcon />
-				<span>SIGN UP</span>
+				<span>{text}</span>
 				<span />
 			</Button>
-			<Typography
-				className={this.props.classes.affiliateMessage}
-				variant="subtitle2"
-				color="secondary"
-				gutterBottom
-			>
-				Disclosure: The button above is an affiliate link, we may receive a commission for
-				purchases made through this link.
-			</Typography>
+			{isAffiliate && (
+				<Typography
+					className={this.props.classes.affiliateMessage}
+					variant="subtitle2"
+					color="secondary"
+					gutterBottom
+				>
+					Disclosure: The button above is an affiliate link, we may receive a commission
+					for purchases made through this link.
+				</Typography>
+			)}
 		</React.Fragment>
 	);
 
