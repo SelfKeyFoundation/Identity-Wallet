@@ -28,10 +28,6 @@ class CorporateContainerComponent extends PureComponent {
 					path={`${match.path}/add-member/:parentId?`}
 					component={CorporateAddMemberContainer}
 				/>
-				<Route
-					path={`${match.path}/edit-member/:id/:parentId?`}
-					component={CorporateEditMemberContainer}
-				/>
 			</React.Fragment>
 		);
 	}
