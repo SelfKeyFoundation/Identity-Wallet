@@ -94,9 +94,13 @@ const RoleIcon = ({ role }) => {
 };
 
 class CorporateMemberSelectRoleComponent extends PureComponent {
-	state = {
-		positions: new Set()
-	};
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			positions: props.positions
+		};
+	}
 
 	handleChange = e => {
 		const value = e.target.value;

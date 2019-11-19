@@ -19,11 +19,11 @@ import CorporateDocuments from './corporate-documents';
 import CorporateInformation from './corporate-information';
 import {
 	getEntityIcon,
-	getEntityName,
-	getEntityRoles,
-	getEntityJurisdiction,
-	getEntityResidency,
-	getEntityEquity
+	getProfileName,
+	getMemberPositions,
+	getProfileJurisdiction,
+	getProfileResidency,
+	getMemberEquity
 } from './common-helpers.jsx';
 
 const styles = theme => ({
@@ -165,12 +165,12 @@ const CorporateMembers = withStyles(styles)(props => {
 										</TableCell>
 										<TableCell>
 											<Typography variant="h6" className={classes.capitalize}>
-												{getEntityName(entry)}
+												{getProfileName(entry)}
 											</Typography>
 										</TableCell>
 										<TableCell>
 											<Typography variant="h6" className={classes.capitalize}>
-												{getEntityRoles(entry)}
+												{getMemberPositions(entry)}
 											</Typography>
 										</TableCell>
 										<TableCell>
@@ -178,17 +178,17 @@ const CorporateMembers = withStyles(styles)(props => {
 										</TableCell>
 										<TableCell>
 											<Typography variant="h6" className={classes.capitalize}>
-												{getEntityJurisdiction(entry)}
+												{getProfileJurisdiction(entry)}
 											</Typography>
 										</TableCell>
 										<TableCell>
 											<Typography variant="h6" className={classes.capitalize}>
-												{getEntityResidency(entry)}
+												{getProfileResidency(entry)}
 											</Typography>
 										</TableCell>
 										<TableCell>
 											<Typography variant="h6">
-												{getEntityEquity(entry)}
+												{getMemberEquity(entry)}
 											</Typography>
 										</TableCell>
 										<TableCell>

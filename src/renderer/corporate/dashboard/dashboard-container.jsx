@@ -24,8 +24,15 @@ class CorporateDashboardContainer extends PureComponent {
 
 	handleAddMember = () => this.props.dispatch(push('/main/corporate/add-member'));
 
-	handleDeleteMember = profile =>
-		this.props.dispatch(identityOperations.deleteIdentityOperation(profile.identity.id));
+	handleDeleteMember = member =>
+		this.props.dispatch(identityOperations.deleteIdentityOperation(member.identity.id));
+
+	handleEditMember = member => {
+		console.log(member);
+		this.props.dispatch(
+			push(`/main/corporate/edit-member/${member.identity.id}/${this.props.identity.id}`)
+		);
+	};
 
 	handleOpenDetails = member => {
 		if (
@@ -96,6 +103,7 @@ class CorporateDashboardContainer extends PureComponent {
 					onDeleteDocument={this.handleDeleteAttribute}
 					onAddMember={this.handleAddMember}
 					onDeleteMember={this.handleDeleteMember}
+					onEditMember={this.handleEditMember}
 					onOpenMemberDetails={this.handleOpenDetails}
 					selectedMember={this.state.selectedMember}
 					didComponent={<RegisterDidCardContainer returnPath={'/main/corporate'} />}

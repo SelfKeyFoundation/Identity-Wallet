@@ -7,6 +7,20 @@ import { push } from 'connected-react-router';
 import { appSelectors } from 'common/app';
 import { identityAttributes } from 'common/identity/utils';
 import { identityOperations, identitySelectors } from 'common/identity';
+import { getProfileIdAttribute } from '../common/common-helpers.jsx';
+import {
+	EMAIL_ATTRIBUTE,
+	FIRST_NAME_ATTRIBUTE,
+	LAST_NAME_ATTRIBUTE,
+	JURISDICTION_ATTRIBUTE,
+	ENTITY_TYPE_ATTRIBUTE,
+	TAX_ID_ATTRIBUTE,
+	ENTITY_NAME_ATTRIBUTE,
+	CREATION_DATE_ATTRIBUTE,
+	COUNTRY_ATTRIBUTE,
+	NATIONALITY_ATTRIBUTE,
+	PHONE_NUMBER_ATTRIBUTE
+} from 'common/identity/constants';
 
 const styles = theme => ({});
 
@@ -31,11 +45,29 @@ const individualFields = [
 class CorporateEditMemberContainerComponent extends PureComponent {
 	constructor(props) {
 		super(props);
+
+		const { profile } = this.props;
 		this.state = {
 			errors: { hasErrors: false },
-			type: 'individual',
-			parentId: props.companies[0].identity.id
+			type: profile.identity.type || 'individual',
+			parentId: props.companies[0].identity.id,
+			email: getProfileIdAttribute(profile, EMAIL_ATTRIBUTE),
+			firstName: getProfileIdAttribute(profile, FIRST_NAME_ATTRIBUTE),
+			lastName: getProfileIdAttribute(profile, LAST_NAME_ATTRIBUTE),
+			phoneNumber: getProfileIdAttribute(profile, PHONE_NUMBER_ATTRIBUTE),
+			creationDate: getProfileIdAttribute(profile, CREATION_DATE_ATTRIBUTE),
+			jurisdiction: getProfileIdAttribute(profile, JURISDICTION_ATTRIBUTE),
+			entityName: getProfileIdAttribute(profile, ENTITY_NAME_ATTRIBUTE),
+			entityType: getProfileIdAttribute(profile, ENTITY_TYPE_ATTRIBUTE),
+			taxId: getProfileIdAttribute(profile, TAX_ID_ATTRIBUTE),
+			country: getProfileIdAttribute(profile, COUNTRY_ATTRIBUTE),
+			nationality: getProfileIdAttribute(profile, NATIONALITY_ATTRIBUTE),
+			equity: profile.identity.equity,
+			positions: new Set(profile.identity.positions),
+			did: profile.identity.did
 		};
+
+		console.log(new Set(profile.identity.positions));
 	}
 
 	selectFields = type =>
@@ -53,6 +85,8 @@ class CorporateEditMemberContainerComponent extends PureComponent {
 		const stateErrors = { ...this.state.errors };
 		delete stateErrors[name];
 		const errors = this.validateAllAttributes([{ name, value }]);
+
+		console.log(value);
 
 		if (name === 'positions' && value) {
 			value = this.filterAcceptablePositions(Array.from(value));
@@ -193,7 +227,7 @@ class CorporateEditMemberContainerComponent extends PureComponent {
 
 	handleCancelClick = evt => {
 		evt && evt.preventDefault();
-		this.props.dispatch(push('/main/dashboard'));
+		this.props.dispatch(push('/main/corporate'));
 	};
 
 	isDisabled() {
@@ -218,8 +252,8 @@ class CorporateEditMemberContainerComponent extends PureComponent {
 
 const mapStateToProps = (state, props) => {
 	let { parentId, identityId } = props.match.params;
-	const identity = identitySelectors.selectIdentity(state, { identityId: identityId });
 
+	const profile = identitySelectors.selectProfile(state, { identityId });
 	const parentProfile = identitySelectors.selectCorporateProfile(state, {
 		identityId: parentId
 	});
@@ -228,10 +262,12 @@ const mapStateToProps = (state, props) => {
 		throw new Error(`Invalid parent identity, requires 'corporate' type`);
 	}
 
+	console.log(profile);
+
 	return {
 		parentId,
 		parentProfile,
-		identity,
+		profile,
 		individualAttributeTypes: identitySelectors.selectMemberIndividualAttributeTypes(state),
 		corporateAttributeTypes: identitySelectors.selectMemberCorporateAttributeTypes(state),
 		walletType: appSelectors.selectWalletType(state),

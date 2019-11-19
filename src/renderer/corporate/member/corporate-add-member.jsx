@@ -75,6 +75,7 @@ class CorporateAddMemberComponent extends PureComponent {
 			classes,
 			onFieldChange = () => {},
 			availablePositions = [],
+			positions = new Set(),
 			types = [
 				{
 					title: 'Individual',
@@ -111,6 +112,7 @@ class CorporateAddMemberComponent extends PureComponent {
 								xs={12}
 							>
 								<CorporateMemberSelectRole
+									positions={positions}
 									availablePositions={availablePositions}
 									onFieldChange={onFieldChange}
 								/>
