@@ -58,6 +58,9 @@ const styles = theme => ({
 		wordBreak: 'break-all',
 		padding: '5px'
 	},
+	labelCell: {
+		paddingLeft: '5px'
+	},
 	editColumn: {
 		textAlign: 'right'
 	},
@@ -113,7 +116,7 @@ const KycChecklistItemLabel = withStyles(styles)(
 		const { options } = item;
 		if (!options || options.length <= 1) {
 			return (
-				<Typography variant="subtitle1" gutterBottom className={className}>
+				<Typography variant="subtitle1" className={className}>
 					{options.length ? options[0].name : '...'}
 					{item.duplicateType && <br />}
 					{item.duplicateType && (
@@ -226,7 +229,7 @@ const KycChecklist = withStyles(styles)(
 						<TableCell className={classes.headCell}>
 							<Typography variant="overline">Information</Typography>
 						</TableCell>
-						<TableCell className={classes.headCell}>
+						<TableCell className={classes.labelCell}>
 							<Typography variant="overline">Label</Typography>
 						</TableCell>
 						<TableCell className={classes.editColumn}>
@@ -383,6 +386,10 @@ export const CurrentApplicationPopup = withStyles(styles)(
 									? error.message
 									: currentApplication.error && currentApplication.error.message
 									? currentApplication.error.message
+									: currentApplication.error &&
+									  currentApplication.error.details &&
+									  currentApplication.error.details.message
+									? currentApplication.error.details.message
 									: 'You must provide all required information to proceed. Please update any missing details.'}
 							</Typography>
 						</Grid>
