@@ -45,7 +45,7 @@ const styles = theme => ({
 		wordBreak: 'break-word'
 	},
 	excluded: {
-		padding: '10px',
+		padding: '10px 10px 10px 0',
 		whiteSpace: 'normal',
 		width: '100px',
 		wordBreak: 'break-word'
