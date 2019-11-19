@@ -481,7 +481,7 @@ export const selectCountries = createSelector(
 	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: COUNTRY_ATTRIBUTE }),
 	idType => {
 		const { enum: codes, enumNames: names } = idType.content.properties.country;
-		return codes.map((country, index) => ({ country, denonym: names[index] }));
+		return codes.map((country, index) => ({ country, name: names[index] }));
 	}
 );
 
