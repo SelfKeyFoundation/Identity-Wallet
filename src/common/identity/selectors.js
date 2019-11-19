@@ -446,9 +446,8 @@ export const selectNonBasicDocumentAttributes = createSelector(
 export const selectAttributesByUrl = createSelector(
 	selectFullIdAttributesByIds,
 	selectProps('attributeTypeUrls'),
-	(attributes, { attributeTypeUrls = [] }) => {
-		attributes.filter(attr => attributeTypeUrls.includes(attr.type.url));
-	}
+	(attributes, { attributeTypeUrls = [] }) =>
+		attributes.filter(attr => attributeTypeUrls.includes(attr.type.url))
 );
 
 export const selectBasicAttributeInfo = attribute =>
