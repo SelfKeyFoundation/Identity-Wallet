@@ -9,7 +9,7 @@ if (!isStorybook()) {
 	electron = require('electron');
 }
 
-const isDevMode = () => process.env.NODE_ENV === DEV_ENV;
+const isDevMode = () => process.env.FORCE_DEV_MODE === '1' || process.env.NODE_ENV === DEV_ENV;
 
 const isTestMode = () => process.env.MODE === 'test';
 
