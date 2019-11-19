@@ -5,7 +5,7 @@ import NotarizationDetailsPage from '../src/renderer/marketplace/notarization/de
 import RequestNotarizationPage from '../src/renderer/marketplace/notarization/process/request-notarization-page';
 import TOCPopup from '../src/renderer/marketplace/notarization/common/toc-popup';
 import TOCDisagreementPopup from '../src/renderer/marketplace/notarization/common/toc-disagreement-popup';
-import NotarizationMessageContainer from '../src/renderer/marketplace/notarization/common/message-container';
+import NotarizationMessageWidget from '../src/renderer/marketplace/notarization/common/message-widget';
 
 const documents = [
 	{
@@ -118,4 +118,4 @@ storiesOf('Notarization', module)
 			onStartClick={linkTo('Notarization/Popups', 'toc')}
 		/>
 	))
-	.add('Messages', () => <NotarizationMessageContainer messages={messagesReply} />);
+	.add('Messages', () => <NotarizationMessageWidget messages={messagesReply} />);
