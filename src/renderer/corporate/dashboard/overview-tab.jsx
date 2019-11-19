@@ -4,7 +4,7 @@ import { CorporateDetails } from '../common/corporate-details';
 import { CorporateApplicationsSummary } from '../common/corporate-applications';
 import { CorporateCapTable } from '../common/corporate-cap-table';
 import { CorporateShareholding } from '../common/corporate-shareholding';
-import { CorporateOrgChart } from '../common/corporate-org-chart';
+// import { CorporateOrgChart } from '../common/corporate-org-chart';
 
 const styles = theme => ({
 	overviewBox: {
@@ -54,9 +54,11 @@ const CorporateOverviewTab = withStyles(styles)(
 					<div className="halfWidth" styles={{ marginRight: 15 }}>
 						<CorporateShareholding profile={profile} members={members} />
 					</div>
+					{/*
 					<div className="halfWidth" styles={{ marginLeft: 15 }}>
 						<CorporateOrgChart profile={profile} members={members} />
 					</div>
+					*/}
 				</div>
 			</div>
 		</div>
