@@ -239,7 +239,10 @@ const mapStateToProps = (state, props) => {
 		}),
 		companies: [
 			parentProfile,
-			...parentProfile.members.filter(m => m.identity.type === 'corporate')
+			...identitySelectors.selectChildrenProfilesByType(state, {
+				identityId: parentId,
+				type: 'corporate'
+			})
 		]
 	};
 };
