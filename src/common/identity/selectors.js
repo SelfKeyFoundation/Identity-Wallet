@@ -566,6 +566,17 @@ const selectChildrenProfiles = createSelector(
 		)
 );
 
+// props: identityId, type ('corporate' or 'individual')
+export const selectChildrenProfilesByType = createSelector(
+	state => state,
+	selectChildrenIdentities,
+	selectProps('type'),
+	(state, childrenIdentities, { type }) =>
+		childrenIdentities
+			.filter(c => c.type === type)
+			.map(c => selectCorporateProfile(state, { identityId: c.id }))
+);
+
 export const selectCorporateProfile = createSelector(
 	selectProfile,
 	selectChildrenProfiles,
