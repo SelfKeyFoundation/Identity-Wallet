@@ -7,7 +7,6 @@ import { push } from 'connected-react-router';
 import { appSelectors } from 'common/app';
 import { identityAttributes } from 'common/identity/utils';
 import { identityOperations, identitySelectors } from 'common/identity';
-import { getProfileIdAttribute } from '../common/common-helpers.jsx';
 import {
 	EMAIL_ATTRIBUTE,
 	FIRST_NAME_ATTRIBUTE,
@@ -45,29 +44,27 @@ const individualFields = [
 class CorporateEditMemberContainerComponent extends PureComponent {
 	constructor(props) {
 		super(props);
+		const { member, profile } = props;
 
-		const { profile } = this.props;
 		this.state = {
 			errors: { hasErrors: false },
 			type: profile.identity.type || 'individual',
 			parentId: props.companies[0].identity.id,
-			email: getProfileIdAttribute(profile, EMAIL_ATTRIBUTE),
-			firstName: getProfileIdAttribute(profile, FIRST_NAME_ATTRIBUTE),
-			lastName: getProfileIdAttribute(profile, LAST_NAME_ATTRIBUTE),
-			phoneNumber: getProfileIdAttribute(profile, PHONE_NUMBER_ATTRIBUTE),
-			creationDate: getProfileIdAttribute(profile, CREATION_DATE_ATTRIBUTE),
-			jurisdiction: getProfileIdAttribute(profile, JURISDICTION_ATTRIBUTE),
-			entityName: getProfileIdAttribute(profile, ENTITY_NAME_ATTRIBUTE),
-			entityType: getProfileIdAttribute(profile, ENTITY_TYPE_ATTRIBUTE),
-			taxId: getProfileIdAttribute(profile, TAX_ID_ATTRIBUTE),
-			country: getProfileIdAttribute(profile, COUNTRY_ATTRIBUTE),
-			nationality: getProfileIdAttribute(profile, NATIONALITY_ATTRIBUTE),
+			email: member[EMAIL_ATTRIBUTE],
+			firstName: member[FIRST_NAME_ATTRIBUTE],
+			lastName: member[LAST_NAME_ATTRIBUTE],
+			phoneNumber: member[PHONE_NUMBER_ATTRIBUTE],
+			creationDate: member[CREATION_DATE_ATTRIBUTE],
+			jurisdiction: member[JURISDICTION_ATTRIBUTE],
+			entityName: member[ENTITY_NAME_ATTRIBUTE],
+			entityType: member[ENTITY_TYPE_ATTRIBUTE],
+			taxId: member[TAX_ID_ATTRIBUTE],
+			country: member[COUNTRY_ATTRIBUTE],
+			nationality: member[NATIONALITY_ATTRIBUTE],
 			equity: profile.identity.equity,
 			positions: new Set(profile.identity.positions),
 			did: profile.identity.did
 		};
-
-		console.log(new Set(profile.identity.positions));
 	}
 
 	selectFields = type =>
@@ -85,8 +82,6 @@ class CorporateEditMemberContainerComponent extends PureComponent {
 		const stateErrors = { ...this.state.errors };
 		delete stateErrors[name];
 		const errors = this.validateAllAttributes([{ name, value }]);
-
-		console.log(value);
 
 		if (name === 'positions' && value) {
 			value = this.filterAcceptablePositions(Array.from(value));
@@ -250,6 +245,32 @@ class CorporateEditMemberContainerComponent extends PureComponent {
 	}
 }
 
+const memberData = (state, identityId) => {
+	const attributes = [
+		EMAIL_ATTRIBUTE,
+		FIRST_NAME_ATTRIBUTE,
+		LAST_NAME_ATTRIBUTE,
+		JURISDICTION_ATTRIBUTE,
+		ENTITY_TYPE_ATTRIBUTE,
+		TAX_ID_ATTRIBUTE,
+		ENTITY_NAME_ATTRIBUTE,
+		CREATION_DATE_ATTRIBUTE,
+		COUNTRY_ATTRIBUTE,
+		NATIONALITY_ATTRIBUTE,
+		PHONE_NUMBER_ATTRIBUTE
+	];
+
+	const data = [];
+	attributes.forEach(
+		attr =>
+			(data[attr] = identitySelectors.selectAttributeValue(state, {
+				identityId,
+				attributeTypeUrl: attr
+			}))
+	);
+	return data;
+};
+
 const mapStateToProps = (state, props) => {
 	let { parentId, identityId } = props.match.params;
 
@@ -261,8 +282,6 @@ const mapStateToProps = (state, props) => {
 	if (!parentProfile || parentProfile.identity.type !== 'corporate') {
 		throw new Error(`Invalid parent identity, requires 'corporate' type`);
 	}
-
-	console.log(profile);
 
 	return {
 		parentId,
@@ -280,7 +299,8 @@ const mapStateToProps = (state, props) => {
 		companies: [
 			parentProfile,
 			...parentProfile.members.filter(m => m.identity.type === 'corporate')
-		]
+		],
+		member: memberData(state, identityId)
 	};
 };
 

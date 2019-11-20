@@ -168,7 +168,7 @@ class CorporateAddMemberContainer extends PureComponent {
 		);
 
 	validateAttributeParentId = parentId =>
-		this.props.companies.find(c => c.identity.id === parentId);
+		this.props.companies.find(c => c.identity.id === +parentId);
 
 	handleContinueClick = evt => {
 		evt && evt.preventDefault();
@@ -201,7 +201,8 @@ class CorporateAddMemberContainer extends PureComponent {
 	}
 
 	render() {
-		const membersForm = _.pick(this.state, 'errors', this.selectFields(this.state.type));
+		const membersForm = _.pick(this.state, ['errors', ...this.selectFields(this.state.type)]);
+
 		return (
 			<CorporateAddMember
 				{...this.props}
@@ -217,10 +218,7 @@ class CorporateAddMemberContainer extends PureComponent {
 }
 
 const mapStateToProps = (state, props) => {
-	const identity = identitySelectors.selectIdentity(state);
-	let { parentId } = props.match.params;
-	parentId = parentId || identity.id;
-
+	const { parentId } = props.match.params;
 	const parentProfile = identitySelectors.selectCorporateProfile(state, {
 		identityId: parentId
 	});
@@ -232,7 +230,6 @@ const mapStateToProps = (state, props) => {
 	return {
 		parentId,
 		parentProfile,
-		identity,
 		individualAttributeTypes: identitySelectors.selectMemberIndividualAttributeTypes(state),
 		corporateAttributeTypes: identitySelectors.selectMemberCorporateAttributeTypes(state),
 		walletType: appSelectors.selectWalletType(state),
@@ -244,7 +241,10 @@ const mapStateToProps = (state, props) => {
 		}),
 		companies: [
 			parentProfile,
-			...parentProfile.members.filter(m => m.identity.type === 'corporate')
+			...identitySelectors.selectChildrenProfilesByType(state, {
+				identityId: parentId,
+				type: 'corporate'
+			})
 		]
 	};
 };

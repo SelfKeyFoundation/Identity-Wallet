@@ -153,7 +153,7 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 						</MenuItem>
 						{countries.map(item => (
 							<MenuItem key={item.country} value={item}>
-								{item.denonym}
+								{item.name}
 							</MenuItem>
 						))}
 					</Select>
@@ -180,7 +180,7 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 						</MenuItem>
 						{countries.map(item => (
 							<MenuItem key={item.country} value={item}>
-								{item.denonym}
+								{item.name}
 							</MenuItem>
 						))}
 					</Select>

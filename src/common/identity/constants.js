@@ -60,7 +60,7 @@ export const CORPORATE_MEMBER_CORPORATE_ATTRIBUTES = {
 	[TAX_ID_ATTRIBUTE]: 1
 };
 
-export const CORPORATE_STRUCTURE =
+export const CORPORATE_STRUCTURE_ATTRIBUTE =
 	'http://platform.selfkey.org/schema/attribute/corporate-structure.json';
 
 export const individualMemberAttributes = [

@@ -8,6 +8,6 @@ export {
 	CorporateContainer,
 	CorporateDashboardContainer,
 	CorporateAddMemberContainer,
-	CorporateEditMemberContainer,
-	CorporateWizardContainer
+	CorporateWizardContainer,
+	CorporateEditMemberContainer
 };

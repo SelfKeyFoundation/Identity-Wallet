@@ -17,7 +17,8 @@ class CorporateDashboardContainer extends PureComponent {
 	};
 
 	componentDidUpdate() {
-		if (this.props.identity.type !== 'corporate') {
+		const { identity } = this.props.profile;
+		if (identity.type !== 'corporate') {
 			this.props.dispatch(identityOperations.navigateToProfileOperation());
 		}
 	}
@@ -28,9 +29,9 @@ class CorporateDashboardContainer extends PureComponent {
 		this.props.dispatch(identityOperations.deleteIdentityOperation(member.identity.id));
 
 	handleEditMember = member => {
-		console.log(member);
+		const { identity } = this.props.profile;
 		this.props.dispatch(
-			push(`/main/corporate/edit-member/${member.identity.id}/${this.props.identity.id}`)
+			push(`/main/corporate/edit-member/${member.identity.id}/${identity.id}`)
 		);
 	};
 
@@ -116,11 +117,9 @@ class CorporateDashboardContainer extends PureComponent {
 const mapStateToProps = (state, props) => {
 	const profile = identitySelectors.selectCorporateProfile(state);
 	return {
-		identity: identitySelectors.selectIdentity(state),
 		profile,
-		applications: [], // marketplace applications,
-		members: profile.members,
-		cap: []
+		applications: [], // TODO: marketplace applications,
+		members: profile.members
 	};
 };
 
