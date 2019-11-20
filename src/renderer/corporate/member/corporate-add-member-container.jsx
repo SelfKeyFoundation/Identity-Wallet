@@ -168,7 +168,7 @@ class CorporateAddMemberContainer extends PureComponent {
 		);
 
 	validateAttributeParentId = parentId =>
-		this.props.companies.find(c => c.identity.id === parentId);
+		this.props.companies.find(c => c.identity.id === +parentId);
 
 	handleContinueClick = evt => {
 		evt && evt.preventDefault();
