@@ -19,7 +19,7 @@ import {
 	COUNTRY_ATTRIBUTE,
 	NATIONALITY_ATTRIBUTE,
 	PHONE_NUMBER_ATTRIBUTE,
-	CORPORATE_STRUCTURE,
+	CORPORATE_STRUCTURE_ATTRIBUTE,
 	CORPORATE_MEMBER_INDIVIDUAL_ATTRIBUTES,
 	CORPORATE_MEMBER_CORPORATE_ATTRIBUTES
 } from './constants';
@@ -481,7 +481,7 @@ export const selectCountries = createSelector(
 	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: COUNTRY_ATTRIBUTE }),
 	idType => {
 		const { enum: codes, enumNames: names } = idType.content.properties.country;
-		return codes.map((country, index) => ({ country, denonym: names[index] }));
+		return codes.map((country, index) => ({ country, name: names[index] }));
 	}
 );
 
@@ -566,6 +566,17 @@ const selectChildrenProfiles = createSelector(
 		)
 );
 
+// props: identityId, type ('corporate' or 'individual')
+export const selectChildrenProfilesByType = createSelector(
+	state => state,
+	selectChildrenIdentities,
+	selectProps('type'),
+	(state, childrenIdentities, { type }) =>
+		childrenIdentities
+			.filter(c => c.type === type)
+			.map(c => selectCorporateProfile(state, { identityId: c.id }))
+);
+
 export const selectCorporateProfile = createSelector(
 	selectProfile,
 	selectChildrenProfiles,
@@ -603,7 +614,7 @@ export const selectCorporateProfile = createSelector(
 );
 
 export const selectPositionsForCompanyType = createSelector(
-	state => selectAttributeTypeByUrl(state, { attributeTypeUrl: CORPORATE_STRUCTURE }),
+	state => selectAttributeTypeByUrl(state, { attributeTypeUrl: CORPORATE_STRUCTURE_ATTRIBUTE }),
 	selectProps('companyType'),
 	(attrType, props) => {
 		return new CorporateStructureSchema(attrType.content).getPositionsForCompanyType(
