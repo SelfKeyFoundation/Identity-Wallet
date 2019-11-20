@@ -5,6 +5,7 @@ import NotarizationDetailsPage from '../src/renderer/marketplace/notarization/de
 import RequestNotarizationPage from '../src/renderer/marketplace/notarization/process/request-notarization-page';
 import TOCPopup from '../src/renderer/marketplace/notarization/common/toc-popup';
 import TOCDisagreementPopup from '../src/renderer/marketplace/notarization/common/toc-disagreement-popup';
+import RequirePayment from '../src/renderer/certifiers/common/require-payment-popup';
 
 const documents = [
 	{
@@ -80,7 +81,8 @@ storiesOf('Notarization/Popups', module)
 			onBackClick={linkTo('Notarization', 'Request Notarization')}
 			onReturnClick={linkTo('Notarization/Popups', 'toc')}
 		/>
-	));
+	))
+	.add('require payment', () => <RequirePayment />);
 
 storiesOf('Notarization', module).add('Request Notarization', () => (
 	<RequestNotarizationPage
