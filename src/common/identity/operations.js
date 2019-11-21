@@ -336,7 +336,9 @@ const createCorporateProfileOperation = (data, onComplete) => async (dispatch, g
 
 		await dispatch(identityOperations.updateIdentitySetupOperation(true, identity.id));
 		await dispatch(identityOperations.unlockIdentityOperation(identity.id));
-		await dispatch(push(onComplete));
+		if (onComplete) {
+			await dispatch(push(onComplete));
+		}
 	} catch (error) {
 		log.error('failed to create corporate identity %s', error);
 	}
@@ -405,7 +407,9 @@ const createMemberProfileOperation = (data, onComplete) => async (dispatch, getS
 		}
 	}
 	await dispatch(identityOperations.updateIdentitySetupOperation(true, member.id));
-	await dispatch(push(onComplete));
+	if (onComplete) {
+		await dispatch(push(onComplete));
+	}
 };
 
 const updateMemberProfileOperation = (data, identityId, onComplete) => async (
@@ -473,7 +477,9 @@ const updateMemberProfileOperation = (data, identityId, onComplete) => async (
 		}
 	}
 	await dispatch(identityOperations.updateIdentitySetupOperation(true, identityId));
-	await dispatch(push(onComplete));
+	if (onComplete) {
+		await dispatch(push(onComplete));
+	}
 };
 
 const createIndividualProfile = (identityId, data) => async (dispatch, getState) => {
