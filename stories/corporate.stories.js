@@ -17,11 +17,11 @@ import { CorporateWizard } from '../src/renderer/corporate/wizard/corporate-wiza
 import { CorporateDocuments } from '../src/renderer/corporate/common/corporate-documents';
 import { CorporateMembers } from '../src/renderer/corporate/common/corporate-members';
 import { CorporateAddMember } from '../src/renderer/corporate/member/corporate-add-member';
-import { CorporateMemberIndividualForm } from '../src/renderer/corporate/common/member-individual-form';
-import { CorporateMemberEntityForm } from '../src/renderer/corporate/common/member-entity-form';
-import { CorporateMemberSharesForm } from '../src/renderer/corporate/common/member-shares-form';
-import { CorporateMemberSelectRole } from '../src/renderer/corporate/common/member-select-role';
-import { CorporateMemberSelectType } from '../src/renderer/corporate/common/member-select-type';
+import { CorporateMemberIndividualForm } from '../src/renderer/corporate/member/member-individual-form';
+import { CorporateMemberCorporateForm } from '../src/renderer/corporate/member/member-corporate-form';
+import { CorporateMemberSharesForm } from '../src/renderer/corporate/member/member-shares-form';
+import { CorporateMemberSelectRole } from '../src/renderer/corporate/member/member-select-role';
+import { CorporateMemberSelectType } from '../src/renderer/corporate/member/member-select-type';
 
 import {
 	dummyProfile,
@@ -31,6 +31,7 @@ import {
 	dummyMembers,
 	entityTypes,
 	legalJurisdictions,
+	countries,
 	corporateAttributes,
 	corporateDocuments,
 	corporateMembers,
@@ -164,7 +165,7 @@ storiesOf('Corporate/Components', module)
 		<div style={{ width: '650px' }}>
 			<CorporateOrgChart
 				profile={dummyProfile}
-				cap={corporateCapTable}
+				members={corporateMembers}
 				onEdit={action('corporate org chart edit click')}
 			/>
 		</div>
@@ -193,7 +194,7 @@ storiesOf('Corporate/Components', module)
 		<div>
 			<CorporateMembers
 				members={corporateMembers}
-				onOpenEntityDetails={action('on open entity details')}
+				onOpenMemberDetails={action('on open entity details')}
 				onAddMember={action('on add new member')}
 				onDeleteMember={action('on delete member')}
 				onEditMember={action('on edit member')}
@@ -204,11 +205,11 @@ storiesOf('Corporate/Components', module)
 		<div>
 			<CorporateMembers
 				members={corporateMembers}
-				onOpenEntityDetails={action('on open entity details')}
+				onOpenMemberDetails={action('on open entity details')}
 				onAddMember={action('on add new member')}
 				onDeleteMember={action('on delete member')}
 				onEditMember={action('on edit member')}
-				selectedEntity={corporateMembers[1]}
+				selectedMember={corporateMembers[1]}
 			/>
 		</div>
 	));
@@ -240,33 +241,49 @@ storiesOf('Corporate/Members', module).add('Add Member', () => (
 	<CorporateAddMember
 		entityTypes={entityTypes}
 		jurisdictions={legalJurisdictions}
-		positions={corporatePositionsLLC}
-		parentIdentity={dummyProfile}
+		countries={countries}
+		availablePositions={corporatePositionsLLC}
+		parentProfile={dummyProfile}
+		companies={corporateMembers}
+		selectedType={`individual`}
+		onContinueClick={action(`continue click`)}
+		onCancelClick={action(`cancel click`)}
 		onFieldChange={name => action(`field change ${name}:`)}
 	/>
 ));
 storiesOf('Corporate/Members/Components', module)
 	.add('Individual Member Form', () => (
 		<div style={{ width: '1140px' }}>
-			<CorporateMemberIndividualForm jurisdictions={legalJurisdictions} />
+			<CorporateMemberIndividualForm
+				countries={countries}
+				onFieldChange={name => action(`field changed ${name}`)}
+			/>
 		</div>
 	))
 	.add('Entity Member Form', () => (
 		<div style={{ width: '1140px' }}>
-			<CorporateMemberEntityForm
+			<CorporateMemberCorporateForm
 				jurisdictions={legalJurisdictions}
 				entityTypes={entityTypes}
+				onFieldChange={name => action(`field changed ${name}`)}
 			/>
 		</div>
 	))
 	.add('Parent & Shares Form', () => (
 		<div style={{ width: '1140px' }}>
-			<CorporateMemberSharesForm shares={50} parentIdentity={dummyProfile} />
+			<CorporateMemberSharesForm
+				shares={50}
+				companies={corporateMembers}
+				onFieldChange={name => action(`field changed ${name}`)}
+			/>
 		</div>
 	))
 	.add('Select Role', () => (
 		<div style={{ width: '720px' }}>
-			<CorporateMemberSelectRole positions={corporatePositionsLLC} />
+			<CorporateMemberSelectRole
+				availablePositions={corporatePositionsLLC}
+				onFieldChange={name => action(`field changed ${name}`)}
+			/>
 		</div>
 	))
 	.add('Select Type', () => (

@@ -16,7 +16,12 @@ import {
 	TAX_ID_ATTRIBUTE,
 	ENTITY_NAME_ATTRIBUTE,
 	CREATION_DATE_ATTRIBUTE,
-	CORPORATE_STRUCTURE
+	COUNTRY_ATTRIBUTE,
+	NATIONALITY_ATTRIBUTE,
+	PHONE_NUMBER_ATTRIBUTE,
+	CORPORATE_STRUCTURE_ATTRIBUTE,
+	CORPORATE_MEMBER_INDIVIDUAL_ATTRIBUTES,
+	CORPORATE_MEMBER_CORPORATE_ATTRIBUTES
 } from './constants';
 
 const createRootSelector = rootKey => (...fields) => state => _.pick(state[rootKey], fields);
@@ -78,6 +83,13 @@ export const selectExpiredIdAttributeTypes = state => {
 };
 
 // props: attributeTypeUrl
+export const selectAttributeTypeByUrl = createSelector(
+	state => selectAttributeTypesFiltered(state, { entityType: 'corporate', includeSystem: true }),
+	selectProps('attributeTypeUrl'),
+	(attributeTypes, { attributeTypeUrl }) => attributeTypes.find(t => t.url === attributeTypeUrl)
+);
+
+// props: attributeTypeUrl
 export const selectIdAttributeTypeByUrl = createSelector(
 	selectIdAttributeTypes,
 	selectProps('attributeTypeUrl'),
@@ -115,6 +127,82 @@ export const selectBasicCorporateAttributeTypes = createSelector(
 					case JURISDICTION_ATTRIBUTE:
 						acc.jurisdiction = curr;
 						curr.required = true;
+						return acc;
+					default:
+						return acc;
+				}
+			}, {})
+);
+
+export const selectMemberCorporateAttributeTypes = createSelector(
+	state => selectAttributeTypesFiltered(state, { entityType: 'corporate' }),
+	corporateTypes =>
+		corporateTypes
+			.filter(t => CORPORATE_MEMBER_CORPORATE_ATTRIBUTES[t.url])
+			.reduce((acc, curr) => {
+				curr = { ...curr };
+				switch (curr.url) {
+					case EMAIL_ATTRIBUTE:
+						acc.email = curr;
+						curr.required = false;
+						return acc;
+					case TAX_ID_ATTRIBUTE:
+						acc.taxId = curr;
+						curr.required = false;
+						return acc;
+					case ENTITY_NAME_ATTRIBUTE:
+						acc.entityName = curr;
+						curr.required = true;
+						return acc;
+					case ENTITY_TYPE_ATTRIBUTE:
+						acc.entityType = curr;
+						curr.required = true;
+						return acc;
+					case CREATION_DATE_ATTRIBUTE:
+						acc.creationDate = curr;
+						curr.required = true;
+						return acc;
+					case JURISDICTION_ATTRIBUTE:
+						acc.jurisdiction = curr;
+						curr.required = true;
+						return acc;
+					default:
+						return acc;
+				}
+			}, {})
+);
+
+export const selectMemberIndividualAttributeTypes = createSelector(
+	state => selectAttributeTypesFiltered(state, { entityType: 'individual' }),
+	corporateTypes =>
+		corporateTypes
+			.filter(t => CORPORATE_MEMBER_INDIVIDUAL_ATTRIBUTES[t.url])
+			.reduce((acc, curr) => {
+				curr = { ...curr };
+				switch (curr.url) {
+					case FIRST_NAME_ATTRIBUTE:
+						acc.firstName = curr;
+						curr.required = false;
+						return acc;
+					case LAST_NAME_ATTRIBUTE:
+						acc.lastName = curr;
+						curr.required = false;
+						return acc;
+					case EMAIL_ATTRIBUTE:
+						acc.email = curr;
+						curr.required = true;
+						return acc;
+					case COUNTRY_ATTRIBUTE:
+						acc.country = curr;
+						curr.required = true;
+						return acc;
+					case NATIONALITY_ATTRIBUTE:
+						acc.nationality = curr;
+						curr.required = true;
+						return acc;
+					case PHONE_NUMBER_ATTRIBUTE:
+						acc.phoneNumber = curr;
+						curr.required = false;
 						return acc;
 					default:
 						return acc;
@@ -205,7 +293,7 @@ export const selectIdentities = createSelector(
 );
 
 export const selectFullIdentityHierarchy = createSelector(
-	state => selectIdentities(state, { rootIdentity: false }),
+	state => selectIdentities(state, { rootIdentities: false }),
 	identities =>
 		identities.reduce((acc, curr) => {
 			let parentId = curr.parentId;
@@ -373,7 +461,7 @@ export const selectBasicAttributeInfo = attribute =>
 		}
 	);
 
-// JURISDICTIONS
+// Jurisdictions
 
 export const selectCorporateJurisdictions = createSelector(
 	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: JURISDICTION_ATTRIBUTE }),
@@ -385,6 +473,16 @@ export const selectCorporateJurisdictions = createSelector(
 export const selectCorporateLegalEntityTypes = createSelector(
 	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: ENTITY_TYPE_ATTRIBUTE }),
 	idType => (idType ? idType.content.enum : [])
+);
+
+// Countries
+
+export const selectCountries = createSelector(
+	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: COUNTRY_ATTRIBUTE }),
+	idType => {
+		const { enum: codes, enumNames: names } = idType.content.properties.country;
+		return codes.map((country, index) => ({ country, name: names[index] }));
+	}
 );
 
 // Profile
@@ -468,6 +566,17 @@ const selectChildrenProfiles = createSelector(
 		)
 );
 
+// props: identityId, type ('corporate' or 'individual')
+export const selectChildrenProfilesByType = createSelector(
+	state => state,
+	selectChildrenIdentities,
+	selectProps('type'),
+	(state, childrenIdentities, { type }) =>
+		childrenIdentities
+			.filter(c => c.type === type)
+			.map(c => selectCorporateProfile(state, { identityId: c.id }))
+);
+
 export const selectCorporateProfile = createSelector(
 	selectProfile,
 	selectChildrenProfiles,
@@ -505,8 +614,21 @@ export const selectCorporateProfile = createSelector(
 );
 
 export const selectPositionsForCompanyType = createSelector(
-	state => selectIdAttributeTypeByUrl({ attributeTypeUrl: CORPORATE_STRUCTURE }),
+	state => selectAttributeTypeByUrl(state, { attributeTypeUrl: CORPORATE_STRUCTURE_ATTRIBUTE }),
 	selectProps('companyType'),
-	(attrType, props) =>
-		new CorporateStructureSchema(attrType.content).getPositionsForCompanyType(props.companyType)
+	(attrType, props) => {
+		return new CorporateStructureSchema(attrType.content).getPositionsForCompanyType(
+			props.companyType
+		);
+	}
 );
+
+export const selectMemberAttributeTypes = type => {
+	if (type === 'corporate') {
+		return CORPORATE_MEMBER_CORPORATE_ATTRIBUTES;
+	} else if (type === 'individual') {
+		return CORPORATE_MEMBER_INDIVIDUAL_ATTRIBUTES;
+	} else {
+		throw new Error(`Invalid type ${type}, expecting 'corporate' or 'individual'`);
+	}
+};

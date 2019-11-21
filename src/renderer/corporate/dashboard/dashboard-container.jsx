@@ -10,28 +10,34 @@ import {
 	DeleteAttributeContainer
 } from '../../attributes';
 
-const mapStateToProps = (state, props) => {
-	return {
-		identity: identitySelectors.selectIdentity(state),
-		profile: identitySelectors.selectCorporateProfile(state),
-		applications: [], // marketplace applications,
-		members: [],
-		cap: []
-	};
-};
-
 class CorporateDashboardContainer extends PureComponent {
 	state = {
-		popup: null
+		popup: null,
+		selectedMember: false
 	};
 
 	componentDidUpdate() {
-		if (this.props.identity.type !== 'corporate') {
+		const { identity } = this.props.profile;
+		if (identity.type !== 'corporate') {
 			this.props.dispatch(identityOperations.navigateToProfileOperation());
 		}
 	}
 
-	handleAddMember = () => this.props.dispatch(push('/main/corporate-add-member'));
+	handleAddMember = () => this.props.dispatch(push('/main/corporate/add-member'));
+
+	handleDeleteMember = profile =>
+		this.props.dispatch(identityOperations.deleteIdentityOperation(profile.identity.id));
+
+	handleOpenDetails = member => {
+		if (
+			this.state.selectedMember &&
+			this.state.selectedMember.identity.id === member.identity.id
+		) {
+			this.setState({ selectedMember: false });
+		} else {
+			this.setState({ selectedMember: member });
+		}
+	};
 
 	handleAttributeDelete = attributeId =>
 		this.props.dispatch(identityOperations.removeIdAttributeOperation(attributeId));
@@ -89,12 +95,25 @@ class CorporateDashboardContainer extends PureComponent {
 					onAddDocument={this.handleAddDocument}
 					onEditDocument={this.handleEditAttribute}
 					onDeleteDocument={this.handleDeleteAttribute}
+					onAddMember={this.handleAddMember}
+					onDeleteMember={this.handleDeleteMember}
+					onOpenMemberDetails={this.handleOpenDetails}
+					selectedMember={this.state.selectedMember}
 					didComponent={<RegisterDidCardContainer returnPath={'/main/corporate'} />}
 				/>
 			</React.Fragment>
 		);
 	}
 }
+
+const mapStateToProps = (state, props) => {
+	const profile = identitySelectors.selectCorporateProfile(state);
+	return {
+		profile,
+		applications: [], // TODO: marketplace applications,
+		members: profile.members
+	};
+};
 
 const connectedComponent = connect(mapStateToProps)(CorporateDashboardContainer);
 export { connectedComponent as CorporateDashboardContainer };

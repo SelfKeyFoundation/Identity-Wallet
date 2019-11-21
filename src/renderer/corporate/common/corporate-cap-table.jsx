@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import { SmallTableRow, SmallTableCell, EditTransparentIcon, SmallTableHeadRow } from 'selfkey-ui';
 import {
+	getEntityType,
 	getEntityName,
 	getEntityEmail,
 	getEntityRoles,
@@ -43,6 +44,9 @@ const styles = theme => ({
 		'& span': {
 			fontWeight: 400
 		}
+	},
+	capitalize: {
+		textTransform: 'capitalize'
 	}
 });
 
@@ -54,13 +58,10 @@ const editAction = onEdit => (
 
 const CorporateCapTable = withStyles(styles)(props => {
 	const { classes, members = [], onEdit } = props;
-
-	const shareholders = members.filter(m => m.positions.find(p => p.position === 'shareholder'));
-
+	const shareholders = members.filter(m => m.identity.positions.find(p => p === 'shareholder'));
 	if (shareholders.length === 0) {
 		return null;
 	}
-
 	return (
 		<Card>
 			<CardHeader
@@ -107,15 +108,26 @@ const CorporateCapTable = withStyles(styles)(props => {
 							{shareholders.map((s, idx) => (
 								<SmallTableRow key={`cap-${idx}`}>
 									<SmallTableCell>
-										<Typography variant="subtitle1">{s.entity.type}</Typography>
+										<Typography
+											variant="subtitle1"
+											className={classes.capitalize}
+										>
+											{getEntityType(s)}
+										</Typography>
 									</SmallTableCell>
 									<SmallTableCell>
-										<Typography variant="subtitle1">
+										<Typography
+											variant="subtitle1"
+											className={classes.capitalize}
+										>
 											{getEntityRoles(s)}
 										</Typography>
 									</SmallTableCell>
 									<SmallTableCell>
-										<Typography variant="subtitle1">
+										<Typography
+											variant="subtitle1"
+											className={classes.capitalize}
+										>
 											{getEntityName(s)}
 										</Typography>
 									</SmallTableCell>
@@ -125,12 +137,18 @@ const CorporateCapTable = withStyles(styles)(props => {
 										</Typography>
 									</SmallTableCell>
 									<SmallTableCell>
-										<Typography variant="subtitle1">
+										<Typography
+											variant="subtitle1"
+											className={classes.capitalize}
+										>
 											{getEntityJurisdiction(s)}
 										</Typography>
 									</SmallTableCell>
 									<SmallTableCell>
-										<Typography variant="subtitle1">
+										<Typography
+											variant="subtitle1"
+											className={classes.capitalize}
+										>
 											{getEntityResidency(s)}
 										</Typography>
 									</SmallTableCell>

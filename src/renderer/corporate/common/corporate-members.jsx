@@ -45,7 +45,10 @@ const styles = theme => ({
 		alignItems: 'center',
 		display: 'flex',
 		flexDirection: 'column',
-		justifyContent: 'center'
+		justifyContent: 'center',
+		'& td': {
+			whiteSpace: 'pre-wrap'
+		}
 	},
 	regularText: {
 		'& span': {
@@ -75,6 +78,14 @@ const styles = theme => ({
 	},
 	closedIcon: {
 		transform: 'rotate(-90deg)'
+	},
+	capitalize: {
+		textTransform: 'capitalize'
+	},
+	iconColumn: {
+		maxWidth: '1em',
+		padding: '0',
+		textAlign: 'center'
 	}
 });
 
@@ -84,7 +95,7 @@ const CorporateMembers = withStyles(styles)(props => {
 		onAddMember,
 		onEditMember,
 		onDeleteMember,
-		onOpenEntityDetails,
+		onOpenMemberDetails,
 		onAddAttribute,
 		onEditAttribute,
 		onDeleteAttribute,
@@ -92,7 +103,7 @@ const CorporateMembers = withStyles(styles)(props => {
 		onEditDocument,
 		onDeleteDocument,
 		members = [],
-		selectedEntity = false
+		selectedMember = false
 	} = props;
 	return (
 		<Card className={classes.card}>
@@ -134,25 +145,31 @@ const CorporateMembers = withStyles(styles)(props => {
 					</TableHead>
 					<TableBody>
 						{members.map(entry => {
-							const isOpen = selectedEntity && selectedEntity.entity.id === entry.id;
+							const isOpen =
+								selectedMember && selectedMember.identity.id === entry.identity.id;
 							return (
-								<React.Fragment key={entry.id}>
+								<React.Fragment key={entry.identity.id}>
 									<TableRow>
-										<TableCell onClick={() => onOpenEntityDetails(entry)}>
+										<TableCell
+											onClick={() => onOpenMemberDetails(entry)}
+											className={classes.iconColumn}
+										>
 											<DropdownIcon
 												className={
 													isOpen ? classes.openIcon : classes.closedIcon
 												}
 											/>
 										</TableCell>
-										<TableCell>{getEntityIcon(entry)}</TableCell>
+										<TableCell className={classes.iconColumn}>
+											{getEntityIcon(entry)}
+										</TableCell>
 										<TableCell>
-											<Typography variant="h6">
+											<Typography variant="h6" className={classes.capitalize}>
 												{getEntityName(entry)}
 											</Typography>
 										</TableCell>
 										<TableCell>
-											<Typography variant="h6">
+											<Typography variant="h6" className={classes.capitalize}>
 												{getEntityRoles(entry)}
 											</Typography>
 										</TableCell>
@@ -160,12 +177,12 @@ const CorporateMembers = withStyles(styles)(props => {
 											<Typography variant="h6" />
 										</TableCell>
 										<TableCell>
-											<Typography variant="h6">
+											<Typography variant="h6" className={classes.capitalize}>
 												{getEntityJurisdiction(entry)}
 											</Typography>
 										</TableCell>
 										<TableCell>
-											<Typography variant="h6">
+											<Typography variant="h6" className={classes.capitalize}>
 												{getEntityResidency(entry)}
 											</Typography>
 										</TableCell>
@@ -204,7 +221,7 @@ const CorporateMembers = withStyles(styles)(props => {
 												>
 													<Grid item>
 														<CorporateInformation
-															attributes={selectedEntity.attributes}
+															attributes={selectedMember.attributes}
 															onAddAttribute={onAddAttribute}
 															onEditAttribute={onEditAttribute}
 															onDeleteAttribute={onDeleteAttribute}
@@ -212,7 +229,7 @@ const CorporateMembers = withStyles(styles)(props => {
 													</Grid>
 													<Grid item>
 														<CorporateDocuments
-															documents={selectedEntity.documents}
+															documents={selectedMember.documents}
 															onAddDocument={onAddDocument}
 															onEditDocument={onEditDocument}
 															onDeleteDocument={onDeleteDocument}
