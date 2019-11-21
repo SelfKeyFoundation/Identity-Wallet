@@ -153,9 +153,9 @@ class CorporateAddMemberContainer extends PureComponent {
 		return !isError;
 	};
 
+
 	validateAttributeEquity = (shares = null) => {
 		if (shares === null) return true;
-
 		const number = parseInt(shares);
 		return !isNaN(number) && number >= 0 && number <= 100;
 	};

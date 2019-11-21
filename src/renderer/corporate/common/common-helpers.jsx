@@ -19,13 +19,7 @@ const getEntityName = entry => {
 	}
 };
 
-const getEntityEmail = entry => {
-	const idAttribute = 'http://platform.selfkey.org/schema/attribute/email.json';
-	const attribute = entry.allAttributes.find(a => a.type.content.$id === idAttribute);
-	if (attribute && attribute.data.value) {
-		return attribute.data.value;
-	}
-};
+const getEntityEmail = entry => entry.email;
 
 const getEntityRoles = entry => entry.identity.positions.join(', ');
 
