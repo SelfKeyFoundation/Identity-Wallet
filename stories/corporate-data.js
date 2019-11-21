@@ -499,7 +499,8 @@ export const corporateDocuments = [
 
 export const corporateMembers = [
 	{
-		entityName: 'John Doe',
+		firstName: 'John',
+		lastName: 'Doe',
 		identity: {
 			id: 10,
 			type: 'individual',
@@ -535,6 +536,19 @@ export const corporateMembers = [
 				},
 				data: {
 					value: 'Australia'
+				}
+			},
+			{
+				name: 'email',
+				type: {
+					content: {
+						$id: 'http://platform.selfkey.org/schema/attribute/email.json',
+						title: 'Nationality'
+					},
+					url: 'http://platform.selfkey.org/schema/attribute/email.json'
+				},
+				data: {
+					value: 'johndoe@mail.provider.com'
 				}
 			}
 		],

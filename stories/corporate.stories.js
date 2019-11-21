@@ -165,7 +165,7 @@ storiesOf('Corporate/Components', module)
 		<div style={{ width: '650px' }}>
 			<CorporateOrgChart
 				profile={dummyProfile}
-				cap={corporateCapTable}
+				members={corporateMembers}
 				onEdit={action('corporate org chart edit click')}
 			/>
 		</div>

@@ -27,7 +27,7 @@ class CorporateDashboardContainer extends PureComponent {
 
 	handleDeleteMember = profile =>
 		this.props.dispatch(identityOperations.deleteIdentityOperation(profile.identity.id));
-  
+
 	handleOpenDetails = member => {
 		if (
 			this.state.selectedMember &&

@@ -45,7 +45,10 @@ const styles = theme => ({
 		alignItems: 'center',
 		display: 'flex',
 		flexDirection: 'column',
-		justifyContent: 'center'
+		justifyContent: 'center',
+		'& td': {
+			whiteSpace: 'pre-wrap'
+		}
 	},
 	regularText: {
 		'& span': {
@@ -75,6 +78,14 @@ const styles = theme => ({
 	},
 	closedIcon: {
 		transform: 'rotate(-90deg)'
+	},
+	capitalize: {
+		textTransform: 'capitalize'
+	},
+	iconColumn: {
+		maxWidth: '1em',
+		padding: '0',
+		textAlign: 'center'
 	}
 });
 
@@ -139,21 +150,26 @@ const CorporateMembers = withStyles(styles)(props => {
 							return (
 								<React.Fragment key={entry.identity.id}>
 									<TableRow>
-										<TableCell onClick={() => onOpenMemberDetails(entry)}>
+										<TableCell
+											onClick={() => onOpenMemberDetails(entry)}
+											className={classes.iconColumn}
+										>
 											<DropdownIcon
 												className={
 													isOpen ? classes.openIcon : classes.closedIcon
 												}
 											/>
 										</TableCell>
-										<TableCell>{getEntityIcon(entry)}</TableCell>
+										<TableCell className={classes.iconColumn}>
+											{getEntityIcon(entry)}
+										</TableCell>
 										<TableCell>
-											<Typography variant="h6">
+											<Typography variant="h6" className={classes.capitalize}>
 												{getEntityName(entry)}
 											</Typography>
 										</TableCell>
 										<TableCell>
-											<Typography variant="h6">
+											<Typography variant="h6" className={classes.capitalize}>
 												{getEntityRoles(entry)}
 											</Typography>
 										</TableCell>
@@ -161,12 +177,12 @@ const CorporateMembers = withStyles(styles)(props => {
 											<Typography variant="h6" />
 										</TableCell>
 										<TableCell>
-											<Typography variant="h6">
+											<Typography variant="h6" className={classes.capitalize}>
 												{getEntityJurisdiction(entry)}
 											</Typography>
 										</TableCell>
 										<TableCell>
-											<Typography variant="h6">
+											<Typography variant="h6" className={classes.capitalize}>
 												{getEntityResidency(entry)}
 											</Typography>
 										</TableCell>
