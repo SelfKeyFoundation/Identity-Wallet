@@ -12,12 +12,10 @@ const getEntityType = profile => profile.identity.type;
 const getEntityIcon = profile =>
 	getEntityType(profile) === 'individual' ? <SmallRoundPerson /> : <SmallRoundCompany />;
 
-const getProfileName = profile => {
-	console.log(profile);
-	return getEntityType(profile) === 'individual'
+const getProfileName = profile =>
+	getEntityType(profile) === 'individual'
 		? `${profile.lastName}, ${profile.firstName}`
 		: profile.entityName;
-};
 
 const getMemberPositions = profile => profile.identity.positions.join(', ');
 
