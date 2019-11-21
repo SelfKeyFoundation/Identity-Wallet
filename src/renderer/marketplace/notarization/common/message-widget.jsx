@@ -1,13 +1,21 @@
-import React, { PureComponent } from 'react';
-import { Typography, Button, withStyles } from '@material-ui/core';
-import { CloseButtonIcon, RoundCompany, RoundPerson, baseDark, grey } from 'selfkey-ui';
+import React from 'react';
+import {
+	Typography,
+	Button,
+	withStyles,
+	Card,
+	CardHeader,
+	Divider,
+	CardContent,
+	Input
+} from '@material-ui/core';
+import { RoundCompany, RoundPerson, baseDark, grey } from 'selfkey-ui';
 import moment from 'moment';
 
 const styles = theme => ({
 	container: {
 		margin: '0 auto',
-		maxWidth: '780px',
-		position: 'relative',
+		// maxWidth: '1100px',
 		width: '100%'
 	},
 	containerHeader: {
@@ -20,6 +28,9 @@ const styles = theme => ({
 			display: 'inline-block',
 			color: '#FFF'
 		}
+	},
+	cardContent: {
+		paddingBottom: '0 !important'
 	},
 	closeIcon: {
 		position: 'absolute',
@@ -45,16 +56,13 @@ const styles = theme => ({
 	textArea: {
 		marginRight: '30px',
 		width: '100%',
-		'& textarea': {
+		'& div': {
+			width: '100%'
+		},
+		'& input': {
 			backgroundColor: baseDark,
 			boxSizing: 'border-box',
-			border: '1px solid #384656',
-			borderRadius: '4px',
-			color: '#fff',
-			fontFamily: 'Lato,arial,sans-serif',
-			fontSize: '16px',
 			outline: 'none',
-			padding: '10px 15px',
 			width: '100%',
 			'&::placeholder': {
 				color: grey
@@ -93,7 +101,7 @@ const messageStyles = theme => ({
 				backgroundColor: '#313D49',
 				borderRadius: '4px',
 				marginLeft: 50,
-				maxWidth: '586px',
+				maxWidth: '75%',
 				padding: 15
 			},
 			'& .date': {
@@ -118,7 +126,7 @@ const messageStyles = theme => ({
 				backgroundColor: '#384E64',
 				borderRadius: '4px',
 				marginRight: 50,
-				maxWidth: '586px',
+				maxWidth: '75%',
 				padding: 15,
 				textAlign: 'right'
 			},
@@ -150,36 +158,30 @@ export const DirectMessage = withStyles(messageStyles)(({ classes, data, index }
 	);
 });
 
-class MessageComponent extends PureComponent {
-	render() {
-		const { classes, onBackClick, messages } = this.props;
-		return (
-			<div className={classes.container}>
-				<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
-				<div className={classes.containerHeader}>
-					<Typography variant="h2" className="region">
-						Message Reply
-					</Typography>
-				</div>
-				<div className={classes.contentContainer}>
-					{messages &&
-						messages.map((message, indx) => (
-							<DirectMessage key={indx} data={message} index={indx} />
-						))}
-					<div className={classes.send}>
-						<div className={classes.textArea}>
-							<textarea rows="5" placeholder="Message..." />
-						</div>
-						<Button variant="contained" size="large" onClick={onBackClick}>
-							Send
-						</Button>
+export const NotarizationMessageWidget = withStyles(styles)(props => {
+	const { classes, onBackClick, messages } = props;
+	return (
+		<Card className={classes.container}>
+			<CardHeader title="Message Reply" />
+			<Divider variant="middle" />
+			<CardContent className={classes.cardContent}>
+				{messages &&
+					messages.map((message, indx) => (
+						<DirectMessage key={indx} data={message} index={indx} />
+					))}
+				<div className={classes.send}>
+					<div className={classes.textArea}>
+						<Input disableUnderline placeholder="Write your message..." />
 					</div>
+					<Button variant="contained" size="large" onClick={onBackClick}>
+						Send
+					</Button>
 				</div>
-			</div>
-		);
-	}
-}
+			</CardContent>
+			{/* <div className={classes.contentContainer}>
+			</div> */}
+		</Card>
+	);
+});
 
-const MessageReply = withStyles(styles)(MessageComponent);
-export default MessageReply;
-export { MessageReply };
+export default NotarizationMessageWidget;

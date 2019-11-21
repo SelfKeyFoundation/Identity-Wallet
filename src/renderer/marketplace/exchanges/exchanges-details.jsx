@@ -250,6 +250,72 @@ const styles = theme => ({
 	}
 });
 
+const linkToExternalUrl = url => window.openExternal(null, url);
+
+const ExchangeLinkButton = withStyles(styles)(
+	({ classes, url, isAffiliate = false, text = 'SIGN UP' }) => (
+		<React.Fragment>
+			<Button
+				variant="contained"
+				size="large"
+				className={`${classes.signUpButton} ${classes.ctaButton}`}
+				onClick={() => linkToExternalUrl(url)}
+			>
+				<UserPlusIcon />
+				<span>{text}</span>
+				<span />
+			</Button>
+			{isAffiliate && (
+				<Typography
+					className={classes.affiliateMessage}
+					variant="subtitle2"
+					color="secondary"
+					gutterBottom
+				>
+					Disclosure: The button above is an affiliate link, we may receive a commission
+					for purchases made through this link.
+				</Typography>
+			)}
+		</React.Fragment>
+	)
+);
+
+const ExchangeApplyButton = withStyles(styles)(({ classes, application, onClick }) => (
+	<React.Fragment>
+		<Button
+			disabled={
+				// Disabled as we don't have any Exchange integrated yet!
+				true ||
+				(application &&
+					[APPLICATION_REJECTED, APPLICATION_CANCELLED].includes(
+						application.currentStatus
+					))
+			}
+			variant="contained"
+			size="large"
+			className={`${classes.signUpButton} ${classes.ctaButton}`}
+			onClick={onClick}
+		>
+			<UserPlusIcon />
+			<span>SIGN UP</span>
+		</Button>
+	</React.Fragment>
+));
+
+const RelyingPartyLinkButton = withStyles(styles)(({ classes, onClick }) => (
+	<React.Fragment>
+		<Button variant="contained" size="large" className={classes.ctaButton} onClick={onClick}>
+			COMPLETE REQUIREMENTS
+		</Button>
+		<div>
+			<Typography variant="h3" gutterBottom>
+				After clicking the button above, you will be redirected to a web page to complete
+				the KYC requirements needed
+			</Typography>
+		</div>
+	</React.Fragment>
+));
+
 class ExchangesDetailsComponent extends PureComponent {
 	async componentDidMount() {
 		window.scrollTo(0, 0);
@@ -282,7 +348,7 @@ class ExchangesDetailsComponent extends PureComponent {
 	linkToRelyingParty = () => {
 		const { relyingParty } = this.props;
 		const url = new URL(relyingParty.session.ctx.config.rootEndpoint);
-		return window.openExternal(null, `https://${url.hostname}`);
+		return linkToExternalUrl(`https://${url.hostname}`);
 	};
 
 	linkToServiceProvider = () => {
@@ -296,113 +362,35 @@ class ExchangesDetailsComponent extends PureComponent {
 
 	renderActionButton = item => {
 		const application = this.getLastApplication();
+		const url = item.data.affiliateUrl ? item.data.affiliateUrl : item.data.url;
 
 		if (!this.props.relyingParty) {
-			if (item.data.affiliateUrl) {
-				return this.renderAffiliateLinkButton(item.data.affiliateUrl);
+			if (url) {
+				return <ExchangeLinkButton url={url} isAffiliate={!!item.data.affiliateUrl} />;
+			} else {
+				return null;
 			}
-			return null;
 		} else if (
 			!application ||
 			[APPLICATION_REJECTED, APPLICATION_CANCELLED].includes(application.currentStatus)
 		) {
-			return this.renderApplicationButton(application);
+			return <ExchangeApplyButton application={application} onClick={this.handleSignup} />;
 		} else if (
 			application.currentStatus === APPLICATION_UPLOAD_REQUIRED ||
 			application.currentStatus === APPLICATION_ANSWER_REQUIRED
 		) {
-			return this.renderLinkToRelyingParty();
+			return <RelyingPartyLinkButton onClick={this.linkToRelyingParty} />;
 		} else if (application.currentStatus === APPLICATION_APPROVED) {
-			return this.renderLinkToServiceProvider();
+			return (
+				<ExchangeLinkButton
+					url={url}
+					isAffiliate={!!item.data.affiliateUrl}
+					text="ACCESS YOUR ACCOUNT"
+				/>
+			);
 		} else {
 			return this.renderPendingApplication();
 		}
-	};
-
-	renderAffiliateLinkButton = url => (
-		<React.Fragment>
-			<Button
-				variant="contained"
-				size="large"
-				className={`${this.props.classes.signUpButton} ${this.props.classes.ctaButton}`}
-				onClick={() => this.linkToAffiliateUrl(url)}
-			>
-				<UserPlusIcon />
-				<span>SIGN UP</span>
-				<span />
-			</Button>
-			<Typography
-				className={this.props.classes.affiliateMessage}
-				variant="subtitle2"
-				color="secondary"
-				gutterBottom
-			>
-				Disclosure: The button above is an affiliate link, we may receive a commission for
-				purchases made through this link.
-			</Typography>
-		</React.Fragment>
-	);
-
-	renderApplicationButton = application => {
-		const { classes } = this.props;
-		return (
-			<React.Fragment>
-				<Button
-					disabled={
-						// Disabled as we don't have any Exchange integrated yet!
-						true ||
-						(application &&
-							[APPLICATION_REJECTED, APPLICATION_CANCELLED].includes(
-								application.currentStatus
-							))
-					}
-					variant="contained"
-					size="large"
-					className={`${classes.signUpButton} ${classes.ctaButton}`}
-					onClick={this.handleSignup}
-				>
-					<UserPlusIcon />
-					<span>SIGN UP</span>
-					<span />
-				</Button>
-			</React.Fragment>
-		);
-	};
-
-	renderLinkToRelyingParty = () => {
-		const { classes } = this.props;
-		return (
-			<React.Fragment>
-				<Button
-					variant="contained"
-					size="large"
-					className={classes.ctaButton}
-					onClick={this.linkToRelyingParty}
-				>
-					COMPLETE REQUIREMENTS
-				</Button>
-				<div>
-					<Typography variant="h3" gutterBottom>
-						After clicking the button above, you will be redirected to a web page to
-						complete the KYC requirements needed
-					</Typography>
-				</div>
-			</React.Fragment>
-		);
-	};
-
-	renderLinkToServiceProvider = () => {
-		const { classes } = this.props;
-		return (
-			<Button
-				variant="contained"
-				size="large"
-				className={classes.ctaButton}
-				onClick={this.linkToServiceProvider}
-			>
-				ACCESS YOUR ACCOUNT
-			</Button>
-		);
 	};
 
 	renderPendingApplication = () => {

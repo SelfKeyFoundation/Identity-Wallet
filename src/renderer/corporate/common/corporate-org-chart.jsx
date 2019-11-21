@@ -3,6 +3,7 @@ import { Grid, CardHeader, Card, CardContent, withStyles } from '@material-ui/co
 import { grey, EditTransparentIcon, typography } from 'selfkey-ui';
 import 'react-orgchart/index.css';
 import OrgChart from 'react-orgchart';
+import { getEntityName } from './common-helpers.jsx';
 
 const styles = theme => ({
 	hr: {
@@ -53,11 +54,11 @@ const styles = theme => ({
 	}
 });
 
-const generateStructFromCap = (name, cap) => {
+const generateStructFromCap = (profile, members = []) => {
 	return {
-		name: name,
-		role: 'Entity',
-		children: cap
+		name: getEntityName(profile),
+		role: profile.identity.type,
+		children: members.map(m => generateStructFromCap(m, m.members))
 	};
 };
 
@@ -75,7 +76,11 @@ const treeNode = ({ node }) => (
 );
 
 const CorporateOrgChart = withStyles(styles)(props => {
-	const { classes, profile, cap = [], onEdit } = props;
+	const { classes, profile, members = [], onEdit } = props;
+	const shareholders = members.filter(m => m.identity.positions.find(p => p === 'shareholder'));
+	if (shareholders.length === 0) {
+		return null;
+	}
 	return (
 		<Grid container direction="column" spacing={32}>
 			<Grid item>
@@ -91,7 +96,7 @@ const CorporateOrgChart = withStyles(styles)(props => {
 					<hr className={classes.hr} />
 					<CardContent className={classes.orgChart}>
 						<OrgChart
-							tree={generateStructFromCap(profile.entityName, cap)}
+							tree={generateStructFromCap(profile, shareholders)}
 							NodeComponent={treeNode}
 						/>
 					</CardContent>

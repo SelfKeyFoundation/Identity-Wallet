@@ -9,11 +9,11 @@ import {
 } from 'selfkey-ui';
 import { Grid, Modal, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { CorporateMemberIndividualForm } from '../common/member-individual-form';
-import { CorporateMemberEntityForm } from '../common/member-entity-form';
-import { CorporateMemberSharesForm } from '../common/member-shares-form';
-import { CorporateMemberSelectRole } from '../common/member-select-role';
-import { CorporateMemberSelectType } from '../common/member-select-type';
+import { CorporateMemberIndividualForm } from './member-individual-form';
+import { CorporateMemberCorporateForm } from './member-corporate-form';
+import { CorporateMemberSharesForm } from './member-shares-form';
+import { CorporateMemberSelectRole } from './member-select-role';
+import { CorporateMemberSelectType } from './member-select-type';
 
 const styles = theme => ({
 	errorText: {
@@ -55,8 +55,16 @@ const styles = theme => ({
 });
 
 class CorporateAddMemberComponent extends PureComponent {
-	state = {
-		type: 'individual'
+	constructor(props) {
+		super(props);
+		this.state = {
+			type: props.selectedType
+		};
+	}
+
+	onTypeChange = type => {
+		this.props.onFieldChange('type')(type);
+		this.setState({ type });
 	};
 
 	render() {
@@ -65,7 +73,8 @@ class CorporateAddMemberComponent extends PureComponent {
 			onCancelClick,
 			isDisabled,
 			classes,
-			positions = [],
+			onFieldChange = () => {},
+			availablePositions = [],
 			types = [
 				{
 					title: 'Individual',
@@ -101,11 +110,14 @@ class CorporateAddMemberComponent extends PureComponent {
 								spacing={0}
 								xs={12}
 							>
-								<CorporateMemberSelectRole positions={positions} />
+								<CorporateMemberSelectRole
+									availablePositions={availablePositions}
+									onFieldChange={onFieldChange}
+								/>
 
 								<CorporateMemberSelectType
 									types={types}
-									onTypeChange={type => this.setState({ type })}
+									onTypeChange={this.onTypeChange}
 									selected={this.state.type}
 								/>
 
@@ -119,8 +131,7 @@ class CorporateAddMemberComponent extends PureComponent {
 									{this.state.type === 'corporate' && (
 										<>
 											<hr className={`${classes.hr} ${classes.hrInternal}`} />
-											<CorporateMemberEntityForm {...this.props} />
-											/>
+											<CorporateMemberCorporateForm {...this.props} />
 										</>
 									)}
 									<hr className={`${classes.hr} ${classes.hrInternal}`} />

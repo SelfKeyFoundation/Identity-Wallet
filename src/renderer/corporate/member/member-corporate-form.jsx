@@ -82,7 +82,7 @@ const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => 
 	);
 });
 
-const CorporateMemberEntityFormComponent = withStyles(styles)(props => {
+const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 	const {
 		classes,
 		jurisdictions = [],
@@ -259,5 +259,7 @@ const CorporateMemberEntityFormComponent = withStyles(styles)(props => {
 	);
 });
 
-export const CorporateMemberEntityForm = withStyles(styles)(CorporateMemberEntityFormComponent);
-export default CorporateMemberEntityForm;
+export const CorporateMemberCorporateForm = withStyles(styles)(
+	CorporateMemberCorporateFormComponent
+);
+export default CorporateMemberCorporateForm;

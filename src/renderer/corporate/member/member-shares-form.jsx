@@ -89,11 +89,10 @@ const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => 
 const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 	const {
 		classes,
-		// companies = [],
+		companies = [],
 		errors = {},
-		shares,
-		parentIdentity,
-		parentCompany,
+		equity,
+		parentId,
 		onFieldChange = () => {},
 		showParentCompany = true
 	} = props;
@@ -105,24 +104,23 @@ const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 						<InputTitle title="Parent Company" />
 						<Select
 							className={classes.select}
-							onChange={onFieldChange('parentCompany')}
-							name="parentCompany"
-							error={errors.parentCompany}
-							value={parentCompany}
+							onChange={onFieldChange('parentId')}
+							value={parentId}
+							name="parentId"
+							error={errors.parentId}
 							disableUnderline
 							IconComponent={KeyboardArrowDown}
 							input={<Input disableUnderline />}
 						>
-							<MenuItem value="">
-								<em>Choose...</em>
-							</MenuItem>
-							<MenuItem key={parentIdentity.id} value={parentIdentity.id}>
-								{parentIdentity.entityName}
-							</MenuItem>
+							{companies.map(item => (
+								<MenuItem key={item.identity.id} value={item.identity.id}>
+									{item.entityName}
+								</MenuItem>
+							))}
 						</Select>
-						{errors.parentCompany && (
+						{errors.parentId && (
 							<Typography variant="subtitle2" color="error" gutterBottom>
-								{errors.parentCompany}
+								{errors.parentId}
 							</Typography>
 						)}
 					</div>
@@ -131,20 +129,20 @@ const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 					<InputTitle title="Shares Owned" />
 					<div>
 						<Input
-							id="shares"
+							id="equity"
 							required
-							error={errors.shares}
-							value={shares}
-							onChange={onFieldChange('shares')}
+							error={errors.equity}
+							value={equity}
+							onChange={onFieldChange('equity')}
 							placeholder="0"
 						/>
 						<Typography variant="title" color="primary" gutterBottom>
 							%
 						</Typography>
 					</div>
-					{errors.email && (
+					{errors.equity && (
 						<Typography variant="subtitle2" color="error" gutterBottom>
-							{errors.shares}
+							{errors.equity}
 						</Typography>
 					)}
 				</div>

@@ -5,6 +5,8 @@ import NotarizationDetailsPage from '../src/renderer/marketplace/notarization/de
 import RequestNotarizationPage from '../src/renderer/marketplace/notarization/process/request-notarization-page';
 import TOCPopup from '../src/renderer/marketplace/notarization/common/toc-popup';
 import TOCDisagreementPopup from '../src/renderer/marketplace/notarization/common/toc-disagreement-popup';
+import RequirePayment from '../src/renderer/certifiers/common/require-payment-popup';
+import KYCRequirementData from './kyc-requirements-data';
 
 const documents = [
 	{
@@ -55,6 +57,7 @@ storiesOf('Notarization/Tabs', module)
 		<NotarizationDetailsPage
 			tab="types"
 			keyRate="0.0001297225"
+			KYCRequirementData={KYCRequirementData}
 			onTabChange={linkTo('Notarization/Tabs', tab => tab)}
 			startNotarize={linkTo('Notarization', 'Request Notarization')}
 		/>
@@ -63,6 +66,7 @@ storiesOf('Notarization/Tabs', module)
 		<NotarizationDetailsPage
 			tab="informations"
 			keyRate="0.0001297225"
+			KYCRequirementData={KYCRequirementData}
 			onTabChange={linkTo('Notarization/Tabs', tab => tab)}
 			startNotarize={linkTo('Notarization', 'Request Notarization')}
 		/>
@@ -80,6 +84,9 @@ storiesOf('Notarization/Popups', module)
 			onBackClick={linkTo('Notarization', 'Request Notarization')}
 			onReturnClick={linkTo('Notarization/Popups', 'toc')}
 		/>
+	))
+	.add('require payment', () => (
+		<RequirePayment name={'John Doe'} address={'0x4ac0d9ebd28118cab68a64ad8eb8c07c0120ebf8'} />
 	));
 
 storiesOf('Notarization', module).add('Request Notarization', () => (
