@@ -6,6 +6,7 @@ import RequestNotarizationPage from '../src/renderer/marketplace/notarization/pr
 import TOCPopup from '../src/renderer/marketplace/notarization/common/toc-popup';
 import TOCDisagreementPopup from '../src/renderer/marketplace/notarization/common/toc-disagreement-popup';
 import NotarizationMessageWidget from '../src/renderer/marketplace/notarization/common/message-widget';
+import KYCRequirementData from './kyc-requirements-data';
 
 const documents = [
 	{
@@ -56,6 +57,7 @@ storiesOf('Notarization/Tabs', module)
 		<NotarizationDetailsPage
 			tab="types"
 			keyRate="0.0001297225"
+			KYCRequirementData={KYCRequirementData}
 			onTabChange={linkTo('Notarization/Tabs', tab => tab)}
 			startNotarize={linkTo('Notarization', 'Request Notarization')}
 		/>
@@ -64,6 +66,7 @@ storiesOf('Notarization/Tabs', module)
 		<NotarizationDetailsPage
 			tab="informations"
 			keyRate="0.0001297225"
+			KYCRequirementData={KYCRequirementData}
 			onTabChange={linkTo('Notarization/Tabs', tab => tab)}
 			startNotarize={linkTo('Notarization', 'Request Notarization')}
 		/>
