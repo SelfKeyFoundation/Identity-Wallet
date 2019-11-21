@@ -84,15 +84,15 @@ const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => 
 const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 	const {
 		classes,
-		jurisdictions = [],
+		countries = [],
 		errors = {},
 		email,
 		did,
-		phone,
+		phoneNumber,
 		firstName,
 		lastName,
-		citizenship,
-		residency,
+		nationality,
+		country,
 		onFieldChange = () => {},
 		showDid = true
 	} = props;
@@ -140,10 +140,10 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 					<InputTitle title="Citizenship" />
 					<Select
 						className={classes.select}
-						onChange={onFieldChange('citizenship')}
-						value={citizenship}
-						name="citizenship"
-						error={errors.citizenship}
+						onChange={onFieldChange('nationality')}
+						value={nationality}
+						name="nationality"
+						error={errors.nationality}
 						disableUnderline
 						IconComponent={KeyboardArrowDown}
 						input={<Input disableUnderline />}
@@ -151,15 +151,15 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 						<MenuItem value="">
 							<em>Choose...</em>
 						</MenuItem>
-						{jurisdictions.map(item => (
-							<MenuItem key={item} value={item}>
-								{item}
+						{countries.map(item => (
+							<MenuItem key={item.country} value={item}>
+								{item.name}
 							</MenuItem>
 						))}
 					</Select>
-					{errors.citizenship && (
+					{errors.nationality && (
 						<Typography variant="subtitle2" color="error" gutterBottom>
-							{errors.citizenship}
+							{errors.nationality}
 						</Typography>
 					)}
 				</div>
@@ -167,10 +167,10 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 					<InputTitle title="Residency" />
 					<Select
 						className={classes.select}
-						onChange={onFieldChange('residency')}
-						value={residency}
-						name="residency"
-						error={errors.residency}
+						onChange={onFieldChange('country')}
+						value={country}
+						name="country"
+						error={errors.country}
 						disableUnderline
 						IconComponent={KeyboardArrowDown}
 						input={<Input disableUnderline />}
@@ -178,15 +178,15 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 						<MenuItem value="">
 							<em>Choose...</em>
 						</MenuItem>
-						{jurisdictions.map(item => (
-							<MenuItem key={item} value={item}>
-								{item}
+						{countries.map(item => (
+							<MenuItem key={item.country} value={item}>
+								{item.name}
 							</MenuItem>
 						))}
 					</Select>
-					{errors.residency && (
+					{errors.country && (
 						<Typography variant="subtitle2" color="error" gutterBottom>
-							{errors.residency}
+							{errors.country}
 						</Typography>
 					)}
 				</div>
@@ -213,17 +213,17 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 				<div className={`${classes.inputBox} ${classes.flexColumn}`}>
 					<InputTitle title="Phone" />
 					<Input
-						id="phone"
+						id="phoneNumber"
 						fullWidth
 						required
-						error={errors.phone}
-						value={phone}
-						onChange={onFieldChange('phone')}
+						error={errors.phoneNumber}
+						value={phoneNumber}
+						onChange={onFieldChange('phoneNumber')}
 						placeholder="Phone"
 					/>
-					{errors.phone && (
+					{errors.phoneNumber && (
 						<Typography variant="subtitle2" color="error" gutterBottom>
-							{errors.phone}
+							{errors.phoneNumber}
 						</Typography>
 					)}
 				</div>

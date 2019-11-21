@@ -13,17 +13,27 @@ class CorporateContainerComponent extends PureComponent {
 
 		return (
 			<React.Fragment>
-				<Route exact="1" path={`${match.path}`} component={CorporateDashboardContainer} />
-				<Route path={`${match.path}/dashboard`} component={CorporateDashboardContainer} />
+				<Route
+					exact="1"
+					path={`${match.path}`}
+					render={props => <CorporateDashboardContainer {...props} />}
+				/>
+				<Route
+					path={`${match.path}/dashboard`}
+					render={props => <CorporateDashboardContainer {...props} />}
+				/>
 				<Route
 					path={`${match.path}/create-corporate-profile`}
-					component={CorporateWizardContainer}
+					render={props => <CorporateWizardContainer {...props} />}
 				/>
 				<Route
 					path={`${match.path}/setup-corporate-profile/:identityId`}
-					component={CorporateWizardContainer}
+					render={props => <CorporateWizardContainer {...props} />}
 				/>
-				<Route path={`${match.path}/add-member`} component={CorporateAddMemberContainer} />
+				<Route
+					path={`${match.path}/add-member/:parentId?`}
+					render={props => <CorporateAddMemberContainer {...props} />}
+				/>
 			</React.Fragment>
 		);
 	}

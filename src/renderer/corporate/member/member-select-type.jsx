@@ -79,7 +79,7 @@ const EntityIcon = ({ type }) => {
 	}
 };
 
-const CorporateMemberSelectTypeComponent = withStyles(styles)(props => {
+const CorporateMemberSelectType = withStyles(styles)(props => {
 	const {
 		classes,
 		types = [
@@ -135,5 +135,5 @@ const CorporateMemberSelectTypeComponent = withStyles(styles)(props => {
 	);
 });
 
-export const CorporateMemberSelectType = withStyles(styles)(CorporateMemberSelectTypeComponent);
+export { CorporateMemberSelectType };
 export default CorporateMemberSelectType;

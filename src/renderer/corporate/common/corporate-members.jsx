@@ -84,7 +84,7 @@ const CorporateMembers = withStyles(styles)(props => {
 		onAddMember,
 		onEditMember,
 		onDeleteMember,
-		onOpenEntityDetails,
+		onOpenMemberDetails,
 		onAddAttribute,
 		onEditAttribute,
 		onDeleteAttribute,
@@ -92,7 +92,7 @@ const CorporateMembers = withStyles(styles)(props => {
 		onEditDocument,
 		onDeleteDocument,
 		members = [],
-		selectedEntity = false
+		selectedMember = false
 	} = props;
 	return (
 		<Card className={classes.card}>
@@ -134,11 +134,12 @@ const CorporateMembers = withStyles(styles)(props => {
 					</TableHead>
 					<TableBody>
 						{members.map(entry => {
-							const isOpen = selectedEntity && selectedEntity.entity.id === entry.id;
+							const isOpen =
+								selectedMember && selectedMember.identity.id === entry.identity.id;
 							return (
-								<React.Fragment key={entry.id}>
+								<React.Fragment key={entry.identity.id}>
 									<TableRow>
-										<TableCell onClick={() => onOpenEntityDetails(entry)}>
+										<TableCell onClick={() => onOpenMemberDetails(entry)}>
 											<DropdownIcon
 												className={
 													isOpen ? classes.openIcon : classes.closedIcon
@@ -204,7 +205,7 @@ const CorporateMembers = withStyles(styles)(props => {
 												>
 													<Grid item>
 														<CorporateInformation
-															attributes={selectedEntity.attributes}
+															attributes={selectedMember.attributes}
 															onAddAttribute={onAddAttribute}
 															onEditAttribute={onEditAttribute}
 															onDeleteAttribute={onDeleteAttribute}
@@ -212,7 +213,7 @@ const CorporateMembers = withStyles(styles)(props => {
 													</Grid>
 													<Grid item>
 														<CorporateDocuments
-															documents={selectedEntity.documents}
+															documents={selectedMember.documents}
 															onAddDocument={onAddDocument}
 															onEditDocument={onEditDocument}
 															onDeleteDocument={onDeleteDocument}

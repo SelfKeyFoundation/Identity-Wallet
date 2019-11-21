@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { DirectorIcon, ObserverIcon, MemberIcon, SignatureIcon, ProtectionIcon } from 'selfkey-ui';
@@ -93,52 +93,76 @@ const RoleIcon = ({ role }) => {
 	}
 };
 
-const CorporateMemberSelectRoleComponent = withStyles(styles)(props => {
-	const { classes, positions } = props;
-	return (
-		<Grid container direction="column" spacing={8}>
-			<Grid item>
-				<Typography variant="body1" align="center" className={classes.title}>
-					Select one or multiple roles
-				</Typography>
-			</Grid>
-			<Grid item>
-				<Grid container justify="center" className={classes.selectionBoxContainer}>
-					{positions.map((p, idx) => (
-						<div key={`role_${idx}`} className={classes.input}>
-							<input
-								type="checkbox"
-								id={`role_${idx}`}
-								name="roles[]"
-								value={p.position}
-							/>
-							<label htmlFor={`role_${idx}`}>
-								<div className={classes.selectionBoxHeader}>
-									<div>
-										<RoleIcon role={p.position} />
+class CorporateMemberSelectRoleComponent extends PureComponent {
+	state = {
+		positions: new Set()
+	};
+
+	handleChange = e => {
+		const value = e.target.value;
+		this.setState(
+			({ positions: prevState }) => {
+				const positions = new Set(prevState);
+				if (positions.has(value)) {
+					positions.delete(value);
+				} else {
+					positions.add(value);
+				}
+				return { positions };
+			},
+			() => this.props.onFieldChange('positions')(this.state.positions)
+		);
+	};
+
+	render() {
+		const { classes, availablePositions } = this.props;
+		return (
+			<Grid container direction="column" spacing={8}>
+				<Grid item>
+					<Typography variant="body1" align="center" className={classes.title}>
+						Select one or multiple roles
+					</Typography>
+				</Grid>
+				<Grid item>
+					<Grid container justify="center" className={classes.selectionBoxContainer}>
+						{availablePositions.map((p, idx) => (
+							<div key={`role_${idx}`} className={classes.input}>
+								<input
+									type="checkbox"
+									id={`role_${idx}`}
+									name="roles[]"
+									value={p.position}
+									checked={this.state.positions.has(p.position)}
+									onChange={this.handleChange}
+								/>
+								<label htmlFor={`role_${idx}`}>
+									<div className={classes.selectionBoxHeader}>
+										<div>
+											<RoleIcon role={p.position} />
+											<Typography
+												variant="body2"
+												className={classes.selectionBoxTitle}
+											>
+												{p.title}
+											</Typography>
+										</div>
 										<Typography
-											variant="body2"
-											className={classes.selectionBoxTitle}
+											variant="subtitle2"
+											color="secondary"
+											className={classes.selectionBoxDescription}
 										>
-											{p.title}
+											{p.description}
 										</Typography>
 									</div>
-									<Typography
-										variant="subtitle2"
-										color="secondary"
-										className={classes.selectionBoxDescription}
-									>
-										{p.description}
-									</Typography>
-								</div>
-							</label>
-						</div>
-					))}
+								</label>
+							</div>
+						))}
+					</Grid>
 				</Grid>
 			</Grid>
-		</Grid>
-	);
-});
+		);
+	}
+}
 
 export const CorporateMemberSelectRole = withStyles(styles)(CorporateMemberSelectRoleComponent);
 export default CorporateMemberSelectRole;

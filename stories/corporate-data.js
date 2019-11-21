@@ -1,12 +1,15 @@
 export const dummyProfile = {
-	id: 5,
 	entityName: 'Selfkey, LLC',
 	jurisdiction: 'United States',
 	entityType: 'LLC',
 	creationDate: '08/08/2018',
 	address: '1, Amazing Loop, Singapore',
 	did: 'did:selfkey:0x9cb701490ad6112d2880225c1d712f1af8c7dce1a81c44030b321fb31029cd75',
-	allAttributes: []
+	allAttributes: [],
+	identity: {
+		id: 5,
+		type: 'corporate'
+	}
 };
 export const dummyIncompleteProfile = {
 	id: 6,
@@ -359,6 +362,13 @@ export const legalJurisdictions = [
 	'Zambia',
 	'Zimbabwe'
 ];
+
+export const countries = [
+	{ country: 'CA', denonym: 'Canada' },
+	{ country: 'PT', denonym: 'Portugal' },
+	{ country: 'ES', denonym: 'Spain' }
+];
+
 export const corporateAttributes = [
 	{
 		createdAt: 1568107330518,
@@ -489,11 +499,15 @@ export const corporateDocuments = [
 
 export const corporateMembers = [
 	{
-		entity: {
+		entityName: 'John Doe',
+		identity: {
+			id: 10,
 			type: 'individual',
 			firstName: 'John',
 			lastName: 'Doe',
-			email: 'test@gmail.com'
+			email: 'test@gmail.com',
+			positions: ['director', 'shareholder'],
+			equity: 19
 		},
 		attributes: [
 			{
@@ -524,23 +538,17 @@ export const corporateMembers = [
 				}
 			}
 		],
-		documents: [],
-		positions: [
-			{
-				position: 'director'
-			},
-			{
-				position: 'shareholder',
-				equity: 19
-			}
-		]
+		documents: []
 	},
 	{
-		entity: {
+		entityName: 'Test Company name',
+		identity: {
+			id: 11,
 			type: 'corporate',
 			companyType: 'Company Limited by Shares (LTD)',
 			companyName: 'Test Company name',
-			email: 'test@company.org'
+			email: 'test@company.org',
+			positions: ['observer']
 		},
 		attributes: [
 			{
@@ -558,19 +566,18 @@ export const corporateMembers = [
 				}
 			}
 		],
-		documents: [],
-		positions: [
-			{
-				position: 'observer'
-			}
-		]
+		documents: []
 	},
 	{
-		entity: {
+		entityName: 'Selfkey Org',
+		identity: {
+			id: 12,
 			type: 'corporate',
 			companyType: 'Company Limited by Shares (LTD)',
 			companyName: 'Selfkey Org',
-			email: 'info@selfkeyorg'
+			email: 'info@selfkeyorg',
+			positions: ['shareholder'],
+			equity: 81
 		},
 		attributes: [
 			{
@@ -588,13 +595,7 @@ export const corporateMembers = [
 				}
 			}
 		],
-		documents: [],
-		positions: [
-			{
-				position: 'shareholder',
-				equity: 81
-			}
-		]
+		documents: []
 	}
 ];
 
