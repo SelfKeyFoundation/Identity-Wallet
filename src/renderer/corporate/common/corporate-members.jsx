@@ -35,7 +35,8 @@ const styles = theme => ({
 		margin: '5px 16px'
 	},
 	card: {
-		marginTop: '22px'
+		marginTop: '22px',
+		overflow: 'auto'
 	},
 	cardHeader: {
 		whiteSpace: 'normal',

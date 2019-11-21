@@ -419,13 +419,15 @@ const updateMemberProfileOperation = (data, identityId) => async (dispatch, getS
 
 	update.id = identityId;
 
-	const identity = await dispatch(identityOperations.updateIdentity(update));
+	const identity = await dispatch(identityOperations.updateIdentityOperation(update));
 
 	const attributeList =
 		identity.type === 'individual' ? individualMemberAttributes : corporateMemberAttributes;
 
 	const attributes = identitySelectors.selectIdAttributes(getState(), { identityId });
-
+	/* const attributes = identitySelectors.selectAttributeTypesFiltered(getState(), {
+		entityType: identity.type
+	}); */
 	const updatedAttributes = attributeList.map(attr => {
 		const attribute = attributes.find(a => a.type === attr.type) || {};
 		attr = { ...attr };
@@ -442,7 +444,6 @@ const updateMemberProfileOperation = (data, identityId) => async (dispatch, getS
 
 	for (const attr of updatedAttributes) {
 		const value = attr.value || '';
-
 		try {
 			if (!attr.id) {
 				await dispatch(
@@ -464,7 +465,7 @@ const updateMemberProfileOperation = (data, identityId) => async (dispatch, getS
 				);
 			}
 		} catch (error) {
-			log.error('failed to update attribute %s', attr.type);
+			log.error('failed to update attribute %s - %s', attr.type, error);
 		}
 	}
 	await dispatch(identityOperations.updateIdentitySetupOperation(true, identityId));

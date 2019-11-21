@@ -7,6 +7,19 @@ import { push } from 'connected-react-router';
 import { appSelectors } from 'common/app';
 import { identityAttributes } from 'common/identity/utils';
 import { identityOperations, identitySelectors } from 'common/identity';
+import {
+	EMAIL_ATTRIBUTE,
+	FIRST_NAME_ATTRIBUTE,
+	LAST_NAME_ATTRIBUTE,
+	JURISDICTION_ATTRIBUTE,
+	ENTITY_TYPE_ATTRIBUTE,
+	TAX_ID_ATTRIBUTE,
+	ENTITY_NAME_ATTRIBUTE,
+	CREATION_DATE_ATTRIBUTE,
+	COUNTRY_ATTRIBUTE,
+	NATIONALITY_ATTRIBUTE,
+	PHONE_NUMBER_ATTRIBUTE
+} from 'common/identity/constants';
 
 const styles = theme => ({});
 
@@ -28,13 +41,29 @@ const individualFields = [
 	'phoneNumber'
 ];
 
-class CorporateAddMemberContainer extends PureComponent {
+class CorporateMemberContainerComponent extends PureComponent {
 	constructor(props) {
 		super(props);
+		const { member, profile } = props;
+
 		this.state = {
 			errors: { hasErrors: false },
-			type: 'individual',
-			parentId: props.companies[0].identity.id
+			type: profile ? profile.identity.type : 'individual',
+			equity: profile ? profile.identity.equity : '',
+			positions: new Set(profile ? profile.identity.positions : []),
+			did: profile ? profile.identity.did : '',
+			parentId: props.companies[0].identity.id,
+			email: member[EMAIL_ATTRIBUTE],
+			firstName: member[FIRST_NAME_ATTRIBUTE],
+			lastName: member[LAST_NAME_ATTRIBUTE],
+			phoneNumber: member[PHONE_NUMBER_ATTRIBUTE],
+			creationDate: member[CREATION_DATE_ATTRIBUTE],
+			jurisdiction: member[JURISDICTION_ATTRIBUTE],
+			entityName: member[ENTITY_NAME_ATTRIBUTE],
+			entityType: member[ENTITY_TYPE_ATTRIBUTE],
+			taxId: member[TAX_ID_ATTRIBUTE],
+			country: member[COUNTRY_ATTRIBUTE],
+			nationality: member[NATIONALITY_ATTRIBUTE]
 		};
 	}
 
@@ -53,10 +82,6 @@ class CorporateAddMemberContainer extends PureComponent {
 		const stateErrors = { ...this.state.errors };
 		delete stateErrors[name];
 		const errors = this.validateAllAttributes([{ name, value }]);
-
-		if (name === 'positions' && value) {
-			value = this.filterAcceptablePositions(Array.from(value));
-		}
 
 		this.setState({
 			[name]: value
@@ -90,8 +115,10 @@ class CorporateAddMemberContainer extends PureComponent {
 			parentId: 'Invalid parent company'
 		};
 		if (!attrs) {
+			const data = this.state;
 			const fields = this.selectFields(this.state.type);
-			attrs = fields.map(name => ({ name, value: this.state[name] }));
+			data['positions'] = this.filterAcceptablePositions(Array.from(data['positions']));
+			attrs = fields.map(name => ({ name, value: data[name] }));
 		}
 		const errors = attrs.reduce(
 			(acc, curr) => {
@@ -184,19 +211,30 @@ class CorporateAddMemberContainer extends PureComponent {
 
 		const fields = this.selectFields(this.state.type);
 
-		const { parentId } = this.props;
+		const { parentId, profile } = this.props;
 
-		this.props.dispatch(
-			identityOperations.createMemberProfileOperation({
-				..._.pick(this.state, fields),
-				parentId
-			})
-		);
+		if (!profile) {
+			this.props.dispatch(
+				identityOperations.createMemberProfileOperation({
+					..._.pick(this.state, fields),
+					parentId
+				})
+			);
+		} else {
+			this.props.dispatch(
+				identityOperations.updateMemberProfileOperation(
+					{
+						..._.pick(this.state, fields)
+					},
+					profile.identity.id
+				)
+			);
+		}
 	};
 
 	handleCancelClick = evt => {
 		evt && evt.preventDefault();
-		this.props.dispatch(push('/main/dashboard'));
+		this.props.dispatch(push('/main/corporate/dashboard/members'));
 	};
 
 	isDisabled() {
@@ -205,7 +243,6 @@ class CorporateAddMemberContainer extends PureComponent {
 
 	render() {
 		const membersForm = _.pick(this.state, ['errors', ...this.selectFields(this.state.type)]);
-
 		return (
 			<CorporateAddMember
 				{...this.props}
@@ -220,8 +257,36 @@ class CorporateAddMemberContainer extends PureComponent {
 	}
 }
 
+const memberData = (state, identityId) => {
+	const attributes = [
+		EMAIL_ATTRIBUTE,
+		FIRST_NAME_ATTRIBUTE,
+		LAST_NAME_ATTRIBUTE,
+		JURISDICTION_ATTRIBUTE,
+		ENTITY_TYPE_ATTRIBUTE,
+		TAX_ID_ATTRIBUTE,
+		ENTITY_NAME_ATTRIBUTE,
+		CREATION_DATE_ATTRIBUTE,
+		COUNTRY_ATTRIBUTE,
+		NATIONALITY_ATTRIBUTE,
+		PHONE_NUMBER_ATTRIBUTE
+	];
+
+	const data = [];
+	attributes.forEach(
+		attr =>
+			(data[attr] = identitySelectors.selectAttributeValue(state, {
+				identityId,
+				attributeTypeUrl: attr
+			}))
+	);
+	return data;
+};
+
 const mapStateToProps = (state, props) => {
-	const { parentId } = props.match.params;
+	let { parentId, identityId } = props.match.params;
+
+	const profile = identityId ? identitySelectors.selectProfile(state, { identityId }) : false;
 	const parentProfile = identitySelectors.selectCorporateProfile(state, {
 		identityId: parentId
 	});
@@ -233,6 +298,7 @@ const mapStateToProps = (state, props) => {
 	return {
 		parentId,
 		parentProfile,
+		profile,
 		individualAttributeTypes: identitySelectors.selectMemberIndividualAttributeTypes(state),
 		corporateAttributeTypes: identitySelectors.selectMemberCorporateAttributeTypes(state),
 		walletType: appSelectors.selectWalletType(state),
@@ -248,11 +314,12 @@ const mapStateToProps = (state, props) => {
 				identityId: parentId,
 				type: 'corporate'
 			})
-		]
+		],
+		member: identityId ? memberData(state, identityId) : false
 	};
 };
 
-const styledComponent = withStyles(styles)(CorporateAddMemberContainer);
+const styledComponent = withStyles(styles)(CorporateMemberContainerComponent);
 const connectedComponent = connect(mapStateToProps)(styledComponent);
-export { connectedComponent as CorporateAddMemberContainer };
+export { connectedComponent as CorporateMemberContainer };
 export default connectedComponent;

@@ -31,7 +31,7 @@ class CorporateDashboardContainer extends PureComponent {
 	handleEditMember = member => {
 		const { identity } = this.props.profile;
 		this.props.dispatch(
-			push(`/main/corporate/edit-member/${member.identity.id}/${identity.id}`)
+			push(`/main/corporate/edit-member/${identity.id}/${member.identity.id}`)
 		);
 	};
 

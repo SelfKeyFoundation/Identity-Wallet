@@ -15,9 +15,12 @@ const styles = theme => ({
 	}
 });
 class CorporateDashboardPage extends CorporateComponent {
-	state = {
-		tab: 'overview'
-	};
+	constructor(props) {
+		super(props);
+		this.state = {
+			tab: props.match.params.tab || 'overview'
+		};
+	}
 
 	onTabChange = tab => this.setState({ tab });
 
