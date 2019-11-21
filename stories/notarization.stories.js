@@ -5,7 +5,7 @@ import NotarizationDetailsPage from '../src/renderer/marketplace/notarization/de
 import RequestNotarizationPage from '../src/renderer/marketplace/notarization/process/request-notarization-page';
 import TOCPopup from '../src/renderer/marketplace/notarization/common/toc-popup';
 import TOCDisagreementPopup from '../src/renderer/marketplace/notarization/common/toc-disagreement-popup';
-import NotarizationMessageWidget from '../src/renderer/marketplace/notarization/common/message-widget';
+import RequirePayment from '../src/renderer/certifiers/common/require-payment-popup';
 import KYCRequirementData from './kyc-requirements-data';
 
 const documents = [
@@ -84,41 +84,15 @@ storiesOf('Notarization/Popups', module)
 			onBackClick={linkTo('Notarization', 'Request Notarization')}
 			onReturnClick={linkTo('Notarization/Popups', 'toc')}
 		/>
+	))
+	.add('require payment', () => (
+		<RequirePayment name={'John Doe'} address={'0x4ac0d9ebd28118cab68a64ad8eb8c07c0120ebf8'} />
 	));
 
-const messagesReply = [
-	{
-		id: 809598767582156,
-		name: 'John Paul',
-		type: 'person',
-		date: 1569504593,
-		message:
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam dictum ullamcorper purus sit amet convallis. Quisque congue augue quam, dignissim aliquam lorem dignissim ac.'
-	},
-	{
-		id: 2348767582156,
-		name: 'Smith Jhonson Certifier',
-		type: 'certifier',
-		date: 2234104593,
-		message:
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam dictum ullamcorper purus sit amet convallis. Quisque congue augue quam, dignissim aliquam lorem dignissim ac.  '
-	},
-	{
-		id: 2348767582156,
-		name: 'Smith Jhonson Certifier',
-		type: 'certifier',
-		date: 2234104593,
-		message:
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam dictum ullamcorper purus sit amet convallis. Quisque congue augue quam, dignissim aliquam lorem dignissim ac.  '
-	}
-];
-
-storiesOf('Notarization', module)
-	.add('Request Notarization', () => (
-		<RequestNotarizationPage
-			documents={documents}
-			onBackClick={linkTo('Notarization/Tabs', 'types')}
-			onStartClick={linkTo('Notarization/Popups', 'toc')}
-		/>
-	))
-	.add('Messages', () => <NotarizationMessageWidget messages={messagesReply} />);
+storiesOf('Notarization', module).add('Request Notarization', () => (
+	<RequestNotarizationPage
+		documents={documents}
+		onBackClick={linkTo('Notarization/Tabs', 'types')}
+		onStartClick={linkTo('Notarization/Popups', 'toc')}
+	/>
+));
