@@ -5,7 +5,6 @@ import { MarketplaceNotariesIcon, NotarizeDocumentIcon } from 'selfkey-ui';
 import { Alert } from '../../../common';
 import NotarizationDetailsPageTabs from './notarization-details-tabs';
 import KycRequirementsList from '../../../kyc/requirements/requirements-list';
-import KYCRequirementData from '../../../../../stories/kyc-requirements-data';
 
 const styles = theme => ({
 	pageContent: {
@@ -151,6 +150,7 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 		startNotarize,
 		onBackClick,
 		loading,
+		kycRequirements,
 		keyRate = 1500000
 	} = props;
 	return (
@@ -232,7 +232,7 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 							</div>
 							<div className={classes.kyc}>
 								<KycRequirementsList
-									requirements={KYCRequirementData}
+									requirements={kycRequirements}
 									title="KYC Requirements and Forms"
 								/>
 							</div>

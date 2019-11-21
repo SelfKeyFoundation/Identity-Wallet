@@ -45,7 +45,7 @@ const getProfileIdAttribute = (profile, idAttribute) => {
 	// TODO: check valid idAttributes
 	const attribute = profile.allAttributes.find(a => a.type.content.$id === idAttribute);
 	if (attribute && attribute.data.value) {
-		return attribute.data.value;
+		return attribute.data.value.denonym ? attribute.data.value.denonym : attribute.data.value;
 	}
 };
 

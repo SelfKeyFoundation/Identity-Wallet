@@ -146,7 +146,6 @@ const CorporateMembers = withStyles(styles)(props => {
 					</TableHead>
 					<TableBody>
 						{members.map(member => {
-							console.log(member);
 							const isOpen =
 								selectedMember && selectedMember.identity.id === member.identity.id;
 							return (
