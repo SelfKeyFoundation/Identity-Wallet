@@ -148,6 +148,10 @@ export class IdentityService {
 	deleteIdentity(identityId) {
 		return Identity.delete(identityId);
 	}
+
+	updateIdentity(identity) {
+		return Identity.update(identity);
+	}
 }
 
 export default IdentityService;

@@ -110,7 +110,7 @@ ref={c => {
 
 const CorporateShareholding = withStyles(styles)(props => {
 	const { classes, members = [] } = props;
-	const shareholders = members.filter(m => m.identity.positions.find(p => p === 'shareholder'));
+	const shareholders = members.filter(m => m.identity.equity);
 	if (shareholders.length === 0) {
 		return null;
 	}

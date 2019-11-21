@@ -118,8 +118,9 @@ const mapStateToProps = (state, props) => {
 	const profile = identitySelectors.selectCorporateProfile(state);
 	return {
 		profile,
-		applications: [], // TODO: marketplace applications,
-		members: profile.members
+		members: identitySelectors.selectFlattenMemberHierarchy(state, {
+			identityId: profile.identity.id
+		})
 	};
 };
 

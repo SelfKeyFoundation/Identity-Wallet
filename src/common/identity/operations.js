@@ -260,7 +260,7 @@ const updateDIDOperation = (did, id) => async (dispatch, getState) => {
 
 // Profile
 
-const createCorporateProfileOperation = data => async (dispatch, getState) => {
+const createCorporateProfileOperation = (data, onComplete) => async (dispatch, getState) => {
 	const wallet = walletSelectors.getWallet(getState());
 	let identity = null;
 	if (data.identityId) {
@@ -336,13 +336,13 @@ const createCorporateProfileOperation = data => async (dispatch, getState) => {
 
 		await dispatch(identityOperations.updateIdentitySetupOperation(true, identity.id));
 		await dispatch(identityOperations.unlockIdentityOperation(identity.id));
-		await dispatch(push('/main/corporate'));
+		await dispatch(push(onComplete));
 	} catch (error) {
 		log.error('failed to create corporate identity %s', error);
 	}
 };
 
-const createMemberProfileOperation = data => async (dispatch, getState) => {
+const createMemberProfileOperation = (data, onComplete) => async (dispatch, getState) => {
 	const identity = _.pick(data, [
 		'name',
 		'type',
@@ -405,9 +405,13 @@ const createMemberProfileOperation = data => async (dispatch, getState) => {
 		}
 	}
 	await dispatch(identityOperations.updateIdentitySetupOperation(true, member.id));
+	await dispatch(push(onComplete));
 };
 
-const updateMemberProfileOperation = (data, identityId) => async (dispatch, getState) => {
+const updateMemberProfileOperation = (data, identityId, onComplete) => async (
+	dispatch,
+	getState
+) => {
 	const update = _.pick(data, [
 		'name',
 		'profilePicture',
@@ -418,7 +422,6 @@ const updateMemberProfileOperation = (data, identityId) => async (dispatch, getS
 	]);
 
 	update.id = identityId;
-
 	const identity = await dispatch(identityOperations.updateIdentityOperation(update));
 
 	const attributeList =
@@ -441,34 +444,36 @@ const updateMemberProfileOperation = (data, identityId) => async (dispatch, getS
 	const getTypeId = url => {
 		return idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
 	};
-
 	for (const attr of updatedAttributes) {
-		const value = attr.value || '';
-		try {
-			if (!attr.id) {
-				await dispatch(
-					identityOperations.createIdAttributeOperation(
-						{
-							typeId: getTypeId(attr.type),
-							name: attr.name,
+		if (typeof attr.value !== 'undefined') {
+			const value = attr.value || '';
+			try {
+				if (!attr.id) {
+					await dispatch(
+						identityOperations.createIdAttributeOperation(
+							{
+								typeId: getTypeId(attr.type),
+								name: attr.name,
+								data: { value }
+							},
+							identityId
+						)
+					);
+				} else {
+					await dispatch(
+						identityOperations.editIdAttributeOperation({
+							id: attr.id,
 							data: { value }
-						},
-						identityId
-					)
-				);
-			} else {
-				await dispatch(
-					identityOperations.editIdAttributeOperation({
-						id: attr.id,
-						data: { value }
-					})
-				);
+						})
+					);
+				}
+			} catch (error) {
+				log.error('failed to update attribute %s - %s', attr.type, error);
 			}
-		} catch (error) {
-			log.error('failed to update attribute %s - %s', attr.type, error);
 		}
 	}
 	await dispatch(identityOperations.updateIdentitySetupOperation(true, identityId));
+	await dispatch(push(onComplete));
 };
 
 const createIndividualProfile = (identityId, data) => async (dispatch, getState) => {

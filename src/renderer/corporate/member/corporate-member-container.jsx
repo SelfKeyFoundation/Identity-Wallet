@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import _ from 'lodash';
-import { CorporateAddMember } from './corporate-add-member';
+import { CorporateMemberForm } from './corporate-member-form';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { push } from 'connected-react-router';
@@ -51,7 +51,7 @@ class CorporateMemberContainerComponent extends PureComponent {
 			type: profile ? profile.identity.type : 'individual',
 			equity: profile ? profile.identity.equity : '',
 			positions: new Set(profile ? profile.identity.positions : []),
-			did: profile ? profile.identity.did : '',
+			did: profile && profile.identity.did ? profile.identity.did : '',
 			parentId: props.companies[0].identity.id,
 			email: member[EMAIL_ATTRIBUTE],
 			firstName: member[FIRST_NAME_ATTRIBUTE],
@@ -209,16 +209,19 @@ class CorporateMemberContainerComponent extends PureComponent {
 			return this.setErrors(errors);
 		}
 
-		const fields = this.selectFields(this.state.type);
+		const fields = this.selectFields(this.state.type).filter(f => !!this.state[f]);
 
 		const { parentId, profile } = this.props;
 
 		if (!profile) {
 			this.props.dispatch(
-				identityOperations.createMemberProfileOperation({
-					..._.pick(this.state, fields),
-					parentId
-				})
+				identityOperations.createMemberProfileOperation(
+					{
+						..._.pick(this.state, fields),
+						parentId
+					},
+					'/main/corporate/dashboard/members'
+				)
 			);
 		} else {
 			this.props.dispatch(
@@ -226,7 +229,8 @@ class CorporateMemberContainerComponent extends PureComponent {
 					{
 						..._.pick(this.state, fields)
 					},
-					profile.identity.id
+					profile.identity.id,
+					'/main/corporate/dashboard/members'
 				)
 			);
 		}
@@ -244,9 +248,10 @@ class CorporateMemberContainerComponent extends PureComponent {
 	render() {
 		const membersForm = _.pick(this.state, ['errors', ...this.selectFields(this.state.type)]);
 		return (
-			<CorporateAddMember
+			<CorporateMemberForm
 				{...this.props}
 				{...membersForm}
+				isEditing={!!this.props.profile}
 				selectedType={this.state.type}
 				isDisabled={this.isDisabled()}
 				onFieldChange={this.handleFieldChange}

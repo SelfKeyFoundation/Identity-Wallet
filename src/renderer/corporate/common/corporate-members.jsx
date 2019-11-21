@@ -94,9 +94,9 @@ const CorporateMembers = withStyles(styles)(props => {
 	const {
 		classes,
 		onAddMember,
+		onOpenMemberDetails,
 		onEditMember,
 		onDeleteMember,
-		onOpenMemberDetails,
 		onAddAttribute,
 		onEditAttribute,
 		onDeleteAttribute,
@@ -145,14 +145,15 @@ const CorporateMembers = withStyles(styles)(props => {
 						</SmallTableHeadRow>
 					</TableHead>
 					<TableBody>
-						{members.map(entry => {
+						{members.map(member => {
+							console.log(member);
 							const isOpen =
-								selectedMember && selectedMember.identity.id === entry.identity.id;
+								selectedMember && selectedMember.identity.id === member.identity.id;
 							return (
-								<React.Fragment key={entry.identity.id}>
+								<React.Fragment key={member.identity.id}>
 									<TableRow>
 										<TableCell
-											onClick={() => onOpenMemberDetails(entry)}
+											onClick={() => onOpenMemberDetails(member)}
 											className={classes.iconColumn}
 										>
 											<DropdownIcon
@@ -162,34 +163,38 @@ const CorporateMembers = withStyles(styles)(props => {
 											/>
 										</TableCell>
 										<TableCell className={classes.iconColumn}>
-											{getEntityIcon(entry)}
+											{getEntityIcon(member)}
 										</TableCell>
 										<TableCell>
 											<Typography variant="h6" className={classes.capitalize}>
-												{getProfileName(entry)}
+												{getProfileName(member)}
 											</Typography>
 										</TableCell>
 										<TableCell>
 											<Typography variant="h6" className={classes.capitalize}>
-												{getMemberPositions(entry)}
-											</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="h6" />
-										</TableCell>
-										<TableCell>
-											<Typography variant="h6" className={classes.capitalize}>
-												{getProfileJurisdiction(entry)}
-											</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="h6" className={classes.capitalize}>
-												{getProfileResidency(entry)}
+												{getMemberPositions(member)}
 											</Typography>
 										</TableCell>
 										<TableCell>
 											<Typography variant="h6">
-												{getMemberEquity(entry)}
+												{member.parent
+													? getProfileName(member.parent)
+													: null}
+											</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="h6" className={classes.capitalize}>
+												{getProfileJurisdiction(member)}
+											</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="h6" className={classes.capitalize}>
+												{getProfileResidency(member)}
+											</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="h6">
+												{getMemberEquity(member)}
 											</Typography>
 										</TableCell>
 										<TableCell>
@@ -198,13 +203,13 @@ const CorporateMembers = withStyles(styles)(props => {
 										<TableCell>
 											<IconButton
 												id="editButton"
-												onClick={() => onEditMember(entry)}
+												onClick={() => onEditMember(member)}
 											>
 												<EditTransparentIcon />
 											</IconButton>
 											<IconButton
 												id="deleteButton"
-												onClick={() => onDeleteMember(entry)}
+												onClick={() => onDeleteMember(member)}
 											>
 												<DeleteIcon />
 											</IconButton>
@@ -222,7 +227,7 @@ const CorporateMembers = withStyles(styles)(props => {
 												>
 													<Grid item>
 														<CorporateInformation
-															attributes={selectedMember.attributes}
+															attributes={member.attributes}
 															onAddAttribute={onAddAttribute}
 															onEditAttribute={onEditAttribute}
 															onDeleteAttribute={onDeleteAttribute}
@@ -230,7 +235,7 @@ const CorporateMembers = withStyles(styles)(props => {
 													</Grid>
 													<Grid item>
 														<CorporateDocuments
-															documents={selectedMember.documents}
+															documents={member.documents}
 															onAddDocument={onAddDocument}
 															onEditDocument={onEditDocument}
 															onDeleteDocument={onDeleteDocument}

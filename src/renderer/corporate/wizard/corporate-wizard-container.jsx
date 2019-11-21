@@ -113,10 +113,13 @@ class CorporateWizardContainerComponent extends PureComponent {
 		}
 
 		this.props.dispatch(
-			identityOperations.createCorporateProfileOperation({
-				..._.pick(this.state, fields),
-				identityId: this.props.match.params.identityId
-			})
+			identityOperations.createCorporateProfileOperation(
+				{
+					..._.pick(this.state, fields),
+					identityId: this.props.match.params.identityId
+				},
+				'/main/corporate/dashboard/members'
+			)
 		);
 	};
 

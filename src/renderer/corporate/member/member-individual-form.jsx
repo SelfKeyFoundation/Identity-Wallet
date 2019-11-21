@@ -81,6 +81,15 @@ const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => 
 	);
 });
 
+const onCountryChange = (evt, field, countries, onFieldChange) => {
+	let value = evt;
+	if (evt && evt.target) {
+		value = evt.target.value;
+	}
+	const selection = countries.find(c => c.country === value);
+	onFieldChange(field)(selection);
+};
+
 const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 	const {
 		classes,
@@ -140,8 +149,8 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 					<InputTitle title="Citizenship" />
 					<Select
 						className={classes.select}
-						onChange={onFieldChange('nationality')}
-						value={nationality}
+						onChange={e => onCountryChange(e, 'nationality', countries, onFieldChange)}
+						value={nationality ? nationality.country : null}
 						name="nationality"
 						error={errors.nationality}
 						disableUnderline
@@ -152,7 +161,7 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 							<em>Choose...</em>
 						</MenuItem>
 						{countries.map(item => (
-							<MenuItem key={item.country} value={item}>
+							<MenuItem key={item} value={item.country}>
 								{item.name}
 							</MenuItem>
 						))}
@@ -167,8 +176,8 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 					<InputTitle title="Residency" />
 					<Select
 						className={classes.select}
-						onChange={onFieldChange('country')}
-						value={country}
+						onChange={e => onCountryChange(e, 'country', countries, onFieldChange)}
+						value={country ? country.country : null}
 						name="country"
 						error={errors.country}
 						disableUnderline
@@ -179,7 +188,7 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 							<em>Choose...</em>
 						</MenuItem>
 						{countries.map(item => (
-							<MenuItem key={item.country} value={item}>
+							<MenuItem key={item.country} value={item.country}>
 								{item.name}
 							</MenuItem>
 						))}

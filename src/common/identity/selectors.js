@@ -642,3 +642,16 @@ export const selectMemberAttributeTypes = type => {
 		throw new Error(`Invalid type ${type}, expecting 'corporate' or 'individual'`);
 	}
 };
+
+export const selectFlattenMemberHierarchy = createSelector(
+	selectCorporateProfile,
+	profile => {
+		const flattenMembers = memberProfile =>
+			memberProfile.members.reduce((acc, curr) => {
+				curr.parent = memberProfile;
+				const children = curr.members ? flattenMembers(curr) : [];
+				return [...acc, curr, ...children];
+			}, []);
+		return flattenMembers(profile);
+	}
+);

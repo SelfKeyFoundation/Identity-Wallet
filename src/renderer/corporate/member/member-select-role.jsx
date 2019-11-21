@@ -98,7 +98,7 @@ class CorporateMemberSelectRoleComponent extends PureComponent {
 		super(props);
 
 		this.state = {
-			positions: props.positions
+			positions: props.positions ? props.positions : new Set()
 		};
 	}
 

@@ -1,59 +1,45 @@
 import React from 'react';
 import { SmallRoundCompany, SmallRoundPerson } from 'selfkey-ui';
+
 import {
-	EMAIL_ATTRIBUTE,
 	JURISDICTION_ATTRIBUTE,
 	NATIONALITY_ATTRIBUTE,
 	COUNTRY_ATTRIBUTE
 } from 'common/identity/constants';
 
-const getEntityType = entry => entry.identity.type;
+const getEntityType = profile => profile.identity.type;
 
-const getEntityIcon = entry => {
-	if (entry.identity.type === 'individual') {
-		return <SmallRoundPerson />;
-	} else {
-		return <SmallRoundCompany />;
-	}
-};
+const getEntityIcon = profile =>
+	getEntityType(profile) === 'individual' ? <SmallRoundPerson /> : <SmallRoundCompany />;
 
-const getProfileName = entry => {
-	if (entry.identity.type === 'individual') {
-		return `${entry.lastName}, ${entry.firstName}`;
-	} else {
-		return `${entry.entityName}`;
-	}
+const getProfileName = profile => {
+	console.log(profile);
+	return getEntityType(profile) === 'individual'
+		? `${profile.lastName}, ${profile.firstName}`
+		: profile.entityName;
 };
 
 const getMemberPositions = profile => profile.identity.positions.join(', ');
 
-const getProfileEmail = profile => getProfileIdAttribute(profile, EMAIL_ATTRIBUTE);
+const getProfileEmail = profile => profile.email;
 
 const getProfileJurisdiction = profile => {
-	if (profile.identity.type === 'individual') {
-		return getProfileIdAttribute(profile, NATIONALITY_ATTRIBUTE);
-	} else {
-		return getProfileIdAttribute(profile, JURISDICTION_ATTRIBUTE);
-	}
-	/*
-			? 'http://platform.selfkey.org/schema/attribute/nationality.json'
-			: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json';
-	const attribute = entry.allAttributes.find(a => a.type.content.$id === idAttribute);
-	if (attribute && attribute.data.value) {
-		return attribute.data.value.denonym ? attribute.data.value.denonym : attribute.data.value;
-	}
-	*/
+	const jurisdiction =
+		getEntityType(profile) === 'individual'
+			? getProfileIdAttribute(profile, NATIONALITY_ATTRIBUTE)
+			: getProfileIdAttribute(profile, JURISDICTION_ATTRIBUTE);
+	return jurisdiction.country ? jurisdiction.name : jurisdiction;
 };
 
 const getProfileResidency = profile => {
-	if (profile.identity.type === 'individual') {
-		return getProfileIdAttribute(profile, COUNTRY_ATTRIBUTE);
-	} else {
-		return getProfileIdAttribute(profile, JURISDICTION_ATTRIBUTE);
-	}
+	const residency =
+		getEntityType(profile) === 'individual'
+			? getProfileIdAttribute(profile, COUNTRY_ATTRIBUTE)
+			: getProfileIdAttribute(profile, JURISDICTION_ATTRIBUTE);
+	return residency.country ? residency.name : residency;
 };
 
-const getMemberEquity = entry => entry.identity.equity;
+const getMemberEquity = profile => profile.identity.equity;
 
 const getProfileIdAttribute = (profile, idAttribute) => {
 	// TODO: check valid idAttributes
