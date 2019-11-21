@@ -9,7 +9,8 @@ class CertifiersRequirePaymentContainer extends PureComponent {
 	state = {};
 
 	render() {
-		return <RequirePayment />;
+		const { name, address } = this.props;
+		return <RequirePayment name={name} address={address} />;
 	}
 }
 

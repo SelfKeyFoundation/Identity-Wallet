@@ -79,7 +79,7 @@ const styles = theme => ({
 });
 
 export const RequirePayment = withStyles(styles)(props => {
-	const { classes } = props;
+	const { classes, name, address } = props;
 
 	return (
 		<Popup className={classes.popup} closeAction={''} open text="Notarization Payment ">
@@ -96,7 +96,7 @@ export const RequirePayment = withStyles(styles)(props => {
 						</div>
 						<div>
 							<Typography variant="body1">
-								You are about to initiate a payment requirement to John Doe. The
+								You are about to initiate a payment requirement to {name}. The
 								payment will be done with KEY tokens, at the provided exchange rate.
 							</Typography>
 						</div>
@@ -112,7 +112,7 @@ export const RequirePayment = withStyles(styles)(props => {
 										variant="subtitle1"
 										color="secondary"
 									>
-										0x4ac0d9ebd28118cab68a64ad8eb8c07c0120ebf8
+										{address}
 									</Typography>
 								</div>
 								<div>

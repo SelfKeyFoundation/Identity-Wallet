@@ -82,7 +82,9 @@ storiesOf('Notarization/Popups', module)
 			onReturnClick={linkTo('Notarization/Popups', 'toc')}
 		/>
 	))
-	.add('require payment', () => <RequirePayment />);
+	.add('require payment', () => (
+		<RequirePayment name={'John Doe'} address={'0x4ac0d9ebd28118cab68a64ad8eb8c07c0120ebf8'} />
+	));
 
 storiesOf('Notarization', module).add('Request Notarization', () => (
 	<RequestNotarizationPage
