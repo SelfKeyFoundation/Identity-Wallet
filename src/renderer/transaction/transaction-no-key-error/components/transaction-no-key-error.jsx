@@ -1,12 +1,21 @@
 import * as React from 'react';
 import TransactionErrorBox from '../../common/transaction-error-box';
 import { withStyles, Typography, List, ListItem } from '@material-ui/core';
+import { DefaultBullet } from 'selfkey-ui';
 
 const styles = theme => ({
 	bodyText: {
 		marginBottom: '30px',
 		paddingRight: '30px',
 		textAlign: 'justify'
+	},
+	list: {
+		columns: 2,
+		paddingLeft: 0,
+		width: '70%',
+		'& li': {
+			paddingLeft: 0
+		}
 	},
 	bottomSpace: {
 		marginBottom: '30px'
@@ -25,7 +34,7 @@ export const TransactionNoKeyError = withStyles(styles)(
 						To access this marketplace, you will need to deposit 39.730,293 KEY tokens
 						in your SelfKey Wallet. KEY tokens are listed on many exchanges worldwide:
 					</Typography>
-					<List style={{ width: '70%', columns: 2 }}>
+					<List className={classes.list}>
 						{[
 							'Binance',
 							'KuCoin',
@@ -37,9 +46,8 @@ export const TransactionNoKeyError = withStyles(styles)(
 							'P2PB2B'
 						].map(item => (
 							<ListItem key={item}>
-								<Typography variant="body1" align="right">
-									{item}
-								</Typography>
+								<DefaultBullet />
+								<Typography variant="body1">{item}</Typography>
 							</ListItem>
 						))}
 					</List>
