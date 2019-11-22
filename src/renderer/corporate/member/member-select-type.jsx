@@ -93,6 +93,7 @@ const CorporateMemberSelectType = withStyles(styles)(props => {
 			}
 		],
 		onTypeChange,
+		isEditing,
 		selected
 	} = props;
 	return (
@@ -113,6 +114,7 @@ const CorporateMemberSelectType = withStyles(styles)(props => {
 								value={t.value}
 								onChange={() => onTypeChange(t.value)}
 								defaultChecked={selected === t.value}
+								disabled={isEditing}
 							/>
 							<label htmlFor={`type_${idx}`}>
 								<div className={classes.selectionBoxHeader}>

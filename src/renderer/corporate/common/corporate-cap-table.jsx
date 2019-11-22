@@ -12,12 +12,12 @@ import {
 import { SmallTableRow, SmallTableCell, EditTransparentIcon, SmallTableHeadRow } from 'selfkey-ui';
 import {
 	getEntityType,
-	getEntityName,
-	getEntityEmail,
-	getEntityRoles,
-	getEntityJurisdiction,
-	getEntityResidency,
-	getEntityEquity
+	getProfileName,
+	getProfileEmail,
+	getMemberPositions,
+	getProfileJurisdiction,
+	getProfileResidency,
+	getMemberEquity
 } from './common-helpers.jsx';
 
 const styles = theme => ({
@@ -58,7 +58,7 @@ const editAction = onEdit => (
 
 const CorporateCapTable = withStyles(styles)(props => {
 	const { classes, members = [], onEdit } = props;
-	const shareholders = members.filter(m => m.identity.positions.find(p => p === 'shareholder'));
+	const shareholders = members.filter(m => m.identity.equity);
 	if (shareholders.length === 0) {
 		return null;
 	}
@@ -120,7 +120,7 @@ const CorporateCapTable = withStyles(styles)(props => {
 											variant="subtitle1"
 											className={classes.capitalize}
 										>
-											{getEntityRoles(s)}
+											{getMemberPositions(s)}
 										</Typography>
 									</SmallTableCell>
 									<SmallTableCell>
@@ -128,12 +128,12 @@ const CorporateCapTable = withStyles(styles)(props => {
 											variant="subtitle1"
 											className={classes.capitalize}
 										>
-											{getEntityName(s)}
+											{getProfileName(s)}
 										</Typography>
 									</SmallTableCell>
 									<SmallTableCell>
 										<Typography variant="subtitle1">
-											{getEntityEmail(s)}
+											{getProfileEmail(s)}
 										</Typography>
 									</SmallTableCell>
 									<SmallTableCell>
@@ -141,7 +141,7 @@ const CorporateCapTable = withStyles(styles)(props => {
 											variant="subtitle1"
 											className={classes.capitalize}
 										>
-											{getEntityJurisdiction(s)}
+											{getProfileJurisdiction(s)}
 										</Typography>
 									</SmallTableCell>
 									<SmallTableCell>
@@ -149,12 +149,12 @@ const CorporateCapTable = withStyles(styles)(props => {
 											variant="subtitle1"
 											className={classes.capitalize}
 										>
-											{getEntityResidency(s)}
+											{getProfileResidency(s)}
 										</Typography>
 									</SmallTableCell>
 									<SmallTableCell>
 										<Typography variant="subtitle1">
-											{getEntityEquity(s)}
+											{getMemberEquity(s)}
 										</Typography>
 									</SmallTableCell>
 								</SmallTableRow>

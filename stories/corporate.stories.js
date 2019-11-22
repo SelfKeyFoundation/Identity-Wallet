@@ -16,7 +16,7 @@ import { CorporateInformation } from '../src/renderer/corporate/common/corporate
 import { CorporateWizard } from '../src/renderer/corporate/wizard/corporate-wizard';
 import { CorporateDocuments } from '../src/renderer/corporate/common/corporate-documents';
 import { CorporateMembers } from '../src/renderer/corporate/common/corporate-members';
-import { CorporateAddMember } from '../src/renderer/corporate/member/corporate-add-member';
+import { CorporateMemberForm } from '../src/renderer/corporate/member/corporate-member-form';
 import { CorporateMemberIndividualForm } from '../src/renderer/corporate/member/member-individual-form';
 import { CorporateMemberCorporateForm } from '../src/renderer/corporate/member/member-corporate-form';
 import { CorporateMemberSharesForm } from '../src/renderer/corporate/member/member-shares-form';
@@ -238,7 +238,7 @@ storiesOf('Corporate/Wizard', module)
 	));
 
 storiesOf('Corporate/Members', module).add('Add Member', () => (
-	<CorporateAddMember
+	<CorporateMemberForm
 		entityTypes={entityTypes}
 		jurisdictions={legalJurisdictions}
 		countries={countries}
@@ -290,6 +290,15 @@ storiesOf('Corporate/Members/Components', module)
 		<div style={{ width: '720px' }}>
 			<CorporateMemberSelectType
 				selected={'corporate'}
+				onTypeChange={action(`type changed`)}
+			/>
+		</div>
+	))
+	.add('Disabled Select Type', () => (
+		<div style={{ width: '720px' }}>
+			<CorporateMemberSelectType
+				selected={'corporate'}
+				isEditing={true}
 				onTypeChange={action(`type changed`)}
 			/>
 		</div>

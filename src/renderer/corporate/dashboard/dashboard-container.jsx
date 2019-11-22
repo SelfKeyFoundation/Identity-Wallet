@@ -25,8 +25,15 @@ class CorporateDashboardContainer extends PureComponent {
 
 	handleAddMember = () => this.props.dispatch(push('/main/corporate/add-member'));
 
-	handleDeleteMember = profile =>
-		this.props.dispatch(identityOperations.deleteIdentityOperation(profile.identity.id));
+	handleDeleteMember = member =>
+		this.props.dispatch(identityOperations.deleteIdentityOperation(member.identity.id));
+
+	handleEditMember = member => {
+		const { identity } = this.props.profile;
+		this.props.dispatch(
+			push(`/main/corporate/edit-member/${identity.id}/${member.identity.id}`)
+		);
+	};
 
 	handleOpenDetails = member => {
 		if (
@@ -97,6 +104,7 @@ class CorporateDashboardContainer extends PureComponent {
 					onDeleteDocument={this.handleDeleteAttribute}
 					onAddMember={this.handleAddMember}
 					onDeleteMember={this.handleDeleteMember}
+					onEditMember={this.handleEditMember}
 					onOpenMemberDetails={this.handleOpenDetails}
 					selectedMember={this.state.selectedMember}
 					didComponent={<RegisterDidCardContainer returnPath={'/main/corporate'} />}
@@ -110,8 +118,9 @@ const mapStateToProps = (state, props) => {
 	const profile = identitySelectors.selectCorporateProfile(state);
 	return {
 		profile,
-		applications: [], // TODO: marketplace applications,
-		members: profile.members
+		members: identitySelectors.selectFlattenMemberHierarchy(state, {
+			identityId: profile.identity.id
+		})
 	};
 };
 

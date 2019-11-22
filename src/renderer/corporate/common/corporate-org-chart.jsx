@@ -3,7 +3,7 @@ import { Grid, CardHeader, Card, CardContent, withStyles } from '@material-ui/co
 import { grey, EditTransparentIcon, typography } from 'selfkey-ui';
 import 'react-orgchart/index.css';
 import OrgChart from 'react-orgchart';
-import { getEntityName } from './common-helpers.jsx';
+import { getProfileName } from './common-helpers.jsx';
 
 const styles = theme => ({
 	hr: {
@@ -56,7 +56,7 @@ const styles = theme => ({
 
 const generateStructFromCap = (profile, members = []) => {
 	return {
-		name: getEntityName(profile),
+		name: getProfileName(profile),
 		role: profile.identity.type,
 		children: members.map(m => generateStructFromCap(m, m.members))
 	};

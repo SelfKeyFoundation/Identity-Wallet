@@ -42,7 +42,7 @@ export const identityTypes = {
 	IDENTITIES_UPDATE_DID_OPERATION: 'identities/did/UPDATE',
 	IDENTITIES_CREATE_OPERATION: 'identities/operation/CREATE',
 	IDENTITIES_UPDATE_OPERATION: 'identities/operation/UPDATE',
-	IDENTITIES_DELETE_OPERATION: 'identities/operation/UPDATE',
+	IDENTITIES_DELETE_OPERATION: 'identities/operation/DELETE',
 	IDENTITIES_CREATE_CORPORATE_PROFILE_OPERATION: 'identities/profile/corporate/CREATE',
 	IDENTITIES_SWITCH_PROFILE_OPERATION: 'identities/profile/SWITCH',
 	IDENTITIES_NAVIGATE_TO_PROFILE_OPERATION: 'identities/profile/NAVIGATE',

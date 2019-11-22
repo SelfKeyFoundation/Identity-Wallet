@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import {
 	CorporateDashboardContainer,
 	CorporateWizardContainer,
-	CorporateAddMemberContainer
+	CorporateMemberContainer
 } from '../corporate';
 
 class CorporateContainerComponent extends PureComponent {
@@ -19,7 +19,12 @@ class CorporateContainerComponent extends PureComponent {
 					render={props => <CorporateDashboardContainer {...props} />}
 				/>
 				<Route
+					exact="1"
 					path={`${match.path}/dashboard`}
+					render={props => <CorporateDashboardContainer {...props} />}
+				/>
+				<Route
+					path={`${match.path}/dashboard/:tab`}
 					render={props => <CorporateDashboardContainer {...props} />}
 				/>
 				<Route
@@ -32,7 +37,11 @@ class CorporateContainerComponent extends PureComponent {
 				/>
 				<Route
 					path={`${match.path}/add-member/:parentId?`}
-					render={props => <CorporateAddMemberContainer {...props} />}
+					render={props => <CorporateMemberContainer {...props} />}
+				/>
+				<Route
+					path={`${match.path}/edit-member/:parentId/:identityId`}
+					render={props => <CorporateMemberContainer {...props} />}
 				/>
 			</React.Fragment>
 		);
