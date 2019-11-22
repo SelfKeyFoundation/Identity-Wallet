@@ -153,7 +153,6 @@ class CorporateAddMemberContainer extends PureComponent {
 		return !isError;
 	};
 
-
 	validateAttributeEquity = (shares = null) => {
 		if (shares === null) return true;
 		const number = parseInt(shares);
