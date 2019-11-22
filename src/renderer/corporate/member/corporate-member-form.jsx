@@ -54,7 +54,7 @@ const styles = theme => ({
 	}
 });
 
-class CorporateAddMemberComponent extends PureComponent {
+class CorporateMemberFormComponent extends PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -75,6 +75,8 @@ class CorporateAddMemberComponent extends PureComponent {
 			classes,
 			onFieldChange = () => {},
 			availablePositions = [],
+			positions = new Set(),
+			isEditing = false,
 			types = [
 				{
 					title: 'Individual',
@@ -111,6 +113,7 @@ class CorporateAddMemberComponent extends PureComponent {
 								xs={12}
 							>
 								<CorporateMemberSelectRole
+									positions={positions}
 									availablePositions={availablePositions}
 									onFieldChange={onFieldChange}
 								/>
@@ -119,6 +122,7 @@ class CorporateAddMemberComponent extends PureComponent {
 									types={types}
 									onTypeChange={this.onTypeChange}
 									selected={this.state.type}
+									isEditing={isEditing}
 								/>
 
 								<div className={classes.memberForm}>
@@ -168,6 +172,6 @@ class CorporateAddMemberComponent extends PureComponent {
 	}
 }
 
-export const CorporateAddMember = withStyles(styles)(CorporateAddMemberComponent);
+export const CorporateMemberForm = withStyles(styles)(CorporateMemberFormComponent);
 
-export default CorporateAddMember;
+export default CorporateMemberForm;

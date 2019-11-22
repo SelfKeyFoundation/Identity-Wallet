@@ -128,6 +128,11 @@ export class Identity extends BaseModel {
 		return identity;
 	}
 
+	static async update(data) {
+		let identity = await this.query().patchAndFetchById(data.id, data);
+		return identity;
+	}
+
 	static async addInitialIdAttributesAndActivate(id, initialIdAttributesValues) {
 		for (let key in initialIdAttributesValues) {
 			await IdAttribute.create({
