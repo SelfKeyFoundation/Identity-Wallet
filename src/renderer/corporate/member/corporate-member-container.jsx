@@ -50,7 +50,7 @@ class CorporateMemberContainerComponent extends PureComponent {
 			errors: { hasErrors: false },
 			type: profile ? profile.identity.type : 'individual',
 			equity: profile ? profile.identity.equity : '',
-			positions: new Set(profile ? profile.identity.positions : []),
+			positions: profile ? this.filterAcceptablePositions(profile.identity.positions) : [],
 			did: profile && profile.identity.did ? profile.identity.did : '',
 			parentId: props.companies[0].identity.id,
 			email: member[EMAIL_ATTRIBUTE],
@@ -82,6 +82,10 @@ class CorporateMemberContainerComponent extends PureComponent {
 		const stateErrors = { ...this.state.errors };
 		delete stateErrors[name];
 		const errors = this.validateAllAttributes([{ name, value }]);
+
+		if (name === 'positions') {
+			value = this.filterAcceptablePositions(value);
+		}
 
 		this.setState({
 			[name]: value
@@ -115,10 +119,8 @@ class CorporateMemberContainerComponent extends PureComponent {
 			parentId: 'Invalid parent company'
 		};
 		if (!attrs) {
-			const data = this.state;
 			const fields = this.selectFields(this.state.type);
-			data['positions'] = this.filterAcceptablePositions(Array.from(data['positions']));
-			attrs = fields.map(name => ({ name, value: data[name] }));
+			attrs = fields.map(name => ({ name, value: this.state[name] }));
 		}
 		const errors = attrs.reduce(
 			(acc, curr) => {

@@ -98,20 +98,17 @@ class CorporateMemberSelectRoleComponent extends PureComponent {
 		super(props);
 
 		this.state = {
-			positions: props.positions ? props.positions : new Set()
+			positions: props.positions
 		};
 	}
 
 	handleChange = e => {
 		const value = e.target.value;
 		this.setState(
-			({ positions: prevState }) => {
-				const positions = new Set(prevState);
-				if (positions.has(value)) {
-					positions.delete(value);
-				} else {
-					positions.add(value);
-				}
+			state => {
+				const positions = state.positions.includes(value)
+					? state.positions.filter(p => p !== value) // remove item
+					: [...state.positions, value]; // add item
 				return { positions };
 			},
 			() => this.props.onFieldChange('positions')(this.state.positions)
@@ -136,7 +133,7 @@ class CorporateMemberSelectRoleComponent extends PureComponent {
 									id={`role_${idx}`}
 									name="roles[]"
 									value={p.position}
-									checked={this.state.positions.has(p.position)}
+									checked={this.state.positions.includes(p.position)}
 									onChange={this.handleChange}
 								/>
 								<label htmlFor={`role_${idx}`}>
