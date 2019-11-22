@@ -31,3 +31,4 @@ client-secret.json
 **/.env
 .history
 junit.xml
+IdentityWalletStorage.sqlite

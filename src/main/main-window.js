@@ -45,9 +45,10 @@ export const createMainWindow = async () => {
 
 	Menu.setApplicationMenu(Menu.buildFromTemplate(createMenuTemplate(mainWindow)));
 
-	const webAppPath = isDevMode()
-		? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}/index.html`
-		: `file://${__dirname}/index.html`;
+	const webAppPath =
+		isDevMode() && process.env.NODE_ENV !== 'production'
+			? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}/index.html`
+			: `file://${__dirname}/index.html`;
 
 	mainWindow.loadURL(webAppPath);
 
@@ -65,6 +66,7 @@ export const createMainWindow = async () => {
 
 	if (
 		isDevMode() &&
+		process.env.NODE_ENV !== 'production' &&
 		process.argv.indexOf('--noDevServer') === -1 &&
 		process.env.ENABLE_EXTENSIONS
 	) {

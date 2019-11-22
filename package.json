@@ -231,15 +231,21 @@
 		"buildDependenciesFromSource": true,
 		"generateUpdatesFilesForAllChannels": true,
 		"afterSign": "scripts/notarize.js",
-		"asar": true,
-		"asarUnpack": [
-			"**/*.node",
-			"node_modules/knex/**",
-			"node_modules/sqlite3/**"
-		],
+		"asar": false,
 		"files": [
 			"dist/main",
-			"dist/common"
+			"dist/common",
+			"!**/stories/**"
+		],
+		"extraFiles": [
+			{
+				"from": "dist/common",
+				"to": "./common"
+			},
+			{
+				"from": "dist/main",
+				"to": "./main"
+			}
 		],
 		"mac": {
 			"category": "public.app-category.finance",
