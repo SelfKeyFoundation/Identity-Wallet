@@ -49,14 +49,13 @@ export class CorporateStructureSchema {
 			const positions = this.getPositionsForCompanyType(companyType);
 			return positions.reduce((acc, curr) => {
 				if (acc) return acc;
-				return curr.equity || false;
+				return curr.equity ? curr : false;
 			}, false);
 		} catch (error) {
 			log.error(error);
 			throw new Error('Invalid Schema');
 		}
 	}
-
 	getAllPositions() {
 		const companyTypes = this.getCompanyTypes();
 		const positions = companyTypes

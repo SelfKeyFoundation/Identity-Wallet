@@ -633,6 +633,16 @@ export const selectPositionsForCompanyType = createSelector(
 	}
 );
 
+export const selectEquityForCompanyType = createSelector(
+	state => selectAttributeTypeByUrl(state, { attributeTypeUrl: CORPORATE_STRUCTURE_ATTRIBUTE }),
+	selectProps('companyType'),
+	(attrType, props) => {
+		return new CorporateStructureSchema(attrType.content).getEquityForCompanyType(
+			props.companyType
+		);
+	}
+);
+
 export const selectMemberAttributeTypes = type => {
 	if (type === 'corporate') {
 		return CORPORATE_MEMBER_CORPORATE_ATTRIBUTES;
