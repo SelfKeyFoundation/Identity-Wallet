@@ -99,9 +99,18 @@ storiesOf('Notarization', module)
 			onStartClick={linkTo('Notarization/Popups', 'toc')}
 		/>
 	))
-	.add('Notarization Process', () => (
+	.add('Require Payment', () => (
 		<NotarizationProcess
 			status={2}
+			summary={summary}
+			payments={false}
+			onBackClick={linkTo('Notarization/Tabs', 'types')}
+			onStartClick={linkTo('Notarization/Popups', 'toc')}
+		/>
+	))
+	.add('Notarization Complete', () => (
+		<NotarizationProcess
+			status={1}
 			summary={summary}
 			payments={false}
 			onBackClick={linkTo('Notarization/Tabs', 'types')}
