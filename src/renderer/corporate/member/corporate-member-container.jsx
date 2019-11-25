@@ -85,7 +85,7 @@ class CorporateMemberContainerComponent extends PureComponent {
 
 		if (name === 'positions') {
 			value = this.filterAcceptablePositions(value);
-			if (!value.includes(this.props.positionWithEquity)) {
+			if (!value.some(p => this.props.positionsWithEquity.includes(p))) {
 				this.setState({ equity: '' });
 			}
 		}
@@ -188,11 +188,11 @@ class CorporateMemberContainerComponent extends PureComponent {
 	validateAttributeEquity = (shares = null, selectedPositions = []) => {
 		if (shares === null || shares === '') return true;
 		const number = parseInt(shares);
-		const positionWithEquity = this.props.positionWithEquity
-			? this.props.positionWithEquity.position
-			: false;
+		const positionsWithEquity = this.props.positionsWithEquity
+			? this.props.positionsWithEquity
+			: [];
 		return (
-			selectedPositions.includes(positionWithEquity) &&
+			selectedPositions.some(p => positionsWithEquity.includes(p)) &&
 			(!isNaN(number) && number >= 0 && number <= 100)
 		);
 	};
@@ -320,7 +320,7 @@ const mapStateToProps = (state, props) => {
 		availablePositions: identitySelectors.selectPositionsForCompanyType(state, {
 			companyType: parentProfile.entityType
 		}),
-		positionWithEquity: identitySelectors.selectEquityForCompanyType(state, {
+		positionsWithEquity: identitySelectors.selectEquityPositionsForCompanyType(state, {
 			companyType: parentProfile.entityType
 		}),
 		companies: [

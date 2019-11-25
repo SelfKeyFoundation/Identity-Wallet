@@ -91,7 +91,7 @@ const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 		classes,
 		companies = [],
 		positions = [],
-		positionWithEquity = '',
+		positionsWithEquity = [],
 		errors = {},
 		equity,
 		parentId,
@@ -135,11 +135,7 @@ const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 							required
 							error={errors.equity}
 							value={equity}
-							disabled={
-								!positions.includes(
-									positionWithEquity ? positionWithEquity.position : ''
-								)
-							}
+							disabled={!positions.some(p => positionsWithEquity.includes(p))}
 							onChange={onFieldChange('equity')}
 							placeholder="0"
 						/>

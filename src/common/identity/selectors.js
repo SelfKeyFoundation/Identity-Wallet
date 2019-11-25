@@ -633,11 +633,11 @@ export const selectPositionsForCompanyType = createSelector(
 	}
 );
 
-export const selectEquityForCompanyType = createSelector(
+export const selectEquityPositionsForCompanyType = createSelector(
 	state => selectAttributeTypeByUrl(state, { attributeTypeUrl: CORPORATE_STRUCTURE_ATTRIBUTE }),
 	selectProps('companyType'),
 	(attrType, props) => {
-		return new CorporateStructureSchema(attrType.content).getEquityForCompanyType(
+		return new CorporateStructureSchema(attrType.content).getEquityPositionsForCompanyType(
 			props.companyType
 		);
 	}
