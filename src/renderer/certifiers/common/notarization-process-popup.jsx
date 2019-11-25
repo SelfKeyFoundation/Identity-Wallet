@@ -98,7 +98,14 @@ const styles = theme => ({
 export const NotarizationProcess = withStyles(styles)(props => {
 	const { classes, status, summary } = props;
 
-	let icon, title, bodyText, buttonText, notarizationStatus;
+	let icon,
+		title,
+		bodyText,
+		buttonText,
+		cancelButtonText,
+		notarizationStatus,
+		onSubmitClick,
+		onCancelClick;
 
 	switch (status) {
 		// Completed
@@ -108,6 +115,8 @@ export const NotarizationProcess = withStyles(styles)(props => {
 			bodyText =
 				'If you finished notarizing all the documents the user has submited and you have received payment for your services, please finish the notarization. The documents you notarized, as well as the details of this process will be available under the requests history tab.';
 			buttonText = 'Finish Notarization';
+			onSubmitClick = '';
+			onCancelClick = '';
 			break;
 		// Reimbursment
 		case 2:
@@ -116,7 +125,10 @@ export const NotarizationProcess = withStyles(styles)(props => {
 			bodyText =
 				'The user is entitled to ask for a reimbursment for the ammount associated with each document they wanted notarized. You might refuse this reimbursment, depending how advanced they were with your notarisation process.';
 			buttonText = 'Reimburse User';
+			cancelButtonText = 'Refuse';
 			notarizationStatus = true;
+			onSubmitClick = '';
+			onCancelClick = '';
 			break;
 		// default:
 		// break;
@@ -151,10 +163,7 @@ export const NotarizationProcess = withStyles(styles)(props => {
 								>
 									User
 								</Typography>
-								<Typography variant="body2">
-									{/* {moment(item.applicationDate).format('DD MMM YYYY')} */}
-									{summary.user}
-								</Typography>
+								<Typography variant="body2">{summary.user}</Typography>
 							</ListItem>
 							<ListItem key="userDid" className={classes.listItem}>
 								<Typography
@@ -205,7 +214,7 @@ export const NotarizationProcess = withStyles(styles)(props => {
 									>
 										Notarization Status
 									</Typography>
-									<Typography variant="body2" style={{ color: 'red' }}>
+									<Typography variant="body2" color="error">
 										Canceled by Notary
 									</Typography>
 								</ListItem>
@@ -275,12 +284,12 @@ export const NotarizationProcess = withStyles(styles)(props => {
 									className={classes.payButton}
 									variant="contained"
 									size="large"
-									onClick={''}
+									onClick={onSubmitClick}
 								>
 									{buttonText}
 								</Button>
-								<Button variant="outlined" size="large" onClick={''}>
-									Cancel
+								<Button variant="outlined" size="large" onClick={onCancelClick}>
+									{(cancelButtonText && cancelButtonText) || 'Cancel'}
 								</Button>
 							</div>
 						</div>
