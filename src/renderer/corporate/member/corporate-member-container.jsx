@@ -85,6 +85,9 @@ class CorporateMemberContainerComponent extends PureComponent {
 
 		if (name === 'positions') {
 			value = this.filterAcceptablePositions(value);
+			if (!value.some(p => this.props.positionsWithEquity.includes(p))) {
+				this.setState({ equity: '' });
+			}
 		}
 
 		this.setState({
@@ -144,7 +147,7 @@ class CorporateMemberContainerComponent extends PureComponent {
 			case 'type':
 				return this.validateAttributeType(value);
 			case 'equity':
-				return this.validateAttributeEquity(value);
+				return this.validateAttributeEquity(value, this.state.positions);
 			case 'did':
 				return this.validateAttributeDid(value);
 			case 'parentId':
@@ -182,14 +185,16 @@ class CorporateMemberContainerComponent extends PureComponent {
 		return !isError;
 	};
 
-	validateAttributeEquity = (shares = null) => {
-		if (shares === null) return true;
-
-		/*
+	validateAttributeEquity = (shares = null, selectedPositions = []) => {
+		if (shares === null || shares === '') return true;
 		const number = parseInt(shares);
-		return !isNaN(number) && number >= 0 && number <= 100;
-		*/
-		return true;
+		const positionsWithEquity = this.props.positionsWithEquity
+			? this.props.positionsWithEquity
+			: [];
+		return (
+			selectedPositions.some(p => positionsWithEquity.includes(p)) &&
+			(!isNaN(number) && number >= 0 && number <= 100)
+		);
 	};
 
 	validateAttributeDid = did => true;
@@ -294,6 +299,7 @@ const mapStateToProps = (state, props) => {
 	let { parentId, identityId } = props.match.params;
 
 	const profile = identityId ? identitySelectors.selectProfile(state, { identityId }) : false;
+	parentId = profile && profile.identity.parentId ? profile.identity.parentId : parentId;
 	const parentProfile = identitySelectors.selectCorporateProfile(state, {
 		identityId: parentId
 	});
@@ -313,6 +319,9 @@ const mapStateToProps = (state, props) => {
 		jurisdictions: identitySelectors.selectCorporateJurisdictions(state),
 		entityTypes: identitySelectors.selectCorporateLegalEntityTypes(state),
 		availablePositions: identitySelectors.selectPositionsForCompanyType(state, {
+			companyType: parentProfile.entityType
+		}),
+		positionsWithEquity: identitySelectors.selectEquityPositionsForCompanyType(state, {
 			companyType: parentProfile.entityType
 		}),
 		companies: [
