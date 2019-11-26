@@ -50,7 +50,8 @@ export const TransactionNoKeyError = withStyles(styles)(
 							'Rightbtc',
 							'IDCM',
 							'Lukki',
-							'Bilaxy'
+							'Bilaxy',
+							'Bw'
 						].map(item => (
 							<ListItem key={item}>
 								<DefaultBullet />
