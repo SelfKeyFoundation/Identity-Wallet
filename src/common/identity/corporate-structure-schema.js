@@ -49,14 +49,25 @@ export class CorporateStructureSchema {
 			const positions = this.getPositionsForCompanyType(companyType);
 			return positions.reduce((acc, curr) => {
 				if (acc) return acc;
-				return curr.equity || false;
+				return curr.equity ? curr.equity : false;
 			}, false);
 		} catch (error) {
 			log.error(error);
 			throw new Error('Invalid Schema');
 		}
 	}
-
+	getEquityPositionsForCompanyType(companyType) {
+		if (!this.getCompanyTypes().includes(companyType)) {
+			throw new Error('Unknown company type');
+		}
+		try {
+			const positions = this.getPositionsForCompanyType(companyType);
+			return positions.filter(p => p.equity).map(p => p.position);
+		} catch (error) {
+			log.error(error);
+			throw new Error('Invalid Schema');
+		}
+	}
 	getAllPositions() {
 		const companyTypes = this.getCompanyTypes();
 		const positions = companyTypes
