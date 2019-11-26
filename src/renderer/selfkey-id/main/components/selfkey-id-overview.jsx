@@ -28,7 +28,8 @@ import {
 	SmallTableHeadRow,
 	SmallTableRow,
 	SmallTableCell,
-	FileAudioIcon
+	FileAudioIcon,
+	FileLinkWithModal
 } from 'selfkey-ui';
 
 import { HexagonAvatar } from './hexagon-avatar';
@@ -118,11 +119,12 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 	renderDocumentName({ entry, classes }) {
 		let fileType = null;
 		let fileName = null;
+		let hasOneDocument = false;
 		let FileIcon = FileDefaultIcon;
 
 		if (entry.documents.length === 1) {
-			fileName = entry.documents[0].name;
 			fileType = entry.documents[0].mimeType;
+			hasOneDocument = true;
 			if (fileType) {
 				if (fileType === 'application/pdf') FileIcon = FilePdfIcon;
 				else if (fileType.startsWith('audio')) FileIcon = FileAudioIcon;
@@ -140,14 +142,23 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 				</div>
 				<div>
 					<Typography variant="h6">{entry.name}</Typography>
-					<Typography
-						variant="subtitle1"
-						color="secondary"
-						className={classes.ellipsis}
-						title={fileName}
-					>
-						{fileName}
-					</Typography>
+					{fileName && (
+						<Typography
+							variant="subtitle1"
+							color="secondary"
+							className={classes.ellipsis}
+							title={fileName}
+						>
+							{fileName}
+						</Typography>
+					)}
+					{hasOneDocument && (
+						<FileLinkWithModal
+							file={entry.documents[0]}
+							small
+							onPDFOpen={file => window.openPDF(file.content || file.url)}
+						/>
+					)}
 				</div>
 			</div>
 		);
