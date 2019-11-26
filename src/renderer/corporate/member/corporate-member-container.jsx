@@ -299,6 +299,7 @@ const mapStateToProps = (state, props) => {
 	let { parentId, identityId } = props.match.params;
 
 	const profile = identityId ? identitySelectors.selectProfile(state, { identityId }) : false;
+	parentId = profile && profile.identity.parentId ? profile.identity.parentId : parentId;
 	const parentProfile = identitySelectors.selectCorporateProfile(state, {
 		identityId: parentId
 	});

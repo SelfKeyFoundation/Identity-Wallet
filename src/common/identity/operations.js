@@ -431,12 +431,11 @@ const updateMemberProfileOperation = (data, identityId, onComplete) => async (
 	const attributeList =
 		identity.type === 'individual' ? individualMemberAttributes : corporateMemberAttributes;
 
-	const attributes = identitySelectors.selectIdAttributes(getState(), { identityId });
-	/* const attributes = identitySelectors.selectAttributeTypesFiltered(getState(), {
+	const attributes = identitySelectors.selectAttributeTypesFiltered(getState(), {
 		entityType: identity.type
-	}); */
+	});
 	const updatedAttributes = attributeList.map(attr => {
-		const attribute = attributes.find(a => a.type === attr.type) || {};
+		const attribute = attributes.find(a => a.url === attr.type) || {};
 		attr = { ...attr };
 		attr.id = attribute.id;
 		attr.value = data[attr.key];
