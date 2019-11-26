@@ -26,7 +26,11 @@ const getProfileJurisdiction = profile => {
 		getEntityType(profile) === 'individual'
 			? getProfileIdAttribute(profile, NATIONALITY_ATTRIBUTE)
 			: getProfileIdAttribute(profile, JURISDICTION_ATTRIBUTE);
-	return jurisdiction.country ? jurisdiction.name : jurisdiction;
+	if (!jurisdiction) {
+		return '';
+	} else {
+		return jurisdiction.country ? jurisdiction.name : jurisdiction;
+	}
 };
 
 const getProfileResidency = profile => {
@@ -34,7 +38,11 @@ const getProfileResidency = profile => {
 		getEntityType(profile) === 'individual'
 			? getProfileIdAttribute(profile, COUNTRY_ATTRIBUTE)
 			: getProfileIdAttribute(profile, JURISDICTION_ATTRIBUTE);
-	return residency.country ? residency.name : residency;
+	if (!residency) {
+		return '';
+	} else {
+		return residency.country ? residency.name : residency;
+	}
 };
 
 const getMemberEquity = profile => profile.identity.equity;

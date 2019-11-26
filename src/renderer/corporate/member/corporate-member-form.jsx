@@ -75,7 +75,7 @@ class CorporateMemberFormComponent extends PureComponent {
 			classes,
 			onFieldChange = () => {},
 			availablePositions = [],
-			positions = new Set(),
+			positions = [],
 			isEditing = false,
 			types = [
 				{
