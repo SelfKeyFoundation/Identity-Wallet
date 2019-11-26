@@ -10,9 +10,9 @@ const styles = theme => ({
 		textAlign: 'justify'
 	},
 	list: {
-		columns: 2,
+		columns: 3,
 		paddingLeft: 0,
-		width: '70%',
+		width: '100%',
 		'& li': {
 			paddingLeft: 0
 		}
@@ -37,13 +37,20 @@ export const TransactionNoKeyError = withStyles(styles)(
 					<List className={classes.list}>
 						{[
 							'Binance',
-							'KuCoin',
-							'Latoken',
+							'Hitbtc',
+							'DCoin',
+							'Kucoin',
+							'WhiteBit',
+							'P2PB2B',
 							'ProBit',
 							'Tidex',
-							'DCoin',
-							'WhiteBit',
-							'P2PB2B'
+							'Abcc',
+							'Idex',
+							'Crex24',
+							'Rightbtc',
+							'IDCM',
+							'Lukki',
+							'Bilaxy'
 						].map(item => (
 							<ListItem key={item}>
 								<DefaultBullet />
