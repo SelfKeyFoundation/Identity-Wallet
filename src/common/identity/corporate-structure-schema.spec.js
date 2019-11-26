@@ -4,7 +4,8 @@ import {
 	companyTypes,
 	companyPositions,
 	companyEquity,
-	positionEquity
+	positionEquity,
+	companyPositionWithEquity
 } from './__fixtures__/corporate-structure-schema';
 import { corporateProfiles } from './__fixtures__/corporate-profile-to-attribute';
 
@@ -78,6 +79,27 @@ describe('CorporateStructureSchema', () => {
 			});
 
 		Object.keys(positionEquity).forEach(t);
+	});
+
+	describe('getEquityPositionsForCompanyType', () => {
+		it('should throw on unknown error', () => {
+			expect.assertions(1);
+
+			try {
+				csSchema.getEquityForPosition('unknown');
+			} catch (error) {
+				expect(error.message).toBe('Unknown position type');
+			}
+		});
+
+		const t = type =>
+			it(`should return position with equity for '${type}'`, () => {
+				expect(csSchema.getEquityPositionsForCompanyType(type)).toEqual(
+					companyPositionWithEquity[type]
+				);
+			});
+
+		companyTypes.forEach(t);
 	});
 
 	describe('buildValue', () => {

@@ -461,6 +461,16 @@ export const selectBasicAttributeInfo = attribute =>
 		}
 	);
 
+export const selectAttributeValue = createSelector(
+	selectFullIdAttributesByIds,
+	selectProps('attributeTypeUrl'),
+	(attributes, { attributeTypeUrl }) => {
+		const attr = attributes.find(a => a.type.url === attributeTypeUrl);
+		if (!attr || !attr.data || !attr.data.value) return '';
+		return attr.data.value;
+	}
+);
+
 // Jurisdictions
 
 export const selectCorporateJurisdictions = createSelector(
@@ -623,6 +633,16 @@ export const selectPositionsForCompanyType = createSelector(
 	}
 );
 
+export const selectEquityPositionsForCompanyType = createSelector(
+	state => selectAttributeTypeByUrl(state, { attributeTypeUrl: CORPORATE_STRUCTURE_ATTRIBUTE }),
+	selectProps('companyType'),
+	(attrType, props) => {
+		return new CorporateStructureSchema(attrType.content).getEquityPositionsForCompanyType(
+			props.companyType
+		);
+	}
+);
+
 export const selectMemberAttributeTypes = type => {
 	if (type === 'corporate') {
 		return CORPORATE_MEMBER_CORPORATE_ATTRIBUTES;
@@ -632,3 +652,16 @@ export const selectMemberAttributeTypes = type => {
 		throw new Error(`Invalid type ${type}, expecting 'corporate' or 'individual'`);
 	}
 };
+
+export const selectFlattenMemberHierarchy = createSelector(
+	selectCorporateProfile,
+	profile => {
+		const flattenMembers = memberProfile =>
+			memberProfile.members.reduce((acc, curr) => {
+				curr.parent = memberProfile;
+				const children = curr.members ? flattenMembers(curr) : [];
+				return [...acc, curr, ...children];
+			}, []);
+		return flattenMembers(profile);
+	}
+);

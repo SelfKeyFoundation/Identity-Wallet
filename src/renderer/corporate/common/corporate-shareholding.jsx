@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, CardHeader, Card, CardContent, withStyles } from '@material-ui/core';
 import { Chart } from 'react-google-charts';
-import { getEntityName, getEntityEquity } from './common-helpers.jsx';
+import { getProfileName, getMemberEquity } from './common-helpers.jsx';
 
 const styles = theme => ({
 	hr: {
@@ -81,7 +81,7 @@ const chartOptions = {
 
 const getChartData = shareholders => {
 	const data = [['Content', 'percents']];
-	const dataPoints = shareholders.map(s => [getEntityName(s), getEntityEquity(s)]);
+	const dataPoints = shareholders.map(s => [getProfileName(s), getMemberEquity(s)]);
 	return data.concat(dataPoints);
 };
 
@@ -110,7 +110,7 @@ ref={c => {
 
 const CorporateShareholding = withStyles(styles)(props => {
 	const { classes, members = [] } = props;
-	const shareholders = members.filter(m => m.identity.positions.find(p => p === 'shareholder'));
+	const shareholders = members.filter(m => m.identity.equity);
 	if (shareholders.length === 0) {
 		return null;
 	}
@@ -137,7 +137,7 @@ const CorporateShareholding = withStyles(styles)(props => {
 									className={classes.coloredBox}
 									style={{ backgroundColor: getColors()[index] }}
 								/>
-								<span>{getEntityName(shareholder)}</span>
+								<span>{getProfileName(shareholder)}</span>
 							</div>
 						))}
 					</Grid>

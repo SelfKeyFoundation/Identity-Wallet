@@ -19,11 +19,11 @@ import CorporateDocuments from './corporate-documents';
 import CorporateInformation from './corporate-information';
 import {
 	getEntityIcon,
-	getEntityName,
-	getEntityRoles,
-	getEntityJurisdiction,
-	getEntityResidency,
-	getEntityEquity
+	getProfileName,
+	getMemberPositions,
+	getProfileJurisdiction,
+	getProfileResidency,
+	getMemberEquity
 } from './common-helpers.jsx';
 
 const styles = theme => ({
@@ -35,7 +35,8 @@ const styles = theme => ({
 		margin: '5px 16px'
 	},
 	card: {
-		marginTop: '22px'
+		marginTop: '22px',
+		overflow: 'auto'
 	},
 	cardHeader: {
 		whiteSpace: 'normal',
@@ -93,9 +94,9 @@ const CorporateMembers = withStyles(styles)(props => {
 	const {
 		classes,
 		onAddMember,
+		onOpenMemberDetails,
 		onEditMember,
 		onDeleteMember,
-		onOpenMemberDetails,
 		onAddAttribute,
 		onEditAttribute,
 		onDeleteAttribute,
@@ -144,14 +145,14 @@ const CorporateMembers = withStyles(styles)(props => {
 						</SmallTableHeadRow>
 					</TableHead>
 					<TableBody>
-						{members.map(entry => {
+						{members.map(member => {
 							const isOpen =
-								selectedMember && selectedMember.identity.id === entry.identity.id;
+								selectedMember && selectedMember.identity.id === member.identity.id;
 							return (
-								<React.Fragment key={entry.identity.id}>
+								<React.Fragment key={member.identity.id}>
 									<TableRow>
 										<TableCell
-											onClick={() => onOpenMemberDetails(entry)}
+											onClick={() => onOpenMemberDetails(member)}
 											className={classes.iconColumn}
 										>
 											<DropdownIcon
@@ -161,34 +162,38 @@ const CorporateMembers = withStyles(styles)(props => {
 											/>
 										</TableCell>
 										<TableCell className={classes.iconColumn}>
-											{getEntityIcon(entry)}
+											{getEntityIcon(member)}
 										</TableCell>
 										<TableCell>
 											<Typography variant="h6" className={classes.capitalize}>
-												{getEntityName(entry)}
+												{getProfileName(member)}
 											</Typography>
 										</TableCell>
 										<TableCell>
 											<Typography variant="h6" className={classes.capitalize}>
-												{getEntityRoles(entry)}
-											</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="h6" />
-										</TableCell>
-										<TableCell>
-											<Typography variant="h6" className={classes.capitalize}>
-												{getEntityJurisdiction(entry)}
-											</Typography>
-										</TableCell>
-										<TableCell>
-											<Typography variant="h6" className={classes.capitalize}>
-												{getEntityResidency(entry)}
+												{getMemberPositions(member)}
 											</Typography>
 										</TableCell>
 										<TableCell>
 											<Typography variant="h6">
-												{getEntityEquity(entry)}
+												{member.parent
+													? getProfileName(member.parent)
+													: null}
+											</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="h6" className={classes.capitalize}>
+												{getProfileJurisdiction(member)}
+											</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="h6" className={classes.capitalize}>
+												{getProfileResidency(member)}
+											</Typography>
+										</TableCell>
+										<TableCell>
+											<Typography variant="h6">
+												{getMemberEquity(member)}
 											</Typography>
 										</TableCell>
 										<TableCell>
@@ -197,13 +202,13 @@ const CorporateMembers = withStyles(styles)(props => {
 										<TableCell>
 											<IconButton
 												id="editButton"
-												onClick={() => onEditMember(entry)}
+												onClick={() => onEditMember(member)}
 											>
 												<EditTransparentIcon />
 											</IconButton>
 											<IconButton
 												id="deleteButton"
-												onClick={() => onDeleteMember(entry)}
+												onClick={() => onDeleteMember(member)}
 											>
 												<DeleteIcon />
 											</IconButton>
@@ -221,7 +226,7 @@ const CorporateMembers = withStyles(styles)(props => {
 												>
 													<Grid item>
 														<CorporateInformation
-															attributes={selectedMember.attributes}
+															attributes={member.attributes}
 															onAddAttribute={onAddAttribute}
 															onEditAttribute={onEditAttribute}
 															onDeleteAttribute={onDeleteAttribute}
@@ -229,7 +234,7 @@ const CorporateMembers = withStyles(styles)(props => {
 													</Grid>
 													<Grid item>
 														<CorporateDocuments
-															documents={selectedMember.documents}
+															documents={member.documents}
 															onAddDocument={onAddDocument}
 															onEditDocument={onEditDocument}
 															onDeleteDocument={onDeleteDocument}

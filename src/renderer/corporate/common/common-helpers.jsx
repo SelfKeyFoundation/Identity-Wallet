@@ -1,59 +1,68 @@
 import React from 'react';
 import { SmallRoundCompany, SmallRoundPerson } from 'selfkey-ui';
 
-const getEntityType = entry => entry.identity.type;
+import {
+	JURISDICTION_ATTRIBUTE,
+	NATIONALITY_ATTRIBUTE,
+	COUNTRY_ATTRIBUTE
+} from 'common/identity/constants';
 
-const getEntityIcon = entry => {
-	if (entry.identity.type === 'individual') {
-		return <SmallRoundPerson />;
+const getEntityType = profile => profile.identity.type;
+
+const getEntityIcon = profile =>
+	getEntityType(profile) === 'individual' ? <SmallRoundPerson /> : <SmallRoundCompany />;
+
+const getProfileName = profile =>
+	getEntityType(profile) === 'individual'
+		? `${profile.lastName}, ${profile.firstName}`
+		: profile.entityName;
+
+const getMemberPositions = profile => profile.identity.positions.join(', ');
+
+const getProfileEmail = profile => profile.email;
+
+const getProfileJurisdiction = profile => {
+	const jurisdiction =
+		getEntityType(profile) === 'individual'
+			? getProfileIdAttribute(profile, NATIONALITY_ATTRIBUTE)
+			: getProfileIdAttribute(profile, JURISDICTION_ATTRIBUTE);
+	if (!jurisdiction) {
+		return '';
 	} else {
-		return <SmallRoundCompany />;
+		return jurisdiction.country ? jurisdiction.name : jurisdiction;
 	}
 };
 
-const getEntityName = entry => {
-	if (entry.identity.type === 'individual') {
-		return `${entry.lastName}, ${entry.firstName}`;
+const getProfileResidency = profile => {
+	const residency =
+		getEntityType(profile) === 'individual'
+			? getProfileIdAttribute(profile, COUNTRY_ATTRIBUTE)
+			: getProfileIdAttribute(profile, JURISDICTION_ATTRIBUTE);
+	if (!residency) {
+		return '';
 	} else {
-		return `${entry.entityName}`;
+		return residency.country ? residency.name : residency;
 	}
 };
 
-const getEntityEmail = entry => entry.email;
+const getMemberEquity = profile => profile.identity.equity;
 
-const getEntityRoles = entry => entry.identity.positions.join(', ');
-
-const getEntityJurisdiction = entry => {
-	const idAttribute =
-		entry.identity.type === 'individual'
-			? 'http://platform.selfkey.org/schema/attribute/nationality.json'
-			: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json';
-	const attribute = entry.allAttributes.find(a => a.type.content.$id === idAttribute);
+const getProfileIdAttribute = (profile, idAttribute) => {
+	// TODO: check valid idAttributes
+	const attribute = profile.allAttributes.find(a => a.type.content.$id === idAttribute);
 	if (attribute && attribute.data.value) {
 		return attribute.data.value.denonym ? attribute.data.value.denonym : attribute.data.value;
 	}
 };
-
-const getEntityResidency = entry => {
-	const idAttribute =
-		entry.identity.type === 'individual'
-			? 'http://platform.selfkey.org/schema/attribute/country-of-residency.json'
-			: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json';
-	const attribute = entry.allAttributes.find(a => a.type.content.$id === idAttribute);
-	if (attribute && attribute.data.value) {
-		return attribute.data.value.denonym ? attribute.data.value.denonym : attribute.data.value;
-	}
-};
-
-const getEntityEquity = entry => entry.identity.equity;
 
 export {
+	getProfileIdAttribute,
+	getProfileName,
 	getEntityType,
 	getEntityIcon,
-	getEntityName,
-	getEntityEmail,
-	getEntityRoles,
-	getEntityJurisdiction,
-	getEntityResidency,
-	getEntityEquity
+	getMemberPositions,
+	getProfileEmail,
+	getMemberEquity,
+	getProfileJurisdiction,
+	getProfileResidency
 };

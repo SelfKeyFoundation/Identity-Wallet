@@ -510,7 +510,7 @@ export const corporateMembers = [
 			positions: ['director', 'shareholder'],
 			equity: 19
 		},
-		attributes: [
+		allAttributes: [
 			{
 				name: 'residence',
 				type: {
@@ -564,7 +564,7 @@ export const corporateMembers = [
 			email: 'test@company.org',
 			positions: ['observer']
 		},
-		attributes: [
+		allAttributes: [
 			{
 				title: 'incorporation',
 				name: 'incorporation',
@@ -593,7 +593,7 @@ export const corporateMembers = [
 			positions: ['shareholder'],
 			equity: 81
 		},
-		attributes: [
+		allAttributes: [
 			{
 				title: 'incorporation',
 				name: 'incorporation',

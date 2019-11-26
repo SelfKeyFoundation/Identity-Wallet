@@ -260,7 +260,7 @@ const updateDIDOperation = (did, id) => async (dispatch, getState) => {
 
 // Profile
 
-const createCorporateProfileOperation = data => async (dispatch, getState) => {
+const createCorporateProfileOperation = (data, onComplete) => async (dispatch, getState) => {
 	const wallet = walletSelectors.getWallet(getState());
 	let identity = null;
 	if (data.identityId) {
@@ -336,13 +336,15 @@ const createCorporateProfileOperation = data => async (dispatch, getState) => {
 
 		await dispatch(identityOperations.updateIdentitySetupOperation(true, identity.id));
 		await dispatch(identityOperations.unlockIdentityOperation(identity.id));
-		await dispatch(push('/main/corporate'));
+		if (onComplete) {
+			await dispatch(push(onComplete));
+		}
 	} catch (error) {
 		log.error('failed to create corporate identity %s', error);
 	}
 };
 
-const createMemberProfileOperation = data => async (dispatch, getState) => {
+const createMemberProfileOperation = (data, onComplete) => async (dispatch, getState) => {
 	const identity = _.pick(data, [
 		'name',
 		'type',
@@ -405,9 +407,15 @@ const createMemberProfileOperation = data => async (dispatch, getState) => {
 		}
 	}
 	await dispatch(identityOperations.updateIdentitySetupOperation(true, member.id));
+	if (onComplete) {
+		await dispatch(push(onComplete));
+	}
 };
 
-const updateMemberProfileOperation = (data, identityId) => async (dispatch, getState) => {
+const updateMemberProfileOperation = (data, identityId, onComplete) => async (
+	dispatch,
+	getState
+) => {
 	const update = _.pick(data, [
 		'name',
 		'profilePicture',
@@ -418,16 +426,16 @@ const updateMemberProfileOperation = (data, identityId) => async (dispatch, getS
 	]);
 
 	update.id = identityId;
-
-	const identity = await dispatch(identityOperations.updateIdentity(update));
+	const identity = await dispatch(identityOperations.updateIdentityOperation(update));
 
 	const attributeList =
 		identity.type === 'individual' ? individualMemberAttributes : corporateMemberAttributes;
 
-	const attributes = identitySelectors.selectIdAttributes(getState(), { identityId });
-
+	const attributes = identitySelectors.selectAttributeTypesFiltered(getState(), {
+		entityType: identity.type
+	});
 	const updatedAttributes = attributeList.map(attr => {
-		const attribute = attributes.find(a => a.type === attr.type) || {};
+		const attribute = attributes.find(a => a.url === attr.type) || {};
 		attr = { ...attr };
 		attr.id = attribute.id;
 		attr.value = data[attr.key];
@@ -439,35 +447,38 @@ const updateMemberProfileOperation = (data, identityId) => async (dispatch, getS
 	const getTypeId = url => {
 		return idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
 	};
-
 	for (const attr of updatedAttributes) {
-		const value = attr.value || '';
-
-		try {
-			if (!attr.id) {
-				await dispatch(
-					identityOperations.createIdAttributeOperation(
-						{
-							typeId: getTypeId(attr.type),
-							name: attr.name,
+		if (typeof attr.value !== 'undefined') {
+			const value = attr.value || '';
+			try {
+				if (!attr.id) {
+					await dispatch(
+						identityOperations.createIdAttributeOperation(
+							{
+								typeId: getTypeId(attr.type),
+								name: attr.name,
+								data: { value }
+							},
+							identityId
+						)
+					);
+				} else {
+					await dispatch(
+						identityOperations.editIdAttributeOperation({
+							id: attr.id,
 							data: { value }
-						},
-						identityId
-					)
-				);
-			} else {
-				await dispatch(
-					identityOperations.editIdAttributeOperation({
-						id: attr.id,
-						data: { value }
-					})
-				);
+						})
+					);
+				}
+			} catch (error) {
+				log.error('failed to update attribute %s - %s', attr.type, error);
 			}
-		} catch (error) {
-			log.error('failed to update attribute %s', attr.type);
 		}
 	}
 	await dispatch(identityOperations.updateIdentitySetupOperation(true, identityId));
+	if (onComplete) {
+		await dispatch(push(onComplete));
+	}
 };
 
 const createIndividualProfile = (identityId, data) => async (dispatch, getState) => {
