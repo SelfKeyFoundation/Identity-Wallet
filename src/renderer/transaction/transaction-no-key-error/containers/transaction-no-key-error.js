@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { TransactionNoKeyError } from '../components/transaction-no-key-error';
 import { getWallet } from 'common/wallet/selectors';
-import { push } from 'connected-react-router';
 import { kycOperations } from 'common/kyc';
+import history from 'common/store/history';
 
 class TransactionNoKeyErrorContainer extends PureComponent {
 	componentDidMount() {
@@ -14,7 +14,7 @@ class TransactionNoKeyErrorContainer extends PureComponent {
 		await this.props.dispatch(kycOperations.clearRelyingPartyOperation());
 	};
 	closeAction = () => {
-		this.props.dispatch(push('/main/dashboard'));
+		history.getHistory().goBack();
 	};
 	render() {
 		return <TransactionNoKeyError closeAction={this.closeAction} {...this.props} />;
