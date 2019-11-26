@@ -77,6 +77,7 @@ class CorporateMemberFormComponent extends PureComponent {
 			availablePositions = [],
 			positions = [],
 			isEditing = false,
+			errors,
 			types = [
 				{
 					title: 'Individual',
@@ -116,6 +117,7 @@ class CorporateMemberFormComponent extends PureComponent {
 									positions={positions}
 									availablePositions={availablePositions}
 									onFieldChange={onFieldChange}
+									errors={errors}
 								/>
 
 								<CorporateMemberSelectType
