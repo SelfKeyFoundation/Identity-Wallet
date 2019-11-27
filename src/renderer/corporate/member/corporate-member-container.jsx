@@ -165,7 +165,6 @@ class CorporateMemberContainerComponent extends PureComponent {
 			throw new Error(`${name} is not a basic attribute`);
 		}
 
-		console.log(type);
 		if (!value) {
 			return !type.required;
 		}
