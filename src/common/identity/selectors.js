@@ -182,15 +182,15 @@ export const selectMemberIndividualAttributeTypes = createSelector(
 				switch (curr.url) {
 					case FIRST_NAME_ATTRIBUTE:
 						acc.firstName = curr;
-						curr.required = false;
+						curr.required = true;
 						return acc;
 					case LAST_NAME_ATTRIBUTE:
 						acc.lastName = curr;
-						curr.required = false;
+						curr.required = true;
 						return acc;
 					case EMAIL_ATTRIBUTE:
 						acc.email = curr;
-						curr.required = true;
+						curr.required = false;
 						return acc;
 					case COUNTRY_ATTRIBUTE:
 						acc.country = curr;
