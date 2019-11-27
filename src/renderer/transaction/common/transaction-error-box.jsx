@@ -20,7 +20,7 @@ export const TransactionErrorBox = withStyles(styles)(
 							<>
 								<Divider />
 								<Typography variant="body1" color="secondary">
-									Your Address:
+									Your Address to receive KEY:
 								</Typography>
 								<Grid container alignItems="center">
 									<Typography variant="body1">{address}</Typography>
