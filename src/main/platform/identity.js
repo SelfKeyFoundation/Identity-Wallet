@@ -118,9 +118,10 @@ export class Identity {
 	}
 
 	getAttributesByTypes(types = []) {
-		return IdAttribute.findByTypeUrls(this.wid, types.filter(t => typeof t === 'string')).eager(
-			'[documents, attributeType]'
-		);
+		return IdAttribute.findByTypeUrls(
+			this.ident.id,
+			types.filter(t => typeof t === 'string')
+		).eager('[documents, attributeType]');
 	}
 }
 

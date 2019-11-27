@@ -152,10 +152,14 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
-	static getUserToken(ctx) {
+	static getUserToken(ctx, meta) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
 		let token = ctx.token.toString();
 		let url = ctx.getEndpoint(USERS_TOKEN_ENDPOINT_NAME);
+		let qs;
+		if (meta) {
+			qs = { meta: JSON.stringify(meta) };
+		}
 		return request.get({
 			url,
 			headers: {
@@ -163,6 +167,7 @@ export class RelyingPartyRest {
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
+			qs,
 			json: true
 		});
 	}
@@ -445,8 +450,8 @@ export class RelyingPartySession {
 			throw error;
 		}
 	}
-	getUserLoginPayload() {
-		return RelyingPartyRest.getUserToken(this.ctx);
+	getUserLoginPayload(meta = {}) {
+		return RelyingPartyRest.getUserToken(this.ctx, meta);
 	}
 
 	async createUser(attributes = [], meta = {}) {
