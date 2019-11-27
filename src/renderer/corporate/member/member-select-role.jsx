@@ -69,6 +69,12 @@ const styles = theme => ({
 	},
 	selectionBoxDescription: {
 		marginTop: '15px'
+	},
+	error: {
+		marginTop: '1em'
+	},
+	withError: {
+		border: '1px solid red'
 	}
 });
 
@@ -116,9 +122,14 @@ class CorporateMemberSelectRoleComponent extends PureComponent {
 	};
 
 	render() {
-		const { classes, availablePositions } = this.props;
+		const { classes, availablePositions, errors } = this.props;
 		return (
-			<Grid container direction="column" spacing={8}>
+			<Grid
+				container
+				direction="column"
+				spacing={8}
+				className={errors.positions ? classes.withError : null}
+			>
 				<Grid item>
 					<Typography variant="body1" align="center" className={classes.title}>
 						Select one or multiple roles
@@ -158,6 +169,16 @@ class CorporateMemberSelectRoleComponent extends PureComponent {
 								</label>
 							</div>
 						))}
+						{errors.positions && (
+							<Typography
+								variant="subtitle2"
+								color="error"
+								gutterBottom
+								className={classes.error}
+							>
+								{errors.positions}
+							</Typography>
+						)}
 					</Grid>
 				</Grid>
 			</Grid>

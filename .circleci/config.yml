@@ -109,6 +109,7 @@ jobs:
             - run:
                   name: Build App
                   command: yarn dist --publish=never
+                  no_output_timeout: 40m
             - persist_to_workspace:
                   root: .
                   paths:
@@ -232,6 +233,7 @@ jobs:
             - run:
                   name: Publish App to Github
                   command: yarn publish-build
+                  no_output_timeout: 1h
 
     'publish-linux':
         docker: *DOCKERIMAGE
