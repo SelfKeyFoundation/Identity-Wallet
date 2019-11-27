@@ -328,7 +328,7 @@ export class LWSService {
 			);
 		}
 		try {
-			let payload = await session.getUserLoginPayload();
+			let payload = await session.getUserLoginPayload(config.meta);
 			return this.authResp({ payload }, msg, conn);
 		} catch (error) {
 			log.error(error);
