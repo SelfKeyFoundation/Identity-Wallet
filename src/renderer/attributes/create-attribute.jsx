@@ -188,7 +188,7 @@ class CreateAttributeComponent extends PureComponent {
 					</Select>
 					<Divider className={classes.divider} />
 					{this.state.typeId > -1 && (
-						<>
+						<React.Fragment>
 							<Typography variant="overline" className={classes.label}>
 								Label *
 							</Typography>
@@ -208,7 +208,7 @@ class CreateAttributeComponent extends PureComponent {
 									{this.state.errorLabel}
 								</Typography>
 							)}
-						</>
+						</React.Fragment>
 					)}
 				</div>
 				{type && <Divider className={classes.divider} />}

@@ -32,6 +32,15 @@ export const positionEquity = {
 	'limited-partner': 'Percentage'
 };
 
+export const companyPositionWithEquity = {
+	'Company Limited by Shares (LTD)': ['shareholder'],
+	'Limited Liability Company (LLC)': ['member'],
+	'Trust (TST)': [],
+	'Foundation (FND)': [],
+	'Limited Partnership (LLP)': ['general-partner', 'limited-partner'],
+	Other: ['member']
+};
+
 const director = {
 	title: 'Director',
 	description: 'The person that is chief executive of the organization.',
