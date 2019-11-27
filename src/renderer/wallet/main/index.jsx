@@ -132,7 +132,7 @@ class Main extends PureComponent {
 						component={TransactionNoGasError}
 					/>
 					<Route
-						path={`${match.path}/transaction-no-key-error`}
+						path={`${match.path}/transaction-no-key-error/:keyPrice?`}
 						component={TransactionNoKeyError}
 					/>
 					<Route path={`${match.path}/transaction-error`} component={TransactionError} />

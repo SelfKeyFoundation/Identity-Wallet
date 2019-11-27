@@ -10,9 +10,9 @@ const styles = theme => ({
 		textAlign: 'justify'
 	},
 	list: {
-		columns: 2,
+		columns: 3,
 		paddingLeft: 0,
-		width: '70%',
+		width: '100%',
 		'& li': {
 			paddingLeft: 0
 		}
@@ -23,7 +23,9 @@ const styles = theme => ({
 });
 
 export const TransactionNoKeyError = withStyles(styles)(
-	({ classes, children, address, closeAction }) => {
+	({ classes, children, keyPrice, address, closeAction }) => {
+		const numeric = keyPrice && +keyPrice;
+		const key = numeric.toLocaleString();
 		return (
 			<TransactionErrorBox address={address} closeAction={closeAction}>
 				<div className={classes.bodyText}>
@@ -31,19 +33,27 @@ export const TransactionNoKeyError = withStyles(styles)(
 						You do not have enough KEY tokens to pay for this marketplace application.
 					</Typography>
 					<Typography variant="body1" className={classes.bottomSpace}>
-						To access this marketplace, you will need to deposit 39.730,293 KEY tokens
-						in your SelfKey Wallet. KEY tokens are listed on many exchanges worldwide:
+						To access this marketplace, you will need to deposit {key} KEY tokens in
+						your SelfKey Wallet. KEY tokens are listed on many exchanges worldwide:
 					</Typography>
 					<List className={classes.list}>
 						{[
 							'Binance',
-							'KuCoin',
-							'Latoken',
+							'Hitbtc',
+							'DCoin',
+							'Kucoin',
+							'WhiteBit',
+							'P2PB2B',
 							'ProBit',
 							'Tidex',
-							'DCoin',
-							'WhiteBit',
-							'P2PB2B'
+							'Abcc',
+							'Idex',
+							'Crex24',
+							'Rightbtc',
+							'IDCM',
+							'Lukki',
+							'Bilaxy',
+							'Bw'
 						].map(item => (
 							<ListItem key={item}>
 								<DefaultBullet />
