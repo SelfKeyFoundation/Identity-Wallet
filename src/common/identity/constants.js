@@ -68,7 +68,7 @@ export const individualMemberAttributes = [
 	{ key: 'lastName', type: LAST_NAME_ATTRIBUTE, name: 'Last Name', required: true },
 	{ key: 'nationality', type: NATIONALITY_ATTRIBUTE, name: 'Citizenship', required: true },
 	{ key: 'country', type: RESIDENCY_ATTRIBUTE, name: 'Residency', required: true },
-	{ key: 'email', type: EMAIL_ATTRIBUTE, name: 'Email', required: true },
+	{ key: 'email', type: EMAIL_ATTRIBUTE, name: 'Email', required: false },
 	{ key: 'phone', type: PHONE_ATTRIBUTE, name: 'Phone' }
 ];
 

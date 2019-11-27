@@ -355,6 +355,17 @@ const createMemberProfileOperation = (data, onComplete) => async (dispatch, getS
 		'equity',
 		'parentId'
 	]);
+
+	const attributes =
+		data.type === 'individual' ? individualMemberAttributes : corporateMemberAttributes;
+
+	for (const attr of attributes) {
+		const value = data[attr.key];
+		if (!value && attr.required) {
+			throw new Error(`Attribute ${attr.name} is required`);
+		}
+	}
+
 	if (!identity.walletId) {
 		const wallet = walletSelectors.getWallet(getState());
 		identity.walletId = wallet.id;
@@ -374,8 +385,6 @@ const createMemberProfileOperation = (data, onComplete) => async (dispatch, getS
 	const getTypeId = url => {
 		return idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
 	};
-	const attributes =
-		member.type === 'individual' ? individualMemberAttributes : corporateMemberAttributes;
 
 	for (const attr of attributes) {
 		const value = data[attr.key];
@@ -425,11 +434,18 @@ const updateMemberProfileOperation = (data, identityId, onComplete) => async (
 		'parentId'
 	]);
 
+	const attributeList =
+		data.type === 'individual' ? individualMemberAttributes : corporateMemberAttributes;
+
+	for (const attr of attributeList) {
+		const value = data[attr.key];
+		if (!value && attr.required) {
+			throw new Error(`Attribute ${attr.name} is required`);
+		}
+	}
+
 	update.id = identityId;
 	const identity = await dispatch(identityOperations.updateIdentityOperation(update));
-
-	const attributeList =
-		identity.type === 'individual' ? individualMemberAttributes : corporateMemberAttributes;
 
 	const attributes = identitySelectors.selectAttributeTypesFiltered(getState(), {
 		entityType: identity.type

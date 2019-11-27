@@ -112,7 +112,7 @@ class CorporateMemberContainerComponent extends PureComponent {
 			creationDate: 'Please enter company incorporation date',
 			taxId: 'Tax id provided is invalid',
 			type: 'Invalid member type',
-			positions: 'Invalid position',
+			positions: 'Please select a position',
 			country: 'Please select Residency',
 			nationality: 'Please select Nationality',
 			firstName: 'Please enter your first Name',
@@ -153,10 +153,13 @@ class CorporateMemberContainerComponent extends PureComponent {
 			case 'parentId':
 				return this.validateAttributeParentId(value);
 			case 'positions':
-				return true;
+				return value.length > 0;
 		}
 
-		const type = corporateAttributeTypes[name] || individualAttributeTypes[name];
+		const type =
+			this.state.type === 'individual'
+				? individualAttributeTypes[name]
+				: corporateAttributeTypes[name];
 
 		if (!type || !type.content) {
 			throw new Error(`${name} is not a basic attribute`);
