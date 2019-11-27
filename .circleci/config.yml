@@ -115,7 +115,7 @@ jobs:
                   paths:
                       - dist
             - store_artifacts:
-                  path: dist
+                  path: dist/{latest,SelfKey Identity}*
             - *step_save_cache_mac
 
     'build-linux':
@@ -148,7 +148,7 @@ jobs:
                   paths:
                       - dist
             - store_artifacts:
-                  path: dist
+                  path: dist/{latest,SelfKey Identity}*
             - *step_save_cache
     'e2e-mac':
         macos:
