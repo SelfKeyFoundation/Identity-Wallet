@@ -32,3 +32,4 @@ client-secret.json
 .history
 junit.xml
 IdentityWalletStorage.sqlite
+test-db*
