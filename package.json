@@ -262,13 +262,20 @@
 			"sign": false
 		},
 		"linux": {
-			"target": {
-				"target": "AppImage",
-				"arch": [
-					"x64",
-					"armv7l"
-				]
-			}
+			"target": [
+				{
+					"target": "AppImage",
+					"arch": [
+						"x64"
+					]
+				},
+				{
+					"target": "tar.gz",
+					"arch": [
+						"armv7l"
+					]
+				}
+			]
 		},
 		"win": {
 			"target": "nsis"
