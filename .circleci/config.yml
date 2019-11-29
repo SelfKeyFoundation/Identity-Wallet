@@ -315,6 +315,7 @@ workflows:
                   requires:
                       # - e2e-linux
                       - build-linux
+                      - build-linux-arm
                   filters:
                       branches:
                           only:
@@ -350,7 +351,6 @@ workflows:
                   requires:
                       # - e2e-linux
                       - build-linux
-                      - build-linux-arm
                   filters:
                       branches:
                           only:
