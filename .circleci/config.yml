@@ -176,7 +176,7 @@ jobs:
                   command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
             - run:
                   name: Build App
-                  command: yarn dist --publish=never -l --x64
+                  command: yarn dist --publish=never
             - persist_to_workspace:
                   root: .
                   paths:
