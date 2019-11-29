@@ -305,9 +305,9 @@ workflows:
             - 'build-linux':
                   requires:
                       - unit-test
-            - 'build-linux-arm':
-                  requires:
-                      - unit-test
+            # - 'build-linux-arm':
+            #       requires:
+            #           - unit-test
             # - 'e2e-linux':
             #       requires:
             #           - build-linux
@@ -315,7 +315,7 @@ workflows:
                   requires:
                       # - e2e-linux
                       - build-linux
-                      - build-linux-arm
+                      # - build-linux-arm
                   filters:
                       branches:
                           only:
