@@ -117,7 +117,40 @@ jobs:
             - store_artifacts:
                   path: dist/{latest,SelfKey Identity}*
             - *step_save_cache_mac
-
+    'build-linux-arm':
+        docker:
+            - image: arm32v7/node:10.17.0-stretch
+        environment:
+            CACHE_VERSION: *cache_version
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: /tmp/linux
+            - *step_prepare_cache_buster
+            - *step_restore_cache
+            - run:
+                  name: Install OS Dependecies
+                  command: |
+                      sudo apt-get update
+                      sudo apt-get install libudev-dev
+                      sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
+                      sudo apt-get install libc6-dev-armhf-cross linux-libc-dev-armhf-cross g++-arm-linux-gnueabihf
+            - run:
+                  name: Install Node Packages
+                  command: yarn install-all
+            - run:
+                  name: Set Sentry
+                  command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
+            - run:
+                  name: Build App
+                  command: yarn dist --publish=never -l --armv7l
+            - persist_to_workspace:
+                  root: .
+                  paths:
+                      - dist
+            - store_artifacts:
+                  path: dist/{latest,SelfKey Identity}*
+            - *step_save_cache
     'build-linux':
         docker: *DOCKERIMAGE
         environment:
@@ -143,7 +176,7 @@ jobs:
                   command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
             - run:
                   name: Build App
-                  command: yarn dist --publish=never
+                  command: yarn dist --publish=never -l --x64
             - persist_to_workspace:
                   root: .
                   paths:
@@ -272,6 +305,9 @@ workflows:
             - 'build-linux':
                   requires:
                       - unit-test
+            - 'build-linux-arm':
+                  requires:
+                      - unit-test
             # - 'e2e-linux':
             #       requires:
             #           - build-linux
@@ -314,6 +350,7 @@ workflows:
                   requires:
                       # - e2e-linux
                       - build-linux
+                      - build-linux-arm
                   filters:
                       branches:
                           only:
