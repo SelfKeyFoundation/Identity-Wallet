@@ -8,7 +8,7 @@ const styles = theme => ({
 		position: 'relative',
 		width: '100%',
 		margin: '0 auto',
-		maxWidth: '960px'
+		maxWidth: '780px'
 	},
 	containerHeader: {
 		padding: '22px 30px',
@@ -16,12 +16,6 @@ const styles = theme => ({
 		'& div': {
 			display: 'inline-block',
 			color: '#FFF'
-		},
-		'& .region': {
-			marginLeft: '1em',
-			marginTop: '0.25em',
-			marginBottom: '0',
-			fontSize: '24px'
 		}
 	},
 	closeIcon: {
@@ -32,6 +26,7 @@ const styles = theme => ({
 	contentContainer: {
 		border: '1px solid #303C49',
 		borderRadius: '4px',
+		boxShadow: '0 50px 70px -50px black',
 		padding: '30px'
 	},
 	icon: {
@@ -79,9 +74,7 @@ export const BankAccountsPaymentComplete = withStyles(styles)(props => {
 				alignItems="flex-start"
 				className={classes.containerHeader}
 			>
-				<Typography variant="body2" gutterBottom className="region">
-					Payment Received
-				</Typography>
+				<Typography variant="body1">Payment Received</Typography>
 			</Grid>
 			<div className={classes.contentContainer}>
 				<Grid
