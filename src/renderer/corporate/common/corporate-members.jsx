@@ -23,7 +23,8 @@ import {
 	getMemberPositions,
 	getProfileJurisdiction,
 	getProfileResidency,
-	getMemberEquity
+	getMemberEquity,
+	getProfileEmail
 } from './common-helpers.jsx';
 
 const styles = theme => ({
@@ -87,6 +88,9 @@ const styles = theme => ({
 		maxWidth: '1em',
 		padding: '0',
 		textAlign: 'center'
+	},
+	email: {
+		textTransform: 'lowercase'
 	}
 });
 
@@ -136,9 +140,11 @@ const CorporateMembers = withStyles(styles)(props => {
 							<TableCell>
 								<Typography variant="overline">Shares</Typography>
 							</TableCell>
+							{/* }
 							<TableCell>
 								<Typography variant="overline">Selfkey user</Typography>
 							</TableCell>
+							*/}
 							<TableCell align="right">
 								<Typography variant="overline">Actions</Typography>
 							</TableCell>
@@ -168,6 +174,12 @@ const CorporateMembers = withStyles(styles)(props => {
 											<Typography variant="h6" className={classes.capitalize}>
 												{getProfileName(member)}
 											</Typography>
+											<Typography
+												variant="overline"
+												className={classes.email}
+											>
+												{getProfileEmail(member)}
+											</Typography>
 										</TableCell>
 										<TableCell>
 											<Typography variant="h6" className={classes.capitalize}>
@@ -193,12 +205,14 @@ const CorporateMembers = withStyles(styles)(props => {
 										</TableCell>
 										<TableCell>
 											<Typography variant="h6">
-												{getMemberEquity(member)}
+												{getMemberEquity(member)}%
 											</Typography>
 										</TableCell>
+										{/*
 										<TableCell>
 											<Typography variant="h6">Invite</Typography>
 										</TableCell>
+										*/}
 										<TableCell>
 											<IconButton
 												id="editButton"
