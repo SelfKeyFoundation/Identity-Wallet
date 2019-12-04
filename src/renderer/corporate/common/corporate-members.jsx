@@ -254,7 +254,9 @@ const CorporateMembers = withStyles(styles)(props => {
 											</Typography>
 										</TableCell>
 										<TableCell>
-											<Typography variant="subtitle1">Invite</Typography>
+											<Typography variant="subtitle1" color="primary">
+												Invite
+											</Typography>
 										</TableCell>
 										<TableCell>
 											<IconButton
