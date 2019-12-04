@@ -102,6 +102,14 @@ const styles = theme => ({
 	},
 	overflowStandard: {
 		maxWidth: '100px'
+	},
+	dropdownIcon: {
+		'&:hover': {
+			cursor: 'pointer',
+			'& svg': {
+				fill: 'white'
+			}
+		}
 	}
 });
 
@@ -168,7 +176,9 @@ const CorporateMembers = withStyles(styles)(props => {
 									<TableRow>
 										<TableCell
 											onClick={() => onOpenMemberDetails(member)}
-											className={classes.iconColumn}
+											className={`${classes.iconColumn} ${
+												classes.dropdownIcon
+											}`}
 										>
 											<DropdownIcon
 												className={
