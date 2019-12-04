@@ -110,6 +110,9 @@ const styles = theme => ({
 				fill: 'white'
 			}
 		}
+	},
+	email: {
+		textTransform: 'lowercase'
 	}
 });
 
@@ -202,7 +205,7 @@ const CorporateMembers = withStyles(styles)(props => {
 											<Typography
 												variant="subtitle2"
 												color="secondary"
-												className={`${classes.capitalize} ${
+												className={`${classes.email} ${
 													classes.overflowProfile
 												} ${classes.overflow}`}
 												title={getProfileEmail(member)}

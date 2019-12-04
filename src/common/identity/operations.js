@@ -447,22 +447,26 @@ const updateMemberProfileOperation = (data, identityId, onComplete) => async (
 	update.id = identityId;
 	const identity = await dispatch(identityOperations.updateIdentityOperation(update));
 
-	const attributes = identitySelectors.selectAttributeTypesFiltered(getState(), {
+	const attributes = identitySelectors.selectIdAttributes(getState(), {
+		identityId
+	});
+
+	const idAttributeTypes = identitySelectors.selectAttributeTypesFiltered(getState(), {
 		entityType: identity.type
 	});
+
+	const getTypeId = url => {
+		return idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
+	};
+
 	const updatedAttributes = attributeList.map(attr => {
-		const attribute = attributes.find(a => a.url === attr.type) || {};
+		const attribute = attributes.find(a => a.typeId === getTypeId(attr.type)) || {};
 		attr = { ...attr };
 		attr.id = attribute.id;
 		attr.value = data[attr.key];
 		return attr;
 	});
-	const idAttributeTypes = identitySelectors.selectAttributeTypesFiltered(getState(), {
-		entityType: identity.type
-	});
-	const getTypeId = url => {
-		return idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
-	};
+
 	for (const attr of updatedAttributes) {
 		if (typeof attr.value !== 'undefined') {
 			const value = attr.value || '';

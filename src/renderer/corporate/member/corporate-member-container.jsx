@@ -194,10 +194,11 @@ class CorporateMemberContainerComponent extends PureComponent {
 		const positionsWithEquity = this.props.positionsWithEquity
 			? this.props.positionsWithEquity
 			: [];
-		return (
-			selectedPositions.some(p => positionsWithEquity.includes(p)) &&
-			(!isNaN(number) && number >= 0 && number <= 100)
-		);
+		if (selectedPositions.some(p => positionsWithEquity.includes(p))) {
+			return !isNaN(number) && number >= 0 && number <= 100;
+		} else {
+			return true;
+		}
 	};
 
 	validateAttributeDid = did => true;
@@ -310,7 +311,6 @@ const mapStateToProps = (state, props) => {
 	if (!parentProfile || parentProfile.identity.type !== 'corporate') {
 		throw new Error(`Invalid parent identity, requires 'corporate' type`);
 	}
-
 	return {
 		parentId,
 		parentProfile,
@@ -329,10 +329,12 @@ const mapStateToProps = (state, props) => {
 		}),
 		companies: [
 			parentProfile,
-			...identitySelectors.selectChildrenProfilesByType(state, {
-				identityId: parentId,
-				type: 'corporate'
-			})
+			...identitySelectors
+				.selectChildrenProfilesByType(state, {
+					identityId: parentId,
+					type: 'corporate'
+				})
+				.filter(c => c.identity.id !== +identityId)
 		],
 		member: identityId ? memberData(state, identityId) : false
 	};
