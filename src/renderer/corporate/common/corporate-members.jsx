@@ -23,7 +23,8 @@ import {
 	getMemberPositions,
 	getProfileJurisdiction,
 	getProfileResidency,
-	getMemberEquity
+	getMemberEquity,
+	getProfileEmail
 } from './common-helpers.jsx';
 
 const styles = theme => ({
@@ -47,8 +48,8 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'center',
-		'& td': {
-			whiteSpace: 'pre-wrap'
+		'& td, & th': {
+			padding: '15px 20px'
 		}
 	},
 	regularText: {
@@ -85,8 +86,22 @@ const styles = theme => ({
 	},
 	iconColumn: {
 		maxWidth: '1em',
-		padding: '0',
+		padding: '0 !important',
 		textAlign: 'center'
+	},
+	overflow: {
+		overflow: 'hidden',
+		textOverflow: 'ellipsis',
+		whiteSpace: 'nowrap'
+	},
+	overflowProfile: {
+		maxWidth: '150px'
+	},
+	overflowPosition: {
+		maxWidth: '80px'
+	},
+	overflowStandard: {
+		maxWidth: '100px'
 	}
 });
 
@@ -165,39 +180,78 @@ const CorporateMembers = withStyles(styles)(props => {
 											{getEntityIcon(member)}
 										</TableCell>
 										<TableCell>
-											<Typography variant="h6" className={classes.capitalize}>
+											<Typography
+												variant="subtitle1"
+												className={`${classes.capitalize} ${
+													classes.overflowProfile
+												} ${classes.overflow}`}
+												title={getProfileName(member)}
+											>
 												{getProfileName(member)}
+											</Typography>
+											<Typography
+												variant="subtitle2"
+												color="secondary"
+												className={`${classes.capitalize} ${
+													classes.overflowProfile
+												} ${classes.overflow}`}
+												title={getProfileEmail(member)}
+											>
+												{getProfileEmail(member)}
 											</Typography>
 										</TableCell>
 										<TableCell>
-											<Typography variant="h6" className={classes.capitalize}>
+											<Typography
+												variant="subtitle1"
+												className={`${classes.capitalize} ${
+													classes.overflowPosition
+												} ${classes.overflow}`}
+												title={getMemberPositions(member)}
+											>
 												{getMemberPositions(member)}
 											</Typography>
 										</TableCell>
 										<TableCell>
-											<Typography variant="h6">
+											<Typography
+												variant="subtitle1"
+												className={`${classes.overflowPosition} ${
+													classes.overflow
+												}`}
+											>
 												{member.parent
 													? getProfileName(member.parent)
 													: null}
 											</Typography>
 										</TableCell>
 										<TableCell>
-											<Typography variant="h6" className={classes.capitalize}>
+											<Typography
+												variant="subtitle1"
+												className={`${classes.capitalize} ${
+													classes.overflow
+												} ${classes.overflowStandard}`}
+												title={getProfileJurisdiction(member)}
+											>
 												{getProfileJurisdiction(member)}
 											</Typography>
 										</TableCell>
 										<TableCell>
-											<Typography variant="h6" className={classes.capitalize}>
+											<Typography
+												variant="subtitle1"
+												className={`${classes.capitalize} ${
+													classes.overflow
+												} ${classes.overflowStandard}`}
+												title={getProfileResidency(member)}
+											>
 												{getProfileResidency(member)}
 											</Typography>
 										</TableCell>
 										<TableCell>
-											<Typography variant="h6">
+											<Typography variant="subtitle1">
 												{getMemberEquity(member)}
 											</Typography>
 										</TableCell>
 										<TableCell>
-											<Typography variant="h6">Invite</Typography>
+											<Typography variant="subtitle1">Invite</Typography>
 										</TableCell>
 										<TableCell>
 											<IconButton
