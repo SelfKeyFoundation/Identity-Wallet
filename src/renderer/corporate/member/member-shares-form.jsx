@@ -81,7 +81,7 @@ const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => 
 						(optional)
 					</Typography>
 				) : (
-					''
+					'*'
 				)}
 			</Typography>
 		</div>
@@ -105,7 +105,7 @@ const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 			<div className={classes.inputWrap}>
 				{showParentCompany && (
 					<div className={`${classes.parentCompany} ${classes.flexColumn}`}>
-						<InputTitle title="Parent Company" />
+						<InputTitle title="Parent Company" optional={true} />
 						<Select
 							className={classes.select}
 							onChange={onFieldChange('parentId')}
