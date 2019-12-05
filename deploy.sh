@@ -7,7 +7,7 @@ gcloud auth activate-service-account --key-file client-secret.json
 if [ "$OSENV" == "linux" ]
 then
     VERSION=$(cat /tmp/linux/package.json | jq .version)
-    gsutil cp /tmp/linux/dist/*.AppImage gs://selfkey-builds/$CIRCLE_BRANCH/$TIMESTAMP/
+    gsutil cp /tmp/linux/dist/*.{AppImage,tar.gz} gs://selfkey-builds/$CIRCLE_BRANCH/$TIMESTAMP/
 else
     VERSION=$(cat /tmp/mac/package.json | jq .version)
     gsutil cp /tmp/mac/dist/*.{zip,dmg} gs://selfkey-builds/$CIRCLE_BRANCH/$TIMESTAMP/
