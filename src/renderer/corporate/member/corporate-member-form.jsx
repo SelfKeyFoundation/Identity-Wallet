@@ -112,7 +112,7 @@ class CorporateMemberFormComponent extends PureComponent {
 						<ModalCloseIcon style={{ marginTop: '20px' }} />
 					</ModalCloseButton>
 					<ModalHeader>
-						<Grid container direction="row" justify="space-between" alignItems="center">
+						<Grid container direction="row" justify="flex-start" alignItems="center">
 							<Grid item>
 								<Typography variant="body1">Add Company Member</Typography>
 							</Grid>
