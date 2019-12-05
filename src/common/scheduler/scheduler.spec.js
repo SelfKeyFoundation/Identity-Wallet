@@ -11,13 +11,20 @@ import sinon from 'sinon';
 describe('scheduler', () => {
 	describe('actions', () => {
 		it('queueJobAction', () => {
-			const payload = { id: 'test1', category: 'test', at: 10000000, data: { test: true } };
+			const payload = {
+				id: 'test1',
+				category: 'test',
+				at: 10000000,
+				data: { test: true },
+				strategy: 'test'
+			};
 			expect(
 				schedulerActions.queueJobAction(
 					payload.id,
 					payload.category,
 					payload.at,
-					payload.data
+					payload.data,
+					payload.strategy
 				)
 			).toEqual({
 				type: schedulerTypes.SCHEDULER_JOB_QUEUE,
@@ -112,9 +119,21 @@ describe('scheduler', () => {
 		});
 		it('queueJobReducer', () => {
 			const state = { ...schedulerInitialState };
-			const job = { id: 'test1', category: 'test', at: 10000000, data: { test: true } };
+			const job = {
+				id: 'test1',
+				category: 'test',
+				at: 10000000,
+				data: { test: true },
+				strategy: 'test'
+			};
 
-			let action = schedulerActions.queueJobAction(job.id, job.category, job.at, job.data);
+			let action = schedulerActions.queueJobAction(
+				job.id,
+				job.category,
+				job.at,
+				job.data,
+				job.strategy
+			);
 			expect(state.queue).toEqual([]);
 			expect(state.jobsById).toEqual({});
 			expect(reducers.queueJobReducer(state, action)).toEqual({
