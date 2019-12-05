@@ -112,7 +112,7 @@ class CorporateMemberContainerComponent extends PureComponent {
 			creationDate: 'Please enter company incorporation date',
 			taxId: 'Tax id provided is invalid',
 			type: 'Invalid member type',
-			positions: 'Please select a position',
+			positions: 'Please select one or more roles',
 			country: 'Please select Residency',
 			nationality: 'Please select Nationality',
 			firstName: 'Please enter your first Name',
