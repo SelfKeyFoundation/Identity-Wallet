@@ -16,6 +16,15 @@ import { CorporateMemberSelectRole } from './member-select-role';
 import { CorporateMemberSelectType } from './member-select-type';
 
 const styles = theme => ({
+	modalWrap: {
+		left: 'calc(50% - 480px)',
+		width: '960px'
+	},
+	closeIcon: {
+		'& div:first-of-type': {
+			marginLeft: '959px !important'
+		}
+	},
 	errorText: {
 		height: '19px',
 		width: '242px',
@@ -51,6 +60,12 @@ const styles = theme => ({
 		'& button': {
 			marginRight: '1em'
 		}
+	},
+	buttonErrorText: {
+		marginTop: '20px'
+	},
+	fullWidth: {
+		width: '100%'
 	}
 });
 
@@ -92,12 +107,12 @@ class CorporateMemberFormComponent extends PureComponent {
 
 		return (
 			<Modal open={true}>
-				<ModalWrap>
-					<ModalCloseButton onClick={onCancelClick}>
+				<ModalWrap className={classes.modalWrap}>
+					<ModalCloseButton onClick={onCancelClick} className={classes.closeIcon}>
 						<ModalCloseIcon style={{ marginTop: '20px' }} />
 					</ModalCloseButton>
 					<ModalHeader>
-						<Grid container direction="row" justify="space-between" alignItems="center">
+						<Grid container direction="row" justify="flex-start" alignItems="center">
 							<Grid item>
 								<Typography variant="body1">Add Company Member</Typography>
 							</Grid>
@@ -144,14 +159,25 @@ class CorporateMemberFormComponent extends PureComponent {
 									<CorporateMemberSharesForm {...this.props} />
 								</div>
 
-								<div className={classes.formActionArea}>
+								{isDisabled && (
+									<div className={classes.fullWidth}>
+										<Typography
+											variant="subtitle2"
+											color="error"
+											className={classes.buttonErrorText}
+										>
+											Please fill all the required pieces of information above
+										</Typography>
+									</div>
+								)}
+
+								<div className={`${classes.formActionArea} ${classes.fullWidth}`}>
 									<StyledButton
 										id="saveButton"
 										variant="contained"
 										size="large"
 										type="submit"
 										onClick={onContinueClick}
-										disabled={isDisabled}
 									>
 										Continue
 									</StyledButton>
