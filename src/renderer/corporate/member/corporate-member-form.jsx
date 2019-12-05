@@ -143,7 +143,6 @@ class CorporateMemberFormComponent extends PureComponent {
 									<hr className={`${classes.hr} ${classes.hrInternal}`} />
 									<CorporateMemberSharesForm {...this.props} />
 								</div>
-								<hr className={classes.hr} />
 
 								<div className={classes.formActionArea}>
 									<StyledButton
