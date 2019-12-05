@@ -15,7 +15,7 @@ const styles = theme => ({
 		borderRadius: '4px',
 		boxSizing: 'border-box',
 		maxWidth: '280px',
-		minWidth: '215px',
+		minWidth: '200px',
 		padding: '25px',
 		'& > div': {
 			display: 'flex',
@@ -28,7 +28,7 @@ const styles = theme => ({
 		margin: '10px 0 40px'
 	},
 	input: {
-		margin: '0 15px',
+		margin: '0 10px',
 		width: '200px',
 		minHeight: '158px',
 		'& input': {
