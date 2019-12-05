@@ -15,7 +15,7 @@ const styles = theme => ({
 		borderRadius: '4px',
 		boxSizing: 'border-box',
 		maxWidth: '280px',
-		minWidth: '215px',
+		minWidth: '200px',
 		padding: '25px',
 		'& > div': {
 			display: 'flex',
@@ -28,7 +28,7 @@ const styles = theme => ({
 		margin: '10px 0 40px'
 	},
 	input: {
-		margin: '0 15px',
+		margin: '0 10px',
 		width: '200px',
 		minHeight: '158px',
 		'& input': {
@@ -71,7 +71,9 @@ const styles = theme => ({
 		marginTop: '15px'
 	},
 	error: {
-		marginTop: '1em'
+		marginTop: '1em',
+		textAlign: 'center',
+		width: '100%'
 	},
 	withError: {
 		border: '1px solid red'
@@ -124,12 +126,7 @@ class CorporateMemberSelectRoleComponent extends PureComponent {
 	render() {
 		const { classes, availablePositions, errors } = this.props;
 		return (
-			<Grid
-				container
-				direction="column"
-				spacing={8}
-				className={errors.positions ? classes.withError : null}
-			>
+			<Grid container direction="column" spacing={8}>
 				<Grid item>
 					<Typography variant="body1" align="center" className={classes.title}>
 						Select one or multiple roles

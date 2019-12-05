@@ -112,11 +112,11 @@ class CorporateMemberContainerComponent extends PureComponent {
 			creationDate: 'Please enter company incorporation date',
 			taxId: 'Tax id provided is invalid',
 			type: 'Invalid member type',
-			positions: 'Please select a position',
+			positions: 'Please select one or more roles',
 			country: 'Please select Residency',
 			nationality: 'Please select Nationality',
-			firstName: 'Please enter your first Name',
-			lastName: 'Please enter your last Name',
+			firstName: 'Please enter your First Name',
+			lastName: 'Please enter your Last Name',
 			phoneNumber: 'Invalid phone number',
 			equity: 'Shares must be between 0 and 100',
 			parentId: 'Invalid parent company'
@@ -194,10 +194,11 @@ class CorporateMemberContainerComponent extends PureComponent {
 		const positionsWithEquity = this.props.positionsWithEquity
 			? this.props.positionsWithEquity
 			: [];
-		return (
-			selectedPositions.some(p => positionsWithEquity.includes(p)) &&
-			(!isNaN(number) && number >= 0 && number <= 100)
-		);
+		if (selectedPositions.some(p => positionsWithEquity.includes(p))) {
+			return !isNaN(number) && number >= 0 && number <= 100;
+		} else {
+			return true;
+		}
 	};
 
 	validateAttributeDid = did => true;
@@ -310,7 +311,6 @@ const mapStateToProps = (state, props) => {
 	if (!parentProfile || parentProfile.identity.type !== 'corporate') {
 		throw new Error(`Invalid parent identity, requires 'corporate' type`);
 	}
-
 	return {
 		parentId,
 		parentProfile,
@@ -329,10 +329,12 @@ const mapStateToProps = (state, props) => {
 		}),
 		companies: [
 			parentProfile,
-			...identitySelectors.selectChildrenProfilesByType(state, {
-				identityId: parentId,
-				type: 'corporate'
-			})
+			...identitySelectors
+				.selectChildrenProfilesByType(state, {
+					identityId: parentId,
+					type: 'corporate'
+				})
+				.filter(c => c.identity.id !== +identityId)
 		],
 		member: identityId ? memberData(state, identityId) : false
 	};

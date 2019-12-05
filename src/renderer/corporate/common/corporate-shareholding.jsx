@@ -81,7 +81,12 @@ const chartOptions = {
 
 const getChartData = shareholders => {
 	const data = [['Content', 'percents']];
+	const total = shareholders.reduce((acc, curr) => acc + getMemberEquity(curr), 0);
 	const dataPoints = shareholders.map(s => [getProfileName(s), getMemberEquity(s)]);
+	// Add a unknown data point if total equity is below 100
+	if (total < 100) {
+		dataPoints.push(['Unknown', 100 - total]);
+	}
 	return data.concat(dataPoints);
 };
 
