@@ -125,7 +125,6 @@ class CorporateMemberSelectRoleComponent extends PureComponent {
 
 	render() {
 		const { classes, availablePositions, errors } = this.props;
-		console.log(errors.positions);
 		return (
 			<Grid container direction="column" spacing={8}>
 				<Grid item>
