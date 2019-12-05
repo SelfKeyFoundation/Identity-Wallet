@@ -61,10 +61,12 @@ const styles = theme => ({
 		alignItems: 'flex-start',
 		justify: 'flex-start'
 	},
+	parentCompany: {
+		marginBottom: '35px'
+	},
 	inputWrap: {
 		display: 'flex',
-		flexWrap: 'nowrap',
-		justifyContent: 'space-between',
+		flexDirection: 'column',
 		width: '100%'
 	}
 });
@@ -102,7 +104,7 @@ const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 		<div className={`${classes.flexColumn} ${classes.inputContainer}`}>
 			<div className={classes.inputWrap}>
 				{showParentCompany && (
-					<div className={`${classes.inputBox} ${classes.flexColumn}`}>
+					<div className={`${classes.parentCompany} ${classes.flexColumn}`}>
 						<InputTitle title="Parent Company" />
 						<Select
 							className={classes.select}
