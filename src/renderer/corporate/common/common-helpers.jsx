@@ -1,5 +1,5 @@
 import React from 'react';
-import { SmallRoundCompany, SmallRoundPerson } from 'selfkey-ui';
+import { CorporateIcon, PersonIcon } from 'selfkey-ui';
 
 import {
 	JURISDICTION_ATTRIBUTE,
@@ -10,11 +10,15 @@ import {
 const getEntityType = profile => profile.identity.type;
 
 const getEntityIcon = profile =>
-	getEntityType(profile) === 'individual' ? <SmallRoundPerson /> : <SmallRoundCompany />;
+	getEntityType(profile) === 'individual' ? (
+		<PersonIcon height="40px" width="40px" />
+	) : (
+		<CorporateIcon height="40px" width="40px" />
+	);
 
 const getProfileName = profile =>
 	getEntityType(profile) === 'individual'
-		? `${profile.lastName}, ${profile.firstName}`
+		? `${profile.lastName} ${profile.firstName}`
 		: profile.entityName;
 
 const getMemberPositions = profile => profile.identity.positions.join(', ');
