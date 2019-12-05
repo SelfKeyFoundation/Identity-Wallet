@@ -71,7 +71,9 @@ const styles = theme => ({
 		marginTop: '15px'
 	},
 	error: {
-		marginTop: '1em'
+		marginTop: '1em',
+		textAlign: 'center',
+		width: '100%'
 	},
 	withError: {
 		border: '1px solid red'
@@ -123,6 +125,7 @@ class CorporateMemberSelectRoleComponent extends PureComponent {
 
 	render() {
 		const { classes, availablePositions, errors } = this.props;
+		console.log(errors.positions);
 		return (
 			<Grid container direction="column" spacing={8}>
 				<Grid item>
