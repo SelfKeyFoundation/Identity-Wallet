@@ -51,6 +51,9 @@ const styles = theme => ({
 		'& button': {
 			marginRight: '1em'
 		}
+	},
+	buttonErrorText: {
+		marginTop: '20px'
 	}
 });
 
@@ -71,6 +74,7 @@ class CorporateMemberFormComponent extends PureComponent {
 		const {
 			onContinueClick,
 			onCancelClick,
+			isDisabled,
 			classes,
 			onFieldChange = () => {},
 			availablePositions = [],
@@ -143,6 +147,18 @@ class CorporateMemberFormComponent extends PureComponent {
 									<CorporateMemberSharesForm {...this.props} />
 								</div>
 								<hr className={classes.hr} />
+
+								{isDisabled && (
+									<div>
+										<Typography
+											variant="subtitle2"
+											color="error"
+											className={classes.buttonErrorText}
+										>
+											Please fill all the required pieces of information above
+										</Typography>
+									</div>
+								)}
 
 								<div className={classes.formActionArea}>
 									<StyledButton
