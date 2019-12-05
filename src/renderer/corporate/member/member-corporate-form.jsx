@@ -75,7 +75,7 @@ const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => 
 						(optional)
 					</Typography>
 				) : (
-					''
+					'*'
 				)}
 			</Typography>
 		</div>
@@ -237,11 +237,10 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 			{showDid && (
 				<div className={classes.inputWrap}>
 					<div className={`${classes.flexColumn} ${classes.fullColumn}`}>
-						<InputTitle title="Selfkey ID (DID)" />
+						<InputTitle title="Selfkey ID (DID)" optional="true" />
 						<Input
 							id="did"
 							fullWidth
-							required
 							error={errors.did}
 							value={did}
 							onChange={onFieldChange('did')}
