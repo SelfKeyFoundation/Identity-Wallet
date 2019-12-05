@@ -14,7 +14,7 @@ const getEntityIcon = profile =>
 
 const getProfileName = profile =>
 	getEntityType(profile) === 'individual'
-		? `${profile.lastName}, ${profile.firstName}`
+		? `${profile.firstName} ${profile.lastName}`
 		: profile.entityName;
 
 const getMemberPositions = profile => profile.identity.positions.join(', ');
