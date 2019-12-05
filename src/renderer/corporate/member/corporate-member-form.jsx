@@ -16,6 +16,15 @@ import { CorporateMemberSelectRole } from './member-select-role';
 import { CorporateMemberSelectType } from './member-select-type';
 
 const styles = theme => ({
+	modalWrap: {
+		left: 'calc(50% - 480px)',
+		width: '960px'
+	},
+	closeIcon: {
+		'& div:first-of-type': {
+			marginLeft: '959px !important'
+		}
+	},
 	errorText: {
 		height: '19px',
 		width: '242px',
@@ -98,8 +107,8 @@ class CorporateMemberFormComponent extends PureComponent {
 
 		return (
 			<Modal open={true}>
-				<ModalWrap>
-					<ModalCloseButton onClick={onCancelClick}>
+				<ModalWrap className={classes.modalWrap}>
+					<ModalCloseButton onClick={onCancelClick} className={classes.closeIcon}>
 						<ModalCloseIcon style={{ marginTop: '20px' }} />
 					</ModalCloseButton>
 					<ModalHeader>
