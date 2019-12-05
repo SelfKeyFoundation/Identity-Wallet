@@ -71,7 +71,6 @@ class CorporateMemberFormComponent extends PureComponent {
 		const {
 			onContinueClick,
 			onCancelClick,
-			isDisabled,
 			classes,
 			onFieldChange = () => {},
 			availablePositions = [],
@@ -152,7 +151,6 @@ class CorporateMemberFormComponent extends PureComponent {
 										size="large"
 										type="submit"
 										onClick={onContinueClick}
-										disabled={isDisabled}
 									>
 										Continue
 									</StyledButton>
