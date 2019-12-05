@@ -71,10 +71,7 @@ export class VendorSyncJobHandler {
 					data: { fetcherName }
 				})
 			);
-		job.addJob({
-			category: VENDOR_SYNC_JOB,
-			at: Date.now() + VENDOR_SYNC_JOB_INTERVAL
-		});
+
 		job.emitProgress(100, { message: 'Done!' });
 		return vendors;
 	}
