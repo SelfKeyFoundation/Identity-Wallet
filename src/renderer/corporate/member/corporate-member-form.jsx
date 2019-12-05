@@ -54,6 +54,9 @@ const styles = theme => ({
 	},
 	buttonErrorText: {
 		marginTop: '20px'
+	},
+	fullWidth: {
+		width: '100%'
 	}
 });
 
@@ -149,7 +152,7 @@ class CorporateMemberFormComponent extends PureComponent {
 								<hr className={classes.hr} />
 
 								{isDisabled && (
-									<div>
+									<div className={classes.fullWidth}>
 										<Typography
 											variant="subtitle2"
 											color="error"
@@ -160,7 +163,7 @@ class CorporateMemberFormComponent extends PureComponent {
 									</div>
 								)}
 
-								<div className={classes.formActionArea}>
+								<div className={`${classes.formActionArea} ${classes.fullWidth}`}>
 									<StyledButton
 										id="saveButton"
 										variant="contained"
