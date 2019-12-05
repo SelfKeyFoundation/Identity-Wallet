@@ -115,8 +115,8 @@ class CorporateMemberContainerComponent extends PureComponent {
 			positions: 'Please select one or more roles',
 			country: 'Please select Residency',
 			nationality: 'Please select Nationality',
-			firstName: 'Please enter your first Name',
-			lastName: 'Please enter your last Name',
+			firstName: 'Please enter your First Name',
+			lastName: 'Please enter your Last Name',
 			phoneNumber: 'Invalid phone number',
 			equity: 'Shares must be between 0 and 100',
 			parentId: 'Invalid parent company'
