@@ -28,10 +28,6 @@ const styles = theme => ({
 		marginBottom: '35px',
 		width: '100%'
 	},
-	lastInputBox: {
-		marginBottom: '26px',
-		width: '47%'
-	},
 	keyBox: {
 		marginBottom: '35px',
 		marginRight: 'calc(47% - 200px)',
@@ -199,11 +195,12 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 				</div>
 			</div>
 			<div className={classes.inputWrap}>
-				<div className={`${classes.lastInputBox} ${classes.flexColumn}`}>
-					<InputTitle title="Contact Email" optional={true} />
+				<div className={`${classes.inputBox} ${classes.flexColumn}`}>
+					<InputTitle title="Contact Email" />
 					<Input
 						id="email"
 						fullWidth
+						required
 						type="email"
 						error={errors.email}
 						value={email}
@@ -216,7 +213,7 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 						</Typography>
 					)}
 				</div>
-				<div className={`${classes.lastInputBox} ${classes.flexColumn}`}>
+				<div className={`${classes.inputBox} ${classes.flexColumn}`}>
 					<InputTitle title="Tax ID" optional={true} />
 					<Input
 						id="taxId"
