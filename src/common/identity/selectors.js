@@ -144,7 +144,7 @@ export const selectMemberCorporateAttributeTypes = createSelector(
 				switch (curr.url) {
 					case EMAIL_ATTRIBUTE:
 						acc.email = curr;
-						curr.required = false;
+						curr.required = true;
 						return acc;
 					case TAX_ID_ATTRIBUTE:
 						acc.taxId = curr;
@@ -190,7 +190,7 @@ export const selectMemberIndividualAttributeTypes = createSelector(
 						return acc;
 					case EMAIL_ATTRIBUTE:
 						acc.email = curr;
-						curr.required = false;
+						curr.required = true;
 						return acc;
 					case COUNTRY_ATTRIBUTE:
 						acc.country = curr;
