@@ -52,7 +52,7 @@ class CorporateMemberContainerComponent extends PureComponent {
 			equity: profile ? profile.identity.equity : '',
 			positions: profile ? this.filterAcceptablePositions(profile.identity.positions) : [],
 			did: profile && profile.identity.did ? profile.identity.did : '',
-			parentId: props.companies[0].identity.id,
+			parentId: props.parentId ? props.parentId : props.companies[0].identity.id,
 			email: member[EMAIL_ATTRIBUTE],
 			firstName: member[FIRST_NAME_ATTRIBUTE],
 			lastName: member[LAST_NAME_ATTRIBUTE],
@@ -222,14 +222,14 @@ class CorporateMemberContainerComponent extends PureComponent {
 
 		const fields = this.selectFields(this.state.type).filter(f => !!this.state[f]);
 
-		const { parentId, profile } = this.props;
+		const { profile } = this.props;
 
 		if (!profile) {
 			this.props.dispatch(
 				identityOperations.createMemberProfileOperation(
 					{
 						..._.pick(this.state, fields),
-						parentId
+						parentId: this.state.parentId
 					},
 					'/main/corporate/dashboard/members'
 				)
@@ -307,10 +307,12 @@ const mapStateToProps = (state, props) => {
 	const parentProfile = identitySelectors.selectCorporateProfile(state, {
 		identityId: parentId
 	});
+	const rootProfile = identitySelectors.selectCorporateProfile(state);
 
 	if (!parentProfile || parentProfile.identity.type !== 'corporate') {
 		throw new Error(`Invalid parent identity, requires 'corporate' type`);
 	}
+
 	return {
 		parentId,
 		parentProfile,
@@ -328,10 +330,10 @@ const mapStateToProps = (state, props) => {
 			companyType: parentProfile.entityType
 		}),
 		companies: [
-			parentProfile,
+			rootProfile,
 			...identitySelectors
 				.selectChildrenProfilesByType(state, {
-					identityId: parentId,
+					identityId: rootProfile.identity.id,
 					type: 'corporate'
 				})
 				.filter(c => c.identity.id !== +identityId)
