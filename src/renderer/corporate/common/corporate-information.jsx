@@ -130,16 +130,20 @@ const CorporateInformation = withStyles(styles)(props => {
 							<Table>
 								<TableHead>
 									<SmallTableHeadRow>
-										<SmallTableCell variant="head">
+										<SmallTableCell variant="head" className="smallTable">
 											<Typography variant="overline">Information</Typography>
 										</SmallTableCell>
-										<SmallTableCell variant="head">
+										<SmallTableCell variant="head" className="smallTable">
 											<Typography variant="overline">Label</Typography>
 										</SmallTableCell>
-										<SmallTableCell variant="head">
+										<SmallTableCell variant="head" className="smallTable">
 											<Typography variant="overline">Last edited</Typography>
 										</SmallTableCell>
-										<SmallTableCell variant="head" align="right">
+										<SmallTableCell
+											variant="head"
+											className="smallTable"
+											align="right"
+										>
 											<Typography variant="overline">Actions</Typography>
 										</SmallTableCell>
 									</SmallTableHeadRow>
@@ -147,12 +151,12 @@ const CorporateInformation = withStyles(styles)(props => {
 								<TableBody>
 									{attributes.map(attr => (
 										<SmallTableRow key={attr.id}>
-											<SmallTableCell>
+											<SmallTableCell className="smallTable">
 												<Typography variant="subtitle1">
 													{renderAttributeTitle(attr)}
 												</Typography>
 											</SmallTableCell>
-											<SmallTableCell>
+											<SmallTableCell className="smallTable">
 												<Typography
 													variant="subtitle1"
 													className={classes.noOverflow}
@@ -161,12 +165,12 @@ const CorporateInformation = withStyles(styles)(props => {
 													{renderAttributeLabel(attr)}
 												</Typography>
 											</SmallTableCell>
-											<SmallTableCell>
+											<SmallTableCell className="smallTable">
 												<Typography variant="subtitle1">
 													{renderLastUpdateDate(attr)}
 												</Typography>
 											</SmallTableCell>
-											<SmallTableCell align="right">
+											<SmallTableCell align="right" className="smallTable">
 												<IconButton
 													id="editButton"
 													onClick={() => onEditAttribute(attr)}

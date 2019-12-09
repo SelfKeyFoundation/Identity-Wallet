@@ -48,7 +48,7 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'center',
-		'& td, & th': {
+		'& td:not(.smallTable), & th:not(.smallTable)': {
 			padding: '15px 20px'
 		}
 	},
