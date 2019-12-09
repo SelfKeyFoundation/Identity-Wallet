@@ -61,10 +61,12 @@ const styles = theme => ({
 		alignItems: 'flex-start',
 		justify: 'flex-start'
 	},
+	parentCompany: {
+		marginBottom: '35px'
+	},
 	inputWrap: {
 		display: 'flex',
-		flexWrap: 'nowrap',
-		justifyContent: 'space-between',
+		flexDirection: 'column',
 		width: '100%'
 	}
 });
@@ -79,7 +81,7 @@ const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => 
 						(optional)
 					</Typography>
 				) : (
-					''
+					'*'
 				)}
 			</Typography>
 		</div>
@@ -102,8 +104,8 @@ const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 		<div className={`${classes.flexColumn} ${classes.inputContainer}`}>
 			<div className={classes.inputWrap}>
 				{showParentCompany && (
-					<div className={`${classes.inputBox} ${classes.flexColumn}`}>
-						<InputTitle title="Parent Company" />
+					<div className={`${classes.parentCompany} ${classes.flexColumn}`}>
+						<InputTitle title="Parent Company" optional={true} />
 						<Select
 							className={classes.select}
 							onChange={onFieldChange('parentId')}

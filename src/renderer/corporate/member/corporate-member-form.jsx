@@ -158,7 +158,6 @@ class CorporateMemberFormComponent extends PureComponent {
 									<hr className={`${classes.hr} ${classes.hrInternal}`} />
 									<CorporateMemberSharesForm {...this.props} />
 								</div>
-								<hr className={classes.hr} />
 
 								{isDisabled && (
 									<div className={classes.fullWidth}>
