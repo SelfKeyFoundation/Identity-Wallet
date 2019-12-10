@@ -203,7 +203,7 @@ const mapStateToProps = (state, props) => {
 		vendorId,
 		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
 		country: marketplaceSelectors.selectCountryByCode(state, countryCode),
-		isLoading: marketplaceSelectors.isLoading(state),
+		isLoading: marketplaceSelectors.isInventoryLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(

@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
-import { withStyles, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/core';
+import { sanitize } from '../../common';
+
 const styles = theme => ({
 	tabContainer: {
 		width: '100%',
@@ -40,20 +42,20 @@ class BankingServicesTabComponent extends PureComponent {
 
 	render() {
 		const { classes, banks } = this.props;
-		const services = banks[Object.keys(banks)[0]].onboarding;
-		const isServices = !!services;
-		const splittedText = isServices ? services.split(/\n/g) : '';
+		let services = banks[Object.keys(banks)[0]].onboarding;
 
+		if (services) {
+			services = services.replace(/\n/g, '<br>');
+		}
 		return (
 			<div className={classes.tabContainer}>
-				{isServices &&
-					splittedText
-						.filter(text => text !== '')
-						.map((text, indx) => (
-							<Typography key={indx} variant="body1" color="secondary">
-								{text}
-							</Typography>
-						))}
+				{services && (
+					<div
+						dangerouslySetInnerHTML={{
+							__html: sanitize(services)
+						}}
+					/>
+				)}
 			</div>
 		);
 	}
