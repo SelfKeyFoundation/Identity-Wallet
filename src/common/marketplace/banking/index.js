@@ -72,8 +72,8 @@ const parseOptions = item => {
 };
 
 export const bankingSelectors = {
-	selectBanks: state =>
-		inventorySelectors.selectInventoryForCategory(state, 'banking').map(b => {
+	selectBanks: (state, entityType) =>
+		inventorySelectors.selectInventoryForCategory(state, 'banking', null, entityType).map(b => {
 			b.price = selectPrice(b);
 			b.templateId = selectTemplate(b);
 			b.data.checkoutOptions = parseOptions(b);
@@ -82,9 +82,12 @@ export const bankingSelectors = {
 			b.didAddress = selectVendorDidAddress(b);
 			return b;
 		}),
-	selectBankTypeByFilter: (state, filter) => bankingSelectors.selectBanks(state).find(filter),
-	selectBankJurisdictionByAccountCode: (state, accountCode) =>
-		bankingSelectors.selectBanks(state).find(b => b.data.accountCode === accountCode)
+	selectBankTypeByFilter: (state, filter, entityType) =>
+		bankingSelectors.selectBanks(state, entityType).find(filter),
+	selectBankJurisdictionByAccountCode: (state, accountCode, entityType) =>
+		bankingSelectors
+			.selectBanks(state, entityType)
+			.find(b => b.data.accountCode === accountCode)
 };
 
 export default bankingSelectors;
