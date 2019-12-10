@@ -2,6 +2,7 @@ export default () => [
 	{
 		sku: 'FT-BNK-AD1b',
 		vendorId: 'flagtheory_banking',
+		entityType: 'individual',
 		priceCurrency: 'USD',
 		status: 'inactive',
 		name: 'Andorra AD1b',
