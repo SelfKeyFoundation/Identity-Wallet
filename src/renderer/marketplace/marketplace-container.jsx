@@ -15,6 +15,10 @@ import {
 	MarketplaceNotariesPage
 } from '../marketplace';
 import { MarketplaceCorporatePreviewContainer } from './corporate-preview-container';
+import { inventorySelectors } from '../../common/marketplace/inventory/index';
+import MarketplaceLoadingErrorContainer from './marketplace-loading-error-container';
+import { vendorSelectors } from '../../common/marketplace/vendors/index';
+import { PageLoading } from './common';
 
 class MarketplaceContainerComponent extends PureComponent {
 	componentDidMount() {
@@ -22,10 +26,18 @@ class MarketplaceContainerComponent extends PureComponent {
 	}
 
 	render() {
-		const { match, identity } = this.props;
+		const { match, identity, isLoadingError, isLoading } = this.props;
 
 		if (identity.type !== 'individual' && featureIsDisabled('corporateMarketplace')) {
 			return <MarketplaceCorporatePreviewContainer />;
+		}
+
+		if (isLoading) {
+			return <PageLoading />;
+		}
+
+		if (isLoadingError) {
+			return <MarketplaceLoadingErrorContainer />;
 		}
 
 		return (
@@ -64,7 +76,9 @@ class MarketplaceContainerComponent extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-	identity: identitySelectors.selectIdentity(state)
+	identity: identitySelectors.selectIdentity(state),
+	isLoadingError: inventorySelectors.isInventoryLoadingError(state),
+	isLoading: vendorSelectors.isVendorsLoading(state)
 });
 
 const connectedComponent = connect(mapStateToProps)(MarketplaceContainerComponent);

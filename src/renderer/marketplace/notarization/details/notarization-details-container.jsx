@@ -67,7 +67,7 @@ NotarizationDetailsContainer.propTypes = {
 
 const mapStateToProps = (state, props) => {
 	return {
-		isLoading: marketplaceSelectors.isLoading(state),
+		isLoading: marketplaceSelectors.isInventoryLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		identity: identitySelectors.selectIdentity(state)
 	};

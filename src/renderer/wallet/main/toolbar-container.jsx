@@ -58,6 +58,7 @@ class ToolbarContainer extends PureComponent {
 				isSidebarOpen={isSidebarOpen}
 				isProfileOpen={isProfileOpen}
 				profiles={this.props.profiles}
+				profileNames={this.props.profileNames}
 				selectedProfile={this.props.selectedProfile}
 				wallet={this.props.wallet}
 				onProfileClick={this.handleProfileClick}
@@ -73,8 +74,29 @@ class ToolbarContainer extends PureComponent {
 	}
 }
 
-export default connect(state => ({
-	profiles: identitySelectors.selectIdentities(state) || [],
-	selectedProfile: identitySelectors.selectIdentity(state) || {},
-	wallet: walletSelectors.getWallet(state)
-}))(ToolbarContainer);
+const defaultIdentityName = ({ type }, walletName) =>
+	type === 'individual' ? walletName || 'New individual' : 'New company';
+
+export default connect(state => {
+	const profiles = identitySelectors.selectIdentities(state) || [];
+	const wallet = walletSelectors.getWallet(state);
+	const profileNames = profiles.reduce(
+		(acc, curr) => {
+			let name = curr.name || defaultIdentityName(curr, wallet.profileName);
+			acc.byName[name] = (acc.byName[name] || 0) + 1;
+			let profileName = name;
+			if (acc.byName[name] > 1) {
+				profileName = `${name} (${acc.byName[name]})`;
+			}
+			acc.byId[curr.id] = profileName;
+			return acc;
+		},
+		{ byId: {}, byName: {} }
+	);
+	return {
+		profiles,
+		profileNames: profileNames.byId,
+		selectedProfile: identitySelectors.selectIdentity(state) || {},
+		wallet
+	};
+})(ToolbarContainer);

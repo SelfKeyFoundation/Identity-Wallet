@@ -22,10 +22,17 @@ const profiles = [
 	}
 ];
 
+const profileNames = {
+	1: 'James Bond',
+	2: 'Acme Corp 1',
+	3: 'Standard United Bank'
+};
+
 storiesOf('Sidebars/Toolbar', module)
 	.add('default', () => (
 		<Toolbar
 			profiles={profiles}
+			profileNames={profileNames}
 			selectedProfile={profiles[0]}
 			primaryToken="KEY"
 			isSidebarOpen={false}
@@ -39,6 +46,7 @@ storiesOf('Sidebars/Toolbar', module)
 	.add('SidebarOpen', () => (
 		<Toolbar
 			profiles={profiles}
+			profileNames={profileNames}
 			selectedProfile={profiles[0]}
 			primaryToken="KEY"
 			isSidebarOpen={true}
@@ -52,6 +60,7 @@ storiesOf('Sidebars/Toolbar', module)
 	.add('ProfileOpen', () => (
 		<Toolbar
 			profiles={profiles}
+			profileNames={profileNames}
 			selectedProfile={profiles[0]}
 			primaryToken="KEY"
 			isSidebarOpen={false}
