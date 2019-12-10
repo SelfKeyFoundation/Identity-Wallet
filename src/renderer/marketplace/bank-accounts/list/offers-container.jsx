@@ -64,7 +64,7 @@ const mapStateToProps = (state, props) => {
 	return {
 		vendors: marketplaceSelectors.selectVendorsForCategory(state, 'banking'),
 		inventory: marketplaceSelectors.selectBanks(state),
-		isLoading: marketplaceSelectors.isLoading(state),
+		isLoading: marketplaceSelectors.isInventoryLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
 	};
 };

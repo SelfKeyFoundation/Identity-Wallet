@@ -6,7 +6,7 @@ export const sanitize = html => {
 	if (!html) return '';
 
 	return sanitizeHtml(html, {
-		allowedTags: ['b', 'i', 'em', 'strong', 'a', 'div', 'ul', 'li', 'ol', 'p', 'hr'],
+		allowedTags: ['b', 'i', 'em', 'strong', 'a', 'div', 'ul', 'li', 'ol', 'p', 'hr', 'br'],
 		allowedAttributes: {
 			a: ['href']
 		}

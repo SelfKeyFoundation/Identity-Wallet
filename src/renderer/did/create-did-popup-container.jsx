@@ -55,7 +55,7 @@ class CreateDIDPopupContainerComponent extends PureComponent {
 	};
 
 	handleLearnHowClicked = e => {
-		window.openExternal(e, 'https://help.selfkey.org/');
+		window.openExternal(e, 'https://help.selfkey.org/article/147-what-is-a-did');
 	};
 
 	render() {

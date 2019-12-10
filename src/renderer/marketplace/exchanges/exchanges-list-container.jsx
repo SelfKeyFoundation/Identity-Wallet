@@ -27,7 +27,7 @@ class ExchangesListContainer extends MarketplaceExchangesComponent {
 
 const mapStateToProps = (state, props) => {
 	return {
-		isLoading: marketplaceSelectors.isLoading(state),
+		isLoading: marketplaceSelectors.isInventoryLoading(state),
 		items: marketplaceSelectors.selectInventoryForCategory(state, 'exchanges'),
 		category: {
 			title: 'Exchanges',
