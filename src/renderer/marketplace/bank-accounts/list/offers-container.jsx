@@ -13,7 +13,7 @@ const styles = theme => ({});
 
 class BankAccountsTableContainer extends MarketplaceBankAccountsComponent {
 	state = {
-		accountType: 'business'
+		accountType: 'personal'
 	};
 
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
@@ -29,8 +29,12 @@ class BankAccountsTableContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	render() {
-		const { isLoading, keyRate, vendors, inventory } = this.props;
-		const { accountType: selectedType } = this.state;
+		const { isLoading, keyRate, vendors, inventory, identity } = this.props;
+		let { accountType: selectedType } = this.state;
+
+		if (identity.type === 'corporate') {
+			selectedType = 'business';
+		}
 
 		const data = inventory
 			.filter(bank => bank.data.type === selectedType)
@@ -64,6 +68,7 @@ BankAccountsTableContainer.propTypes = {
 const mapStateToProps = (state, props) => {
 	const identity = identitySelectors.selectIdentity(state);
 	return {
+		identity,
 		vendors: marketplaceSelectors.selectVendorsForCategory(state, 'banking'),
 		inventory: marketplaceSelectors.selectBanks(state, identity.type),
 		isLoading: marketplaceSelectors.isInventoryLoading(state),
