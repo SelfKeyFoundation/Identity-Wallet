@@ -89,12 +89,14 @@ const BankingOffersPage = withStyles(styles)(
 									Bank Accounts
 								</Typography>
 							</Grid>
+
 							<Grid item className={classes.tabs}>
 								<BankingAccountTypeTabs
 									accountType={accountType}
 									onAccountTypeChange={onAccountTypeChange}
 								/>
 							</Grid>
+
 							<Grid item>
 								<BankingOffersTable
 									keyRate={keyRate}

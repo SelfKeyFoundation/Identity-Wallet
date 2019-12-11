@@ -57,9 +57,11 @@ export const marketplacesSelectors = {
 	displayedPopupSelector(state) {
 		return this.marketplacesSelector(state).displayedPopup;
 	},
-	categoriesSelectors(state) {
+	categoriesSelectors(state, entityType = 'individual') {
 		let { categories, categoriesById } = this.marketplacesSelector(state);
-		return categories.map(id => categoriesById[id]);
+		return categories
+			.map(id => categoriesById[id])
+			.filter(category => category.entityType === entityType);
 	},
 	categorySelector(state, id) {
 		return this.marketplacesSelector(state).categoriesById[id];
