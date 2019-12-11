@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import { featureIsDisabled } from 'common/feature-flags';
 import { identitySelectors } from 'common/identity';
 import { ordersOperations } from 'common/marketplace/orders';
@@ -23,6 +24,12 @@ import { PageLoading } from './common';
 class MarketplaceContainerComponent extends PureComponent {
 	componentDidMount() {
 		this.props.dispatch(ordersOperations.ordersLoadOperation());
+	}
+
+	componentDidUpdate(prevProps) {
+		if (prevProps.identity.type !== this.props.identity.type) {
+			this.props.dispatch(push(this.props.match.path));
+		}
 	}
 
 	render() {
