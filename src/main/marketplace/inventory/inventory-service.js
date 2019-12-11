@@ -68,7 +68,20 @@ export class SelfkeyInventoryFetcher extends InventoryFetcher {
 			.filter(itm => itm.status === 'active')
 			.map(itm => itm.category);
 
-		const data = await Promise.all([...new Set(categories)].map(this.fetchData.bind(this)));
+		const data = await Promise.all(
+			[...new Set(categories)].map(async category => {
+				try {
+					const data = await this.fetchData(category);
+					return data;
+				} catch (error) {
+					log.error('Error fetching data for %s %s', category, error);
+					if (error.message === 'unknown_data_category') {
+						return {};
+					}
+					throw error;
+				}
+			})
+		);
 		const dataByCategory = data.reduce((acc, curr, indx) => {
 			acc[categories[indx]] = curr;
 			return acc;
@@ -162,6 +175,7 @@ export class FlagtheoryIncorporationsInventoryFetcher extends InventoryFetcher {
 					priceCurrency: 'USD',
 					category: 'incorporations',
 					vendorId: 'flagtheory_incorporations',
+					entityType: 'individual',
 					data: {
 						...data,
 						...(corpDetails[data.companyCode] || {}),
@@ -226,6 +240,7 @@ export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
 						itm.data.type && itm.data.type.length
 							? itm.data.type[0].toLowerCase()
 							: 'private';
+					itm.entityType = itm.data.type === 'business' ? 'corporate' : 'individual';
 
 					return itm;
 				});

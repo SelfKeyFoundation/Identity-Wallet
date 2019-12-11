@@ -37,7 +37,7 @@ export class VendorService {
 			},
 			error: {
 				name: ExponentialBackoffRetryStrategy.NAME,
-				attempts: 10
+				attempts: 5
 			}
 		});
 	}

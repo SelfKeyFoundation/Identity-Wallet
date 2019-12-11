@@ -59,24 +59,34 @@ const getColors = () => {
 	return ['#46dfba', '#46b7df', '#238db4', '#1d7999', '#0e4b61'];
 };
 
-const chartOptions = {
-	backgroundColor: 'transparent',
-	title: '',
-	chartArea: { left: 15, top: 15, bottom: 15, right: 15 },
-	pieHole: 0.7,
-	pieSliceBorderColor: 'none',
-	colors: getColors(),
-	legend: {
-		position: 'none'
-	},
-	fontSize: 13,
-	pieSliceText: 'none',
-	tooltip: {
-		isHtml: true
-	},
-	animation: {
-		startup: true
+const getChartOptions = unassignedIndex => {
+	let slices = null;
+
+	if (unassignedIndex) {
+		slices = {
+			[unassignedIndex - 1]: { color: '#999999' }
+		};
 	}
+	return {
+		backgroundColor: 'transparent',
+		title: '',
+		chartArea: { left: 15, top: 15, bottom: 15, right: 15 },
+		pieHole: 0.7,
+		pieSliceBorderColor: 'none',
+		colors: getColors(),
+		legend: {
+			position: 'none'
+		},
+		fontSize: 13,
+		pieSliceText: 'none',
+		tooltip: {
+			isHtml: true
+		},
+		animation: {
+			startup: true
+		},
+		slices
+	};
 };
 
 const getChartData = shareholders => {
@@ -85,7 +95,7 @@ const getChartData = shareholders => {
 	const dataPoints = shareholders.map(s => [getProfileName(s), getMemberEquity(s)]);
 	// Add a unknown data point if total equity is below 100
 	if (total < 100) {
-		dataPoints.push(['Unknown', 100 - total]);
+		dataPoints.push(['Unassigned', 100 - total]);
 	}
 	return data.concat(dataPoints);
 };
@@ -119,6 +129,10 @@ const CorporateShareholding = withStyles(styles)(props => {
 	if (shareholders.length === 0) {
 		return null;
 	}
+	const data = getChartData(shareholders);
+	const unassignedIndex = data.findIndex(d => d[0] === 'Unassigned');
+	const options = getChartOptions(unassignedIndex);
+
 	return (
 		<Card>
 			<CardHeader title="Shareholding" className={classes.regularText} />
@@ -128,7 +142,7 @@ const CorporateShareholding = withStyles(styles)(props => {
 					<Chart
 						chartType="PieChart"
 						data={getChartData(shareholders)}
-						options={chartOptions}
+						options={options}
 						graph_id="PieChart"
 						width="100%"
 						height="300px"

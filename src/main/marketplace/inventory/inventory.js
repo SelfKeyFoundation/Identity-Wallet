@@ -19,6 +19,7 @@ export class Inventory extends BaseModel {
 				id: { type: 'integer' },
 				sku: { type: 'string' },
 				vendorId: { type: 'string' },
+				entityType: { type: 'string' },
 				env: { type: 'string', enum: ['development', 'production', 'test'] },
 				name: { type: 'string', default: '' },
 				description: { type: 'string', default: '' },
