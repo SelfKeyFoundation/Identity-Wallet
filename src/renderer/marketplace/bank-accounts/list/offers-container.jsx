@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { BankingOffersPage } from './offers-page';
 import { marketplaceSelectors } from 'common/marketplace';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
+import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
 
@@ -61,9 +62,10 @@ BankAccountsTableContainer.propTypes = {
 };
 
 const mapStateToProps = (state, props) => {
+	const identity = identitySelectors.selectIdentity(state);
 	return {
 		vendors: marketplaceSelectors.selectVendorsForCategory(state, 'banking'),
-		inventory: marketplaceSelectors.selectBanks(state),
+		inventory: marketplaceSelectors.selectBanks(state, identity.type),
 		isLoading: marketplaceSelectors.isInventoryLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
 	};

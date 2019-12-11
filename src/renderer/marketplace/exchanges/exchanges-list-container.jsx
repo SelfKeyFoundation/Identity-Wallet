@@ -6,6 +6,7 @@ import { marketplaceSelectors } from 'common/marketplace';
 import { MarketplaceExchangesComponent } from './common/marketplace-exchanges-component';
 import { ExchangesList } from './exchanges-list';
 import { ExchangeSmallIcon } from 'selfkey-ui';
+import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
 
@@ -26,9 +27,15 @@ class ExchangesListContainer extends MarketplaceExchangesComponent {
 }
 
 const mapStateToProps = (state, props) => {
+	const identity = identitySelectors.selectIdentity(state);
 	return {
 		isLoading: marketplaceSelectors.isInventoryLoading(state),
-		items: marketplaceSelectors.selectInventoryForCategory(state, 'exchanges'),
+		items: marketplaceSelectors.selectInventoryForCategory(
+			state,
+			'exchanges',
+			'active',
+			identity.type
+		),
 		category: {
 			title: 'Exchanges',
 			icon: <ExchangeSmallIcon />
