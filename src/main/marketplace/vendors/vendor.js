@@ -18,6 +18,7 @@ export class Vendor extends BaseModel {
 			properties: {
 				id: { type: 'integer' },
 				vendorId: { type: 'string' },
+				entityTypes: { type: 'array', items: { type: 'string' }, default: ['individual'] },
 				env: { type: 'string', enum: ['development', 'production', 'test'] },
 				name: { type: 'string', default: '' },
 				description: { type: 'string', default: '' },

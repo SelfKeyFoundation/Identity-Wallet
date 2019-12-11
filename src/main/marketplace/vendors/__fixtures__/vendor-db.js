@@ -2,6 +2,7 @@ export default [
 	{
 		id: 1,
 		vendorId: 'wandx',
+		entityTypes: ['individual'],
 		env: 'production',
 		name: 'WandX',
 		description:
@@ -18,6 +19,7 @@ export default [
 	{
 		vendorId: 'xstar',
 		name: 'XStar.io',
+		entityTypes: ['individual', 'corporate'],
 		status: 'inactive',
 		categories: ['exchanges'],
 		inventorySource: 'selfkey',
