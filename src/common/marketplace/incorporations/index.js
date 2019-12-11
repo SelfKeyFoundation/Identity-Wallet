@@ -72,17 +72,19 @@ const parseOptions = item => {
 };
 
 export const incorporationsSelectors = {
-	selectIncorporations: state =>
-		inventorySelectors.selectInventoryForCategory(state, 'incorporations').map(c => {
-			c.price = selectPrice(c);
-			c.templateId = selectTemplate(c);
-			c.data.checkoutOptions = parseOptions(c);
-			c.walletAddress = selectVendorWalletAddress(c);
-			c.didAddress = selectVendorDidAddress(c);
-			return c;
-		}),
-	selectIncorporationByFilter: (state, filter) =>
-		incorporationsSelectors.selectIncorporations(state).find(filter)
+	selectIncorporations: (state, entityType) =>
+		inventorySelectors
+			.selectInventoryForCategory(state, 'incorporations', 'active', entityType)
+			.map(c => {
+				c.price = selectPrice(c);
+				c.templateId = selectTemplate(c);
+				c.data.checkoutOptions = parseOptions(c);
+				c.walletAddress = selectVendorWalletAddress(c);
+				c.didAddress = selectVendorDidAddress(c);
+				return c;
+			}),
+	selectIncorporationByFilter: (state, filter, entityType) =>
+		incorporationsSelectors.selectIncorporations(state, entityType).find(filter)
 };
 
 export default incorporationsSelectors;

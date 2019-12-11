@@ -7,6 +7,7 @@ import { pricesSelectors } from 'common/prices';
 import { marketplaceSelectors } from 'common/marketplace';
 import { IncorporationsListPage } from './incorporations-list-page';
 import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorporations-component';
+import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
 
@@ -45,8 +46,9 @@ IncorporationsListContainer.propTypes = {
 };
 
 const mapStateToProps = (state, props) => {
+	const identity = identitySelectors.selectIdentity(state);
 	return {
-		incorporations: marketplaceSelectors.selectIncorporations(state),
+		incorporations: marketplaceSelectors.selectIncorporations(state, identity.type),
 		isLoading: marketplaceSelectors.isInventoryLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
 	};

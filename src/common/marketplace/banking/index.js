@@ -72,19 +72,24 @@ const parseOptions = item => {
 };
 
 export const bankingSelectors = {
-	selectBanks: state =>
-		inventorySelectors.selectInventoryForCategory(state, 'banking').map(b => {
-			b.price = selectPrice(b);
-			b.templateId = selectTemplate(b);
-			b.data.checkoutOptions = parseOptions(b);
-			b.accountType = b.data.type ? b.data.type.toLowerCase() : null;
-			b.walletAddress = selectVendorWalletAddress(b);
-			b.didAddress = selectVendorDidAddress(b);
-			return b;
-		}),
-	selectBankTypeByFilter: (state, filter) => bankingSelectors.selectBanks(state).find(filter),
-	selectBankJurisdictionByAccountCode: (state, accountCode) =>
-		bankingSelectors.selectBanks(state).find(b => b.data.accountCode === accountCode)
+	selectBanks: (state, entityType) =>
+		inventorySelectors
+			.selectInventoryForCategory(state, 'banking', 'active', entityType)
+			.map(b => {
+				b.price = selectPrice(b);
+				b.templateId = selectTemplate(b);
+				b.data.checkoutOptions = parseOptions(b);
+				b.accountType = b.data.type ? b.data.type.toLowerCase() : null;
+				b.walletAddress = selectVendorWalletAddress(b);
+				b.didAddress = selectVendorDidAddress(b);
+				return b;
+			}),
+	selectBankTypeByFilter: (state, filter, entityType) =>
+		bankingSelectors.selectBanks(state, entityType).find(filter),
+	selectBankJurisdictionByAccountCode: (state, accountCode, entityType) =>
+		bankingSelectors
+			.selectBanks(state, entityType)
+			.find(b => b.data.accountCode === accountCode)
 };
 
 export default bankingSelectors;
