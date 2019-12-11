@@ -32,6 +32,5 @@ class MarketplaceNotariesComponent extends PureComponent {
 		);
 	}
 }
-
 const MarketplaceNotariesPage = connect()(MarketplaceNotariesComponent);
 export { MarketplaceNotariesPage };

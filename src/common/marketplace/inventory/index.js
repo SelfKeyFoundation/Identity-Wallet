@@ -60,7 +60,8 @@ export const inventorySelectors = {
 	selectInventory: (state, entityType = 'individual') =>
 		inventorySelectors
 			.selectInventoryRoot(state)
-			.all.map(id => inventorySelectors.selectInventoryRoot(state).byId[id]),
+			.all.map(id => inventorySelectors.selectInventoryRoot(state).byId[id])
+			.filter(inv => inv.entityType === entityType),
 	selectInventoryForCategory: (state, category, status = 'active', entityType) =>
 		inventorySelectors
 			.selectInventory(state, entityType)
@@ -91,7 +92,7 @@ export const inventorySelectors = {
 	},
 	selectInventoryItemByFilter: (state, category, filter, entityType) =>
 		inventorySelectors
-			.selectInventoryForCategory(state, category, null, entityType)
+			.selectInventoryForCategory(state, category, 'active', entityType)
 			.find(filter)
 };
 

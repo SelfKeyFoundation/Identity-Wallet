@@ -6,6 +6,7 @@ import AddressBook from '../../address-book/main';
 import AddressBookAdd from '../../address-book/add';
 import AddressBookEdit from '../../address-book/edit';
 import { walletTokensOperations } from 'common/wallet-tokens';
+import { marketplaceOperations } from 'common/marketplace';
 import { walletSelectors } from 'common/wallet';
 import { appSelectors } from 'common/app';
 
@@ -78,6 +79,7 @@ class Main extends PureComponent {
 	};
 	async componentDidMount() {
 		await this.props.dispatch(walletTokensOperations.loadWalletTokens());
+		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
 		this.setMatomoId();
 	}
 

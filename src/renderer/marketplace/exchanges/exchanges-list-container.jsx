@@ -33,7 +33,7 @@ const mapStateToProps = (state, props) => {
 		items: marketplaceSelectors.selectInventoryForCategory(
 			state,
 			'exchanges',
-			null,
+			'active',
 			identity.type
 		),
 		category: {

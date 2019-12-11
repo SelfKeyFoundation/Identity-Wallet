@@ -74,7 +74,7 @@ const parseOptions = item => {
 export const incorporationsSelectors = {
 	selectIncorporations: (state, entityType) =>
 		inventorySelectors
-			.selectInventoryForCategory(state, 'incorporations', null, entityType)
+			.selectInventoryForCategory(state, 'incorporations', 'active', entityType)
 			.map(c => {
 				c.price = selectPrice(c);
 				c.templateId = selectTemplate(c);
