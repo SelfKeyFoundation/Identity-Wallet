@@ -7,6 +7,7 @@ import { kycSelectors, kycOperations } from 'common/kyc';
 import { marketplaceSelectors } from 'common/marketplace';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 import { OptionSelection } from '../common/option-selection';
+import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
 
@@ -72,12 +73,17 @@ class BankAccountsSelectBankContainer extends MarketplaceBankAccountsComponent {
 const mapStateToProps = (state, props) => {
 	const { accountCode, countryCode, templateId, vendorId } = props.match.params;
 	const authenticated = true;
+	const identity = identitySelectors.selectIdentity(state);
 	return {
 		vendorId,
 		templateId,
 		countryCode,
 		accountCode,
-		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
+		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(
+			state,
+			accountCode,
+			identity.type
+		),
 		address: getWallet(state).address,
 		currentApplication: kycSelectors.selectCurrentApplication(state),
 		rp: kycSelectors.relyingPartySelector(state, vendorId),

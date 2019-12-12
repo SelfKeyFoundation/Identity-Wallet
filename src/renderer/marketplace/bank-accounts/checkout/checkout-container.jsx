@@ -14,6 +14,7 @@ import { kycSelectors, kycOperations } from 'common/kyc';
 import { marketplaceSelectors } from 'common/marketplace';
 import { PaymentCheckout } from '../../common/payment-checkout';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
+import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
 const CRYPTOCURRENCY = config.constants.primaryToken;
@@ -116,11 +117,16 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 const mapStateToProps = (state, props) => {
 	const { accountCode, vendorId, countryCode, templateId } = props.match.params;
 	const authenticated = true;
+	const identity = identitySelectors.selectIdentity(state);
 	return {
 		countryCode,
 		templateId,
 		vendorId,
-		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
+		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(
+			state,
+			accountCode,
+			identity.type
+		),
 		...getLocale(state),
 		...getFiatCurrency(state),
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
