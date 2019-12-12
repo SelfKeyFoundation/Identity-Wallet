@@ -44,16 +44,19 @@ const styles = theme => ({
 		}
 	},
 	attrValue: {
-		maxWidth: '12em'
+		maxWidth: '12em',
+		wordBreak: 'break-all'
 	}
 });
 
-const DetailsAttribute = withStyles(styles)(({ attr, classes }) =>
+const DetailsAttribute = withStyles(styles)(({ attr, classes, noIcon = false }) =>
 	attr ? (
 		<Grid container direction="row" justify="flex-start" alignItems="flex-start">
-			<Grid item>
-				<CheckMaIcon />
-			</Grid>
+			{!noIcon && (
+				<Grid item>
+					<CheckMaIcon />
+				</Grid>
+			)}
 			<Grid item className={classes.attrValue}>
 				<Typography variant="h5">{attr}</Typography>
 			</Grid>
@@ -127,14 +130,6 @@ const CorporateDetails = withStyles(styles)(props => {
 						</Typography>
 						<AddressDetailsAttribute profile={profile} />
 					</div>
-					{profile.did && (
-						<div className={classes.attr}>
-							<Typography className="label" color="secondary">
-								DID
-							</Typography>
-							{profile.did}
-						</div>
-					)}
 				</div>
 			</CardContent>
 		</Card>

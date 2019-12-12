@@ -4,6 +4,7 @@ import { CorporateDetails } from '../common/corporate-details';
 import { CorporateApplicationsSummary } from '../common/corporate-applications';
 import { CorporateCapTable } from '../common/corporate-cap-table';
 import { CorporateShareholding } from '../common/corporate-shareholding';
+import { DisplayDid } from '../../did';
 // import { CorporateOrgChart } from '../common/corporate-org-chart';
 
 const styles = theme => ({
@@ -35,7 +36,8 @@ const CorporateOverviewTab = withStyles(styles)(
 	({ classes, applications, profile, members, onEditCorporateDetails, didComponent }) => (
 		<div>
 			<div className={classes.overviewBox}>
-				{!profile.did && <Grid item>{didComponent}</Grid>}
+				{!profile.identity.did && <Grid item>{didComponent}</Grid>}
+				{profile.identity.did && <DisplayDid did={profile.identity.did} />}
 				<div className="halfWidgetBox">
 					<div className="halfWidth">
 						<CorporateDetails profile={profile} onEdit={onEditCorporateDetails} />

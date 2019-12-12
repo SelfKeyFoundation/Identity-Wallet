@@ -64,7 +64,8 @@ const styles = theme => ({
 });
 
 export const BankAccountsPaymentComplete = withStyles(styles)(props => {
-	const { classes, email, onBackClick, onContinueClick } = props;
+	const { classes, email, identity, onBackClick, onContinueClick } = props;
+	const simpleFlow = identity.type === 'corporate';
 	return (
 		<div className={classes.container}>
 			<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
@@ -94,11 +95,25 @@ export const BankAccountsPaymentComplete = withStyles(styles)(props => {
 							<Typography variant="body1" gutterBottom>
 								Thank you for payment!
 							</Typography>
-							<Typography variant="body2" gutterBottom>
-								Please click the continue button and select your preferred Bank to
-								continue the process. If you have any questions in the meantime, you
-								can reach us at:
-							</Typography>
+							{simpleFlow && (
+								<Typography variant="body2" gutterBottom>
+									One of our managers is reviewing the information you submitted
+									and{' '}
+									<strong>
+										will contact you shortly on the e-mail you provided{' '}
+									</strong>
+									, to continue the process. If you have any questions in the
+									meantime, you can reach us at:
+								</Typography>
+							)}
+
+							{!simpleFlow && (
+								<Typography variant="body2" gutterBottom>
+									Please click the continue button and select your preferred Bank
+									to continue the process. If you have any questions in the
+									meantime, you can reach us at:
+								</Typography>
+							)}
 							<Typography
 								variant="body2"
 								color="primary"
@@ -108,11 +123,13 @@ export const BankAccountsPaymentComplete = withStyles(styles)(props => {
 								{email}
 							</Typography>
 						</div>
-						<div className={classes.footer}>
-							<Button variant="contained" size="large" onClick={onContinueClick}>
-								Continue
-							</Button>
-						</div>
+						{!simpleFlow && (
+							<div className={classes.footer}>
+								<Button variant="contained" size="large" onClick={onContinueClick}>
+									Continue
+								</Button>
+							</div>
+						)}
 					</div>
 				</Grid>
 			</div>

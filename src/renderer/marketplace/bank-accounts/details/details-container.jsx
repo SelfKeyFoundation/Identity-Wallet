@@ -198,10 +198,15 @@ const mapStateToProps = (state, props) => {
 		...props,
 		cryptoCurrency: config.constants.primaryToken
 	};
+	const identity = identitySelectors.selectIdentity(state);
 	return {
 		templateId,
 		vendorId,
-		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
+		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(
+			state,
+			accountCode,
+			identity.type
+		),
 		country: marketplaceSelectors.selectCountryByCode(state, countryCode),
 		isLoading: marketplaceSelectors.isInventoryLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
@@ -212,7 +217,7 @@ const mapStateToProps = (state, props) => {
 			authenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(state, vendorId, templateId),
-		identity: identitySelectors.selectIdentity(state),
+		identity,
 		cryptoValue: getCryptoValue(state, primaryToken)
 	};
 };

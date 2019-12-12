@@ -9,6 +9,7 @@ import { pricesSelectors } from 'common/prices';
 import { marketplaceSelectors } from 'common/marketplace';
 import { ordersOperations } from 'common/marketplace/orders';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
+import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
 const VENDOR_NAME = 'Far Horizon Capital Inc';
@@ -58,12 +59,16 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 const mapStateToProps = (state, props) => {
 	const { accountCode, templateId, vendorId } = props.match.params;
 	const authenticated = true;
-
+	const identity = identitySelectors.selectIdentity(state);
 	return {
 		accountCode,
 		templateId,
 		vendorId,
-		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
+		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(
+			state,
+			accountCode,
+			identity.type
+		),
 		address: getWallet(state).address,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		currentApplication: kycSelectors.selectCurrentApplication(state),
