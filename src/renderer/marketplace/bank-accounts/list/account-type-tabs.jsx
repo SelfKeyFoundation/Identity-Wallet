@@ -12,11 +12,12 @@ const BankingAccountTypeTabs = withStyles(styles)(
 	({ classes, accountType, onAccountTypeChange }) => {
 		return (
 			<React.Fragment>
-				<Tabs value={accountType} onChange={(evt, value) => onAccountTypeChange(value)}>
-					<Tab id="personalType" value="business" label="Corporate Accounts" />
-					<Tab id="businessType" value="personal" label="Personal Accounts" />
-					<Tab id="privateType" value="private" label="Wealth Management" />
-				</Tabs>
+				{accountType !== 'business' && (
+					<Tabs value={accountType} onChange={(evt, value) => onAccountTypeChange(value)}>
+						<Tab id="businessType" value="personal" label="Personal Accounts" />
+						<Tab id="privateType" value="private" label="Wealth Management" />
+					</Tabs>
+				)}
 				{accountType === 'personal' && (
 					<Typography
 						id="personalView"

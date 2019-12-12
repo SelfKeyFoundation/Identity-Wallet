@@ -57,13 +57,14 @@ export const reducer = (state = initialState, action) => {
 
 export const inventorySelectors = {
 	selectInventoryRoot: state => state.marketplace.inventory,
-	selectInventory: state =>
+	selectInventory: (state, entityType = 'individual') =>
 		inventorySelectors
 			.selectInventoryRoot(state)
-			.all.map(id => inventorySelectors.selectInventoryRoot(state).byId[id]),
-	selectInventoryForCategory: (state, category, status = 'active') =>
+			.all.map(id => inventorySelectors.selectInventoryRoot(state).byId[id])
+			.filter(inv => inv.entityType === entityType),
+	selectInventoryForCategory: (state, category, status = 'active', entityType) =>
 		inventorySelectors
-			.selectInventory(state)
+			.selectInventory(state, entityType)
 			.filter(i => i.category === category && i.status === status),
 	selectInventoryItemById: (state, id) => inventorySelectors.selectInventoryRoot(state).byId[id],
 	isInventoryLoading: state => {
@@ -89,8 +90,10 @@ export const inventorySelectors = {
 		}
 		return vendorSelectors.isVendorsLoadingError(state);
 	},
-	selectInventoryItemByFilter: (state, category, filter) =>
-		inventorySelectors.selectInventoryForCategory(state, category).find(filter)
+	selectInventoryItemByFilter: (state, category, filter, entityType) =>
+		inventorySelectors
+			.selectInventoryForCategory(state, category, 'active', entityType)
+			.find(filter)
 };
 
 export default reducer;

@@ -7,12 +7,13 @@ import { withStyles } from '@material-ui/core/styles';
 import { BankingOffersPage } from './offers-page';
 import { marketplaceSelectors } from 'common/marketplace';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
+import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
 
 class BankAccountsTableContainer extends MarketplaceBankAccountsComponent {
 	state = {
-		accountType: 'business'
+		accountType: 'personal'
 	};
 
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
@@ -28,8 +29,12 @@ class BankAccountsTableContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	render() {
-		const { isLoading, keyRate, vendors, inventory } = this.props;
-		const { accountType: selectedType } = this.state;
+		const { isLoading, keyRate, vendors, inventory, identity } = this.props;
+		let { accountType: selectedType } = this.state;
+
+		if (identity.type === 'corporate') {
+			selectedType = 'business';
+		}
 
 		const data = inventory
 			.filter(bank => bank.data.type === selectedType)
@@ -61,9 +66,11 @@ BankAccountsTableContainer.propTypes = {
 };
 
 const mapStateToProps = (state, props) => {
+	const identity = identitySelectors.selectIdentity(state);
 	return {
+		identity,
 		vendors: marketplaceSelectors.selectVendorsForCategory(state, 'banking'),
-		inventory: marketplaceSelectors.selectBanks(state),
+		inventory: marketplaceSelectors.selectBanks(state, identity.type),
 		isLoading: marketplaceSelectors.isInventoryLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
 	};

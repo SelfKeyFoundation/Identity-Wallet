@@ -298,7 +298,9 @@ const CorporateMembers = withStyles(styles)(props => {
 												>
 													<Grid item>
 														<CorporateInformation
-															attributes={member.attributes}
+															attributes={(
+																member.basicAttributes || []
+															).concat(member.attributes)}
 															onAddAttribute={onAddAttribute}
 															onEditAttribute={onEditAttribute}
 															onDeleteAttribute={onDeleteAttribute}

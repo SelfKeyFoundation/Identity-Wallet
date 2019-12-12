@@ -4,6 +4,7 @@ import { ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { marketplacesSelectors } from 'common/marketplaces';
 import { MarketplaceCategoriesList } from './categories-list';
 import { push } from 'connected-react-router';
+import { identitySelectors } from 'common/identity';
 
 class MarketplaceCategoriesContainer extends PureComponent {
 	componentDidMount() {
@@ -30,16 +31,20 @@ class MarketplaceCategoriesContainer extends PureComponent {
 			<MarketplaceCategoriesList
 				items={this.props.categories.map(cat => ({
 					...cat,
-					learnMoreAction: this.actions[cat.id]
+					learnMoreAction: this.actions[cat.name]
 				}))}
 			/>
 		);
 	}
 }
 
-const mapStateToProps = state => ({
-	categories: marketplacesSelectors.categoriesSelectors(state)
-});
+const mapStateToProps = state => {
+	const identity = identitySelectors.selectIdentity(state);
+	return {
+		identity,
+		categories: marketplacesSelectors.categoriesSelectors(state, identity.type)
+	};
+};
 
 const connectedComponent = connect(mapStateToProps)(MarketplaceCategoriesContainer);
 export { connectedComponent as MarketplaceCategoriesContainer };
