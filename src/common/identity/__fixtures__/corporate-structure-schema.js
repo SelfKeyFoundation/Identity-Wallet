@@ -23,8 +23,10 @@ export const positionEquity = {
 	authorizedSignatory: false,
 	manager: false,
 	member: 'Membership Interest',
+	'member-llc': 'Membership Interest',
 	grantor: false,
-	beneficiary: false,
+	'beneficiary-tst': false,
+	'beneficiary-fnd': false,
 	trustee: false,
 	protector: false,
 	founder: false,
@@ -34,7 +36,7 @@ export const positionEquity = {
 
 export const companyPositionWithEquity = {
 	'Company Limited by Shares (LTD)': ['shareholder'],
-	'Limited Liability Company (LLC)': ['member'],
+	'Limited Liability Company (LLC)': ['member-llc'],
 	'Trust (TST)': [],
 	'Foundation (FND)': [],
 	'Limited Partnership (LLP)': ['general-partner', 'limited-partner'],
@@ -66,19 +68,30 @@ const observer = {
 };
 const authorizedSignatory = {
 	position: 'authorizedSignatory',
-	title: 'Authorized Signatory',
+	title: 'Authorised Signatory',
 	description: 'Director or person who has been authorized to sign documents.'
 };
 const other = {
 	position: 'other',
+	title: 'Other',
+	description: 'Other type of  company members.'
+};
+const otherLlc = {
+	position: 'other-llc',
 	title: 'Other',
 	description: 'Designated nonmembers or outsiders.'
 };
 const member = {
 	position: 'member',
 	equity: 'Membership Interest',
-	title: 'Member',
+	title: 'Company Member',
 	description: 'Co-owner of a business, who oversees and runs the that business.'
+};
+const memberLlc = {
+	position: 'member-llc',
+	equity: 'Membership Interest',
+	title: 'Member',
+	description: 'Owner of a limited liability company.'
 };
 const manager = {
 	position: 'manager',
@@ -90,10 +103,15 @@ const grantor = {
 	title: 'Grantor',
 	description: 'Person or entity that establishes the trust.'
 };
-const beneficiary = {
-	position: 'beneficiary',
+const beneficiaryTst = {
+	position: 'beneficiary-tst',
 	title: 'Beneficiary',
-	description: 'Person or entity that establishes the trust.'
+	description: 'Individual or group of individuals for whom a trust is created.'
+};
+const beneficiaryFnd = {
+	position: 'beneficiary-fnd',
+	title: 'Beneficiary',
+	description: 'The person who gains an advantage and/or profits from the foundation.'
 };
 const trustee = {
 	position: 'trustee',
@@ -140,10 +158,17 @@ export const companyPositions = {
 		authorizedSignatory,
 		other
 	],
-	'Limited Liability Company (LLC)': [manager, member, ubo, observer, authorizedSignatory, other],
+	'Limited Liability Company (LLC)': [
+		manager,
+		memberLlc,
+		ubo,
+		observer,
+		authorizedSignatory,
+		otherLlc
+	],
 	'Trust (TST)': [
 		grantor,
-		beneficiary,
+		beneficiaryTst,
 		trustee,
 		protector,
 		ubo,
@@ -155,7 +180,7 @@ export const companyPositions = {
 		founder,
 		director,
 		supervisor,
-		beneficiary,
+		beneficiaryFnd,
 		ubo,
 		observer,
 		authorizedSignatory,
@@ -169,7 +194,7 @@ export const companyPositions = {
 		authorizedSignatory,
 		other
 	],
-	Other: [member, ubo, observer, authorizedSignatory, other]
+	Other: [member, ubo, observer, authorizedSignatory]
 };
 export const resolvedCorporateSchema = {
 	url: 'http://platform.selfkey.org/schema/attribute/corporate-structure.json',
@@ -435,7 +460,7 @@ export const resolvedCorporateSchema = {
 							$ref: '#/definitions/positions/manager'
 						},
 						{
-							$ref: '#/definitions/positions/member'
+							$ref: '#/definitions/positions/member_llc'
 						},
 						{
 							$ref: '#/definitions/positions/ubo'
@@ -447,7 +472,7 @@ export const resolvedCorporateSchema = {
 							$ref: '#/definitions/positions/authorizedSignatory'
 						},
 						{
-							$ref: '#/definitions/positions/other'
+							$ref: '#/definitions/positions/other_llc'
 						}
 					]
 				},
@@ -457,7 +482,7 @@ export const resolvedCorporateSchema = {
 							$ref: '#/definitions/positions/grantor'
 						},
 						{
-							$ref: '#/definitions/positions/beneficiary'
+							$ref: '#/definitions/positions/beneficiary_tst'
 						},
 						{
 							$ref: '#/definitions/positions/trustee'
@@ -491,7 +516,7 @@ export const resolvedCorporateSchema = {
 							$ref: '#/definitions/positions/supervisor'
 						},
 						{
-							$ref: '#/definitions/positions/beneficiary'
+							$ref: '#/definitions/positions/beneficiary_fnd'
 						},
 						{
 							$ref: '#/definitions/positions/ubo'
@@ -542,9 +567,6 @@ export const resolvedCorporateSchema = {
 						},
 						{
 							$ref: '#/definitions/positions/authorizedSignatory'
-						},
-						{
-							$ref: '#/definitions/positions/other'
 						}
 					]
 				},
@@ -584,7 +606,7 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
-							title: 'Authorized Signatory',
+							title: 'Authorised Signatory',
 							description:
 								'Director or person who has been authorized to sign documents.',
 							const: 'authorizedSignatory'
@@ -606,11 +628,25 @@ export const resolvedCorporateSchema = {
 						}
 					}
 				},
-				member: {
+				member_llc: {
 					type: 'object',
 					properties: {
 						position: {
 							title: 'Member',
+							description: 'Owner of a limited liability company.',
+							const: 'member-llc'
+						},
+						equity: {
+							title: 'Membership Interest',
+							$ref: '#/definitions/equity'
+						}
+					}
+				},
+				member: {
+					type: 'object',
+					properties: {
+						position: {
+							title: 'Company Member',
 							description:
 								'Co-owner of a business, who oversees and runs the that business.',
 							const: 'member'
@@ -642,13 +678,25 @@ export const resolvedCorporateSchema = {
 						}
 					}
 				},
-				beneficiary: {
+				beneficiary_tst: {
 					type: 'object',
 					properties: {
 						position: {
 							title: 'Beneficiary',
-							description: 'Person or entity that establishes the trust.',
-							const: 'beneficiary'
+							description:
+								'Individual or group of individuals for whom a trust is created.',
+							const: 'beneficiary-tst'
+						}
+					}
+				},
+				beneficiary_fnd: {
+					type: 'object',
+					properties: {
+						position: {
+							title: 'Beneficiary',
+							description:
+								'The person who gains an advantage and/or profits from the foundation.',
+							const: 'beneficiary-fnd'
 						}
 					}
 				},
@@ -727,8 +775,18 @@ export const resolvedCorporateSchema = {
 					properties: {
 						position: {
 							title: 'Other',
-							description: 'Designated nonmembers or outsiders.',
+							description: 'Other type of  company members.',
 							const: 'other'
+						}
+					}
+				},
+				other_llc: {
+					type: 'object',
+					properties: {
+						position: {
+							title: 'Other',
+							description: 'Designated nonmembers or outsiders.',
+							const: 'other-llc'
 						}
 					}
 				}
@@ -888,7 +946,7 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
-																title: 'Authorized Signatory',
+																title: 'Authorised Signatory',
 																description:
 																	'Director or person who has been authorized to sign documents.',
 																const: 'authorizedSignatory'
@@ -901,7 +959,7 @@ export const resolvedCorporateSchema = {
 															position: {
 																title: 'Other',
 																description:
-																	'Designated nonmembers or outsiders.',
+																	'Other type of  company members.',
 																const: 'other'
 															}
 														}
@@ -1068,8 +1126,8 @@ export const resolvedCorporateSchema = {
 															position: {
 																title: 'Member',
 																description:
-																	'Co-owner of a business, who oversees and runs the that business.',
-																const: 'member'
+																	'Owner of a limited liability company.',
+																const: 'member-llc'
 															},
 															equity: {
 																title: 'Membership Interest',
@@ -1106,7 +1164,7 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
-																title: 'Authorized Signatory',
+																title: 'Authorised Signatory',
 																description:
 																	'Director or person who has been authorized to sign documents.',
 																const: 'authorizedSignatory'
@@ -1120,7 +1178,7 @@ export const resolvedCorporateSchema = {
 																title: 'Other',
 																description:
 																	'Designated nonmembers or outsiders.',
-																const: 'other'
+																const: 'other-llc'
 															}
 														}
 													}
@@ -1286,8 +1344,8 @@ export const resolvedCorporateSchema = {
 															position: {
 																title: 'Beneficiary',
 																description:
-																	'Person or entity that establishes the trust.',
-																const: 'beneficiary'
+																	'Individual or group of individuals for whom a trust is created.',
+																const: 'beneficiary-tst'
 															}
 														}
 													},
@@ -1339,7 +1397,7 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
-																title: 'Authorized Signatory',
+																title: 'Authorised Signatory',
 																description:
 																	'Director or person who has been authorized to sign documents.',
 																const: 'authorizedSignatory'
@@ -1352,7 +1410,7 @@ export const resolvedCorporateSchema = {
 															position: {
 																title: 'Other',
 																description:
-																	'Designated nonmembers or outsiders.',
+																	'Other type of  company members.',
 																const: 'other'
 															}
 														}
@@ -1541,8 +1599,8 @@ export const resolvedCorporateSchema = {
 															position: {
 																title: 'Beneficiary',
 																description:
-																	'Person or entity that establishes the trust.',
-																const: 'beneficiary'
+																	'The person who gains an advantage and/or profits from the foundation.',
+																const: 'beneficiary-fnd'
 															}
 														}
 													},
@@ -1572,7 +1630,7 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
-																title: 'Authorized Signatory',
+																title: 'Authorised Signatory',
 																description:
 																	'Director or person who has been authorized to sign documents.',
 																const: 'authorizedSignatory'
@@ -1585,7 +1643,7 @@ export const resolvedCorporateSchema = {
 															position: {
 																title: 'Other',
 																description:
-																	'Designated nonmembers or outsiders.',
+																	'Other type of  company members.',
 																const: 'other'
 															}
 														}
@@ -1795,7 +1853,7 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
-																title: 'Authorized Signatory',
+																title: 'Authorised Signatory',
 																description:
 																	'Director or person who has been authorized to sign documents.',
 																const: 'authorizedSignatory'
@@ -1808,7 +1866,7 @@ export const resolvedCorporateSchema = {
 															position: {
 																title: 'Other',
 																description:
-																	'Designated nonmembers or outsiders.',
+																	'Other type of  company members.',
 																const: 'other'
 															}
 														}
@@ -1962,7 +2020,7 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
-																title: 'Member',
+																title: 'Company Member',
 																description:
 																	'Co-owner of a business, who oversees and runs the that business.',
 																const: 'member'
@@ -2002,21 +2060,10 @@ export const resolvedCorporateSchema = {
 														type: 'object',
 														properties: {
 															position: {
-																title: 'Authorized Signatory',
+																title: 'Authorised Signatory',
 																description:
 																	'Director or person who has been authorized to sign documents.',
 																const: 'authorizedSignatory'
-															}
-														}
-													},
-													{
-														type: 'object',
-														properties: {
-															position: {
-																title: 'Other',
-																description:
-																	'Designated nonmembers or outsiders.',
-																const: 'other'
 															}
 														}
 													}
@@ -2230,7 +2277,7 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
-														title: 'Authorized Signatory',
+														title: 'Authorised Signatory',
 														description:
 															'Director or person who has been authorized to sign documents.',
 														const: 'authorizedSignatory'
@@ -2243,7 +2290,7 @@ export const resolvedCorporateSchema = {
 													position: {
 														title: 'Other',
 														description:
-															'Designated nonmembers or outsiders.',
+															'Other type of  company members.',
 														const: 'other'
 													}
 												}
@@ -2410,8 +2457,8 @@ export const resolvedCorporateSchema = {
 													position: {
 														title: 'Member',
 														description:
-															'Co-owner of a business, who oversees and runs the that business.',
-														const: 'member'
+															'Owner of a limited liability company.',
+														const: 'member-llc'
 													},
 													equity: {
 														title: 'Membership Interest',
@@ -2448,7 +2495,7 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
-														title: 'Authorized Signatory',
+														title: 'Authorised Signatory',
 														description:
 															'Director or person who has been authorized to sign documents.',
 														const: 'authorizedSignatory'
@@ -2462,7 +2509,7 @@ export const resolvedCorporateSchema = {
 														title: 'Other',
 														description:
 															'Designated nonmembers or outsiders.',
-														const: 'other'
+														const: 'other-llc'
 													}
 												}
 											}
@@ -2628,8 +2675,8 @@ export const resolvedCorporateSchema = {
 													position: {
 														title: 'Beneficiary',
 														description:
-															'Person or entity that establishes the trust.',
-														const: 'beneficiary'
+															'Individual or group of individuals for whom a trust is created.',
+														const: 'beneficiary-tst'
 													}
 												}
 											},
@@ -2681,7 +2728,7 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
-														title: 'Authorized Signatory',
+														title: 'Authorised Signatory',
 														description:
 															'Director or person who has been authorized to sign documents.',
 														const: 'authorizedSignatory'
@@ -2694,7 +2741,7 @@ export const resolvedCorporateSchema = {
 													position: {
 														title: 'Other',
 														description:
-															'Designated nonmembers or outsiders.',
+															'Other type of  company members.',
 														const: 'other'
 													}
 												}
@@ -2883,8 +2930,8 @@ export const resolvedCorporateSchema = {
 													position: {
 														title: 'Beneficiary',
 														description:
-															'Person or entity that establishes the trust.',
-														const: 'beneficiary'
+															'The person who gains an advantage and/or profits from the foundation.',
+														const: 'beneficiary-fnd'
 													}
 												}
 											},
@@ -2914,7 +2961,7 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
-														title: 'Authorized Signatory',
+														title: 'Authorised Signatory',
 														description:
 															'Director or person who has been authorized to sign documents.',
 														const: 'authorizedSignatory'
@@ -2927,7 +2974,7 @@ export const resolvedCorporateSchema = {
 													position: {
 														title: 'Other',
 														description:
-															'Designated nonmembers or outsiders.',
+															'Other type of  company members.',
 														const: 'other'
 													}
 												}
@@ -3137,7 +3184,7 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
-														title: 'Authorized Signatory',
+														title: 'Authorised Signatory',
 														description:
 															'Director or person who has been authorized to sign documents.',
 														const: 'authorizedSignatory'
@@ -3150,7 +3197,7 @@ export const resolvedCorporateSchema = {
 													position: {
 														title: 'Other',
 														description:
-															'Designated nonmembers or outsiders.',
+															'Other type of  company members.',
 														const: 'other'
 													}
 												}
@@ -3304,7 +3351,7 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
-														title: 'Member',
+														title: 'Company Member',
 														description:
 															'Co-owner of a business, who oversees and runs the that business.',
 														const: 'member'
@@ -3344,21 +3391,10 @@ export const resolvedCorporateSchema = {
 												type: 'object',
 												properties: {
 													position: {
-														title: 'Authorized Signatory',
+														title: 'Authorised Signatory',
 														description:
 															'Director or person who has been authorized to sign documents.',
 														const: 'authorizedSignatory'
-													}
-												}
-											},
-											{
-												type: 'object',
-												properties: {
-													position: {
-														title: 'Other',
-														description:
-															'Designated nonmembers or outsiders.',
-														const: 'other'
 													}
 												}
 											}
@@ -3557,7 +3593,7 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
-													title: 'Authorized Signatory',
+													title: 'Authorised Signatory',
 													description:
 														'Director or person who has been authorized to sign documents.',
 													const: 'authorizedSignatory'
@@ -3569,8 +3605,7 @@ export const resolvedCorporateSchema = {
 											properties: {
 												position: {
 													title: 'Other',
-													description:
-														'Designated nonmembers or outsiders.',
+													description: 'Other type of  company members.',
 													const: 'other'
 												}
 											}
@@ -3722,8 +3757,8 @@ export const resolvedCorporateSchema = {
 												position: {
 													title: 'Member',
 													description:
-														'Co-owner of a business, who oversees and runs the that business.',
-													const: 'member'
+														'Owner of a limited liability company.',
+													const: 'member-llc'
 												},
 												equity: {
 													title: 'Membership Interest',
@@ -3760,7 +3795,7 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
-													title: 'Authorized Signatory',
+													title: 'Authorised Signatory',
 													description:
 														'Director or person who has been authorized to sign documents.',
 													const: 'authorizedSignatory'
@@ -3774,7 +3809,7 @@ export const resolvedCorporateSchema = {
 													title: 'Other',
 													description:
 														'Designated nonmembers or outsiders.',
-													const: 'other'
+													const: 'other-llc'
 												}
 											}
 										}
@@ -3925,8 +3960,8 @@ export const resolvedCorporateSchema = {
 												position: {
 													title: 'Beneficiary',
 													description:
-														'Person or entity that establishes the trust.',
-													const: 'beneficiary'
+														'Individual or group of individuals for whom a trust is created.',
+													const: 'beneficiary-tst'
 												}
 											}
 										},
@@ -3978,7 +4013,7 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
-													title: 'Authorized Signatory',
+													title: 'Authorised Signatory',
 													description:
 														'Director or person who has been authorized to sign documents.',
 													const: 'authorizedSignatory'
@@ -3990,8 +4025,7 @@ export const resolvedCorporateSchema = {
 											properties: {
 												position: {
 													title: 'Other',
-													description:
-														'Designated nonmembers or outsiders.',
+													description: 'Other type of  company members.',
 													const: 'other'
 												}
 											}
@@ -4165,8 +4199,8 @@ export const resolvedCorporateSchema = {
 												position: {
 													title: 'Beneficiary',
 													description:
-														'Person or entity that establishes the trust.',
-													const: 'beneficiary'
+														'The person who gains an advantage and/or profits from the foundation.',
+													const: 'beneficiary-fnd'
 												}
 											}
 										},
@@ -4196,7 +4230,7 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
-													title: 'Authorized Signatory',
+													title: 'Authorised Signatory',
 													description:
 														'Director or person who has been authorized to sign documents.',
 													const: 'authorizedSignatory'
@@ -4208,8 +4242,7 @@ export const resolvedCorporateSchema = {
 											properties: {
 												position: {
 													title: 'Other',
-													description:
-														'Designated nonmembers or outsiders.',
+													description: 'Other type of  company members.',
 													const: 'other'
 												}
 											}
@@ -4404,7 +4437,7 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
-													title: 'Authorized Signatory',
+													title: 'Authorised Signatory',
 													description:
 														'Director or person who has been authorized to sign documents.',
 													const: 'authorizedSignatory'
@@ -4416,8 +4449,7 @@ export const resolvedCorporateSchema = {
 											properties: {
 												position: {
 													title: 'Other',
-													description:
-														'Designated nonmembers or outsiders.',
+													description: 'Other type of  company members.',
 													const: 'other'
 												}
 											}
@@ -4556,7 +4588,7 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
-													title: 'Member',
+													title: 'Company Member',
 													description:
 														'Co-owner of a business, who oversees and runs the that business.',
 													const: 'member'
@@ -4596,21 +4628,10 @@ export const resolvedCorporateSchema = {
 											type: 'object',
 											properties: {
 												position: {
-													title: 'Authorized Signatory',
+													title: 'Authorised Signatory',
 													description:
 														'Director or person who has been authorized to sign documents.',
 													const: 'authorizedSignatory'
-												}
-											}
-										},
-										{
-											type: 'object',
-											properties: {
-												position: {
-													title: 'Other',
-													description:
-														'Designated nonmembers or outsiders.',
-													const: 'other'
 												}
 											}
 										}
@@ -4794,7 +4815,7 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
-									title: 'Authorized Signatory',
+									title: 'Authorised Signatory',
 									description:
 										'Director or person who has been authorized to sign documents.',
 									const: 'authorizedSignatory'
@@ -4806,7 +4827,7 @@ export const resolvedCorporateSchema = {
 							properties: {
 								position: {
 									title: 'Other',
-									description: 'Designated nonmembers or outsiders.',
+									description: 'Other type of  company members.',
 									const: 'other'
 								}
 							}
@@ -4831,9 +4852,8 @@ export const resolvedCorporateSchema = {
 							properties: {
 								position: {
 									title: 'Member',
-									description:
-										'Co-owner of a business, who oversees and runs the that business.',
-									const: 'member'
+									description: 'Owner of a limited liability company.',
+									const: 'member-llc'
 								},
 								equity: {
 									title: 'Membership Interest',
@@ -4870,7 +4890,7 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
-									title: 'Authorized Signatory',
+									title: 'Authorised Signatory',
 									description:
 										'Director or person who has been authorized to sign documents.',
 									const: 'authorizedSignatory'
@@ -4883,7 +4903,7 @@ export const resolvedCorporateSchema = {
 								position: {
 									title: 'Other',
 									description: 'Designated nonmembers or outsiders.',
-									const: 'other'
+									const: 'other-llc'
 								}
 							}
 						}
@@ -4906,8 +4926,9 @@ export const resolvedCorporateSchema = {
 							properties: {
 								position: {
 									title: 'Beneficiary',
-									description: 'Person or entity that establishes the trust.',
-									const: 'beneficiary'
+									description:
+										'Individual or group of individuals for whom a trust is created.',
+									const: 'beneficiary-tst'
 								}
 							}
 						},
@@ -4959,7 +4980,7 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
-									title: 'Authorized Signatory',
+									title: 'Authorised Signatory',
 									description:
 										'Director or person who has been authorized to sign documents.',
 									const: 'authorizedSignatory'
@@ -4971,7 +4992,7 @@ export const resolvedCorporateSchema = {
 							properties: {
 								position: {
 									title: 'Other',
-									description: 'Designated nonmembers or outsiders.',
+									description: 'Other type of  company members.',
 									const: 'other'
 								}
 							}
@@ -5018,8 +5039,9 @@ export const resolvedCorporateSchema = {
 							properties: {
 								position: {
 									title: 'Beneficiary',
-									description: 'Person or entity that establishes the trust.',
-									const: 'beneficiary'
+									description:
+										'The person who gains an advantage and/or profits from the foundation.',
+									const: 'beneficiary-fnd'
 								}
 							}
 						},
@@ -5049,7 +5071,7 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
-									title: 'Authorized Signatory',
+									title: 'Authorised Signatory',
 									description:
 										'Director or person who has been authorized to sign documents.',
 									const: 'authorizedSignatory'
@@ -5061,7 +5083,7 @@ export const resolvedCorporateSchema = {
 							properties: {
 								position: {
 									title: 'Other',
-									description: 'Designated nonmembers or outsiders.',
+									description: 'Other type of  company members.',
 									const: 'other'
 								}
 							}
@@ -5130,7 +5152,7 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
-									title: 'Authorized Signatory',
+									title: 'Authorised Signatory',
 									description:
 										'Director or person who has been authorized to sign documents.',
 									const: 'authorizedSignatory'
@@ -5142,7 +5164,7 @@ export const resolvedCorporateSchema = {
 							properties: {
 								position: {
 									title: 'Other',
-									description: 'Designated nonmembers or outsiders.',
+									description: 'Other type of  company members.',
 									const: 'other'
 								}
 							}
@@ -5155,7 +5177,7 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
-									title: 'Member',
+									title: 'Company Member',
 									description:
 										'Co-owner of a business, who oversees and runs the that business.',
 									const: 'member'
@@ -5195,20 +5217,10 @@ export const resolvedCorporateSchema = {
 							type: 'object',
 							properties: {
 								position: {
-									title: 'Authorized Signatory',
+									title: 'Authorised Signatory',
 									description:
 										'Director or person who has been authorized to sign documents.',
 									const: 'authorizedSignatory'
-								}
-							}
-						},
-						{
-							type: 'object',
-							properties: {
-								position: {
-									title: 'Other',
-									description: 'Designated nonmembers or outsiders.',
-									const: 'other'
 								}
 							}
 						}
@@ -5250,7 +5262,7 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					properties: {
 						position: {
-							title: 'Authorized Signatory',
+							title: 'Authorised Signatory',
 							description:
 								'Director or person who has been authorized to sign documents.',
 							const: 'authorizedSignatory'
@@ -5275,11 +5287,28 @@ export const resolvedCorporateSchema = {
 						}
 					}
 				},
-				member: {
+				member_llc: {
 					type: 'object',
 					properties: {
 						position: {
 							title: 'Member',
+							description: 'Owner of a limited liability company.',
+							const: 'member-llc'
+						},
+						equity: {
+							title: 'Membership Interest',
+							type: 'number',
+							default: 0,
+							minimum: 0,
+							maximum: 100
+						}
+					}
+				},
+				member: {
+					type: 'object',
+					properties: {
+						position: {
+							title: 'Company Member',
 							description:
 								'Co-owner of a business, who oversees and runs the that business.',
 							const: 'member'
@@ -5314,13 +5343,25 @@ export const resolvedCorporateSchema = {
 						}
 					}
 				},
-				beneficiary: {
+				beneficiary_tst: {
 					type: 'object',
 					properties: {
 						position: {
 							title: 'Beneficiary',
-							description: 'Person or entity that establishes the trust.',
-							const: 'beneficiary'
+							description:
+								'Individual or group of individuals for whom a trust is created.',
+							const: 'beneficiary-tst'
+						}
+					}
+				},
+				beneficiary_fnd: {
+					type: 'object',
+					properties: {
+						position: {
+							title: 'Beneficiary',
+							description:
+								'The person who gains an advantage and/or profits from the foundation.',
+							const: 'beneficiary-fnd'
 						}
 					}
 				},
@@ -5405,8 +5446,18 @@ export const resolvedCorporateSchema = {
 					properties: {
 						position: {
 							title: 'Other',
-							description: 'Designated nonmembers or outsiders.',
+							description: 'Other type of  company members.',
 							const: 'other'
+						}
+					}
+				},
+				other_llc: {
+					type: 'object',
+					properties: {
+						position: {
+							title: 'Other',
+							description: 'Designated nonmembers or outsiders.',
+							const: 'other-llc'
 						}
 					}
 				}
