@@ -300,7 +300,12 @@ const CorporateMembers = withStyles(styles)(props => {
 														<CorporateInformation
 															attributes={(
 																member.basicAttributes || []
-															).concat(member.attributes)}
+															).concat(
+																member.nonBasicAttributes || []
+															)}
+															attributeOptions={
+																member.attributeOptions
+															}
 															onAddAttribute={onAddAttribute}
 															onEditAttribute={onEditAttribute}
 															onDeleteAttribute={onDeleteAttribute}
@@ -309,6 +314,9 @@ const CorporateMembers = withStyles(styles)(props => {
 													<Grid item>
 														<CorporateDocuments
 															documents={member.documents}
+															attributeOptions={
+																member.attributeOptions
+															}
 															onAddDocument={onAddDocument}
 															onEditDocument={onEditDocument}
 															onDeleteDocument={onDeleteDocument}

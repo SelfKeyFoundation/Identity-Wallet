@@ -26,6 +26,8 @@ import {
 	FileLinkWithModal
 } from 'selfkey-ui';
 
+import { canEdit, canDelete } from './common-helpers.jsx';
+
 const styles = theme => ({
 	hr: {
 		backgroundColor: '#303C49',
@@ -139,7 +141,14 @@ const DocumentExpiryDate = ({ doc }) => {
 };
 
 const CorporateDocuments = withStyles(styles)(props => {
-	const { classes, documents = [], onEditDocument, onDeleteDocument, onAddDocument } = props;
+	const {
+		classes,
+		documents = [],
+		attributeOptions = {},
+		onEditDocument,
+		onDeleteDocument,
+		onAddDocument
+	} = props;
 	return (
 		<Card className={classes.card}>
 			<CardHeader title="Documents" className={classes.regularText} />
@@ -185,18 +194,22 @@ const CorporateDocuments = withStyles(styles)(props => {
 									</Typography>
 								</TableCell>
 								<TableCell align="right">
-									<IconButton
-										id="editButton"
-										onClick={() => onEditDocument(entry)}
-									>
-										<EditTransparentIcon />
-									</IconButton>
-									<IconButton
-										id="deleteButton"
-										onClick={() => onDeleteDocument(entry)}
-									>
-										<DeleteIcon />
-									</IconButton>
+									{canEdit(entry.type, attributeOptions) && (
+										<IconButton
+											id="editButton"
+											onClick={() => onEditDocument(entry)}
+										>
+											<EditTransparentIcon />
+										</IconButton>
+									)}
+									{canDelete(entry.type, attributeOptions) && (
+										<IconButton
+											id="deleteButton"
+											onClick={() => onDeleteDocument(entry)}
+										>
+											<DeleteIcon />
+										</IconButton>
+									)}
 								</TableCell>
 							</TableRow>
 						))}
