@@ -2,8 +2,8 @@ import React from 'react';
 import { Chart } from 'react-google-charts';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { GearIcon, NumberFormat, PriceSummary } from 'selfkey-ui';
-import { Grid, Paper, Typography, IconButton, Divider } from '@material-ui/core';
+import { NumberFormat, PriceSummary } from 'selfkey-ui';
+import { Grid, Paper, Typography, Button } from '@material-ui/core';
 import { getLocale } from 'common/locale/selectors';
 import { getViewAll } from 'common/view-all-tokens/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
@@ -19,14 +19,12 @@ const styles = () => ({
 		boxSizing: 'border-box',
 		padding: '16px 30px'
 	},
-
 	coloredBox: {
 		width: '44px !important',
 		height: '44px !important',
 		borderRadius: '8px !important',
 		position: 'relative'
 	},
-
 	coloredBoxText: {
 		position: 'absolute',
 		textAlign: 'center',
@@ -35,7 +33,6 @@ const styles = () => ({
 		left: '50%',
 		transform: 'translate(-50%, -50%)'
 	},
-
 	prices: {
 		margin: 0,
 		width: '100%',
@@ -44,11 +41,9 @@ const styles = () => ({
 			paddingRight: '0 !important'
 		}
 	},
-
 	texts: {
 		fontSize: '18px'
 	},
-
 	active: {
 		backgroundColor: '#313D49',
 		borderRadius: '4px',
@@ -56,7 +51,6 @@ const styles = () => ({
 		border: 'none',
 		padding: '10px'
 	},
-
 	chartCenterContainer: {
 		position: 'absolute',
 		textAlign: 'center',
@@ -65,11 +59,9 @@ const styles = () => ({
 		left: '50%',
 		transform: 'translate(-50%, -50%)'
 	},
-
 	chart: {
 		position: 'relative'
 	},
-
 	buttonViewMore: {
 		outline: 'none',
 		fontSize: '12px',
@@ -77,34 +69,27 @@ const styles = () => ({
 		cursor: 'pointer',
 		textTransform: 'uppercase'
 	},
-
 	buttonViewMoreText: {
 		borderBottom: '1px dashed #93b0c1'
 	},
-
 	expandMore: {
 		verticalAlign: 'middle !important'
 	},
-
 	textRight: {
 		textAlign: 'right'
 	},
-
 	smallText: {
 		marginTop: '0 !important',
 		'& >div': {
 			fontSize: '14px'
 		}
 	},
-
 	textColor: {
 		color: 'rgba(255, 255, 255, 0.7)'
 	},
-
 	title: {
 		fontSize: '20px'
 	},
-
 	chartWrap: {
 		'& div.google-visualization-tooltip': {
 			backgroundColor: '#1F2830',
@@ -121,6 +106,9 @@ const styles = () => ({
 				color: '#FFFFFF !important'
 			}
 		}
+	},
+	button: {
+		margin: '0 10px'
 	}
 });
 
@@ -395,27 +383,15 @@ export class CryptoChartBoxComponent extends React.Component {
 		const { classes, locale, fiatCurrency, tokens, manageCryptoAction } = this.props;
 
 		return (
-			<Paper className={classes.paper}>
+			<Paper className={classes.paper} style={{ width: '66%' }}>
 				<Grid container alignItems="center" spacing={16}>
 					<Grid item xs={12}>
-						<Grid container justify="space-between" alignItems="center">
-							<Grid item xs={11}>
-								<Typography variant="h1" className={classes.title}>
-									My Crypto
-								</Typography>
-							</Grid>
-							<Grid item xs={1} className={classes.textRight}>
-								<IconButton onClick={manageCryptoAction}>
-									<GearIcon />
-								</IconButton>
-							</Grid>
-						</Grid>
+						<Typography variant="h1" className={classes.title}>
+							My Tokens
+						</Typography>
 					</Grid>
 					<Grid item xs={12}>
-						<Divider />
-					</Grid>
-					<Grid item xs={12}>
-						<Grid container alignItems="flex-start" spacing={0}>
+						<Grid container justify="center" spacing={0}>
 							<Grid item xs={4} className={classes.chart}>
 								<ChartContainer
 									events={this.getChartEvents()}
@@ -432,15 +408,31 @@ export class CryptoChartBoxComponent extends React.Component {
 											value={this.getTotalBalanceInFiat(tokens)}
 										/>
 									</Typography>
-									<Typography variant="h3">Total Value {fiatCurrency}</Typography>
+									<Typography variant="subtitle2" color="secondary">
+										Total Value {fiatCurrency}
+									</Typography>
 								</div>
 							</Grid>
-							<Grid item xs={8}>
-								<Grid container spacing={16} justify="space-between">
-									{this.getTokensLegend(classes, tokens, locale, fiatCurrency)}
-								</Grid>
-							</Grid>
 						</Grid>
+					</Grid>
+					<Grid container justify="center" style={{ marginBottom: '40px' }}>
+						<Button className={classes.button} variant="outlined" color="secondary">
+							+ Add Token
+						</Button>
+						<Button
+							className={classes.button}
+							variant="outlined"
+							color="secondary"
+							onClick={manageCryptoAction}
+						>
+							Manage Tokens
+						</Button>
+						<Button className={classes.button} variant="outlined" color="secondary">
+							Send/Receive
+						</Button>
+					</Grid>
+					<Grid container spacing={16} justify="space-between">
+						{this.getTokensLegend(classes, tokens, locale, fiatCurrency)}
 					</Grid>
 					{this.getViewAllSection()}
 				</Grid>
