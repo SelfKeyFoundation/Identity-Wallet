@@ -75,7 +75,7 @@ class CorporateDashboardContainer extends PureComponent {
 						open={true}
 						onClose={this.handlePopupClose}
 						isDocument={this.state.isDocument}
-						attributeOptions={this.props.attributeOptions}
+						attributeOptions={this.props.profile.attributeOptions}
 					/>
 				)}
 				{popup === 'edit-attribute' && (

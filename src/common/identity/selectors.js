@@ -616,19 +616,19 @@ export const selectCorporateProfile = createSelector(
 		documents: documentAttributes,
 		attributeOptions: {
 			[JURISDICTION_ATTRIBUTE]: {
-				unique: true,
+				forbidCreate: true,
 				forbidDelete: true
 			},
 			[CREATION_DATE_ATTRIBUTE]: {
-				unique: true,
+				forbidCreate: true,
 				forbidDelete: true
 			},
 			[ENTITY_NAME_ATTRIBUTE]: {
-				unique: true,
+				forbidCreate: true,
 				forbidDelete: true
 			},
 			[ENTITY_TYPE_ATTRIBUTE]: {
-				unique: true,
+				forbidCreate: true,
 				forbidDelete: true,
 				forbidEdit: true
 			}

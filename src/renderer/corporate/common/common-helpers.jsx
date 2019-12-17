@@ -59,21 +59,21 @@ const getProfileIdAttribute = (profile, idAttribute) => {
 	}
 };
 
-const canEdit = (attr, attributeOptions = {}) => {
-	const type = attr.type.url;
-	const options = attributeOptions[type] || {};
+const canEdit = (type, attributeOptions = {}) => {
+	const url = type.url;
+	const options = attributeOptions[url] || {};
 	return !options.forbidEdit;
 };
 
-const canDelete = (attr, attributeOptions = {}) => {
-	const type = attr.type.url;
-	const options = attributeOptions[type] || {};
+const canDelete = (type, attributeOptions = {}) => {
+	const url = type.url;
+	const options = attributeOptions[url] || {};
 	return !options.forbidDelete;
 };
 
-const canCreate = (attr, attributeOptions = {}) => {
-	const type = attr.type.url;
-	const options = attributeOptions[type] || {};
+const canCreate = (type, attributeOptions = {}) => {
+	const url = type.url;
+	const options = attributeOptions[url] || {};
 	return !options.forbidCreate;
 };
 

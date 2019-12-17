@@ -6,6 +6,7 @@ import Form from 'react-jsonschema-form-material-theme';
 import transformErrors from './transform-errors';
 import { Popup } from '../common/popup';
 import { KeyboardArrowDown } from '@material-ui/icons';
+import { canCreate } from '../corporate/common/common-helpers';
 
 const styles = theme => ({
 	section1: { marginBottom: '10px' },
@@ -136,17 +137,19 @@ class CreateAttributeComponent extends PureComponent {
 		);
 	}
 
-	getTypes = _.memoize((isDocument, types) =>
+	getTypes = _.memoize((isDocument, types, attributeOptions) =>
 		(isDocument
 			? types.filter(type => jsonSchema.containsFile(type.content))
 			: types.filter(type => !jsonSchema.containsFile(type.content))
-		).sort((a, b) =>
-			a.content.title > b.content.title ? 1 : a.content.title === b.content.title ? 0 : -1
 		)
+			.filter(type => canCreate(type, attributeOptions))
+			.sort((a, b) =>
+				a.content.title > b.content.title ? 1 : a.content.title === b.content.title ? 0 : -1
+			)
 	);
 
 	get types() {
-		return this.getTypes(this.props.isDocument, this.props.types);
+		return this.getTypes(this.props.isDocument, this.props.types, this.props.attributeOptions);
 	}
 	render() {
 		const { classes, subtitle, open, text } = this.props;

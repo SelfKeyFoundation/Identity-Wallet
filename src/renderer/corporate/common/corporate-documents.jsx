@@ -194,7 +194,7 @@ const CorporateDocuments = withStyles(styles)(props => {
 									</Typography>
 								</TableCell>
 								<TableCell align="right">
-									{canEdit(entry, attributeOptions) && (
+									{canEdit(entry.type, attributeOptions) && (
 										<IconButton
 											id="editButton"
 											onClick={() => onEditDocument(entry)}
@@ -202,7 +202,7 @@ const CorporateDocuments = withStyles(styles)(props => {
 											<EditTransparentIcon />
 										</IconButton>
 									)}
-									{canDelete(entry, attributeOptions) && (
+									{canDelete(entry.type, attributeOptions) && (
 										<IconButton
 											id="deleteButton"
 											onClick={() => onDeleteDocument(entry)}
