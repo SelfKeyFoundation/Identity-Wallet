@@ -2,14 +2,16 @@ import { inventorySelectors } from '../inventory';
 import config from 'common/config';
 
 const selectPrice = item => {
-	const { data: program } = item;
+	const { data } = item;
 	// Check for override ENV variables
 	if (config.incorporationsPriceOverride) return config.incorporationsPriceOverride;
-	if (!program.walletPrice && !program.testPrice) return null;
+	if (!data.walletPrice && !data.testPrice) {
+		return item.price;
+	}
 
-	let price = `${program.walletPrice}`;
-	if (config.dev || program.activeTestPrice) {
-		price = `${program.testPrice}`;
+	let price = `${data.walletPrice}`;
+	if (config.dev || data.activeTestPrice) {
+		price = `${data.testPrice}`;
 	}
 
 	return parseFloat(price.replace(/\$/, '').replace(/,/, ''));
@@ -44,11 +46,11 @@ const selectVendorDidAddress = item => {
 };
 
 const parseOptions = item => {
-	const { data: program } = item;
-	if (!program.walletOptions) {
+	const { data } = item;
+	if (!data.walletOptions && !data.priceOptions) {
 		return [];
 	}
-	const options = program.walletOptions;
+	const options = data.walletOptions ? data.walletOptions : data.priceOptions;
 
 	const strArray = options.split('-');
 

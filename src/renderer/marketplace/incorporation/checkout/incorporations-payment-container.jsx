@@ -11,7 +11,6 @@ import { ordersOperations } from 'common/marketplace/orders';
 import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorporations-component';
 
 const styles = theme => ({});
-const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class IncorporationsPaymentContainer extends MarketplaceIncorporationsComponent {
 	async componentDidMount() {
@@ -24,13 +23,13 @@ class IncorporationsPaymentContainer extends MarketplaceIncorporationsComponent 
 	};
 
 	async createOrder() {
-		const { program, companyCode, vendorId } = this.props;
+		const { program, companyCode, vendorId, vendor } = this.props;
 		const application = this.getLastApplication();
 		const price = this.priceInKEY(program.price);
 		const walletAddress = program.walletAddress;
 		const vendorDID = program.didAddress;
 		// TODO: get vendor name from RP store
-		const vendorName = VENDOR_NAME;
+		const vendorName = vendor.name;
 
 		this.props.dispatch(
 			ordersOperations.startOrderOperation({
@@ -62,6 +61,7 @@ const mapStateToProps = (state, props) => {
 		companyCode,
 		templateId,
 		vendorId,
+		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
 		program: marketplaceSelectors.selectIncorporationByFilter(
 			state,
 			c => c.data.companyCode === companyCode

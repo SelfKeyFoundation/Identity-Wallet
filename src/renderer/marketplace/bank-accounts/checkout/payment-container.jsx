@@ -12,7 +12,6 @@ import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-acc
 import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
-const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 	async componentDidMount() {
@@ -25,13 +24,12 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	async createOrder() {
-		const { jurisdiction, accountCode, vendorId } = this.props;
+		const { jurisdiction, accountCode, vendorId, vendor } = this.props;
 		const application = this.getLastApplication();
 		const price = this.priceInKEY(jurisdiction.price);
 		const walletAddress = jurisdiction.walletAddress;
 		const vendorDID = jurisdiction.didAddress;
-		// TODO: get vendor name from RP store
-		const vendorName = VENDOR_NAME;
+		const vendorName = vendor.name;
 
 		this.props.dispatch(
 			ordersOperations.startOrderOperation({
@@ -64,6 +62,7 @@ const mapStateToProps = (state, props) => {
 		accountCode,
 		templateId,
 		vendorId,
+		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
 		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(
 			state,
 			accountCode,

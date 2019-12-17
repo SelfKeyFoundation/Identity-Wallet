@@ -7,13 +7,12 @@ import { getWallet } from 'common/wallet/selectors';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { incorporationsSelectors } from 'common/incorporations';
 import { transactionSelectors } from 'common/transaction';
+import { marketplaceSelectors } from 'common/marketplace';
 import { ordersSelectors } from 'common/marketplace/orders';
 import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorporations-component';
 import { MarketplaceProcessStarted } from '../../common/marketplace-process-started';
 
 const styles = theme => ({});
-
-const VENDOR_EMAIL = `support@flagtheory.com`;
 
 class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsComponent {
 	async componentWillMount() {
@@ -77,7 +76,7 @@ class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsCo
 	onContinueClick = () => this.props.dispatch(push(this.getNextRoute()));
 
 	render() {
-		// TODO: get vendor email from the RP
+		const { vendor } = this.props;
 		const body = (
 			<React.Fragment>
 				<Typography variant="h1" gutterBottom>
@@ -93,7 +92,7 @@ class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsCo
 					us at:
 				</Typography>
 				<Typography variant="body2" color="primary" gutterBottom className="email">
-					{VENDOR_EMAIL}
+					{vendor.contactEmail}
 				</Typography>
 			</React.Fragment>
 		);
@@ -115,6 +114,7 @@ const mapStateToProps = (state, props) => {
 	return {
 		companyCode,
 		vendorId,
+		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
 		program: incorporationsSelectors.getIncorporationsDetails(state, companyCode),
 		transaction: transactionSelectors.getTransaction(state),
 		address: getWallet(state).address,
