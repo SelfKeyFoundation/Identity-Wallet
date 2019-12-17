@@ -11,7 +11,16 @@ class CreateAttributeContainerComponent extends PureComponent {
 		if (this.props.onClose) return this.props.onClose();
 	};
 	render() {
-		let { types, open = true, text, subtitle, uiSchemas, typeId, isDocument } = this.props;
+		let {
+			types,
+			open = true,
+			text,
+			subtitle,
+			uiSchemas,
+			typeId,
+			isDocument,
+			attributeOptions = {}
+		} = this.props;
 
 		if (!text) {
 			if (isDocument) {
@@ -37,6 +46,7 @@ class CreateAttributeContainerComponent extends PureComponent {
 				onSave={this.handleSave}
 				onCancel={this.handleCancel}
 				types={types}
+				attributeOptions={attributeOptions}
 				uiSchemas={uiSchemas}
 				isDocument={isDocument}
 				typeId={typeId}

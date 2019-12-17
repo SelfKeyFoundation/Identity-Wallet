@@ -154,9 +154,9 @@ identityAttributes.normalizeDocumentsSchema = (
 
 identityAttributes.validate = (schema, attribute, documents, validateSchema = true) => {
 	try {
-		schema = jsonSchema.removeMeta(schema);
+		const cleanSchema = jsonSchema.removeMeta(schema);
 		const denormalized = identityAttributes.denormalizeDocumentsSchema(
-			schema,
+			cleanSchema,
 			attribute,
 			documents
 		);
@@ -285,11 +285,12 @@ jsonSchema.loadRemoteRepository = async (url, options, attempt = 1) => {
 jsonSchema.validate = (schema, value, validateSchema = true) => {
 	const ajv = new Ajv({ validateSchema: true, allErrors: true });
 	ajv.addFormat('file', () => {});
+	const schemaId = schema.id || schema.$id;
 	schema = jsonSchema.removeMeta(schema);
 	if (validateSchema && !ajv.validateSchema(schema)) return false;
 	const ret = ajv.validate(schema, value);
 	if (!ret) {
-		log.error('validation error %2j', ajv.errors);
+		log.error('validation error %s %2j %2j', schemaId, value, ajv.errors);
 	}
 	return ret;
 };

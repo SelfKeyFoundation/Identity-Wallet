@@ -91,6 +91,7 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 		did,
 		entityName,
 		creationDate,
+		isEditing = false,
 		onFieldChange = () => {},
 		showDid = true
 	} = props;
@@ -155,6 +156,7 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 						disableUnderline
 						IconComponent={KeyboardArrowDown}
 						input={<Input disableUnderline />}
+						disabled={isEditing}
 					>
 						<MenuItem value="">
 							<em>Choose...</em>
