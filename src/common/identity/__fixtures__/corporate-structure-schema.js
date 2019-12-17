@@ -85,7 +85,7 @@ const member = {
 	position: 'member',
 	equity: 'Membership Interest',
 	title: 'Company Member',
-	description: 'Co-owner of a business, who oversees and runs the that business.'
+	description: 'Co-owner of a business, who oversees and runs the business.'
 };
 const memberLlc = {
 	position: 'member-llc',
@@ -133,7 +133,7 @@ const generalPartner = {
 	position: 'general-partner',
 	equity: 'Percentage',
 	title: 'General Partner',
-	description: 'Co-owner of a business, who oversees and runs the that business.'
+	description: 'Co-owner of a business, who oversees and runs the business.'
 };
 const limitedPartner = {
 	position: 'limited-partner',
@@ -648,7 +648,7 @@ export const resolvedCorporateSchema = {
 						position: {
 							title: 'Company Member',
 							description:
-								'Co-owner of a business, who oversees and runs the that business.',
+								'Co-owner of a business, who oversees and runs the business.',
 							const: 'member'
 						},
 						equity: {
@@ -748,7 +748,7 @@ export const resolvedCorporateSchema = {
 						position: {
 							title: 'General Partner',
 							description:
-								'Co-owner of a business, who oversees and runs the that business.',
+								'Co-owner of a business, who oversees and runs the business.',
 							const: 'general-partner'
 						},
 						equity: {
@@ -1799,7 +1799,7 @@ export const resolvedCorporateSchema = {
 															position: {
 																title: 'General Partner',
 																description:
-																	'Co-owner of a business, who oversees and runs the that business.',
+																	'Co-owner of a business, who oversees and runs the business.',
 																const: 'general-partner'
 															},
 															equity: {
@@ -2022,7 +2022,7 @@ export const resolvedCorporateSchema = {
 															position: {
 																title: 'Company Member',
 																description:
-																	'Co-owner of a business, who oversees and runs the that business.',
+																	'Co-owner of a business, who oversees and runs the business.',
 																const: 'member'
 															},
 															equity: {
@@ -3130,7 +3130,7 @@ export const resolvedCorporateSchema = {
 													position: {
 														title: 'General Partner',
 														description:
-															'Co-owner of a business, who oversees and runs the that business.',
+															'Co-owner of a business, who oversees and runs the business.',
 														const: 'general-partner'
 													},
 													equity: {
@@ -3353,7 +3353,7 @@ export const resolvedCorporateSchema = {
 													position: {
 														title: 'Company Member',
 														description:
-															'Co-owner of a business, who oversees and runs the that business.',
+															'Co-owner of a business, who oversees and runs the business.',
 														const: 'member'
 													},
 													equity: {
@@ -4383,7 +4383,7 @@ export const resolvedCorporateSchema = {
 												position: {
 													title: 'General Partner',
 													description:
-														'Co-owner of a business, who oversees and runs the that business.',
+														'Co-owner of a business, who oversees and runs the business.',
 													const: 'general-partner'
 												},
 												equity: {
@@ -4590,7 +4590,7 @@ export const resolvedCorporateSchema = {
 												position: {
 													title: 'Company Member',
 													description:
-														'Co-owner of a business, who oversees and runs the that business.',
+														'Co-owner of a business, who oversees and runs the business.',
 													const: 'member'
 												},
 												equity: {
@@ -5098,7 +5098,7 @@ export const resolvedCorporateSchema = {
 								position: {
 									title: 'General Partner',
 									description:
-										'Co-owner of a business, who oversees and runs the that business.',
+										'Co-owner of a business, who oversees and runs the business.',
 									const: 'general-partner'
 								},
 								equity: {
@@ -5179,7 +5179,7 @@ export const resolvedCorporateSchema = {
 								position: {
 									title: 'Company Member',
 									description:
-										'Co-owner of a business, who oversees and runs the that business.',
+										'Co-owner of a business, who oversees and runs the business.',
 									const: 'member'
 								},
 								equity: {
@@ -5310,7 +5310,7 @@ export const resolvedCorporateSchema = {
 						position: {
 							title: 'Company Member',
 							description:
-								'Co-owner of a business, who oversees and runs the that business.',
+								'Co-owner of a business, who oversees and runs the business.',
 							const: 'member'
 						},
 						equity: {
@@ -5413,7 +5413,7 @@ export const resolvedCorporateSchema = {
 						position: {
 							title: 'General Partner',
 							description:
-								'Co-owner of a business, who oversees and runs the that business.',
+								'Co-owner of a business, who oversees and runs the business.',
 							const: 'general-partner'
 						},
 						equity: {

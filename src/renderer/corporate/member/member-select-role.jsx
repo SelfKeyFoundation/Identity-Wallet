@@ -86,7 +86,7 @@ const RoleIcon = ({ role }) => {
 		case 'manager':
 		case 'grantor':
 		case 'founder':
-		case 'generalPartner':
+		case 'general-partner':
 			return <DirectorIcon />;
 		case 'member':
 			return <MemberIcon />;
