@@ -9,6 +9,7 @@ const CorporateInformationTab = withStyles(styles)(
 	({
 		classes,
 		attributes,
+		attributeOptions,
 		onAddAttribute,
 		onEditAttribute,
 		onDeleteAttribute,
@@ -21,6 +22,7 @@ const CorporateInformationTab = withStyles(styles)(
 			<Grid item>
 				<CorporateInformation
 					attributes={attributes}
+					attributeOptions={attributeOptions}
 					onAddAttribute={onAddAttribute}
 					onEditAttribute={onEditAttribute}
 					onDeleteAttribute={onDeleteAttribute}
@@ -29,6 +31,7 @@ const CorporateInformationTab = withStyles(styles)(
 			<Grid item>
 				<CorporateDocuments
 					documents={documents}
+					attributeOptions={attributeOptions}
 					onAddDocument={onAddDocument}
 					onEditDocument={onEditDocument}
 					onDeleteDocument={onDeleteDocument}

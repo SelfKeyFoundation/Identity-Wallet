@@ -22,6 +22,8 @@ import {
 	DeleteIcon
 } from 'selfkey-ui';
 
+import { canEdit, canDelete } from './common-helpers.jsx';
+
 const styles = theme => ({
 	hr: {
 		backgroundColor: '#303C49',
@@ -109,7 +111,14 @@ const renderAttributeValue = ({ data, type }) => {
 const renderAttributeTitle = attr => attr.type.content.title || 'No title provided';
 
 const CorporateInformation = withStyles(styles)(props => {
-	const { classes, attributes = [], onEditAttribute, onDeleteAttribute, onAddAttribute } = props;
+	const {
+		classes,
+		attributes = [],
+		attributeOptions = {},
+		onEditAttribute,
+		onDeleteAttribute,
+		onAddAttribute
+	} = props;
 	return (
 		<Card>
 			<CardHeader title="Information" className={classes.regularText} />
@@ -167,18 +176,22 @@ const CorporateInformation = withStyles(styles)(props => {
 												</Typography>
 											</SmallTableCell>
 											<SmallTableCell align="right">
-												<IconButton
-													id="editButton"
-													onClick={() => onEditAttribute(attr)}
-												>
-													<EditTransparentIcon />
-												</IconButton>
-												<IconButton
-													id="deleteButton"
-													onClick={() => onDeleteAttribute(attr)}
-												>
-													<DeleteIcon />
-												</IconButton>
+												{canEdit(attr, attributeOptions) && (
+													<IconButton
+														id="editButton"
+														onClick={() => onEditAttribute(attr)}
+													>
+														<EditTransparentIcon />
+													</IconButton>
+												)}
+												{canDelete(attr, attributeOptions) && (
+													<IconButton
+														id="deleteButton"
+														onClick={() => onDeleteAttribute(attr)}
+													>
+														<DeleteIcon />
+													</IconButton>
+												)}
 											</SmallTableCell>
 										</SmallTableRow>
 									))}

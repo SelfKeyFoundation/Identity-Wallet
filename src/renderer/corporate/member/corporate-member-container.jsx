@@ -215,7 +215,6 @@ class CorporateMemberContainerComponent extends PureComponent {
 		evt && evt.preventDefault();
 
 		const errors = this.validateAllAttributes();
-
 		if (errors.hasErrors) {
 			return this.setErrors(errors);
 		}

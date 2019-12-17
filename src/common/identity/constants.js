@@ -69,7 +69,7 @@ export const individualMemberAttributes = [
 	{ key: 'nationality', type: NATIONALITY_ATTRIBUTE, name: 'Citizenship', required: true },
 	{ key: 'country', type: RESIDENCY_ATTRIBUTE, name: 'Residency', required: true },
 	{ key: 'email', type: EMAIL_ATTRIBUTE, name: 'Email', required: true },
-	{ key: 'phone', type: PHONE_ATTRIBUTE, name: 'Phone' }
+	{ key: 'phoneNumber', type: PHONE_ATTRIBUTE, name: 'Phone' }
 ];
 
 export const corporateMemberAttributes = [

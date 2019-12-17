@@ -75,6 +75,7 @@ class CorporateDashboardContainer extends PureComponent {
 						open={true}
 						onClose={this.handlePopupClose}
 						isDocument={this.state.isDocument}
+						attributeOptions={this.props.attributeOptions}
 					/>
 				)}
 				{popup === 'edit-attribute' && (
@@ -95,6 +96,7 @@ class CorporateDashboardContainer extends PureComponent {
 				<CorporateDashboardPage
 					{...this.props}
 					attributes={this.props.profile.attributes}
+					attributeOptions={this.props.profile.attributeOptions}
 					documents={this.props.profile.documents}
 					onAddAttribute={this.handleAddAttribute}
 					onEditAttribute={this.handleEditAttribute}
