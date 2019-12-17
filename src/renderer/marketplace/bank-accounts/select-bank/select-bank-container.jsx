@@ -50,6 +50,7 @@ class BankAccountsSelectBankContainer extends MarketplaceBankAccountsComponent {
 
 	render() {
 		const { jurisdiction, countryCode } = this.props;
+		const application = this.getLastApplication();
 		return (
 			<OptionSelection
 				jurisdiction={jurisdiction}
@@ -61,10 +62,11 @@ class BankAccountsSelectBankContainer extends MarketplaceBankAccountsComponent {
 					start the process with your option first, but if you are not eligible for that specific bank we
 					will suggest another bank from those available in the specific jurisdiction.`}
 				banks={jurisdiction.data.accounts}
-				selected={this.getExistingBankPreferenceSelection(this.getLastApplication())}
+				selected={this.getExistingBankPreferenceSelection(application)}
 				countryCode={countryCode}
 				onBackClick={this.onBackClick}
 				onStartClick={this.onStartClick}
+				disabled={!application}
 			/>
 		);
 	}

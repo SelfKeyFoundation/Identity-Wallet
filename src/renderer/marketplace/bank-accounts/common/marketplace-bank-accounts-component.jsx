@@ -67,6 +67,9 @@ export default class MarketplaceBankAccountsComponent extends MarketplaceCompone
 	};
 
 	getExistingBankPreferenceSelection = application => {
+		if (!application) {
+			return '';
+		}
 		const questions = application.questions;
 		const questionId = this.getBankQuestionId(questions);
 		return questions[questionId].value ? questions[questionId].value[0] : '';
