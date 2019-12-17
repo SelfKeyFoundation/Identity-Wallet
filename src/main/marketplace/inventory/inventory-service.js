@@ -64,12 +64,14 @@ export class InventoryFetcher {
 export class SelfkeyInventoryFetcher extends InventoryFetcher {
 	async fetch() {
 		let inventory = await this.fetchInventory();
-		const categories = inventory
+		const itemsCategory = inventory
 			.filter(itm => itm.status === 'active')
 			.map(itm => itm.category);
 
+		const categories = [...new Set(itemsCategory)];
+
 		const data = await Promise.all(
-			[...new Set(categories)].map(async category => {
+			categories.map(async category => {
 				try {
 					const data = await this.fetchData(category);
 					return data;
@@ -82,16 +84,18 @@ export class SelfkeyInventoryFetcher extends InventoryFetcher {
 				}
 			})
 		);
+
 		const dataByCategory = data.reduce((acc, curr, indx) => {
 			acc[categories[indx]] = curr;
 			return acc;
 		}, {});
+
 		return inventory.map(itm => {
 			itm.data = itm.data || {};
 			if (!dataByCategory[itm.category] || !dataByCategory[itm.category][itm.sku]) {
 				return itm;
 			}
-			itm.data = dataByCategory[itm.category][itm.sku];
+			itm.data = { ...itm.data, ...dataByCategory[itm.category][itm.sku] };
 			return itm;
 		});
 	}
@@ -123,10 +127,12 @@ export class SelfkeyInventoryFetcher extends InventoryFetcher {
 		}
 		try {
 			let fetched = await request.get({ url: dataEndpoints[category], json: true });
-
 			return fetched.entities
 				.map(entity => _.mapKeys(entity.data, (value, key) => _.camelCase(key)))
 				.reduce((acc, curr) => {
+					if (!acc[category]) {
+						acc[category] = {};
+					}
 					acc[curr.sku] = curr;
 					return acc;
 				}, {});
