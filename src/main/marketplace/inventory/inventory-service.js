@@ -130,9 +130,6 @@ export class SelfkeyInventoryFetcher extends InventoryFetcher {
 			return fetched.entities
 				.map(entity => _.mapKeys(entity.data, (value, key) => _.camelCase(key)))
 				.reduce((acc, curr) => {
-					if (!acc[category]) {
-						acc[category] = {};
-					}
 					acc[curr.sku] = curr;
 					return acc;
 				}, {});
