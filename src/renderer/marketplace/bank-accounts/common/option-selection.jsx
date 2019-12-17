@@ -58,7 +58,8 @@ class OptionSelectionComponent extends PureComponent {
 			banks,
 			countryCode,
 			onBackClick,
-			showBankName = true
+			showBankName = true,
+			disabled = false
 		} = this.props;
 
 		return (
@@ -123,8 +124,9 @@ class OptionSelectionComponent extends PureComponent {
 										variant="contained"
 										size="large"
 										onClick={this.onStartClick}
+										disabled={disabled}
 									>
-										Continue
+										{disabled ? `Loading, please Wait...` : `Continue`}
 									</Button>
 								</Grid>
 								<Grid item>
