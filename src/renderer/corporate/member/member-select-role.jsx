@@ -1,7 +1,14 @@
 import React, { PureComponent } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { DirectorIcon, ObserverIcon, MemberIcon, SignatureIcon, ProtectionIcon } from 'selfkey-ui';
+import {
+	DirectorIcon,
+	ObserverIcon,
+	MemberIcon,
+	SignatureIcon,
+	ProtectionIcon,
+	ChartIcon
+} from 'selfkey-ui';
 
 const styles = theme => ({
 	title: {
@@ -82,11 +89,12 @@ const styles = theme => ({
 
 const RoleIcon = ({ role }) => {
 	switch (role) {
-		case 'director':
+		case 'director-ltd':
+		case 'director-fnd':
 		case 'manager':
 		case 'grantor':
 		case 'founder':
-		case 'generalPartner':
+		case 'general-partner':
 			return <DirectorIcon />;
 		case 'member':
 			return <MemberIcon />;
@@ -96,6 +104,8 @@ const RoleIcon = ({ role }) => {
 			return <ProtectionIcon />;
 		case 'authorizedSignatory':
 			return <SignatureIcon />;
+		case 'shareholder':
+			return <ChartIcon />;
 		default:
 			return <MemberIcon />;
 	}
