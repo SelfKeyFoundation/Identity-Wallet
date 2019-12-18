@@ -77,11 +77,11 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 	onContinueClick = () => this.props.dispatch(push(this.getNextRoute()));
 
 	render() {
-		// TODO: get vendor email from the RP
+		const { vendor, identity } = this.props;
 		return (
 			<BankAccountsPaymentComplete
-				email={'support@flagtheory.com'}
-				identity={this.props.identity}
+				email={vendor.contactEmail}
+				identity={identity}
 				onBackClick={this.onBackClick}
 				onContinueClick={this.onContinueClick}
 			/>
@@ -98,6 +98,7 @@ const mapStateToProps = (state, props) => {
 		accountCode,
 		templateId,
 		vendorId,
+		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
 		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(
 			state,
 			accountCode,
