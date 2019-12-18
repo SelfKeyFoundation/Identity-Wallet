@@ -148,6 +148,7 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 		} = this.props;
 		const region = program.data.region;
 		const price = program.price;
+
 		return (
 			<IncorporationsDetailsPage
 				applicationStatus={this.getApplicationStatus()}

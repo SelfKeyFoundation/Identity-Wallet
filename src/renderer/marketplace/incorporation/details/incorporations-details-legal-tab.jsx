@@ -223,7 +223,9 @@ const IncorporationsLegalTab = withStyles(styles)(({ classes, program }) => (
 		<IncorporationsDataPanel sections={selectColumns(program)} data={program.data} />
 		<div
 			dangerouslySetInnerHTML={{
-				__html: sanitize(program.data.en.legalParagraph)
+				__html: sanitize(
+					program.data.en ? program.data.en.legalParagraph : program.data.legalDescription
+				)
 			}}
 		/>
 	</div>

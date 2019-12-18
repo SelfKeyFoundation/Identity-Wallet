@@ -6,13 +6,12 @@ import { withStyles } from '@material-ui/core/styles';
 import { getWallet } from 'common/wallet/selectors';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { transactionSelectors } from 'common/transaction';
+import { marketplaceSelectors } from 'common/marketplace';
 import { ordersSelectors } from 'common/marketplace/orders';
 import { MarketplaceNotariesComponent } from '../common/marketplace-notaries-component';
 import { MarketplaceProcessStarted } from '../../common/marketplace-process-started';
 
 const styles = theme => ({});
-
-const VENDOR_EMAIL = `support@flagtheory.com`;
 
 class NotarizationPaymentCompleteContainer extends MarketplaceNotariesComponent {
 	async componentWillMount() {
@@ -75,7 +74,7 @@ class NotarizationPaymentCompleteContainer extends MarketplaceNotariesComponent 
 	onContinueClick = () => this.props.dispatch(push(this.getNextRoute()));
 
 	render() {
-		// TODO: get vendor email from the RP
+		const { vendor } = this.props;
 		const body = (
 			<React.Fragment>
 				<Typography variant="h1" gutterBottom>
@@ -95,7 +94,7 @@ class NotarizationPaymentCompleteContainer extends MarketplaceNotariesComponent 
 					at:
 				</Typography>
 				<Typography variant="body2" color="primary" gutterBottom className="email">
-					{VENDOR_EMAIL}
+					{vendor.contactEmail}
 				</Typography>
 			</React.Fragment>
 		);
@@ -117,6 +116,7 @@ const mapStateToProps = (state, props) => {
 	return {
 		companyCode,
 		vendorId,
+		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
 		transaction: transactionSelectors.getTransaction(state),
 		address: getWallet(state).address,
 		currentApplication: kycSelectors.selectCurrentApplication(state),
