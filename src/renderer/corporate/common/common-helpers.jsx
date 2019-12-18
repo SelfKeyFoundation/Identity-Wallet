@@ -59,6 +59,24 @@ const getProfileIdAttribute = (profile, idAttribute) => {
 	}
 };
 
+const canEdit = (type, attributeOptions = {}) => {
+	const url = type.url;
+	const options = attributeOptions[url] || {};
+	return !options.forbidEdit;
+};
+
+const canDelete = (type, attributeOptions = {}) => {
+	const url = type.url;
+	const options = attributeOptions[url] || {};
+	return !options.forbidDelete;
+};
+
+const canCreate = (type, attributeOptions = {}) => {
+	const url = type.url;
+	const options = attributeOptions[url] || {};
+	return !options.forbidCreate;
+};
+
 export {
 	getProfileIdAttribute,
 	getProfileName,
@@ -68,5 +86,8 @@ export {
 	getProfileEmail,
 	getMemberEquity,
 	getProfileJurisdiction,
-	getProfileResidency
+	getProfileResidency,
+	canEdit,
+	canDelete,
+	canCreate
 };

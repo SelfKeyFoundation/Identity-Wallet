@@ -36,7 +36,6 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 	saveTransactionHash = async () => {
 		const { order, transaction, jurisdiction, vendorId } = this.props;
 		const application = this.getLastApplication();
-
 		const transactionHash = order ? order.paymentHash : transaction.transactionHash;
 		const amountKey = order ? order.amount : transaction.amount;
 

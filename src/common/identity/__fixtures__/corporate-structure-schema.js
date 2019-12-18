@@ -16,7 +16,8 @@ export const companyEquity = {
 };
 
 export const positionEquity = {
-	director: false,
+	'director-ltd': false,
+	'director-fnd': false,
 	shareholder: 'Shares',
 	ubo: false,
 	observer: false,
@@ -43,10 +44,17 @@ export const companyPositionWithEquity = {
 	Other: ['member']
 };
 
-const director = {
+const directorFnd = {
 	title: 'Director',
 	description: 'The person that is chief executive of the organization.',
-	position: 'director'
+	position: 'director-fnd'
+};
+
+const directorLtd = {
+	title: 'Director',
+	description:
+		'Person from a group of managers who leads or supervises a particular area of your company.',
+	position: 'director-ltd'
 };
 
 const shareholder = {
@@ -74,7 +82,7 @@ const authorizedSignatory = {
 const other = {
 	position: 'other',
 	title: 'Other',
-	description: 'Other type of  company members.'
+	description: 'Other type of company members.'
 };
 const otherLlc = {
 	position: 'other-llc',
@@ -85,7 +93,7 @@ const member = {
 	position: 'member',
 	equity: 'Membership Interest',
 	title: 'Company Member',
-	description: 'Co-owner of a business, who oversees and runs the that business.'
+	description: 'Co-owner of a business, who oversees and runs the business.'
 };
 const memberLlc = {
 	position: 'member-llc',
@@ -133,7 +141,7 @@ const generalPartner = {
 	position: 'general-partner',
 	equity: 'Percentage',
 	title: 'General Partner',
-	description: 'Co-owner of a business, who oversees and runs the that business.'
+	description: 'Co-owner of a business, who oversees and runs the business.'
 };
 const limitedPartner = {
 	position: 'limited-partner',
@@ -151,7 +159,7 @@ const supervisor = {
 
 export const companyPositions = {
 	'Company Limited by Shares (LTD)': [
-		director,
+		directorLtd,
 		shareholder,
 		ubo,
 		observer,
@@ -178,7 +186,7 @@ export const companyPositions = {
 	],
 	'Foundation (FND)': [
 		founder,
-		director,
+		directorFnd,
 		supervisor,
 		beneficiaryFnd,
 		ubo,
@@ -435,7 +443,7 @@ export const resolvedCorporateSchema = {
 					type: 'object',
 					oneOf: [
 						{
-							$ref: '#/definitions/positions/director'
+							$ref: '#/definitions/positions/director_ltd'
 						},
 						{
 							$ref: '#/definitions/positions/shareholder'
@@ -510,7 +518,7 @@ export const resolvedCorporateSchema = {
 							$ref: '#/definitions/positions/founder'
 						},
 						{
-							$ref: '#/definitions/positions/director'
+							$ref: '#/definitions/positions/director_fnd'
 						},
 						{
 							$ref: '#/definitions/positions/supervisor'
@@ -570,13 +578,24 @@ export const resolvedCorporateSchema = {
 						}
 					]
 				},
-				director: {
+				director_fnd: {
 					type: 'object',
 					properties: {
 						position: {
 							title: 'Director',
 							description: 'The person that is chief executive of the organization.',
-							const: 'director'
+							const: 'director-fnd'
+						}
+					}
+				},
+				director_ltd: {
+					type: 'object',
+					properties: {
+						position: {
+							title: 'Director',
+							description:
+								'Person from a group of managers who leads or supervises a particular area of your company.',
+							const: 'director-ltd'
 						}
 					}
 				},
@@ -648,7 +667,7 @@ export const resolvedCorporateSchema = {
 						position: {
 							title: 'Company Member',
 							description:
-								'Co-owner of a business, who oversees and runs the that business.',
+								'Co-owner of a business, who oversees and runs the business.',
 							const: 'member'
 						},
 						equity: {
@@ -748,7 +767,7 @@ export const resolvedCorporateSchema = {
 						position: {
 							title: 'General Partner',
 							description:
-								'Co-owner of a business, who oversees and runs the that business.',
+								'Co-owner of a business, who oversees and runs the business.',
 							const: 'general-partner'
 						},
 						equity: {
@@ -775,7 +794,7 @@ export const resolvedCorporateSchema = {
 					properties: {
 						position: {
 							title: 'Other',
-							description: 'Other type of  company members.',
+							description: 'Other type of company members.',
 							const: 'other'
 						}
 					}
@@ -897,8 +916,8 @@ export const resolvedCorporateSchema = {
 															position: {
 																title: 'Director',
 																description:
-																	'The person that is chief executive of the organization.',
-																const: 'director'
+																	'Person from a group of managers who leads or supervises a particular area of your company.',
+																const: 'director-ltd'
 															}
 														}
 													},
@@ -959,7 +978,7 @@ export const resolvedCorporateSchema = {
 															position: {
 																title: 'Other',
 																description:
-																	'Other type of  company members.',
+																	'Other type of company members.',
 																const: 'other'
 															}
 														}
@@ -1410,7 +1429,7 @@ export const resolvedCorporateSchema = {
 															position: {
 																title: 'Other',
 																description:
-																	'Other type of  company members.',
+																	'Other type of company members.',
 																const: 'other'
 															}
 														}
@@ -1578,7 +1597,7 @@ export const resolvedCorporateSchema = {
 																title: 'Director',
 																description:
 																	'The person that is chief executive of the organization.',
-																const: 'director'
+																const: 'director-fnd'
 															}
 														}
 													},
@@ -1643,7 +1662,7 @@ export const resolvedCorporateSchema = {
 															position: {
 																title: 'Other',
 																description:
-																	'Other type of  company members.',
+																	'Other type of company members.',
 																const: 'other'
 															}
 														}
@@ -1799,7 +1818,7 @@ export const resolvedCorporateSchema = {
 															position: {
 																title: 'General Partner',
 																description:
-																	'Co-owner of a business, who oversees and runs the that business.',
+																	'Co-owner of a business, who oversees and runs the business.',
 																const: 'general-partner'
 															},
 															equity: {
@@ -1866,7 +1885,7 @@ export const resolvedCorporateSchema = {
 															position: {
 																title: 'Other',
 																description:
-																	'Other type of  company members.',
+																	'Other type of company members.',
 																const: 'other'
 															}
 														}
@@ -2022,7 +2041,7 @@ export const resolvedCorporateSchema = {
 															position: {
 																title: 'Company Member',
 																description:
-																	'Co-owner of a business, who oversees and runs the that business.',
+																	'Co-owner of a business, who oversees and runs the business.',
 																const: 'member'
 															},
 															equity: {
@@ -2228,8 +2247,8 @@ export const resolvedCorporateSchema = {
 													position: {
 														title: 'Director',
 														description:
-															'The person that is chief executive of the organization.',
-														const: 'director'
+															'Person from a group of managers who leads or supervises a particular area of your company.',
+														const: 'director-ltd'
 													}
 												}
 											},
@@ -2290,7 +2309,7 @@ export const resolvedCorporateSchema = {
 													position: {
 														title: 'Other',
 														description:
-															'Other type of  company members.',
+															'Other type of company members.',
 														const: 'other'
 													}
 												}
@@ -2741,7 +2760,7 @@ export const resolvedCorporateSchema = {
 													position: {
 														title: 'Other',
 														description:
-															'Other type of  company members.',
+															'Other type of company members.',
 														const: 'other'
 													}
 												}
@@ -2909,7 +2928,7 @@ export const resolvedCorporateSchema = {
 														title: 'Director',
 														description:
 															'The person that is chief executive of the organization.',
-														const: 'director'
+														const: 'director-fnd'
 													}
 												}
 											},
@@ -2974,7 +2993,7 @@ export const resolvedCorporateSchema = {
 													position: {
 														title: 'Other',
 														description:
-															'Other type of  company members.',
+															'Other type of company members.',
 														const: 'other'
 													}
 												}
@@ -3130,7 +3149,7 @@ export const resolvedCorporateSchema = {
 													position: {
 														title: 'General Partner',
 														description:
-															'Co-owner of a business, who oversees and runs the that business.',
+															'Co-owner of a business, who oversees and runs the business.',
 														const: 'general-partner'
 													},
 													equity: {
@@ -3197,7 +3216,7 @@ export const resolvedCorporateSchema = {
 													position: {
 														title: 'Other',
 														description:
-															'Other type of  company members.',
+															'Other type of company members.',
 														const: 'other'
 													}
 												}
@@ -3353,7 +3372,7 @@ export const resolvedCorporateSchema = {
 													position: {
 														title: 'Company Member',
 														description:
-															'Co-owner of a business, who oversees and runs the that business.',
+															'Co-owner of a business, who oversees and runs the business.',
 														const: 'member'
 													},
 													equity: {
@@ -3544,8 +3563,8 @@ export const resolvedCorporateSchema = {
 												position: {
 													title: 'Director',
 													description:
-														'The person that is chief executive of the organization.',
-													const: 'director'
+														'Person from a group of managers who leads or supervises a particular area of your company.',
+													const: 'director-ltd'
 												}
 											}
 										},
@@ -3605,7 +3624,7 @@ export const resolvedCorporateSchema = {
 											properties: {
 												position: {
 													title: 'Other',
-													description: 'Other type of  company members.',
+													description: 'Other type of company members.',
 													const: 'other'
 												}
 											}
@@ -4025,7 +4044,7 @@ export const resolvedCorporateSchema = {
 											properties: {
 												position: {
 													title: 'Other',
-													description: 'Other type of  company members.',
+													description: 'Other type of company members.',
 													const: 'other'
 												}
 											}
@@ -4178,7 +4197,7 @@ export const resolvedCorporateSchema = {
 													title: 'Director',
 													description:
 														'The person that is chief executive of the organization.',
-													const: 'director'
+													const: 'director-fnd'
 												}
 											}
 										},
@@ -4242,7 +4261,7 @@ export const resolvedCorporateSchema = {
 											properties: {
 												position: {
 													title: 'Other',
-													description: 'Other type of  company members.',
+													description: 'Other type of company members.',
 													const: 'other'
 												}
 											}
@@ -4383,7 +4402,7 @@ export const resolvedCorporateSchema = {
 												position: {
 													title: 'General Partner',
 													description:
-														'Co-owner of a business, who oversees and runs the that business.',
+														'Co-owner of a business, who oversees and runs the business.',
 													const: 'general-partner'
 												},
 												equity: {
@@ -4449,7 +4468,7 @@ export const resolvedCorporateSchema = {
 											properties: {
 												position: {
 													title: 'Other',
-													description: 'Other type of  company members.',
+													description: 'Other type of company members.',
 													const: 'other'
 												}
 											}
@@ -4590,7 +4609,7 @@ export const resolvedCorporateSchema = {
 												position: {
 													title: 'Company Member',
 													description:
-														'Co-owner of a business, who oversees and runs the that business.',
+														'Co-owner of a business, who oversees and runs the business.',
 													const: 'member'
 												},
 												equity: {
@@ -4766,8 +4785,8 @@ export const resolvedCorporateSchema = {
 								position: {
 									title: 'Director',
 									description:
-										'The person that is chief executive of the organization.',
-									const: 'director'
+										'Person from a group of managers who leads or supervises a particular area of your company.',
+									const: 'director-ltd'
 								}
 							}
 						},
@@ -4827,7 +4846,7 @@ export const resolvedCorporateSchema = {
 							properties: {
 								position: {
 									title: 'Other',
-									description: 'Other type of  company members.',
+									description: 'Other type of company members.',
 									const: 'other'
 								}
 							}
@@ -4992,7 +5011,7 @@ export const resolvedCorporateSchema = {
 							properties: {
 								position: {
 									title: 'Other',
-									description: 'Other type of  company members.',
+									description: 'Other type of company members.',
 									const: 'other'
 								}
 							}
@@ -5019,7 +5038,7 @@ export const resolvedCorporateSchema = {
 									title: 'Director',
 									description:
 										'The person that is chief executive of the organization.',
-									const: 'director'
+									const: 'director-fnd'
 								}
 							}
 						},
@@ -5083,7 +5102,7 @@ export const resolvedCorporateSchema = {
 							properties: {
 								position: {
 									title: 'Other',
-									description: 'Other type of  company members.',
+									description: 'Other type of company members.',
 									const: 'other'
 								}
 							}
@@ -5098,7 +5117,7 @@ export const resolvedCorporateSchema = {
 								position: {
 									title: 'General Partner',
 									description:
-										'Co-owner of a business, who oversees and runs the that business.',
+										'Co-owner of a business, who oversees and runs the business.',
 									const: 'general-partner'
 								},
 								equity: {
@@ -5164,7 +5183,7 @@ export const resolvedCorporateSchema = {
 							properties: {
 								position: {
 									title: 'Other',
-									description: 'Other type of  company members.',
+									description: 'Other type of company members.',
 									const: 'other'
 								}
 							}
@@ -5179,7 +5198,7 @@ export const resolvedCorporateSchema = {
 								position: {
 									title: 'Company Member',
 									description:
-										'Co-owner of a business, who oversees and runs the that business.',
+										'Co-owner of a business, who oversees and runs the business.',
 									const: 'member'
 								},
 								equity: {
@@ -5226,13 +5245,24 @@ export const resolvedCorporateSchema = {
 						}
 					]
 				},
-				director: {
+				director_fnd: {
 					type: 'object',
 					properties: {
 						position: {
 							title: 'Director',
 							description: 'The person that is chief executive of the organization.',
-							const: 'director'
+							const: 'director-fnd'
+						}
+					}
+				},
+				director_ltd: {
+					type: 'object',
+					properties: {
+						position: {
+							title: 'Director',
+							description:
+								'Person from a group of managers who leads or supervises a particular area of your company.',
+							const: 'director-ltd'
 						}
 					}
 				},
@@ -5310,7 +5340,7 @@ export const resolvedCorporateSchema = {
 						position: {
 							title: 'Company Member',
 							description:
-								'Co-owner of a business, who oversees and runs the that business.',
+								'Co-owner of a business, who oversees and runs the business.',
 							const: 'member'
 						},
 						equity: {
@@ -5413,7 +5443,7 @@ export const resolvedCorporateSchema = {
 						position: {
 							title: 'General Partner',
 							description:
-								'Co-owner of a business, who oversees and runs the that business.',
+								'Co-owner of a business, who oversees and runs the business.',
 							const: 'general-partner'
 						},
 						equity: {
@@ -5446,7 +5476,7 @@ export const resolvedCorporateSchema = {
 					properties: {
 						position: {
 							title: 'Other',
-							description: 'Other type of  company members.',
+							description: 'Other type of company members.',
 							const: 'other'
 						}
 					}

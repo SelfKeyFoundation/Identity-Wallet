@@ -558,6 +558,7 @@ export const selectIndividualProfile = createSelector(
 		attributes: nonBasicInfoAttributes,
 		basicAttributes,
 		documents: documentAttributes,
+		attributeOptions: {},
 		email,
 		firstName,
 		lastName,
@@ -613,6 +614,25 @@ export const selectCorporateProfile = createSelector(
 		attributes: infoAttributes,
 		basicAttributes,
 		documents: documentAttributes,
+		attributeOptions: {
+			[JURISDICTION_ATTRIBUTE]: {
+				forbidCreate: true,
+				forbidDelete: true
+			},
+			[CREATION_DATE_ATTRIBUTE]: {
+				forbidCreate: true,
+				forbidDelete: true
+			},
+			[ENTITY_NAME_ATTRIBUTE]: {
+				forbidCreate: true,
+				forbidDelete: true
+			},
+			[ENTITY_TYPE_ATTRIBUTE]: {
+				forbidCreate: true,
+				forbidDelete: true,
+				forbidEdit: true
+			}
+		},
 		email,
 		taxId,
 		entityName,
