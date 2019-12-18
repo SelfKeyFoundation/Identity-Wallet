@@ -28,7 +28,6 @@ class IncorporationsPaymentContainer extends MarketplaceIncorporationsComponent 
 		const price = this.priceInKEY(program.price);
 		const walletAddress = program.walletAddress;
 		const vendorDID = program.didAddress;
-		// TODO: get vendor name from RP store
 		const vendorName = vendor.name;
 
 		this.props.dispatch(
