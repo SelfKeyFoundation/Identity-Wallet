@@ -306,7 +306,9 @@ const CorporateMembers = withStyles(styles)(props => {
 															attributeOptions={
 																member.attributeOptions
 															}
-															onAddAttribute={onAddAttribute}
+															onAddAttribute={evt =>
+																onAddAttribute(evt, member)
+															}
 															onEditAttribute={onEditAttribute}
 															onDeleteAttribute={onDeleteAttribute}
 														/>
@@ -317,7 +319,9 @@ const CorporateMembers = withStyles(styles)(props => {
 															attributeOptions={
 																member.attributeOptions
 															}
-															onAddDocument={onAddDocument}
+															onAddDocument={evt =>
+																onAddDocument(evt, member)
+															}
 															onEditDocument={onEditDocument}
 															onDeleteDocument={onDeleteDocument}
 														/>
