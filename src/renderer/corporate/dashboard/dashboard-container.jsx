@@ -13,6 +13,7 @@ import {
 class CorporateDashboardContainer extends PureComponent {
 	state = {
 		popup: null,
+		member: null,
 		selectedMember: false
 	};
 
@@ -52,44 +53,47 @@ class CorporateDashboardContainer extends PureComponent {
 	handleEditAttribute = attribute => {
 		this.setState({ popup: 'edit-attribute', editAttribute: attribute });
 	};
-	handleAddAttribute = () => {
-		this.setState({ popup: 'create-attribute', isDocument: false });
+	handleAddAttribute = (evt, member) => {
+		this.setState({ popup: 'create-attribute', isDocument: false, member });
 	};
-	handleAddDocument = () => {
-		this.setState({ popup: 'create-attribute', isDocument: true });
+	handleAddDocument = (evt, member) => {
+		this.setState({ popup: 'create-attribute', isDocument: true, member });
 	};
 	handleDeleteAttribute = attribute => {
 		this.setState({ popup: 'delete-attribute', deleteAttribute: attribute });
 	};
 	handlePopupClose = () => {
-		this.setState({ popup: null });
+		this.setState({ popup: null, member: null });
 	};
 
 	render() {
-		const { popup } = this.state;
+		const { popup, member, editAttribute, deleteAttribute } = this.state;
 		return (
 			<React.Fragment>
 				{popup === 'create-attribute' && (
 					<CreateAttributeContainer
-						corporate={true}
+						corporate={member ? member.identity.type === 'corporate' : true}
 						open={true}
 						onClose={this.handlePopupClose}
 						isDocument={this.state.isDocument}
-						attributeOptions={this.props.profile.attributeOptions}
+						attributeOptions={
+							member ? member.attributeOptions : this.props.profile.attributeOptions
+						}
+						identityId={member ? member.identity.id : this.props.profile.identity.id}
 					/>
 				)}
 				{popup === 'edit-attribute' && (
 					<EditAttributeContainer
 						open={true}
 						onClose={this.handlePopupClose}
-						attribute={this.state.editAttribute}
+						attribute={editAttribute}
 					/>
 				)}
 				{popup === 'delete-attribute' && (
 					<DeleteAttributeContainer
 						open={true}
 						onClose={this.handlePopupClose}
-						attribute={this.state.deleteAttribute}
+						attribute={deleteAttribute}
 					/>
 				)}
 

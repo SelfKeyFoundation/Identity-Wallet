@@ -5,7 +5,9 @@ import CreateAttribute from './create-attribute';
 
 class CreateAttributeContainerComponent extends PureComponent {
 	handleSave = attribute => {
-		this.props.dispatch(identityOperations.createIdAttributeOperation(attribute));
+		this.props.dispatch(
+			identityOperations.createIdAttributeOperation(attribute, this.props.identityId)
+		);
 	};
 	handleCancel = () => {
 		if (this.props.onClose) return this.props.onClose();
