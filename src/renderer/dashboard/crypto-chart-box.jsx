@@ -383,7 +383,7 @@ export class CryptoChartBoxComponent extends React.Component {
 		const { classes, locale, fiatCurrency, tokens, manageCryptoAction } = this.props;
 
 		return (
-			<Paper className={classes.paper} style={{ width: '66%' }}>
+			<Paper className={classes.paper}>
 				<Grid container alignItems="center" spacing={16}>
 					<Grid item xs={12}>
 						<Typography variant="h1" className={classes.title}>
