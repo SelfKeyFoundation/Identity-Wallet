@@ -31,8 +31,7 @@ const styles = theme => ({
 		marginBottom: '15px'
 	},
 	transactions: {
-		backgroundColor: '#262F39',
-		height: '200px'
+		backgroundColor: '#262F39'
 	}
 });
 
@@ -100,12 +99,9 @@ const Dashboard = connect(mapStateToProps)(
 							<Typography variant="h2">Trade</Typography>
 						</Grid>
 						<Grid item className={`${classes.transactions} ${classes.smallWidgetBox}`}>
-							<Typography variant="h2">Transactions</Typography>
+							<TransactionsHistory />
 						</Grid>
 					</Grid>
-				</Grid>
-				<Grid item style={{ width: '100%' }}>
-					<TransactionsHistory />
 				</Grid>
 			</Grid>
 		);
