@@ -300,9 +300,7 @@ const CorporateMembers = withStyles(styles)(props => {
 														<CorporateInformation
 															attributes={(
 																member.basicAttributes || []
-															).concat(
-																member.nonBasicAttributes || []
-															)}
+															).concat(member.attributes || [])}
 															attributeOptions={
 																member.attributeOptions
 															}
