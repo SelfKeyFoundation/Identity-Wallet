@@ -178,6 +178,7 @@ const CompanyInformation = withStyles(styles)(props => {
 									<Select
 										className={classes.select}
 										onChange={onFieldChange('entityType')}
+										displayEmpty
 										value={entityType}
 										name="entitytype"
 										error={errors.entityType}
