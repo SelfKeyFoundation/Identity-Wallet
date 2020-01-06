@@ -8,6 +8,7 @@ import TransactionsHistory from '../transaction/transactions-history';
 import { Alert } from '../common';
 import { withStyles } from '@material-ui/core/styles';
 import { appSelectors } from 'common/app';
+import { CustomIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	chartBox: {
@@ -32,6 +33,21 @@ const styles = theme => ({
 	},
 	transactions: {
 		backgroundColor: '#262F39'
+	},
+	title: {
+		fontSize: '20px',
+		marginBottom: '30px'
+	},
+	ctabutton: {
+		display: 'flex',
+		justifyContent: 'space-between',
+		maxWidth: '100%',
+		marginLeft: 'auto',
+		marginRight: '0',
+		width: '100%',
+		'& span': {
+			flexGrow: 1
+		}
 	}
 });
 
@@ -96,7 +112,18 @@ const Dashboard = connect(mapStateToProps)(
 					</Grid>
 					<Grid item className={classes.smallWidget}>
 						<Grid item className={`${classes.trading} ${classes.smallWidgetBox}`}>
-							<Typography variant="h2">Trade</Typography>
+							<Typography variant="h1" className={classes.title}>
+								Buy KEY tokens, to use in the SelfKey Marketplace.
+							</Typography>
+							<Button
+								variant="outlined"
+								color="primary"
+								size="large"
+								className={classes.ctabutton}
+							>
+								<CustomIcon width="24px" height="24px" />
+								<span>Buy KEY</span>
+							</Button>
 						</Grid>
 						<Grid item className={`${classes.transactions} ${classes.smallWidgetBox}`}>
 							<TransactionsHistory />
