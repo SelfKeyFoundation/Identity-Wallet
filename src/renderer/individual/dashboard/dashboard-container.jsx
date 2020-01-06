@@ -2,8 +2,13 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { identitySelectors, identityOperations } from 'common/identity';
 import { push } from 'connected-react-router';
-import { RegisterDidCardContainer } from '../../did';
+import { appSelectors } from 'common/app';
+import { walletSelectors } from 'common/wallet';
+import { marketplaceSelectors, marketplaceOperations } from 'common/marketplace';
+import { kycSelectors, kycOperations } from 'common/kyc';
+import { RegisterDidCardContainer } from 'renderer/did';
 import { IndividualDashboardPage } from './dashboard-page';
+import { NotifyPopup } from '../common/notify-popup';
 import {
 	CreateAttributeContainer,
 	EditAttributeContainer,
@@ -18,21 +23,55 @@ class IndividualDashboardContainerComponent extends PureComponent {
 		popup: null
 	};
 
-	componentDidUpdate() {
-		const { identity } = this.props.profile;
+	async componentDidMount() {
+		const { vendors, profile, dispatch, wallet } = this.props;
+		const { identity } = profile;
+
 		if (identity.type !== 'individual') {
-			this.props.dispatch(identityOperations.navigateToProfileOperation());
+			return dispatch(identityOperations.navigateToProfileOperation());
+		}
+		if (!identity.isSetupFinished) {
+			return dispatch(push('/main/individual/setup-individual-profile'));
+		}
+
+		// load marketplace store
+		dispatch(marketplaceOperations.loadMarketplaceOperation());
+
+		await dispatch(kycOperations.resetApplications());
+		// load existing kyc_applications data
+		await dispatch(kycOperations.loadApplicationsOperation());
+
+		// load RPs
+		if (wallet.profile === 'local') {
+			await this.loadRelyingParties(vendors);
 		}
 	}
 
-	async componentDidMount() {
-		const { identity } = this.props.profile;
-
+	componentDidUpdate(prevProps) {
+		const { dispatch, wallet, profile, vendors } = this.props;
+		const { identity } = profile;
 		if (identity.type !== 'individual') {
-			return this.props.dispatch(identityOperations.navigateToProfileOperation());
+			dispatch(identityOperations.navigateToProfileOperation());
 		}
-		if (!identity.isSetupFinished) {
-			await this.props.dispatch(push('/main/individual/setup-individual-profile'));
+
+		if (prevProps.vendors.length !== vendors.length && wallet.profile === 'local') {
+			return this.loadRelyingParties(vendors);
+		}
+	}
+
+	async loadRelyingParties(vendors) {
+		const authenticated = true;
+		const { afterAuthRoute, cancelRoute, dispatch } = this.props;
+
+		for (const vendor of vendors) {
+			await dispatch(
+				kycOperations.loadRelyingParty(
+					vendor.vendorId,
+					authenticated,
+					afterAuthRoute,
+					cancelRoute
+				)
+			);
 		}
 	}
 
@@ -44,10 +83,10 @@ class IndividualDashboardContainerComponent extends PureComponent {
 	handleEditAttribute = attribute => {
 		this.setState({ popup: 'edit-attribute', editAttribute: attribute });
 	};
-	handleAddAttribute = (evt, member) => {
+	handleAddAttribute = evt => {
 		this.setState({ popup: 'create-attribute', isDocument: false });
 	};
-	handleAddDocument = (evt, member) => {
+	handleAddDocument = evt => {
 		this.setState({ popup: 'create-attribute', isDocument: true });
 	};
 	handleDeleteAttribute = attribute => {
@@ -58,6 +97,56 @@ class IndividualDashboardContainerComponent extends PureComponent {
 	};
 	handlePopupClose = () => {
 		this.setState({ popup: null });
+	};
+
+	handleApplicationAdditionalRequirements = application => {
+		const { rps } = this.props;
+
+		// get current application info from RP
+		const rp = rps[application.rpName];
+		if (!rp) {
+			console.error(`Can't find RP named ${application.rpName}`);
+			return false;
+		}
+		// Later on, we will need to improve this to be able to distinguish requirements
+		// that can be fulfilled by the wallet directly and ones that need redirect to KYCC
+		// onboarding app.
+		// Redirects to KYCC with auto-login via JWT token
+		const instanceUrl = rp.session.ctx.config.rootEndpoint;
+		const url = `${instanceUrl}/applications/${application.id}?access_token=${
+			rp.session.access_token.jwt
+		}`;
+		window.openExternal(null, url);
+	};
+
+	handleApplicationRefresh = application => {
+		const { rps, wallet, dispatch, afterAuthRoute, cancelRoute } = this.props;
+
+		// get current application info from RP
+		const rp = rps[application.rpName];
+		if (!rp && wallet.profile === 'local') {
+			console.warn(`Can't find RP named ${application.rpName}`);
+			return false;
+		}
+
+		if (wallet.profile !== 'local') {
+			return dispatch(
+				kycOperations.refreshRelyingPartyForKycApplication(
+					application,
+					afterAuthRoute,
+					cancelRoute
+				)
+			);
+		}
+
+		if (rp.error) {
+			console.warn(`RP loading error`, rp);
+			this.setState({ popup: 'applications-refresh' });
+			return false;
+		}
+
+		// sync of RP applications with local database is done automatically, all done, show modal
+		this.setState({ popup: 'applications-refresh' });
 	};
 
 	render() {
@@ -94,10 +183,16 @@ class IndividualDashboardContainerComponent extends PureComponent {
 						identityId={profile.identity.id}
 					/>
 				)}
+				{popup === 'applications-refresh' && (
+					<NotifyPopup
+						onClose={this.handlePopupClose}
+						title="Update Application"
+						text="Application status updated successfully."
+					/>
+				)}
 
 				<IndividualDashboardPage
 					{...this.props}
-					profile={profile}
 					onMarketplaceClick={this.handleMarketplaceClick}
 					onAddAttribute={this.handleAddAttribute}
 					onEditAttribute={this.handleEditAttribute}
@@ -107,6 +202,10 @@ class IndividualDashboardContainerComponent extends PureComponent {
 					onDeleteDocument={this.handleDeleteAttribute}
 					onAvatarClick={this.handleEditAvatar}
 					didComponent={<RegisterDidCardContainer returnPath={'/main/individual'} />}
+					onApplicationAdditionalRequirements={
+						this.handleApplicationAdditionalRequirements
+					}
+					onApplicationRefresh={this.handleApplicationRefresh}
 				/>
 			</React.Fragment>
 		);
@@ -114,8 +213,19 @@ class IndividualDashboardContainerComponent extends PureComponent {
 }
 
 const mapStateToProps = (state, props) => {
+	const walletType = appSelectors.selectApp(state).walletType;
 	return {
-		profile: identitySelectors.selectIndividualProfile(state)
+		wallet: walletSelectors.getWallet(state),
+		walletType,
+		profile: identitySelectors.selectIndividualProfile(state),
+		vendors: marketplaceSelectors.selectActiveVendors(state),
+		rps: kycSelectors.relyingPartiesSelector(state),
+		applications: kycSelectors.selectApplications(state),
+		afterAuthRoute:
+			walletType === 'ledger' || walletType === 'trezor'
+				? `/main/individual/dashboard/applications`
+				: '',
+		cancelRoute: `/main/individual`
 	};
 };
 

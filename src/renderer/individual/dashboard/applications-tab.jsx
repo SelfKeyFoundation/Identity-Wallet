@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import moment from 'moment';
 import classNames from 'classnames';
 import {
 	Button,
@@ -34,8 +35,6 @@ import {
 	typography,
 	error
 } from 'selfkey-ui';
-import moment from 'moment';
-import { Popup } from '../../../common/popup';
 
 const styles = theme => ({
 	statusIcon: {
@@ -144,6 +143,7 @@ const StatusInfo = withStyles(statusInfoStyle)(
 		let message;
 		let statusStyle;
 		let button = null;
+
 		switch (status) {
 			case 2:
 				icon = <SimpleCheckIcon className={classes.statusIcon} />;
@@ -262,59 +262,19 @@ const LoadingScreen = ({ classes }) => (
 	</Grid>
 );
 
-class IndividualApplicationsTab extends PureComponent {
-	renderApplicationRefreshModal = () => (
-		<Popup
-			open={true}
-			text={'Update Application'}
-			closeAction={this.props.onCloseApplicationRefreshModal}
-		>
-			<Grid
-				container
-				className={this.props.classes.root}
-				spacing={32}
-				direction="column"
-				justify="flex-start"
-				alignItems="stretch"
-			>
-				<Grid item>
-					<Typography variant="overline">
-						Application status updated successfully.
-					</Typography>
-				</Grid>
-				<Grid item>
-					<Grid container spacing={24}>
-						<Grid item>
-							<Button
-								variant="outlined"
-								size="large"
-								onClick={this.props.onCloseApplicationRefreshModal}
-							>
-								Close
-							</Button>
-						</Grid>
-					</Grid>
-				</Grid>
-			</Grid>
-		</Popup>
-	);
-
+class IndividualApplicationsTabComponent extends PureComponent {
 	render() {
-		const { classes, showApplicationRefreshModal, loading, applications, vendors } = this.props;
+		const { classes, loading, applications = [], vendors } = this.props;
 
 		const getRpInfo = (rpName, field) => {
 			const vendor = vendors.find(v => v.vendorId === rpName);
-			if (vendor && vendor[field]) {
-				return vendor[field];
-			} else {
-				return 'N/A';
-			}
+			return vendor && vendor[field] ? vendor[field] : 'N/A';
 		};
 
 		const getRpName = application => getRpInfo(application.rpName, 'name');
 
 		if (loading) {
-			return this.renderLoadingScreen();
+			return <LoadingScreen classes={this.props.classes} />;
 		}
 
 		if (!loading && applications && applications.length === 0) {
@@ -346,7 +306,7 @@ class IndividualApplicationsTab extends PureComponent {
 									<Button
 										id="marketplace"
 										variant="contained"
-										onClick={this.props.onMarketplaceAccessClick}
+										onClick={this.props.onMarketplaceClick}
 										className={classes.next}
 										size="large"
 									>
@@ -362,69 +322,141 @@ class IndividualApplicationsTab extends PureComponent {
 
 		return (
 			<React.Fragment>
-				{this.props.applications &&
-					this.props.applications.map((item, index) => (
-						<React.Fragment key={item.id}>
-							<ExpansionPanel defaultExpanded={index === 0}>
-								<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
-									<Grid
-										container
-										direction="row"
-										justify="flex-start"
-										alignItems="baseline"
-									>
-										<Typography variant="h2" className={classes.type}>
-											{item.title}
-										</Typography>
-										<Typography variant="subtitle2" color="secondary">
-											{getRpName(item)}
-										</Typography>
-									</Grid>
-									<Grid
-										container
-										direction="row"
-										justify="flex-end"
-										alignItems="center"
-										className={classes.noRightPadding}
-									>
-										<HeaderIcon status={item.currentStatus} />
-										<Typography variant="subtitle2" color="secondary">
-											{item.currentStatusName}
-										</Typography>
-									</Grid>
-								</ExpansionPanelSummary>
-								<Divider />
+				{this.props.applications.map((item, index) => (
+					<React.Fragment key={item.id}>
+						<ExpansionPanel defaultExpanded={index === 0}>
+							<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
 								<Grid
-									className={classes.statusInfoWrap}
 									container
 									direction="row"
-									alignItems="center"
+									justify="flex-start"
+									alignItems="baseline"
 								>
-									<StatusInfo
-										application={item}
-										status={item.currentStatus}
-										onClick={() =>
-											this.props.onApplicationAdditionalRequirements(item)
-										}
-										handleRefresh={() => this.props.onApplicationRefresh(item)}
-										tooltip={moment(new Date(item.updatedAt)).format(
-											'DD MMM YYYY'
-										)}
-										loading={loading}
-									/>
+									<Typography variant="h2" className={classes.type}>
+										{item.title}
+									</Typography>
+									<Typography variant="subtitle2" color="secondary">
+										{getRpName(item)}
+									</Typography>
 								</Grid>
-								<ExpansionPanelDetails>
-									<Grid container spacing={32}>
+								<Grid
+									container
+									direction="row"
+									justify="flex-end"
+									alignItems="center"
+									className={classes.noRightPadding}
+								>
+									<HeaderIcon status={item.currentStatus} />
+									<Typography variant="subtitle2" color="secondary">
+										{item.currentStatusName}
+									</Typography>
+								</Grid>
+							</ExpansionPanelSummary>
+							<Divider />
+							<Grid
+								className={classes.statusInfoWrap}
+								container
+								direction="row"
+								alignItems="center"
+							>
+								<StatusInfo
+									application={item}
+									status={item.currentStatus}
+									onClick={() =>
+										this.props.onApplicationAdditionalRequirements(item)
+									}
+									handleRefresh={() => this.props.onApplicationRefresh(item)}
+									tooltip={moment(new Date(item.updatedAt)).format('DD MMM YYYY')}
+									loading={loading}
+								/>
+							</Grid>
+							<ExpansionPanelDetails>
+								<Grid container spacing={32}>
+									<Grid item xs>
+										<Card>
+											<Typography variant="h2" className={classes.title}>
+												Application Details
+											</Typography>
+											<Divider variant="middle" />
+											<CardContent>
+												<List className={classes.list}>
+													<ListItem
+														key="applicationDate"
+														className={classes.listItem}
+													>
+														<Typography
+															variant="body2"
+															color="secondary"
+															className={classes.label}
+														>
+															Application Date
+														</Typography>
+														<Typography variant="body2">
+															{moment(item.applicationDate).format(
+																'DD MMM YYYY'
+															)}
+														</Typography>
+													</ListItem>
+													<ListItem
+														key="serviceProvider"
+														className={classes.listItem}
+													>
+														<Typography
+															variant="body2"
+															color="secondary"
+															className={classes.label}
+														>
+															Service Provider
+														</Typography>
+														<Typography variant="body2">
+															{getRpInfo(item.rpName, 'name')}
+														</Typography>
+													</ListItem>
+													<ListItem
+														key="providerContact"
+														className={classes.listItem}
+													>
+														<Typography
+															variant="body2"
+															color="secondary"
+															className={classes.label}
+														>
+															Provider Contact
+														</Typography>
+														<Typography variant="body2">
+															{getRpInfo(item.rpName, 'contactEmail')}
+														</Typography>
+													</ListItem>
+													<ListItem
+														key="address"
+														className={classes.listItem}
+													>
+														<Typography
+															variant="body2"
+															color="secondary"
+															className={classes.label}
+														>
+															Address
+														</Typography>
+														<Typography variant="body2">
+															{getRpInfo(item.rpName, 'address')}
+														</Typography>
+													</ListItem>
+												</List>
+											</CardContent>
+										</Card>
+									</Grid>
+									{item.payments && Object.keys(item.payments).length > 0 && (
 										<Grid item xs>
 											<Card>
 												<Typography variant="h2" className={classes.title}>
-													Application Details
+													Payment Details
 												</Typography>
 												<Divider variant="middle" />
 												<CardContent>
 													<List className={classes.list}>
 														<ListItem
-															key="applicationDate"
+															key="transactionId"
 															className={classes.listItem}
 														>
 															<Typography
@@ -432,16 +464,14 @@ class IndividualApplicationsTab extends PureComponent {
 																color="secondary"
 																className={classes.label}
 															>
-																Application Date
+																Transaction ID
 															</Typography>
 															<Typography variant="body2">
-																{moment(
-																	item.applicationDate
-																).format('DD MMM YYYY')}
+																{item.payments.transactionHash}
 															</Typography>
 														</ListItem>
 														<ListItem
-															key="serviceProvider"
+															key="transactionDate"
 															className={classes.listItem}
 														>
 															<Typography
@@ -449,14 +479,18 @@ class IndividualApplicationsTab extends PureComponent {
 																color="secondary"
 																className={classes.label}
 															>
-																Service Provider
+																Transaction Date
 															</Typography>
 															<Typography variant="body2">
-																{getRpInfo(item.rpName, 'name')}
+																{item.payments &&
+																	moment(
+																		item.payments
+																			.transactionDate
+																	).format('DD MMM YYYY')}
 															</Typography>
 														</ListItem>
 														<ListItem
-															key="providerContact"
+															key="amount"
 															className={classes.listItem}
 														>
 															<Typography
@@ -464,17 +498,14 @@ class IndividualApplicationsTab extends PureComponent {
 																color="secondary"
 																className={classes.label}
 															>
-																Provider Contact
+																Amount
 															</Typography>
 															<Typography variant="body2">
-																{getRpInfo(
-																	item.rpName,
-																	'contactEmail'
-																)}
+																{item.payments.amountKey}
 															</Typography>
 														</ListItem>
 														<ListItem
-															key="address"
+															key="paymentStatus"
 															className={classes.listItem}
 														>
 															<Typography
@@ -482,108 +513,26 @@ class IndividualApplicationsTab extends PureComponent {
 																color="secondary"
 																className={classes.label}
 															>
-																Address
+																Payment Status
 															</Typography>
 															<Typography variant="body2">
-																{getRpInfo(item.rpName, 'address')}
+																{item.payments.status}
 															</Typography>
 														</ListItem>
 													</List>
 												</CardContent>
 											</Card>
 										</Grid>
-										{item.payments && Object.keys(item.payments).length > 0 && (
-											<Grid item xs>
-												<Card>
-													<Typography
-														variant="h2"
-														className={classes.title}
-													>
-														Payment Details
-													</Typography>
-													<Divider variant="middle" />
-													<CardContent>
-														<List className={classes.list}>
-															<ListItem
-																key="transactionId"
-																className={classes.listItem}
-															>
-																<Typography
-																	variant="body2"
-																	color="secondary"
-																	className={classes.label}
-																>
-																	Transaction ID
-																</Typography>
-																<Typography variant="body2">
-																	{item.payments.transactionHash}
-																</Typography>
-															</ListItem>
-															<ListItem
-																key="transactionDate"
-																className={classes.listItem}
-															>
-																<Typography
-																	variant="body2"
-																	color="secondary"
-																	className={classes.label}
-																>
-																	Transaction Date
-																</Typography>
-																<Typography variant="body2">
-																	{item.payments &&
-																		moment(
-																			item.payments
-																				.transactionDate
-																		).format('DD MMM YYYY')}
-																</Typography>
-															</ListItem>
-															<ListItem
-																key="amount"
-																className={classes.listItem}
-															>
-																<Typography
-																	variant="body2"
-																	color="secondary"
-																	className={classes.label}
-																>
-																	Amount
-																</Typography>
-																<Typography variant="body2">
-																	{item.payments.amountKey}
-																</Typography>
-															</ListItem>
-															<ListItem
-																key="paymentStatus"
-																className={classes.listItem}
-															>
-																<Typography
-																	variant="body2"
-																	color="secondary"
-																	className={classes.label}
-																>
-																	Payment Status
-																</Typography>
-																<Typography variant="body2">
-																	{item.payments.status}
-																</Typography>
-															</ListItem>
-														</List>
-													</CardContent>
-												</Card>
-											</Grid>
-										)}
-									</Grid>
-								</ExpansionPanelDetails>
-							</ExpansionPanel>
-							<br />
-						</React.Fragment>
-					))}
-				{showApplicationRefreshModal && this.renderApplicationRefreshModal()}
+									)}
+								</Grid>
+							</ExpansionPanelDetails>
+						</ExpansionPanel>
+					</React.Fragment>
+				))}
 			</React.Fragment>
 		);
 	}
 }
 
-export const IndividualApplicationsTab = withStyles(styles)(IndividualApplicationsTab);
+export const IndividualApplicationsTab = withStyles(styles)(IndividualApplicationsTabComponent);
 export default IndividualApplicationsTab;

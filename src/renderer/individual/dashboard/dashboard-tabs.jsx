@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles, Tabs, Tab } from '@material-ui/core';
 import { IndividualOverviewTab } from './overview-tab';
-// import { IndividualApplicationsTab } from './applications-tab';
+import { IndividualApplicationsTab } from './applications-tab';
 
 const styles = theme => ({
 	dashboardTabs: {
@@ -25,13 +25,14 @@ export const IndividualDashboardTabs = withStyles(styles)(
 			>
 				<Tab id="overview" value="overview" label="Overview" />
 				<Tab id="applications" value="applications" label="Marketplace Applications" />
+
 				{/* <Tab label="Companies" /> */}
 				{/* <Tab label="History" /> */}
 			</Tabs>
 			{tab === 'overview' && <IndividualOverviewTab id="overviewTab" {...tabProps} />}
-			{/* tab === 'applications' && (
+			{tab === 'applications' && (
 				<IndividualApplicationsTab id="applicationsTab" {...tabProps} />
-			) */}
+			)}
 		</div>
 	)
 );

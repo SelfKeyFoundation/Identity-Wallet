@@ -23,6 +23,10 @@ class IndividualContainerComponent extends PureComponent {
 					path={`${match.path}/dashboard/:tab`}
 					render={props => <IndividualDashboardContainer {...props} />}
 				/>
+				<Route
+					path={`${match.path}/setup-individual-profile`}
+					render={props => <IndividualDashboardContainer {...props} />}
+				/>
 			</React.Fragment>
 		);
 	}
