@@ -9,6 +9,7 @@ import {
 	EditAttributeContainer,
 	DeleteAttributeContainer
 } from '../../attributes';
+import DeleteMemberContainer from '../../attributes/delete-member-container';
 
 class CorporateDashboardContainer extends PureComponent {
 	state = {
@@ -26,8 +27,9 @@ class CorporateDashboardContainer extends PureComponent {
 
 	handleAddMember = () => this.props.dispatch(push('/main/corporate/add-member'));
 
-	handleDeleteMember = member =>
-		this.props.dispatch(identityOperations.deleteIdentityOperation(member.identity.id));
+	handleDeleteMember = member => {
+		this.setState({ popup: 'delete-member', deleteMember: member });
+	};
 
 	handleEditMember = member => {
 		const { identity } = this.props.profile;
@@ -94,6 +96,13 @@ class CorporateDashboardContainer extends PureComponent {
 						open={true}
 						onClose={this.handlePopupClose}
 						attribute={deleteAttribute}
+					/>
+				)}
+				{popup === 'delete-member' && (
+					<DeleteMemberContainer
+						open={true}
+						onClose={this.handlePopupClose}
+						member={this.state.deleteMember}
 					/>
 				)}
 

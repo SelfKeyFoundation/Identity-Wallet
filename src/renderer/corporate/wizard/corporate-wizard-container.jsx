@@ -10,19 +10,15 @@ import { identityOperations, identitySelectors } from 'common/identity';
 const fields = ['jurisdiction', 'taxId', 'entityType', 'email', 'entityName', 'creationDate'];
 
 class CorporateWizardContainerComponent extends PureComponent {
-	constructor(props) {
-		super(props);
-		const { basicIdentity = {} } = props;
-		this.state = {
-			errors: { hasErrors: false },
-			jurisdiction: basicIdentity.jurisdiction || '',
-			taxId: basicIdentity.taxId || null,
-			entityType: basicIdentity.entityType || '',
-			email: basicIdentity.email || null,
-			entityName: basicIdentity.entityName || null,
-			creationDate: basicIdentity.creationDate || null
-		};
-	}
+	state = {
+		errors: { hasErrors: false },
+		jurisdiction: '',
+		taxId: null,
+		entityType: '',
+		email: null,
+		entityName: null,
+		creationDate: null
+	};
 
 	componentDidMount() {
 		if (this.props.identity && this.props.identity.type !== 'corporate') {
