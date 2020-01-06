@@ -99,3 +99,8 @@ export const hasBalance = (state, name) => {
 
 	return keyToken.balance >= requiredBalance;
 };
+
+export const selectListingExchanges = state => {
+	const { exchangesListingById, exchangesListingAll } = state.exchanges;
+	return exchangesListingAll.map(id => exchangesListingById[id]);
+};

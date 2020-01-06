@@ -20,6 +20,7 @@ import { inventorySelectors } from '../../common/marketplace/inventory/index';
 import MarketplaceLoadingErrorContainer from './marketplace-loading-error-container';
 import { vendorSelectors } from '../../common/marketplace/vendors/index';
 import { PageLoading } from './common';
+import { exchangesSelectors } from '../../common/exchanges';
 
 class MarketplaceContainerComponent extends PureComponent {
 	componentDidMount() {
@@ -27,6 +28,8 @@ class MarketplaceContainerComponent extends PureComponent {
 	}
 
 	componentDidUpdate(prevProps) {
+		// XXX listing exchanges select change
+		console.log('XXX', this.props.listingExchanges);
 		if (prevProps.identity.type !== this.props.identity.type) {
 			this.props.dispatch(push(this.props.match.path));
 		}
@@ -85,7 +88,9 @@ class MarketplaceContainerComponent extends PureComponent {
 const mapStateToProps = state => ({
 	identity: identitySelectors.selectIdentity(state),
 	isLoadingError: inventorySelectors.isInventoryLoadingError(state),
-	isLoading: vendorSelectors.isVendorsLoading(state)
+	isLoading: vendorSelectors.isVendorsLoading(state),
+	// XXX listing exchanges selector test
+	listingExchanges: exchangesSelectors.selectListingExchanges(state)
 });
 
 const connectedComponent = connect(mapStateToProps)(MarketplaceContainerComponent);
