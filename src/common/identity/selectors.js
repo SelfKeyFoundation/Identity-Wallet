@@ -598,7 +598,15 @@ export const selectCorporateProfile = createSelector(
 	selectBasicAttributeInfo(CREATION_DATE_ATTRIBUTE),
 	selectBasicAttributeInfo(JURISDICTION_ATTRIBUTE),
 	(
-		{ identity, wallet, allAttributes, basicAttributes, infoAttributes, documentAttributes },
+		{
+			identity,
+			wallet,
+			allAttributes,
+			basicAttributes,
+			infoAttributes,
+			documentAttributes,
+			nonBasicInfoAttributes
+		},
 		members,
 		email,
 		taxId,
@@ -611,7 +619,7 @@ export const selectCorporateProfile = createSelector(
 		wallet,
 		profilePicture: identity.profilePicture,
 		allAttributes,
-		attributes: infoAttributes,
+		attributes: nonBasicInfoAttributes,
 		basicAttributes,
 		documents: documentAttributes,
 		attributeOptions: {
