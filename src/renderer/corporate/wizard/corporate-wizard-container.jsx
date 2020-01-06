@@ -62,7 +62,7 @@ class CorporateWizardContainerComponent extends PureComponent {
 			jurisdiction: 'Please select a jurisdiction',
 			entityName: 'Please enter an entity name',
 			entityType: 'Please select a entity type',
-			creationDate: 'Please enter company creation date',
+			creationDate: 'Please enter company Incorporation date',
 			taxId: 'Tax id provided is invalid'
 		};
 		if (!attrs) {
