@@ -157,14 +157,6 @@ function onReady() {
 				ctx.rpcHandler[actionName](event, actionId, actionName, args);
 			}
 		});
-
-		electron.ipcMain.on('ON_CLOSE_DIALOG_CANCELED', event => {
-			mainWindow.shouldIgnoreClose = true;
-		});
-
-		electron.ipcMain.on('ON_IGNORE_CLOSE_DIALOG', event => {
-			mainWindow.shouldIgnoreCloseDialog = true;
-		});
 	};
 }
 
