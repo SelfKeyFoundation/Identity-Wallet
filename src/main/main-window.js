@@ -5,8 +5,6 @@ import path from 'path';
 import { isDevMode, isDebugMode } from 'common/utils/common';
 import { Logger } from '../common/logger';
 import createMenuTemplate from './menu';
-import { getGlobalContext } from 'common/context';
-import { push } from 'connected-react-router';
 import { initSplashScreen } from '@trodi/electron-splashscreen';
 
 const log = new Logger('main-window');
@@ -39,9 +37,6 @@ export const createMainWindow = async () => {
 			transparent: true
 		}
 	});
-
-	mainWindow.shouldIgnoreClose = true;
-	mainWindow.shouldIgnoreCloseDialog = false; // in order to don't show prompt window
 
 	Menu.setApplicationMenu(Menu.buildFromTemplate(createMenuTemplate(mainWindow)));
 
@@ -79,18 +74,7 @@ export const createMainWindow = async () => {
 		);
 	}
 
-	mainWindow.on('close', event => {
-		if (mainWindow.shouldIgnoreCloseDialog) {
-			mainWindow.shouldIgnoreCloseDialog = false;
-			return;
-		}
-		if (mainWindow.shouldIgnoreClose) {
-			event.preventDefault();
-			mainWindow.shouldIgnoreClose = false;
-			const store = getGlobalContext().store;
-			store.dispatch(push('/closeConfirmation'));
-		}
-	});
+	mainWindow.on('close', event => {});
 
 	mainWindow.on('closed', () => {
 		mainWindow = null;
