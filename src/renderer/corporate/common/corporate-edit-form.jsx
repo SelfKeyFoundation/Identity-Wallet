@@ -97,7 +97,7 @@ const CorporateEditFormComponent = withStyles(styles)(props => {
 						)}
 					</div>
 					<div className={`${classes.inputBox} ${classes.flexColumn}`}>
-						<InputTitle title="Creation Date" />
+						<InputTitle title="Incorporation Date" />
 						<KeyPicker
 							id="creationDate"
 							value={creationDate}
