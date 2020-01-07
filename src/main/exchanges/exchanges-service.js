@@ -4,7 +4,6 @@ import Exchange from './exchange';
 import ListingExchange from './listing-exchange';
 import { isDevMode } from 'common/utils/common';
 import { Logger } from 'common/logger';
-import { getGlobalContext } from 'common/context';
 import { LISTING_EXCHANGES_SYNC_JOB } from './listing-exchanges-sync-job-handler';
 
 const log = new Logger('ExchangesService');
@@ -14,8 +13,9 @@ const airtableBaseUrl =
 	'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=';
 
 export class ExchangesService {
-	constructor({ schedulerService }) {
+	constructor({ schedulerService, store }) {
 		this.schedulerService = schedulerService;
+		this.store = store;
 	}
 	async start() {
 		const now = new Date();
@@ -49,8 +49,7 @@ export class ExchangesService {
 
 		await Exchange.import(exchanges);
 		const importedExchanges = await Exchange.findAll();
-		const store = getGlobalContext().store;
-		return store.dispatch(exchangesOperations.updateExchanges(importedExchanges));
+		return this.store.dispatch(exchangesOperations.updateExchanges(importedExchanges));
 	}
 
 	loadListingExchanges() {

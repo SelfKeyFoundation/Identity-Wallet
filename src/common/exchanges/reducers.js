@@ -4,7 +4,7 @@ import { exchangeListSchema } from './schemas';
 import { schedulerTypes } from '../scheduler';
 import { LISTING_EXCHANGES_SYNC_JOB } from '../../main/exchanges/listing-exchanges-sync-job-handler';
 
-const initialState = {
+export const initialState = {
 	byId: {},
 	allIds: [],
 	exchangesListingById: {},
