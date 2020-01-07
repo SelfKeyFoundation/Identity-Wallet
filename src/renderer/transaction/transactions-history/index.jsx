@@ -24,10 +24,10 @@ import {
 	HourGlassIcon,
 	HourGlassSmallIcon,
 	FailedIcon,
-	ReceivedNewIcon,
-	SentNewIcon,
+	ReceivedRoundedIcon,
 	FilterIcon,
-	DropdownIcon
+	DropdownIcon,
+	SentRoundedIcon
 } from 'selfkey-ui';
 // import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { convertExponentialToDecimal } from 'common/utils/exponential-to-decimal';
@@ -46,10 +46,15 @@ const styles = theme => ({
 		backgroundColor: 'transparent !important',
 		borderBottom: '1px solid #303C49',
 		'& td': {
-			padding: '20px 0',
+			padding: '15px 0',
 			'&:last-child': {
 				paddingRight: 0
 			}
+		}
+	},
+	tableFooter: {
+		'& td': {
+			paddingBottom: 0
 		}
 	},
 	title: {
@@ -112,7 +117,7 @@ const getIconForTransaction = (isError, sent) => {
 		case undefined:
 			return <HourGlassIcon />;
 		default:
-			return sent ? <SentNewIcon /> : <ReceivedNewIcon />;
+			return sent ? <SentRoundedIcon /> : <ReceivedRoundedIcon />;
 	}
 };
 
@@ -212,7 +217,7 @@ const filterTransactionByToken = (transaction, token) => {
 
 class TransactionsHistory extends PureComponent {
 	state = {
-		rowsPerPage: 10,
+		rowsPerPage: 4,
 		page: 0
 	};
 
@@ -334,18 +339,22 @@ class TransactionsHistory extends PureComponent {
 									);
 								})}
 							</TableBody>
-							<TableFooter>
-								<TableRow className={classes.transparent}>
-									<TableCell colSpan={3} align="center">
-										<Button className={classes.moreTransactions}>
-											<DropdownIcon />
-											<Typography variant="overline" color="secondary">
-												View All Transactions
-											</Typography>
-										</Button>
-									</TableCell>
-								</TableRow>
-							</TableFooter>
+							{transactions.length > 4 ? (
+								<TableFooter className={classes.tableFooter}>
+									<TableRow className={classes.transparent}>
+										<TableCell colSpan={3} align="center">
+											<Button className={classes.moreTransactions}>
+												<DropdownIcon />
+												<Typography variant="overline" color="secondary">
+													View All Transactions
+												</Typography>
+											</Button>
+										</TableCell>
+									</TableRow>
+								</TableFooter>
+							) : (
+								''
+							)}
 						</Table>
 					)}
 				</Grid>
