@@ -102,6 +102,8 @@ const renderAttributeValue = ({ data, type }) => {
 				valueToString += `${data.value[prop]} `;
 			}
 		}
+	} else if (type.content.type === 'array') {
+		valueToString = type.content.title;
 	} else {
 		valueToString = data.value || '';
 	}
