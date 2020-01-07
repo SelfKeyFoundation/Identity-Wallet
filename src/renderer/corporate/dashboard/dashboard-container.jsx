@@ -69,6 +69,7 @@ class CorporateDashboardContainer extends PureComponent {
 	};
 
 	render() {
+		const { profile } = this.props;
 		const { popup, member, editAttribute, deleteAttribute } = this.state;
 		return (
 			<React.Fragment>
@@ -108,9 +109,9 @@ class CorporateDashboardContainer extends PureComponent {
 
 				<CorporateDashboardPage
 					{...this.props}
-					attributes={this.props.profile.basicAttributes}
-					attributeOptions={this.props.profile.attributeOptions}
-					documents={this.props.profile.documents}
+					attributes={[...profile.basicAttributes, ...profile.attributes]}
+					attributeOptions={profile.attributeOptions}
+					documents={profile.documents}
 					onAddAttribute={this.handleAddAttribute}
 					onEditAttribute={this.handleEditAttribute}
 					onDeleteAttribute={this.handleDeleteAttribute}
