@@ -45,6 +45,7 @@ import { CurrentApplication, ApplicationInProgress } from '../../kyc';
 import md5 from 'md5';
 import ReactPiwik from 'react-piwik';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
+import { exchangesOperations } from '../../../common/exchanges';
 
 const styles = theme => ({
 	headerSection: {
@@ -80,6 +81,7 @@ class Main extends PureComponent {
 	async componentDidMount() {
 		await this.props.dispatch(walletTokensOperations.loadWalletTokens());
 		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
+		await this.props.dispatch(exchangesOperations.loadListingExchangesOperation());
 		this.setMatomoId();
 	}
 
