@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
 	Grid,
 	Button,
@@ -93,7 +93,7 @@ const styles = theme => ({
 	}
 });
 
-class SelfKeyIdCreateFormComponent extends Component {
+class SelfKeyIdCreateFormComponent extends PureComponent {
 	state = {
 		error: '',
 		errorEmail: false,
@@ -116,7 +116,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 	handleSave = evt => {
 		evt.preventDefault();
 		this.props.dispatch(
-			identityOperations.createSelfkeyIdOperation(this.props.identity.id, { ...this.state })
+			identityOperations.createIndividualProfile(this.props.identity.id, { ...this.state })
 		);
 	};
 
@@ -170,7 +170,7 @@ class SelfKeyIdCreateFormComponent extends Component {
 	render() {
 		const { classes } = this.props;
 		return (
-			<>
+			<React.Fragment>
 				<div className={classes.backButtonContainer}>
 					<BackButton onclick={this.handleBackClick} className={classes.bb} />
 					{/* <Button
@@ -473,14 +473,14 @@ class SelfKeyIdCreateFormComponent extends Component {
 						</Grid>
 					</ModalWrap>
 				</Modal>
-			</>
+			</React.Fragment>
 		);
 	}
 }
 
 const mapStateToProps = (state, props) => {
 	return {
-		identity: identitySelectors.selectCurrentIdentity(state)
+		identity: identitySelectors.selectIdentity(state)
 	};
 };
 

@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { identitySelectors } from 'common/identity';
 import { didSelectors, didOperations } from 'common/did';
 import { AssociateDid } from './associate-did';
 
-class AssociateDIDContainerComponent extends Component {
+class AssociateDIDContainerComponent extends PureComponent {
 	state = {
 		did: '',
 		searching: false
@@ -76,7 +76,7 @@ class AssociateDIDContainerComponent extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		identity: identitySelectors.selectCurrentIdentity(state),
+		identity: identitySelectors.selectIdentity(state),
 		associateError: didSelectors.selectAssociateError(state),
 		didOriginUrl: didSelectors.selectOriginUrl(state)
 	};

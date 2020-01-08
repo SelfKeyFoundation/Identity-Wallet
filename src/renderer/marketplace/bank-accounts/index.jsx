@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { marketplaceOperations } from 'common/marketplace';
@@ -10,7 +10,7 @@ import { BankAccountsPaymentCompleteContainer } from './checkout/payment-complet
 import { BankAccountsSelectBankContainer } from './select-bank/select-bank-container';
 import { BankAccountsProcessStartedContainer } from './process-started/process-started-container';
 
-class MarketplaceBankAccountsComponent extends Component {
+class MarketplaceBankAccountsComponent extends PureComponent {
 	async componentDidMount() {
 		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
 	}
@@ -32,7 +32,7 @@ class MarketplaceBankAccountsComponent extends Component {
 					component={BankAccountsPaymentContainer}
 				/>
 				<Route
-					path={`${path}/payment-complete/:accountCode/:countryCode/:templateId/:vendorId`}
+					path={`${path}/payment-complete/:accountCode/:countryCode/:templateId/:vendorId/:orderId?`}
 					component={BankAccountsPaymentCompleteContainer}
 				/>
 				<Route

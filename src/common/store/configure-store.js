@@ -1,36 +1,11 @@
 /* istanbul ignore file */
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import promise from 'redux-promise';
-import locale from '../locale';
-import fiatCurrency from '../fiatCurrency';
-import wallet from '../wallet';
-import prices from '../prices';
-import walletTokens from '../wallet-tokens';
-import viewAll from '../view-all-tokens';
-import tokens from '../tokens';
-import ethGasStationInfo from '../eth-gas-station';
-import transaction from '../transaction';
-import addressBook from '../address-book';
-import incorporations from '../incorporations';
-import bankAccounts from '../bank-accounts';
-import exchanges from '../exchanges';
+import { routerMiddleware } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
-import marketplaces from '../marketplaces';
-import kyc from '../kyc';
-import identity from '../identity';
-import { connectRouter, routerMiddleware } from 'connected-react-router';
 import history from './history';
-import createWallet from '../create-wallet';
-import did from '../did';
-import transactionHistory from '../transaction-history';
-import app from '../app';
-import gas from '../gas';
-import scheduler from '../scheduler';
-import marketplace from '../marketplace';
-// eslint-disable-next-line
-import { closeOperations } from '../close';
-
+import { createReducers } from './reducers';
 import {
 	forwardToMain,
 	forwardToRenderer,
@@ -41,7 +16,7 @@ import {
 
 export default (initialState, scope = 'main') => {
 	let middleware = [thunk, promise];
-	let scopedReducers = {};
+	let composeFunction = compose;
 	if (scope === 'renderer') {
 		if (process.env.ENABLE_REDUX_LOGGER) {
 			const logger = createLogger({ collapsed: (getState, actions) => true });
@@ -49,13 +24,14 @@ export default (initialState, scope = 'main') => {
 		}
 		middleware = [forwardToMain, ...middleware];
 
-		history.create();
-		let router = connectRouter(history.getHistory());
+		if (!history.getHistory()) {
+			history.create();
+		}
 
 		middleware = [forwardToMain, ...middleware, routerMiddleware(history.getHistory())];
-		scopedReducers = {
-			router
-		};
+		if (typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
+			composeFunction = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+		}
 	}
 
 	if (scope === 'main') {
@@ -64,39 +40,20 @@ export default (initialState, scope = 'main') => {
 
 	const enhanced = [applyMiddleware(...middleware)];
 
-	const rootReducer = combineReducers({
-		locale,
-		fiatCurrency,
-		wallet,
-		walletTokens,
-		viewAll,
-		prices,
-		ethGasStationInfo,
-		transaction,
-		addressBook,
-		incorporations,
-		bankAccounts,
-		exchanges,
-		marketplaces,
-		marketplace,
-		identity,
-		createWallet,
-		transactionHistory,
-		app,
-		gas,
-		kyc,
-		tokens,
-		scheduler,
-		did,
-		...scopedReducers
-	});
-	const enhancer = compose(...enhanced);
+	const rootReducer = createReducers(scope);
+	const enhancer = composeFunction(...enhanced);
 	const store = createStore(rootReducer, initialState, enhancer);
 
 	if (scope === 'main') {
 		replayActionMain(store);
 	} else {
 		replayActionRenderer(store);
+	}
+
+	if (module.hot) {
+		module.hot.accept('./reducers', () => {
+			store.replaceReducer(createReducers(scope));
+		});
 	}
 
 	return store;

@@ -141,8 +141,16 @@ export class IdentityService {
 		return Identity.updateDID({ did, id });
 	}
 
-	createIdentity(walletId, type) {
-		return Identity.create({ walletId, type });
+	createIdentity(identity) {
+		return Identity.create(identity);
+	}
+
+	deleteIdentity(identityId) {
+		return Identity.delete(identityId);
+	}
+
+	updateIdentity(identity) {
+		return Identity.update(identity);
 	}
 }
 

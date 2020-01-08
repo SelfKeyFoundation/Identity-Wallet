@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { TransactionErrorPopup } from '../../common/transaction-error-popup';
 import { ordersOperations } from '../../../common/marketplace/orders';
 
-class MarketplaceOrderTxErrorContainer extends Component {
+class MarketplaceOrderTxErrorContainer extends PureComponent {
 	handleCloseAction = _ => {
 		this.props.dispatch(ordersOperations.cancelCurrentOrderOperation());
 	};

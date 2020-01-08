@@ -100,11 +100,11 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 
 	onApplyClick = () => {
 		const { rp, identity, vendorId, program } = this.props;
-		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
-		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
-		const transactionNoKeyError = '/main/transaction-no-key-error';
-		const authenticated = true;
+		const selfkeyIdRequiredRoute = '/main/marketplace/selfkey-id-required';
+		const selfkeyDIDRequiredRoute = '/main/marketplace/selfkey-did-required';
 		const keyPrice = this.priceInKEY(program.price);
+		const transactionNoKeyError = `/main/transaction-no-key-error/${keyPrice}`;
+		const authenticated = true;
 		const keyAvailable = new BigNumber(this.props.cryptoValue);
 		// When clicking the start process,
 		// we check if an authenticated kyc-chain session exists
@@ -148,6 +148,7 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 		} = this.props;
 		const region = program.data.region;
 		const price = program.price;
+
 		return (
 			<IncorporationsDetailsPage
 				applicationStatus={this.getApplicationStatus()}
@@ -199,7 +200,7 @@ const mapStateToProps = (state, props) => {
 		),
 		treaties: marketplaceSelectors.selectTaxTreatiesByCountryCode(state, countryCode),
 		country: marketplaceSelectors.selectCountryByCode(state, countryCode),
-		isLoading: marketplaceSelectors.isLoading(state),
+		isLoading: marketplaceSelectors.isInventoryLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
@@ -208,7 +209,7 @@ const mapStateToProps = (state, props) => {
 			notAuthenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(state, vendorId, templateId),
-		identity: identitySelectors.selectCurrentIdentity(state),
+		identity: identitySelectors.selectIdentity(state),
 		cryptoValue: getCryptoValue(state, primaryToken)
 	};
 };

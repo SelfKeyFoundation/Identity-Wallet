@@ -1,6 +1,6 @@
 import { MarketplaceComponent } from '../../common/marketplace-component';
 
-const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace-bank-accounts';
+const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = '/main/marketplace/bank-accounts';
 
 export default class MarketplaceBankAccountsComponent extends MarketplaceComponent {
 	processStartedRoute = () => {
@@ -67,6 +67,9 @@ export default class MarketplaceBankAccountsComponent extends MarketplaceCompone
 	};
 
 	getExistingBankPreferenceSelection = application => {
+		if (!application) {
+			return '';
+		}
 		const questions = application.questions;
 		const questionId = this.getBankQuestionId(questions);
 		return questions[questionId].value ? questions[questionId].value[0] : '';

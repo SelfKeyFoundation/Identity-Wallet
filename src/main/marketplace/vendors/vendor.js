@@ -18,6 +18,7 @@ export class Vendor extends BaseModel {
 			properties: {
 				id: { type: 'integer' },
 				vendorId: { type: 'string' },
+				entityTypes: { type: 'array', items: { type: 'string' }, default: ['individual'] },
 				env: { type: 'string', enum: ['development', 'production', 'test'] },
 				name: { type: 'string', default: '' },
 				description: { type: 'string', default: '' },
@@ -30,6 +31,7 @@ export class Vendor extends BaseModel {
 				},
 				relyingPartyConfig: { type: 'object', default: {} },
 				privacyPolicy: { type: 'string', default: '' },
+				termsOfService: { type: 'string', default: '' },
 				contactEmail: { type: 'string', default: '' },
 				did: { type: 'string', default: '' },
 				paymentAddress: { type: 'string', default: '' }

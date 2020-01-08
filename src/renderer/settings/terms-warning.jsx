@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Grid, Typography, Paper, Modal, Button } from '@material-ui/core';
 import { SelfkeyLogo, ModalWrap, ModalHeader, ModalBody } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
@@ -29,7 +29,7 @@ const styles = theme => ({
 	}
 });
 
-class TermsWarning extends Component {
+class TermsWarning extends PureComponent {
 	handleReturn = () => {
 		this.props.dispatch(push('/terms'));
 	};

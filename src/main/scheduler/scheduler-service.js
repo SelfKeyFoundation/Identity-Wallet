@@ -2,18 +2,18 @@ import { SchedulerJob } from './scheduler-job';
 import { schedulerOperations } from 'common/scheduler';
 import { Logger } from '../../common/logger';
 
-const log = new Logger('Scheduler Service');
+const log = new Logger('SchedulerService');
 export class SchedulerService {
 	constructor({ store }) {
 		this.store = store;
 		this.registry = {};
 	}
-	queueJob(id = null, category, at = 0, data) {
-		log.info('queuing job %s', category);
-		this.store.dispatch(schedulerOperations.queueJobAction(id, category, at, data));
+	queueJob(id = null, category, at = 0, data, strategy) {
+		log.debug('queuing job %s', category);
+		this.store.dispatch(schedulerOperations.queueJobAction(id, category, at, data, strategy));
 	}
 	registerJobHandler(category, handler) {
-		log.info('registering new handler: %s', category);
+		log.debug('registering new handler: %s', category);
 		this.registry[category] = handler;
 	}
 	unregisterJobHandler(category) {

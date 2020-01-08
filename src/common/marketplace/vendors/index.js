@@ -2,6 +2,8 @@ import { getGlobalContext } from 'common/context';
 import { createAliasedAction } from 'electron-redux';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import CONFIG from 'common/config.js';
+import { schedulerSelectors, schedulerOperations } from '../../scheduler/index';
+import { VENDOR_SYNC_JOB } from '../../../main/marketplace/vendors/vendor-sync-job-handler';
 
 export const initialState = {
 	all: [],
@@ -10,7 +12,8 @@ export const initialState = {
 
 export const vendorTypes = {
 	VENDORS_SET: 'marketplace/vendor/actions/SET',
-	VENDORS_LOAD_OPERATION: 'marketplace/vendor/operations/LOAD'
+	VENDORS_LOAD_OPERATION: 'marketplace/vendor/operations/LOAD',
+	VENDORS_REFRESH_OPERATION: 'marketplace/vendor/operations/REFRESH'
 };
 
 export const vendorActions = {
@@ -26,11 +29,19 @@ const loadVendorsOperation = () => async (dispatch, getState) => {
 	await dispatch(vendorActions.setVendors(vendors));
 };
 
+const refreshVendorsOperation = () => async (dispatch, getState) => {
+	await dispatch(schedulerOperations.queueJobAction(null, VENDOR_SYNC_JOB));
+};
+
 export const vendorOperations = {
 	...vendorActions,
 	loadVendorsOperation: createAliasedAction(
 		vendorTypes.VENDORS_LOAD_OPERATION,
 		loadVendorsOperation
+	),
+	refreshVendorsOperation: createAliasedAction(
+		vendorTypes.VENDORS_REFRESH_OPERATION,
+		refreshVendorsOperation
 	)
 };
 
@@ -82,6 +93,22 @@ export const vendorSelectors = {
 			name: vendorId,
 			...vendor
 		};
+	},
+	isVendorsLoading: state => {
+		if (vendorSelectors.selectVendors(state).length) {
+			return false;
+		}
+		const jobs = schedulerSelectors.selectJobsInProgressByCategory(state, VENDOR_SYNC_JOB, 100);
+		return !!jobs.length;
+	},
+	isVendorsLoadingError: state => {
+		if (
+			vendorSelectors.selectVendors(state).length ||
+			vendorSelectors.isVendorsLoading(state)
+		) {
+			return false;
+		}
+		return true;
 	},
 	hasBalance: (state, vendorId) => {
 		const service = vendorSelectors.selectRPDetails(state, vendorId);

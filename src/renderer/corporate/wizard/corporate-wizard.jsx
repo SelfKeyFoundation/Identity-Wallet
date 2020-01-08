@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
 	CardHeader,
 	Card,
@@ -178,6 +178,7 @@ const CompanyInformation = withStyles(styles)(props => {
 									<Select
 										className={classes.select}
 										onChange={onFieldChange('entityType')}
+										displayEmpty
 										value={entityType}
 										name="entitytype"
 										error={errors.entityType}
@@ -201,7 +202,7 @@ const CompanyInformation = withStyles(styles)(props => {
 									)}
 								</div>
 								<div className={`${classes.inputBox} ${classes.flexColumn}`}>
-									<InputTitle title="Creation Date" />
+									<InputTitle title="Incorporation Date" />
 									<KeyPicker
 										id="creationDate"
 										value={creationDate}
@@ -390,7 +391,7 @@ const CompanyInformation = withStyles(styles)(props => {
 // 	);
 // });
 
-class CorporateWizardComponent extends Component {
+class CorporateWizardComponent extends PureComponent {
 	render() {
 		const { classes, isDisabled } = this.props;
 		return (

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { identitySelectors, identityOperations } from 'common/identity';
 import SelfkeyId from '../components/selfkey-id';
@@ -6,9 +6,9 @@ import SelfkeyIdOverview from './selfkey-id-overview';
 import SelfkeyIdApplications from './selfkey-id-applications';
 import { push } from 'connected-react-router';
 
-const MARKETPLACE_ROOT_PATH = '/main/marketplace-categories';
+const MARKETPLACE_ROOT_PATH = '/main/marketplace';
 
-class SelfkeyIdContainerComponent extends Component {
+class SelfkeyIdContainerComponent extends PureComponent {
 	state = {
 		tab: 0
 	};
@@ -58,7 +58,6 @@ class SelfkeyIdContainerComponent extends Component {
 		// } else if (this.state.tabValue === 3) {
 		// 	component = <SelfkeyIdHistory {...this.props} />;
 		// }
-
 		return (
 			<React.Fragment>
 				<SelfkeyId
@@ -74,7 +73,7 @@ class SelfkeyIdContainerComponent extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		...identitySelectors.selectSelfkeyId(state)
+		...identitySelectors.selectIndividualProfile(state)
 	};
 };
 export const SelfkeyIdContainer = connect(mapStateToProps)(SelfkeyIdContainerComponent);

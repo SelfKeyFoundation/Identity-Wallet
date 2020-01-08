@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 import { Button, Grid, withStyles, Typography } from '@material-ui/core';
 import { ReturnLargeIcon, TransactionFeeSelector } from 'selfkey-ui';
@@ -34,7 +34,7 @@ const styles = theme => ({
 	checked: {}
 });
 
-class ReturnDepositContentComponent extends Component {
+class ReturnDepositContentComponent extends PureComponent {
 	state = {
 		error: false,
 		understood: false,

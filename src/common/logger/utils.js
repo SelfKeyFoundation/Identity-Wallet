@@ -18,7 +18,7 @@ export const createFilter = ({ filters, filterLevels }) => {
 	}
 
 	return (level, msg) => {
-		if (filterLevels && !filterLevels.contains(level)) {
+		if (filterLevels && !filterLevels.includes(level)) {
 			return false;
 		}
 		for (let filter of filters) {

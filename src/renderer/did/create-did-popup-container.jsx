@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import config from 'common/config';
 
@@ -16,7 +16,7 @@ import { push } from 'connected-react-router';
 
 const CRYPTOCURRENCY = config.constants.primaryToken;
 
-class CreateDIDPopupContainerComponent extends Component {
+class CreateDIDPopupContainerComponent extends PureComponent {
 	state = {
 		open: true,
 		isConfirmationOpen: false
@@ -55,7 +55,7 @@ class CreateDIDPopupContainerComponent extends Component {
 	};
 
 	handleLearnHowClicked = e => {
-		window.openExternal(e, 'https://help.selfkey.org/');
+		window.openExternal(e, 'https://help.selfkey.org/article/147-what-is-a-did');
 	};
 
 	render() {

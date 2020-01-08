@@ -18,7 +18,6 @@ import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorp
 const styles = theme => ({});
 const CRYPTOCURRENCY = config.constants.primaryToken;
 const FIXED_GAS_LIMIT_PRICE = 21000;
-const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent {
 	async componentDidMount() {
@@ -59,10 +58,9 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 	onBackClick = () => this.props.dispatch(push(this.cancelRoute()));
 
 	onStartClick = async () => {
-		const { program, vendorId, templateId } = this.props;
+		const { program, vendorId, templateId, vendor } = this.props;
 		const { region } = program.data;
 
-		// TODO: get URLs and vendor name from the RP store
 		this.props.dispatch(
 			kycOperations.startCurrentApplicationOperation(
 				vendorId,
@@ -75,19 +73,23 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 				will result in delays in the incorporation process. You may also be asked to provide
 				more information by the service provider`,
 				'conducting KYC',
-				VENDOR_NAME,
-				'https://flagtheory.com/privacy-policy',
-				'http://flagtheory.com/terms-and-conditions'
+				vendor.name,
+				vendor.privacyPolicy,
+				vendor.termsOfService
 			)
 		);
 	};
 
 	render() {
 		const { program, countryCode } = this.props;
+		const description = program.data.walletDescription
+			? program.data.walletDescription
+			: program.data.servicesDescription;
+
 		return (
 			<PaymentCheckout
 				title={`Pay Incorporation Fee: ${program.data.region}`}
-				description={program.data.walletDescription}
+				description={description}
 				timeToForm={program.data.timeToFormWeeks}
 				program={program}
 				countryCode={countryCode}
@@ -118,6 +120,7 @@ const mapStateToProps = (state, props) => {
 		countryCode,
 		templateId,
 		vendorId,
+		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
 		program: marketplaceSelectors.selectIncorporationByFilter(
 			state,
 			c => c.data.companyCode === companyCode

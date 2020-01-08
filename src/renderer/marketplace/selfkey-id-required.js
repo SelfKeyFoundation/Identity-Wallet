@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { WarningShieldIcon } from 'selfkey-ui';
 import { Popup } from '../common/popup';
 import { connect } from 'react-redux';
@@ -14,13 +14,13 @@ const styles = theme => ({
 	}
 });
 
-class MarketplaceSelfkeyIdRequiredComponent extends Component {
+class MarketplaceSelfkeyIdRequiredComponent extends PureComponent {
 	handleConfirm = evt => {
 		evt.preventDefault();
 		this.props.dispatch(push('/main/selfkeyId'));
 	};
 	handleClose = () => {
-		this.props.dispatch(push('/main/marketplace-categories'));
+		this.props.dispatch(push('/main/marketplace'));
 	};
 	render() {
 		const { classes } = this.props;

@@ -1,10 +1,10 @@
 /* global FileReader */
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { ButtonBase, withStyles, Button, Grid } from '@material-ui/core';
 import { HexagonAvatar } from './hexagon-avatar';
 const styles = theme => ({});
 
-class EditAvatarComponent extends Component {
+class EditAvatarComponent extends PureComponent {
 	constructor(props) {
 		super(props);
 		const { avatar, identityId } = props;

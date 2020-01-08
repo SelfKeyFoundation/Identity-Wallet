@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Typography, Button, Grid, withStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
 import Popup from '../../../common/popup';
@@ -12,7 +12,7 @@ const styles = theme => ({
 		fontSize: '66px'
 	}
 });
-class HardwareWalletUnlock extends Component {
+class HardwareWalletUnlock extends PureComponent {
 	handleClose = () => {
 		this.props.dispatch(push(this.props.cancelRoute));
 	};

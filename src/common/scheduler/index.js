@@ -27,13 +27,14 @@ export const schedulerTypes = {
 };
 
 export const schedulerActions = {
-	queueJobAction: (id, category, at = 0, data) => ({
+	queueJobAction: (id, category, at = 0, data, strategy = null) => ({
 		type: schedulerTypes.SCHEDULER_JOB_QUEUE,
 		payload: {
 			id: id || uuidv1(),
 			category,
 			at,
-			data
+			data,
+			strategy
 		}
 	}),
 	processJobAction: (id, processTs) => ({
@@ -74,7 +75,10 @@ export const reducers = {
 		return { ...state, processing: !!action.payload };
 	},
 	queueJobReducer: (state, action) => {
-		const job = { ...action.payload, data: { ...action.payload.data } };
+		const job = {
+			...action.payload,
+			data: { ...action.payload.data }
+		};
 		const jobsById = { ...state.jobsById };
 		const queue = state.queue.filter(id => id !== job.id);
 		queue.push(job.id);
@@ -176,22 +180,6 @@ export const operations = {
 					job.data
 				)
 			);
-			if (jobObj.hasJobs()) {
-				await Promise.all(
-					jobObj
-						.getJobs()
-						.map(job =>
-							dispatch(
-								schedulerOperations.queueJobAction(
-									job.id || null,
-									job.category,
-									job.at,
-									job.data
-								)
-							)
-						)
-				);
-			}
 			return result;
 		} catch (error) {
 			await dispatch(
@@ -202,6 +190,24 @@ export const operations = {
 				job.data
 			);
 			return error;
+		} finally {
+			if (jobObj.hasJobs()) {
+				await Promise.all(
+					jobObj
+						.getJobs()
+						.map(job =>
+							dispatch(
+								schedulerOperations.queueJobAction(
+									job.id || null,
+									job.category,
+									job.at,
+									job.data,
+									job.strategy
+								)
+							)
+						)
+				);
+			}
 		}
 	},
 
@@ -266,7 +272,27 @@ export const schedulerSelectors = {
 		return schedulerSelectors.selectQueued(state).filter(job => job.at <= ts);
 	},
 	selectJob: (state, id) => schedulerSelectors.selectScheduler(state).jobsById[id],
-	isSchedulerProcessing: state => !!schedulerSelectors.selectScheduler(state).processing
+	isSchedulerProcessing: state => !!schedulerSelectors.selectScheduler(state).processing,
+	selectProcessingJobsByCategory: (state, category) =>
+		schedulerSelectors.selectProcessingJobs(state).filter(job => job.category === category),
+	selectQueuedJobsByCategory: (state, category, maxAnticipationTime = null) => {
+		const ts = Date.now();
+		return schedulerSelectors.selectQueued(state).filter(job => {
+			if (maxAnticipationTime !== null && job.at > ts + maxAnticipationTime) {
+				return false;
+			}
+			return job.category === category;
+		});
+	},
+	selectJobsInProgressByCategory: (state, category, maxAnticipationTime = 0) => {
+		const processing = schedulerSelectors.selectProcessingJobsByCategory(state, category);
+		const queued = schedulerSelectors.selectQueuedJobsByCategory(
+			state,
+			category,
+			maxAnticipationTime
+		);
+		return [...processing, ...queued];
+	}
 };
 
 export const schedulerReducer = (state = schedulerInitialState, action) => {

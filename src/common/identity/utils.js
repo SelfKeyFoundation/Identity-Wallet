@@ -152,18 +152,15 @@ identityAttributes.normalizeDocumentsSchema = (
 	return { value, documents };
 };
 
-identityAttributes.validate = (schema, attribute, documents) => {
-	const ajv = new Ajv({ validateSchema: true, allErrors: true });
-	ajv.addFormat('file', () => {});
+identityAttributes.validate = (schema, attribute, documents, validateSchema = true) => {
 	try {
-		schema = jsonSchema.removeMeta(schema);
-		if (!ajv.validateSchema(schema)) return false;
+		const cleanSchema = jsonSchema.removeMeta(schema);
 		const denormalized = identityAttributes.denormalizeDocumentsSchema(
-			schema,
+			cleanSchema,
 			attribute,
 			documents
 		);
-		return ajv.validate(schema, denormalized.value);
+		return jsonSchema.validate(schema, denormalized.value, validateSchema);
 	} catch (error) {
 		log.error(error);
 		return false;
@@ -248,9 +245,9 @@ jsonSchema.loadRemoteSchema = async (url, options, attempt = 1) => {
 jsonSchema.dereference = (schema, options) => {
 	const resolver = {
 		order: 1,
-		canRead: /^platform\.selfkey\.org:/i,
+		canRead: /platform\.selfkey\.org/i,
 		async read(file) {
-			return jsonSchema.loadRemoteSchema(file, options);
+			return jsonSchema.loadRemoteSchema(file.url, options);
 		}
 	};
 	return RefParser.dereference(schema, { resolve: { selfkey: resolver } });
@@ -283,6 +280,19 @@ jsonSchema.loadRemoteRepository = async (url, options, attempt = 1) => {
 		}
 		throw error;
 	}
+};
+
+jsonSchema.validate = (schema, value, validateSchema = true) => {
+	const ajv = new Ajv({ validateSchema: true, allErrors: true });
+	ajv.addFormat('file', () => {});
+	const schemaId = schema.id || schema.$id;
+	schema = jsonSchema.removeMeta(schema);
+	if (validateSchema && !ajv.validateSchema(schema)) return false;
+	const ret = ajv.validate(schema, value);
+	if (!ret) {
+		log.error('validation error %s %2j %2j', schemaId, value, ajv.errors);
+	}
+	return ret;
 };
 
 export default { identityAttributes, jsonSchema };

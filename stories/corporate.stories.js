@@ -14,8 +14,14 @@ import { CorporateShareholding } from '../src/renderer/corporate/common/corporat
 import { CorporateOrgChart } from '../src/renderer/corporate/common/corporate-org-chart';
 import { CorporateInformation } from '../src/renderer/corporate/common/corporate-information';
 import { CorporateWizard } from '../src/renderer/corporate/wizard/corporate-wizard';
-import { CorporateAddMember } from '../src/renderer/corporate/member/corporate-add-member';
 import { CorporateDocuments } from '../src/renderer/corporate/common/corporate-documents';
+import { CorporateMembers } from '../src/renderer/corporate/common/corporate-members';
+import { CorporateMemberForm } from '../src/renderer/corporate/member/corporate-member-form';
+import { CorporateMemberIndividualForm } from '../src/renderer/corporate/member/member-individual-form';
+import { CorporateMemberCorporateForm } from '../src/renderer/corporate/member/member-corporate-form';
+import { CorporateMemberSharesForm } from '../src/renderer/corporate/member/member-shares-form';
+import { CorporateMemberSelectRole } from '../src/renderer/corporate/member/member-select-role';
+import { CorporateMemberSelectType } from '../src/renderer/corporate/member/member-select-type';
 
 import {
 	dummyProfile,
@@ -25,8 +31,11 @@ import {
 	dummyMembers,
 	entityTypes,
 	legalJurisdictions,
+	countries,
 	corporateAttributes,
-	corporateDocuments
+	corporateDocuments,
+	corporateMembers,
+	corporatePositionsLLC
 } from './corporate-data';
 
 storiesOf('Corporate', module).add('Dashboard', () => (
@@ -140,23 +149,23 @@ storiesOf('Corporate/Components', module)
 		</div>
 	))
 	.add('Corporate Cap Table', () => (
-		<div style={{ width: '650px' }}>
+		<div style={{ width: '1024px' }}>
 			<CorporateCapTable
-				cap={corporateCapTable}
+				members={corporateMembers}
 				onEdit={action('corporate cap edit click')}
 			/>
 		</div>
 	))
 	.add('Corporate Shareholding', () => (
 		<div style={{ width: '650px' }}>
-			<CorporateShareholding cap={corporateCapTable} />
+			<CorporateShareholding members={corporateMembers} />
 		</div>
 	))
 	.add('Corporate Org Chart', () => (
 		<div style={{ width: '650px' }}>
 			<CorporateOrgChart
 				profile={dummyProfile}
-				cap={corporateCapTable}
+				members={corporateMembers}
 				onEdit={action('corporate org chart edit click')}
 			/>
 		</div>
@@ -178,6 +187,29 @@ storiesOf('Corporate/Components', module)
 				onAddDocument={action('on add document')}
 				onEditDocument={action('on edit document')}
 				onDeleteDocument={action('on delete document')}
+			/>
+		</div>
+	))
+	.add('Corporate Members', () => (
+		<div>
+			<CorporateMembers
+				members={corporateMembers}
+				onOpenMemberDetails={action('on open entity details')}
+				onAddMember={action('on add new member')}
+				onDeleteMember={action('on delete member')}
+				onEditMember={action('on edit member')}
+			/>
+		</div>
+	))
+	.add('Corporate Members with Selected Entity', () => (
+		<div>
+			<CorporateMembers
+				members={corporateMembers}
+				onOpenMemberDetails={action('on open entity details')}
+				onAddMember={action('on add new member')}
+				onDeleteMember={action('on delete member')}
+				onEditMember={action('on edit member')}
+				selectedMember={corporateMembers[1]}
 			/>
 		</div>
 	));
@@ -205,4 +237,69 @@ storiesOf('Corporate/Wizard', module)
 		/>
 	));
 
-storiesOf('Corporate', module).add('Add Member', () => <CorporateAddMember />);
+storiesOf('Corporate/Members', module).add('Add Member', () => (
+	<CorporateMemberForm
+		entityTypes={entityTypes}
+		jurisdictions={legalJurisdictions}
+		countries={countries}
+		availablePositions={corporatePositionsLLC}
+		parentProfile={dummyProfile}
+		companies={corporateMembers}
+		selectedType={`individual`}
+		onContinueClick={action(`continue click`)}
+		onCancelClick={action(`cancel click`)}
+		onFieldChange={name => action(`field change ${name}:`)}
+	/>
+));
+storiesOf('Corporate/Members/Components', module)
+	.add('Individual Member Form', () => (
+		<div style={{ width: '1140px' }}>
+			<CorporateMemberIndividualForm
+				countries={countries}
+				onFieldChange={name => action(`field changed ${name}`)}
+			/>
+		</div>
+	))
+	.add('Entity Member Form', () => (
+		<div style={{ width: '1140px' }}>
+			<CorporateMemberCorporateForm
+				jurisdictions={legalJurisdictions}
+				entityTypes={entityTypes}
+				onFieldChange={name => action(`field changed ${name}`)}
+			/>
+		</div>
+	))
+	.add('Parent & Shares Form', () => (
+		<div style={{ width: '1140px' }}>
+			<CorporateMemberSharesForm
+				shares={50}
+				companies={corporateMembers}
+				onFieldChange={name => action(`field changed ${name}`)}
+			/>
+		</div>
+	))
+	.add('Select Role', () => (
+		<div style={{ width: '720px' }}>
+			<CorporateMemberSelectRole
+				availablePositions={corporatePositionsLLC}
+				onFieldChange={name => action(`field changed ${name}`)}
+			/>
+		</div>
+	))
+	.add('Select Type', () => (
+		<div style={{ width: '720px' }}>
+			<CorporateMemberSelectType
+				selected={'corporate'}
+				onTypeChange={action(`type changed`)}
+			/>
+		</div>
+	))
+	.add('Disabled Select Type', () => (
+		<div style={{ width: '720px' }}>
+			<CorporateMemberSelectType
+				selected={'corporate'}
+				isEditing={true}
+				onTypeChange={action(`type changed`)}
+			/>
+		</div>
+	));

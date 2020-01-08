@@ -8,7 +8,7 @@ import { Logger } from '../common/logger';
 const log = new Logger('squirrelEvent');
 
 export function handleSquirrelEvent() {
-	log.info('started handleSquirrelEvent');
+	log.debug('started handleSquirrelEvent');
 
 	if (process.argv.length === 1) {
 		return false;
@@ -68,7 +68,7 @@ export function handleSquirrelEvent() {
 			electron.app.quit();
 			return true;
 	}
-	log.info('end handleSquirrelEvent');
+	log.debug('end handleSquirrelEvent');
 }
 
 export default handleSquirrelEvent;

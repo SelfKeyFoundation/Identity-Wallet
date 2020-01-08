@@ -1,17 +1,28 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { identitySelectors, identityOperations } from 'common/identity';
 import CreateAttribute from './create-attribute';
 
-class CreateAttributeContainerComponent extends Component {
+class CreateAttributeContainerComponent extends PureComponent {
 	handleSave = attribute => {
-		this.props.dispatch(identityOperations.createIdAttributeOperation(attribute));
+		this.props.dispatch(
+			identityOperations.createIdAttributeOperation(attribute, this.props.identityId)
+		);
 	};
 	handleCancel = () => {
 		if (this.props.onClose) return this.props.onClose();
 	};
 	render() {
-		let { types, open = true, text, subtitle, uiSchemas, typeId, isDocument } = this.props;
+		let {
+			types,
+			open = true,
+			text,
+			subtitle,
+			uiSchemas,
+			typeId,
+			isDocument,
+			attributeOptions = {}
+		} = this.props;
 
 		if (!text) {
 			if (isDocument) {
@@ -37,6 +48,7 @@ class CreateAttributeContainerComponent extends Component {
 				onSave={this.handleSave}
 				onCancel={this.handleCancel}
 				types={types}
+				attributeOptions={attributeOptions}
 				uiSchemas={uiSchemas}
 				isDocument={isDocument}
 				typeId={typeId}
@@ -47,10 +59,9 @@ class CreateAttributeContainerComponent extends Component {
 
 const mapStateToProps = (state, props) => {
 	return {
-		types: identitySelectors.selectIdAttributeTypes(
-			state,
-			props.corporate ? 'corporate' : 'individual'
-		),
+		types: identitySelectors.selectAttributeTypesFiltered(state, {
+			entityType: props.corporate ? 'corporate' : 'individual'
+		}),
 		uiSchemas: identitySelectors.selectUiSchemas(state)
 	};
 };

@@ -1,5 +1,5 @@
-import React from 'react';
-import { withStyles } from '@material-ui/core';
+import React, { PureComponent } from 'react';
+import { withStyles, Typography } from '@material-ui/core';
 import { sanitize } from '../../common';
 
 const styles = theme => ({
@@ -8,8 +8,7 @@ const styles = theme => ({
 		padding: '2em 0',
 		color: '#FFFFFF',
 		'& p': {
-			marginBottom: '1.5em',
-			lineHeight: '1.4em'
+			marginBottom: '1.5em'
 		},
 		'& strong': {
 			fontWeight: 'bold',
@@ -36,15 +35,27 @@ const styles = theme => ({
 	}
 });
 
-const BankingDescriptionTab = withStyles(styles)(({ classes, jurisdiction }) => (
-	<div className={classes.tabContainer}>
-		<div
-			dangerouslySetInnerHTML={{
-				__html: sanitize(jurisdiction.data.introText)
-			}}
-		/>
-	</div>
-));
+class BankingDescriptionTabComponent extends PureComponent {
+	async componentDidMount() {
+		window.scrollTo(0, 0);
+	}
 
-export { BankingDescriptionTab };
+	render() {
+		const { classes, jurisdiction } = this.props;
+		return (
+			<div className={classes.tabContainer}>
+				<Typography
+					variant="body1"
+					color="secondary"
+					dangerouslySetInnerHTML={{
+						__html: sanitize(jurisdiction.data.introText)
+					}}
+				/>
+			</div>
+		);
+	}
+}
+
+export const BankingDescriptionTab = withStyles(styles)(BankingDescriptionTabComponent);
+
 export default BankingDescriptionTab;

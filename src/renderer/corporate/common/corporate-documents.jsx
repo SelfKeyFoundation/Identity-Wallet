@@ -22,8 +22,11 @@ import {
 	FileImageIcon,
 	FileDefaultIcon,
 	FileMultipleIcon,
-	FileAudioIcon
+	FileAudioIcon,
+	FileLinkWithModal
 } from 'selfkey-ui';
+
+import { canEdit, canDelete } from './common-helpers.jsx';
 
 const styles = theme => ({
 	hr: {
@@ -82,11 +85,12 @@ const renderAttributeTitle = attr => attr.type.content.title || 'No title provid
 const renderDocumentName = ({ entry, classes }) => {
 	let fileType = null;
 	let fileName = null;
+	let hasOneDocument = false;
 	let FileIcon = FileDefaultIcon;
 
 	if (entry.documents.length === 1) {
-		fileName = entry.documents[0].name;
 		fileType = entry.documents[0].mimeType;
+		hasOneDocument = true;
 		if (fileType) {
 			if (fileType === 'application/pdf') FileIcon = FilePdfIcon;
 			else if (fileType.startsWith('audio')) FileIcon = FileAudioIcon;
@@ -103,17 +107,24 @@ const renderDocumentName = ({ entry, classes }) => {
 				<FileIcon />
 			</div>
 			<div>
-				<Typography variant="h6" className={classes.noOverflow} title={entry.name}>
-					{entry.name}
-				</Typography>
-				<Typography
-					variant="subtitle1"
-					color="secondary"
-					className={classes.noOverflow}
-					title={fileName}
-				>
-					{fileName}
-				</Typography>
+				<Typography variant="h6">{entry.name}</Typography>
+				{fileName && (
+					<Typography
+						variant="subtitle1"
+						color="secondary"
+						className={classes.ellipsis}
+						title={fileName}
+					>
+						{fileName}
+					</Typography>
+				)}
+				{hasOneDocument && (
+					<FileLinkWithModal
+						file={entry.documents[0]}
+						small
+						onPDFOpen={file => window.openPDF(file.content || file.url)}
+					/>
+				)}
 			</div>
 		</div>
 	);
@@ -130,7 +141,14 @@ const DocumentExpiryDate = ({ doc }) => {
 };
 
 const CorporateDocuments = withStyles(styles)(props => {
-	const { classes, documents = [], onEditDocument, onDeleteDocument, onAddDocument } = props;
+	const {
+		classes,
+		documents = [],
+		attributeOptions = {},
+		onEditDocument,
+		onDeleteDocument,
+		onAddDocument
+	} = props;
 	return (
 		<Card className={classes.card}>
 			<CardHeader title="Documents" className={classes.regularText} />
@@ -176,18 +194,22 @@ const CorporateDocuments = withStyles(styles)(props => {
 									</Typography>
 								</TableCell>
 								<TableCell align="right">
-									<IconButton
-										id="editButton"
-										onClick={() => onEditDocument(entry)}
-									>
-										<EditTransparentIcon />
-									</IconButton>
-									<IconButton
-										id="deleteButton"
-										onClick={() => onDeleteDocument(entry)}
-									>
-										<DeleteIcon />
-									</IconButton>
+									{canEdit(entry.type, attributeOptions) && (
+										<IconButton
+											id="editButton"
+											onClick={() => onEditDocument(entry)}
+										>
+											<EditTransparentIcon />
+										</IconButton>
+									)}
+									{canDelete(entry.type, attributeOptions) && (
+										<IconButton
+											id="deleteButton"
+											onClick={() => onDeleteDocument(entry)}
+										>
+											<DeleteIcon />
+										</IconButton>
+									)}
 								</TableCell>
 							</TableRow>
 						))}

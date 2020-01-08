@@ -27,12 +27,12 @@ const Dashboard = connect(mapStateToProps)(props => {
 			{props.info && props.info.version && (
 				<Grid item style={{ width: '100%' }}>
 					<Alert type="warning">
-						<Grid container direction="row" justify="space-between">
-							<Grid item>
+						<Grid container direction="row" justify="space-between" alignItems="center">
+							<div>
 								A new version of the wallet is available! For security reasons
 								please update to the latest version.
-							</Grid>
-							<Grid item>
+							</div>
+							<div>
 								<Button
 									variant="contained"
 									size="small"
@@ -40,7 +40,7 @@ const Dashboard = connect(mapStateToProps)(props => {
 								>
 									DOWNLOAD & INSTALL
 								</Button>
-							</Grid>
+							</div>
 						</Grid>
 					</Alert>
 				</Grid>

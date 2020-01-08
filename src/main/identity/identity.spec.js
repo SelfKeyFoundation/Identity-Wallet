@@ -1,5 +1,6 @@
 import Identity from './identity';
 import TestDb from '../db/test-db';
+import IdAttribute from './id-attribute';
 
 describe('Identity model', () => {
 	const testIdentity = {
@@ -55,10 +56,21 @@ describe('Identity model', () => {
 
 	it('create', async () => {
 		const idnt = await Identity.create(testIdentity);
-		const idnt2 = await Identity.create(testIdentity);
+		const idnt2 = await Identity.create({
+			...testIdentity,
+			rootIdentity: false,
+			positions: ['shareholder', 'director'],
+			equity: 50.2
+		});
 		expect(idnt.id).toBeGreaterThan(0);
 		expect(idnt2.id).toBeGreaterThan(0);
 		expect(idnt.id).not.toBe(idnt2.id);
+		expect(idnt.rootIdentity).toBe(true);
+		expect(idnt.positions).toEqual([]);
+		expect(idnt.equity).toBe(0);
+		expect(idnt2.rootIdentity).toBe(false);
+		expect(idnt2.positions).toEqual(['shareholder', 'director']);
+		expect(idnt2.equity).toBe(50.2);
 	});
 
 	it('updateDID', async () => {
@@ -77,6 +89,87 @@ describe('Identity model', () => {
 		await Identity.delete(idnt.id);
 		found = await Identity.query().findById(idnt.id);
 		expect(found).toBeUndefined();
+	});
+
+	it('delete with data', async () => {
+		const testAttributes = [
+			{
+				name: 'test1',
+				typeId: 1
+			},
+			{
+				name: 'test2',
+				typeId: 2,
+				documents: [
+					{
+						name: 'doc1',
+						mimeType: 'test1',
+						size: 15,
+						buffer: Buffer.from('test1')
+					},
+					{
+						name: 'doc2',
+						mimeType: 'test1',
+						size: 15,
+						buffer: Buffer.from('test2')
+					}
+				]
+			},
+			{
+				name: 'test3',
+				typeId: 3
+			},
+			{
+				name: 'test4',
+				typeId: 4
+			}
+		];
+
+		const deleteTestIdentity = {
+			type: 'corporate',
+			name: 'test-delete',
+			walletId: 1,
+			attributes: testAttributes,
+			members: [
+				{
+					type: 'corporate',
+					name: 'test-member',
+					walletId: 1,
+					attributes: testAttributes,
+					members: [
+						{
+							type: 'individual',
+							name: 'test-member',
+							walletId: 1,
+							attributes: testAttributes,
+							members: []
+						}
+					]
+				},
+				{
+					type: 'individual',
+					name: 'test-member1',
+					walletId: 1,
+					attributes: testAttributes
+				}
+			]
+		};
+
+		const identity = await Identity.query().insertGraphAndFetch(deleteTestIdentity);
+		await Identity.delete(identity.id);
+
+		let found = await Identity.query().findById(identity.id);
+		expect(found).toBeUndefined();
+
+		for (let member of identity.members) {
+			found = await Identity.query().findById(member.id);
+			expect(found).toBeUndefined();
+		}
+
+		for (let attr of identity.attributes) {
+			found = await IdAttribute.query().findById(attr.id);
+			expect(found).toBeUndefined();
+		}
 	});
 
 	it('findAllByWalletId', async () => {

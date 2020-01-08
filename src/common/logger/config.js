@@ -1,3 +1,5 @@
+import 'common/config';
+import { isStorybook } from 'common/utils/common';
 import { createFilter } from './utils';
 import is from 'electron-is';
 import log from 'electron-log';
@@ -57,7 +59,7 @@ export const updateConfig = (conf, silent) => {
 
 export const init = () => {
 	updateConfig({}, true);
-	if (process.env.MODE === 'test' || process.env.STORYBOOK) return;
+	if (process.env.MODE === 'test' || isStorybook()) return;
 	if (is.main()) ipcMain.on(LOG_UPDATED_MSG, (event, arg) => updateConfig(arg, true));
 	else ipcRenderer.on(LOG_UPDATED_MSG, (event, arg) => updateConfig(arg, true));
 };

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Grid, withStyles, Typography, Button, IconButton, Divider } from '@material-ui/core';
 import { Popup } from '../common/popup';
 import { KeyTooltip, TooltipArrow, PaymentIcon, InfoTooltip } from 'selfkey-ui';
@@ -43,7 +43,7 @@ const styles = theme => ({
 	}
 });
 
-class CreateDIDPopupComponent extends Component {
+class CreateDIDPopupComponent extends PureComponent {
 	render() {
 		const {
 			classes,

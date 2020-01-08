@@ -8,7 +8,7 @@ const styles = theme => ({
 		position: 'relative',
 		width: '100%',
 		margin: '0 auto',
-		maxWidth: '960px'
+		maxWidth: '780px'
 	},
 	containerHeader: {
 		padding: '22px 30px',
@@ -16,12 +16,6 @@ const styles = theme => ({
 		'& div': {
 			display: 'inline-block',
 			color: '#FFF'
-		},
-		'& .region': {
-			marginLeft: '1em',
-			marginTop: '0.25em',
-			marginBottom: '0',
-			fontSize: '24px'
 		}
 	},
 	closeIcon: {
@@ -32,6 +26,7 @@ const styles = theme => ({
 	contentContainer: {
 		border: '1px solid #303C49',
 		borderRadius: '4px',
+		boxShadow: '0 50px 70px -50px black',
 		padding: '30px'
 	},
 	icon: {
@@ -69,7 +64,8 @@ const styles = theme => ({
 });
 
 export const BankAccountsPaymentComplete = withStyles(styles)(props => {
-	const { classes, email, onBackClick, onContinueClick } = props;
+	const { classes, email, identity, onBackClick, onContinueClick } = props;
+	const simpleFlow = identity.type === 'corporate';
 	return (
 		<div className={classes.container}>
 			<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
@@ -79,9 +75,7 @@ export const BankAccountsPaymentComplete = withStyles(styles)(props => {
 				alignItems="flex-start"
 				className={classes.containerHeader}
 			>
-				<Typography variant="body2" gutterBottom className="region">
-					Payment Received
-				</Typography>
+				<Typography variant="body1">Payment Received</Typography>
 			</Grid>
 			<div className={classes.contentContainer}>
 				<Grid
@@ -101,11 +95,25 @@ export const BankAccountsPaymentComplete = withStyles(styles)(props => {
 							<Typography variant="body1" gutterBottom>
 								Thank you for payment!
 							</Typography>
-							<Typography variant="body2" gutterBottom>
-								Please click the continue button and select your preferred Bank to
-								continue the process. If you have any questions in the meantime, you
-								can reach us at:
-							</Typography>
+							{simpleFlow && (
+								<Typography variant="body2" gutterBottom>
+									One of our managers is reviewing the information you submitted
+									and{' '}
+									<strong>
+										will contact you shortly on the e-mail you provided{' '}
+									</strong>
+									, to continue the process. If you have any questions in the
+									meantime, you can reach us at:
+								</Typography>
+							)}
+
+							{!simpleFlow && (
+								<Typography variant="body2" gutterBottom>
+									Please click the continue button and select your preferred Bank
+									to continue the process. If you have any questions in the
+									meantime, you can reach us at:
+								</Typography>
+							)}
 							<Typography
 								variant="body2"
 								color="primary"
@@ -115,11 +123,13 @@ export const BankAccountsPaymentComplete = withStyles(styles)(props => {
 								{email}
 							</Typography>
 						</div>
-						<div className={classes.footer}>
-							<Button variant="contained" size="large" onClick={onContinueClick}>
-								Continue
-							</Button>
-						</div>
+						{!simpleFlow && (
+							<div className={classes.footer}>
+								<Button variant="contained" size="large" onClick={onContinueClick}>
+									Continue
+								</Button>
+							</div>
+						)}
 					</div>
 				</Grid>
 			</div>

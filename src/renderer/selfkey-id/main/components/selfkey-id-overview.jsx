@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import moment from 'moment';
 
 import {
@@ -28,7 +28,8 @@ import {
 	SmallTableHeadRow,
 	SmallTableRow,
 	SmallTableCell,
-	FileAudioIcon
+	FileAudioIcon,
+	FileLinkWithModal
 } from 'selfkey-ui';
 
 import { HexagonAvatar } from './hexagon-avatar';
@@ -108,7 +109,7 @@ const DocumentExpiryDate = ({ doc }) => {
 	return <span>{date}</span>;
 };
 
-class SelfkeyIdOverviewComponent extends Component {
+class SelfkeyIdOverviewComponent extends PureComponent {
 	renderLastUpdateDate({ updatedAt }) {
 		return moment(updatedAt).format('DD MMM YYYY, hh:mm a');
 	}
@@ -118,11 +119,12 @@ class SelfkeyIdOverviewComponent extends Component {
 	renderDocumentName({ entry, classes }) {
 		let fileType = null;
 		let fileName = null;
+		let hasOneDocument = false;
 		let FileIcon = FileDefaultIcon;
 
 		if (entry.documents.length === 1) {
-			fileName = entry.documents[0].name;
 			fileType = entry.documents[0].mimeType;
+			hasOneDocument = true;
 			if (fileType) {
 				if (fileType === 'application/pdf') FileIcon = FilePdfIcon;
 				else if (fileType.startsWith('audio')) FileIcon = FileAudioIcon;
@@ -140,14 +142,23 @@ class SelfkeyIdOverviewComponent extends Component {
 				</div>
 				<div>
 					<Typography variant="h6">{entry.name}</Typography>
-					<Typography
-						variant="subtitle1"
-						color="secondary"
-						className={classes.ellipsis}
-						title={fileName}
-					>
-						{fileName}
-					</Typography>
+					{fileName && (
+						<Typography
+							variant="subtitle1"
+							color="secondary"
+							className={classes.ellipsis}
+							title={fileName}
+						>
+							{fileName}
+						</Typography>
+					)}
+					{hasOneDocument && (
+						<FileLinkWithModal
+							file={entry.documents[0]}
+							small
+							onPDFOpen={file => window.openPDF(file.content || file.url)}
+						/>
+					)}
 				</div>
 			</div>
 		);

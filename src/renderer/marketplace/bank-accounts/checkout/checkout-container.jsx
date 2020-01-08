@@ -14,11 +14,11 @@ import { kycSelectors, kycOperations } from 'common/kyc';
 import { marketplaceSelectors } from 'common/marketplace';
 import { PaymentCheckout } from '../../common/payment-checkout';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
+import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
 const CRYPTOCURRENCY = config.constants.primaryToken;
 const FIXED_GAS_LIMIT_PRICE = 21000;
-const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 	async componentDidMount() {
@@ -57,7 +57,7 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 	onBackClick = () => this.props.dispatch(push(this.cancelRoute()));
 
 	onStartClick = async () => {
-		const { jurisdiction, templateId, vendorId } = this.props;
+		const { jurisdiction, templateId, vendorId, vendor } = this.props;
 		const { region } = jurisdiction.data;
 
 		// TODO: get URLs and vendor name from the RP store
@@ -73,9 +73,9 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 				necessary. Failure to do so will result in delays in the process. You may also be
 				asked to provide more information by the service provider`,
 				'conducting KYC',
-				VENDOR_NAME,
-				'https://flagtheory.com/privacy-policy',
-				'http://flagtheory.com/terms-and-conditions'
+				vendor.name,
+				vendor.privacyPolicy,
+				vendor.termsOfService
 			)
 		);
 	};
@@ -116,11 +116,17 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 const mapStateToProps = (state, props) => {
 	const { accountCode, vendorId, countryCode, templateId } = props.match.params;
 	const authenticated = true;
+	const identity = identitySelectors.selectIdentity(state);
 	return {
 		countryCode,
 		templateId,
 		vendorId,
-		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
+		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
+		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(
+			state,
+			accountCode,
+			identity.type
+		),
 		...getLocale(state),
 		...getFiatCurrency(state),
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),

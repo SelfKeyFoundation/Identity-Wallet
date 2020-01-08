@@ -10,6 +10,15 @@ import {
 	withStyles
 } from '@material-ui/core';
 import { SmallTableRow, SmallTableCell, EditTransparentIcon, SmallTableHeadRow } from 'selfkey-ui';
+import {
+	getEntityType,
+	getProfileName,
+	getProfileEmail,
+	getMemberPositions,
+	getProfileJurisdiction,
+	getProfileResidency,
+	getMemberEquity
+} from './common-helpers.jsx';
 
 const styles = theme => ({
 	hr: {
@@ -35,6 +44,9 @@ const styles = theme => ({
 		'& span': {
 			fontWeight: 400
 		}
+	},
+	capitalize: {
+		textTransform: 'capitalize'
 	}
 });
 
@@ -45,7 +57,11 @@ const editAction = onEdit => (
 );
 
 const CorporateCapTable = withStyles(styles)(props => {
-	const { classes, cap = [], onEdit } = props;
+	const { classes, members = [], onEdit } = props;
+	const shareholders = members.filter(m => m.identity.equity);
+	if (shareholders.length === 0) {
+		return null;
+	}
 	return (
 		<Card>
 			<CardHeader
@@ -89,38 +105,60 @@ const CorporateCapTable = withStyles(styles)(props => {
 							</SmallTableHeadRow>
 						</TableHead>
 						<TableBody>
-							{cap &&
-								cap.map((c, idx) => (
-									<SmallTableRow key={`cap-${idx}`}>
-										<SmallTableCell>
-											<Typography variant="subtitle1">{c.type}</Typography>
-										</SmallTableCell>
-										<SmallTableCell>
-											<Typography variant="subtitle1">{c.role}</Typography>
-										</SmallTableCell>
-										<SmallTableCell>
-											<Typography variant="subtitle1">{c.name}</Typography>
-										</SmallTableCell>
-										<SmallTableCell>
-											<Typography variant="subtitle1">
-												{c.email ? c.email : '-'}
-											</Typography>
-										</SmallTableCell>
-										<SmallTableCell>
-											<Typography variant="subtitle1">
-												{c.citizenship}
-											</Typography>
-										</SmallTableCell>
-										<SmallTableCell>
-											<Typography variant="subtitle1">
-												{c.residency}
-											</Typography>
-										</SmallTableCell>
-										<SmallTableCell>
-											<Typography variant="subtitle1">{c.shares}</Typography>
-										</SmallTableCell>
-									</SmallTableRow>
-								))}
+							{shareholders.map((s, idx) => (
+								<SmallTableRow key={`cap-${idx}`}>
+									<SmallTableCell>
+										<Typography
+											variant="subtitle1"
+											className={classes.capitalize}
+										>
+											{getEntityType(s)}
+										</Typography>
+									</SmallTableCell>
+									<SmallTableCell>
+										<Typography
+											variant="subtitle1"
+											className={classes.capitalize}
+										>
+											{getMemberPositions(s)}
+										</Typography>
+									</SmallTableCell>
+									<SmallTableCell>
+										<Typography
+											variant="subtitle1"
+											className={classes.capitalize}
+										>
+											{getProfileName(s)}
+										</Typography>
+									</SmallTableCell>
+									<SmallTableCell>
+										<Typography variant="subtitle1">
+											{getProfileEmail(s)}
+										</Typography>
+									</SmallTableCell>
+									<SmallTableCell>
+										<Typography
+											variant="subtitle1"
+											className={classes.capitalize}
+										>
+											{getProfileJurisdiction(s)}
+										</Typography>
+									</SmallTableCell>
+									<SmallTableCell>
+										<Typography
+											variant="subtitle1"
+											className={classes.capitalize}
+										>
+											{getProfileResidency(s)}
+										</Typography>
+									</SmallTableCell>
+									<SmallTableCell>
+										<Typography variant="subtitle1">
+											{getMemberEquity(s)}
+										</Typography>
+									</SmallTableCell>
+								</SmallTableRow>
+							))}
 						</TableBody>
 					</Table>
 				</div>

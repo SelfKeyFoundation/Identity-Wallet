@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Typography, Grid, withStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
 import Popup from '../../common/popup';
@@ -8,7 +8,7 @@ import history from 'common/store/history';
 
 const styles = theme => ({});
 
-class HardwareWalletTransactionTimer extends Component {
+class HardwareWalletTransactionTimer extends PureComponent {
 	handleClose = () => {
 		history.getHistory().goBack();
 	};

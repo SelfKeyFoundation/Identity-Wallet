@@ -2,8 +2,9 @@ import React from 'react';
 import { Grid, withStyles } from '@material-ui/core';
 import { CorporateDetails } from '../common/corporate-details';
 import { CorporateApplicationsSummary } from '../common/corporate-applications';
-// import { CorporateCapTable } from '../common/corporate-cap-table';
-// import { CorporateShareholding } from '../common/corporate-shareholding';
+import { CorporateCapTable } from '../common/corporate-cap-table';
+import { CorporateShareholding } from '../common/corporate-shareholding';
+import { DisplayDid } from '../../did';
 // import { CorporateOrgChart } from '../common/corporate-org-chart';
 
 const styles = theme => ({
@@ -32,10 +33,11 @@ const styles = theme => ({
 });
 
 const CorporateOverviewTab = withStyles(styles)(
-	({ classes, applications, profile, cap, onEditCorporateDetails, didComponent }) => (
+	({ classes, applications, profile, members, onEditCorporateDetails, didComponent }) => (
 		<div>
 			<div className={classes.overviewBox}>
-				{!profile.did && <Grid item>{didComponent}</Grid>}
+				{!profile.identity.did && <Grid item>{didComponent}</Grid>}
+				{profile.identity.did && <DisplayDid did={profile.identity.did} />}
 				<div className="halfWidgetBox">
 					<div className="halfWidth">
 						<CorporateDetails profile={profile} onEdit={onEditCorporateDetails} />
@@ -47,17 +49,19 @@ const CorporateOverviewTab = withStyles(styles)(
 						/>
 					</div>
 				</div>
-				{/* <div>
-					<CorporateCapTable profile={profile} cap={cap} />
+				<div>
+					<CorporateCapTable profile={profile} members={members} />
 				</div>
 				<div className="halfWidgetBox">
 					<div className="halfWidth" styles={{ marginRight: 15 }}>
-						<CorporateShareholding profile={profile} cap={cap} />
+						<CorporateShareholding profile={profile} members={members} />
 					</div>
+					{/*
 					<div className="halfWidth" styles={{ marginLeft: 15 }}>
-						<CorporateOrgChart profile={profile} cap={cap} />
+						<CorporateOrgChart profile={profile} members={members} />
 					</div>
-				</div> */}
+					*/}
+				</div>
 			</div>
 		</div>
 	)

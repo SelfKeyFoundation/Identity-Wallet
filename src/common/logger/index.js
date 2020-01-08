@@ -1,5 +1,6 @@
 /* istanbul ignore file */
-if (!process.env.STORYBOOK) {
+import { isStorybook } from 'common/utils/common';
+if (!isStorybook()) {
 	const confInit = require('./config').init;
 
 	confInit();
@@ -7,7 +8,7 @@ if (!process.env.STORYBOOK) {
 
 import Logger from './logger';
 
-if (process.env.STORYBOOK) {
+if (isStorybook()) {
 	Logger.prototype.log = console.log.bind(console);
 }
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import config from 'common/config';
 import {
 	Grid,
@@ -46,7 +46,7 @@ const styles = theme => ({
 	}
 });
 
-class DepositContentComponent extends Component {
+class DepositContentComponent extends PureComponent {
 	state = {
 		error: false,
 		understood: false,

@@ -9,6 +9,26 @@ import { Logger } from 'common/logger';
 const log = new Logger('relying-party');
 
 const { userAgent } = config;
+
+const DEFAULT_ORIGIN = 'IDW';
+
+const CHALLENGE_ENDPOINT_NAME = '/auth/challenge';
+const CHALLENGE_RESPONSE_ENDPOINT_NAME = '/auth/challenge-response';
+const USERS_CREATE_ENDPOINT_NAME = '/users';
+const USERS_TOKEN_ENDPOINT_NAME = '/users/token';
+const USERS_FILE_ENDPOINT_NAME = '/users/file';
+const KYC_TEMPLATES_LIST_ENDPOINT_NAME = '/templates';
+const KYC_TEMPLATE_GET_ENDPOINT_NAME = '/templates/:id';
+const KYC_APPLICATIONS_CREATE_ENDPOINT_NAME = '/applications';
+const KYC_APPLICATIONS_UPDATE_ENDPOINT_NAME = '/applications/:id';
+const KYC_APPLICATIONS_GET_ENDPOINT_NAME = '/applications/:id';
+const KYC_APPLICATIONS_FILE_ENDPOINT_NAME = '/files';
+const KYC_APPLICATIONS_PAYMENT_ENDPOINT_NAME = '/applications/:id/payments';
+const KYC_APPLICATIONS_LIST_ENDPOINT_NAME = '/applications';
+const KYC_USERS_GET_ENDPOINT_NAME = '/kyc-users/me';
+const KYC_USERS_CREATE_ENDPOINT_NAME = '/kyc-users';
+const KYC_GET_ACCESS_TOKEN_ENDPOINT_NAME = '/auth/token';
+
 export class RelyingPartyError extends Error {
 	constructor(conf) {
 		super(conf.message);
@@ -23,10 +43,10 @@ export class RelyingPartyCtx {
 	}
 	mergeWithConfig() {}
 	supportsDID() {
-		return !!this.config.did;
+		return config.did !== false;
 	}
 	getOrigin() {
-		return this.config.origin || 'IDW';
+		return this.config.origin || DEFAULT_ORIGIN;
 	}
 	getEndpoint(name) {
 		let rootEndpoint = this.getRootEndpoint();
@@ -45,15 +65,21 @@ export class RelyingPartyCtx {
 		}
 		return root;
 	}
-	hasUserFileEndpoint() {
+	hasEndpoint(endpoint, hasDefaultValue = false) {
 		const { config } = this;
-		if (!config.endpoints || !config.endpoints.hasOwnProperty('/users/file')) {
-			return true;
+		if (!config.endpoints || !config.endpoints.hasOwnProperty(endpoint)) {
+			return hasDefaultValue;
 		}
-		if (config.endpoints['/users/file'] === false) {
+		if (config.endpoints[endpoint] === false) {
 			return false;
 		}
 		return true;
+	}
+	hasUserFileEndpoint() {
+		return this.hasEndpoint(USERS_FILE_ENDPOINT_NAME, true);
+	}
+	hasKYCUserEndpoint() {
+		return this.hasEndpoint(KYC_USERS_CREATE_ENDPOINT_NAME);
 	}
 }
 
@@ -93,12 +119,12 @@ export class RelyingPartyRest {
 		return `Bearer ${token}`;
 	}
 	static async getChallenge(ctx) {
-		let url = ctx.getEndpoint('/auth/challenge');
+		let url = ctx.getEndpoint(CHALLENGE_ENDPOINT_NAME);
 		const did = ctx.supportsDID()
 			? ctx.identity.getDidWithParams()
 			: await ctx.identity.publicKey;
 		url = urljoin(url, did);
-		log.info('XXX challenge url %s', url);
+		log.debug('XXX challenge url %s', url);
 		return request.get({
 			url,
 			headers: { 'User-Agent': this.userAgent, Origin: ctx.getOrigin() },
@@ -106,7 +132,9 @@ export class RelyingPartyRest {
 		});
 	}
 	static postChallengeReply(ctx, challenge, signature, keyId) {
-		let url = ctx.getEndpoint('/auth/challenge');
+		let url = ctx.hasEndpoint(CHALLENGE_RESPONSE_ENDPOINT_NAME)
+			? ctx.getEndpoint(CHALLENGE_RESPONSE_ENDPOINT_NAME)
+			: ctx.getEndpoint(CHALLENGE_ENDPOINT_NAME);
 		const body = {};
 		if (ctx.supportsDID()) {
 			body.signature = { value: signature, keyId };
@@ -124,10 +152,14 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
-	static getUserToken(ctx) {
+	static getUserToken(ctx, meta) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
 		let token = ctx.token.toString();
-		let url = ctx.getEndpoint('/users/token');
+		let url = ctx.getEndpoint(USERS_TOKEN_ENDPOINT_NAME);
+		let qs;
+		if (meta) {
+			qs = { meta: JSON.stringify(meta) };
+		}
 		return request.get({
 			url,
 			headers: {
@@ -135,11 +167,12 @@ export class RelyingPartyRest {
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
+			qs,
 			json: true
 		});
 	}
 	static async uploadUserFile(ctx, doc) {
-		let url = ctx.getEndpoint('/users/file');
+		let url = ctx.getEndpoint(USERS_FILE_ENDPOINT_NAME);
 		let formData = {
 			document: {
 				value: doc.buffer,
@@ -162,7 +195,7 @@ export class RelyingPartyRest {
 	}
 	static async createUser(ctx, attributes, documents = [], meta = {}) {
 		if (!ctx.token) throw new RelyingPartyError({ code: 401, message: 'not authorized' });
-		let url = ctx.getEndpoint('/users');
+		let url = ctx.getEndpoint(USERS_CREATE_ENDPOINT_NAME);
 		if (ctx.hasUserFileEndpoint()) {
 			return request.post({
 				url,
@@ -206,7 +239,7 @@ export class RelyingPartyRest {
 		});
 	}
 	static listKYCTemplates(ctx) {
-		let url = ctx.getEndpoint('/templates');
+		let url = ctx.getEndpoint(KYC_TEMPLATES_LIST_ENDPOINT_NAME);
 		return request.get({
 			url,
 			headers: {
@@ -217,9 +250,9 @@ export class RelyingPartyRest {
 		});
 	}
 	static getKYCTemplate(ctx, id) {
-		let url = ctx.getEndpoint('/templates/:id');
+		let url = ctx.getEndpoint(KYC_TEMPLATE_GET_ENDPOINT_NAME);
 		url = url.replace(':id', id);
-		log.info(`[getKYCTemplate] GET ${url}`);
+		log.debug(`[getKYCTemplate] GET ${url}`);
 		return request.get({
 			url,
 			headers: {
@@ -229,9 +262,10 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
+
 	static createKYCApplication(ctx, templateId, attributes) {
-		let url = ctx.getEndpoint('/applications');
-		log.info(`[createKYCApplication] POST ${url}`);
+		let url = ctx.getEndpoint(KYC_APPLICATIONS_CREATE_ENDPOINT_NAME);
+		log.debug(`[createKYCApplication] POST ${url}`);
 		return request.post({
 			url,
 			body: { attributes, templateId },
@@ -244,9 +278,9 @@ export class RelyingPartyRest {
 		});
 	}
 	static updateKYCApplication(ctx, application) {
-		let url = ctx.getEndpoint('/applications/:id');
+		let url = ctx.getEndpoint(KYC_APPLICATIONS_UPDATE_ENDPOINT_NAME);
 		url = url.replace(':id', application.id);
-		log.info(`[updateKYCApplication] PATCH ${url}`);
+		log.debug(`[updateKYCApplication] PATCH ${url}`);
 		return request.patch({
 			url,
 			body: application,
@@ -259,9 +293,9 @@ export class RelyingPartyRest {
 		});
 	}
 	static updateKYCApplicationPayment(ctx, applicationId, transactionHash) {
-		let url = ctx.getEndpoint('/applications/:id/payments');
+		let url = ctx.getEndpoint(KYC_APPLICATIONS_PAYMENT_ENDPOINT_NAME);
 		url = url.replace(':id', applicationId);
-		log.info(`[updateKYCApplicationPayment] POST ${url} : ${transactionHash}`);
+		log.debug(`[updateKYCApplicationPayment] POST ${url} : ${transactionHash}`);
 		return request.post({
 			url,
 			body: { transactionHash },
@@ -273,11 +307,55 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
-	static listKYCApplications(ctx) {
-		let url = ctx.getEndpoint('/applications');
-		log.info(`[listKYCApplications] GET ${url}`);
-		return request.get({
+	static async listKYCApplications(ctx) {
+		let url = ctx.getEndpoint(KYC_APPLICATIONS_LIST_ENDPOINT_NAME);
+		log.debug(`[listKYCApplications] GET ${url}`);
+		try {
+			const applications = await request.get({
+				url,
+				headers: {
+					Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+					'User-Agent': this.userAgent,
+					Origin: ctx.getOrigin()
+				},
+				json: true
+			});
+			return applications;
+		} catch (error) {
+			if (error.statusCode === 404) {
+				return [];
+			}
+			throw error;
+		}
+	}
+
+	static async getKYCUser(ctx) {
+		let url = ctx.getEndpoint(KYC_USERS_GET_ENDPOINT_NAME);
+		try {
+			const user = await request.get({
+				url,
+				headers: {
+					Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+					'User-Agent': this.userAgent,
+					Origin: ctx.getOrigin()
+				},
+				json: true
+			});
+			return user;
+		} catch (error) {
+			if (error.statusCode === 404) {
+				return null;
+			}
+			throw error;
+		}
+	}
+
+	static createKYCUser(ctx, user) {
+		let url = ctx.getEndpoint(KYC_USERS_CREATE_ENDPOINT_NAME);
+
+		return request.post({
 			url,
+			body: user,
 			headers: {
 				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
 				'User-Agent': this.userAgent,
@@ -286,8 +364,9 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
+
 	static getKYCApplication(ctx, id) {
-		let url = ctx.getEndpoint('/applications/:id');
+		let url = ctx.getEndpoint(KYC_APPLICATIONS_GET_ENDPOINT_NAME);
 		url = url.replace(':id', id);
 		return request.get({
 			url,
@@ -300,7 +379,7 @@ export class RelyingPartyRest {
 		});
 	}
 	static uploadKYCApplicationFile(ctx, doc) {
-		let url = ctx.getEndpoint('/files');
+		let url = ctx.getEndpoint(KYC_APPLICATIONS_FILE_ENDPOINT_NAME);
 		let formData = {
 			document: {
 				value: doc.buffer,
@@ -322,7 +401,7 @@ export class RelyingPartyRest {
 		});
 	}
 	static getAccessToken(ctx) {
-		let url = ctx.getEndpoint('/auth/token');
+		let url = ctx.getEndpoint(KYC_GET_ACCESS_TOKEN_ENDPOINT_NAME);
 		return request.get({
 			url,
 			headers: {
@@ -361,14 +440,18 @@ export class RelyingPartySession {
 			let token = RelyingPartyToken.fromString(challengeReply.jwt);
 			this.ctx.token = token;
 
+			if (this.ctx.hasKYCUserEndpoint()) {
+				this.ctx.user = await this.getKYCUser();
+			}
+
 			return token;
 		} catch (error) {
 			log.error('Error establishing session %s', error);
 			throw error;
 		}
 	}
-	getUserLoginPayload() {
-		return RelyingPartyRest.getUserToken(this.ctx);
+	getUserLoginPayload(meta = {}) {
+		return RelyingPartyRest.getUserToken(this.ctx, meta);
 	}
 
 	async createUser(attributes = [], meta = {}) {
@@ -422,6 +505,21 @@ export class RelyingPartySession {
 
 	getKYCApplication(id) {
 		return RelyingPartyRest.getKYCApplication(this.ctx, id);
+	}
+
+	getKYCUser() {
+		return RelyingPartyRest.getKYCUser(this.ctx);
+	}
+
+	async createKYCUser(user) {
+		try {
+			const newUser = await RelyingPartyRest.createKYCUser(this.ctx, user);
+			this.ctx.user = newUser;
+			return newUser;
+		} catch (error) {
+			log.error(error);
+			throw error;
+		}
 	}
 
 	async createKYCApplication(templateId, attributes) {

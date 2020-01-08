@@ -6,8 +6,10 @@ import { getWallet } from 'common/wallet/selectors';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { marketplaceSelectors } from 'common/marketplace';
 import { transactionSelectors } from 'common/transaction';
+import { ordersSelectors } from 'common/marketplace/orders';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 import { BankAccountsPaymentComplete } from './payment-complete';
+import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
 
@@ -17,13 +19,13 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 	}
 
 	async componentDidMount() {
-		const { transaction, jurisdiction, vendorId } = this.props;
+		const { order, jurisdiction, vendorId } = this.props;
 
 		this.saveTransactionHash();
 		this.clearRelyingParty();
 
 		this.trackEcommerceTransaction({
-			transactionHash: transaction.transactionHash,
+			transactionHash: order.paymentHash,
 			price: jurisdiction.price,
 			code: jurisdiction.data.accountCode,
 			jurisdiction: jurisdiction.data.region,
@@ -32,15 +34,17 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 	}
 
 	saveTransactionHash = async () => {
-		const { transaction, jurisdiction, vendorId } = this.props;
+		const { order, transaction, jurisdiction, vendorId } = this.props;
 		const application = this.getLastApplication();
+		const transactionHash = order ? order.paymentHash : transaction.transactionHash;
+		const amountKey = order ? order.amount : transaction.amount;
 
-		if (!this.userHasPaid() && transaction) {
+		if (!this.userHasPaid() && transactionHash) {
 			await this.props.dispatch(
 				kycOperations.updateRelyingPartyKYCApplicationPayment(
 					vendorId,
 					application.id,
-					transaction.transactionHash
+					transactionHash
 				)
 			);
 
@@ -49,16 +53,16 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 					id: application.id,
 					payments: {
 						amount: jurisdiction.price,
-						amountKey: transaction.amount,
-						transactionHash: transaction.transactionHash,
+						amountKey,
+						transactionHash,
 						date: Date.now(),
 						status: 'Sent KEY'
 					}
 				})
 			);
 		} else {
-			// TODO: what to do if no transaction or currentApplication exists?
-			console.error('No current application or transaction');
+			// TODO: what to do if no order or currentApplication exists?
+			console.error('No current application or order');
 			this.props.dispatch(push(this.cancelRoute()));
 		}
 	};
@@ -73,10 +77,11 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 	onContinueClick = () => this.props.dispatch(push(this.getNextRoute()));
 
 	render() {
-		// TODO: get vendor email from the RP
+		const { vendor, identity } = this.props;
 		return (
 			<BankAccountsPaymentComplete
-				email={'support@flagtheory.com'}
+				email={vendor.contactEmail}
+				identity={identity}
 				onBackClick={this.onBackClick}
 				onContinueClick={this.onContinueClick}
 			/>
@@ -85,16 +90,24 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 }
 
 const mapStateToProps = (state, props) => {
-	const { accountCode, vendorId, templateId } = props.match.params;
+	const { accountCode, vendorId, templateId, orderId } = props.match.params;
 	const authenticated = true;
+	const identity = identitySelectors.selectIdentity(state);
 	return {
+		identity,
 		accountCode,
 		templateId,
 		vendorId,
-		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
+		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
+		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(
+			state,
+			accountCode,
+			identity.type
+		),
 		transaction: transactionSelectors.getTransaction(state),
 		address: getWallet(state).address,
 		currentApplication: kycSelectors.selectCurrentApplication(state),
+		order: ordersSelectors.getOrder(state, orderId),
 		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,

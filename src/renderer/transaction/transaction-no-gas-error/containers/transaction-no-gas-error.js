@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { TransactionNoGasError } from '../components/transaction-no-gas-error';
 import { getWallet } from 'common/wallet/selectors';
 import { push } from 'connected-react-router';
 import { kycOperations } from 'common/kyc';
 
-class TransactionNoGasErrorContainer extends Component {
+class TransactionNoGasErrorContainer extends PureComponent {
 	componentDidMount() {
 		this.clearRelyingParty();
 	}

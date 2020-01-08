@@ -1,27 +1,27 @@
 import React from 'react';
 import { withStyles, Tabs, Tab } from '@material-ui/core';
-import { CertifiersDashboardOverviewTab } from './dashboard-overview';
-import { CertifiersDashboardMessagesTab } from './dashboard-messages';
-import { CertifiersDashboardHistoryTab } from './dashboard-history';
+import { CertifiersDashboardOverviewTab } from './dashboard-overview-container';
+import { CertifiersDashboardAnalyticsTab } from './dashboard-analytics-container';
+import { CertifiersDashboardHistoryTab } from './dashboard-history-container';
 
 const styles = theme => ({});
 
 export const DashboardPageTabs = withStyles(styles)(
-	({ classes, tab = 'overview', onTabChange, ...tabProps }) => {
+	({ classes, tab, onTabChange, ...tabProps }) => {
 		return (
 			<React.Fragment>
 				<Tabs value={tab} onChange={(evt, value) => onTabChange(value)}>
 					<Tab id="overview" value="overview" label="Overview" />
-					<Tab id="messages" value="messages" label="Messages" />
 					<Tab id="history" value="history" label="Requests History" />
+					<Tab id="analytics" value="analytics" label="Analytics" />
 				</Tabs>
 				{tab === 'overview' && (
 					<CertifiersDashboardOverviewTab id="overview" {...tabProps} />
 				)}
-				{tab === 'messages' && (
-					<CertifiersDashboardMessagesTab id="messages" {...tabProps} />
-				)}
 				{tab === 'history' && <CertifiersDashboardHistoryTab id="history" {...tabProps} />}
+				{tab === 'analytics' && (
+					<CertifiersDashboardAnalyticsTab id="analytics" {...tabProps} />
+				)}
 			</React.Fragment>
 		);
 	}

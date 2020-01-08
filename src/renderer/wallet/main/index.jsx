@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Route } from 'react-router-dom';
 import Dashboard from '../../dashboard';
 import { CryptoMangerContainer, AddTokenContainer } from '../../crypto-manager';
@@ -6,18 +6,12 @@ import AddressBook from '../../address-book/main';
 import AddressBookAdd from '../../address-book/add';
 import AddressBookEdit from '../../address-book/edit';
 import { walletTokensOperations } from 'common/wallet-tokens';
+import { marketplaceOperations } from 'common/marketplace';
 import { walletSelectors } from 'common/wallet';
 import { appSelectors } from 'common/app';
 
-import {
-	MarketplaceCategoriesContainer,
-	MarketplaceExchangesContainer,
-	MarketplaceIncorporationPage,
-	MarketplaceBankAccountsPage,
-	MarketplaceSelfkeyIdRequired,
-	MarketplaceSelfkeyDIDRequiredContainer,
-	MarketplaceOrdersPage
-} from '../../marketplace';
+import { MarketplaceContainer } from '../../marketplace';
+import { CorporateContainer } from '../../corporate';
 
 import { SelfkeyIdContainer } from '../../selfkey-id/main';
 import {
@@ -51,9 +45,6 @@ import { CurrentApplication, ApplicationInProgress } from '../../kyc';
 import md5 from 'md5';
 import ReactPiwik from 'react-piwik';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
-import CorporateWizardContainer from '../../corporate/wizard/corporate-wizard-container';
-import CorporateAddMemberContainer from '../../corporate/member/corporate-add-member-container';
-import { CorporateDashboardContainer } from '../../corporate';
 
 const styles = theme => ({
 	headerSection: {
@@ -79,7 +70,7 @@ const contentWrapperStyle = {
 	marginTop: '128px'
 };
 
-class Main extends Component {
+class Main extends PureComponent {
 	setMatomoId = () => {
 		ReactPiwik.push(['setUserId', md5(this.props.address)]);
 		ReactPiwik.push(['setCustomVariable', 1, 'machineId', window.machineId, 'visit']);
@@ -88,6 +79,7 @@ class Main extends Component {
 	};
 	async componentDidMount() {
 		await this.props.dispatch(walletTokensOperations.loadWalletTokens());
+		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
 		this.setMatomoId();
 	}
 
@@ -126,34 +118,7 @@ class Main extends Component {
 					<Route path={`${match.path}/enter-did`} component={AssociateDIDContainer} />
 					<Route path={`${match.path}/addressBookAdd`} component={AddressBookAdd} />
 					<Route path={`${match.path}/addressBookEdit/:id`} component={AddressBookEdit} />
-					<Route
-						path={`${match.path}/marketplace-selfkey-id-required`}
-						component={MarketplaceSelfkeyIdRequired}
-					/>
-					<Route
-						path={`${match.path}/marketplace-selfkey-did-required`}
-						component={MarketplaceSelfkeyDIDRequiredContainer}
-					/>
-					<Route
-						path={`${match.path}/marketplace-categories`}
-						component={MarketplaceCategoriesContainer}
-					/>
-					<Route
-						path={`${match.path}/marketplace-exchanges`}
-						component={MarketplaceExchangesContainer}
-					/>
-					<Route
-						path={`${match.path}/marketplace-incorporation`}
-						component={MarketplaceIncorporationPage}
-					/>
-					<Route
-						path={`${match.path}/marketplace-bank-accounts`}
-						component={MarketplaceBankAccountsPage}
-					/>
-					<Route
-						path={`${match.path}/marketplace-orders`}
-						component={MarketplaceOrdersPage}
-					/>
+					<Route path={`${match.path}/marketplace`} component={MarketplaceContainer} />
 					<Route
 						path={`${match.path}/transfer/:crypto`}
 						render={props => (
@@ -169,7 +134,7 @@ class Main extends Component {
 						component={TransactionNoGasError}
 					/>
 					<Route
-						path={`${match.path}/transaction-no-key-error`}
+						path={`${match.path}/transaction-no-key-error/:keyPrice?`}
 						component={TransactionNoKeyError}
 					/>
 					<Route path={`${match.path}/transaction-error`} component={TransactionError} />
@@ -221,22 +186,8 @@ class Main extends Component {
 						path={`${match.path}/create-did-processing`}
 						component={CreateDIDProcessingContainer}
 					/>
-					<Route
-						path={`${match.path}/create-corporate-profile`}
-						component={CorporateWizardContainer}
-					/>
-					<Route
-						path={`${match.path}/:identityId/setup-corporate-profile`}
-						component={CorporateWizardContainer}
-					/>
-					<Route
-						path={`${match.path}/corporate-add-member`}
-						component={CorporateAddMemberContainer}
-					/>
-					<Route
-						path={`${match.path}/corporate-dashboard`}
-						component={CorporateDashboardContainer}
-					/>
+
+					<Route path={`${match.path}/corporate`} component={CorporateContainer} />
 				</Grid>
 			</Grid>
 		);

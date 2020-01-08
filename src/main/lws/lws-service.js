@@ -180,7 +180,7 @@ export class LWSService {
 		let payload = { publicKey, unlocked: false };
 		let wallet = await Wallet.findByPublicKey(publicKey).eager('identities');
 		const ident = wallet.getDefaultIdentity();
-		log.debug('XXX reqUnlock ident %2j', ident);
+		log.debug('reqUnlock ident %2j', ident);
 		wallet = !wallet
 			? await Wallet.create({
 					address: publicKey,
@@ -195,7 +195,7 @@ export class LWSService {
 			conn.addIdentity(publicKey, identity);
 			payload.unlocked = true;
 			payload.hasSelfkeyId = ident.isSetupFinished;
-			if (config.did) {
+			if (config.did !== false) {
 				payload.did = identity.did || null;
 			}
 			payload.name = wallet.name;
@@ -328,7 +328,7 @@ export class LWSService {
 			);
 		}
 		try {
-			let payload = await session.getUserLoginPayload();
+			let payload = await session.getUserLoginPayload(config.meta);
 			return this.authResp({ payload }, msg, conn);
 		} catch (error) {
 			log.error(error);
@@ -521,7 +521,7 @@ export class LWSService {
 	}
 
 	handleConn(conn) {
-		log.info('ws connection established');
+		log.debug('ws connection established');
 		let wsConn = new WSConnection(conn, this);
 		wsConn.listen();
 	}
@@ -530,10 +530,10 @@ export class LWSService {
 		const clientIp = info.req.connection.remoteAddress;
 		const clientOrigin = info.req.headers.origin;
 		if (!WS_IP_WHITELIST.includes(clientIp) || !WS_ORIGINS_WHITELIST.includes(clientOrigin)) {
-			log.info(`rejecting ws from ip:${clientIp} origin:${clientOrigin}`);
+			log.debug(`rejecting ws from ip:${clientIp} origin:${clientOrigin}`);
 			return false;
 		}
-		log.info(`accepting ws from ip:${clientIp} origin:${clientOrigin}`);
+		log.debug(`accepting ws from ip:${clientIp} origin:${clientOrigin}`);
 		return true;
 	}
 

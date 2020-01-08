@@ -5,9 +5,14 @@ export const dummyProfile = {
 	creationDate: '08/08/2018',
 	address: '1, Amazing Loop, Singapore',
 	did: 'did:selfkey:0x9cb701490ad6112d2880225c1d712f1af8c7dce1a81c44030b321fb31029cd75',
-	allAttributes: []
+	allAttributes: [],
+	identity: {
+		id: 5,
+		type: 'corporate'
+	}
 };
 export const dummyIncompleteProfile = {
+	id: 6,
 	entityName: 'Selfkey, LLC',
 	entityType: 'LLC',
 	creationDate: '08/08/2018',
@@ -357,6 +362,13 @@ export const legalJurisdictions = [
 	'Zambia',
 	'Zimbabwe'
 ];
+
+export const countries = [
+	{ country: 'CA', denonym: 'Canada' },
+	{ country: 'PT', denonym: 'Portugal' },
+	{ country: 'ES', denonym: 'Spain' }
+];
+
 export const corporateAttributes = [
 	{
 		createdAt: 1568107330518,
@@ -482,5 +494,133 @@ export const corporateDocuments = [
 				expires: 1568107330518
 			}
 		}
+	}
+];
+
+export const corporateMembers = [
+	{
+		firstName: 'John',
+		lastName: 'Doe',
+		identity: {
+			id: 10,
+			type: 'individual',
+			firstName: 'John',
+			lastName: 'Doe',
+			email: 'test@gmail.com',
+			positions: ['director', 'shareholder'],
+			equity: 19
+		},
+		allAttributes: [
+			{
+				name: 'residence',
+				type: {
+					content: {
+						$id:
+							'http://platform.selfkey.org/schema/attribute/country-of-residency.json',
+						title: 'Country of Residence'
+					},
+					url: 'http://platform.selfkey.org/schema/attribute/country-of-residency.json'
+				},
+				data: {
+					value: 'Russia'
+				}
+			},
+			{
+				name: 'nationality',
+				type: {
+					content: {
+						$id: 'http://platform.selfkey.org/schema/attribute/nationality.json',
+						title: 'Nationality'
+					},
+					url: 'http://platform.selfkey.org/schema/attribute/nationality.json'
+				},
+				data: {
+					value: 'Australia'
+				}
+			},
+			{
+				name: 'email',
+				type: {
+					content: {
+						$id: 'http://platform.selfkey.org/schema/attribute/email.json',
+						title: 'Nationality'
+					},
+					url: 'http://platform.selfkey.org/schema/attribute/email.json'
+				},
+				data: {
+					value: 'johndoe@mail.provider.com'
+				}
+			}
+		],
+		documents: []
+	},
+	{
+		entityName: 'Test Company name',
+		identity: {
+			id: 11,
+			type: 'corporate',
+			companyType: 'Company Limited by Shares (LTD)',
+			companyName: 'Test Company name',
+			email: 'test@company.org',
+			positions: ['observer']
+		},
+		allAttributes: [
+			{
+				title: 'incorporation',
+				name: 'incorporation',
+				type: {
+					content: {
+						$id: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json',
+						title: 'Legal Jurisdiction'
+					},
+					url: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json'
+				},
+				data: {
+					value: 'Hong Kong'
+				}
+			}
+		],
+		documents: []
+	},
+	{
+		entityName: 'Selfkey Org',
+		identity: {
+			id: 12,
+			type: 'corporate',
+			companyType: 'Company Limited by Shares (LTD)',
+			companyName: 'Selfkey Org',
+			email: 'info@selfkeyorg',
+			positions: ['shareholder'],
+			equity: 81
+		},
+		allAttributes: [
+			{
+				title: 'incorporation',
+				name: 'incorporation',
+				type: {
+					content: {
+						$id: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json',
+						title: 'Legal Jurisdiction'
+					},
+					url: 'http://platform.selfkey.org/schema/attribute/legal-jurisdiction.json'
+				},
+				data: {
+					value: 'Singapore'
+				}
+			}
+		],
+		documents: []
+	}
+];
+
+export const corporatePositionsLLC = [
+	{ position: 'manager', title: 'Manager', description: 'Manager description' },
+	{ position: 'member', title: 'Member', description: 'Member description' },
+	{ position: 'ubo', title: 'UBO', description: 'ubo description' },
+	{ position: 'observer', title: 'Observer', description: 'observer description' },
+	{
+		position: 'authorizedSignatory',
+		title: 'Authorized Signatory',
+		description: 'description'
 	}
 ];

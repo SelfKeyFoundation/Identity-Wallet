@@ -1,6 +1,7 @@
 import React from 'react';
 import { Grid, CardHeader, Card, CardContent, withStyles } from '@material-ui/core';
 import { Chart } from 'react-google-charts';
+import { getProfileName, getMemberEquity } from './common-helpers.jsx';
 
 const styles = theme => ({
 	hr: {
@@ -58,29 +59,44 @@ const getColors = () => {
 	return ['#46dfba', '#46b7df', '#238db4', '#1d7999', '#0e4b61'];
 };
 
-const chartOptions = {
-	backgroundColor: 'transparent',
-	title: '',
-	chartArea: { left: 15, top: 15, bottom: 15, right: 15 },
-	pieHole: 0.7,
-	pieSliceBorderColor: 'none',
-	colors: getColors(),
-	legend: {
-		position: 'none'
-	},
-	fontSize: 13,
-	pieSliceText: 'none',
-	tooltip: {
-		isHtml: true
-	},
-	animation: {
-		startup: true
+const getChartOptions = unassignedIndex => {
+	let slices = null;
+
+	if (unassignedIndex) {
+		slices = {
+			[unassignedIndex - 1]: { color: '#999999' }
+		};
 	}
+	return {
+		backgroundColor: 'transparent',
+		title: '',
+		chartArea: { left: 15, top: 15, bottom: 15, right: 15 },
+		pieHole: 0.7,
+		pieSliceBorderColor: 'none',
+		colors: getColors(),
+		legend: {
+			position: 'none'
+		},
+		fontSize: 13,
+		pieSliceText: 'none',
+		tooltip: {
+			isHtml: true
+		},
+		animation: {
+			startup: true
+		},
+		slices
+	};
 };
 
-const getChartData = cap => {
+const getChartData = shareholders => {
 	const data = [['Content', 'percents']];
-	const dataPoints = cap.map(shareholder => [shareholder.name, shareholder.shares]);
+	const total = shareholders.reduce((acc, curr) => acc + getMemberEquity(curr), 0);
+	const dataPoints = shareholders.map(s => [getProfileName(s), getMemberEquity(s)]);
+	// Add a unknown data point if total equity is below 100
+	if (total < 100) {
+		dataPoints.push(['Unassigned', 100 - total]);
+	}
 	return data.concat(dataPoints);
 };
 
@@ -108,7 +124,15 @@ ref={c => {
 */
 
 const CorporateShareholding = withStyles(styles)(props => {
-	const { classes, cap = [] } = props;
+	const { classes, members = [] } = props;
+	const shareholders = members.filter(m => m.identity.equity);
+	if (shareholders.length === 0) {
+		return null;
+	}
+	const data = getChartData(shareholders);
+	const unassignedIndex = data.findIndex(d => d[0] === 'Unassigned');
+	const options = getChartOptions(unassignedIndex);
+
 	return (
 		<Card>
 			<CardHeader title="Shareholding" className={classes.regularText} />
@@ -117,8 +141,8 @@ const CorporateShareholding = withStyles(styles)(props => {
 				<div className={classes.chartWrap}>
 					<Chart
 						chartType="PieChart"
-						data={getChartData(cap)}
-						options={chartOptions}
+						data={getChartData(shareholders)}
+						options={options}
 						graph_id="PieChart"
 						width="100%"
 						height="300px"
@@ -126,13 +150,13 @@ const CorporateShareholding = withStyles(styles)(props => {
 						chartEvents={[selectEvent, readyEvent]}
 					/>
 					<Grid item xs={4} className={classes.legend}>
-						{cap.map((shareholder, index) => (
+						{shareholders.map((shareholder, index) => (
 							<div key={`shareholder-${index}`}>
 								<div
 									className={classes.coloredBox}
 									style={{ backgroundColor: getColors()[index] }}
 								/>
-								<span>{shareholder.name}</span>
+								<span>{getProfileName(shareholder)}</span>
 							</div>
 						))}
 					</Grid>

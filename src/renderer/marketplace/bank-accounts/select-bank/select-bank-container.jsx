@@ -7,6 +7,7 @@ import { kycSelectors, kycOperations } from 'common/kyc';
 import { marketplaceSelectors } from 'common/marketplace';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 import { OptionSelection } from '../common/option-selection';
+import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
 
@@ -49,6 +50,7 @@ class BankAccountsSelectBankContainer extends MarketplaceBankAccountsComponent {
 
 	render() {
 		const { jurisdiction, countryCode } = this.props;
+		const application = this.getLastApplication();
 		return (
 			<OptionSelection
 				jurisdiction={jurisdiction}
@@ -60,10 +62,11 @@ class BankAccountsSelectBankContainer extends MarketplaceBankAccountsComponent {
 					start the process with your option first, but if you are not eligible for that specific bank we
 					will suggest another bank from those available in the specific jurisdiction.`}
 				banks={jurisdiction.data.accounts}
-				selected={this.getExistingBankPreferenceSelection(this.getLastApplication())}
+				selected={this.getExistingBankPreferenceSelection(application)}
 				countryCode={countryCode}
 				onBackClick={this.onBackClick}
 				onStartClick={this.onStartClick}
+				disabled={!application}
 			/>
 		);
 	}
@@ -72,12 +75,17 @@ class BankAccountsSelectBankContainer extends MarketplaceBankAccountsComponent {
 const mapStateToProps = (state, props) => {
 	const { accountCode, countryCode, templateId, vendorId } = props.match.params;
 	const authenticated = true;
+	const identity = identitySelectors.selectIdentity(state);
 	return {
 		vendorId,
 		templateId,
 		countryCode,
 		accountCode,
-		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
+		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(
+			state,
+			accountCode,
+			identity.type
+		),
 		address: getWallet(state).address,
 		currentApplication: kycSelectors.selectCurrentApplication(state),
 		rp: kycSelectors.relyingPartySelector(state, vendorId),

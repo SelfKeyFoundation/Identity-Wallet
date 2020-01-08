@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Modal, Typography, Grid, Paper, Button, Input, InputAdornment } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -65,7 +65,7 @@ const BoxComponent = withStyles(boxComponentStyles)(props => {
 	);
 });
 
-class EnterPIN extends Component {
+class EnterPIN extends PureComponent {
 	state = {
 		pin: ''
 	};
