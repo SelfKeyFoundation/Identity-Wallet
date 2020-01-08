@@ -58,6 +58,9 @@ const styles = theme => ({
 		wordBreak: 'break-all',
 		padding: '5px'
 	},
+	labelCell: {
+		paddingLeft: '5px'
+	},
 	editColumn: {
 		textAlign: 'right'
 	},
@@ -113,7 +116,7 @@ const KycChecklistItemLabel = withStyles(styles)(
 		const { options } = item;
 		if (!options || options.length <= 1) {
 			return (
-				<Typography variant="subtitle1" gutterBottom className={className}>
+				<Typography variant="subtitle1" className={className}>
 					{options.length ? options[0].name : '...'}
 					{item.duplicateType && <br />}
 					{item.duplicateType && (
@@ -186,7 +189,7 @@ const KycChecklistItem = withStyles(styles)(
 			<SmallTableRow>
 				<SmallTableCell className={warningClassname}>{icon}</SmallTableCell>
 				<SmallTableCell>
-					<Typography variant="subtitle1" gutterBottom className={warningClassname}>
+					<Typography variant="subtitle1" className={warningClassname}>
 						{type}
 					</Typography>
 				</SmallTableCell>
@@ -200,7 +203,7 @@ const KycChecklistItem = withStyles(styles)(
 					/>
 				</SmallTableCell>
 				<SmallTableCell className={classes.editColumn}>
-					<Typography variant="subtitle1" gutterBottom>
+					<Typography variant="subtitle1">
 						<IconButton aria-label="Add" onClick={event => addItem(item)}>
 							<MuiAddIcon />
 						</IconButton>
@@ -224,19 +227,13 @@ const KycChecklist = withStyles(styles)(
 					<SmallTableHeadRow>
 						<TableCell className={classes.headCell}> </TableCell>
 						<TableCell className={classes.headCell}>
-							<Typography variant="overline" gutterBottom>
-								Information
-							</Typography>
+							<Typography variant="overline">Information</Typography>
 						</TableCell>
-						<TableCell className={classes.headCell}>
-							<Typography variant="overline" gutterBottom>
-								Label
-							</Typography>
+						<TableCell className={classes.labelCell}>
+							<Typography variant="overline">Label</Typography>
 						</TableCell>
 						<TableCell className={classes.editColumn}>
-							<Typography variant="overline" gutterBottom>
-								Actions
-							</Typography>
+							<Typography variant="overline">Actions</Typography>
 						</TableCell>
 					</SmallTableHeadRow>
 				</TableHead>
@@ -389,6 +386,10 @@ export const CurrentApplicationPopup = withStyles(styles)(
 									? error.message
 									: currentApplication.error && currentApplication.error.message
 									? currentApplication.error.message
+									: currentApplication.error &&
+									  currentApplication.error.details &&
+									  currentApplication.error.details.message
+									? currentApplication.error.details.message
 									: 'You must provide all required information to proceed. Please update any missing details.'}
 							</Typography>
 						</Grid>

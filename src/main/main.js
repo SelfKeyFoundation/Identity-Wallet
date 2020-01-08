@@ -21,7 +21,7 @@ import { featureIsEnabled } from 'common/feature-flags';
 
 const log = new Logger('main');
 
-log.info('starting: %s', electron.app.getName());
+log.debug('starting: %s', electron.app.getName());
 
 const userDataDirectoryPath = getUserDataPath();
 const walletsDirectoryPath = getWalletsDir();
@@ -36,7 +36,7 @@ process.on('unhandledRejection', err => {
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
-	log.info('missing: electron-squirrel-startup');
+	log.debug('missing: electron-squirrel-startup');
 	process.exit(0);
 }
 
@@ -61,15 +61,21 @@ if (!gotTheLock) {
 	});
 }
 
+function initCtx(options = {}) {
+	const container = configureContext('main');
+	const ctx = container.cradle;
+	setGlobalContext(ctx);
+	return container;
+}
+
 function onReady() {
 	return async () => {
 		let ctx = getGlobalContext();
 		if (ctx && ctx.app.win) return;
 		global.__static = __static;
 		await db.init();
-		const container = configureContext('main');
-		ctx = container.cradle;
-		setGlobalContext(ctx);
+		const container = initCtx();
+		ctx = getGlobalContext();
 		const store = ctx.store;
 		const app = ctx.app;
 		try {
@@ -95,15 +101,25 @@ function onReady() {
 			electron.app.dock.setIcon(__static + '/assets/icons/png/newlogo-256x256.png');
 		}
 
-		let mainWindow = (app.win = createMainWindow());
+		let mainWindow = (app.win = await createMainWindow());
 
 		container.register({
 			mainWindow: asValue(mainWindow)
 		});
 
+		if (module.hot) {
+			module.hot.accept('../common/context', () => {
+				const container = initCtx('main', { store });
+				container.register({
+					mainWindow: asValue(mainWindow)
+				});
+				ctx = getGlobalContext();
+			});
+		}
+
 		mainWindow.webContents.on('did-finish-load', async () => {
 			try {
-				log.info('did-finish-load');
+				log.debug('did-finish-load');
 				mainWindow.webContents.send('APP_START_LOADING');
 				ctx.networkService.start();
 				// start update cmc data
@@ -131,7 +147,7 @@ function onReady() {
 
 		// TODO - check
 		electron.ipcMain.on('ON_CONFIG_CHANGE', (event, userConfig) => {
-			log.info('ON_CONFIG_CHANGE');
+			log.debug('ON_CONFIG_CHANGE');
 			app.config.user = userConfig;
 		});
 
@@ -141,18 +157,13 @@ function onReady() {
 				ctx.rpcHandler[actionName](event, actionId, actionName, args);
 			}
 		});
-
-		electron.ipcMain.on('ON_CLOSE_DIALOG_CANCELED', event => {
-			mainWindow.shouldIgnoreClose = true;
-		});
-
-		electron.ipcMain.on('ON_IGNORE_CLOSE_DIALOG', event => {
-			mainWindow.shouldIgnoreCloseDialog = true;
-		});
 	};
 }
 
 async function loadIdentity(ctx) {
+	if (config.forceUpdateAttributes) {
+		log.info('Force reloading of identity attributes is enabled');
+	}
 	// TODO, this probably should be initialized in root of react app
 	await ctx.store.dispatch(identityOperations.loadRepositoriesOperation());
 	try {
@@ -179,7 +190,7 @@ async function loadIdentity(ctx) {
 
 function onWindowAllClosed() {
 	return () => {
-		log.info('all windows closed, quitting');
+		log.debug('all windows closed, quitting');
 		return electron.app.quit();
 	};
 }

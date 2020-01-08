@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import {
 	APPLICATION_REJECTED,
 	APPLICATION_CANCELLED,
@@ -8,8 +8,8 @@ import {
 import { kycOperations } from 'common/kyc';
 import ReactPiwik from 'react-piwik';
 
-export default class MarketplaceComponent extends Component {
-	marketplaceRootPath = () => `/main/marketplace-categories`;
+class MarketplaceComponent extends PureComponent {
+	marketplaceRootPath = () => `/main/marketplace`;
 
 	manageApplicationsRoute = () => `/main/selfkeyIdApplications`;
 
@@ -148,3 +148,4 @@ export default class MarketplaceComponent extends Component {
 }
 
 export { MarketplaceComponent };
+export default MarketplaceComponent;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Toolbar from './toolbar';
 import config from 'common/config';
 import { connect } from 'react-redux';
@@ -7,7 +7,7 @@ import { walletSelectors } from 'common/wallet';
 import { push } from 'connected-react-router';
 import { featureIsEnabled } from 'common/feature-flags';
 
-class ToolbarContainer extends Component {
+class ToolbarContainer extends PureComponent {
 	state = {
 		isSidebarOpen: false,
 		isProfileOpen: false
@@ -33,7 +33,7 @@ class ToolbarContainer extends Component {
 
 	createCorporateProfile = evt => {
 		this.toggleProfile(!this.state.isProfileOpen);
-		this.props.dispatch(push('/main/create-corporate-profile'));
+		this.props.dispatch(push('/main/corporate/create-corporate-profile'));
 	};
 
 	handleProfileSelect = identity => evt => {
@@ -58,6 +58,7 @@ class ToolbarContainer extends Component {
 				isSidebarOpen={isSidebarOpen}
 				isProfileOpen={isProfileOpen}
 				profiles={this.props.profiles}
+				profileNames={this.props.profileNames}
 				selectedProfile={this.props.selectedProfile}
 				wallet={this.props.wallet}
 				onProfileClick={this.handleProfileClick}
@@ -73,8 +74,29 @@ class ToolbarContainer extends Component {
 	}
 }
 
-export default connect(state => ({
-	profiles: identitySelectors.selectAllIdentities(state) || [],
-	selectedProfile: identitySelectors.selectCurrentIdentity(state) || {},
-	wallet: walletSelectors.getWallet(state)
-}))(ToolbarContainer);
+const defaultIdentityName = ({ type }, walletName) =>
+	type === 'individual' ? walletName || 'New individual' : 'New company';
+
+export default connect(state => {
+	const profiles = identitySelectors.selectIdentities(state) || [];
+	const wallet = walletSelectors.getWallet(state);
+	const profileNames = profiles.reduce(
+		(acc, curr) => {
+			let name = curr.name || defaultIdentityName(curr, wallet.profileName);
+			acc.byName[name] = (acc.byName[name] || 0) + 1;
+			let profileName = name;
+			if (acc.byName[name] > 1) {
+				profileName = `${name} (${acc.byName[name]})`;
+			}
+			acc.byId[curr.id] = profileName;
+			return acc;
+		},
+		{ byId: {}, byName: {} }
+	);
+	return {
+		profiles,
+		profileNames: profileNames.byId,
+		selectedProfile: identitySelectors.selectIdentity(state) || {},
+		wallet
+	};
+})(ToolbarContainer);

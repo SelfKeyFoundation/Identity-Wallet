@@ -5,13 +5,11 @@ import path from 'path';
 import { isDevMode, isDebugMode } from 'common/utils/common';
 import { Logger } from '../common/logger';
 import createMenuTemplate from './menu';
-import { getGlobalContext } from 'common/context';
-import { push } from 'connected-react-router';
 import { initSplashScreen } from '@trodi/electron-splashscreen';
 
 const log = new Logger('main-window');
 
-export const createMainWindow = () => {
+export const createMainWindow = async () => {
 	const windowOptions = {
 		id: 'main-window',
 		title: electron.app.getName(),
@@ -40,44 +38,43 @@ export const createMainWindow = () => {
 		}
 	});
 
-	mainWindow.shouldIgnoreClose = true;
-	mainWindow.shouldIgnoreCloseDialog = false; // in order to don't show prompt window
-
 	Menu.setApplicationMenu(Menu.buildFromTemplate(createMenuTemplate(mainWindow)));
 
-	const webAppPath = isDevMode()
-		? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}/index.html`
-		: `file://${__dirname}/index.html`;
+	const webAppPath =
+		isDevMode() && process.env.NODE_ENV !== 'production'
+			? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}/index.html`
+			: `file://${__dirname}/index.html`;
 
 	mainWindow.loadURL(webAppPath);
 
 	mainWindow.setMenu(null); // in order to don't show electron default menu bar
 
 	if (isDebugMode()) {
-		log.info('app is running in debug mode');
+		log.debug('app is running in debug mode');
 		mainWindow.webContents.openDevTools();
 	}
 
-	if (isDevMode() && process.argv.indexOf('--noDevServer') === -1) {
-		const installer = require('electron-devtools-installer');
-		const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-		const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS', 'DEVTRON'];
-
-		extensions.map(name => installer.default(installer[name], forceDownload));
+	if (process.env.FULL_SCREEN) {
+		log.debug('app is running in full screen mode');
+		mainWindow.setFullScreen(true);
 	}
 
-	mainWindow.on('close', event => {
-		if (mainWindow.shouldIgnoreCloseDialog) {
-			mainWindow.shouldIgnoreCloseDialog = false;
-			return;
-		}
-		if (mainWindow.shouldIgnoreClose) {
-			event.preventDefault();
-			mainWindow.shouldIgnoreClose = false;
-			const store = getGlobalContext().store;
-			store.dispatch(push('/closeConfirmation'));
-		}
-	});
+	if (
+		isDevMode() &&
+		process.env.NODE_ENV !== 'production' &&
+		process.argv.indexOf('--noDevServer') === -1 &&
+		process.env.ENABLE_EXTENSIONS
+	) {
+		const installer = require('electron-devtools-installer');
+		const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+		const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
+
+		await Promise.all(
+			extensions.map(name => installer.default(installer[name], forceDownload))
+		);
+	}
+
+	mainWindow.on('close', event => {});
 
 	mainWindow.on('closed', () => {
 		mainWindow = null;

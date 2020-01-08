@@ -23,6 +23,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 
 	async componentDidMount() {
 		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: false });
+		window.scrollTo(0, 0);
 	}
 
 	onBackClick = () => this.props.dispatch(push(this.listRoute()));
@@ -53,11 +54,11 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 
 	onApplyClick = () => {
 		const { rp, identity, vendorId, jurisdiction } = this.props;
-		const selfkeyIdRequiredRoute = '/main/marketplace-selfkey-id-required';
-		const selfkeyDIDRequiredRoute = '/main/marketplace-selfkey-did-required';
-		const transactionNoKeyError = '/main/transaction-no-key-error';
-		const authenticated = true;
+		const selfkeyIdRequiredRoute = '/main/marketplace/selfkey-id-required';
+		const selfkeyDIDRequiredRoute = '/main/marketplace/selfkey-did-required';
 		const keyPrice = this.priceInKEY(jurisdiction.price);
+		const transactionNoKeyError = `/main/transaction-no-key-error/${keyPrice}`;
+		const authenticated = true;
 		const keyAvailable = new BigNumber(this.props.cryptoValue);
 		// When clicking the start process,
 		// we check if an authenticated kyc-chain session exists
@@ -197,12 +198,17 @@ const mapStateToProps = (state, props) => {
 		...props,
 		cryptoCurrency: config.constants.primaryToken
 	};
+	const identity = identitySelectors.selectIdentity(state);
 	return {
 		templateId,
 		vendorId,
-		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
+		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(
+			state,
+			accountCode,
+			identity.type
+		),
 		country: marketplaceSelectors.selectCountryByCode(state, countryCode),
-		isLoading: marketplaceSelectors.isLoading(state),
+		isLoading: marketplaceSelectors.isInventoryLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
@@ -211,7 +217,7 @@ const mapStateToProps = (state, props) => {
 			authenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(state, vendorId, templateId),
-		identity: identitySelectors.selectCurrentIdentity(state),
+		identity,
 		cryptoValue: getCryptoValue(state, primaryToken)
 	};
 };

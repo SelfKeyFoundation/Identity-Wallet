@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Logger } from 'common/logger';
-import { Provider, connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { Route, HashRouter } from 'react-router-dom';
 import { ConnectedRouter, push } from 'connected-react-router';
 import ReactPiwik from 'react-piwik';
@@ -14,7 +14,6 @@ import { GlobalError } from './global-error';
 import Home from './home';
 import CreateWallet from './wallet/create';
 import CreatePassword from './wallet/create/password';
-import CloseConfirmation from './close-confirmation';
 import NoConnection from './no-connection';
 import PasswordConfirmation from './wallet/create/password/confirmation';
 import BackupAddress from './wallet/create/backup-address';
@@ -48,7 +47,7 @@ ReactPiwik.push(['trackPageView']);
 ReactPiwik.push(['enableHeartBeatTimer']);
 ReactPiwik.push(['trackAllContentImpressions']);
 
-class AppContainerComponent extends Component {
+class AppContainerComponent extends PureComponent {
 	state = { hasError: false };
 	handleRefresh = async () => {
 		await this.props.dispatch(push('/'));
@@ -79,7 +78,6 @@ class AppContainerComponent extends Component {
 					<div>
 						<Route exact path="/" component={Loading} />
 						<Route exact path="/home" component={Home} />
-						<Route path="/closeConfirmation" component={CloseConfirmation} />
 						<Route path="/no-connection" component={NoConnection} />
 						<Route path="/createWallet" component={CreateWallet} />
 						<Route path="/createPassword" component={CreatePassword} />
@@ -118,9 +116,7 @@ const AppContainer = connect()(AppContainerComponent);
 
 const App = ({ store, history }) => (
 	<SelfkeyDarkTheme>
-		<Provider store={store}>
-			<AppContainer history={history} />
-		</Provider>
+		<AppContainer history={history} />
 	</SelfkeyDarkTheme>
 );
 

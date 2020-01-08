@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
 	withStyles,
 	List,
@@ -184,11 +184,11 @@ const styles = theme => ({
 });
 
 const dashboard = props => <Link to="/main/dashboard" {...props} />;
-const marketplace = props => <Link to="/main/marketplace-categories" {...props} />;
+const marketplace = props => <Link to="/main/marketplace" {...props} />;
 const addressBook = props => <Link to="/main/addressBook" {...props} />;
 const switchAccount = props => <Link to="/home" {...props} />;
 
-class Sidebar extends Component {
+class Sidebar extends PureComponent {
 	state = {
 		open: false
 	};
@@ -245,8 +245,9 @@ class Sidebar extends Component {
 							className={classes.listItem}
 							component={dashboard}
 							key="dashboard"
+							title="Dashboard"
 						>
-							<ListItemIcon className={classes.listItemIcon} title="Dashboard">
+							<ListItemIcon className={classes.listItemIcon}>
 								<DashboardMenuIcon width="16px" height="16px" viewBox="0 0 16 16" />
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
@@ -258,8 +259,9 @@ class Sidebar extends Component {
 							className={classes.listItem}
 							component={marketplace}
 							key="marketplace"
+							title="Marketplace"
 						>
-							<ListItemIcon className={classes.listItemIcon} title="Marketplace">
+							<ListItemIcon className={classes.listItemIcon}>
 								<MarketplaceMenuIcon
 									width="15px"
 									height="16px"
@@ -275,8 +277,9 @@ class Sidebar extends Component {
 							className={classes.listItem}
 							component={addressBook}
 							key="addressBook"
+							title="Address Book"
 						>
-							<ListItemIcon className={classes.listItemIcon} title="Address Book">
+							<ListItemIcon className={classes.listItemIcon}>
 								<AddressBookMenuIcon
 									width="15px"
 									height="16px"
@@ -293,8 +296,9 @@ class Sidebar extends Component {
 							className={classes.listItem}
 							key="selfkeyId"
 							onClick={onProfileNavigate}
+							title="My Profile"
 						>
-							<ListItemIcon className={classes.listItemIcon} title="My Profile">
+							<ListItemIcon className={classes.listItemIcon}>
 								<SelfkeyIDMenuIcon width="14px" height="20px" viewBox="0 0 14 20" />
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
@@ -375,8 +379,9 @@ class Sidebar extends Component {
 								window.openExternal(e, 'https://help.selfkey.org/');
 							}}
 							key="helpAndSupport"
+							title="Help & Support"
 						>
-							<ListItemIcon className={classes.listItemIcon} title="Help & Support">
+							<ListItemIcon className={classes.listItemIcon}>
 								<MenuHelpIcon />
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
@@ -399,16 +404,22 @@ class Sidebar extends Component {
 							className={classes.listItem}
 							component={switchAccount}
 							key="switchAccount"
+							title="Switch Wallet"
 						>
-							<ListItemIcon className={classes.listItemIcon} title="Switch Wallet">
+							<ListItemIcon className={classes.listItemIcon}>
 								<SwitchAccountsIcon />
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
 								Switch Wallet
 							</Typography>
 						</ListItem>
-						<ListItem className={classes.listItem} key="quit" onClick={window.quit}>
-							<ListItemIcon className={classes.listItemIcon} title="Quit">
+						<ListItem
+							className={classes.listItem}
+							key="quit"
+							onClick={window.quit}
+							title="Quit"
+						>
+							<ListItemIcon className={classes.listItemIcon}>
 								<PowerIcon />
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">

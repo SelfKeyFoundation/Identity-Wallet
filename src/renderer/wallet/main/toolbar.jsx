@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
 	createStyles,
 	withStyles,
@@ -196,13 +196,11 @@ const profileStyle = theme =>
 		}
 	});
 
-const defaultIdentityName = ({ type }, walletName) =>
-	type === 'individual' ? walletName || 'New individual' : 'New company';
-
 const ProfileList = withStyles(profileStyle)(
 	({
 		classes,
 		profiles,
+		profileNames,
 		wallet,
 		isOpen,
 		onProfileSelect,
@@ -240,8 +238,7 @@ const ProfileList = withStyles(profileStyle)(
 										</Grid>
 										<Grid item sm={8} className={classes.profileName}>
 											<Typography variant="subtitle1">
-												{el.name ||
-													defaultIdentityName(el, wallet.profileName)}
+												{profileNames[el.id]}
 											</Typography>
 											<Typography variant="subtitle2" color="secondary">
 												{`${el.type.charAt(0).toUpperCase() +
@@ -291,7 +288,16 @@ const ProfileList = withStyles(profileStyle)(
 );
 
 const Profile = withStyles(styles)(
-	({ classes, profile, wallet, isOpen, onProfileClick, onProfileNavigate, showCorporate }) => (
+	({
+		classes,
+		profile,
+		profileName,
+		wallet,
+		isOpen,
+		onProfileClick,
+		onProfileNavigate,
+		showCorporate
+	}) => (
 		<Grid container wrap="nowrap" justify="space-between">
 			<Grid item>
 				<Grid container onClick={onProfileNavigate}>
@@ -309,12 +315,8 @@ const Profile = withStyles(styles)(
 						)}
 					</Grid>
 					<Grid item className={classes.nameRole}>
-						<Typography
-							variant="h6"
-							className="toolbarProfileName"
-							title={profile.name || defaultIdentityName(profile, wallet.profileName)}
-						>
-							{profile.name || defaultIdentityName(profile, wallet.profileName)}
+						<Typography variant="h6" className="toolbarProfileName" title={profileName}>
+							{profileName}
 						</Typography>
 						<Typography variant="subtitle1" color="secondary">
 							{profile.type === 'individual'
@@ -337,7 +339,7 @@ const Profile = withStyles(styles)(
 	)
 );
 
-class Toolbar extends Component {
+class Toolbar extends PureComponent {
 	render() {
 		const {
 			classes,
@@ -350,6 +352,7 @@ class Toolbar extends Component {
 			onProfileNavigate,
 			onProfileSelect,
 			profiles,
+			profileNames,
 			wallet,
 			onCreateCorporateProfileClick,
 			primaryToken,
@@ -401,6 +404,7 @@ class Toolbar extends Component {
 									<Profile
 										wallet={wallet}
 										profile={selectedProfile}
+										profileName={profileNames[selectedProfile.id]}
 										isOpen={isProfileOpen}
 										onProfileClick={onProfileClick}
 										onProfileNavigate={onProfileNavigate}
@@ -415,6 +419,7 @@ class Toolbar extends Component {
 					<ProfileList
 						wallet={wallet}
 						profiles={profiles}
+						profileNames={profileNames}
 						isOpen={isProfileOpen}
 						onClickCorporate={onCreateCorporateProfileClick}
 						onProfileSelect={onProfileSelect}

@@ -46,7 +46,7 @@ module.exports = function(cradle) {
 	const walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
 	const documentsDirectoryPath = path.resolve(userDataDirectoryPath, 'documents');
 
-	log.info(userDataDirectoryPath);
+	log.debug(userDataDirectoryPath);
 
 	/**
 	 * refactored methods
@@ -58,7 +58,7 @@ module.exports = function(cradle) {
 	// refactored
 	controller.prototype.createKeystoreFile = function(event, actionId, actionName, args) {
 		const params = { keyBytes: 32, ivBytes: 16 };
-		log.info('createKeystoreFile');
+		log.debug('createKeystoreFile');
 		// asynchronous
 		keystorage.create(params, function(dk) {
 			let options = {
@@ -113,7 +113,7 @@ module.exports = function(cradle) {
 
 	// refactored
 	controller.prototype.importKeystoreFile = function(event, actionId, actionName, args) {
-		log.info('importKeystoreFile');
+		log.debug('importKeystoreFile');
 		try {
 			keystorage.importFromFile(args.keystoreFilePath, keystoreObject => {
 				let privateKey = keystorage.recover(args.password, keystoreObject);
@@ -595,7 +595,7 @@ module.exports = function(cradle) {
 	};
 
 	controller.prototype.closeApp = function(event, actionId, actionName, args) {
-		log.info('quitting app');
+		log.debug('quitting app');
 		electron.app.quit();
 	};
 

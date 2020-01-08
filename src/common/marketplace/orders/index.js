@@ -16,7 +16,7 @@ import { fiatCurrencySelectors } from '../../fiatCurrency';
 const hardwalletConfirmationTime = '30000';
 const log = new Logger('orders-duck');
 
-const MARKETPLACE_ORDERS_ROOT_PATH = '/main/marketplace-orders';
+const MARKETPLACE_ORDERS_ROOT_PATH = '/main/marketplace/orders';
 
 export const orderStatus = {
 	PENDING: 'PENDING',
@@ -85,7 +85,7 @@ const createOrderOperation = ({
 }) => async (dispatch, getState) => {
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const wallet = walletSelectors.getWallet(getState());
-	const identity = identitySelectors.selectCurrentIdentity(getState());
+	const identity = identitySelectors.selectIdentity(getState());
 	const order = await ordersService.createOrder({
 		amount: '' + amount,
 		applicationId,
@@ -141,7 +141,7 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 	dispatch,
 	getState
 ) => {
-	log.info('[showOrderPaymentUIOperation] %d %s %s', orderId, backUrl, completeUrl);
+	log.debug('[showOrderPaymentUIOperation] %d %s %s', orderId, backUrl, completeUrl);
 	await dispatch(
 		ordersActions.setCurrentOrderAction({
 			orderId,
@@ -206,7 +206,7 @@ const showOrderPaymentUIOperation = (orderId, backUrl, completeUrl) => async (
 };
 
 const ordersLoadOperation = () => async (dispatch, getState) => {
-	const identity = identitySelectors.selectCurrentIdentity(getState());
+	const identity = identitySelectors.selectIdentity(getState());
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const orders = await ordersService.loadOrders(identity.id);
 	await dispatch(ordersActions.setOrdersAction(orders));
@@ -256,8 +256,8 @@ const checkOrderAllowanceOperation = orderId => async (dispatch, getState) => {
 };
 
 const finishCurrentOrderOperation = () => async (dispatch, getState) => {
-	const { completeUrl } = ordersSelectors.getCurrentOrder(getState());
-	await dispatch(push(completeUrl));
+	const { completeUrl, orderId } = ordersSelectors.getCurrentOrder(getState());
+	await dispatch(push(`${completeUrl}/${orderId}`));
 	await dispatch(ordersOperations.setCurrentOrderAction(null));
 };
 

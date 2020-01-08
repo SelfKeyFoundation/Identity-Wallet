@@ -13,7 +13,7 @@ const airtableBaseUrl =
 
 export class ExchangesService {
 	async loadExchangeData() {
-		log.info(`Fetching exchanges from ${airtableBaseUrl}Exchanges${isDevMode() ? 'Dev' : ''}`);
+		log.debug(`Fetching exchanges from ${airtableBaseUrl}Exchanges${isDevMode() ? 'Dev' : ''}`);
 		const response = await fetch(`${airtableBaseUrl}Exchanges${isDevMode() ? 'Dev' : ''}`);
 
 		const responseBody = await response.json();

@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { withStyles } from '@material-ui/core';
 import { sanitize } from '../../common';
+
 const styles = theme => ({
 	tabContainer: {
 		width: '100%',
 		padding: '2em 0',
 		color: '#FFFFFF',
 		'& p': {
-			marginBottom: '1.5em',
-			lineHeight: '1.4em'
+			marginBottom: '1.5em'
 		},
 		'& strong': {
 			fontWeight: 'bold',
@@ -35,15 +35,32 @@ const styles = theme => ({
 	}
 });
 
-const BankingServicesTab = withStyles(styles)(({ classes, banks }) => (
-	<div className={classes.tabContainer}>
-		<div
-			dangerouslySetInnerHTML={{
-				__html: sanitize(banks[Object.keys(banks)[0]].onboarding)
-			}}
-		/>
-	</div>
-));
+class BankingServicesTabComponent extends PureComponent {
+	async componentDidMount() {
+		window.scrollTo(0, 0);
+	}
 
-export { BankingServicesTab };
+	render() {
+		const { classes, banks } = this.props;
+		let services = banks[Object.keys(banks)[0]].onboarding;
+
+		if (services) {
+			services = services.replace(/\n/g, '<br>');
+		}
+		return (
+			<div className={classes.tabContainer}>
+				{services && (
+					<div
+						dangerouslySetInnerHTML={{
+							__html: sanitize(services)
+						}}
+					/>
+				)}
+			</div>
+		);
+	}
+}
+
+export const BankingServicesTab = withStyles(styles)(BankingServicesTabComponent);
+
 export default BankingServicesTab;

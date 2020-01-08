@@ -22,6 +22,8 @@ import {
 	DeleteIcon
 } from 'selfkey-ui';
 
+import { canEdit, canDelete } from './common-helpers.jsx';
+
 const styles = theme => ({
 	hr: {
 		backgroundColor: '#303C49',
@@ -90,7 +92,7 @@ const styles = theme => ({
 
 const renderLastUpdateDate = ({ updatedAt }) => moment(updatedAt).format('DD MMM YYYY, hh:mm a');
 
-// const renderAttributeLabel = ({ name }) => name || 'No label provided';
+const renderAttributeLabel = ({ name }) => name || 'No label provided';
 
 const renderAttributeValue = ({ data, type }) => {
 	let valueToString = '';
@@ -100,6 +102,8 @@ const renderAttributeValue = ({ data, type }) => {
 				valueToString += `${data.value[prop]} `;
 			}
 		}
+	} else if (type.content.type === 'array') {
+		valueToString = type.content.title;
 	} else {
 		valueToString = data.value || '';
 	}
@@ -109,7 +113,14 @@ const renderAttributeValue = ({ data, type }) => {
 const renderAttributeTitle = attr => attr.type.content.title || 'No title provided';
 
 const CorporateInformation = withStyles(styles)(props => {
-	const { classes, attributes = [], onEditAttribute, onDeleteAttribute, onAddAttribute } = props;
+	const {
+		classes,
+		attributes = [],
+		attributeOptions = {},
+		onEditAttribute,
+		onDeleteAttribute,
+		onAddAttribute
+	} = props;
 	return (
 		<Card>
 			<CardHeader title="Information" className={classes.regularText} />
@@ -158,7 +169,7 @@ const CorporateInformation = withStyles(styles)(props => {
 													className={classes.noOverflow}
 													title={renderAttributeValue(attr)}
 												>
-													{renderAttributeValue(attr)}
+													{renderAttributeLabel(attr)}
 												</Typography>
 											</SmallTableCell>
 											<SmallTableCell>
@@ -167,18 +178,22 @@ const CorporateInformation = withStyles(styles)(props => {
 												</Typography>
 											</SmallTableCell>
 											<SmallTableCell align="right">
-												<IconButton
-													id="editButton"
-													onClick={() => onEditAttribute(attr)}
-												>
-													<EditTransparentIcon />
-												</IconButton>
-												<IconButton
-													id="deleteButton"
-													onClick={() => onDeleteAttribute(attr)}
-												>
-													<DeleteIcon />
-												</IconButton>
+												{canEdit(attr.type, attributeOptions) && (
+													<IconButton
+														id="editButton"
+														onClick={() => onEditAttribute(attr)}
+													>
+														<EditTransparentIcon />
+													</IconButton>
+												)}
+												{canDelete(attr.type, attributeOptions) && (
+													<IconButton
+														id="deleteButton"
+														onClick={() => onDeleteAttribute(attr)}
+													>
+														<DeleteIcon />
+													</IconButton>
+												)}
 											</SmallTableCell>
 										</SmallTableRow>
 									))}

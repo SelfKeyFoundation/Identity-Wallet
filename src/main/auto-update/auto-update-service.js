@@ -27,9 +27,6 @@ export class AutoUpdateService extends EventEmitter {
 	}
 
 	quitAndInstall() {
-		if (this.app.win) {
-			this.app.win.shouldIgnoreCloseDialog = true;
-		}
 		autoUpdater.quitAndInstall();
 	}
 }

@@ -9,9 +9,9 @@ import { pricesSelectors } from 'common/prices';
 import { marketplaceSelectors } from 'common/marketplace';
 import { ordersOperations } from 'common/marketplace/orders';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
+import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
-const VENDOR_NAME = 'Far Horizon Capital Inc';
 
 class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 	async componentDidMount() {
@@ -24,13 +24,12 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	async createOrder() {
-		const { jurisdiction, accountCode, vendorId } = this.props;
+		const { jurisdiction, accountCode, vendorId, vendor } = this.props;
 		const application = this.getLastApplication();
 		const price = this.priceInKEY(jurisdiction.price);
 		const walletAddress = jurisdiction.walletAddress;
 		const vendorDID = jurisdiction.didAddress;
-		// TODO: get vendor name from RP store
-		const vendorName = VENDOR_NAME;
+		const vendorName = vendor.name;
 
 		this.props.dispatch(
 			ordersOperations.startOrderOperation({
@@ -58,12 +57,17 @@ class BankAccountsPaymentContainer extends MarketplaceBankAccountsComponent {
 const mapStateToProps = (state, props) => {
 	const { accountCode, templateId, vendorId } = props.match.params;
 	const authenticated = true;
-
+	const identity = identitySelectors.selectIdentity(state);
 	return {
 		accountCode,
 		templateId,
 		vendorId,
-		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
+		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
+		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(
+			state,
+			accountCode,
+			identity.type
+		),
 		address: getWallet(state).address,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		currentApplication: kycSelectors.selectCurrentApplication(state),

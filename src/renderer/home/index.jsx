@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Grid, Typography, Paper, Button } from '@material-ui/core';
 import { primary, HelpIcon, QuitIcon, SelfkeyLogoTemp } from 'selfkey-ui';
 import { tokensOperations } from 'common/tokens';
@@ -64,7 +64,7 @@ const styles = theme => ({
 
 const createWalletLink = props => <Link to="/createWallet" {...props} />;
 const unlockWalletLink = props => <Link to="/unlockWallet" {...props} />;
-class Home extends Component {
+class Home extends PureComponent {
 	includeTracking = () => {
 		return this.props.hasAcceptedTracking && !isTestMode();
 	};

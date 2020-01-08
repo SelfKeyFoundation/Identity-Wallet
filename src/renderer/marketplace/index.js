@@ -3,5 +3,7 @@ export { MarketplaceExchangesContainer } from './exchanges';
 export { MarketplaceIncorporationPage } from './incorporation';
 export { MarketplaceBankAccountsPage } from './bank-accounts';
 export { MarketplaceSelfkeyIdRequired } from './selfkey-id-required';
+export { MarketplaceNotariesPage } from './notarization';
 export { MarketplaceSelfkeyDIDRequiredContainer } from './selfkey-did-required-container';
 export { MarketplaceOrdersPage } from './orders';
+export { MarketplaceContainer } from './marketplace-container';

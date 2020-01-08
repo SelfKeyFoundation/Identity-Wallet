@@ -1,11 +1,15 @@
-import React, { Component } from 'react';
-import { withStyles, Typography, Grid } from '@material-ui/core';
+import React, { PureComponent } from 'react';
+import { withStyles, Typography } from '@material-ui/core';
 import { BankingAccountOption } from '../common/account-option';
 
 const styles = theme => ({
 	tabContainer: {
+		alignItems: 'strech',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'flex-start',
+		padding: '2em 0',
 		width: '100%',
-		padding: '30px 0',
 		'& strong': {
 			fontWeight: 'bold',
 			color: theme.palette.secondary.main,
@@ -29,13 +33,21 @@ const styles = theme => ({
 			color: theme.palette.secondary.main
 		}
 	},
-	gridPadding: {
-		padding: '15px 20px !important'
+	text: {
+		padding: '0 0 2em'
+	},
+	bankingAccountOption: {
+		marginBottom: '2em'
 	}
 });
 
-class BankingTypesTabComponent extends Component {
+class BankingTypesTabComponent extends PureComponent {
 	state = { option: null };
+
+	async componentDidMount() {
+		window.scrollTo(0, 0);
+	}
+
 	toggleOption = optionIdx => expanded => {
 		const { option } = this.state;
 		if (!expanded) {
@@ -50,34 +62,26 @@ class BankingTypesTabComponent extends Component {
 		const { option } = this.state;
 		return (
 			<div className={classes.tabContainer}>
-				<Grid
-					container
-					direction="column"
-					justify="flex-start"
-					alignItems="stretch"
-					spacing={40}
-				>
-					<Grid item className={classes.gridPadding}>
-						<Typography variant="body1" color="secondary">
-							We work with {Object.keys(banks).length} different banks in {region}.
-							Each bank has different eligibility requirements, types of accounts
-							available and onboarding processes. We invite you to carefully review
-							each banks requirements and services to better understand if their
-							banking services meet your needs:
-						</Typography>
-					</Grid>
-					{Object.keys(banks).map((opt, idx) => (
-						<Grid item key={idx} className={classes.gridPadding}>
-							<BankingAccountOption
-								account={banks[opt]}
-								jurisdiction={jurisdiction}
-								title={`Option ${idx + 1}`}
-								isOpen={option === idx}
-								toggleOpen={this.toggleOption(idx)}
-							/>
-						</Grid>
-					))}
-				</Grid>
+				<div className={classes.text}>
+					<Typography variant="body1" color="secondary">
+						We work with {Object.keys(banks).length} different banks in {region}. Each
+						bank has different eligibility requirements, types of accounts available and
+						onboarding processes. We invite you to carefully review each banks
+						requirements and services to better understand if their banking services
+						meet your needs:
+					</Typography>
+				</div>
+				{Object.keys(banks).map((opt, idx) => (
+					<div item key={idx} className={classes.bankingAccountOption}>
+						<BankingAccountOption
+							account={banks[opt]}
+							jurisdiction={jurisdiction}
+							title={`Option ${idx + 1}`}
+							isOpen={option === idx}
+							toggleOpen={this.toggleOption(idx)}
+						/>
+					</div>
+				))}
 			</div>
 		);
 	}

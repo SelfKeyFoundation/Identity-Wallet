@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { MarketplacePayment } from './payment';
 import { ordersSelectors, ordersOperations } from '../../../common/marketplace/orders';
@@ -7,7 +7,7 @@ import { featureIsEnabled } from 'common/feature-flags';
 
 const LEARN_HOW_URL = 'https://help.selfkey.org';
 
-class MarketplacePaymentContainer extends Component {
+class MarketplacePaymentContainer extends PureComponent {
 	handleBackClick = () => {
 		this.props.dispatch(ordersOperations.hideCurrentPaymentUIOperation());
 	};
@@ -47,7 +47,7 @@ const mapStateToProps = (state, props) => ({
 	priceUSD: ordersSelectors.getOrderPriceUsd(state, props.match.params.orderId),
 	feeUSD: ordersSelectors.getCurrentPaymentFeeUsd(state),
 	feeETH: ordersSelectors.getCurrentPaymentFeeEth(state),
-	identity: identitySelectors.selectCurrentIdentity(state),
+	identity: identitySelectors.selectIdentity(state),
 	currentOrder: ordersSelectors.getCurrentOrder(state)
 });
 

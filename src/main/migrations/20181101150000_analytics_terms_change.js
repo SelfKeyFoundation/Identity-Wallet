@@ -11,7 +11,12 @@ const resetTerms = async (knex, Promise) => {
 };
 
 exports.up = async (knex, Promise) => {
-	await resetTerms(knex, Promise);
+	try {
+		await resetTerms(knex, Promise);
+	} catch (error) {
+		console.error(error);
+		throw error;
+	}
 };
 
 exports.down = async (knex, Promise) => {

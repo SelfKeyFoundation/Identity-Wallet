@@ -303,6 +303,58 @@ describe('RelyingPartyRest', () => {
 		xit('should throw 401 if token is invalid/expired', () => {});
 		xit('should throw on request failure', () => {});
 	});
+	describe('getKycUser', () => {
+		it('should return a kyc user', async () => {
+			const testEndpoint = 'http://test';
+			ctx.token = {
+				toString() {
+					return 'test';
+				}
+			};
+			sinon.stub(request, 'get').resolves('ok');
+			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
+			let res = await RelyingPartyRest.getKYCUser(ctx);
+			expect(request.get.getCall(0).args).toEqual([
+				{
+					url: `${testEndpoint}`,
+					headers: {
+						Authorization: 'Bearer test',
+						'User-Agent': RelyingPartyRest.userAgent,
+						Origin: 'test'
+					},
+					json: true
+				}
+			]);
+			expect(res).toEqual('ok');
+		});
+	});
+	describe('createKYCUser', () => {
+		it('should create a kyc user', async () => {
+			const testEndpoint = 'http://test';
+			const testUser = { email: 'test@test.com', name: 'test' };
+			ctx.token = {
+				toString() {
+					return 'test';
+				}
+			};
+			sinon.stub(request, 'post').resolves('ok');
+			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
+			let res = await RelyingPartyRest.createKYCUser(ctx, testUser);
+			expect(request.post.getCall(0).args).toEqual([
+				{
+					url: `${testEndpoint}`,
+					body: testUser,
+					headers: {
+						Authorization: 'Bearer test',
+						'User-Agent': RelyingPartyRest.userAgent,
+						Origin: 'test'
+					},
+					json: true
+				}
+			]);
+			expect(res).toEqual('ok');
+		});
+	});
 	describe('listKYCTemplates', () => {
 		it('should return a list of KYC templates', async () => {
 			const testEndpoint = 'http://test';

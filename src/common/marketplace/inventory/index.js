@@ -1,5 +1,8 @@
 import { getGlobalContext } from 'common/context';
 import { createAliasedAction } from 'electron-redux';
+import { schedulerSelectors } from '../../scheduler/index';
+import { vendorSelectors } from '../vendors/index';
+import { INVENTORY_SYNC_JOB } from '../../../main/marketplace/inventory/inventory-sync-job-handler';
 export const initialState = {
 	all: [],
 	byId: {}
@@ -54,18 +57,43 @@ export const reducer = (state = initialState, action) => {
 
 export const inventorySelectors = {
 	selectInventoryRoot: state => state.marketplace.inventory,
-	selectInventory: state =>
+	selectInventory: (state, entityType = 'individual') =>
 		inventorySelectors
 			.selectInventoryRoot(state)
-			.all.map(id => inventorySelectors.selectInventoryRoot(state).byId[id]),
-	selectInventoryForCategory: (state, category, status = 'active') =>
+			.all.map(id => inventorySelectors.selectInventoryRoot(state).byId[id])
+			.filter(inv => inv.entityType === entityType),
+	selectInventoryForCategory: (state, category, status = 'active', entityType) =>
 		inventorySelectors
-			.selectInventory(state)
+			.selectInventory(state, entityType)
 			.filter(i => i.category === category && i.status === status),
 	selectInventoryItemById: (state, id) => inventorySelectors.selectInventoryRoot(state).byId[id],
-	isLoading: state => inventorySelectors.selectInventoryRoot(state).all.length === 0,
-	selectInventoryItemByFilter: (state, category, filter) =>
-		inventorySelectors.selectInventoryForCategory(state, category).find(filter)
+	isInventoryLoading: state => {
+		if (inventorySelectors.selectInventoryRoot(state).all.length) {
+			return false;
+		}
+		if (vendorSelectors.isVendorsLoading(state)) {
+			return true;
+		}
+		const jobs = schedulerSelectors.selectJobsInProgressByCategory(
+			state,
+			INVENTORY_SYNC_JOB,
+			100
+		);
+		return !!jobs.length;
+	},
+	isInventoryLoadingError: state => {
+		if (
+			inventorySelectors.selectInventory(state).length ||
+			inventorySelectors.isInventoryLoading(state)
+		) {
+			return false;
+		}
+		return vendorSelectors.isVendorsLoadingError(state);
+	},
+	selectInventoryItemByFilter: (state, category, filter, entityType) =>
+		inventorySelectors
+			.selectInventoryForCategory(state, category, 'active', entityType)
+			.find(filter)
 };
 
 export default reducer;

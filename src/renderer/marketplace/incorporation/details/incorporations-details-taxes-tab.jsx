@@ -105,7 +105,9 @@ const IncorporationsTaxesTab = withStyles(styles)(({ classes, program }) => (
 		<IncorporationsDataPanel sections={TAX_COLUMNS} data={program.data} />
 		<div
 			dangerouslySetInnerHTML={{
-				__html: sanitize(program.data.en.taxesParagraph)
+				__html: sanitize(
+					program.data.en ? program.data.en.taxesParagraph : program.data.taxesDescription
+				)
 			}}
 		/>
 	</div>

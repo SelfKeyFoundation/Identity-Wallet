@@ -12,22 +12,24 @@ const styles = theme => ({
 });
 
 const PopupWrap = props => {
-	const { classes, children, closeAction, text, open = true } = props;
+	const { classes, children, closeAction, text, open = true, isHeaderVisible = true } = props;
 	return (
 		<Modal open={open} className={`${classes.modal} ${props.className}`}>
 			<ModalWrap>
 				<ModalCloseButton onClick={closeAction} className={classes.closeButton}>
 					<ModalCloseIcon />
 				</ModalCloseButton>
-				<ModalHeader>
-					{typeof text === 'string' ? (
-						<Typography variant="body1" className={classes.title}>
-							{text}
-						</Typography>
-					) : (
-						text
-					)}
-				</ModalHeader>
+				{isHeaderVisible && (
+					<ModalHeader>
+						{typeof text === 'string' ? (
+							<Typography variant="body1" className={classes.title}>
+								{text}
+							</Typography>
+						) : (
+							text
+						)}
+					</ModalHeader>
+				)}
 				<ModalBody>{children}</ModalBody>
 			</ModalWrap>
 		</Modal>

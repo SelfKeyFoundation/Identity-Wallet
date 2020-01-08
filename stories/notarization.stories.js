@@ -1,7 +1,14 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import NotarizationDetailsPage from '../src/renderer/marketplace/notarization/details/details-page';
-import RequestNotarization from '../src/renderer/marketplace/notarization/process/request-notarization';
+import { linkTo } from '@storybook/addon-links';
+import NotarizationDetailsPage from '../src/renderer/marketplace/notarization/details/notarization-details-page';
+import RequestNotarizationPage from '../src/renderer/marketplace/notarization/process/request-notarization-page';
+import TOCPopup from '../src/renderer/marketplace/notarization/common/toc-popup';
+import TOCDisagreementPopup from '../src/renderer/marketplace/notarization/common/toc-disagreement-popup';
+import RequirePayment from '../src/renderer/certifiers/common/require-payment-popup';
+import KYCRequirementData from './kyc-requirements-data';
+import NotarizationProcess from '../src/renderer/certifiers/common/notarization-process-popup';
+import { summary } from './notarization-data';
 
 const documents = [
 	{
@@ -48,9 +55,65 @@ const documents = [
 ];
 
 storiesOf('Notarization/Tabs', module)
-	.add('Supported Doc Types', () => <NotarizationDetailsPage tab="types" />)
-	.add('Key Informations', () => <NotarizationDetailsPage tab="informations" />);
+	.add('types', () => (
+		<NotarizationDetailsPage
+			tab="types"
+			keyRate="0.0001297225"
+			KYCRequirementData={KYCRequirementData}
+			onTabChange={linkTo('Notarization/Tabs', tab => tab)}
+			startNotarize={linkTo('Notarization', 'Request Notarization')}
+		/>
+	))
+	.add('informations', () => (
+		<NotarizationDetailsPage
+			tab="informations"
+			keyRate="0.0001297225"
+			KYCRequirementData={KYCRequirementData}
+			onTabChange={linkTo('Notarization/Tabs', tab => tab)}
+			startNotarize={linkTo('Notarization', 'Request Notarization')}
+		/>
+	));
 
-storiesOf('Notarization', module).add('Request Notarization', () => (
-	<RequestNotarization documents={documents} />
-));
+storiesOf('Notarization/Popups', module)
+	.add('toc', () => (
+		<TOCPopup
+			onBackClick={linkTo('Notarization', 'Request Notarization')}
+			onDisagreeClick={linkTo('Notarization/Popups', 'toc disagreement')}
+		/>
+	))
+	.add('toc disagreement', () => (
+		<TOCDisagreementPopup
+			onBackClick={linkTo('Notarization', 'Request Notarization')}
+			onReturnClick={linkTo('Notarization/Popups', 'toc')}
+		/>
+	))
+	.add('require payment', () => (
+		<RequirePayment name={'John Doe'} address={'0x4ac0d9ebd28118cab68a64ad8eb8c07c0120ebf8'} />
+	));
+
+storiesOf('Notarization', module)
+	.add('Request Notarization', () => (
+		<RequestNotarizationPage
+			documents={documents}
+			onBackClick={linkTo('Notarization/Tabs', 'types')}
+			onStartClick={linkTo('Notarization/Popups', 'toc')}
+		/>
+	))
+	.add('Require Payment', () => (
+		<NotarizationProcess
+			status={2}
+			summary={summary}
+			payments={false}
+			onBackClick={linkTo('Notarization/Tabs', 'types')}
+			onStartClick={linkTo('Notarization/Popups', 'toc')}
+		/>
+	))
+	.add('Notarization Complete', () => (
+		<NotarizationProcess
+			status={1}
+			summary={summary}
+			payments={false}
+			onBackClick={linkTo('Notarization/Tabs', 'types')}
+			onStartClick={linkTo('Notarization/Popups', 'toc')}
+		/>
+	));

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Modal, Typography, Button, Grid, CircularProgress } from '@material-ui/core';
 import {
 	ModalWrap,
@@ -15,7 +15,7 @@ import { appOperations, appSelectors } from 'common/app';
 import HelpStepsErrorSection from './help-steps-error-section';
 import { push } from 'connected-react-router';
 
-class ConnectingLedger extends Component {
+class ConnectingLedger extends PureComponent {
 	async componentDidMount() {
 		await this.props.dispatch(appOperations.setHardwareWalletsAction([]));
 		await this.props.dispatch(appOperations.loadLedgerWalletsOperation());

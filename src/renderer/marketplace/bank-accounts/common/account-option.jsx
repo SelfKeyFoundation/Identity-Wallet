@@ -186,7 +186,7 @@ export const BankingAccountOption = withStyles(styles)(
 				<Grid item xs={gridSize}>
 					<ExpansionPanel
 						expanded={isOpen}
-						onChange={(e, expanded) => toggleOpen(expanded)}
+						onChange={(e, expanded) => toggleOpen && toggleOpen(expanded)}
 						style={{ borderRadius: '0 4px 4px 0' }}
 					>
 						<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>

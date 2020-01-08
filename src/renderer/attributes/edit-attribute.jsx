@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Input, withStyles, Typography, Divider, Button, Grid } from '@material-ui/core';
 import { Popup } from '../common/popup';
 import { identityAttributes, jsonSchema } from 'common/identity/utils';
@@ -20,7 +20,7 @@ const styles = theme => ({
 	}
 });
 
-class EditAttributeComponent extends Component {
+class EditAttributeComponent extends PureComponent {
 	constructor(props) {
 		super(props);
 		const { attribute, uiSchema = {} } = props;

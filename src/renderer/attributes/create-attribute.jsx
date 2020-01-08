@@ -1,11 +1,12 @@
 import _ from 'lodash';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { withStyles, Divider, Button, Grid, Select, Typography, Input } from '@material-ui/core';
 import { identityAttributes, jsonSchema } from 'common/identity/utils';
 import Form from 'react-jsonschema-form-material-theme';
 import transformErrors from './transform-errors';
 import { Popup } from '../common/popup';
 import { KeyboardArrowDown } from '@material-ui/icons';
+import { canCreate } from '../corporate/common/common-helpers';
 
 const styles = theme => ({
 	section1: { marginBottom: '10px' },
@@ -32,7 +33,7 @@ const styles = theme => ({
 	}
 });
 
-class CreateAttributeComponent extends Component {
+class CreateAttributeComponent extends PureComponent {
 	state = {
 		typeId: -1,
 		label: '',
@@ -136,17 +137,19 @@ class CreateAttributeComponent extends Component {
 		);
 	}
 
-	getTypes = _.memoize((isDocument, types) =>
+	getTypes = _.memoize((isDocument, types, attributeOptions) =>
 		(isDocument
 			? types.filter(type => jsonSchema.containsFile(type.content))
 			: types.filter(type => !jsonSchema.containsFile(type.content))
-		).sort((a, b) =>
-			a.content.title > b.content.title ? 1 : a.content.title === b.content.title ? 0 : -1
 		)
+			.filter(type => canCreate(type, attributeOptions))
+			.sort((a, b) =>
+				a.content.title > b.content.title ? 1 : a.content.title === b.content.title ? 0 : -1
+			)
 	);
 
 	get types() {
-		return this.getTypes(this.props.isDocument, this.props.types);
+		return this.getTypes(this.props.isDocument, this.props.types, this.props.attributeOptions);
 	}
 	render() {
 		const { classes, subtitle, open, text } = this.props;
@@ -188,7 +191,7 @@ class CreateAttributeComponent extends Component {
 					</Select>
 					<Divider className={classes.divider} />
 					{this.state.typeId > -1 && (
-						<>
+						<React.Fragment>
 							<Typography variant="overline" className={classes.label}>
 								Label *
 							</Typography>
@@ -208,7 +211,7 @@ class CreateAttributeComponent extends Component {
 									{this.state.errorLabel}
 								</Typography>
 							)}
-						</>
+						</React.Fragment>
 					)}
 				</div>
 				{type && <Divider className={classes.divider} />}

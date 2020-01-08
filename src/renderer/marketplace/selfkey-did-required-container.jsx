@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { MarketplaceDIDRequired } from './selfkey-did-required';
 import { didOperations } from 'common/did';
 
-const MARKETPLACE_PATH = '/main/marketplace-categories';
+const MARKETPLACE_PATH = '/main/marketplace';
 
-class MarketplaceSelfkeyDIDRequiredContainer extends Component {
+class MarketplaceSelfkeyDIDRequiredContainer extends PureComponent {
 	handleConfirm = evt => {
 		evt.preventDefault();
 		this.props.dispatch(didOperations.startCreateDidFlowOperation(MARKETPLACE_PATH));

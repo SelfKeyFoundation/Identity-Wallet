@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import AutoUpdateProgressContent from './auto-update-progress';
 import { appSelectors, appOperations } from 'common/app';
 import history from 'common/store/history';
 
-class AutoUpdateProgressContainer extends Component {
+class AutoUpdateProgressContainer extends PureComponent {
 	handleInstallRelaunchAction = () => {
 		this.props.dispatch(appOperations.installUpdateOperation());
 	};

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Paper, CircularProgress } from '@material-ui/core';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -15,7 +15,7 @@ const styles = theme => ({
 	}
 });
 
-class Loading extends Component {
+class Loading extends PureComponent {
 	async componentDidMount() {
 		await this.props.dispatch(appOperations.loadingOperation());
 		await this.props.dispatch(appOperations.startAutoUpdateOperation());

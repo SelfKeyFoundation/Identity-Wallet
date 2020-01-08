@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { appSelectors } from 'common/app';
@@ -9,20 +9,16 @@ import { identityOperations, identitySelectors } from 'common/identity';
 
 const fields = ['jurisdiction', 'taxId', 'entityType', 'email', 'entityName', 'creationDate'];
 
-class CorporateWizardContainerComponent extends Component {
-	constructor(props) {
-		super(props);
-		const { basicIdentity = {} } = props;
-		this.state = {
-			errors: { hasErrors: false },
-			jurisdiction: basicIdentity.jurisdiction || '',
-			taxId: basicIdentity.taxId || null,
-			entityType: basicIdentity.entityType || '',
-			email: basicIdentity.email || null,
-			entityName: basicIdentity.entityName || null,
-			creationDate: basicIdentity.creationDate || null
-		};
-	}
+class CorporateWizardContainerComponent extends PureComponent {
+	state = {
+		errors: { hasErrors: false },
+		jurisdiction: '',
+		taxId: null,
+		entityType: '',
+		email: null,
+		entityName: null,
+		creationDate: null
+	};
 
 	componentDidMount() {
 		if (this.props.identity && this.props.identity.type !== 'corporate') {
@@ -66,7 +62,7 @@ class CorporateWizardContainerComponent extends Component {
 			jurisdiction: 'Please select a jurisdiction',
 			entityName: 'Please enter an entity name',
 			entityType: 'Please select a entity type',
-			creationDate: 'Please enter company creation date',
+			creationDate: 'Please enter company Incorporation date',
 			taxId: 'Tax id provided is invalid'
 		};
 		if (!attrs) {
@@ -113,10 +109,13 @@ class CorporateWizardContainerComponent extends Component {
 		}
 
 		this.props.dispatch(
-			identityOperations.createCorporateProfileOperation({
-				..._.pick(this.state, fields),
-				identityId: this.props.match.params.identityId
-			})
+			identityOperations.createCorporateProfileOperation(
+				{
+					..._.pick(this.state, fields),
+					identityId: this.props.match.params.identityId
+				},
+				'/main/corporate/dashboard/members'
+			)
 		);
 	};
 
@@ -153,59 +152,18 @@ class CorporateWizardContainerComponent extends Component {
 	}
 }
 
-// const dummyMembers = [
-// 	{
-// 		id: '1',
-// 		name: 'Giacomo Guilizzoni',
-// 		type: 'Person',
-// 		role: 'Director, Shareholder',
-// 		citizenship: 'Italy',
-// 		residency: 'Singapore',
-// 		shares: '45%'
-// 	},
-// 	{
-// 		id: '2',
-// 		name: 'Marco Botton Ltd',
-// 		type: 'Corporate',
-// 		role: 'Shareholder',
-// 		citizenship: 'Hong Kong',
-// 		residency: 'Hong Kong',
-// 		shares: '9%'
-// 	},
-// 	{
-// 		id: '3',
-// 		name: 'Big Things Ltd',
-// 		type: 'Corporate',
-// 		role: 'Shareholder',
-// 		citizenship: 'Hong Kong',
-// 		residency: 'Hong Kong',
-// 		shares: '41%'
-// 	},
-// 	{
-// 		id: '4',
-// 		name: 'John Dafoe',
-// 		type: 'Person',
-// 		role: 'Director',
-// 		citizenship: 'France',
-// 		residency: 'France',
-// 		shares: '5%'
-// 	}
-// ];
-
 const mapStateToProps = (state, props) => {
 	return {
 		basicAttributeTypes: identitySelectors.selectBasicCorporateAttributeTypes(state),
-		basicIdentity: identitySelectors.selectCorporateProfile(
-			state,
-			props.match.params.identityId
-		),
+		basicIdentity: identitySelectors.selectCorporateProfile(state, {
+			identityId: props.match.params.identityId
+		}),
 		walletType: appSelectors.selectWalletType(state),
 		jurisdictions: identitySelectors.selectCorporateJurisdictions(state),
 		entityTypes: identitySelectors.selectCorporateLegalEntityTypes(state)
-		// members: dummyMembers
 	};
 };
 
-export const CorporateWizardContainer = connect(mapStateToProps)(CorporateWizardContainerComponent);
-
-export default CorporateWizardContainer;
+const connectedComponent = connect(mapStateToProps)(CorporateWizardContainerComponent);
+export { connectedComponent as CorporateWizardContainer };
+export default connectedComponent;

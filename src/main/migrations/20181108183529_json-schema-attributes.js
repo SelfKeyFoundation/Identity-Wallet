@@ -398,40 +398,45 @@ const downgradeIdentityAttributes = async (knex, Promise) => {
 };
 
 exports.up = async (knex, Promise) => {
-	let ctx = {
-		now: Date.now()
-	};
+	try {
+		let ctx = {
+			now: Date.now()
+		};
 
-	await knex.schema.createTable('repository', t => {
-		t.increments('id');
-		t.string('url');
-		t.string('name');
-		t.boolean('eager').defaultTo(false);
-		t.string('content').defaultTo('{}');
-		t.integer('expires');
-		t.integer('createdAt').notNullable();
-		t.integer('updatedAt');
-	});
+		await knex.schema.createTable('repository', t => {
+			t.increments('id');
+			t.string('url');
+			t.string('name');
+			t.boolean('eager').defaultTo(false);
+			t.string('content').defaultTo('{}');
+			t.integer('expires');
+			t.integer('createdAt').notNullable();
+			t.integer('updatedAt');
+		});
 
-	ctx = populateInitialRepo(ctx, knex, Promise);
+		ctx = populateInitialRepo(ctx, knex, Promise);
 
-	await knex.schema.createTable('ui_schema', t => {
-		t.increments('id');
-		t.integer('repositoryId')
-			.notNullable()
-			.references('repository.id');
-		t.integer('attributeTypeId')
-			.notNullable()
-			.references('id_attribute_types.id');
-		t.string('url');
-		t.string('content');
-		t.integer('expires');
-		t.integer('createdAt').notNullable();
-		t.integer('updatedAt');
-	});
-	ctx = await migrateIdentityAttributes(ctx, knex, Promise);
-	ctx = await migrateAttributeTypes(ctx, knex, Promise);
-	return ctx;
+		await knex.schema.createTable('ui_schema', t => {
+			t.increments('id');
+			t.integer('repositoryId')
+				.notNullable()
+				.references('repository.id');
+			t.integer('attributeTypeId')
+				.notNullable()
+				.references('id_attribute_types.id');
+			t.string('url');
+			t.string('content');
+			t.integer('expires');
+			t.integer('createdAt').notNullable();
+			t.integer('updatedAt');
+		});
+		ctx = await migrateIdentityAttributes(ctx, knex, Promise);
+		ctx = await migrateAttributeTypes(ctx, knex, Promise);
+		return ctx;
+	} catch (error) {
+		console.error(error);
+		throw error;
+	}
 };
 
 exports.down = async (knex, Promise) => {

@@ -1,23 +1,22 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
+import { marketplaceSelectors } from 'common/marketplace';
 import { MarketplaceProcessStarted } from '../../common/marketplace-process-started';
 
 const styles = theme => ({});
-const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = `/main/marketplace-bank-accounts`;
+const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = `/main/marketplace/bank-accounts`;
 const SELFKEY_PATH = `/main/selfkeyId`;
 
-// TODO: future improvement load from rp config
-const VENDOR_EMAIL = `support@flagtheory.com`;
-
-class BankAccountsProcessStartedContainer extends Component {
+class BankAccountsProcessStartedContainer extends PureComponent {
 	onBackClick = () => this.props.dispatch(push(MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH));
 
 	onSelfKeyClick = () => this.props.dispatch(push(SELFKEY_PATH));
 
 	render() {
+		const { vendor } = this.props;
 		const body = (
 			<React.Fragment>
 				<Typography variant="h1" gutterBottom>
@@ -33,7 +32,7 @@ class BankAccountsProcessStartedContainer extends Component {
 					us at:
 				</Typography>
 				<Typography variant="body2" color="primary" gutterBottom className="email">
-					{VENDOR_EMAIL}
+					{vendor.contactEmail}
 				</Typography>
 			</React.Fragment>
 		);
@@ -49,7 +48,13 @@ class BankAccountsProcessStartedContainer extends Component {
 	}
 }
 
-const mapStateToProps = (state, props) => {};
+const mapStateToProps = (state, props) => {
+	const { vendorId } = props.match.params;
+	return {
+		vendorId,
+		vendor: marketplaceSelectors.selectVendorById(state, vendorId)
+	};
+};
 
 const styledComponent = withStyles(styles)(BankAccountsProcessStartedContainer);
 const connectedComponent = connect(mapStateToProps)(styledComponent);

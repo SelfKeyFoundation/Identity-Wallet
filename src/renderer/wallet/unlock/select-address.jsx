@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
 	Modal,
 	Typography,
@@ -89,7 +89,7 @@ const styles = theme => ({
 	}
 });
 
-class SelectAddress extends Component {
+class SelectAddress extends PureComponent {
 	state = {
 		page: 0,
 		loading: false,

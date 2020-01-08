@@ -64,21 +64,38 @@ export class InventoryFetcher {
 export class SelfkeyInventoryFetcher extends InventoryFetcher {
 	async fetch() {
 		let inventory = await this.fetchInventory();
-		const categories = inventory
+		const itemsCategory = inventory
 			.filter(itm => itm.status === 'active')
 			.map(itm => itm.category);
 
-		const data = await Promise.all([...new Set(categories)].map(this.fetchData.bind(this)));
+		const categories = [...new Set(itemsCategory)];
+
+		const data = await Promise.all(
+			categories.map(async category => {
+				try {
+					const data = await this.fetchData(category);
+					return data;
+				} catch (error) {
+					log.error('Error fetching data for %s %s', category, error);
+					if (error.message === 'unknown_data_category') {
+						return {};
+					}
+					throw error;
+				}
+			})
+		);
+
 		const dataByCategory = data.reduce((acc, curr, indx) => {
 			acc[categories[indx]] = curr;
 			return acc;
 		}, {});
+
 		return inventory.map(itm => {
 			itm.data = itm.data || {};
 			if (!dataByCategory[itm.category] || !dataByCategory[itm.category][itm.sku]) {
 				return itm;
 			}
-			itm.data = dataByCategory[itm.category][itm.sku];
+			itm.data = { ...itm.data, ...dataByCategory[itm.category][itm.sku] };
 			return itm;
 		});
 	}
@@ -110,7 +127,6 @@ export class SelfkeyInventoryFetcher extends InventoryFetcher {
 		}
 		try {
 			let fetched = await request.get({ url: dataEndpoints[category], json: true });
-
 			return fetched.entities
 				.map(entity => _.mapKeys(entity.data, (value, key) => _.camelCase(key)))
 				.reduce((acc, curr) => {
@@ -144,6 +160,8 @@ export class FlagtheoryIncorporationsInventoryFetcher extends InventoryFetcher {
 
 			let items = fetched.Main.map(itm => {
 				const data = _.mapKeys(itm.data.fields, (value, key) => _.camelCase(key));
+				data.companyCode = ('' + data.companyCode || null).trim();
+				data.countryCode = ('' + data.countryCode || null).trim();
 				const sku = `FT-INC-${data.companyCode}`;
 				let name = data.region;
 				if (data.acronym && data.acronym.length) {
@@ -160,6 +178,7 @@ export class FlagtheoryIncorporationsInventoryFetcher extends InventoryFetcher {
 					priceCurrency: 'USD',
 					category: 'incorporations',
 					vendorId: 'flagtheory_incorporations',
+					entityType: 'individual',
 					data: {
 						...data,
 						...(corpDetails[data.companyCode] || {}),
@@ -195,6 +214,8 @@ export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
 			)
 				.filter(itm => itm.region && (itm.accountCode || itm.countryCode))
 				.map(itm => {
+					itm.accountCode = ('' + itm.accountCode || null).trim();
+					itm.countryCode = ('' + itm.countryCode || null).trim();
 					const sku = `FT-BNK-${itm.accountCode || itm.countryCode}`;
 					const name = `${itm.region} ${itm.accountCode || itm.countryCode}`;
 					let price = itm.activeTestPrice ? itm.testPrice : itm.price;
@@ -222,6 +243,7 @@ export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
 						itm.data.type && itm.data.type.length
 							? itm.data.type[0].toLowerCase()
 							: 'private';
+					itm.entityType = itm.data.type === 'business' ? 'corporate' : 'individual';
 
 					return itm;
 				});

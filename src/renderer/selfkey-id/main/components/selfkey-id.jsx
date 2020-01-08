@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Grid, Typography, Tabs, Tab } from '@material-ui/core';
 
-class SelfkeyIdComponent extends Component {
+class SelfkeyIdComponent extends PureComponent {
 	render() {
 		return (
 			<Grid container direction="column" spacing={32}>
 				<Grid item>
-					<Typography variant="h1">SelfKey Identity Wallet</Typography>
+					<Typography variant="h1">SelfKey Profile</Typography>
 				</Grid>
 				<Grid item>
 					<Tabs value={this.props.tab} onChange={this.props.onTabChange}>
