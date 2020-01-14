@@ -147,6 +147,7 @@ class IndividualDashboardContainerComponent extends PureComponent {
 
 		// sync of RP applications with local database is done automatically, all done, show modal
 		this.setState({ popup: 'applications-refresh' });
+		return dispatch(kycOperations.loadRelyingParty(application.rpName, true));
 	};
 
 	render() {
