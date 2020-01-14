@@ -153,6 +153,7 @@ class IndividualDashboardContainerComponent extends PureComponent {
 	render() {
 		const { profile } = this.props;
 		const { popup } = this.state;
+		console.log(profile);
 		return (
 			<React.Fragment>
 				{popup === 'create-attribute' && (

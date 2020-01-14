@@ -4,7 +4,6 @@ import {
 	Table,
 	TableBody,
 	TableRow,
-	TableCell,
 	IconButton,
 	TableHead,
 	Typography,
@@ -19,7 +18,8 @@ import {
 	FileLinkWithModal,
 	EditTransparentIcon,
 	DeleteIcon,
-	SmallTableHeadRow
+	SmallTableHeadRow,
+	SmallTableCell
 } from 'selfkey-ui';
 
 const styles = theme => ({
@@ -106,57 +106,50 @@ const DocumentName = ({ entry, classes }) => {
 };
 
 export const DocumentsTable = withStyles(styles)(
-	({
-		classes,
-		documents = [],
-		onEditDocument,
-		onDeleteDocument,
-		onEditAttribute,
-		onDeleteAttribute
-	}) => (
+	({ classes, documents = [], onEditAttribute, onDeleteAttribute }) => (
 		<Table>
 			<TableHead>
 				<SmallTableHeadRow>
-					<TableCell>
+					<SmallTableCell>
 						<Typography variant="overline">Type</Typography>
-					</TableCell>
-					<TableCell>
+					</SmallTableCell>
+					<SmallTableCell>
 						<Typography variant="overline">Label</Typography>
-					</TableCell>
-					<TableCell>
+					</SmallTableCell>
+					<SmallTableCell>
 						<Typography variant="overline">Expiry Date</Typography>
-					</TableCell>
-					<TableCell>
+					</SmallTableCell>
+					<SmallTableCell>
 						<Typography variant="overline">Last Edited</Typography>
-					</TableCell>
-					<TableCell align="right">
+					</SmallTableCell>
+					<SmallTableCell align="right">
 						<Typography variant="overline">Actions</Typography>
-					</TableCell>
+					</SmallTableCell>
 				</SmallTableHeadRow>
 			</TableHead>
 			<TableBody>
 				{documents.map(entry => (
 					<TableRow key={entry.id}>
-						<TableCell>
+						<SmallTableCell>
 							<Typography variant="h6">{entry.type.content.title}</Typography>
-						</TableCell>
-						<TableCell className={classes.labelCell}>
+						</SmallTableCell>
+						<SmallTableCell className={classes.labelCell}>
 							<DocumentName entry={entry} classes={classes} />
-						</TableCell>
-						<TableCell>
+						</SmallTableCell>
+						<SmallTableCell>
 							<DocumentExpiryDate doc={entry} />
-						</TableCell>
-						<TableCell>
+						</SmallTableCell>
+						<SmallTableCell>
 							<Typography variant="h6">{lastUpdateDate(entry)}</Typography>
-						</TableCell>
-						<TableCell align="right">
+						</SmallTableCell>
+						<SmallTableCell align="right">
 							<IconButton onClick={() => onEditAttribute(entry)}>
 								<EditTransparentIcon />
 							</IconButton>
 							<IconButton onClick={() => onDeleteAttribute(entry)}>
 								<DeleteIcon />
 							</IconButton>
-						</TableCell>
+						</SmallTableCell>
 					</TableRow>
 				))}
 			</TableBody>
