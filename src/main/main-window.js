@@ -75,6 +75,11 @@ export const createMainWindow = async () => {
 		);
 	}
 
+	mainWindow.once('ready-to-show', () => {
+		mainWindow.webContents.setZoomFactor(+process.env.WINDOW_ZOOM_FACTOR || 1);
+		mainWindow.show();
+	});
+
 	mainWindow.on('close', event => {});
 
 	mainWindow.on('closed', () => {
