@@ -13,15 +13,16 @@ export const createMainWindow = async () => {
 	const windowOptions = {
 		id: 'main-window',
 		title: electron.app.getName(),
-		width: 1170,
-		height: 800,
-		minWidth: 1170,
-		minHeight: 800,
+		width: +process.env.WINDOW_WIDTH || 1170,
+		height: +process.env.WINDOW_HEIGHT || 800,
+		minWidth: +process.env.WINDOW_MIN_WIDTH || 1170,
+		minHeight: +process.env.WINDOW_MIN_HEIGHT || 800,
 		webPreferences: {
 			nodeIntegration: true,
 			webSecurity: true,
 			disableBlinkFeatures: 'Auxclick',
-			preload: path.resolve(__dirname, 'preload.js')
+			preload: path.resolve(__dirname, 'preload.js'),
+			zoomFactor: +process.env.WINDOW_ZOOM_FACTOR || 1
 		},
 		icon: __static + '/assets/icons/png/newlogo-256x256.png'
 	};
@@ -32,8 +33,8 @@ export const createMainWindow = async () => {
 		delay: 0,
 		minVisible: 1500,
 		splashScreenOpts: {
-			height: 800,
-			width: 1170,
+			height: process.env.WINDOW_HEIGHT || 800,
+			width: process.env.WINDOW_WIDTH || 1170,
 			transparent: true
 		}
 	});
