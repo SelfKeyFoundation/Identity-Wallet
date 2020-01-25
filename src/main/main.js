@@ -93,7 +93,7 @@ function onReady() {
 		ctx.priceService.on('pricesUpdated', newPrices => {
 			ctx.store.dispatch(pricesOperations.updatePrices(newPrices));
 		});
-		ctx.stakingService.acquireContract();
+		// ctx.stakingService.acquireContract();
 
 		createKeystoreFolder();
 

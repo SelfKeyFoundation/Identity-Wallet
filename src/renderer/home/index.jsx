@@ -62,8 +62,8 @@ const styles = theme => ({
 	}
 });
 
-const createWalletLink = props => <Link to="/createWallet" {...props} />;
-const unlockWalletLink = props => <Link to="/unlockWallet" {...props} />;
+const createWalletLink = (props = {}) => <Link to="/createWallet" {...props} />;
+const unlockWalletLink = (props = {}) => <Link to="/unlockWallet" {...props} />;
 class Home extends PureComponent {
 	includeTracking = () => {
 		return this.props.hasAcceptedTracking && !isTestMode();
