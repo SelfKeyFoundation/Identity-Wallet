@@ -38,7 +38,6 @@ const styles = theme => ({
 
 const IncorporationsDescriptionTab = withStyles(styles)(({ classes, program }) => (
 	<div className={classes.tabContainer}>
-		{console.log(program)}
 		<div
 			dangerouslySetInnerHTML={{
 				__html: sanitize(

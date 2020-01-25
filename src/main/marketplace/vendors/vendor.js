@@ -31,6 +31,7 @@ export class Vendor extends BaseModel {
 				},
 				relyingPartyConfig: { type: 'object', default: {} },
 				privacyPolicy: { type: 'string', default: '' },
+				termsOfService: { type: 'string', default: '' },
 				contactEmail: { type: 'string', default: '' },
 				did: { type: 'string', default: '' },
 				paymentAddress: { type: 'string', default: '' }
