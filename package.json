@@ -64,7 +64,7 @@
 		"@babel/polyfill": "7.4.3",
 		"@ledgerhq/hw-app-eth": "5.7.0",
 		"@ledgerhq/hw-transport-node-hid": "5.7.0",
-		"@ledgerhq/web3-subprovider": "5.7.0",
+		"@ledgerhq/web3-subprovider": "5.7.1",
 		"@material-ui/core": "3.9.2",
 		"@material-ui/icons": "3.0.2",
 		"@material-ui/lab": "3.0.0-alpha.30",
