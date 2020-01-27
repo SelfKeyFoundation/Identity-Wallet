@@ -251,7 +251,8 @@
 			"category": "public.app-category.finance",
 			"target": [
 				"dmg",
-				"zip"
+				"zip",
+				"pkg"
 			],
 			"hardenedRuntime": true,
 			"gatekeeperAssess": false,
@@ -260,6 +261,9 @@
 		},
 		"dmg": {
 			"sign": false
+		},
+		"pkg": {
+			"installLocation": "/Applications"
 		},
 		"linux": {
 			"target": [
