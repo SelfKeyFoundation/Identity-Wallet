@@ -33,7 +33,7 @@
 	"scripts": {
 		"dev": "electron-webpack dev",
 		"install-app-deps": "electron-builder install-app-deps buildDependenciesFromSource",
-		"install-all": "BUILD_DLL_PRODUCTION=true yarn && yarn install-app-deps",
+		"install-all": "yarn && yarn install-app-deps",
 		"install-all-dev": "BUILD_DLL_PRODUCTION=false yarn && yarn install-app-deps",
 		"compile": "electron-webpack",
 		"dist": "yarn compile && electron-builder",
