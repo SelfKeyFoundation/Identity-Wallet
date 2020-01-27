@@ -7,4 +7,4 @@ class EtheriumTx {
 	}
 }
 
-module.exports = EtheriumTx;
+module.exports = { Transaction: EtheriumTx };
