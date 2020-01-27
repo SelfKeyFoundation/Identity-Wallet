@@ -237,6 +237,7 @@ function registerJobHandlers(ctx) {
 	ctx.inventorySyncJobHandler.registerHandler();
 	ctx.marketplaceCountrySyncJobHandler.registerHandler();
 	ctx.taxTreatiesSyncJobHandler.registerHandler();
+	ctx.listingExchangesSyncJobHandler.registerHandler();
 }
 
 function scheduleInitialJobs(ctx) {
@@ -244,4 +245,5 @@ function scheduleInitialJobs(ctx) {
 	ctx.vendorService.start();
 	ctx.marketplaceCountryService.start();
 	ctx.taxTreatiesService.start();
+	ctx.exchangesService.start();
 }

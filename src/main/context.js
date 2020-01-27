@@ -27,6 +27,7 @@ import { VendorService } from './marketplace/vendors/vendor-service';
 import { VendorSyncJobHandler } from './marketplace/vendors/vendor-sync-job-handler';
 import { InventoryService } from './marketplace/inventory/inventory-service';
 import { InventorySyncJobHandler } from './marketplace/inventory/inventory-sync-job-handler';
+import { ListingExchangesSyncJobHandler } from './exchanges/listing-exchanges-sync-job-handler';
 import { MarketplaceCountryService } from './marketplace/countries/marketplace-country-service';
 import { MarketplaceCountrySyncJobHandler } from './marketplace/countries/marketplace-country-sync-job-handler';
 import { TaxTreatiesService } from './marketplace/tax-treaties/tax-treaties-service';
@@ -48,6 +49,7 @@ export const registerMainServices = container => {
 		marketplaceCountrySyncJobHandler: asClass(MarketplaceCountrySyncJobHandler).singleton(),
 		taxTreatiesService: asClass(TaxTreatiesService).singleton(),
 		taxTreatiesSyncJobHandler: asClass(TaxTreatiesSyncJobHandler).singleton(),
+		listingExchangesSyncJobHandler: asClass(ListingExchangesSyncJobHandler).singleton(),
 		web3Service: asClass(Web3Service).singleton(),
 		walletService: asClass(WalletService).singleton(),
 		addressBookService: asClass(AddressBookService).singleton(),
