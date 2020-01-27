@@ -23,7 +23,7 @@ const styles = theme => ({
 });
 
 export const TransactionNoKeyError = withStyles(styles)(
-	({ classes, children, keyPrice, address, closeAction }) => {
+	({ classes, children, keyPrice, address, closeAction, listingExchanges = [] }) => {
 		const numeric = keyPrice && +keyPrice;
 		const key = numeric.toLocaleString();
 		return (
@@ -37,27 +37,10 @@ export const TransactionNoKeyError = withStyles(styles)(
 						your SelfKey Wallet. KEY tokens are listed on many exchanges worldwide:
 					</Typography>
 					<List className={classes.list}>
-						{[
-							'Binance',
-							'Hitbtc',
-							'DCoin',
-							'Kucoin',
-							'WhiteBit',
-							'P2PB2B',
-							'ProBit',
-							'Tidex',
-							'Abcc',
-							'Idex',
-							'Crex24',
-							'Rightbtc',
-							'IDCM',
-							'Lukki',
-							'Bilaxy',
-							'Bw'
-						].map(item => (
-							<ListItem key={item}>
+						{listingExchanges.map(item => (
+							<ListItem key={item.id}>
 								<DefaultBullet />
-								<Typography variant="body1">{item}</Typography>
+								<Typography variant="body1">{item.name}</Typography>
 							</ListItem>
 						))}
 					</List>
