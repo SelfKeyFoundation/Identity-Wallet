@@ -7,4 +7,9 @@ const updateExchanges = exchanges => {
 	};
 };
 
-export { updateExchanges };
+const setListingExchanges = payload => ({
+	type: types.EXCHANGES_LISTING_SET,
+	payload
+});
+
+export { updateExchanges, setListingExchanges };

@@ -5,8 +5,6 @@ import promise from 'redux-promise';
 import { routerMiddleware } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
 import history from './history';
-// eslint-disable-next-line
-import { closeOperations } from '../close';
 import { createReducers } from './reducers';
 import {
 	forwardToMain,

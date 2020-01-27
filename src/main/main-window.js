@@ -5,8 +5,6 @@ import path from 'path';
 import { isDevMode, isDebugMode } from 'common/utils/common';
 import { Logger } from '../common/logger';
 import createMenuTemplate from './menu';
-import { getGlobalContext } from 'common/context';
-import { push } from 'connected-react-router';
 import { initSplashScreen } from '@trodi/electron-splashscreen';
 
 const log = new Logger('main-window');
@@ -15,15 +13,17 @@ export const createMainWindow = async () => {
 	const windowOptions = {
 		id: 'main-window',
 		title: electron.app.getName(),
-		width: 1170,
-		height: 800,
-		minWidth: 1170,
-		minHeight: 800,
+		width: +process.env.WINDOW_WIDTH || 1170,
+		height: +process.env.WINDOW_HEIGHT || 800,
+		minWidth: +process.env.WINDOW_MIN_WIDTH || 1170,
+		minHeight: +process.env.WINDOW_MIN_HEIGHT || 800,
+		kiosk: !!process.env.WINDOW_KIOSK_MODE || false,
 		webPreferences: {
 			nodeIntegration: true,
 			webSecurity: true,
 			disableBlinkFeatures: 'Auxclick',
-			preload: path.resolve(__dirname, 'preload.js')
+			preload: path.resolve(__dirname, 'preload.js'),
+			zoomFactor: +process.env.WINDOW_ZOOM_FACTOR || 1
 		},
 		icon: __static + '/assets/icons/png/newlogo-256x256.png'
 	};
@@ -34,14 +34,11 @@ export const createMainWindow = async () => {
 		delay: 0,
 		minVisible: 1500,
 		splashScreenOpts: {
-			height: 800,
-			width: 1170,
+			height: process.env.WINDOW_HEIGHT || 800,
+			width: process.env.WINDOW_WIDTH || 1170,
 			transparent: true
 		}
 	});
-
-	mainWindow.shouldIgnoreClose = true;
-	mainWindow.shouldIgnoreCloseDialog = false; // in order to don't show prompt window
 
 	Menu.setApplicationMenu(Menu.buildFromTemplate(createMenuTemplate(mainWindow)));
 
@@ -79,18 +76,12 @@ export const createMainWindow = async () => {
 		);
 	}
 
-	mainWindow.on('close', event => {
-		if (mainWindow.shouldIgnoreCloseDialog) {
-			mainWindow.shouldIgnoreCloseDialog = false;
-			return;
-		}
-		if (mainWindow.shouldIgnoreClose) {
-			event.preventDefault();
-			mainWindow.shouldIgnoreClose = false;
-			const store = getGlobalContext().store;
-			store.dispatch(push('/closeConfirmation'));
-		}
+	mainWindow.once('ready-to-show', () => {
+		mainWindow.webContents.setZoomFactor(+process.env.WINDOW_ZOOM_FACTOR || 1);
+		mainWindow.show();
 	});
+
+	mainWindow.on('close', event => {});
 
 	mainWindow.on('closed', () => {
 		mainWindow = null;
