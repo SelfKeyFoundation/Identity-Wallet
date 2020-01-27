@@ -2,13 +2,14 @@
 
 import EventEmitter from 'events';
 import Web3Service from 'main/blockchain/web3-service';
+import { Logger } from 'common/logger';
 
 const { getWallet } = require('common/wallet/selectors');
 const { getTokens } = require('common/wallet-tokens/selectors');
 const { walletOperations } = require('common/wallet');
 const { walletTokensOperations } = require('common/wallet-tokens');
 const store = require('renderer/react/common/store').default;
-
+const log = new Logger('BalanceUpdaterService');
 const web3Service = new Web3Service();
 
 let txInfoCheckInterval = null;
@@ -48,19 +49,23 @@ export class BalanceUpdaterService extends EventEmitter {
 	async startTxCheck(txHash, oldBalance) {
 		let me = this;
 		txInfoCheckInterval = setInterval(async () => {
-			let txInfo = await web3Service.waitForTicket({
-				method: 'getTransactionReceipt',
-				args: [txHash]
-			});
+			try {
+				let txInfo = await web3Service.waitForTicket({
+					method: 'getTransactionReceipt',
+					args: [txHash]
+				});
 
-			if (txInfo && txInfo.blockNumber !== null) {
-				let status = Number(txInfo.status);
-				this.emit('tx-status:change', txHash, status);
+				if (txInfo && txInfo.blockNumber !== null) {
+					let status = Number(txInfo.status);
+					this.emit('tx-status:change', txHash, status);
 
-				if (status) {
-					me.updateBalances(oldBalance);
+					if (status) {
+						me.updateBalances(oldBalance);
+					}
+					clearInterval(txInfoCheckInterval);
 				}
-				clearInterval(txInfoCheckInterval);
+			} catch (error) {
+				log.error('tx check error', error);
 			}
 		}, TX_CHECK_INTERVAL);
 	}
