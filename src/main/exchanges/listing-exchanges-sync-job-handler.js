@@ -1,4 +1,4 @@
-export const LISTING_EXCHANGES_SYNC_JOB = 'vendor-sync-job';
+export const LISTING_EXCHANGES_SYNC_JOB = 'listing-exchanges-sync-job';
 
 export class ListingExchangesSyncJobHandler {
 	constructor({ schedulerService, exchangesService }) {

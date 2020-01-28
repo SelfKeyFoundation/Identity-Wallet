@@ -1,12 +1,12 @@
 'use strict';
 import Web3 from 'web3';
-import EtheriumTx from 'ethereumjs-tx';
+import { Transaction as EthereumTx } from 'ethereumjs-tx';
 import AsyncTaskQueue from 'common/utils/async-task-queue';
 import CONFIG from 'common/config';
 import { abi as ABI } from 'main/assets/data/abi.json';
 import { Logger } from 'common/logger';
 import ProviderEngine from 'web3-provider-engine';
-import FetchSubprovider from 'web3-provider-engine/subproviders/fetch';
+import WebsocketProvider from 'web3-provider-engine/subproviders/websocket';
 import HookedWalletEthTxSubprovider from 'web3-provider-engine/subproviders/hooked-wallet-ethtx';
 import SubscriptionSubprovider from 'web3-provider-engine/subproviders/subscriptions';
 import HWTransportNodeHid from '@ledgerhq/hw-transport-node-hid';
@@ -18,13 +18,9 @@ const log = new Logger('Web3Service');
 export const REQUEST_INTERVAL_DELAY = 500;
 
 export const SERVER_CONFIG = {
-	mew: {
-		1: { url: 'https://api.myetherapi.com/eth' },
-		3: { url: 'https://api.myetherapi.com/rop' }
-	},
 	infura: {
-		1: { url: 'https://mainnet.infura.io/v3/2e5fb5cf42714929a7f61a1617ef1ffd' },
-		3: { url: 'https://ropsten.infura.io/v3/2e5fb5cf42714929a7f61a1617ef1ffd' }
+		1: { url: 'wss://mainnet.infura.io/ws/v3/2e5fb5cf42714929a7f61a1617ef1ffd' },
+		3: { url: 'wss://ropsten.infura.io/ws/v3/2e5fb5cf42714929a7f61a1617ef1ffd' }
 	}
 };
 
@@ -60,11 +56,16 @@ export class Web3Service {
 	}
 
 	async defaultWallet() {
+		if (this.web3 && this.web3.currentProvider) {
+			this.web3.currentProvider.stop();
+		}
 		const engine = new ProviderEngine();
 
 		engine.addProvider(this.getWalletEthTxSubprovider());
-		engine.addProvider(new FetchSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
-
+		engine.addProvider(new WebsocketProvider({ rpcUrl: SELECTED_SERVER_URL }));
+		engine.on('error', error => {
+			log.error('Web3Service provider error %s', error);
+		});
 		engine.start();
 
 		this.web3 = new Web3(engine);
@@ -72,6 +73,9 @@ export class Web3Service {
 	}
 
 	async switchToLedgerWallet(accountsOffset = 0, accountsQuantity = 6) {
+		if (this.web3 && this.web3.currentProvider) {
+			this.web3.currentProvider.stop();
+		}
 		const engine = new ProviderEngine();
 		this.getLedgerTransport = () => HWTransportNodeHid.create();
 		const ledger = Web3SubProvider(this.getLedgerTransport, {
@@ -80,13 +84,13 @@ export class Web3Service {
 			accountsOffset: accountsOffset
 		});
 		const subscriptionSubprovider = new SubscriptionSubprovider();
-		subscriptionSubprovider.on('data', (err, notification) => {
-			engine.emit('data', err, notification);
-		});
 
 		engine.addProvider(ledger);
 		engine.addProvider(subscriptionSubprovider);
-		engine.addProvider(new FetchSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
+		engine.addProvider(new WebsocketProvider({ rpcUrl: SELECTED_SERVER_URL }));
+		engine.on('error', error => {
+			log.error('Web3Service provider error %s', error);
+		});
 		engine.start();
 
 		this.web3 = new Web3(engine);
@@ -121,6 +125,9 @@ export class Web3Service {
 	}
 
 	async switchToTrezorWallet(accountsOffset = 0, accountsQuantity = 6, eventEmitter) {
+		if (this.web3 && this.web3.currentProvider) {
+			this.web3.currentProvider.stop();
+		}
 		this.trezorWalletSubProvider = await TrezorWalletSubProviderFactory(
 			CONFIG.chainId,
 			accountsOffset,
@@ -130,15 +137,14 @@ export class Web3Service {
 		const engine = new ProviderEngine();
 
 		const subscriptionSubprovider = new SubscriptionSubprovider();
-		subscriptionSubprovider.on('data', (err, notification) => {
-			engine.emit('data', err, notification);
-		});
 
+		engine.on('error', error => {
+			log.error('Web3Service provider error %s', error);
+		});
 		engine.addProvider(this.trezorWalletSubProvider);
 		engine.addProvider(subscriptionSubprovider);
-		engine.addProvider(new FetchSubprovider({ rpcUrl: SELECTED_SERVER_URL }));
+		engine.addProvider(new WebsocketProvider({ rpcUrl: SELECTED_SERVER_URL }));
 		engine.start();
-
 		this.web3 = new Web3(engine);
 		this.web3.transactionConfirmationBlocks = 1;
 	}
@@ -177,6 +183,7 @@ export class Web3Service {
 				...(await this.sendSignedTransaction(contract, contractAddress, args, wallet))
 			};
 		}
+
 		return { ticketPromise: contract[method](...args) };
 	}
 	getSelectedServerURL() {
@@ -190,11 +197,12 @@ export class Web3Service {
 				if (!ticketPromise) {
 					return reject(new Error('Failed to process ticket'));
 				}
-
-				ticketPromise.catch(err => {
+				const errorHandler = err => {
 					this.nonce = 0;
+					log.error('web3 response error %s', err);
 					reject(err);
-				});
+				};
+				ticketPromise.catch(errorHandler);
 
 				if (args.onceListenerName) {
 					ticketPromise.once(args.onceListenerName, res => {
@@ -206,6 +214,9 @@ export class Web3Service {
 					});
 				}
 			} catch (error) {
+				if (error.method && error.method !== 'call') {
+					log.error('waitForTicket error %s %2j', error, args);
+				}
 				reject(error);
 			}
 		});
@@ -242,21 +253,26 @@ export class Web3Service {
 	 * @return {string} status
 	 */
 	async getTransactionStatus(tx) {
-		if (!tx) {
-			return 'pending';
-		}
-		if (!tx.blockNumber) {
-			return 'processing';
-		}
-		let receipt = await this.getTransactionReceipt(tx.hash);
-		let status = receipt.status;
-		if (typeof status !== 'boolean') {
-			status = this.web3.utils.hexToNumber(receipt.status);
-		}
-		if (!status) {
+		try {
+			if (!tx) {
+				return 'pending';
+			}
+			if (!tx.blockNumber) {
+				return 'processing';
+			}
+			let receipt = await this.getTransactionReceipt(tx.hash);
+			let status = receipt.status;
+			if (typeof status !== 'boolean') {
+				status = this.web3.utils.hexToNumber(receipt.status);
+			}
+			if (!status) {
+				return 'failed';
+			}
+			return 'success';
+		} catch (error) {
+			log.error('getTransactionStatus %s', error);
 			return 'failed';
 		}
-		return 'success';
 	}
 
 	/**
@@ -311,7 +327,7 @@ export class Web3Service {
 			chainId: CONFIG.chainId,
 			...opts
 		};
-		const tx = new EtheriumTx(rawTx);
+		const tx = new EthereumTx(rawTx, { chain: CONFIG.chainId });
 		tx.sign(Buffer.from(wallet.privateKey.replace('0x', ''), 'hex'));
 		let serializedTx = '0x' + tx.serialize().toString('hex');
 		this.nonce = nonce;

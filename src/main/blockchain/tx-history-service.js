@@ -154,7 +154,9 @@ export class TxHistoryService {
 				tokenName
 			};
 		} catch (err) {
-			log.error('IS NOT CONTRACT ADDRESS, %s, %s', contractAddress, err);
+			if (!err.message.startsWith("Returned values aren't valid")) {
+				log.error('ContractInfo error, %s, %s', contractAddress, err);
+			}
 			return null;
 		}
 	}
@@ -220,7 +222,7 @@ export class TxHistoryService {
 				}
 				Object.assign(processedTx, contractInfo);
 			} catch (error) {
-				console.error(error);
+				console.error('isFailedERC20TokenTx error %s', error);
 				return null;
 			}
 		}

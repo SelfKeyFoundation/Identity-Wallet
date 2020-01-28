@@ -38,7 +38,7 @@ import {
 	corporatePositionsLLC
 } from './corporate-data';
 
-storiesOf('Corporate', module).add('Dashboard', () => (
+storiesOf('Corporate Profile', module).add('Dashboard', () => (
 	<div style={{ width: '1140px' }}>
 		<CorporateDashboardPage
 			profile={dummyProfile}
@@ -48,7 +48,7 @@ storiesOf('Corporate', module).add('Dashboard', () => (
 	</div>
 ));
 
-storiesOf('Corporate/Dashboard Tabs', module)
+storiesOf('Corporate Profile/Dashboard Tabs', module)
 	.add('default', () => (
 		<CorporateDashboardTabs
 			profile={dummyProfile}
@@ -126,7 +126,7 @@ storiesOf('Corporate/Dashboard Tabs', module)
 		/>
 	));
 
-storiesOf('Corporate/Components', module)
+storiesOf('Corporate Profile/Components', module)
 	.add('Company', () => (
 		<div style={{ width: '650px' }}>
 			<CorporateDetails
@@ -214,7 +214,7 @@ storiesOf('Corporate/Components', module)
 		</div>
 	));
 
-storiesOf('Corporate/Wizard', module)
+storiesOf('Corporate Profile/Wizard', module)
 	.add('default', () => (
 		<CorporateWizard
 			members={dummyMembers}
@@ -237,7 +237,7 @@ storiesOf('Corporate/Wizard', module)
 		/>
 	));
 
-storiesOf('Corporate/Members', module).add('Add Member', () => (
+storiesOf('Corporate Profile/Members', module).add('Add Member', () => (
 	<CorporateMemberForm
 		entityTypes={entityTypes}
 		jurisdictions={legalJurisdictions}
@@ -251,7 +251,7 @@ storiesOf('Corporate/Members', module).add('Add Member', () => (
 		onFieldChange={name => action(`field change ${name}:`)}
 	/>
 ));
-storiesOf('Corporate/Members/Components', module)
+storiesOf('Corporate Profile/Members/Components', module)
 	.add('Individual Member Form', () => (
 		<div style={{ width: '1140px' }}>
 			<CorporateMemberIndividualForm

@@ -12,6 +12,7 @@ import { appSelectors } from 'common/app';
 
 import { MarketplaceContainer } from '../../marketplace';
 import { CorporateContainer } from '../../corporate';
+import { IndividualContainer } from '../../individual';
 
 import { SelfkeyIdContainer } from '../../selfkey-id/main';
 import {
@@ -190,6 +191,7 @@ class Main extends PureComponent {
 					/>
 
 					<Route path={`${match.path}/corporate`} component={CorporateContainer} />
+					<Route path={`${match.path}/individual`} component={IndividualContainer} />
 				</Grid>
 			</Grid>
 		);

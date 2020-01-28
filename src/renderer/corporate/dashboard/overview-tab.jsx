@@ -4,7 +4,7 @@ import { CorporateDetails } from '../common/corporate-details';
 import { CorporateApplicationsSummary } from '../common/corporate-applications';
 import { CorporateCapTable } from '../common/corporate-cap-table';
 import { CorporateShareholding } from '../common/corporate-shareholding';
-import { DisplayDid } from '../../did';
+import { DisplayDid } from '../../did/display-did';
 // import { CorporateOrgChart } from '../common/corporate-org-chart';
 
 const styles = theme => ({
