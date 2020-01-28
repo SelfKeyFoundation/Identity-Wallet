@@ -60,6 +60,7 @@ const styles = () => ({
 		transform: 'translate(-50%, -50%)'
 	},
 	chart: {
+		maxWidth: 'initial',
 		position: 'relative'
 	},
 	buttonViewMore: {
@@ -88,7 +89,8 @@ const styles = () => ({
 		color: 'rgba(255, 255, 255, 0.7)'
 	},
 	title: {
-		fontSize: '20px'
+		fontSize: '20px',
+		paddingTop: '12px'
 	},
 	chartWrap: {
 		'& div.google-visualization-tooltip': {
@@ -109,6 +111,39 @@ const styles = () => ({
 	},
 	button: {
 		margin: '0 10px'
+	},
+	token: {
+		flexBasis: '48%',
+		margin: '13px 0'
+	},
+	tokenContainer: {
+		display: 'flex',
+		flexWrap: 'wrap',
+		justifyContent: 'space-between',
+		marginBottom: '30px',
+		maxHeight: '240px',
+		overflow: 'scroll'
+	},
+	tokenName: {
+		maxWidth: '130px',
+		width: '130px'
+	},
+	overflowEllipsis: {
+		overflow: 'hidden',
+		textOverflow: 'ellipsis',
+		whiteSpace: 'nowrap'
+	},
+	tokenActionButtons: {
+		marginBottom: '40px',
+		marginTop: '20px'
+	},
+	flex: {
+		display: 'flex'
+	},
+	flexContainer: {
+		alignItems: 'flex-start',
+		display: 'flex',
+		justifyContent: 'space-between'
 	}
 });
 
@@ -167,8 +202,8 @@ class ChartContainerComponent extends React.Component {
 						}
 					}}
 					graph_id="PieChart"
-					width="100%"
-					height="300px"
+					width="270px"
+					height="270px"
 					legend_toggle
 					chartEvents={events}
 					ref={c => {
@@ -254,7 +289,7 @@ export class CryptoChartBoxComponent extends React.Component {
 		}
 	};
 
-	getColors = () => ['#46dfba', '#46b7df', '#238db4', '#1d7999', '#0e4b61'];
+	getColors = () => ['#46dfba', '#05538E', '#006CBE', '#006CBE', '#00C0D9'];
 
 	getChartEvents = () => {
 		return this.hasBalance() ? [this.selectEvent, this.readyEvent] : [];
@@ -285,35 +320,45 @@ export class CryptoChartBoxComponent extends React.Component {
 					key={index}
 					className={
 						this.state.activations[index] && this.state.activations[index].active
-							? classes.active
-							: ''
+							? `${classes.active} ${classes.token}`
+							: `${classes.token}`
 					}
 				>
-					<Grid container alignItems="flex-start" justify="space-between">
-						<Grid item xs={2}>
+					<div className={classes.flexContainer}>
+						<div className={classes.flex}>
 							<div
 								className={classes.coloredBox}
 								style={{
 									backgroundColor:
-										index <= 4 ? this.getColors()[index] : this.OTHERS_COLOR
+										index <= 4 ? this.getColors()[index] : this.OTHERS_COLOR,
+									marginRight: '10px'
 								}}
 							>
 								<div className={classes.coloredBoxText}>{token.name.charAt(0)}</div>
 							</div>
-						</Grid>
-						<Grid item xs={5}>
-							<Grid container alignItems="flex-start">
-								<Grid item xs={12}>
-									<Typography variant="h2">{token.name}</Typography>
+							<div className={classes.tokenName}>
+								<Grid container alignItems="flex-start">
+									<Grid item xs={12}>
+										<Typography
+											variant="h2"
+											title={token.name}
+											className={classes.overflowEllipsis}
+										>
+											{token.name}
+										</Typography>
+									</Grid>
+									<Grid item xs={12}>
+										<Typography
+											variant="subtitle1"
+											className={classes.textColor}
+										>
+											{token.symbol}
+										</Typography>
+									</Grid>
 								</Grid>
-								<Grid item xs={12}>
-									<Typography variant="subtitle1" className={classes.textColor}>
-										{token.symbol}
-									</Typography>
-								</Grid>
-							</Grid>
-						</Grid>
-						<Grid item xs={5}>
+							</div>
+						</div>
+						<div>
 							<Grid container alignItems="flex-start">
 								<Grid item xs={12}>
 									<PriceSummary
@@ -338,8 +383,8 @@ export class CryptoChartBoxComponent extends React.Component {
 									/>
 								</Grid>
 							</Grid>
-						</Grid>
-					</Grid>
+						</div>
+					</div>
 				</Grid>
 			);
 		});
@@ -380,16 +425,21 @@ export class CryptoChartBoxComponent extends React.Component {
 	}
 
 	render() {
-		const { classes, locale, fiatCurrency, tokens, manageCryptoAction } = this.props;
+		const {
+			classes,
+			locale,
+			fiatCurrency,
+			tokens,
+			manageCryptoAction,
+			manageAddTokenAction
+		} = this.props;
 
 		return (
 			<Paper className={classes.paper}>
 				<Grid container alignItems="center" spacing={16}>
-					<Grid item xs={12}>
-						<Typography variant="h1" className={classes.title}>
-							My Tokens
-						</Typography>
-					</Grid>
+					<Typography variant="h1" className={classes.title}>
+						My Tokens
+					</Typography>
 					<Grid item xs={12}>
 						<Grid container justify="center" spacing={0}>
 							<Grid item xs={4} className={classes.chart}>
@@ -415,8 +465,13 @@ export class CryptoChartBoxComponent extends React.Component {
 							</Grid>
 						</Grid>
 					</Grid>
-					<Grid container justify="center" style={{ marginBottom: '40px' }}>
-						<Button className={classes.button} variant="outlined" color="secondary">
+					<Grid container justify="center" className={classes.tokenActionButtons}>
+						<Button
+							className={classes.button}
+							variant="outlined"
+							color="secondary"
+							onClick={manageAddTokenAction}
+						>
 							+ Add Token
 						</Button>
 						<Button
@@ -431,7 +486,12 @@ export class CryptoChartBoxComponent extends React.Component {
 							Send/Receive
 						</Button>
 					</Grid>
-					<Grid container spacing={16} justify="space-between">
+					<Grid
+						container
+						spacing={16}
+						justify="space-between"
+						className={classes.tokenContainer}
+					>
 						{this.getTokensLegend(classes, tokens, locale, fiatCurrency)}
 					</Grid>
 					{this.getViewAllSection()}
