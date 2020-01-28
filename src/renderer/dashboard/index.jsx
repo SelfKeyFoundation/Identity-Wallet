@@ -28,7 +28,7 @@ const styles = theme => ({
 	},
 	trading: {
 		backgroundColor: '#1E262E',
-		height: '200px',
+		height: '236px',
 		marginBottom: '15px'
 	},
 	transactions: {
@@ -108,6 +108,7 @@ const Dashboard = connect(mapStateToProps)(
 					<Grid item className={classes.chartBox}>
 						<CryptoChartBox
 							manageCryptoAction={() => props.dispatch(push('/main/crypto-manager'))}
+							manageAddTokenAction={() => props.dispatch(push('/main/add-token'))}
 						/>
 					</Grid>
 					<Grid item className={classes.smallWidget}>
