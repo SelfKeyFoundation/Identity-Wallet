@@ -46,7 +46,7 @@ const styles = theme => ({
 		backgroundColor: 'transparent !important',
 		borderBottom: '1px solid #303C49',
 		'& td': {
-			padding: '15px 0',
+			padding: '17px 0',
 			'&:last-child': {
 				paddingRight: 0
 			}
