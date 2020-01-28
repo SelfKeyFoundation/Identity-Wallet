@@ -141,7 +141,7 @@ export const ServiceCost = withStyles(serviceCostStyle)(({ classes }) => (
 				</div>
 				<div className="rowItem price">
 					<Typography className={classes.bold} variant="body2" color="primary">
-						2 x $25
+						$25
 					</Typography>
 					<Typography variant="subtitle2" color="secondary">
 						2 x 211.831.319,192 KEY

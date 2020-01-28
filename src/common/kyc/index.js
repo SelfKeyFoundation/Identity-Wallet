@@ -42,6 +42,10 @@ export const kycTypes = {
 	KYC_APPLICATION_CURRENT_CLEAR: 'kyc/application/current/clear',
 	KYC_APPLICATION_CURRENT_CENCEL: 'kyc/application/current/cancel',
 	KYC_APPLICATION_CURRENT_SUBMIT: 'kyc/application/current/submit',
+
+	KYC_APPLICATION_CHAT_LOAD: 'kyc/application/chat/load',
+	KYC_APPLICATION_CHAT_CREATE: 'kyc/application/chat/create',
+
 	KYC_APPLICATIONS_LOAD: 'kyc/applications/load',
 	KYC_APPLICATIONS_SET: 'kyc/applications/set',
 	KYC_APPLICATIONS_UPDATE: 'kyc/applications/update',
@@ -404,8 +408,8 @@ const loadRelyingPartyOperation = (
 		if (authenticate) {
 			applications = await session.listKYCApplications();
 			for (const application of applications) {
+				const formattedMessages = messageFilter(application.messages);
 				const template = templates.find(t => t.id === application.template);
-
 				await dispatch(
 					kycOperations.updateApplicationsOperation({
 						id: application.id,
@@ -416,7 +420,8 @@ const loadRelyingPartyOperation = (
 						owner: application.owner,
 						scope: application.scope,
 						applicationDate: application.createdAt,
-						title: template ? template.name : rpName
+						title: template ? template.name : rpName,
+						messages: formattedMessages
 					})
 				);
 			}
@@ -483,7 +488,7 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 		let application = await rp.session.createKYCApplication(templateId, attributes);
 		application = await rp.session.getKYCApplication(application.id);
 		await dispatch(kycActions.addKYCApplication(rpName, application));
-
+		const formattedMessages = messageFilter(application.messages);
 		await dispatch(
 			kycOperations.updateApplicationsOperation({
 				id: application.id,
@@ -494,7 +499,8 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 				owner: application.owner,
 				scope: application.scope,
 				applicationDate: application.createdAt,
-				title: title || rpName
+				title: title || rpName,
+				messages: formattedMessages
 			})
 		);
 	} catch (error) {
@@ -557,7 +563,7 @@ const updateRelyingPartyKYCApplication = (
 		let application = await rp.session.updateKYCApplication(updatedApplication);
 		application = await rp.session.getKYCApplication(application.id);
 		await dispatch(kycActions.addKYCApplication(rpName, application));
-
+		const formattedMessages = messageFilter(application.messages);
 		await dispatch(
 			kycOperations.updateApplicationsOperation({
 				id: application.id,
@@ -567,7 +573,8 @@ const updateRelyingPartyKYCApplication = (
 				currentStatusName: application.statusName,
 				owner: application.owner,
 				scope: application.scope,
-				applicationDate: application.createdAt
+				applicationDate: application.createdAt,
+				messages: formattedMessages
 			})
 		);
 	} catch (error) {
@@ -879,6 +886,22 @@ export const reducer = (state = initialState, action) => {
 			return reducers.setProcessingReducer(state, action);
 	}
 	return state;
+};
+
+export const messageFilter = messages => {
+	let result = [];
+	for (let m of messages) {
+		let fm = {};
+		fm.id = m.id;
+		m.user.name ? (fm.name = m.user.name) : (fm.name = 'Certifier');
+		m.roles === undefined || m.roles.length === 0
+			? (fm.type = 'person')
+			: (fm.type = 'certifier');
+		fm.date = parseInt((new Date(m.createdAt).getTime() / 1000).toFixed(0));
+		fm.message = m.message;
+		result.push(fm);
+	}
+	return result;
 };
 
 export default reducer;

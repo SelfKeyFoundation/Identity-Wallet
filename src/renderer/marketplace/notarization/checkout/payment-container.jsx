@@ -9,7 +9,7 @@ import { ordersOperations } from 'common/marketplace/orders';
 import { MarketplaceNotariesComponent } from '../common/marketplace-notaries-component';
 
 const styles = theme => ({});
-const VENDOR_NAME = 'Far Horizon Capital Inc';
+const VENDOR_NAME = 'SelfKey Certifier';
 
 class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 	async componentDidMount() {
@@ -22,22 +22,21 @@ class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 	};
 
 	async createOrder() {
-		// const { program, companyCode } = this.props;
-		const companyCode = 'companyCode';
+		const { program, companyCode } = this.props;
+		// const companyCode = 'companyCode';
 		const application = this.getLastApplication();
-		// const price = this.priceInKEY(program.price);
-		const price = 2017;
-		// const walletAddress = program.walletAddress;
-		const walletAddress = '0x23d233933c86f93b74705cf0d236b39f474249f8';
-		const vendorId = 'flagtheory_notarization';
-		// const vendorDID = program.didAddress;
-		const vendorDID = '0xee10a3335f48e10b444e299cf017d57879109c1e32cec3e31103ceca7718d0ec';
-		// TODO: get vendor name from RP store
+		const price = this.priceInKEY(program.price);
+		// const price = 2017;
+		const walletAddress = program.walletAddress;
+		// const walletAddress = '0x24233C848BdA9AD4559772763aC869d6305D177e';
+		const vendorId = 'selfkey_certifier';
+		const vendorDID = program.didAddress;
+		// const vendorDID = '0x96a101c36b1ac67098d85e4fac750ac538ed9800942ac5def9272c19accced9e';
 		const vendorName = VENDOR_NAME;
 
 		this.props.dispatch(
 			ordersOperations.startOrderOperation({
-				productInfo: `Notarization Test`,
+				productInfo: `SelfKey Notarization`,
 				applicationId: application.id,
 				amount: price,
 				vendorId,

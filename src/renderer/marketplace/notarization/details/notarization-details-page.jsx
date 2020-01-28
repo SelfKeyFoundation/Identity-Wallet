@@ -5,6 +5,27 @@ import { MarketplaceNotariesIcon, NotarizeDocumentIcon } from 'selfkey-ui';
 import { Alert } from '../../../common';
 import NotarizationDetailsPageTabs from './notarization-details-tabs';
 import KycRequirementsList from '../../../kyc/requirements/requirements-list';
+import request from 'request';
+
+const notaryTable = () => {
+	return new Promise(async (resolve, reject) => {
+		try {
+			await request(
+				'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=InventoryDev',
+				(e, r, b) => {
+					let ray = JSON.parse(b).entities;
+					console.log(ray[1]);
+					// let result = ray.filter(data => data.category === 'notaries');
+					let result = ray[1].data.price;
+					console.log(result);
+					resolve(result);
+				}
+			);
+		} catch (e) {
+			reject(e);
+		}
+	});
+};
 
 const styles = theme => ({
 	pageContent: {
@@ -142,7 +163,8 @@ export const NotarizeApplicationButton = withStyles(styles)(
 	)
 );
 
-export const NotarizationDetailsPage = withStyles(styles)(props => {
+export const NotarizationDetailsPage = withStyles(styles)(async props => {
+	let price = await notaryTable();
 	const {
 		classes,
 		tab,
@@ -151,7 +173,7 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 		onBackClick,
 		loading,
 		kycRequirements,
-		keyRate = 1500000
+		keyRate
 	} = props;
 	return (
 		<div>
@@ -182,21 +204,22 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 					<div className={classes.container}>
 						<div id="notarizeDocumentsDetails" className={classes.title}>
 							<Typography variant="body2" className="region">
-								Get your documents notarized!
+								Get Your Documents Notarized!
 							</Typography>
 						</div>
 						<div className={classes.content}>
 							<div className={classes.paragraph}>
 								<div className={classes.headerDescription}>
 									<Typography variant="body1">
-										Notarization doesn’t have to be a hassle anymore. Step in
-										the 21st centry, and conduct your business for the comfort
-										of your own home. The US base notaries services are
-										recognized world wide. All you have to do is to upload the
-										documents you want notarised, and have the availability to
-										take a short video call with a notary. Check the list
-										bellow, with supported document types, to see what we
-										currently support for the online notarization service.
+										Notarization doesn’t have to be a hassle anymore. Step into
+										the 21st century and conduct your business from the comfort
+										of your own home. The SelfKey Certifiers platform provides
+										access to US-based notaries that are recognized worldwide.
+										All you have to do is to upload the documents you want
+										notarised and have the availability to take a short video
+										call with a notary. Check the list below with document types
+										to see which online notarization services are currently
+										supported.
 									</Typography>
 								</div>
 								<div className={classes.applyButton}>
@@ -207,7 +230,7 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 									/>
 									<ProgramPrice
 										id="fees"
-										price="25"
+										price={price}
 										rate={keyRate}
 										label="From $"
 										extraLabel="/ Document"
@@ -218,7 +241,7 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 								<Alert type="warning">
 									<Typography variant="subtitle2" color="secondary">
 										Please make sure that your intended recipient accepts
-										documents notarized online and electronically signed, before
+										documents notarized online and electronically signed before
 										placing your order.
 									</Typography>
 								</Alert>

@@ -56,9 +56,9 @@ export const TOCDisagreementPopup = withStyles(styles)(props => {
 			<div className={classes.contentContainer}>
 				<div className={classes.text}>
 					<Typography variant="body2">
-						You will need to accept the Terms of Service in order to access the
-						notarization services or you will be unable to proceed. Return to the TOS
-						agreement below or cancel the application.
+						You will need to accept the Terms of Service in order to access notarization
+						services or you will be unable to proceed. Return to the TOS agreement below
+						or cancel the application.
 					</Typography>
 				</div>
 				<div className={classes.buttons}>

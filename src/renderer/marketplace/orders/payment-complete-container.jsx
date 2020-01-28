@@ -22,7 +22,7 @@ class MarketplacePaymentCompleteContainer extends PureComponent {
 }
 
 const mapStateToPropes = (state, props) => ({
-	email: 'support@flagtheory.com'
+	email: 'support@selfkey.org'
 });
 
 const connectedComponent = connect(mapStateToPropes)(MarketplacePaymentCompleteContainer);

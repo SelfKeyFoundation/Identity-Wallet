@@ -8,6 +8,7 @@ import { NotarizationTOC } from './common/toc-container';
 import { NotarizationTOCdisagreement } from './common/toc-disagreement-container';
 import { NotarizationPaymentContainer } from './checkout/payment-container';
 import { NotarizationPaymentCompleteContainer } from './checkout/payment-complete-container';
+import { NotarizationMessageContainer } from './common/message-container';
 
 class MarketplaceNotariesComponent extends PureComponent {
 	async componentDidMount() {
@@ -28,6 +29,7 @@ class MarketplaceNotariesComponent extends PureComponent {
 					path={`${path}/paymentComplete`}
 					component={NotarizationPaymentCompleteContainer}
 				/>
+				<Route path={`${path}/messages`} component={NotarizationMessageContainer} />
 			</div>
 		);
 	}

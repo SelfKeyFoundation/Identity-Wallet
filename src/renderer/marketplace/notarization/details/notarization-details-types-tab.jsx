@@ -99,7 +99,7 @@ class NotarizationTypesTabComponent extends PureComponent {
 				<div className={classes.gridPadding}>
 					<Typography variant="body1" color="secondary">
 						Check out the allowed document types before submitting your request. If you
-						have any doubts you can contact us at help@sekfley.org
+						have any questions you can contact us at support@selfkey.org
 					</Typography>
 				</div>
 				{supportedDocumentTypes.map((supportedDocument, indx) => {

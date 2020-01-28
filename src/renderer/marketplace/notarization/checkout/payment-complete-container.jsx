@@ -12,7 +12,7 @@ import { MarketplaceProcessStarted } from '../../common/marketplace-process-star
 
 const styles = theme => ({});
 
-const VENDOR_EMAIL = `support@flagtheory.com`;
+const VENDOR_EMAIL = `certifer_support@selfkey.org`;
 
 class NotarizationPaymentCompleteContainer extends MarketplaceNotariesComponent {
 	async componentWillMount() {

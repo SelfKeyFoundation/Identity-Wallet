@@ -162,7 +162,7 @@ export const NotarizationMessageWidget = withStyles(styles)(props => {
 	const { classes, onBackClick, messages } = props;
 	return (
 		<Card className={classes.container}>
-			<CardHeader title="Message Reply" />
+			<CardHeader title="Direct Messages" />
 			<Divider variant="middle" />
 			<CardContent className={classes.cardContent}>
 				{messages &&
