@@ -31,7 +31,8 @@ class IndividualDashboardContainerComponent extends PureComponent {
 			return dispatch(identityOperations.navigateToProfileOperation());
 		}
 		if (!identity.isSetupFinished) {
-			return dispatch(push('/main/individual/setup-individual-profile'));
+			return dispatch(push('/selfkeyIdCreate'));
+			// return dispatch(push('/main/individual/setup-individual-profile'));
 		}
 
 		// load marketplace store
