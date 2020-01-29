@@ -28,6 +28,9 @@ const styles = theme => ({
 			'& .halfWidth:last-child': {
 				marginLeft: 15
 			}
+		},
+		'& .corporateShareholding': {
+			margin: '30px 0'
 		}
 	}
 });
@@ -52,8 +55,8 @@ const CorporateOverviewTab = withStyles(styles)(
 				<div>
 					<CorporateCapTable profile={profile} members={members} />
 				</div>
-				<div className="halfWidgetBox">
-					<div className="halfWidth" styles={{ marginRight: 15 }}>
+				<div className="corporateShareholding">
+					<div>
 						<CorporateShareholding profile={profile} members={members} />
 					</div>
 					{/*
