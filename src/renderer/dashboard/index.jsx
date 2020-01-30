@@ -5,13 +5,15 @@ import CryptoChartBox from './crypto-chart-box';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import TransactionsHistory from '../transaction/transactions-history';
+import DashboardMarketplaceApplications from './dashboard-marketplace-applications';
+import DashboardSelfkeyProfile from './dashboard-selfkey-profile';
 import { Alert } from '../common';
 import { withStyles } from '@material-ui/core/styles';
 import { appSelectors } from 'common/app';
 import { CustomIcon } from 'selfkey-ui';
 
 const styles = theme => ({
-	chartBox: {
+	leftSideWidget: {
 		width: '66%'
 	},
 	padding: {
@@ -19,6 +21,13 @@ const styles = theme => ({
 	},
 	smallWidget: {
 		width: '32%'
+	},
+	rightColumnWrap: {
+		display: 'flex',
+		flexDirection: 'column',
+		'& .rightColumnWidget': {
+			flexGrow: 1
+		}
 	},
 	smallWidgetBox: {
 		border: '1px solid #43505B',
@@ -28,8 +37,8 @@ const styles = theme => ({
 	},
 	trading: {
 		backgroundColor: '#1E262E',
-		height: '236px',
-		marginBottom: '15px'
+		marginBottom: '15px',
+		maxHeight: '236px'
 	},
 	transactions: {
 		backgroundColor: '#262F39'
@@ -105,14 +114,19 @@ const Dashboard = connect(mapStateToProps)(
 					spacing={10}
 					wrap="nowrap"
 				>
-					<Grid item className={classes.chartBox}>
+					<Grid item className={classes.leftSideWidget}>
 						<CryptoChartBox
 							manageCryptoAction={() => props.dispatch(push('/main/crypto-manager'))}
 							manageAddTokenAction={() => props.dispatch(push('/main/add-token'))}
 						/>
 					</Grid>
-					<Grid item className={classes.smallWidget}>
-						<Grid item className={`${classes.trading} ${classes.smallWidgetBox}`}>
+					<Grid item className={`${classes.smallWidget} ${classes.rightColumnWrap}`}>
+						<Grid
+							item
+							className={`${classes.trading} ${
+								classes.smallWidgetBox
+							} rightColumnWidget`}
+						>
 							<Typography variant="h1" className={classes.title}>
 								Buy KEY tokens, to use in the SelfKey Marketplace.
 							</Typography>
@@ -126,9 +140,29 @@ const Dashboard = connect(mapStateToProps)(
 								<span>Buy KEY</span>
 							</Button>
 						</Grid>
-						<Grid item className={`${classes.transactions} ${classes.smallWidgetBox}`}>
+						<Grid
+							item
+							className={`${classes.transactions} ${
+								classes.smallWidgetBox
+							} rightColumnWidget`}
+						>
 							<TransactionsHistory />
 						</Grid>
+					</Grid>
+				</Grid>
+
+				<Grid
+					container
+					justify="space-between"
+					className={classes.padding}
+					spacing={10}
+					wrap="nowrap"
+				>
+					<Grid item className={classes.leftSideWidget}>
+						<DashboardMarketplaceApplications />
+					</Grid>
+					<Grid item className={classes.smallWidget}>
+						<DashboardSelfkeyProfile />
 					</Grid>
 				</Grid>
 			</Grid>
