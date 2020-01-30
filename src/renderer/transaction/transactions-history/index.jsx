@@ -302,42 +302,51 @@ class TransactionsHistory extends PureComponent {
 					) : (
 						<Table>
 							<TableBody>
-								{paginate(transactions, rowsPerPage, page).map(transaction => {
-									return (
-										<TableRow key={transaction.id} className={classes.tableRow}>
-											<TableCell className={classes.narrowCell}>
-												{getIconForTransaction(
-													transaction.isError,
-													this.hasSent(transaction)
-												)}
-											</TableCell>
-											<TableCell className={classes.smallPadding}>
-												<Typography component="span" variant="h6">
-													{transaction.statusText ||
-														getCustomStatusText(
+								{transactions.length > 0 ? (
+									paginate(transactions, rowsPerPage, page).map(transaction => {
+										return (
+											<TableRow
+												key={transaction.id}
+												className={classes.tableRow}
+											>
+												<TableCell className={classes.narrowCell}>
+													{getIconForTransaction(
+														transaction.isError,
+														this.hasSent(transaction)
+													)}
+												</TableCell>
+												<TableCell className={classes.smallPadding}>
+													<Typography component="span" variant="h6">
+														{transaction.statusText ||
+															getCustomStatusText(
+																transaction,
+																this.hasSent(transaction)
+															)}
+													</Typography>
+													<Typography
+														component="span"
+														variant="subtitle2"
+														color="secondary"
+													>
+														{this.renderDate(transaction.timeStamp)}
+													</Typography>
+												</TableCell>
+												<TableCell align="right">
+													<Typography component="span" variant="h6">
+														{getCustomValue(
 															transaction,
 															this.hasSent(transaction)
 														)}
-												</Typography>
-												<Typography
-													component="span"
-													variant="subtitle2"
-													color="secondary"
-												>
-													{this.renderDate(transaction.timeStamp)}
-												</Typography>
-											</TableCell>
-											<TableCell align="right">
-												<Typography component="span" variant="h6">
-													{getCustomValue(
-														transaction,
-														this.hasSent(transaction)
-													)}
-												</Typography>
-											</TableCell>
-										</TableRow>
-									);
-								})}
+													</Typography>
+												</TableCell>
+											</TableRow>
+										);
+									})
+								) : (
+									<Typography variant="body2">
+										You {"don't"}don’t have any transactions yet.
+									</Typography>
+								)}
 							</TableBody>
 							{transactions.length > 4 ? (
 								<TableFooter className={classes.tableFooter}>
