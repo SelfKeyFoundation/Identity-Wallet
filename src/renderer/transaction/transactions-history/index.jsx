@@ -275,11 +275,12 @@ class TransactionsHistory extends PureComponent {
 							</Typography>
 						</Grid>
 						<Grid item xs={1} className={classes.iconWrap}>
-							<IconButton aria-label="Filter" disabled={processing}>
+							<IconButton label="Filter" title="Filter" disabled={processing}>
 								<FilterIcon />
 							</IconButton>
 							<IconButton
 								aria-label="Refresh"
+								title="Refresh"
 								onClick={this.handleRefresh}
 								disabled={processing}
 							>
@@ -344,7 +345,7 @@ class TransactionsHistory extends PureComponent {
 									})
 								) : (
 									<Typography variant="body2">
-										You {"don't"}don’t have any transactions yet.
+										You {"don't"} have any transactions yet.
 									</Typography>
 								)}
 							</TableBody>
