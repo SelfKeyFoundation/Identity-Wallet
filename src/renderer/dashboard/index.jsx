@@ -4,13 +4,13 @@ import { Grid, Typography, Button } from '@material-ui/core';
 import CryptoChartBox from './crypto-chart-box';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
-import TransactionsHistory from '../transaction/transactions-history';
+import BuyKeyWidget from './buy-key';
 import DashboardMarketplaceApplications from './dashboard-marketplace-applications';
 import DashboardSelfkeyProfile from './dashboard-selfkey-profile';
+import TransactionsHistory from '../transaction/transactions-history';
 import { Alert } from '../common';
 import { withStyles } from '@material-ui/core/styles';
 import { appSelectors } from 'common/app';
-import { CustomIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	leftSideWidget: {
@@ -121,25 +121,7 @@ const Dashboard = connect(mapStateToProps)(
 						/>
 					</Grid>
 					<Grid item className={`${classes.smallWidget} ${classes.rightColumnWrap}`}>
-						<Grid
-							item
-							className={`${classes.trading} ${
-								classes.smallWidgetBox
-							} rightColumnWidget`}
-						>
-							<Typography variant="h1" className={classes.title}>
-								Buy KEY tokens, to use in the SelfKey Marketplace.
-							</Typography>
-							<Button
-								variant="outlined"
-								color="primary"
-								size="large"
-								className={classes.ctabutton}
-							>
-								<CustomIcon width="24px" height="24px" />
-								<span>Buy KEY</span>
-							</Button>
-						</Grid>
+						<BuyKeyWidget />
 						<Grid
 							item
 							className={`${classes.transactions} ${
@@ -158,7 +140,7 @@ const Dashboard = connect(mapStateToProps)(
 					spacing={10}
 					wrap="nowrap"
 				>
-					<Grid item className={classes.leftSideWidget}>
+					<Grid item className={classes.leftSideWidget} style={{ overflow: 'hidden' }}>
 						<DashboardMarketplaceApplications />
 					</Grid>
 					<Grid item className={classes.smallWidget}>
