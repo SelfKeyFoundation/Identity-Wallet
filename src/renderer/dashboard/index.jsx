@@ -144,7 +144,7 @@ const Dashboard = connect(mapStateToProps)(
 						<DashboardMarketplaceApplications />
 					</Grid>
 					<Grid item className={classes.smallWidget}>
-						<DashboardSelfkeyProfile />
+						<DashboardSelfkeyProfile isEmptyProfile={true} />
 					</Grid>
 				</Grid>
 			</Grid>
