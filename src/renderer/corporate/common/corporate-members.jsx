@@ -263,7 +263,7 @@ const CorporateMembers = withStyles(styles)(props => {
 												variant="subtitle1"
 												title={`${getMemberEquity(member)}%`}
 											>
-												{getMemberEquity(member)}
+												{getMemberEquity(member)}%
 											</Typography>
 										</TableCell>
 										<TableCell>
