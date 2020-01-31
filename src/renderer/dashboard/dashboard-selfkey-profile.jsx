@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-// import { getWallet } from 'common/wallet/selectors';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { identityOperations } from 'common/identity';
@@ -17,7 +16,7 @@ const styles = theme => ({
 	bottomSpace: {
 		marginBottom: '30px'
 	},
-	bottomSpace2: {
+	emptyStateSpace: {
 		marginBottom: '16px'
 	},
 	dspWrap: {
@@ -43,11 +42,16 @@ const styles = theme => ({
 		fontSize: '20px',
 		marginBottom: '30px',
 		marginTop: '5px'
+	},
+	'@media screen and (min-width: 1230px)': {
+		bgIcon: {
+			right: '-239px'
+		}
 	}
 });
 
 const EmptyState = ({ classes }) => (
-	<Typography variant="body2" className={classes.bottomSpace2}>
+	<Typography variant="body2" className={classes.emptyStateSpace}>
 		Set up your SelfKey ID for easy Marketplace applications
 	</Typography>
 );
@@ -65,23 +69,9 @@ class DashboardSelfkeyProfile extends PureComponent {
 				<Typography variant="h1" className={classes.title}>
 					My SelfKey Profile
 				</Typography>
+
 				<EmptyState classes={this.props.classes} />
 
-				{/* <Typography variant="subtitle2" color="secondary" className={classes.bottomSpace}>
-					Add more documents and informations for easy marketplace applications.
-				</Typography>
-				<List className={`${classes.list} ${classes.bottomSpace}`}>
-					{['Basic Info', 'Documents', 'Selfkey DID'].map(item => (
-						<ListItem key={item}>
-							<Typography variant="body2" color="secondary">
-								{item}
-							</Typography>
-							<Typography variant="body2" align="right">
-								pass
-							</Typography>
-						</ListItem>
-					))}
-				</List> */}
 				<Button variant="outlined" size="large" onClick={this.handleProfileNavigate}>
 					Go to My Profile
 				</Button>
@@ -94,9 +84,7 @@ class DashboardSelfkeyProfile extends PureComponent {
 }
 
 const mapStateToProps = state => {
-	return {
-		// address: getWallet(state).address
-	};
+	return {};
 };
 
 export default connect(mapStateToProps)(withStyles(styles)(DashboardSelfkeyProfile));
