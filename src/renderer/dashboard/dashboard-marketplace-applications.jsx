@@ -3,8 +3,17 @@ import { connect } from 'react-redux';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { push } from 'connected-react-router';
+import { MarketplaceIcon } from 'selfkey-ui';
 
 const styles = theme => ({
+	bgIcon: {
+		top: '39px',
+		marginTop: '-112px',
+		opacity: '0.5',
+		position: 'relative',
+		right: '-520px',
+		zIndex: 0
+	},
 	bottomSpace: {
 		marginBottom: '40px'
 	},
@@ -19,6 +28,11 @@ const styles = theme => ({
 		fontSize: '20px',
 		marginBottom: '30px',
 		marginTop: '5px'
+	},
+	'@media screen and (min-width: 1230px)': {
+		bgIcon: {
+			right: '-559px'
+		}
 	}
 });
 
@@ -30,6 +44,9 @@ const EmptyState = ({ classes, route }) => (
 		<Button variant="outlined" size="large" onClick={route}>
 			Discover the marketplace
 		</Button>
+		<div className={classes.bgIcon}>
+			<MarketplaceIcon width="135px" height="110px" fill="#313B49" />
+		</div>
 	</>
 );
 
