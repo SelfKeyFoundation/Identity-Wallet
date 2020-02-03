@@ -18,6 +18,7 @@ const styles = theme => ({
 		borderRadius: '4px',
 		boxSizing: 'border-box',
 		flexGrow: 1,
+		height: '236px',
 		marginBottom: '15px',
 		maxHeight: '236px',
 		overflow: 'hidden',
