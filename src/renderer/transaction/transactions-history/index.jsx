@@ -269,12 +269,12 @@ class TransactionsHistory extends PureComponent {
 			<Grid container alignItems="center" spacing={16}>
 				<Grid item xs={12}>
 					<Grid container justify="space-between" alignItems="center">
-						<Grid item xs={11}>
+						<div>
 							<Typography variant="h1" className={classes.title}>
 								Transactions
 							</Typography>
-						</Grid>
-						<Grid item xs={1} className={classes.iconWrap}>
+						</div>
+						<div className={classes.iconWrap}>
 							<IconButton label="Filter" title="Filter" disabled={processing}>
 								<FilterIcon />
 							</IconButton>
@@ -286,7 +286,7 @@ class TransactionsHistory extends PureComponent {
 							>
 								{processing ? <HourGlassSmallIcon /> : <RefreshIcon />}
 							</IconButton>
-						</Grid>
+						</div>
 					</Grid>
 				</Grid>
 				<Grid item xs={12}>
