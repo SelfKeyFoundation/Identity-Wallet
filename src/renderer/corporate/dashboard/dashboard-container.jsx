@@ -9,10 +9,12 @@ import {
 	EditAttributeContainer,
 	DeleteAttributeContainer
 } from '../../attributes';
+import DeleteMemberContainer from '../../attributes/delete-member-container';
 
 class CorporateDashboardContainer extends PureComponent {
 	state = {
 		popup: null,
+		member: null,
 		selectedMember: false
 	};
 
@@ -25,8 +27,9 @@ class CorporateDashboardContainer extends PureComponent {
 
 	handleAddMember = () => this.props.dispatch(push('/main/corporate/add-member'));
 
-	handleDeleteMember = member =>
-		this.props.dispatch(identityOperations.deleteIdentityOperation(member.identity.id));
+	handleDeleteMember = member => {
+		this.setState({ popup: 'delete-member', deleteMember: member });
+	};
 
 	handleEditMember = member => {
 		const { identity } = this.props.profile;
@@ -52,50 +55,63 @@ class CorporateDashboardContainer extends PureComponent {
 	handleEditAttribute = attribute => {
 		this.setState({ popup: 'edit-attribute', editAttribute: attribute });
 	};
-	handleAddAttribute = () => {
-		this.setState({ popup: 'create-attribute', isDocument: false });
+	handleAddAttribute = (evt, member) => {
+		this.setState({ popup: 'create-attribute', isDocument: false, member });
 	};
-	handleAddDocument = () => {
-		this.setState({ popup: 'create-attribute', isDocument: true });
+	handleAddDocument = (evt, member) => {
+		this.setState({ popup: 'create-attribute', isDocument: true, member });
 	};
 	handleDeleteAttribute = attribute => {
 		this.setState({ popup: 'delete-attribute', deleteAttribute: attribute });
 	};
 	handlePopupClose = () => {
-		this.setState({ popup: null });
+		this.setState({ popup: null, member: null });
 	};
 
 	render() {
-		const { popup } = this.state;
+		const { profile } = this.props;
+		const { popup, member, editAttribute, deleteAttribute } = this.state;
 		return (
 			<React.Fragment>
 				{popup === 'create-attribute' && (
 					<CreateAttributeContainer
-						corporate={true}
+						corporate={member ? member.identity.type === 'corporate' : true}
 						open={true}
 						onClose={this.handlePopupClose}
 						isDocument={this.state.isDocument}
+						attributeOptions={
+							member ? member.attributeOptions : this.props.profile.attributeOptions
+						}
+						identityId={member ? member.identity.id : this.props.profile.identity.id}
 					/>
 				)}
 				{popup === 'edit-attribute' && (
 					<EditAttributeContainer
 						open={true}
 						onClose={this.handlePopupClose}
-						attribute={this.state.editAttribute}
+						attribute={editAttribute}
 					/>
 				)}
 				{popup === 'delete-attribute' && (
 					<DeleteAttributeContainer
 						open={true}
 						onClose={this.handlePopupClose}
-						attribute={this.state.deleteAttribute}
+						attribute={deleteAttribute}
+					/>
+				)}
+				{popup === 'delete-member' && (
+					<DeleteMemberContainer
+						open={true}
+						onClose={this.handlePopupClose}
+						member={this.state.deleteMember}
 					/>
 				)}
 
 				<CorporateDashboardPage
 					{...this.props}
-					attributes={this.props.profile.attributes}
-					documents={this.props.profile.documents}
+					attributes={[...profile.basicAttributes, ...profile.attributes]}
+					attributeOptions={profile.attributeOptions}
+					documents={profile.documents}
 					onAddAttribute={this.handleAddAttribute}
 					onEditAttribute={this.handleEditAttribute}
 					onDeleteAttribute={this.handleDeleteAttribute}

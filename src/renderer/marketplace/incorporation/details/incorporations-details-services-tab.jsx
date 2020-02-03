@@ -40,7 +40,11 @@ const IncorporationsServicesTab = withStyles(styles)(({ classes, program }) => (
 	<div className={classes.tabContainer}>
 		<div
 			dangerouslySetInnerHTML={{
-				__html: sanitize(program.data.walletDescription)
+				__html: sanitize(
+					program.data.walletDescription
+						? program.data.walletDescription
+						: program.data.servicesDescription
+				)
 			}}
 		/>
 	</div>

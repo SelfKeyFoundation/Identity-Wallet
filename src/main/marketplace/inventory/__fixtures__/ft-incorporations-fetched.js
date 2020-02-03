@@ -2,6 +2,7 @@ export default () => [
 	{
 		sku: 'FT-INC-AE3i',
 		name: 'Abu Dhabi Global Market (LTD)',
+		entityType: 'individual',
 		status: 'inactive',
 		price: null,
 		priceCurrency: 'USD',
@@ -94,6 +95,7 @@ export default () => [
 	{
 		sku: 'FT-INC-AG1i',
 		name: 'Antigua and Barbuda (IBC)',
+		entityType: 'individual',
 		status: 'inactive',
 		price: '2800',
 		priceCurrency: 'USD',
@@ -187,6 +189,7 @@ export default () => [
 	{
 		sku: 'FT-INC-PA2i',
 		name: 'Panama (SRL)',
+		entityType: 'individual',
 		status: 'inactive',
 		price: '3250',
 		priceCurrency: 'USD',
@@ -280,6 +283,7 @@ export default () => [
 	{
 		sku: 'FT-INC-AT2i',
 		name: 'Austria (FOUNDATION)',
+		entityType: 'individual',
 		status: 'inactive',
 		price: null,
 		priceCurrency: 'USD',
@@ -323,6 +327,7 @@ export default () => [
 	{
 		sku: 'FT-INC-CK1i',
 		name: 'Cook Islands (TRUST)',
+		entityType: 'individual',
 		status: 'inactive',
 		price: null,
 		priceCurrency: 'USD',

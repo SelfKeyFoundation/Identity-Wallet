@@ -144,7 +144,7 @@ export const selectMemberCorporateAttributeTypes = createSelector(
 				switch (curr.url) {
 					case EMAIL_ATTRIBUTE:
 						acc.email = curr;
-						curr.required = false;
+						curr.required = true;
 						return acc;
 					case TAX_ID_ATTRIBUTE:
 						acc.taxId = curr;
@@ -190,7 +190,7 @@ export const selectMemberIndividualAttributeTypes = createSelector(
 						return acc;
 					case EMAIL_ATTRIBUTE:
 						acc.email = curr;
-						curr.required = false;
+						curr.required = true;
 						return acc;
 					case COUNTRY_ATTRIBUTE:
 						acc.country = curr;
@@ -558,6 +558,7 @@ export const selectIndividualProfile = createSelector(
 		attributes: nonBasicInfoAttributes,
 		basicAttributes,
 		documents: documentAttributes,
+		attributeOptions: {},
 		email,
 		firstName,
 		lastName,
@@ -597,7 +598,15 @@ export const selectCorporateProfile = createSelector(
 	selectBasicAttributeInfo(CREATION_DATE_ATTRIBUTE),
 	selectBasicAttributeInfo(JURISDICTION_ATTRIBUTE),
 	(
-		{ identity, wallet, allAttributes, basicAttributes, infoAttributes, documentAttributes },
+		{
+			identity,
+			wallet,
+			allAttributes,
+			basicAttributes,
+			infoAttributes,
+			documentAttributes,
+			nonBasicInfoAttributes
+		},
 		members,
 		email,
 		taxId,
@@ -610,9 +619,28 @@ export const selectCorporateProfile = createSelector(
 		wallet,
 		profilePicture: identity.profilePicture,
 		allAttributes,
-		attributes: infoAttributes,
+		attributes: nonBasicInfoAttributes,
 		basicAttributes,
 		documents: documentAttributes,
+		attributeOptions: {
+			[JURISDICTION_ATTRIBUTE]: {
+				forbidCreate: true,
+				forbidDelete: true
+			},
+			[CREATION_DATE_ATTRIBUTE]: {
+				forbidCreate: true,
+				forbidDelete: true
+			},
+			[ENTITY_NAME_ATTRIBUTE]: {
+				forbidCreate: true,
+				forbidDelete: true
+			},
+			[ENTITY_TYPE_ATTRIBUTE]: {
+				forbidCreate: true,
+				forbidDelete: true,
+				forbidEdit: true
+			}
+		},
 		email,
 		taxId,
 		entityName,

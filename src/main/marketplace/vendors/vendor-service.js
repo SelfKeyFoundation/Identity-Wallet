@@ -3,7 +3,8 @@ import { Vendor } from './vendor';
 import request from 'request-promise-native';
 import { isDevMode } from 'common/utils/common';
 import _ from 'lodash';
-import { VENDOR_SYNC_JOB } from './vendor-sync-job-handler';
+import { VENDOR_SYNC_JOB, VENDOR_SYNC_JOB_INTERVAL } from './vendor-sync-job-handler';
+import { IntervalStrategy, ExponentialBackoffRetryStrategy } from '../../scheduler/strategies';
 
 export const VENDOR_API_ENDPOINT = `${config.airtableBaseUrl}Vendors${isDevMode() ? 'Dev' : ''}`;
 
@@ -29,7 +30,16 @@ export class VendorService {
 		});
 	}
 	start() {
-		this.schedulerService.queueJob(null, VENDOR_SYNC_JOB);
+		this.schedulerService.queueJob(null, VENDOR_SYNC_JOB, 0, null, {
+			success: {
+				name: IntervalStrategy.NAME,
+				interval: VENDOR_SYNC_JOB_INTERVAL
+			},
+			error: {
+				name: ExponentialBackoffRetryStrategy.NAME,
+				attempts: 5
+			}
+		});
 	}
 	loadVendors() {
 		return Vendor.findAll();

@@ -28,10 +28,6 @@ const styles = theme => ({
 		marginBottom: '35px',
 		width: '100%'
 	},
-	lastInputBox: {
-		marginBottom: '26px',
-		width: '47%'
-	},
 	keyBox: {
 		marginBottom: '35px',
 		marginRight: 'calc(47% - 200px)',
@@ -75,7 +71,7 @@ const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => 
 						(optional)
 					</Typography>
 				) : (
-					''
+					'*'
 				)}
 			</Typography>
 		</div>
@@ -95,6 +91,7 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 		did,
 		entityName,
 		creationDate,
+		isEditing = false,
 		onFieldChange = () => {},
 		showDid = true
 	} = props;
@@ -153,12 +150,14 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 					<Select
 						className={classes.select}
 						onChange={onFieldChange('entityType')}
+						displayEmpty
 						value={entityType}
 						name="entitytype"
 						error={errors.entityType}
 						disableUnderline
 						IconComponent={KeyboardArrowDown}
 						input={<Input disableUnderline />}
+						disabled={isEditing}
 					>
 						<MenuItem value="">
 							<em>Choose...</em>
@@ -176,7 +175,7 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 					)}
 				</div>
 				<div className={`${classes.inputBox} ${classes.flexColumn}`}>
-					<InputTitle title="Creation Date" />
+					<InputTitle title="Incorporation Date" />
 					<KeyPicker
 						id="creationDate"
 						value={creationDate}
@@ -199,11 +198,12 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 				</div>
 			</div>
 			<div className={classes.inputWrap}>
-				<div className={`${classes.lastInputBox} ${classes.flexColumn}`}>
-					<InputTitle title="Contact Email" optional={true} />
+				<div className={`${classes.inputBox} ${classes.flexColumn}`}>
+					<InputTitle title="Contact Email" />
 					<Input
 						id="email"
 						fullWidth
+						required
 						type="email"
 						error={errors.email}
 						value={email}
@@ -216,7 +216,7 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 						</Typography>
 					)}
 				</div>
-				<div className={`${classes.lastInputBox} ${classes.flexColumn}`}>
+				<div className={`${classes.inputBox} ${classes.flexColumn}`}>
 					<InputTitle title="Tax ID" optional={true} />
 					<Input
 						id="taxId"
@@ -237,11 +237,10 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 			{showDid && (
 				<div className={classes.inputWrap}>
 					<div className={`${classes.flexColumn} ${classes.fullColumn}`}>
-						<InputTitle title="Selfkey ID (DID)" />
+						<InputTitle title="Selfkey ID (DID)" optional="true" />
 						<Input
 							id="did"
 							fullWidth
-							required
 							error={errors.did}
 							value={did}
 							onChange={onFieldChange('did')}

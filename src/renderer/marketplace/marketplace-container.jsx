@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import { featureIsDisabled } from 'common/feature-flags';
 import { identitySelectors } from 'common/identity';
 import { ordersOperations } from 'common/marketplace/orders';
@@ -15,17 +16,35 @@ import {
 	MarketplaceNotariesPage
 } from '../marketplace';
 import { MarketplaceCorporatePreviewContainer } from './corporate-preview-container';
+import { inventorySelectors } from '../../common/marketplace/inventory/index';
+import MarketplaceLoadingErrorContainer from './marketplace-loading-error-container';
+import { vendorSelectors } from '../../common/marketplace/vendors/index';
+import { PageLoading } from './common';
 
 class MarketplaceContainerComponent extends PureComponent {
 	componentDidMount() {
 		this.props.dispatch(ordersOperations.ordersLoadOperation());
 	}
 
+	componentDidUpdate(prevProps) {
+		if (prevProps.identity.type !== this.props.identity.type) {
+			this.props.dispatch(push(this.props.match.path));
+		}
+	}
+
 	render() {
-		const { match, identity } = this.props;
+		const { match, identity, isLoadingError, isLoading } = this.props;
 
 		if (identity.type !== 'individual' && featureIsDisabled('corporateMarketplace')) {
 			return <MarketplaceCorporatePreviewContainer />;
+		}
+
+		if (isLoading) {
+			return <PageLoading />;
+		}
+
+		if (isLoadingError) {
+			return <MarketplaceLoadingErrorContainer />;
 		}
 
 		return (
@@ -64,7 +83,9 @@ class MarketplaceContainerComponent extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-	identity: identitySelectors.selectIdentity(state)
+	identity: identitySelectors.selectIdentity(state),
+	isLoadingError: inventorySelectors.isInventoryLoadingError(state),
+	isLoading: vendorSelectors.isVendorsLoading(state)
 });
 
 const connectedComponent = connect(mapStateToProps)(MarketplaceContainerComponent);

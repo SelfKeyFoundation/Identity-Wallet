@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 
 import { Logger } from 'common/logger';
+import { STRATEGIES_MAP } from './strategies';
 
 const log = new Logger('Scheduler Job');
 
@@ -20,9 +21,11 @@ export class SchedulerJob extends EventEmitter {
 		);
 		try {
 			const results = await this.jobHandler.execute(this.config.data, this);
+			this.finalize(null, results);
 			return results;
 		} catch (error) {
 			log.error(error);
+			this.finalize(error);
 			throw error;
 		}
 	}
@@ -43,7 +46,33 @@ export class SchedulerJob extends EventEmitter {
 		return this.additionalJobs;
 	}
 	addJob(job) {
+		log.debug('adding job %2j', job);
 		this.additionalJobs.push(job);
+	}
+	finalize(err, result) {
+		const { strategy } = this.config;
+
+		if (!strategy) {
+			return;
+		}
+		if (err) {
+			return this.implementStrategy(strategy.error);
+		}
+		this.implementStrategy(strategy.success);
+	}
+	implementStrategy(strategyConfig) {
+		if (!strategyConfig) {
+			return;
+		}
+		if (!STRATEGIES_MAP[strategyConfig.name]) {
+			throw new Error('Unknown strategy');
+		}
+		try {
+			const strategy = new STRATEGIES_MAP[strategyConfig.name](strategyConfig);
+			return strategy.implement(this);
+		} catch (error) {
+			log.error(error);
+		}
 	}
 }
 

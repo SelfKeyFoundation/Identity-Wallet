@@ -68,8 +68,8 @@ export const individualMemberAttributes = [
 	{ key: 'lastName', type: LAST_NAME_ATTRIBUTE, name: 'Last Name', required: true },
 	{ key: 'nationality', type: NATIONALITY_ATTRIBUTE, name: 'Citizenship', required: true },
 	{ key: 'country', type: RESIDENCY_ATTRIBUTE, name: 'Residency', required: true },
-	{ key: 'email', type: EMAIL_ATTRIBUTE, name: 'Email', required: false },
-	{ key: 'phone', type: PHONE_ATTRIBUTE, name: 'Phone' }
+	{ key: 'email', type: EMAIL_ATTRIBUTE, name: 'Email', required: true },
+	{ key: 'phoneNumber', type: PHONE_ATTRIBUTE, name: 'Phone' }
 ];
 
 export const corporateMemberAttributes = [
@@ -87,6 +87,6 @@ export const corporateMemberAttributes = [
 		name: 'Incorporation Date',
 		required: true
 	},
-	{ key: 'email', type: EMAIL_ATTRIBUTE, name: 'Email', required: false },
+	{ key: 'email', type: EMAIL_ATTRIBUTE, name: 'Email', required: true },
 	{ key: 'taxId', type: TAX_ID_ATTRIBUTE, name: 'Tax Id' }
 ];

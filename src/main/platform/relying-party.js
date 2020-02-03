@@ -23,7 +23,7 @@ const KYC_APPLICATIONS_CREATE_ENDPOINT_NAME = '/applications';
 const KYC_APPLICATIONS_UPDATE_ENDPOINT_NAME = '/applications/:id';
 const KYC_APPLICATIONS_GET_ENDPOINT_NAME = '/applications/:id';
 const KYC_APPLICATIONS_FILE_ENDPOINT_NAME = '/files';
-const KYC_APPLICATIONS_PAYMENT_ENDPOINT_NAME = '/applications/:id/payment';
+const KYC_APPLICATIONS_PAYMENT_ENDPOINT_NAME = '/applications/:id/payments';
 const KYC_APPLICATIONS_LIST_ENDPOINT_NAME = '/applications';
 
 const KYC_APPLICATIONS_CHAT_ENDPOINT_NAME = '/applications/:id/chat';

@@ -73,6 +73,7 @@ const CorporateEditFormComponent = withStyles(styles)(props => {
 						<Select
 							className={classes.select}
 							onChange={onFieldChange('entityType')}
+							displayEmpty
 							value={entityType}
 							name="entitytype"
 							error={errors.entityType}
@@ -96,7 +97,7 @@ const CorporateEditFormComponent = withStyles(styles)(props => {
 						)}
 					</div>
 					<div className={`${classes.inputBox} ${classes.flexColumn}`}>
-						<InputTitle title="Creation Date" />
+						<InputTitle title="Incorporation Date" />
 						<KeyPicker
 							id="creationDate"
 							value={creationDate}

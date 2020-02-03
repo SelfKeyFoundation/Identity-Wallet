@@ -93,7 +93,7 @@ function onReady() {
 		ctx.priceService.on('pricesUpdated', newPrices => {
 			ctx.store.dispatch(pricesOperations.updatePrices(newPrices));
 		});
-		ctx.stakingService.acquireContract();
+		// ctx.stakingService.acquireContract();
 
 		createKeystoreFolder();
 
@@ -156,14 +156,6 @@ function onReady() {
 				log.debug('rpc %s, %2j', actionName, args);
 				ctx.rpcHandler[actionName](event, actionId, actionName, args);
 			}
-		});
-
-		electron.ipcMain.on('ON_CLOSE_DIALOG_CANCELED', event => {
-			mainWindow.shouldIgnoreClose = true;
-		});
-
-		electron.ipcMain.on('ON_IGNORE_CLOSE_DIALOG', event => {
-			mainWindow.shouldIgnoreCloseDialog = true;
 		});
 	};
 }
@@ -245,6 +237,7 @@ function registerJobHandlers(ctx) {
 	ctx.inventorySyncJobHandler.registerHandler();
 	ctx.marketplaceCountrySyncJobHandler.registerHandler();
 	ctx.taxTreatiesSyncJobHandler.registerHandler();
+	ctx.listingExchangesSyncJobHandler.registerHandler();
 }
 
 function scheduleInitialJobs(ctx) {
@@ -252,4 +245,5 @@ function scheduleInitialJobs(ctx) {
 	ctx.vendorService.start();
 	ctx.marketplaceCountryService.start();
 	ctx.taxTreatiesService.start();
+	ctx.exchangesService.start();
 }

@@ -285,7 +285,7 @@ const createCorporateProfileOperation = (data, onComplete) => async (dispatch, g
 		await dispatch(
 			identityOperations.createIdAttributeOperation({
 				typeId: getTypeId(ENTITY_NAME_ATTRIBUTE),
-				name: 'Legal Entity Name',
+				name: data.entityName,
 				data: { value: data.entityName }
 			})
 		);
@@ -293,7 +293,7 @@ const createCorporateProfileOperation = (data, onComplete) => async (dispatch, g
 		await dispatch(
 			identityOperations.createIdAttributeOperation({
 				typeId: getTypeId(ENTITY_TYPE_ATTRIBUTE),
-				name: 'Legal Entity Type',
+				name: data.entityType,
 				data: { value: data.entityType }
 			})
 		);
@@ -301,7 +301,7 @@ const createCorporateProfileOperation = (data, onComplete) => async (dispatch, g
 		await dispatch(
 			identityOperations.createIdAttributeOperation({
 				typeId: getTypeId(JURISDICTION_ATTRIBUTE),
-				name: 'Legal Jurisdiction',
+				name: data.jurisdiction,
 				data: { value: data.jurisdiction }
 			})
 		);
@@ -309,7 +309,7 @@ const createCorporateProfileOperation = (data, onComplete) => async (dispatch, g
 		await dispatch(
 			identityOperations.createIdAttributeOperation({
 				typeId: getTypeId(CREATION_DATE_ATTRIBUTE),
-				name: 'Incorporation Date',
+				name: data.creationDate,
 				data: { value: data.creationDate }
 			})
 		);
@@ -318,7 +318,7 @@ const createCorporateProfileOperation = (data, onComplete) => async (dispatch, g
 			await dispatch(
 				identityOperations.createIdAttributeOperation({
 					typeId: getTypeId(EMAIL_ATTRIBUTE),
-					name: 'Email',
+					name: data.email,
 					data: { value: data.email }
 				})
 			);
@@ -328,7 +328,7 @@ const createCorporateProfileOperation = (data, onComplete) => async (dispatch, g
 			await dispatch(
 				identityOperations.createIdAttributeOperation({
 					typeId: getTypeId(TAX_ID_ATTRIBUTE),
-					name: 'Tax Id',
+					name: data.taxId,
 					data: { value: data.taxId }
 				})
 			);
@@ -385,7 +385,6 @@ const createMemberProfileOperation = (data, onComplete) => async (dispatch, getS
 	const getTypeId = url => {
 		return idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
 	};
-
 	for (const attr of attributes) {
 		const value = data[attr.key];
 
@@ -402,7 +401,7 @@ const createMemberProfileOperation = (data, onComplete) => async (dispatch, getS
 				identityOperations.createIdAttributeOperation(
 					{
 						typeId: getTypeId(attr.type),
-						name: attr.name,
+						name: typeof value === 'string' ? value : attr.name,
 						data: { value }
 					},
 					member.id
@@ -447,22 +446,26 @@ const updateMemberProfileOperation = (data, identityId, onComplete) => async (
 	update.id = identityId;
 	const identity = await dispatch(identityOperations.updateIdentityOperation(update));
 
-	const attributes = identitySelectors.selectAttributeTypesFiltered(getState(), {
+	const attributes = identitySelectors.selectIdAttributes(getState(), {
+		identityId
+	});
+
+	const idAttributeTypes = identitySelectors.selectAttributeTypesFiltered(getState(), {
 		entityType: identity.type
 	});
+
+	const getTypeId = url => {
+		return idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
+	};
+
 	const updatedAttributes = attributeList.map(attr => {
-		const attribute = attributes.find(a => a.url === attr.type) || {};
+		const attribute = attributes.find(a => a.typeId === getTypeId(attr.type)) || {};
 		attr = { ...attr };
 		attr.id = attribute.id;
 		attr.value = data[attr.key];
 		return attr;
 	});
-	const idAttributeTypes = identitySelectors.selectAttributeTypesFiltered(getState(), {
-		entityType: identity.type
-	});
-	const getTypeId = url => {
-		return idAttributeTypes.find(idAttributeType => idAttributeType.url === url).id;
-	};
+
 	for (const attr of updatedAttributes) {
 		if (typeof attr.value !== 'undefined') {
 			const value = attr.value || '';
@@ -472,7 +475,7 @@ const updateMemberProfileOperation = (data, identityId, onComplete) => async (
 						identityOperations.createIdAttributeOperation(
 							{
 								typeId: getTypeId(attr.type),
-								name: attr.name,
+								name: typeof value === 'string' ? value : attr.name,
 								data: { value }
 							},
 							identityId
@@ -482,6 +485,7 @@ const updateMemberProfileOperation = (data, identityId, onComplete) => async (
 					await dispatch(
 						identityOperations.editIdAttributeOperation({
 							id: attr.id,
+							name: typeof value === 'string' ? value : attr.name,
 							data: { value }
 						})
 					);
@@ -511,7 +515,7 @@ const createIndividualProfile = (identityId, data) => async (dispatch, getState)
 	await dispatch(
 		identityOperations.createIdAttributeOperation({
 			typeId: getTypeId(FIRST_NAME_ATTRIBUTE),
-			name: 'First Name',
+			name: data.firstName,
 			data: { value: data.firstName }
 		})
 	);
@@ -519,7 +523,7 @@ const createIndividualProfile = (identityId, data) => async (dispatch, getState)
 	await dispatch(
 		identityOperations.createIdAttributeOperation({
 			typeId: getTypeId(LAST_NAME_ATTRIBUTE),
-			name: 'Last Name',
+			name: data.lastName,
 			data: { value: data.lastName }
 		})
 	);
@@ -527,7 +531,7 @@ const createIndividualProfile = (identityId, data) => async (dispatch, getState)
 	await dispatch(
 		identityOperations.createIdAttributeOperation({
 			typeId: getTypeId(EMAIL_ATTRIBUTE),
-			name: 'Email',
+			name: data.email,
 			data: { value: data.email }
 		})
 	);
@@ -545,11 +549,13 @@ const navigateToProfileOperation = () => async (dispatch, getState) => {
 	const identity = identitySelectors.selectIdentity(getState());
 
 	if (identity.type === 'individual' && !identity.isSetupFinished) {
-		return dispatch(push('/selfkeyIdCreate'));
+		// return dispatch(push('/selfkeyIdCreate'));
+		return dispatch(push('/main/individual/setup-individual-profile'));
 	}
 
 	if (identity.type === 'individual') {
-		return dispatch(push('/main/selfkeyId'));
+		// return dispatch(push('/main/selfkeyId'));
+		return dispatch(push('/main/individual'));
 	}
 
 	if (identity.isSetupFinished) {

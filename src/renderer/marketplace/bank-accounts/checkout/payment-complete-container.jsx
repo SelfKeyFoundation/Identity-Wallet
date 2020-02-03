@@ -9,6 +9,7 @@ import { transactionSelectors } from 'common/transaction';
 import { ordersSelectors } from 'common/marketplace/orders';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 import { BankAccountsPaymentComplete } from './payment-complete';
+import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
 
@@ -35,7 +36,6 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 	saveTransactionHash = async () => {
 		const { order, transaction, jurisdiction, vendorId } = this.props;
 		const application = this.getLastApplication();
-
 		const transactionHash = order ? order.paymentHash : transaction.transactionHash;
 		const amountKey = order ? order.amount : transaction.amount;
 
@@ -77,10 +77,11 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 	onContinueClick = () => this.props.dispatch(push(this.getNextRoute()));
 
 	render() {
-		// TODO: get vendor email from the RP
+		const { vendor, identity } = this.props;
 		return (
 			<BankAccountsPaymentComplete
-				email={'support@flagtheory.com'}
+				email={vendor.contactEmail}
+				identity={identity}
 				onBackClick={this.onBackClick}
 				onContinueClick={this.onContinueClick}
 			/>
@@ -91,11 +92,18 @@ class BankAccountsPaymentCompleteContainer extends MarketplaceBankAccountsCompon
 const mapStateToProps = (state, props) => {
 	const { accountCode, vendorId, templateId, orderId } = props.match.params;
 	const authenticated = true;
+	const identity = identitySelectors.selectIdentity(state);
 	return {
+		identity,
 		accountCode,
 		templateId,
 		vendorId,
-		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(state, accountCode),
+		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
+		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(
+			state,
+			accountCode,
+			identity.type
+		),
 		transaction: transactionSelectors.getTransaction(state),
 		address: getWallet(state).address,
 		currentApplication: kycSelectors.selectCurrentApplication(state),

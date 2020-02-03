@@ -37,18 +37,18 @@ const styles = theme => ({
 	chartWrap: {
 		display: 'flex',
 		'& div.google-visualization-tooltip': {
+			display: 'flex',
 			backgroundColor: '#1F2830',
 			border: '1px solid #43505B',
 			boxShadow: 'none',
 			top: '40px !important',
-			'& .google-visualization-tooltip-item span': {
-				fontSize: '13px !important'
-			},
-			'& .google-visualization-tooltip-item-list li:first-child span': {
-				color: '#93B0C1 !important'
-			},
-			'& .google-visualization-tooltip-item-list li:nth-child(2) span': {
-				color: '#FFFFFF !important'
+			padding: '5px',
+			alignItems: 'center',
+			fontSize: '13px !important',
+			color: '#FFFFFF !important',
+			'& span': {
+				color: '#93B0C1 !important',
+				marginLeft: '.5em'
 			}
 		}
 	}
@@ -59,29 +59,48 @@ const getColors = () => {
 	return ['#46dfba', '#46b7df', '#238db4', '#1d7999', '#0e4b61'];
 };
 
-const chartOptions = {
-	backgroundColor: 'transparent',
-	title: '',
-	chartArea: { left: 15, top: 15, bottom: 15, right: 15 },
-	pieHole: 0.7,
-	pieSliceBorderColor: 'none',
-	colors: getColors(),
-	legend: {
-		position: 'none'
-	},
-	fontSize: 13,
-	pieSliceText: 'none',
-	tooltip: {
-		isHtml: true
-	},
-	animation: {
-		startup: true
+const getChartOptions = unassignedIndex => {
+	let slices = null;
+
+	if (unassignedIndex) {
+		slices = {
+			[unassignedIndex - 1]: { color: '#999999' }
+		};
 	}
+	return {
+		backgroundColor: 'transparent',
+		title: '',
+		chartArea: { left: 15, top: 15, bottom: 15, right: 15 },
+		pieHole: 0.7,
+		pieSliceBorderColor: 'none',
+		colors: getColors(),
+		legend: {
+			position: 'none'
+		},
+		fontSize: 13,
+		pieSliceText: 'none',
+		tooltip: {
+			isHtml: true
+		},
+		animation: {
+			startup: true
+		},
+		slices
+	};
 };
 
 const getChartData = shareholders => {
-	const data = [['Content', 'percents']];
-	const dataPoints = shareholders.map(s => [getProfileName(s), getMemberEquity(s)]);
+	const data = [['Content', 'percents', { role: 'tooltip', type: 'string', p: { html: true } }]];
+	const total = shareholders.reduce((acc, curr) => acc + getMemberEquity(curr), 0);
+	const dataPoints = shareholders.map(s => [
+		getProfileName(s),
+		getMemberEquity(s),
+		`${getProfileName(s)}<span>(${getMemberEquity(s)}%)</span>`
+	]);
+	// Add a unknown data point if total equity is below 100
+	if (total < 100) {
+		dataPoints.push(['Unassigned', 100 - total, `<span>Unassigned</span>`]);
+	}
 	return data.concat(dataPoints);
 };
 
@@ -114,6 +133,10 @@ const CorporateShareholding = withStyles(styles)(props => {
 	if (shareholders.length === 0) {
 		return null;
 	}
+	const data = getChartData(shareholders);
+	const unassignedIndex = data.findIndex(d => d[0] === 'Unassigned');
+	const options = getChartOptions(unassignedIndex);
+
 	return (
 		<Card>
 			<CardHeader title="Shareholding" className={classes.regularText} />
@@ -123,7 +146,7 @@ const CorporateShareholding = withStyles(styles)(props => {
 					<Chart
 						chartType="PieChart"
 						data={getChartData(shareholders)}
-						options={chartOptions}
+						options={options}
 						graph_id="PieChart"
 						width="100%"
 						height="300px"

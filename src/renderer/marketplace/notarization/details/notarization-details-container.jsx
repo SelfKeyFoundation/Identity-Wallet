@@ -91,7 +91,8 @@ const mapStateToProps = async (state, props) => {
 	return {
 		templateId,
 		vendorId,
-		isLoading: marketplaceSelectors.isLoading(state),
+		// isLoading: marketplaceSelectors.isLoading(state),
+		isLoading: marketplaceSelectors.isInventoryLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(

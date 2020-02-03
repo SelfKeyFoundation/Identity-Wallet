@@ -6,11 +6,13 @@ import AddressBook from '../../address-book/main';
 import AddressBookAdd from '../../address-book/add';
 import AddressBookEdit from '../../address-book/edit';
 import { walletTokensOperations } from 'common/wallet-tokens';
+import { marketplaceOperations } from 'common/marketplace';
 import { walletSelectors } from 'common/wallet';
 import { appSelectors } from 'common/app';
 
 import { MarketplaceContainer } from '../../marketplace';
 import { CorporateContainer } from '../../corporate';
+import { IndividualContainer } from '../../individual';
 
 import { SelfkeyIdContainer } from '../../selfkey-id/main';
 import {
@@ -44,6 +46,7 @@ import { CurrentApplication, ApplicationInProgress } from '../../kyc';
 import md5 from 'md5';
 import ReactPiwik from 'react-piwik';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
+import { exchangesOperations } from '../../../common/exchanges';
 
 const styles = theme => ({
 	headerSection: {
@@ -78,6 +81,8 @@ class Main extends PureComponent {
 	};
 	async componentDidMount() {
 		await this.props.dispatch(walletTokensOperations.loadWalletTokens());
+		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
+		await this.props.dispatch(exchangesOperations.loadListingExchangesOperation());
 		this.setMatomoId();
 	}
 
@@ -186,6 +191,7 @@ class Main extends PureComponent {
 					/>
 
 					<Route path={`${match.path}/corporate`} component={CorporateContainer} />
+					<Route path={`${match.path}/individual`} component={IndividualContainer} />
 				</Grid>
 			</Grid>
 		);

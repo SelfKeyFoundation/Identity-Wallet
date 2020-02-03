@@ -8,7 +8,7 @@ export const corporateProfiles = [
 				{
 					identity: {
 						type: 'corporate',
-						positions: ['director', 'shareholder'],
+						positions: ['director-ltd', 'shareholder'],
 						equity: 10
 					},
 					entityType: 'Company Limited by Shares (LTD)',
@@ -18,7 +18,7 @@ export const corporateProfiles = [
 				{
 					identity: {
 						type: 'individual',
-						positions: ['director', 'shareholder'],
+						positions: ['director-ltd', 'shareholder'],
 						equity: 12
 					},
 					firstName: 'testFirstName',
@@ -37,7 +37,10 @@ export const corporateProfiles = [
 						companyName: 'Test LTD',
 						email: 'test@corporate.com'
 					},
-					positions: [{ position: 'director' }, { position: 'shareholder', equity: 10 }]
+					positions: [
+						{ position: 'director-ltd' },
+						{ position: 'shareholder', equity: 10 }
+					]
 				},
 				{
 					entity: {
@@ -46,7 +49,10 @@ export const corporateProfiles = [
 						lastName: 'testLastName',
 						email: 'test@individual.com'
 					},
-					positions: [{ position: 'director' }, { position: 'shareholder', equity: 12 }]
+					positions: [
+						{ position: 'director-ltd' },
+						{ position: 'shareholder', equity: 12 }
+					]
 				}
 			]
 		},
@@ -75,7 +81,7 @@ export const corporateProfiles = [
 				{
 					identity: {
 						type: 'corporate',
-						positions: ['director', 'shareholder'],
+						positions: ['director-ltd', 'shareholder'],
 						equity: 10
 					},
 					entityType: 'Company Limited by Shares (LTD)',
@@ -85,7 +91,7 @@ export const corporateProfiles = [
 				{
 					identity: {
 						type: 'individual',
-						positions: ['director', 'shareholder'],
+						positions: ['director-ltd', 'shareholder'],
 						equity: 12
 					},
 					firstName: 'testFirstName',
