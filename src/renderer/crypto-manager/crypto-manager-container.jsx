@@ -50,6 +50,10 @@ class CryptoManagerContainerComponent extends PureComponent {
 		showRemovedModal: false
 	};
 
+	componentDidMount() {
+		window.scrollTo(0, 0);
+	}
+
 	componentDidUpdate(prevProps) {
 		let isTokenAdded = prevProps.existingTokens.length < this.props.existingTokens.length;
 		if (isTokenAdded) {

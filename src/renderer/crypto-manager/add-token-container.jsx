@@ -110,6 +110,7 @@ class AddTokenContainerComponent extends PureComponent {
 	componentDidMount() {
 		this.props.dispatch(tokensOperations.loadTokensOperation());
 		this.resetErrors();
+		window.scrollTo(0, 0);
 	}
 
 	componentDidUpdate(prevProps) {
