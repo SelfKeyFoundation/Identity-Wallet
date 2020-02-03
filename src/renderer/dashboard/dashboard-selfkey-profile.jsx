@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { Grid, Typography, Button, List, ListItem } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { identityOperations } from 'common/identity';
-import { IdCardIcon } from 'selfkey-ui';
+import { IdCardIcon, AttributeAlertIcon, CheckMaIcon, HourGlassIcon } from 'selfkey-ui';
+import { identitySelectors } from '../../common/identity';
 
 const styles = theme => ({
 	bgIcon: {
@@ -33,8 +34,8 @@ const styles = theme => ({
 			columnCount: 2,
 			padding: 0,
 			'& p:first-child': {
-				maxWidth: '150px',
-				minWidth: '150px'
+				maxWidth: '140px',
+				minWidth: '140px'
 			}
 		}
 	},
@@ -50,6 +51,13 @@ const styles = theme => ({
 		bgIcon: {
 			right: '-239px'
 		}
+	},
+	flex: {
+		alignItems: 'center',
+		display: 'flex'
+	},
+	rightSpace: {
+		marginRight: '8px'
 	}
 });
 
@@ -59,25 +67,94 @@ const EmptyState = ({ classes }) => (
 	</Typography>
 );
 
-const Content = ({ classes }) => (
-	<>
-		<Typography variant="subtitle2" color="secondary" className={classes.bottomSpace}>
-			Add more documents and informations for easy marketplace applications.
-		</Typography>
-		<List className={`${classes.list} ${classes.bottomSpace}`}>
-			{['Basic Info', 'Documents', 'Selfkey DID'].map(item => (
-				<ListItem key={item}>
+const Content = ({ classes, profileData }) => {
+	const isDID = profileData.identity.did;
+	const basicDocs = profileData.basicAttributes.length;
+
+	const Status = ({ status, text }) => {
+		let icon;
+		switch (status) {
+			case 'missing':
+				icon = <AttributeAlertIcon className={classes.rightSpace} />;
+				text = text || 'Missing';
+				break;
+			case 'uploaded':
+				icon = <CheckMaIcon className={classes.rightSpace} />;
+				text = text || 'Uploaded';
+				break;
+			default:
+				icon = <HourGlassIcon className={classes.rightSpace} />;
+				text = text || 'Partially Filled';
+				break;
+		}
+		return (
+			<div className={classes.flex}>
+				{icon}
+				<Typography variant="h5">{text}</Typography>
+			</div>
+		);
+	};
+
+	const BasicDocuments = ({ basicDocs }) => {
+		switch (basicDocs) {
+			case 0:
+				return <Status status="missing" />;
+			case 3:
+				return <Status status="uploaded" />;
+			default:
+				return <Typography>Partially Filled</Typography>;
+		}
+	};
+
+	const Documents = ({ docsNumber }) => {
+		switch (docsNumber) {
+			case 0:
+				return <Status status="missing" />;
+			case 12:
+				return <Status status="uploaded" />;
+			default:
+				return <Typography>Partially Filled</Typography>;
+		}
+	};
+
+	const SelfKeyDID = ({ isDID }) => {
+		return isDID ? (
+			<Status status="uploaded" text={profileData.identity.did} />
+		) : (
+			<Status status="missing" />
+		);
+	};
+
+	return (
+		<>
+			<Typography variant="subtitle2" color="secondary" className={classes.bottomSpace}>
+				Add more documents and informations for easy marketplace applications.
+			</Typography>
+			<List className={`${classes.list} ${classes.bottomSpace}`}>
+				<ListItem key={'Basic Info'}>
 					<Typography variant="body2" color="secondary">
-						{item}
+						Basic Info
 					</Typography>
-					<Typography variant="body2" align="right">
-						pass
-					</Typography>
+					<BasicDocuments basicDocs={basicDocs} />
 				</ListItem>
-			))}
-		</List>
-	</>
-);
+
+				<ListItem key={'Documents'}>
+					<Typography variant="body2" color="secondary">
+						Documents
+					</Typography>
+					<Documents docsNumber={profileData.documents.length} />
+				</ListItem>
+
+				<ListItem key={'Selfkey DID'} style={{ overflow: 'hidden' }}>
+					<Typography variant="body2" color="secondary">
+						Selfkey DID
+					</Typography>
+					<SelfKeyDID isDID={isDID} />
+				</ListItem>
+			</List>
+		</>
+	);
+};
 
 class DashboardSelfkeyProfile extends PureComponent {
 	handleProfileNavigate = evt => {
@@ -86,8 +163,11 @@ class DashboardSelfkeyProfile extends PureComponent {
 	};
 
 	render() {
-		const { classes, isEmptyProfile } = this.props;
+		const { profile, classes } = this.props;
+		const isEmptyProfile = profile.basicAttributes.length < 1;
 		const bgIconClass = isEmptyProfile ? classes.bgIcon : classes.hidden;
+		console.log('LOFASZ -----------');
+		console.log(profile);
 		return (
 			<Grid item className={classes.dspWrap}>
 				<Typography variant="h1" className={classes.title}>
@@ -97,7 +177,7 @@ class DashboardSelfkeyProfile extends PureComponent {
 				{isEmptyProfile ? (
 					<EmptyState classes={this.props.classes} />
 				) : (
-					<Content classes={this.props.classes} />
+					<Content classes={this.props.classes} profileData={profile} />
 				)}
 
 				<Button variant="outlined" size="large" onClick={this.handleProfileNavigate}>
@@ -112,7 +192,9 @@ class DashboardSelfkeyProfile extends PureComponent {
 }
 
 const mapStateToProps = state => {
-	return {};
+	return {
+		profile: identitySelectors.selectIndividualProfile(state)
+	};
 };
 
 export default connect(mapStateToProps)(withStyles(styles)(DashboardSelfkeyProfile));
