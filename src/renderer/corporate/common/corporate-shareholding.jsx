@@ -37,18 +37,18 @@ const styles = theme => ({
 	chartWrap: {
 		display: 'flex',
 		'& div.google-visualization-tooltip': {
+			display: 'flex',
 			backgroundColor: '#1F2830',
 			border: '1px solid #43505B',
 			boxShadow: 'none',
 			top: '40px !important',
-			'& .google-visualization-tooltip-item span': {
-				fontSize: '13px !important'
-			},
-			'& .google-visualization-tooltip-item-list li:first-child span': {
-				color: '#93B0C1 !important'
-			},
-			'& .google-visualization-tooltip-item-list li:nth-child(2) span': {
-				color: '#FFFFFF !important'
+			padding: '5px',
+			alignItems: 'center',
+			fontSize: '13px !important',
+			color: '#FFFFFF !important',
+			'& span': {
+				color: '#93B0C1 !important',
+				marginLeft: '.5em'
 			}
 		}
 	}
@@ -90,12 +90,16 @@ const getChartOptions = unassignedIndex => {
 };
 
 const getChartData = shareholders => {
-	const data = [['Content', 'percents']];
+	const data = [['Content', 'percents', { role: 'tooltip', type: 'string', p: { html: true } }]];
 	const total = shareholders.reduce((acc, curr) => acc + getMemberEquity(curr), 0);
-	const dataPoints = shareholders.map(s => [getProfileName(s), getMemberEquity(s)]);
+	const dataPoints = shareholders.map(s => [
+		getProfileName(s),
+		getMemberEquity(s),
+		`${getProfileName(s)}<span>(${getMemberEquity(s)}%)</span>`
+	]);
 	// Add a unknown data point if total equity is below 100
 	if (total < 100) {
-		dataPoints.push(['Unassigned', 100 - total]);
+		dataPoints.push(['Unassigned', 100 - total, `<span>Unassigned</span>`]);
 	}
 	return data.concat(dataPoints);
 };
