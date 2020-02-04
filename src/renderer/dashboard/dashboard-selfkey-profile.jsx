@@ -15,7 +15,7 @@ const styles = theme => ({
 		zIndex: 0
 	},
 	bottomSpace: {
-		marginBottom: '30px'
+		marginBottom: '26px'
 	},
 	emptyStateSpace: {
 		marginBottom: '16px'
@@ -25,13 +25,16 @@ const styles = theme => ({
 		border: '1px solid #43505B',
 		borderRadius: '4px',
 		boxSizing: 'border-box',
+		height: '100%',
 		overflow: 'hidden',
-		padding: '20px 30px 30px'
+		padding: '18px 30px 30px'
 	},
 	list: {
+		marginBottom: '32px',
 		padding: 0,
 		'& li': {
 			columnCount: 2,
+			marginBottom: '21px',
 			padding: 0,
 			'& p:first-child': {
 				maxWidth: '140px',
@@ -41,7 +44,7 @@ const styles = theme => ({
 	},
 	title: {
 		fontSize: '20px',
-		marginBottom: '30px',
+		marginBottom: '24px',
 		marginTop: '5px'
 	},
 	hidden: {
@@ -130,7 +133,7 @@ const Content = ({ classes, profileData }) => {
 			<Typography variant="subtitle2" color="secondary" className={classes.bottomSpace}>
 				Add more documents and informations for easy marketplace applications.
 			</Typography>
-			<List className={`${classes.list} ${classes.bottomSpace}`}>
+			<List className={classes.list}>
 				<ListItem key={'Basic Info'}>
 					<Typography variant="body2" color="secondary">
 						Basic Info
@@ -163,11 +166,9 @@ class DashboardSelfkeyProfile extends PureComponent {
 	};
 
 	render() {
-		const { profile, classes } = this.props;
+		const { classes, profile } = this.props;
 		const isEmptyProfile = profile.basicAttributes.length < 1;
 		const bgIconClass = isEmptyProfile ? classes.bgIcon : classes.hidden;
-		console.log('LOFASZ -----------');
-		console.log(profile);
 		return (
 			<Grid item className={classes.dspWrap}>
 				<Typography variant="h1" className={classes.title}>
