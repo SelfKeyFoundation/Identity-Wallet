@@ -28,7 +28,6 @@ import Terms from './settings/terms';
 import TermsWarning from './settings/terms-warning';
 import Loading from './home/loading';
 import ConnectingToLedger from './wallet/unlock/ledger/connecting';
-import { SelfKeyIdCreate } from './selfkey-id/main/components/selfkey-id-create';
 import { SelfKeyIdCreateAbout } from './selfkey-id/main/components/selfkey-id-create-about';
 import { SelfKeyIdCreateDisclaimer } from './selfkey-id/main/components/selfkey-id-create-disclaimer';
 import { SelfKeyIdCreateForm } from './selfkey-id/main/components/selfkey-id-create-form';
@@ -97,7 +96,6 @@ class AppContainerComponent extends PureComponent {
 						path="/selfkeyIdCreateDisclaimer"
 						component={SelfKeyIdCreateDisclaimer}
 					/>
-					<Route path="/selfKeyIdCreate" component={SelfKeyIdCreate} />
 					<Route path="/selfkeyIdForm" component={SelfKeyIdCreateForm} />
 					<Route path="/auto-update" component={AutoUpdate} />
 					<Route path="/auto-update-progress" component={AutoUpdateProgress} />
