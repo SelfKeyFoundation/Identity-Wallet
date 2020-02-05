@@ -52,18 +52,23 @@ const styles = theme => ({
 
 class BuyKeyWidget extends PureComponent {
 	state = {
-		isOpenPopup: false
+		popup: null
 	};
 
 	handlePopup = () => {
-		this.setState({ isOpenPopup: !this.state.isOpenPopup });
+		this.setState({ popup: 'open' });
+	};
+
+	handlePopupClose = () => {
+		this.setState({ popup: null });
 	};
 
 	render() {
 		const { classes } = this.props;
+		const { popup } = this.state;
 		return (
 			<React.Fragment>
-				{this.state.isOpenPopup && <BuyKeyPopup closeAction={this.handlePopup} />}
+				{popup !== null && <BuyKeyPopup closeAction={this.handlePopupClose} />}
 				<Grid item className={classes.buyKey}>
 					<Typography variant="h1" className={classes.title}>
 						Buy KEY tokens, to use in the SelfKey Marketplace.
