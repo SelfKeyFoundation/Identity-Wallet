@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { CustomIcon, CoinsIcon } from 'selfkey-ui';
+import BuyKeyPopup from './buy-key-popup';
 
 const styles = theme => ({
 	bgIcon: {
@@ -50,26 +51,38 @@ const styles = theme => ({
 // );
 
 class BuyKeyWidget extends PureComponent {
+	state = {
+		isOpenPopup: false
+	};
+
+	handlePopup = () => {
+		this.setState({ isOpenPopup: !this.state.isOpenPopup });
+	};
+
 	render() {
 		const { classes } = this.props;
 		return (
-			<Grid item className={classes.buyKey}>
-				<Typography variant="h1" className={classes.title}>
-					Buy KEY tokens, to use in the SelfKey Marketplace.
-				</Typography>
-				<Button
-					variant="outlined"
-					color="primary"
-					size="large"
-					className={classes.ctabutton}
-				>
-					<CustomIcon width="24px" height="24px" />
-					<span>Buy KEY</span>
-				</Button>
-				<div className={classes.bgIcon}>
-					<CoinsIcon width="76px" height="79px" fill="#313B49" />
-				</div>
-			</Grid>
+			<React.Fragment>
+				{this.state.isOpenPopup && <BuyKeyPopup closeAction={this.handlePopup} />}
+				<Grid item className={classes.buyKey}>
+					<Typography variant="h1" className={classes.title}>
+						Buy KEY tokens, to use in the SelfKey Marketplace.
+					</Typography>
+					<Button
+						variant="outlined"
+						color="primary"
+						size="large"
+						className={classes.ctabutton}
+						onClick={this.handlePopup}
+					>
+						<CustomIcon width="24px" height="24px" />
+						<span>Buy KEY</span>
+					</Button>
+					<div className={classes.bgIcon}>
+						<CoinsIcon width="76px" height="79px" fill="#313B49" />
+					</div>
+				</Grid>
+			</React.Fragment>
 		);
 	}
 }
