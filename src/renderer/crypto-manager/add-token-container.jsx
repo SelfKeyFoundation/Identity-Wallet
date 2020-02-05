@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
-import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { tokensOperations, tokensSelectors } from 'common/tokens';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { walletTokensOperations } from 'common/wallet-tokens';
+import history from 'common/store/history';
 import {
 	Grid,
 	Button,
@@ -138,7 +138,7 @@ class AddTokenContainerComponent extends PureComponent {
 
 	handleBackClick = evt => {
 		evt && evt.preventDefault();
-		this.props.dispatch(push('/main/crypto-manager'));
+		this.props.dispatch(history.getHistory().goBack());
 	};
 
 	handleFieldChange = async event => {
