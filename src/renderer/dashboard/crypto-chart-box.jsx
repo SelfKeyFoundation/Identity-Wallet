@@ -17,6 +17,7 @@ const styles = () => ({
 		backgroundColor: '#262F39',
 		boxShadow: 'none',
 		boxSizing: 'border-box',
+		height: '100%',
 		padding: '16px 30px'
 	},
 	coloredBox: {
@@ -431,7 +432,8 @@ export class CryptoChartBoxComponent extends React.Component {
 			fiatCurrency,
 			tokens,
 			manageCryptoAction,
-			manageAddTokenAction
+			manageAddTokenAction,
+			manageTransferAction
 		} = this.props;
 
 		return (
@@ -482,7 +484,12 @@ export class CryptoChartBoxComponent extends React.Component {
 						>
 							Manage Tokens
 						</Button>
-						<Button className={classes.button} variant="outlined" color="secondary">
+						<Button
+							className={classes.button}
+							variant="outlined"
+							color="secondary"
+							onClick={manageTransferAction}
+						>
 							Send/Receive
 						</Button>
 					</Grid>

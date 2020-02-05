@@ -118,6 +118,9 @@ const Dashboard = connect(mapStateToProps)(
 						<CryptoChartBox
 							manageCryptoAction={() => props.dispatch(push('/main/crypto-manager'))}
 							manageAddTokenAction={() => props.dispatch(push('/main/add-token'))}
+							manageTransferAction={() =>
+								props.dispatch(push('/main/advancedTransaction/custom'))
+							}
 						/>
 					</Grid>
 					<Grid item className={`${classes.smallWidget} ${classes.rightColumnWrap}`}>
@@ -144,7 +147,7 @@ const Dashboard = connect(mapStateToProps)(
 						<DashboardMarketplaceApplications />
 					</Grid>
 					<Grid item className={classes.smallWidget}>
-						<DashboardSelfkeyProfile isEmptyProfile={true} />
+						<DashboardSelfkeyProfile />
 					</Grid>
 				</Grid>
 			</Grid>
