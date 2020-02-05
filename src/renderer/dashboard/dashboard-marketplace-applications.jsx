@@ -35,6 +35,10 @@ const styles = theme => ({
 	bottomSpace: {
 		marginBottom: '40px'
 	},
+	btnText: {
+		fontWeight: 'normal',
+		marginLeft: '10px'
+	},
 	dmaWrap: {
 		backgroundColor: '#262F39',
 		border: '1px solid #43505B',
@@ -42,7 +46,7 @@ const styles = theme => ({
 		boxSizing: 'border-box',
 		height: '100%',
 		overflow: 'hidden',
-		padding: '18px 30px 24px'
+		padding: '18px 30px 30px'
 	},
 	flex: {
 		display: 'flex'
@@ -141,8 +145,8 @@ const ApplicationsList = ({ classes, route }) => (
 		</div>
 		<div className={`${classes.flex} ${classes.allApplications}`}>
 			<Button onClick={route}>
-				<DropdownIcon />
-				<Typography variant="overline" style={{ fontWeight: 'normal' }} color="secondary">
+				<DropdownIcon width="18px" height="10px" />
+				<Typography variant="overline" className={classes.btnText} color="secondary">
 					View All Applications
 				</Typography>
 			</Button>
