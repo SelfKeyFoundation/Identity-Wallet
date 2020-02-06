@@ -3,7 +3,13 @@ import { connect } from 'react-redux';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { push } from 'connected-react-router';
-import { MarketplaceIcon, DropdownIcon, BankRoundedIcon } from 'selfkey-ui';
+import {
+	MarketplaceIcon,
+	DropdownIcon,
+	BankRoundedIcon,
+	IncorporationsRoundedIcon,
+	ExchangeRoundedIcon
+} from 'selfkey-ui';
 import { kycSelectors } from '../../common/kyc';
 import HeaderIcon from '../common/header-icon';
 
@@ -11,6 +17,9 @@ const styles = theme => ({
 	allApplications: {
 		justifyContent: 'center',
 		marginTop: '16px'
+	},
+	applicationIcon: {
+		marginRight: '16px'
 	},
 	applicationRecord: {
 		alignItems: 'center',
@@ -121,6 +130,28 @@ const RenderDate = ({ timestamp }) => {
 	);
 };
 
+const ApplicationIcon = ({ classes, title }) => {
+	if (title.toLowerCase().includes('incorporate')) {
+		return (
+			<div className={classes.applicationIcon}>
+				<IncorporationsRoundedIcon />
+			</div>
+		);
+	} else if (title.toLowerCase().includes('bank account')) {
+		return (
+			<div className={classes.applicationIcon}>
+				<BankRoundedIcon />
+			</div>
+		);
+	} else {
+		return (
+			<div className={classes.applicationIcon}>
+				<ExchangeRoundedIcon />
+			</div>
+		);
+	}
+};
+
 const ApplicationsList = ({ classes, route, applications }) => (
 	<>
 		<div className={`${classes.flex} ${classes.flexColumn}`}>
@@ -131,9 +162,7 @@ const ApplicationsList = ({ classes, route, applications }) => (
 						className={`${classes.applicationRecord} ${classes.justifySpaceBetween}`}
 					>
 						<div className={classes.flex} style={{ alignItems: 'center' }}>
-							<div style={{ marginRight: '14px' }}>
-								<BankRoundedIcon />
-							</div>
+							<ApplicationIcon classes={classes} title={application.title} />
 							<div className="application-type">
 								<Typography variant="h6">{application.title}</Typography>
 								<Typography variant="subtitle2" color="secondary">
