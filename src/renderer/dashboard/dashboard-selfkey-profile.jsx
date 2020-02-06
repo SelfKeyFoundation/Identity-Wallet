@@ -102,10 +102,10 @@ const Content = ({ classes, profileData }) => {
 		switch (basicDocs) {
 			case 0:
 				return <Status status="missing" />;
-			case 3:
+			case 4:
 				return <Status status="uploaded" />;
 			default:
-				return <Typography>Partially Filled</Typography>;
+				return <Status />;
 		}
 	};
 
@@ -113,19 +113,13 @@ const Content = ({ classes, profileData }) => {
 		switch (docsNumber) {
 			case 0:
 				return <Status status="missing" />;
-			case 12:
-				return <Status status="uploaded" />;
 			default:
-				return <Typography>Partially Filled</Typography>;
+				return <Status status="uploaded" />;
 		}
 	};
 
 	const SelfKeyDID = ({ isDID }) => {
-		return isDID ? (
-			<Status status="uploaded" text={profileData.identity.did} />
-		) : (
-			<Status status="missing" />
-		);
+		return isDID ? <Status status="uploaded" text="Created" /> : <Status status="missing" />;
 	};
 
 	return (
