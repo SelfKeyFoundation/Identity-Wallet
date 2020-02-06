@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { push } from 'connected-react-router';
-import { MarketplaceIcon, DropdownIcon, BankRoundedIcon, CheckMaIcon } from 'selfkey-ui';
+import { MarketplaceIcon, DropdownIcon, BankRoundedIcon } from 'selfkey-ui';
 import { kycSelectors } from '../../common/kyc';
+import HeaderIcon from '../common/header-icon';
 
 const styles = theme => ({
 	allApplications: {
@@ -86,62 +87,67 @@ const EmptyState = ({ classes, route }) => (
 	</>
 );
 
-const ApplicationsList = ({ classes, route }) => (
+const getAbrDateFromTimestamp = timestamp => {
+	const monthNames = [
+		'Jan',
+		'Feb',
+		'Mar',
+		'Apr',
+		'May',
+		'Jun',
+		'Jul',
+		'Aug',
+		'Sep',
+		'Oct',
+		'Nov',
+		'Dec'
+	];
+	const leadingZero = num => `0${num}`.slice(-2);
+	const date = new Date(timestamp);
+	const year = date.getFullYear();
+	const month = monthNames[date.getMonth()];
+	const day = date.getDate();
+	const hours = leadingZero(date.getHours());
+	const minutes = leadingZero(date.getMinutes());
+	return { year, month, day, hours, minutes };
+};
+
+const RenderDate = ({ timestamp }) => {
+	const { year, month, day } = getAbrDateFromTimestamp(timestamp);
+	return (
+		<>
+			{day} {month} {year}
+		</>
+	);
+};
+
+const ApplicationsList = ({ classes, route, applications }) => (
 	<>
 		<div className={`${classes.flex} ${classes.flexColumn}`}>
-			<div className={`${classes.applicationRecord} ${classes.justifySpaceBetween}`}>
-				<div className={classes.flex} style={{ alignItems: 'center' }}>
-					<div style={{ marginRight: '14px' }}>
-						<BankRoundedIcon />
+			{applications.slice(0, 3).map(application => {
+				return (
+					<div
+						key={application.id}
+						className={`${classes.applicationRecord} ${classes.justifySpaceBetween}`}
+					>
+						<div className={classes.flex} style={{ alignItems: 'center' }}>
+							<div style={{ marginRight: '14px' }}>
+								<BankRoundedIcon />
+							</div>
+							<div className="application-type">
+								<Typography variant="h6">{application.title}</Typography>
+								<Typography variant="subtitle2" color="secondary">
+									<RenderDate timestamp={application.applicationDate} />
+								</Typography>
+							</div>
+						</div>
+						<div className={classes.applicationStatus}>
+							<HeaderIcon status={application.currentStatus} />
+							<Typography>{application.currentStatusName}</Typography>
+						</div>
 					</div>
-					<div className="application-type">
-						<Typography variant="h6">Open Bank Account</Typography>
-						<Typography variant="subtitle2" color="secondary">
-							27 Jun 2018
-						</Typography>
-					</div>
-				</div>
-				<div className={classes.applicationStatus}>
-					<CheckMaIcon className={classes.rightSpace} />
-					<Typography>Approved</Typography>
-				</div>
-			</div>
-
-			<div className={`${classes.applicationRecord} ${classes.justifySpaceBetween}`}>
-				<div className={classes.flex} style={{ alignItems: 'center' }}>
-					<div style={{ marginRight: '14px' }}>
-						<BankRoundedIcon />
-					</div>
-					<div className="application-type">
-						<Typography variant="h6">Open Bank Account</Typography>
-						<Typography variant="subtitle2" color="secondary">
-							27 Jun 2018
-						</Typography>
-					</div>
-				</div>
-				<div className={classes.applicationStatus}>
-					<CheckMaIcon className={classes.rightSpace} />
-					<Typography>Approved</Typography>
-				</div>
-			</div>
-
-			<div className={`${classes.applicationRecord} ${classes.justifySpaceBetween}`}>
-				<div className={classes.flex} style={{ alignItems: 'center' }}>
-					<div style={{ marginRight: '14px' }}>
-						<BankRoundedIcon />
-					</div>
-					<div className="application-type">
-						<Typography variant="h6">Open Bank Account</Typography>
-						<Typography variant="subtitle2" color="secondary">
-							27 Jun 2018
-						</Typography>
-					</div>
-				</div>
-				<div className={classes.applicationStatus}>
-					<CheckMaIcon className={classes.rightSpace} />
-					<Typography>Approved</Typography>
-				</div>
-			</div>
+				);
+			})}
 		</div>
 		<div className={`${classes.flex} ${classes.allApplications}`}>
 			<Button onClick={route}>
@@ -166,6 +172,9 @@ class DashboardMarketplaceApplications extends PureComponent {
 	render() {
 		const { classes, applications } = this.props;
 		const isEmpty = applications.length < 1;
+
+		console.log('applications: ');
+		console.log(applications);
 		return (
 			<Grid item className={classes.dmaWrap}>
 				<Typography variant="h1" className={classes.title}>
@@ -174,7 +183,11 @@ class DashboardMarketplaceApplications extends PureComponent {
 				{isEmpty && isEmpty ? (
 					<EmptyState classes={this.props.classes} route={this.marketplaceRoute} />
 				) : (
-					<ApplicationsList classes={this.props.classes} route={this.applicationsRoute} />
+					<ApplicationsList
+						classes={this.props.classes}
+						route={this.applicationsRoute}
+						applications={applications}
+					/>
 				)}
 			</Grid>
 		);
