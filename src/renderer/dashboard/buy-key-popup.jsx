@@ -1,11 +1,32 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getExchangeLinks } from 'common/exchanges/selectors';
-import { Grid, List, ListItem, withStyles, Typography } from '@material-ui/core';
-import { PaymentIcon } from 'selfkey-ui';
+import { getWallet } from 'common/wallet/selectors';
+import { Grid, List, ListItem, withStyles, Typography, Divider } from '@material-ui/core';
+import { PaymentIcon, Copy } from 'selfkey-ui';
 import { Popup } from '../common';
 
 const styles = theme => ({
+	address: {
+		marginRight: '10px'
+	},
+	body: {
+		color: '#FFFFFF',
+		fontFamily: 'Proxima Nova',
+		fontSize: '18px',
+		lineHeight: '30px'
+	},
+	bottomSpace: {
+		marginBottom: '15px'
+	},
+	circle: {
+		fontSize: '16px',
+		paddingRight: '10px'
+	},
+	divider: {
+		margin: '40px 0 25px',
+		width: '100%'
+	},
 	exchangeItem: {
 		columnBreakInside: 'avoid',
 		color: '#FFFFFF',
@@ -15,26 +36,15 @@ const styles = theme => ({
 			color: '#FFFFFF'
 		}
 	},
-
-	body: {
-		color: '#FFFFFF',
-		fontFamily: 'Proxima Nova',
-		fontSize: '18px',
-		lineHeight: '30px'
-	},
-
 	exchanges: {
 		columnCount: 2,
+		marginBottom: '30px',
 		marginLeft: '-15px'
 	},
-
-	circle: {
-		fontSize: '16px',
-		paddingRight: '10px'
-	},
-
-	bottomSpace: {
-		marginBottom: '15px'
+	link: {
+		cursor: 'pointer',
+		color: '#00C0D9',
+		textDecoration: 'none'
 	}
 });
 
@@ -52,41 +62,66 @@ const getExchanges = (exchanges, classes) => {
 	});
 };
 
-export const BuyKeyContent = withStyles(styles)(({ classes, children, exchanges }) => (
-	<Grid container direction="row" justify="flex-start" alignItems="flex-start">
-		<Grid item xs={2}>
-			<PaymentIcon />
-		</Grid>
-		<Grid item xs={10}>
-			<Grid container direction="column" justify="flex-start" alignItems="flex-start">
-				<Grid item id="header">
-					<Typography variant="h1" gutterBottom>
-						Get KEY Tokens
-					</Typography>
-				</Grid>
-				<Grid item id="body" className={classes.body}>
-					<Grid
-						container
-						direction="column"
-						justify="flex-start"
-						alignItems="flex-start"
-						spacing={16}
-					>
-						<Grid item>
-							<Typography variant="body1" className={classes.bottomSpace}>
-								You can buy KEY tokens, to use inthe wallet, from one of the many
-								exchanges worldwide.
-							</Typography>
+export const BuyKeyContent = withStyles(styles)(
+	({ classes, address, children, exchanges, externalLink }) => (
+		<Grid container direction="row" justify="flex-start" alignItems="flex-start">
+			<Grid item xs={2}>
+				<PaymentIcon />
+			</Grid>
+			<Grid item xs={10}>
+				<Grid container direction="column" justify="flex-start" alignItems="flex-start">
+					<Grid item id="header">
+						<Typography variant="h1" gutterBottom>
+							Get KEY Tokens
+						</Typography>
+					</Grid>
+					<Grid item id="body" className={classes.body}>
+						<Grid
+							container
+							direction="column"
+							justify="flex-start"
+							alignItems="flex-start"
+							spacing={16}
+						>
+							<Grid item>
+								<Typography variant="body1" className={classes.bottomSpace}>
+									You can buy KEY tokens, to use in the wallet, from one of the
+									many exchanges worldwide.
+								</Typography>
+							</Grid>
+							<List className={classes.exchanges}>
+								{getExchanges(exchanges, classes)}
+							</List>
+							{address && (
+								<Grid container>
+									<Typography variant="body1" color="secondary">
+										Your Address to receive KEY:
+									</Typography>
+									<Grid container alignItems="center">
+										<Typography className={classes.address} variant="body1">
+											{address}
+										</Typography>
+										<Copy text={address} />
+									</Grid>
+									<Divider className={classes.divider} />
+									<Typography variant="subtitle2" color="secondary">
+										KEY is the main token used in the SelfKey Wallet, and it’s
+										used when accesing services in the marketplace. ETH is
+										needed for the network transaction fee{' '}
+										<a className={classes.link} onClick={externalLink}>
+											(what’s this?)
+										</a>
+										.
+									</Typography>
+								</Grid>
+							)}
 						</Grid>
-						<List className={classes.exchanges}>
-							{getExchanges(exchanges, classes)}
-						</List>
 					</Grid>
 				</Grid>
 			</Grid>
 		</Grid>
-	</Grid>
-));
+	)
+);
 
 const BuyKeyPopupComponent = props => {
 	return (
@@ -98,6 +133,7 @@ const BuyKeyPopupComponent = props => {
 
 const mapStateToProps = state => {
 	return {
+		address: getWallet(state).address,
 		exchanges: getExchangeLinks(state)
 	};
 };

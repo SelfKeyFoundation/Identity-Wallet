@@ -63,12 +63,21 @@ class BuyKeyWidget extends PureComponent {
 		this.setState({ popup: null });
 	};
 
+	handleExternalLink = e => {
+		window.openExternal(e, 'https://help.selfkey.org/article/147-what-is-a-did');
+	};
+
 	render() {
 		const { classes } = this.props;
 		const { popup } = this.state;
 		return (
 			<React.Fragment>
-				{popup !== null && <BuyKeyPopup closeAction={this.handlePopupClose} />}
+				{popup !== null && (
+					<BuyKeyPopup
+						closeAction={this.handlePopupClose}
+						externalLink={this.handleExternalLink}
+					/>
+				)}
 				<Grid item className={classes.buyKey}>
 					<Typography variant="h1" className={classes.title}>
 						Buy KEY tokens, to use in the SelfKey Marketplace.
