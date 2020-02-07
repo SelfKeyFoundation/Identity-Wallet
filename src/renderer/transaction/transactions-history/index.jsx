@@ -29,8 +29,8 @@ import {
 	DropdownIcon,
 	SentRoundedIcon
 } from 'selfkey-ui';
-// import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { convertExponentialToDecimal } from 'common/utils/exponential-to-decimal';
+import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	iconSpacing: {
@@ -234,17 +234,13 @@ class TransactionsHistory extends PureComponent {
 		this.props.dispatch(transactionHistoryOperations.reloadTransactionsOperation());
 	};
 
-	handleChangePage = (event, page) => {
-		this.setState({ page });
-	};
-
-	handleChangeRowsPerPage = (event, rowsPerPage) => {
-		this.setState({ rowsPerPage: rowsPerPage.props.value });
-	};
-
 	hasSent = transaction => {
 		const address = this.props.wallet.address || '';
 		return transaction.from.toLowerCase() === address.toLowerCase();
+	};
+
+	handleAllTransactions = () => {
+		this.props.dispatch(push('/main/transactions-history'));
 	};
 
 	renderDate(timestamp) {
@@ -353,7 +349,10 @@ class TransactionsHistory extends PureComponent {
 								<TableFooter className={classes.tableFooter}>
 									<TableRow className={classes.transparent}>
 										<TableCell colSpan={3} align="center">
-											<Button className={classes.moreTransactions}>
+											<Button
+												className={classes.moreTransactions}
+												onClick={this.handleAllTransactions}
+											>
 												<DropdownIcon />
 												<Typography variant="overline" color="secondary">
 													View All Transactions
