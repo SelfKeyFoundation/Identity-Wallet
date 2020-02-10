@@ -84,7 +84,6 @@ class BuyKeyWidget extends PureComponent {
 					</Typography>
 					<Button
 						variant="outlined"
-						color="primary"
 						size="large"
 						className={classes.ctabutton}
 						onClick={this.handlePopup}
