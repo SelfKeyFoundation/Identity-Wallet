@@ -271,7 +271,12 @@ class TransactionsHistory extends PureComponent {
 							</Typography>
 						</div>
 						<div className={classes.iconWrap}>
-							<IconButton label="Filter" title="Filter" disabled={processing}>
+							<IconButton
+								label="Filter"
+								title="Filter"
+								disabled={processing}
+								onClick={this.handleAllTransactions}
+							>
 								<FilterIcon />
 							</IconButton>
 							<IconButton
