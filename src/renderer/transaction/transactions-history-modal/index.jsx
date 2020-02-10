@@ -254,6 +254,7 @@ class TransactionsHistoryModal extends PureComponent {
 
 	componentDidMount() {
 		this.loadData();
+		window.scrollTo(0, 0);
 	}
 
 	loadData = () => {
