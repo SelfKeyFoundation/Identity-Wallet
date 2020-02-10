@@ -55,7 +55,7 @@ export const styles = theme => ({
 		}
 	},
 	address: {
-		maxWidth: '270px',
+		maxWidth: '170px',
 		overflow: 'hidden',
 		textOverflow: 'ellipsis'
 	},
@@ -195,7 +195,7 @@ class CryptoPriceTableComponent extends PureComponent {
 							className={classes.summary}
 						/>
 					</TableCell>
-					<TableCell title={token.address}>
+					<TableCell title={token.address} className={classes.addresses}>
 						<Typography variant="h6" className={classes.address}>
 							{token.address}
 						</Typography>
