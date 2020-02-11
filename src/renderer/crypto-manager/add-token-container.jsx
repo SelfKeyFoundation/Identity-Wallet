@@ -25,6 +25,10 @@ import {
 } from 'selfkey-ui';
 
 const styles = theme => ({
+	wrap: {
+		margin: 0,
+		width: '100%'
+	},
 	back: {
 		position: 'absolute',
 		top: '100px',
@@ -229,7 +233,14 @@ class AddTokenContainerComponent extends PureComponent {
 		}`;
 
 		return (
-			<Grid container direction="column" justify="flex-start" alignItems="center">
+			<Grid
+				container
+				direction="column"
+				justify="flex-start"
+				alignItems="center"
+				spacing={32}
+				className={classes.wrap}
+			>
 				<BackButton onclick={this.handleBackClick} />
 				<Grid item className={classes.topSpace}>
 					<MyCryptoLargeIcon />

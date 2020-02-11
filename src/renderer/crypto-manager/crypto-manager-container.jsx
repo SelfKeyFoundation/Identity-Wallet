@@ -10,6 +10,10 @@ import { Popup } from '../common/popup';
 import { walletTokensOperations } from 'common/wallet-tokens';
 
 const styles = theme => ({
+	wrap: {
+		margin: 0,
+		width: '100%'
+	},
 	bottomSpace: {
 		marginBottom: '15px'
 	},
@@ -221,7 +225,7 @@ class CryptoManagerContainerComponent extends PureComponent {
 				justify="flex-start"
 				alignItems="center"
 				spacing={32}
-				style={{ width: '100%', margin: 0 }}
+				className={classes.wrap}
 			>
 				<BackButton onclick={this.handleBackClick} />
 				<Grid item className={classes.topSpace}>
