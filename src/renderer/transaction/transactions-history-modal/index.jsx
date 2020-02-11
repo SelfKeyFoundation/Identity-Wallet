@@ -324,7 +324,7 @@ class TransactionsHistoryModal extends PureComponent {
 						container
 						justify="flex-start"
 						alignItems="stretch"
-						flexWrap="nowrap"
+						wrap="nowrap"
 						spacing={40}
 						className={classes.content}
 					>
@@ -365,7 +365,7 @@ class TransactionsHistoryModal extends PureComponent {
 						container
 						direction="column"
 						justify="flex-start"
-						flexWrap="nowrap"
+						wrap="nowrap"
 						alignItems="stretch"
 						spacing={40}
 						className={classes.content}
