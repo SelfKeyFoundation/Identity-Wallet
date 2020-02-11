@@ -229,13 +229,7 @@ class AddTokenContainerComponent extends PureComponent {
 		}`;
 
 		return (
-			<Grid
-				container
-				direction="column"
-				justify="flex-start"
-				alignItems="center"
-				spacing={32}
-			>
+			<Grid container direction="column" justify="flex-start" alignItems="center">
 				<BackButton onclick={this.handleBackClick} />
 				<Grid item className={classes.topSpace}>
 					<MyCryptoLargeIcon />
