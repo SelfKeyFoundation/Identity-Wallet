@@ -30,7 +30,8 @@ import {
 	BackButton,
 	LargeTableHeadRow,
 	CopyIcon,
-	ViewIcon
+	ViewIcon,
+	KeyPicker
 } from 'selfkey-ui';
 import { convertExponentialToDecimal } from 'common/utils/exponential-to-decimal';
 import { push } from 'connected-react-router';
@@ -125,6 +126,9 @@ const styles = theme => ({
 		'& td': {
 			padding: '20px 10px'
 		}
+	},
+	filterInput: {
+		width: '290px'
 	},
 	iconButton: {
 		transition: 'all 0.2s ease-out',
@@ -318,36 +322,50 @@ class TransactionsHistoryModal extends PureComponent {
 					</Grid>
 					<Grid
 						container
-						direction="column"
 						justify="flex-start"
 						alignItems="stretch"
+						flexWrap="nowrap"
 						spacing={40}
 						className={classes.content}
 					>
-						<Typography variant="overline" className={classes.label} gutterBottom>
-							Transaction Type
-						</Typography>
-						<Select
-							native
-							fullWidth
-							value=""
-							displayEmpty
-							IconComponent={KeyboardArrowDown}
-						>
-							<option value={-1} className={classes.selectItem}>
-								Choose...
-							</option>
-							{['sent', 'buy', 'receive'].map(option => (
-								<option key={option} value={option} className={classes.selectItem}>
-									{option}
+						<Grid container direction="column">
+							<Typography variant="overline" className={classes.label} gutterBottom>
+								Transaction Type
+							</Typography>
+							<Select
+								native
+								value=""
+								displayEmpty
+								IconComponent={KeyboardArrowDown}
+								className={classes.filterInput}
+							>
+								<option value={-1} className={classes.selectItem}>
+									Choose...
 								</option>
-							))}
-						</Select>
+								{['sent', 'buy', 'receive'].map(option => (
+									<option
+										key={option}
+										value={option}
+										className={classes.selectItem}
+									>
+										{option}
+									</option>
+								))}
+							</Select>
+						</Grid>
+
+						<Grid container direction="column">
+							<Typography variant="overline" className={classes.label} gutterBottom>
+								Date
+							</Typography>
+							<KeyPicker id="creationDate" required />
+						</Grid>
 					</Grid>
 					<Grid
 						container
 						direction="column"
 						justify="flex-start"
+						flexWrap="nowrap"
 						alignItems="stretch"
 						spacing={40}
 						className={classes.content}
