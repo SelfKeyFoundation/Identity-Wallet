@@ -115,7 +115,14 @@ const styles = () => ({
 	},
 	token: {
 		flexBasis: '48%',
-		margin: '13px 0'
+		margin: '13px 0',
+		'&:hover': {
+			backgroundColor: '#313D49',
+			border: 'none',
+			borderRadius: '4px',
+			cursor: 'pointer',
+			outlineWidth: 0
+		}
 	},
 	tokenContainer: {
 		display: 'flex',
@@ -312,7 +319,7 @@ export class CryptoChartBoxComponent extends React.Component {
 		}, 0);
 	};
 
-	getTokensLegend(classes, tokens, locale, fiatCurrency) {
+	getTokensLegend(classes, tokens, locale, fiatCurrency, manageTransferAction) {
 		return tokens.map((token, index) => {
 			return (
 				<Grid
@@ -324,6 +331,7 @@ export class CryptoChartBoxComponent extends React.Component {
 							? `${classes.active} ${classes.token}`
 							: `${classes.token}`
 					}
+					onClick={manageTransferAction}
 				>
 					<div className={classes.flexContainer}>
 						<div className={classes.flex}>
@@ -499,7 +507,13 @@ export class CryptoChartBoxComponent extends React.Component {
 						justify="space-between"
 						className={classes.tokenContainer}
 					>
-						{this.getTokensLegend(classes, tokens, locale, fiatCurrency)}
+						{this.getTokensLegend(
+							classes,
+							tokens,
+							locale,
+							fiatCurrency,
+							manageTransferAction
+						)}
 					</Grid>
 					{this.getViewAllSection()}
 				</Grid>
