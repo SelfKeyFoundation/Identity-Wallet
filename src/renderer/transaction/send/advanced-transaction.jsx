@@ -313,7 +313,9 @@ class TransactionSendBoxContainer extends PureComponent {
 	// TransactionSendBox - End
 
 	getTitle = cryptoCurrency => {
-		return cryptoCurrency !== 'custom' ? `Send ${cryptoCurrency}` : 'Send Custom Token';
+		return cryptoCurrency !== 'custom'
+			? `Send ${cryptoCurrency}`
+			: 'Send/Receive ERC-20 Tokens';
 	};
 
 	render() {
