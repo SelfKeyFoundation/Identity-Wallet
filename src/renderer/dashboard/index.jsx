@@ -1,10 +1,9 @@
 import React from 'react';
 import { Grid, Typography, Button } from '@material-ui/core';
-// import TokenList from './token-list';
 import CryptoChartBox from './crypto-chart-box';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
-import BuyKeyWidget from './buy-key';
+import BuyKeyWidget from './buy-key-widget';
 import DashboardMarketplaceApplications from './dashboard-marketplace-applications';
 import DashboardSelfkeyProfile from './dashboard-selfkey-profile';
 import TransactionsHistory from '../transaction/transactions-history';

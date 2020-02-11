@@ -1,10 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { getExchangeLinks } from 'common/exchanges/selectors';
-import { getWallet } from 'common/wallet/selectors';
 import { Grid, List, ListItem, withStyles, Typography, Divider } from '@material-ui/core';
 import { PaymentIcon, Copy } from 'selfkey-ui';
-import { Popup } from '../common';
 
 const styles = theme => ({
 	address: {
@@ -123,21 +119,4 @@ export const BuyKeyContent = withStyles(styles)(
 	)
 );
 
-const BuyKeyPopupComponent = props => {
-	return (
-		<Popup closeAction={props.closeAction} text="Buy KEY from our parners.">
-			<BuyKeyContent {...props} />
-		</Popup>
-	);
-};
-
-const mapStateToProps = state => {
-	return {
-		address: getWallet(state).address,
-		exchanges: getExchangeLinks(state)
-	};
-};
-
-export const BuyKeyPopup = connect(mapStateToProps)(BuyKeyPopupComponent);
-
-export default BuyKeyPopup;
+export default BuyKeyContent;

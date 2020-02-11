@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { CustomIcon, CoinsIcon } from 'selfkey-ui';
-import BuyKeyPopup from './buy-key-popup';
+import BuyKeyPopup from './buy-key-popup-container';
 
 const styles = theme => ({
 	bgIcon: {
@@ -46,9 +46,6 @@ const styles = theme => ({
 		}
 	}
 });
-
-// const EmptyState = ({ classes }) => (
-// );
 
 class BuyKeyWidget extends PureComponent {
 	state = {
