@@ -323,7 +323,6 @@ class TransactionSendBoxContainer extends PureComponent {
 		const labelInputClass = `${addressError ? classes.errorColor : ''}`;
 		let { cryptoCurrency } = this.state;
 		const title = this.getTitle(cryptoCurrency);
-		console.log(addressError);
 		return (
 			<TransactionBox
 				cryptoCurrency={cryptoCurrency}

@@ -201,9 +201,6 @@ class DashboardMarketplaceApplications extends PureComponent {
 	render() {
 		const { classes, applications } = this.props;
 		const isEmpty = applications.length < 1;
-
-		console.log('applications: ');
-		console.log(applications);
 		return (
 			<Grid item className={classes.dmaWrap}>
 				<Typography variant="h1" className={classes.title}>

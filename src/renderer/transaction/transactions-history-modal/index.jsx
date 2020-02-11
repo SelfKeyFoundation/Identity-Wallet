@@ -403,7 +403,6 @@ class TransactionsHistoryModal extends PureComponent {
 									{transactions.length > 0 ? (
 										paginate(transactions, rowsPerPage, page).map(
 											transaction => {
-												console.log(transaction);
 												return (
 													<TableRow
 														key={transaction.id}
