@@ -3,6 +3,7 @@ import Toolbar from './toolbar';
 import config from 'common/config';
 import { connect } from 'react-redux';
 import { identitySelectors, identityOperations } from 'common/identity';
+import { appSelectors } from 'common/app';
 import { walletSelectors } from 'common/wallet';
 import { push } from 'connected-react-router';
 import { featureIsEnabled } from 'common/feature-flags';
@@ -69,6 +70,7 @@ class ToolbarContainer extends PureComponent {
 				closeProfile={this.closeProfile}
 				onProfileNavigate={this.handleProfileNavigate}
 				showCorporate={featureIsEnabled('corporate')}
+				isExportableAccount={this.props.isExportableAccount}
 			/>
 		);
 	}
@@ -97,6 +99,7 @@ export default connect(state => {
 		profiles,
 		profileNames: profileNames.byId,
 		selectedProfile: identitySelectors.selectIdentity(state) || {},
-		wallet
+		wallet,
+		isExportableAccount: appSelectors.selectCanExportWallet(state)
 	};
 })(ToolbarContainer);

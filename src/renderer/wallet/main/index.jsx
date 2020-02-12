@@ -42,6 +42,7 @@ import HardwareWalletUnlock from '../../marketplace/authentication/hardware-wall
 import HardwareWalletError from '../../marketplace/authentication/hardware-wallet/error';
 import AuthenticationError from '../../marketplace/authentication/error';
 import { CurrentApplication, ApplicationInProgress } from '../../kyc';
+import WalletExportContainer from './export-container';
 
 import md5 from 'md5';
 import ReactPiwik from 'react-piwik';
@@ -87,7 +88,7 @@ class Main extends PureComponent {
 	}
 
 	render() {
-		const { match, classes } = this.props;
+		const { match, classes, isExportable } = this.props;
 		return (
 			<Grid
 				container
@@ -192,6 +193,35 @@ class Main extends PureComponent {
 
 					<Route path={`${match.path}/corporate`} component={CorporateContainer} />
 					<Route path={`${match.path}/individual`} component={IndividualContainer} />
+					{isExportable && (
+						<Route
+							path={`${match.path}/export-wallet/warning`}
+							render={() => (
+								<WalletExportContainer>
+									{({ onCancel, onExport }) => (
+										<div>
+											WARNING <button onClick={onExport}>export</button>
+											<button onClick={onCancel}>Cancel</button>
+										</div>
+									)}
+								</WalletExportContainer>
+							)}
+						/>
+					)}
+					{isExportable && (
+						<Route
+							path={`${match.path}/export-wallet/qr`}
+							render={() => (
+								<WalletExportContainer>
+									{({ onCancel }) => (
+										<div>
+											QRCode <button onClick={onCancel}>Close</button>
+										</div>
+									)}
+								</WalletExportContainer>
+							)}
+						/>
+					)}
 				</Grid>
 			</Grid>
 		);
@@ -201,7 +231,8 @@ class Main extends PureComponent {
 const mapStateToProps = (state, props) => {
 	return {
 		address: walletSelectors.getWallet(state).address,
-		walletType: appSelectors.selectWalletType(state)
+		walletType: appSelectors.selectWalletType(state),
+		isExportable: appSelectors.selectCanExportWallet(state)
 	};
 };
 

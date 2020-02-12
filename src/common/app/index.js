@@ -1,11 +1,12 @@
 import { getGlobalContext } from 'common/context';
 import { createAliasedAction } from 'electron-redux';
-import { walletOperations } from '../wallet';
+import { walletOperations, walletSelectors } from '../wallet';
 import { push } from 'connected-react-router';
 import { identityOperations } from '../identity';
 import timeoutPromise from 'common/utils/timeout-promise';
 import EventEmitter from 'events';
 import { Logger } from 'common/logger';
+import { featureIsEnabled } from 'common/feature-flags';
 import { kycOperations } from '../kyc';
 import { schedulerOperations } from '../scheduler';
 
@@ -34,7 +35,8 @@ export const initialState = {
 		info: {},
 		progress: {},
 		downloaded: false
-	}
+	},
+	keyStoreValue: null
 };
 
 export const appTypes = {
@@ -66,7 +68,9 @@ export const appTypes = {
 	APP_SET_AUTO_UPDATE_DOWNLOADED: 'app/auto/update/downloaded/SET',
 	APP_DOWNLOAD_UPDATE: 'app/update/DOWNLOAD',
 	APP_INSTALL_UPDATE: 'app/update/INSTALL',
-	APP_UNLOCK_WALLET: 'app/unlock/wallet'
+	APP_UNLOCK_WALLET: 'app/unlock/wallet',
+	APP_SET_KEYSTORE_VALUE: 'app/keystore/SET',
+	LOAD_KEYSTORE_VALUE: 'app/keystore/LOAD'
 };
 
 const appActions = {
@@ -117,6 +121,10 @@ const appActions = {
 	setAutoUpdateDownloadedAction: downloaded => ({
 		type: appTypes.APP_SET_AUTO_UPDATE_DOWNLOADED,
 		payload: downloaded
+	}),
+	setKeystoreValue: payload => ({
+		type: appTypes.APP_SET_KEYSTORE_VALUE,
+		payload
 	})
 };
 
@@ -346,6 +354,16 @@ const installUpdate = () => async () => {
 	await autoUpdateService.quitAndInstall();
 };
 
+const loadKeystoreValue = () => async (dispatch, getState) => {
+	const walletService = getGlobalContext().walletService;
+	const wallet = walletSelectors.getWallet(getState());
+	if (!wallet.profile === 'local' || !wallet.keyStoreFile) {
+		return;
+	}
+	const keystore = await walletService.loadKeyStoreValue(wallet.keyStoreFile, wallet.address);
+	await dispatch(appActions.setKeystoreValue(keystore));
+};
+
 const operations = {
 	loadWallets,
 	unlockWalletWithPassword,
@@ -363,7 +381,8 @@ const operations = {
 	startAutoUpdate,
 	downloadUpdate,
 	installUpdate,
-	unlockWalletOperation
+	unlockWalletOperation,
+	loadKeystoreValue
 };
 
 const appOperations = {
@@ -429,6 +448,10 @@ const appOperations = {
 	unlockWalletOperation: createAliasedAction(
 		appTypes.APP_UNLOCK_WALLET,
 		operations.unlockWalletOperation
+	),
+	loadKeystoreValueOperation: createAliasedAction(
+		appTypes.LOAD_KEYSTORE_VALUE,
+		operations.loadKeystoreValue
 	)
 };
 
@@ -480,6 +503,10 @@ const setAutoUpdateDownloadedReducer = (state, action) => {
 	return { ...state, autoUpdate: { ...state.autoUpdate, downloaded: action.payload } };
 };
 
+const setKeystoreValueReducer = (state, action) => {
+	return { ...state, keyStoreValue: action.payload };
+};
+
 const appReducers = {
 	setWalletsReducer,
 	setWalletsLoadingReducer,
@@ -492,7 +519,8 @@ const appReducers = {
 	setGoBackPathReducer,
 	setAutoUpdateInfoReducer,
 	setAutoUpdateProgressReducer,
-	setAutoUpdateDownloadedReducer
+	setAutoUpdateDownloadedReducer,
+	setKeystoreValueReducer
 };
 
 const reducer = (state = initialState, action) => {
@@ -521,6 +549,8 @@ const reducer = (state = initialState, action) => {
 			return appReducers.setAutoUpdateProgressReducer(state, action);
 		case appTypes.APP_SET_AUTO_UPDATE_DOWNLOADED:
 			return appReducers.setAutoUpdateDownloadedReducer(state, action);
+		case appTypes.APP_SET_KEYSTORE_VALUE:
+			return appReducers.setKeystoreValueReducer(state, action);
 	}
 	return state;
 };
@@ -561,6 +591,16 @@ const selectAutoUpdateDownloaded = state => {
 	return selectApp(state).autoUpdate.downloaded;
 };
 
+const selectCanExportWallet = state => {
+	const wallet = walletSelectors.getWallet(state);
+	return (
+		featureIsEnabled('walletExport') &&
+		!!(wallet && wallet.profile === 'local' && wallet.keystoreFilePath)
+	);
+};
+
+const selectKeystoreValue = state => selectApp(state).keyStoreValue;
+
 const appSelectors = {
 	selectApp,
 	hasConnected,
@@ -570,7 +610,9 @@ const appSelectors = {
 	selectWalletType,
 	selectAutoUpdateInfo,
 	selectAutoUpdateProgress,
-	selectAutoUpdateDownloaded
+	selectAutoUpdateDownloaded,
+	selectCanExportWallet,
+	selectKeystoreValue
 };
 
 export { appSelectors, appReducers, appActions, appOperations };
