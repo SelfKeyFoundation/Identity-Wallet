@@ -357,11 +357,11 @@ const installUpdate = () => async () => {
 const loadKeystoreValue = () => async (dispatch, getState) => {
 	const walletService = getGlobalContext().walletService;
 	const wallet = walletSelectors.getWallet(getState());
-	if (!wallet.profile === 'local' || !wallet.keyStoreFile) {
+	if (wallet.profile !== 'local' || !wallet.keystoreFilePath) {
 		return;
 	}
-	const keystore = await walletService.loadKeyStoreValue(wallet.keyStoreFile, wallet.address);
-	await dispatch(appActions.setKeystoreValue(keystore));
+	const keystore = await walletService.loadKeyStoreValue(wallet.keystoreFilePath, wallet.address);
+	await dispatch(appActions.setKeystoreValue(Buffer.from(keystore).toString('base64')));
 };
 
 const operations = {

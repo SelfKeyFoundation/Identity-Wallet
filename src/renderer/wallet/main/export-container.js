@@ -2,10 +2,15 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { push } from 'connected-react-router';
+import { appOperations, appActions, appSelectors } from 'common/app';
 
 class WalletExportContainer extends PureComponent {
 	async componentDidMount() {
-		// load export file
+		this.props.dispatch(appOperations.loadKeystoreValueOperation());
+	}
+
+	async componentWillUnmount() {
+		this.props.dispatch(appActions.setKeystoreValue(null));
 	}
 
 	handleExport = () => {
@@ -17,11 +22,11 @@ class WalletExportContainer extends PureComponent {
 	};
 
 	render() {
-		const { children } = this.props;
+		const { children, keystore } = this.props;
 
 		return (
 			<React.Fragment>
-				{children({ onExport: this.handleExport, onCancel: this.handleCancel })}
+				{children({ onExport: this.handleExport, onCancel: this.handleCancel, keystore })}
 			</React.Fragment>
 		);
 	}
@@ -32,7 +37,9 @@ WalletExportContainer.propTypes = {
 };
 
 const mapStateToProps = (state, props) => {
-	return {};
+	return {
+		keystore: appSelectors.selectKeystoreValue(state)
+	};
 };
 
 export default connect(mapStateToProps)(WalletExportContainer);

@@ -213,9 +213,11 @@ class Main extends PureComponent {
 							path={`${match.path}/export-wallet/qr`}
 							render={() => (
 								<WalletExportContainer>
-									{({ onCancel }) => (
+									{({ onCancel, keystore }) => (
 										<div>
-											QRCode <button onClick={onCancel}>Close</button>
+											QRCode
+											{keystore || 'Loading'}
+											<button onClick={onCancel}>Close</button>
 										</div>
 									)}
 								</WalletExportContainer>
