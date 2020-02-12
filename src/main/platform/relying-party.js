@@ -25,6 +25,9 @@ const KYC_APPLICATIONS_GET_ENDPOINT_NAME = '/applications/:id';
 const KYC_APPLICATIONS_FILE_ENDPOINT_NAME = '/files';
 const KYC_APPLICATIONS_PAYMENT_ENDPOINT_NAME = '/applications/:id/payments';
 const KYC_APPLICATIONS_LIST_ENDPOINT_NAME = '/applications';
+
+const KYC_APPLICATIONS_CHAT_ENDPOINT_NAME = '/applications/:id/chat';
+
 const KYC_USERS_GET_ENDPOINT_NAME = '/kyc-users/me';
 const KYC_USERS_CREATE_ENDPOINT_NAME = '/kyc-users';
 const KYC_GET_ACCESS_TOKEN_ENDPOINT_NAME = '/auth/token';
@@ -307,6 +310,41 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
+
+	static async getKYCApplicationChat(ctx, applicationId) {
+		let url = ctx.getEndpoint(KYC_APPLICATIONS_CHAT_ENDPOINT_NAME);
+		url = url.replace(':id', applicationId);
+		log.debug(`[getKYCApplicationChat] GET ${url}`);
+		log.info(url);
+		const chatResponse = await request.get({
+			url,
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+		log.info(chatResponse);
+		return chatResponse;
+	}
+
+	static postKYCApplicationChat(ctx, applicationId, message) {
+		let url = ctx.getEndpoint(KYC_APPLICATIONS_CHAT_ENDPOINT_NAME);
+		url = url.replace(':id', applicationId);
+		log.debug(`[postKYCApplicationChat] POST ${url} : ${message}`);
+		return request.post({
+			url,
+			body: { message },
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+
 	static async listKYCApplications(ctx) {
 		let url = ctx.getEndpoint(KYC_APPLICATIONS_LIST_ENDPOINT_NAME);
 		log.debug(`[listKYCApplications] GET ${url}`);
@@ -320,6 +358,15 @@ export class RelyingPartyRest {
 				},
 				json: true
 			});
+			/*
+            let sendApps = [];
+            for (let application of applications) {
+                let messages = await this.getKYCApplicationChat(ctx, application.id);
+                application.messages = messages;
+                sendApps.push(application);
+            }
+            return sendApps;
+            */
 			return applications;
 		} catch (error) {
 			if (error.statusCode === 404) {
@@ -378,6 +425,7 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
+
 	static uploadKYCApplicationFile(ctx, doc) {
 		let url = ctx.getEndpoint(KYC_APPLICATIONS_FILE_ENDPOINT_NAME);
 		let formData = {
@@ -523,8 +571,12 @@ export class RelyingPartySession {
 	}
 
 	async createKYCApplication(templateId, attributes) {
-		attributes = await Promise.all(
-			attributes.map(async attr => {
+		// ignore empty non-required attributes
+		let filteredAttributes = attributes.filter(
+			attr => attr.data || attr.documents || attr.required
+		);
+		filteredAttributes = await Promise.all(
+			filteredAttributes.map(async attr => {
 				const attrDocs = await Promise.all(
 					attr.documents.map(async doc => {
 						if (doc.content) {
@@ -545,7 +597,7 @@ export class RelyingPartySession {
 				return { ...attr, data: value, documents: undefined };
 			})
 		);
-		return RelyingPartyRest.createKYCApplication(this.ctx, templateId, attributes);
+		return RelyingPartyRest.createKYCApplication(this.ctx, templateId, filteredAttributes);
 	}
 
 	updateKYCApplication(application) {
@@ -558,6 +610,14 @@ export class RelyingPartySession {
 			applicationId,
 			transactionHash
 		);
+	}
+
+	getKYCApplicationChat(applicationId) {
+		return RelyingPartyRest.getKYCApplicationChat(this.ctx, applicationId);
+	}
+
+	postKYCApplicationChat(applicationId, message) {
+		return RelyingPartyRest.postKYCApplicationChat(this.ctx, applicationId, message);
 	}
 
 	listKYCTemplates() {
