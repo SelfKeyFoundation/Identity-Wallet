@@ -5,6 +5,7 @@ import { CloseButtonIcon, HourGlassLargeIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	container: {
+		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)',
 		position: 'relative',
 		width: '100%',
 		margin: '0 auto',
@@ -25,17 +26,14 @@ const styles = theme => ({
 	},
 	contentContainer: {
 		border: '1px solid #303C49',
-		borderRadius: '4px',
-		padding: '30px'
+		borderRadius: '0 0 4px 4px',
+		padding: '30px 60px 60px 45px'
 	},
 	icon: {
-		width: '120px'
+		margin: '0 45px 0 0'
 	},
 	content: {
 		width: '100%'
-	},
-	insideContent: {
-		width: 'calc(100% - 160px)'
 	},
 	description: {
 		fontFamily: 'Lato, arial',
@@ -46,21 +44,26 @@ const styles = theme => ({
 			marginBottom: '1em'
 		},
 		'& p.email': {
-			color: '#00C0D9',
-			padding: '10px 0 10px 0'
+			color: '#00C0D9'
 		},
 		'& strong': {
 			fontWeight: '700'
+		},
+		'& .title': {
+			marginBottom: '15px'
+		},
+		'& .divider': {
+			margin: '0 0 25px 0'
 		}
 	},
 	instructions: {
-		padding: '30px 0',
+		padding: '30px 0 45px',
 		borderTop: '1px solid #475768'
 	},
 	footer: {
 		width: '100%',
 		'& button': {
-			marginRight: '30px'
+			marginRight: '20px'
 		}
 	}
 });
@@ -83,14 +86,15 @@ const MarketplaceProcessStarted = withStyles(styles)(
 					justify="flex-start"
 					alignItems="flex-start"
 					className={classes.content}
+					wrap="nowrap"
 				>
 					<div className={classes.icon}>
 						<HourGlassLargeIcon />
 					</div>
-					<div className={classes.insideContent}>
+					<div>
 						<div className={classes.description}>{body}</div>
-						<div className={classes.instructions} style={{ display: 'none' }}>
-							<Typography variant="subtitle2" color="secondary" gutterBottom>
+						<div className={classes.instructions}>
+							<Typography variant="subtitle2" color="secondary">
 								The application is available to you at any point under the
 								marketplace applications tab, in your SelfKey ID Profile.
 							</Typography>
