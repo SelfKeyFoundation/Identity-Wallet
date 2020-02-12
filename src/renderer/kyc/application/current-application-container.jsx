@@ -46,11 +46,18 @@ class CurrentApplicationComponent extends PureComponent {
 		}
 		const error = requirements.reduce((acc, curr) => {
 			if (acc) return acc;
-			if (!curr.options || !curr.options.length) return true;
+
 			const attribute = selected[curr.uiId] || curr.options[0];
+			// Ignore optional empty attributes
+			if (!attribute && !curr.required) {
+				return false;
+			}
+
+			if (!curr.options || !curr.options.length) return true;
 			if (!attribute || !attribute.isValid) return true;
 			return false;
 		}, false);
+
 		if (error) {
 			this.setState({ error });
 			return;
