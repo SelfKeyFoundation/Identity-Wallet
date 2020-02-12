@@ -53,12 +53,11 @@ const styles = theme => ({
 			marginBottom: '15px'
 		},
 		'& .divider': {
-			margin: '0 0 25px 0'
+			margin: '40px 0 25px 0'
 		}
 	},
 	instructions: {
-		padding: '30px 0 45px',
-		borderTop: '1px solid #475768'
+		padding: '0 0 45px'
 	},
 	footer: {
 		width: '100%',
