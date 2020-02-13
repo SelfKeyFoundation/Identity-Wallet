@@ -28,7 +28,6 @@ import Terms from './settings/terms';
 import TermsWarning from './settings/terms-warning';
 import Loading from './home/loading';
 import ConnectingToLedger from './wallet/unlock/ledger/connecting';
-import { SelfKeyIdCreate } from './selfkey-id/main/components/selfkey-id-create';
 import { SelfKeyIdCreateForm } from './selfkey-id/main/components/selfkey-id-create-form';
 import AutoUpdate from './auto-update/auto-update-contatiner';
 import AutoUpdateProgress from './auto-update/auto-update-progress-contatiner';
