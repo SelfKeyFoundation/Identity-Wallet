@@ -90,7 +90,6 @@ class AppContainerComponent extends PureComponent {
 					<Route path="/connectingToTrezor" component={ConnectingToTrezor} />
 					<Route path="/terms" component={Terms} />
 					<Route path="/termsWarning" component={TermsWarning} />
-					<Route path="/selfKeyIdCreate" component={SelfKeyIdCreate} />
 					<Route path="/selfkeyIdForm" component={SelfKeyIdCreateForm} />
 					<Route path="/auto-update" component={AutoUpdate} />
 					<Route path="/auto-update-progress" component={AutoUpdateProgress} />

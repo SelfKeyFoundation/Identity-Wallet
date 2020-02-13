@@ -31,7 +31,8 @@ class IndividualDashboardContainerComponent extends PureComponent {
 			return dispatch(identityOperations.navigateToProfileOperation());
 		}
 		if (!identity.isSetupFinished) {
-			return dispatch(push('/selfkeyIdCreate'));
+			return dispatch(push('/selfkeyIdForm'));
+			// TODO: later refactor to individual profile folder
 			// return dispatch(push('/main/individual/setup-individual-profile'));
 		}
 
