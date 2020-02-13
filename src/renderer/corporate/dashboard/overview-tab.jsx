@@ -42,7 +42,7 @@ const CorporateOverviewTab = withStyles(styles)(
 		profile,
 		members,
 		onEditCorporateDetails,
-		onEditManegeMembers,
+		onEditManageMembers,
 		didComponent
 	}) => (
 		<div>
@@ -64,7 +64,7 @@ const CorporateOverviewTab = withStyles(styles)(
 					<CorporateCapTable
 						profile={profile}
 						members={members}
-						onEdit={onEditManegeMembers}
+						onEdit={onEditManageMembers}
 					/>
 				</div>
 				<div className="corporateShareholding">
