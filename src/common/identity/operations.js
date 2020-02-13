@@ -549,8 +549,9 @@ const navigateToProfileOperation = () => async (dispatch, getState) => {
 	const identity = identitySelectors.selectIdentity(getState());
 
 	if (identity.type === 'individual' && !identity.isSetupFinished) {
-		// return dispatch(push('/selfkeyIdCreate'));
-		return dispatch(push('/main/individual/setup-individual-profile'));
+		return dispatch(push('/selfkeyIdForm'));
+		// TODO: later refactor to individual profile folder
+		// return dispatch(push('/main/individual/setup-individual-profile'));
 	}
 
 	if (identity.type === 'individual') {
