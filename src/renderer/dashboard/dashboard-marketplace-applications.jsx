@@ -10,7 +10,7 @@ import {
 	IncorporationsRoundedIcon,
 	ExchangeRoundedIcon
 } from 'selfkey-ui';
-import { kycSelectors } from '../../common/kyc';
+import { kycSelectors, kycOperations } from '../../common/kyc';
 import HeaderIcon from '../common/header-icon';
 
 const styles = theme => ({
@@ -197,6 +197,11 @@ class DashboardMarketplaceApplications extends PureComponent {
 	applicationsRoute = () => {
 		this.props.dispatch(push('/main/selfkeyIdApplications'));
 	};
+
+	async componentDidMount() {
+		const { dispatch } = this.props;
+		await dispatch(kycOperations.loadApplicationsOperation());
+	}
 
 	render() {
 		const { classes, applications } = this.props;
