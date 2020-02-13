@@ -538,7 +538,7 @@ const createIndividualProfile = (identityId, data) => async (dispatch, getState)
 
 	await dispatch(identityOperations.updateIdentitySetupOperation(true, identityId));
 
-	await dispatch(push('/selfkeyIdCreateAbout'));
+	return dispatch(push('/main/individual'));
 };
 
 const switchProfileOperation = identity => async (dispatch, getState) => {

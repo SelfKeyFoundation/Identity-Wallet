@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import { Typography, Divider } from '@material-ui/core';
 import { marketplaceSelectors } from 'common/marketplace';
 import { MarketplaceProcessStarted } from '../../common/marketplace-process-started';
 
@@ -19,21 +19,22 @@ class BankAccountsProcessStartedContainer extends PureComponent {
 		const { vendor } = this.props;
 		const body = (
 			<React.Fragment>
-				<Typography variant="h1" gutterBottom>
+				<Typography variant="h1" className="title">
 					Bank Account Process Started
 				</Typography>
 				<Typography variant="body1" gutterBottom>
 					Thank you for payment!
 				</Typography>
-				<Typography variant="body2" gutterBottom>
+				<Typography variant="body1" gutterBottom>
 					One of our managers is reviewing the information you submitted and{' '}
 					<strong>will contact you shortly on the e-mail you provided</strong>, to
 					continue the process. If you have any questions in the meantime, you can reach
 					us at:
 				</Typography>
-				<Typography variant="body2" color="primary" gutterBottom className="email">
+				<Typography variant="body1" color="primary" className="email">
 					{vendor.contactEmail}
 				</Typography>
+				<Divider className="divider" />
 			</React.Fragment>
 		);
 
