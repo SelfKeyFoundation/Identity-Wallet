@@ -6,14 +6,16 @@ import { IncorporationsTaxTreatiesTab } from './incorporations-details-tax-treat
 import { IncorporationsCountryTab } from './incorporations-details-country-tab';
 import { IncorporationsDescriptionTab } from './incorporations-details-description-tab';
 import { IncorporationsServicesTab } from './incorporations-details-services-tab';
+import { IncorporationsWhatYouGetTab } from './incorporations-what-you-get-tab';
 
 const styles = theme => ({});
 
 export const IncorporationsDetailsTabs = withStyles(styles)(
-	({ classes, tab = 'description', onTabChange, ...tabProps }) => {
+	({ classes, tab = 'whatyouget', onTabChange, ...tabProps }) => {
 		return (
 			<React.Fragment>
 				<Tabs value={tab} onChange={(evt, value) => onTabChange(value)}>
+					<Tab id="whatYouGetButton" value="whatyouget" label="WHAT YOU GET" />
 					<Tab id="descriptionButton" value="description" label="Description" />
 					<Tab id="legalButton" value="legal" label="Legal" />
 					<Tab id="taxesButton" value="taxes" label="Taxes" />
@@ -21,6 +23,9 @@ export const IncorporationsDetailsTabs = withStyles(styles)(
 					<Tab id="taxTreatiesButton" value="taxTreaties" label="Tax Treaties" />
 					<Tab id="servicesButton" value="services" label="Services" />
 				</Tabs>
+				{tab === 'whatyouget' && (
+					<IncorporationsWhatYouGetTab id="whatyouget" {...tabProps} />
+				)}
 				{tab === 'description' && (
 					<IncorporationsDescriptionTab id="descriptionTab" {...tabProps} />
 				)}
