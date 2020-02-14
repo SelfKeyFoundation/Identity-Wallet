@@ -4,7 +4,7 @@ import { BankingTypesTab } from './details-types-tab';
 import { BankingCountryTab } from './details-country-tab';
 import { BankingDescriptionTab } from './details-description-tab';
 import { BankingServicesTab } from './details-services-tab';
-import { BankingWhatYouGetTab } from './details-what-you-get-tab';
+import { WhatYouGetTab } from '../../common/what-you-get-tab';
 
 const styles = theme => ({});
 
@@ -19,7 +19,7 @@ export const BankingDetailsPageTabs = withStyles(styles)(
 					<Tab id="countryButton" value="country" label="Country Details" />
 					<Tab id="servicesButton" value="services" label="Services" />
 				</Tabs>
-				{tab === 'whatyouget' && <BankingWhatYouGetTab id="whatyouget" {...tabProps} />}
+				{tab === 'whatyouget' && <WhatYouGetTab id="whatyouget" {...tabProps} />}
 				{tab === 'types' && <BankingTypesTab id="accountTab" {...tabProps} />}
 				{tab === 'country' && <BankingCountryTab id="countryTab" {...tabProps} />}
 				{tab === 'services' && <BankingServicesTab id="servicesTab" {...tabProps} />}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core';
-import { WhatYouGet } from '../../common/marketplace-what-you-get';
-import HowServiceWorks from '../../common/marketplace-how-service-works';
+import { WhatYouGet } from './marketplace-what-you-get';
+import { HowServiceWorks } from './marketplace-how-service-works';
 
 const styles = theme => ({
 	tabContainer: {
@@ -37,7 +37,7 @@ const styles = theme => ({
 	}
 });
 
-const IncorporationsWhatYouGetTab = withStyles(styles)(
+const WhatYouGetTab = withStyles(styles)(
 	({ classes, initialDocsText, kycProcessText, getFinalDocsText, description, timeToForm }) => (
 		<div className={classes.tabContainer}>
 			<WhatYouGet
@@ -59,5 +59,5 @@ const IncorporationsWhatYouGetTab = withStyles(styles)(
 	)
 );
 
-export { IncorporationsWhatYouGetTab };
-export default IncorporationsWhatYouGetTab;
+export { WhatYouGetTab };
+export default WhatYouGetTab;

@@ -6,7 +6,7 @@ import { IncorporationsTaxTreatiesTab } from './incorporations-details-tax-treat
 import { IncorporationsCountryTab } from './incorporations-details-country-tab';
 import { IncorporationsDescriptionTab } from './incorporations-details-description-tab';
 import { IncorporationsServicesTab } from './incorporations-details-services-tab';
-import { IncorporationsWhatYouGetTab } from './incorporations-what-you-get-tab';
+import { WhatYouGetTab } from '../../common/what-you-get-tab';
 
 const styles = theme => ({});
 
@@ -23,9 +23,7 @@ export const IncorporationsDetailsTabs = withStyles(styles)(
 					<Tab id="taxTreatiesButton" value="taxTreaties" label="Tax Treaties" />
 					<Tab id="servicesButton" value="services" label="Services" />
 				</Tabs>
-				{tab === 'whatyouget' && (
-					<IncorporationsWhatYouGetTab id="whatyouget" {...tabProps} />
-				)}
+				{tab === 'whatyouget' && <WhatYouGetTab id="whatyouget" {...tabProps} />}
 				{tab === 'description' && (
 					<IncorporationsDescriptionTab id="descriptionTab" {...tabProps} />
 				)}
