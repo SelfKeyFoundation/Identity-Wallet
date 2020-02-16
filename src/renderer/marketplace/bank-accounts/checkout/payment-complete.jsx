@@ -1,10 +1,10 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
-import { CloseButtonIcon, HourGlassLargeIcon } from 'selfkey-ui';
+import { CloseButtonIcon, HourGlassLargeIcon, ModalWrap, ModalHeader, ModalBody } from 'selfkey-ui';
 
 const styles = theme => ({
-	container: {
+	modalWrap: {
 		position: 'relative',
 		width: '100%',
 		margin: '0 auto',
@@ -67,73 +67,81 @@ export const BankAccountsPaymentComplete = withStyles(styles)(props => {
 	const { classes, email, identity, onBackClick, onContinueClick } = props;
 	const simpleFlow = identity.type === 'corporate';
 	return (
-		<div className={classes.container}>
+		<ModalWrap className={classes.modalWrap}>
 			<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
-			<Grid
-				container
-				justify="flex-start"
-				alignItems="flex-start"
-				className={classes.containerHeader}
-			>
-				<Typography variant="body1">Payment Received</Typography>
-			</Grid>
-			<div className={classes.contentContainer}>
+			<ModalHeader className={classes.modalHeader}>
 				<Grid
 					container
 					justify="flex-start"
 					alignItems="flex-start"
-					className={classes.content}
+					className={classes.containerHeader}
 				>
-					<div className={classes.icon}>
-						<HourGlassLargeIcon />
-					</div>
-					<div className={classes.content}>
-						<div className={classes.description}>
-							<Typography variant="h1" gutterBottom>
-								Bank Account KYC Process Started
-							</Typography>
-							<Typography variant="body1" gutterBottom>
-								Thank you for payment!
-							</Typography>
-							{simpleFlow && (
-								<Typography variant="body2" gutterBottom>
-									One of our managers is reviewing the information you submitted
-									and{' '}
-									<strong>
-										will contact you shortly on the e-mail you provided{' '}
-									</strong>
-									, to continue the process. If you have any questions in the
-									meantime, you can reach us at:
-								</Typography>
-							)}
-
-							{!simpleFlow && (
-								<Typography variant="body2" gutterBottom>
-									Please click the continue button and select your preferred Bank
-									to continue the process. If you have any questions in the
-									meantime, you can reach us at:
-								</Typography>
-							)}
-							<Typography
-								variant="body2"
-								color="primary"
-								gutterBottom
-								className="email"
-							>
-								{email}
-							</Typography>
-						</div>
-						{!simpleFlow && (
-							<div className={classes.footer}>
-								<Button variant="contained" size="large" onClick={onContinueClick}>
-									Continue
-								</Button>
-							</div>
-						)}
-					</div>
+					<Typography variant="body1">Payment Received</Typography>
 				</Grid>
-			</div>
-		</div>
+			</ModalHeader>
+			<ModalBody>
+				<div className={classes.contentContainer}>
+					<Grid
+						container
+						justify="flex-start"
+						alignItems="flex-start"
+						className={classes.content}
+					>
+						<div className={classes.icon}>
+							<HourGlassLargeIcon />
+						</div>
+						<div className={classes.content}>
+							<div className={classes.description}>
+								<Typography variant="h1" gutterBottom>
+									Bank Account KYC Process Started
+								</Typography>
+								<Typography variant="body1" gutterBottom>
+									Thank you for payment!
+								</Typography>
+								{simpleFlow && (
+									<Typography variant="body2" gutterBottom>
+										One of our managers is reviewing the information you
+										submitted and{' '}
+										<strong>
+											will contact you shortly on the e-mail you provided{' '}
+										</strong>
+										, to continue the process. If you have any questions in the
+										meantime, you can reach us at:
+									</Typography>
+								)}
+
+								{!simpleFlow && (
+									<Typography variant="body2" gutterBottom>
+										Please click the continue button and select your preferred
+										Bank to continue the process. If you have any questions in
+										the meantime, you can reach us at:
+									</Typography>
+								)}
+								<Typography
+									variant="body2"
+									color="primary"
+									gutterBottom
+									className="email"
+								>
+									{email}
+								</Typography>
+							</div>
+							{!simpleFlow && (
+								<div className={classes.footer}>
+									<Button
+										variant="contained"
+										size="large"
+										onClick={onContinueClick}
+									>
+										Continue
+									</Button>
+								</div>
+							)}
+						</div>
+					</Grid>
+				</div>
+			</ModalBody>
+		</ModalWrap>
 	);
 });
 
