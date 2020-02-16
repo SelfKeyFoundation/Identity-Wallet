@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-	Grid,
-	Button,
-	Typography,
-	withStyles,
-	Input,
-	CircularProgress,
-	Paper
-} from '@material-ui/core';
+import { Grid, Button, Typography, withStyles, Input, CircularProgress } from '@material-ui/core';
 import { MergeIcon, ModalWrap, ModalHeader, ModalBody, CloseButtonIcon } from 'selfkey-ui';
 
 const styles = theme => ({
@@ -92,96 +84,73 @@ export const AssociateDid = withStyles(styles)(props => {
 	return (
 		<Grid container direction="column" justify="flex-start" alignItems="center" spacing={32}>
 			<ModalWrap className={classes.modalPosition}>
-				<Paper>
-					<CloseButtonIcon onClick={onCancelClick} className={classes.closeIcon} />
-					<ModalHeader>
-						<Grid
-							container
-							direction="row"
-							justify="flex-start"
-							alignItems="flex-start"
-						>
-							<Grid item>
-								<Typography variant="body1">
-									Associate DID with this wallet
-								</Typography>
-							</Grid>
+				<CloseButtonIcon onClick={onCancelClick} className={classes.closeIcon} />
+				<ModalHeader>
+					<Grid container direction="row" justify="flex-start" alignItems="flex-start">
+						<Grid item>
+							<Typography variant="body1">Associate DID with this wallet</Typography>
 						</Grid>
-					</ModalHeader>
-					<ModalBody>
-						<Grid
-							container
-							direction="row"
-							justify="flex-start"
-							alignItems="flex-start"
-						>
-							<Grid item xs={2}>
-								<MergeIcon className={classes.icon} />
-							</Grid>
-							<Grid item xs={10}>
-								<Typography variant="body1" gutterBottom>
-									If you already registered on the SelfKey Network, you can
-									associate your existing DID number with this wallet. Just
-									copy/paste it below.
-								</Typography>
-								<br />
-								<Typography
-									variant="overline"
-									gutterBottom
-									className={classes.label}
-								>
-									DID Number
-									{searching && (
-										<React.Fragment>
-											<span className={classes.loading}>
-												<CircularProgress size={20} />
-											</span>
-											<span id="searching" className={classes.searching}>
-												Please wait. Checking the blockchain for DID{' '}
-												information.
-											</span>
-										</React.Fragment>
-									)}
-								</Typography>
-								<Input
-									placeholder="did:selfkey:"
-									name="did"
-									value={did}
-									onChange={onFieldChange}
-									className={didInputClass}
-									disableUnderline
-								/>
-								{!searching && hasAssociateError && (
-									<span id="associateError" className={classes.errorText}>
-										{associateError}
-									</span>
+					</Grid>
+				</ModalHeader>
+				<ModalBody>
+					<Grid container direction="row" justify="flex-start" alignItems="flex-start">
+						<Grid item xs={2}>
+							<MergeIcon className={classes.icon} />
+						</Grid>
+						<Grid item xs={10}>
+							<Typography variant="body1" gutterBottom>
+								If you already registered on the SelfKey Network, you can associate
+								your existing DID number with this wallet. Just copy/paste it below.
+							</Typography>
+							<br />
+							<Typography variant="overline" gutterBottom className={classes.label}>
+								DID Number
+								{searching && (
+									<React.Fragment>
+										<span className={classes.loading}>
+											<CircularProgress size={20} />
+										</span>
+										<span id="searching" className={classes.searching}>
+											Please wait. Checking the blockchain for DID{' '}
+											information.
+										</span>
+									</React.Fragment>
 								)}
-								<Grid container spacing={24} className={classes.buttoms}>
-									<Grid item>
-										<Button
-											variant="contained"
-											disabled={hasAssociateError || isEmpty || searching}
-											size="large"
-											onClick={onAssociateDidClick}
-										>
-											Associate DID
-										</Button>
-									</Grid>
+							</Typography>
+							<Input
+								placeholder="did:selfkey:"
+								name="did"
+								value={did}
+								onChange={onFieldChange}
+								className={didInputClass}
+								disableUnderline
+							/>
+							{!searching && hasAssociateError && (
+								<span id="associateError" className={classes.errorText}>
+									{associateError}
+								</span>
+							)}
+							<Grid container spacing={24} className={classes.buttoms}>
+								<Grid item>
+									<Button
+										variant="contained"
+										disabled={hasAssociateError || isEmpty || searching}
+										size="large"
+										onClick={onAssociateDidClick}
+									>
+										Associate DID
+									</Button>
+								</Grid>
 
-									<Grid item>
-										<Button
-											variant="outlined"
-											size="large"
-											onClick={onCancelClick}
-										>
-											Cancel
-										</Button>
-									</Grid>
+								<Grid item>
+									<Button variant="outlined" size="large" onClick={onCancelClick}>
+										Cancel
+									</Button>
 								</Grid>
 							</Grid>
 						</Grid>
-					</ModalBody>
-				</Paper>
+					</Grid>
+				</ModalBody>
 			</ModalWrap>
 		</Grid>
 	);
