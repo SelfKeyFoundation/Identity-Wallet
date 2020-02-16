@@ -2,7 +2,7 @@ import React from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
-import { CloseButtonIcon } from 'selfkey-ui';
+import { CloseButtonIcon, ModalWrap, ModalHeader, ModalBody } from 'selfkey-ui';
 import { sanitize, FlagCountryName } from '.';
 
 const styles = theme => ({
@@ -12,18 +12,17 @@ const styles = theme => ({
 		margin: '0 auto',
 		maxWidth: '960px'
 	},
+	modalHeader: {
+		display: 'flex',
+		height: '76px'
+	},
 	containerHeader: {
-		padding: '22px 30px',
-		background: '#2A3540',
 		'& div': {
-			display: 'inline-block',
-			color: '#FFF'
+			color: '#FFF',
+			display: 'inline-block'
 		},
-		'& .region': {
-			marginLeft: '1em',
-			marginTop: '0.25em',
-			marginBottom: '0',
-			fontSize: '24px'
+		'& h2': {
+			marginLeft: '16px'
 		}
 	},
 	closeIcon: {
@@ -153,6 +152,10 @@ const styles = theme => ({
 		'& button': {
 			marginRight: '30px'
 		}
+	},
+	modalWrap: {
+		left: 'calc(50% - 452px)',
+		width: '960px'
 	}
 });
 
@@ -176,22 +179,22 @@ const PaymentCheckout = withStyles(styles)(
 		onStartClick,
 		startButtonText
 	}) => (
-		<div className={classes.container}>
+		<ModalWrap className={classes.modalWrap}>
 			<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
-			<Grid
-				container
-				justify="flex-start"
-				alignItems="flex-start"
-				className={classes.containerHeader}
-			>
-				<div>
-					<FlagCountryName code={countryCode} />
-				</div>
-				<Typography variant="body2" gutterBottom className="region">
-					{title}
-				</Typography>
-			</Grid>
-			<div className={classes.contentContainer}>
+			<ModalHeader className={classes.modalHeader}>
+				<Grid
+					container
+					justify="flex-start"
+					alignItems="center"
+					className={classes.containerHeader}
+				>
+					<div>
+						<FlagCountryName code={countryCode} />
+					</div>
+					<Typography variant="h2">{title}</Typography>
+				</Grid>
+			</ModalHeader>
+			<ModalBody>
 				<Grid
 					container
 					justify="flex-start"
@@ -351,8 +354,8 @@ const PaymentCheckout = withStyles(styles)(
 						</Button>
 					</div>
 				</Grid>
-			</div>
-		</div>
+			</ModalBody>
+		</ModalWrap>
 	)
 );
 
