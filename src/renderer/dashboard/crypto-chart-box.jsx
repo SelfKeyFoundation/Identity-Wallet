@@ -131,7 +131,8 @@ const styles = () => ({
 		justifyContent: 'space-between',
 		marginBottom: '30px',
 		maxHeight: '240px',
-		overflow: 'scroll'
+		overflowX: 'hidden',
+		overflowY: 'scroll'
 	},
 	tokenName: {
 		maxWidth: '130px',
