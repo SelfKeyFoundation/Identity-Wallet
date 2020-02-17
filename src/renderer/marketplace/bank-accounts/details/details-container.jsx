@@ -14,7 +14,7 @@ const styles = theme => ({});
 
 class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	state = {
-		tab: 'types',
+		tab: 'whatyouget',
 		loading: false
 	};
 
@@ -147,7 +147,11 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 	render() {
 		const { jurisdiction, keyRate, kycRequirements, country, templateId } = this.props;
 		const { price } = jurisdiction;
-		const { region } = jurisdiction.data;
+		const { region, walletDescription, accounts } = jurisdiction.data;
+		const timeToOpen = Object.keys(accounts).reduce((current, accountId) => {
+			const account = accounts[accountId];
+			return current || account.timeToOpen;
+		}, '');
 
 		return (
 			<BankingDetailsPage
@@ -169,6 +173,11 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 				templateId={templateId}
 				onBack={this.onBackClick}
 				onStatusAction={this.onStatusActionClick}
+				description={walletDescription}
+				timeToForm={timeToOpen}
+				initialDocsText={`You will be required to provide a few basic information about yourself like full name and email. This will be done through SelfKey ID Wallet.`}
+				kycProcessText={`You will undergo a standard KYC process and our team will get in touch with you to make sure we have all the information needed.`}
+				getFinalDocsText={`Once the account opening process is done you will receive all the relevant documents, access codes in persion/via courier or on your email.`}
 			/>
 		);
 	}

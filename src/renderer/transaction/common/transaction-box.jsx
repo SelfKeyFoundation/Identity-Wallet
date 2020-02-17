@@ -14,6 +14,9 @@ const styles = theme => ({
 		width: '34px !important',
 		height: '34px !important',
 		borderRadius: '8px'
+	},
+	popupPadding: {
+		padding: '60px 85px'
 	}
 });
 
@@ -38,7 +41,7 @@ const IconTitle = withStyles(styles)(({ classes, cryptoCurrency, title }) => {
 		<Grid container direction="row" justify="flex-start" alignItems="center" spacing={16}>
 			<Grid item>{icon}</Grid>
 			<Grid item>
-				<Typography variant="h5">{title}</Typography>
+				<Typography variant="body1">{title}</Typography>
 			</Grid>
 		</Grid>
 	);
@@ -50,6 +53,7 @@ export const TransactionBox = withStyles(styles)(
 			open={open}
 			closeAction={closeAction}
 			text={<IconTitle cryptoCurrency={cryptoCurrency} title={title} classes={classes} />}
+			xtraClass={classes.popupPadding}
 		>
 			{children}
 		</Popup>

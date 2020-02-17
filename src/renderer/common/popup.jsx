@@ -37,7 +37,8 @@ const PopupWrap = props => {
 		text,
 		open = true,
 		isHeaderVisible = true,
-		displayLogo = false
+		displayLogo = false,
+		xtraClass = '',
 	} = props;
 	return (
 		<Modal open={open} className={`${classes.modal} ${props.className}`}>
@@ -74,7 +75,7 @@ const PopupWrap = props => {
 								)}
 							</ModalHeader>
 						)}
-						<ModalBody>{children}</ModalBody>
+						<ModalBody className={xtraClass}>{children}</ModalBody>
 					</div>
 				</Paper>
 			</ModalWrap>
