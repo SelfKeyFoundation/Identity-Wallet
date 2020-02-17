@@ -102,7 +102,7 @@ export const BuyKeyContent = withStyles(styles)(
 									<Divider className={classes.divider} />
 									<Typography variant="subtitle2" color="secondary">
 										KEY is the main token used in the SelfKey Wallet, and it’s
-										used when accesing services in the marketplace. ETH is
+										used when accessing services in the marketplace. ETH is
 										needed for the network transaction fee{' '}
 										<a className={classes.link} onClick={externalLink}>
 											(what’s this?)
