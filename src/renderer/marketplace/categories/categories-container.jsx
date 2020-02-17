@@ -9,6 +9,7 @@ import { identitySelectors } from 'common/identity';
 class MarketplaceCategoriesContainer extends PureComponent {
 	componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
+		window.scrollTo(0, 0);
 	}
 
 	actions = {

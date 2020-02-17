@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
-import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { tokensOperations, tokensSelectors } from 'common/tokens';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { walletTokensOperations } from 'common/wallet-tokens';
+import history from 'common/store/history';
 import {
 	Grid,
 	Button,
@@ -25,6 +25,10 @@ import {
 } from 'selfkey-ui';
 
 const styles = theme => ({
+	wrap: {
+		margin: 0,
+		width: '100%'
+	},
 	back: {
 		position: 'absolute',
 		top: '100px',
@@ -110,6 +114,7 @@ class AddTokenContainerComponent extends PureComponent {
 	componentDidMount() {
 		this.props.dispatch(tokensOperations.loadTokensOperation());
 		this.resetErrors();
+		window.scrollTo(0, 0);
 	}
 
 	componentDidUpdate(prevProps) {
@@ -137,7 +142,7 @@ class AddTokenContainerComponent extends PureComponent {
 
 	handleBackClick = evt => {
 		evt && evt.preventDefault();
-		this.props.dispatch(push('/main/crypto-manager'));
+		this.props.dispatch(history.getHistory().goBack());
 	};
 
 	handleFieldChange = async event => {
@@ -234,6 +239,7 @@ class AddTokenContainerComponent extends PureComponent {
 				justify="flex-start"
 				alignItems="center"
 				spacing={32}
+				className={classes.wrap}
 			>
 				<BackButton onclick={this.handleBackClick} />
 				<Grid item className={classes.topSpace}>

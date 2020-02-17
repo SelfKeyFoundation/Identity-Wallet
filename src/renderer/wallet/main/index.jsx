@@ -35,6 +35,7 @@ import TransactionError from '../../transaction/transaction-error/containers/tra
 import TransactionDeclined from '../../transaction/transaction-declined/containers/transaction-declined';
 import TransactionUnlock from '../../transaction/transaction-unlock';
 import TransactionTimeout from '../../transaction/transaction-timeout';
+import TransactionsHistoryModal from '../../transaction/transactions-history-modal';
 import HardwareWalletTimer from '../../marketplace/authentication/hardware-wallet/timer';
 import HardwareWalletTimeout from '../../marketplace/authentication/hardware-wallet/timeout';
 import HardwareWalletDeclined from '../../marketplace/authentication/hardware-wallet/declined';
@@ -155,6 +156,10 @@ class Main extends PureComponent {
 					<Route
 						path={`${match.path}/transaction-timeout`}
 						component={TransactionTimeout}
+					/>
+					<Route
+						path={`${match.path}/transactions-history`}
+						component={TransactionsHistoryModal}
 					/>
 					<Route
 						path={`${match.path}/hd-transaction-timer`}

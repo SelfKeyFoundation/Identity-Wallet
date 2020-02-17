@@ -36,7 +36,15 @@ const styles = theme => ({
 });
 
 const CorporateOverviewTab = withStyles(styles)(
-	({ classes, applications, profile, members, onEditCorporateDetails, didComponent }) => (
+	({
+		classes,
+		applications,
+		profile,
+		members,
+		onEditCorporateDetails,
+		onEditManageMembers,
+		didComponent
+	}) => (
 		<div>
 			<div className={classes.overviewBox}>
 				{!profile.identity.did && <Grid item>{didComponent}</Grid>}
@@ -53,7 +61,11 @@ const CorporateOverviewTab = withStyles(styles)(
 					</div>
 				</div>
 				<div>
-					<CorporateCapTable profile={profile} members={members} />
+					<CorporateCapTable
+						profile={profile}
+						members={members}
+						onEdit={onEditManageMembers}
+					/>
 				</div>
 				<div className="corporateShareholding">
 					<div>
