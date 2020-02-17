@@ -353,7 +353,7 @@ export class CryptoChartBoxComponent extends React.Component {
 											title={token.name}
 											className={classes.overflowEllipsis}
 										>
-											{token.name}
+											{token.name === 'Selfkey' ? 'SelfKey' : token.name}
 										</Typography>
 									</Grid>
 									<Grid item xs={12}>
@@ -383,7 +383,7 @@ export class CryptoChartBoxComponent extends React.Component {
 								<Grid item xs={12}>
 									<PriceSummary
 										locale={locale}
-										style="currency"
+										priceStyle="currency"
 										currency={fiatCurrency}
 										className={classes.smallText}
 										valueClass={classes.texts}
