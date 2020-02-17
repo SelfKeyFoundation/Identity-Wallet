@@ -38,7 +38,7 @@ class WalletExportQRCodeComponent extends PureComponent {
 					<Grid item>
 						{keystore && keystore.length ? (
 							<QRCode
-								size={250}
+								size={350}
 								bgColor={'#262f39'}
 								fgColor={'#ffffff'}
 								level={'H'}
