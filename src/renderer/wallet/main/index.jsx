@@ -43,6 +43,8 @@ import HardwareWalletError from '../../marketplace/authentication/hardware-walle
 import AuthenticationError from '../../marketplace/authentication/error';
 import { CurrentApplication, ApplicationInProgress } from '../../kyc';
 import WalletExportContainer from './export-container';
+import { WalletExportWarning } from './export-warning';
+import { WalletExportQRCode } from './export-qr-code';
 
 import md5 from 'md5';
 import ReactPiwik from 'react-piwik';
@@ -199,10 +201,10 @@ class Main extends PureComponent {
 							render={() => (
 								<WalletExportContainer>
 									{({ onCancel, onExport }) => (
-										<div>
-											WARNING <button onClick={onExport}>export</button>
-											<button onClick={onCancel}>Cancel</button>
-										</div>
+										<WalletExportWarning
+											onExport={onExport}
+											onCancel={onCancel}
+										/>
 									)}
 								</WalletExportContainer>
 							)}
@@ -214,11 +216,10 @@ class Main extends PureComponent {
 							render={() => (
 								<WalletExportContainer>
 									{({ onCancel, keystore }) => (
-										<div>
-											QRCode
-											{keystore || 'Loading'}
-											<button onClick={onCancel}>Close</button>
-										</div>
+										<WalletExportQRCode
+											onCancel={onCancel}
+											keystore={keystore}
+										/>
 									)}
 								</WalletExportContainer>
 							)}
