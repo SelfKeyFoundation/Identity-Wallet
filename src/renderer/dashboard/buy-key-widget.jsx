@@ -61,7 +61,10 @@ class BuyKeyWidget extends PureComponent {
 	};
 
 	handleExternalLink = e => {
-		window.openExternal(e, 'https://help.selfkey.org/article/147-what-is-a-did');
+		window.openExternal(
+			e,
+			'https://help.selfkey.org/article/128-how-to-pay-for-marketplace-products-services-with-key'
+		);
 	};
 
 	render() {

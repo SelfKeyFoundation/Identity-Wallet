@@ -7,7 +7,7 @@ import BuyKeyContent from './buy-key-popup-modal';
 
 const BuyKeyPopupComponent = props => {
 	return (
-		<Popup closeAction={props.closeAction} text="Buy KEY from our parners.">
+		<Popup closeAction={props.closeAction} text="Buy KEY from our partners.">
 			<BuyKeyContent {...props} />
 		</Popup>
 	);
