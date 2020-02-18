@@ -356,7 +356,8 @@ class Toolbar extends PureComponent {
 			wallet,
 			onCreateCorporateProfileClick,
 			primaryToken,
-			showCorporate
+			showCorporate,
+			isExportableAccount
 		} = this.props;
 		return (
 			<div>
@@ -364,6 +365,7 @@ class Toolbar extends PureComponent {
 					isOpen={isSidebarOpen}
 					onClose={onToggleMenu}
 					onProfileNavigate={onProfileNavigate}
+					isExportableAccount={isExportableAccount}
 				/>
 				<Grid
 					container
