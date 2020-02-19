@@ -19,6 +19,7 @@ export const ENDPOINT_CONFIG = {
 	3: { url: 'http://api-ropsten.etherscan.io/api' }
 };
 export const API_ENDPOINT = ENDPOINT_CONFIG[config.chainId].url;
+const API_KEY = 'QA2JBTDK2VRFV769EARR8X684M85UFGCBU';
 
 export const TX_HISTORY_ENDPOINT_CONFIG = {
 	1: { url: 'https://etherscan.io/tx' },
@@ -28,9 +29,9 @@ export const TX_HISTORY_API_ENDPOINT = TX_HISTORY_ENDPOINT_CONFIG[config.chainId
 
 export let OFFSET = 1000;
 
-export const TX_LIST_ACTION = `?module=account&action=txlist&sort=desc&offset=${OFFSET}`;
-export const TOKEN_TX_ACTION = `?module=account&action=tokentx&sort=desc&offset=${OFFSET}`;
-export const TX_RECEIPT_ACTION = '?module=proxy&action=eth_getTransactionReceipt';
+export const TX_LIST_ACTION = `?module=account&action=txlist&sort=desc&offset=${OFFSET}&apikey=${API_KEY}`;
+export const TOKEN_TX_ACTION = `?module=account&action=tokentx&sort=desc&offset=${OFFSET}&apikey=${API_KEY}`;
+export const TX_RECEIPT_ACTION = `?module=proxy&action=eth_getTransactionReceipt&apikey=${API_KEY}`;
 
 // in order to change key name in runtime
 export const KEY_MAP = {
@@ -105,7 +106,7 @@ export class TxHistoryService {
 		return this.queue.push({ method: 'get', url: ACTION_URL });
 	}
 	getMostResentBlock() {
-		const ACTION_URL = API_ENDPOINT + '?module=proxy&action=eth_blockNumber';
+		const ACTION_URL = API_ENDPOINT + `?module=proxy&action=eth_blockNumber&apikey=${API_KEY}`;
 		return this.queue.push({ method: 'get', url: ACTION_URL });
 	}
 	makeRequest(method, url, data) {
