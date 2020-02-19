@@ -11,6 +11,10 @@ import { identitySelectors } from 'common/identity';
 const styles = theme => ({});
 
 class ExchangesListContainer extends MarketplaceExchangesComponent {
+	componentDidMount() {
+		window.scrollTo(0, 0);
+	}
+
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
 
 	onDetailsClick = id => this.props.dispatch(push(this.detailsRoute(id)));

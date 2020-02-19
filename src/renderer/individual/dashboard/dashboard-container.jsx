@@ -47,6 +47,7 @@ class IndividualDashboardContainerComponent extends PureComponent {
 		if (wallet.profile === 'local') {
 			await this.loadRelyingParties(vendors);
 		}
+		window.scrollTo(0, 0);
 	}
 
 	componentDidUpdate(prevProps) {

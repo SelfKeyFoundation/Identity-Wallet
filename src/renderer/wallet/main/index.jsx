@@ -35,6 +35,7 @@ import TransactionError from '../../transaction/transaction-error/containers/tra
 import TransactionDeclined from '../../transaction/transaction-declined/containers/transaction-declined';
 import TransactionUnlock from '../../transaction/transaction-unlock';
 import TransactionTimeout from '../../transaction/transaction-timeout';
+import TransactionsHistoryModal from '../../transaction/transactions-history-modal';
 import HardwareWalletTimer from '../../marketplace/authentication/hardware-wallet/timer';
 import HardwareWalletTimeout from '../../marketplace/authentication/hardware-wallet/timeout';
 import HardwareWalletDeclined from '../../marketplace/authentication/hardware-wallet/declined';
@@ -42,6 +43,9 @@ import HardwareWalletUnlock from '../../marketplace/authentication/hardware-wall
 import HardwareWalletError from '../../marketplace/authentication/hardware-wallet/error';
 import AuthenticationError from '../../marketplace/authentication/error';
 import { CurrentApplication, ApplicationInProgress } from '../../kyc';
+import WalletExportContainer from './export-container';
+import { WalletExportWarning } from './export-warning';
+import { WalletExportQRCode } from './export-qr-code';
 
 import md5 from 'md5';
 import ReactPiwik from 'react-piwik';
@@ -87,7 +91,7 @@ class Main extends PureComponent {
 	}
 
 	render() {
-		const { match, classes } = this.props;
+		const { match, classes, isExportable } = this.props;
 		return (
 			<Grid
 				container
@@ -154,6 +158,10 @@ class Main extends PureComponent {
 						component={TransactionTimeout}
 					/>
 					<Route
+						path={`${match.path}/transactions-history`}
+						component={TransactionsHistoryModal}
+					/>
+					<Route
 						path={`${match.path}/hd-transaction-timer`}
 						component={HardwareWalletTransactionTimer}
 					/>
@@ -192,6 +200,36 @@ class Main extends PureComponent {
 
 					<Route path={`${match.path}/corporate`} component={CorporateContainer} />
 					<Route path={`${match.path}/individual`} component={IndividualContainer} />
+					{isExportable && (
+						<Route
+							path={`${match.path}/export-wallet/warning`}
+							render={() => (
+								<WalletExportContainer>
+									{({ onCancel, onExport }) => (
+										<WalletExportWarning
+											onExport={onExport}
+											onCancel={onCancel}
+										/>
+									)}
+								</WalletExportContainer>
+							)}
+						/>
+					)}
+					{isExportable && (
+						<Route
+							path={`${match.path}/export-wallet/qr`}
+							render={() => (
+								<WalletExportContainer>
+									{({ onCancel, keystore }) => (
+										<WalletExportQRCode
+											onCancel={onCancel}
+											keystore={keystore}
+										/>
+									)}
+								</WalletExportContainer>
+							)}
+						/>
+					)}
 				</Grid>
 			</Grid>
 		);
@@ -201,7 +239,8 @@ class Main extends PureComponent {
 const mapStateToProps = (state, props) => {
 	return {
 		address: walletSelectors.getWallet(state).address,
-		walletType: appSelectors.selectWalletType(state)
+		walletType: appSelectors.selectWalletType(state),
+		isExportable: appSelectors.selectCanExportWallet(state)
 	};
 };
 

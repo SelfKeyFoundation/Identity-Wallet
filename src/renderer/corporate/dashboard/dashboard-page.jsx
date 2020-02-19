@@ -25,6 +25,7 @@ class CorporateDashboardPage extends CorporateComponent {
 	onTabChange = tab => this.setState({ tab });
 
 	onEditCorporateDetails = () => this.setState({ tab: 'information' });
+	onEditManageMembers = () => this.setState({ tab: 'members' });
 
 	render() {
 		const { classes } = this.props;
@@ -47,6 +48,7 @@ class CorporateDashboardPage extends CorporateComponent {
 					<CorporateDashboardTabs
 						{...this.props}
 						onEditCorporateDetails={this.onEditCorporateDetails}
+						onEditManageMembers={this.onEditManageMembers}
 						tab={tab}
 						onTabChange={this.onTabChange}
 					/>
