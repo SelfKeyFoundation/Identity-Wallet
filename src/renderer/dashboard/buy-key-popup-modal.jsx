@@ -27,6 +27,7 @@ const styles = theme => ({
 		columnBreakInside: 'avoid',
 		color: '#FFFFFF',
 		marginBottom: 0,
+		position: 'initial',
 		'& a': {
 			textDecoration: 'none',
 			color: '#FFFFFF'
