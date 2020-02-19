@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles, Grid, Typography } from '@material-ui/core';
-import { CustomFullIcon } from 'selfkey-ui';
+import { Erc20Icon } from 'selfkey-ui';
 import Popup from '../../common/popup';
 
 const styles = theme => ({
@@ -21,7 +21,7 @@ const IconTitle = withStyles(styles)(({ classes, title }) => {
 	return (
 		<Grid container direction="row" justify="flex-start" alignItems="center" spacing={16}>
 			<Grid item>
-				<CustomFullIcon classes={{ root: classes.custom }} />
+				<Erc20Icon classes={{ root: classes.custom }} />
 			</Grid>
 			<Grid item>
 				<Typography variant="body1">{title}</Typography>

@@ -18736,9 +18736,9 @@ select@^1.1.2:
   resolved "https://registry.yarnpkg.com/select/-/select-1.1.2.tgz#0e7350acdec80b1108528786ec1d4418d11b396d"
   integrity sha1-DnNQrN7ICxEIUoeG7B1EGNEbOW0=
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#35a31ebd829a2010e2250eb0713a15d75bf52e81":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#264387c7e3d881ac73dcfbb3c4889fbc43a6b1f4":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#35a31ebd829a2010e2250eb0713a15d75bf52e81"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#264387c7e3d881ac73dcfbb3c4889fbc43a6b1f4"
   dependencies:
     "@material-ui/core" "3.9.2"
     "@material-ui/icons" "3.0.2"
