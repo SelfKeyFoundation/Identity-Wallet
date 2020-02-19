@@ -155,6 +155,15 @@ const styles = theme => ({
 	}
 });
 
+const emptyTableStyle = theme => ({
+	tableRow: {
+		backgroundColor: 'transparent',
+		'& .tableCell': {
+			textAlign: 'center'
+		}
+	}
+});
+
 const getIconForTransaction = (isError, sent) => {
 	switch (isError) {
 		case 1:
@@ -259,6 +268,18 @@ const filterTransactionByToken = (transaction, token) => {
 	}
 	return valid;
 };
+
+export const EmptyTableStatus = withStyles(emptyTableStyle)(({ classes }) => {
+	return (
+		<TableRow className={classes.tableRow}>
+			<TableCell colSpan="6" className="tableCell">
+				<Typography variant="body1" color="secondary">
+					You`ll see here all your transactions.
+				</Typography>
+			</TableCell>
+		</TableRow>
+	);
+});
 
 class TransactionsHistoryModal extends PureComponent {
 	state = {
@@ -512,9 +533,7 @@ class TransactionsHistoryModal extends PureComponent {
 											}
 										)
 									) : (
-										<Typography variant="body2">
-											You {"don't"} have any transactions yet.
-										</Typography>
+										<EmptyTableStatus />
 									)}
 								</TableBody>
 								<TableFooter>
