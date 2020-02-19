@@ -19,7 +19,10 @@ import {
 	TableFooter,
 	TablePagination,
 	IconButton,
-	Select
+	Select,
+	MenuItem,
+	Input,
+	FormControl
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import {
@@ -102,12 +105,15 @@ const styles = theme => ({
 		maxWidth: '110px'
 	},
 	container: {
-		width: '100%',
+		border: '1px solid #384656',
+		borderRadius: '4px',
 		margin: '50px auto 0',
-		maxWidth: '960px'
+		maxWidth: '960px',
+		width: '100%'
 	},
 	title: {
 		background: '#2A3540',
+		borderRadius: '4px 4px 0 0',
 		padding: '22px 30px'
 	},
 	contentContainer: {
@@ -116,11 +122,12 @@ const styles = theme => ({
 	},
 	content: {
 		background: '#262F39',
-		padding: '22px 30px',
-		width: '100%',
-		justifyContent: 'space-between',
+		borderRadius: '0 0 4px 4px',
 		boxSizing: 'border-box',
-		margin: 0
+		justifyContent: 'flex-start',
+		margin: 0,
+		padding: '22px 30px',
+		width: '100%'
 	},
 	tableRow: {
 		'& td': {
@@ -142,6 +149,9 @@ const styles = theme => ({
 				fill: 'white'
 			}
 		}
+	},
+	dropdown: {
+		width: '100%'
 	}
 });
 
@@ -252,6 +262,7 @@ const filterTransactionByToken = (transaction, token) => {
 
 class TransactionsHistoryModal extends PureComponent {
 	state = {
+		option: -1,
 		rowsPerPage: 10,
 		page: 0
 	};
@@ -288,6 +299,10 @@ class TransactionsHistoryModal extends PureComponent {
 		return transaction.from.toLowerCase() === address.toLowerCase();
 	};
 
+	handleOptionSelection = event => {
+		this.setState({ option: event.target.value });
+	};
+
 	renderDate(timestamp) {
 		const { year, month, day } = getAbrDateFromTimestamp(timestamp);
 		return (
@@ -304,7 +319,7 @@ class TransactionsHistoryModal extends PureComponent {
 					filterTransactionByToken(transaction, cryptoCurrency)
 			  )
 			: this.props.transactions;
-		const { rowsPerPage, page } = this.state;
+		const { rowsPerPage, page, option } = this.state;
 
 		return (
 			<Grid container>
@@ -328,33 +343,38 @@ class TransactionsHistoryModal extends PureComponent {
 						spacing={40}
 						className={classes.content}
 					>
-						<Grid container direction="column">
+						<Grid
+							container
+							direction="column"
+							style={{ width: '290px', marginRight: '30px' }}
+						>
 							<Typography variant="overline" className={classes.label} gutterBottom>
 								Transaction Type
 							</Typography>
-							<Select
-								native
-								value=""
-								displayEmpty
-								IconComponent={KeyboardArrowDown}
-								className={classes.filterInput}
-							>
-								<option value={-1} className={classes.selectItem}>
-									Choose...
-								</option>
-								{['sent', 'buy', 'receive'].map(option => (
-									<option
-										key={option}
-										value={option}
-										className={classes.selectItem}
-									>
-										{option}
-									</option>
-								))}
-							</Select>
+							<FormControl variant="filled" fullWidth>
+								<Select
+									value={option}
+									displayEmpty
+									onChange={this.handleOptionSelection}
+									disableUnderline
+									IconComponent={KeyboardArrowDown}
+									input={<Input disableUnderline fullWidth />}
+									autoWidth
+									className={classes.filterInput}
+								>
+									<MenuItem value={-1} className={classes.dropdown}>
+										<em>Choose...</em>
+									</MenuItem>
+									{['sent', 'buy', 'receive'].map(option => (
+										<MenuItem key={option} value={option}>
+											{option}
+										</MenuItem>
+									))}
+								</Select>
+							</FormControl>
 						</Grid>
 
-						<Grid container direction="column">
+						<Grid container direction="column" style={{ width: '290px' }}>
 							<Typography variant="overline" className={classes.label} gutterBottom>
 								Date
 							</Typography>
