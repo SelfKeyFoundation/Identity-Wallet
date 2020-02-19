@@ -2,7 +2,7 @@ import React from 'react';
 import { Chart } from 'react-google-charts';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { NumberFormat, PriceSummary } from 'selfkey-ui';
+import { NumberFormat, PriceSummary, EthereumIcon, SelfkeyIcon } from 'selfkey-ui';
 import { Grid, Paper, Typography, Button } from '@material-ui/core';
 import { getLocale } from 'common/locale/selectors';
 import { getViewAll } from 'common/view-all-tokens/selectors';
@@ -21,10 +21,11 @@ const styles = () => ({
 		padding: '16px 30px'
 	},
 	coloredBox: {
-		width: '44px !important',
-		height: '44px !important',
 		borderRadius: '8px !important',
-		position: 'relative'
+		height: '44px !important',
+		marginRight: '10px',
+		position: 'relative',
+		width: '44px !important'
 	},
 	coloredBoxText: {
 		position: 'absolute',
@@ -130,7 +131,8 @@ const styles = () => ({
 		justifyContent: 'space-between',
 		marginBottom: '30px',
 		maxHeight: '240px',
-		overflow: 'scroll'
+		overflowX: 'hidden',
+		overflowY: 'scroll'
 	},
 	tokenName: {
 		maxWidth: '130px',
@@ -146,7 +148,10 @@ const styles = () => ({
 		marginTop: '20px'
 	},
 	flex: {
-		display: 'flex'
+		display: 'flex',
+		'& svg': {
+			marginRight: '10px'
+		}
 	},
 	flexContainer: {
 		alignItems: 'flex-start',
@@ -319,6 +324,27 @@ export class CryptoChartBoxComponent extends React.Component {
 		}, 0);
 	};
 
+	getTokenIcon(classes, token, index) {
+		switch (token.name) {
+			case 'Ethereum':
+				return <EthereumIcon />;
+			case 'Selfkey':
+				return <SelfkeyIcon />;
+			default:
+				return (
+					<div
+						className={classes.coloredBox}
+						style={{
+							backgroundColor:
+								index <= 4 ? this.getColors()[index] : this.OTHERS_COLOR
+						}}
+					>
+						<div className={classes.coloredBoxText}>{token.name.charAt(0)}</div>
+					</div>
+				);
+		}
+	}
+
 	getTokensLegend(classes, tokens, locale, fiatCurrency, manageTransferAction) {
 		return tokens.map((token, index) => {
 			return (
@@ -335,16 +361,7 @@ export class CryptoChartBoxComponent extends React.Component {
 				>
 					<div className={classes.flexContainer}>
 						<div className={classes.flex}>
-							<div
-								className={classes.coloredBox}
-								style={{
-									backgroundColor:
-										index <= 4 ? this.getColors()[index] : this.OTHERS_COLOR,
-									marginRight: '10px'
-								}}
-							>
-								<div className={classes.coloredBoxText}>{token.name.charAt(0)}</div>
-							</div>
+							{this.getTokenIcon(classes, token, index)}
 							<div className={classes.tokenName}>
 								<Grid container alignItems="flex-start">
 									<Grid item xs={12}>
@@ -353,7 +370,7 @@ export class CryptoChartBoxComponent extends React.Component {
 											title={token.name}
 											className={classes.overflowEllipsis}
 										>
-											{token.name}
+											{token.name === 'Selfkey' ? 'SelfKey' : token.name}
 										</Typography>
 									</Grid>
 									<Grid item xs={12}>
@@ -383,7 +400,7 @@ export class CryptoChartBoxComponent extends React.Component {
 								<Grid item xs={12}>
 									<PriceSummary
 										locale={locale}
-										style="currency"
+										priceStyle="currency"
 										currency={fiatCurrency}
 										className={classes.smallText}
 										valueClass={classes.texts}
