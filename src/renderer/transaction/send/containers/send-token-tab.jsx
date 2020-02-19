@@ -189,11 +189,6 @@ class SendTokenTabComponent extends PureComponent {
 				</div>
 				<Divider className={classes.divider} />
 
-				{/* {addressError && (
-					<span className={classes.addressErrorText}>
-						Invalid address. Please check and try again.
-					</span>
-				)} */}
 				<TransactionFeeBox
 					changeGasLimitAction={this.withLock(this.handleGasLimitChange)}
 					changeGasPriceAction={this.withLock(this.handleGasPriceChange)}
