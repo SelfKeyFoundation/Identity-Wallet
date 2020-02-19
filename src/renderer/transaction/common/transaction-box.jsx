@@ -1,45 +1,28 @@
 import React from 'react';
 import { withStyles, Grid, Typography } from '@material-ui/core';
-import { EthereumIcon, SelfkeyIcon, CustomIcon } from 'selfkey-ui';
+import { CustomFullIcon } from 'selfkey-ui';
 import Popup from '../../common/popup';
 
 const styles = theme => ({
-	icon: {
-		width: '34px !important',
-		height: '34px !important',
-		borderRadius: '8px',
-		backgroundColor: '#00C0D9'
-	},
 	custom: {
-		width: '34px !important',
-		height: '34px !important',
+		width: '44px !important',
+		height: '44px !important',
 		borderRadius: '8px'
 	},
 	popupPadding: {
 		padding: '60px 85px'
+	},
+	header: {
+		padding: '11px 30px'
 	}
 });
 
-const IconTitle = withStyles(styles)(({ classes, cryptoCurrency, title }) => {
-	let icon = null;
-
-	switch (cryptoCurrency) {
-		case 'KEY':
-			icon = <SelfkeyIcon classes={{ root: classes.icon }} />;
-			break;
-		case 'KI':
-			icon = <SelfkeyIcon classes={{ root: classes.icon }} />;
-			break;
-		case 'ETH':
-			icon = <EthereumIcon classes={{ root: classes.icon }} />;
-			break;
-		default:
-			icon = <CustomIcon classes={{ root: classes.custom }} />;
-	}
-
+const IconTitle = withStyles(styles)(({ classes, title }) => {
 	return (
 		<Grid container direction="row" justify="flex-start" alignItems="center" spacing={16}>
-			<Grid item>{icon}</Grid>
+			<Grid item>
+				<CustomFullIcon classes={{ root: classes.custom }} />
+			</Grid>
 			<Grid item>
 				<Typography variant="body1">{title}</Typography>
 			</Grid>
@@ -48,12 +31,13 @@ const IconTitle = withStyles(styles)(({ classes, cryptoCurrency, title }) => {
 });
 
 export const TransactionBox = withStyles(styles)(
-	({ classes, children, cryptoCurrency, closeAction, title, open = true }) => (
+	({ classes, children, closeAction, title, open = true }) => (
 		<Popup
 			open={open}
 			closeAction={closeAction}
-			text={<IconTitle cryptoCurrency={cryptoCurrency} title={title} classes={classes} />}
+			text={<IconTitle title={title} classes={classes} />}
 			xtraClass={classes.popupPadding}
+			headerClass={classes.header}
 		>
 			{children}
 		</Popup>
