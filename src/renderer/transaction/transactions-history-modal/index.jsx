@@ -215,7 +215,7 @@ const getCustomValue = (transaction, sent) => {
 			minimumFractionDigits: 0,
 			maximumFractionDigits: 4
 		});
-		return `${sent ? (a !== 0 ? '-' : '') : '+'}${convertExponentialToDecimal(a)}`;
+		return `${sent ? (a !== '0' ? '-' : '') : '+'}${convertExponentialToDecimal(a)}`;
 	}
 };
 
