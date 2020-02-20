@@ -19,7 +19,7 @@ export const ENDPOINT_CONFIG = {
 	3: { url: 'http://api-ropsten.etherscan.io/api' }
 };
 export const API_ENDPOINT = ENDPOINT_CONFIG[config.chainId].url;
-const API_KEY = 'QA2JBTDK2VRFV769EARR8X684M85UFGCBU';
+export const API_KEY = 'QA2JBTDK2VRFV769EARR8X684M85UFGCBU';
 
 export const TX_HISTORY_ENDPOINT_CONFIG = {
 	1: { url: 'https://etherscan.io/tx' },
