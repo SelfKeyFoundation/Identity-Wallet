@@ -151,7 +151,7 @@ const styles = theme => ({
 		}
 	},
 	dropdown: {
-		width: '100%'
+		width: '250px'
 	}
 });
 
