@@ -7,7 +7,17 @@ import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { withStyles } from '@material-ui/core/styles';
-import { MenuItem, Select, Input, Tabs, Tab } from '@material-ui/core';
+import {
+	MenuItem,
+	Select,
+	Input,
+	Tabs,
+	Tab,
+	Grid,
+	Button,
+	Typography,
+	Divider
+} from '@material-ui/core';
 import { appOperations, appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
 import { debounce, over } from 'lodash';
@@ -15,7 +25,8 @@ import { KeyboardArrowDown } from '@material-ui/icons';
 import { InputTitle } from '../../common/input-title';
 import { getWallet } from 'common/wallet/selectors';
 import ReceiveTokenTab from './containers/receive-token-tab';
-import SendTokenTab from './containers/send-token-tab';
+// import SendTokenTab from './containers/send-token-tab';
+import { NumberFormat, TransactionFeeBox } from 'selfkey-ui';
 
 const styles = theme => ({
 	container: {
@@ -251,9 +262,6 @@ class TransactionSendBoxContainer extends PureComponent {
 	renderSelectTokenItems() {
 		const { tokens, classes } = this.props;
 
-		// console.log(tokens);
-		// console.log(this.props.match.params.sendingAddress);
-
 		let activeTokens = tokens.filter(token => {
 			return token.recordState === 1;
 		});
@@ -269,6 +277,58 @@ class TransactionSendBoxContainer extends PureComponent {
 		});
 	}
 
+	renderButtons() {
+		const { classes, addressError, address, ethFee, locked, sending } = this.props;
+		const sendBtnIsEnabled =
+			address && +this.state.amount && !addressError && ethFee && !locked;
+
+		if (sending) {
+			return (
+				<Grid
+					container
+					direction="row"
+					justify="center"
+					alignItems="center"
+					className={classes.actionButtonsContainer}
+					spacing={24}
+				>
+					<Grid item>
+						<Button variant="contained" size="large" onClick={this.handleConfirm}>
+							CONFIRM
+						</Button>
+					</Grid>
+					<Grid item>
+						<Button variant="outlined" size="large" onClick={this.handleCancel}>
+							CANCEL
+						</Button>
+					</Grid>
+				</Grid>
+			);
+		} else {
+			return (
+				<Grid
+					container
+					direction="row"
+					justify="center"
+					alignItems="center"
+					className={classes.actionButtonsContainer}
+				>
+					<Grid item>
+						<Button
+							disabled={!sendBtnIsEnabled}
+							className={classes.button}
+							onClick={this.handleSend}
+							variant="contained"
+							size="large"
+						>
+							SEND
+						</Button>
+					</Grid>
+				</Grid>
+			);
+		}
+	}
+
 	render() {
 		const {
 			classes,
@@ -280,6 +340,7 @@ class TransactionSendBoxContainer extends PureComponent {
 		} = this.props;
 		let { cryptoCurrency } = this.state;
 		const title = 'Send/Receive ERC-20 Tokens';
+		const labelInputClass = `${addressError ? classes.errorColor : ''}`;
 		return (
 			<TransactionBox closeAction={this.handleCancelAction} title={title}>
 				<div className={classes.tokenBottomSpace}>
@@ -306,17 +367,77 @@ class TransactionSendBoxContainer extends PureComponent {
 						<Tab id="receive" value="receive" label="Receive" />
 					</Tabs>
 					{this.state.tab === 'send' && (
-						<SendTokenTab
-							locale={locale}
-							fiatCurrency={fiatCurrency}
-							amountUsd={amountUsd}
-							amount={this.state.amount}
-							addressError={addressError}
-							handleAmountChange={this.handleAmountChange}
-							handleAllAmountClick={this.handleAllAmountClick}
-							handleAddressChange={this.handleAddressChange}
-							{...this.props}
-						/>
+						<>
+							<div className={classes.bottomSpace}>
+								Available: {this.state.amount}
+							</div>
+							<div className={classes.tokenBottomSpace}>
+								<InputTitle title="Amount" />
+								<div className={classes.tokenMax}>
+									<Input
+										type="text"
+										onChange={this.handleAmountChange}
+										value={this.state.amount}
+										placeholder="0.00"
+										className={classes.amount}
+										fullWidth
+									/>
+									<Button
+										onClick={this.handleAllAmountClick}
+										variant="outlined"
+										size="large"
+									>
+										Max
+									</Button>
+								</div>
+								<div className={classes.fiatPrice}>
+									<Typography
+										variant="subtitle2"
+										color="secondary"
+										style={{ marginRight: '3px' }}
+									>
+										<NumberFormat
+											locale={locale}
+											priceStyle="currency"
+											currency={fiatCurrency}
+											value={amountUsd}
+											fractionDigits={15}
+										/>
+									</Typography>
+									<Typography variant="subtitle2" color="secondary">
+										USD
+									</Typography>
+								</div>
+							</div>
+
+							<div>
+								<InputTitle title="Send to" />
+								<div className={`${classes.tokenMax} ${classes.flexColumn}`}>
+									<Input
+										type="text"
+										onChange={this.handleAddressChange}
+										value={this.state.address}
+										placeholder="0x"
+										className={labelInputClass}
+										fullWidth
+									/>
+								</div>
+							</div>
+							{addressError && (
+								<span id="labelError" className={classes.errorText}>
+									Invalid address. Please check and try again.
+								</span>
+							)}
+							<Divider className={classes.divider} />
+
+							<TransactionFeeBox
+								changeGasLimitAction={this.withLock(this.handleGasLimitChange)}
+								changeGasPriceAction={this.withLock(this.handleGasPriceChange)}
+								reloadEthGasStationInfoAction={this.loadData}
+								{...this.props}
+							/>
+							{this.renderButtons()}
+						</>
 					)}
 					{this.state.tab === 'receive' && (
 						<ReceiveTokenTab
