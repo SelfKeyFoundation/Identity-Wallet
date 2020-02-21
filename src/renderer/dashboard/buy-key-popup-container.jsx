@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getExchangeLinks } from 'common/exchanges/selectors';
+import { selectListingExchanges } from 'common/exchanges/selectors';
 import { getWallet } from 'common/wallet/selectors';
 import { Popup } from '../common';
 import BuyKeyContent from './buy-key-popup-modal';
@@ -16,7 +16,7 @@ const BuyKeyPopupComponent = props => {
 const mapStateToProps = state => {
 	return {
 		address: getWallet(state).address,
-		exchanges: getExchangeLinks(state)
+		exchanges: selectListingExchanges(state)
 	};
 };
 
