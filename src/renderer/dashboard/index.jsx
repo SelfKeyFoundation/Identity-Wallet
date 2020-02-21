@@ -117,8 +117,14 @@ const Dashboard = connect(mapStateToProps)(
 						<CryptoChartBox
 							manageCryptoAction={() => props.dispatch(push('/main/crypto-manager'))}
 							manageAddTokenAction={() => props.dispatch(push('/main/add-token'))}
-							manageTransferAction={() =>
-								props.dispatch(push('/main/advancedTransaction/custom'))
+							manageTransferAction={(e, token) =>
+								props.dispatch(
+									push(
+										`/main/advancedTransaction/${
+											token ? token.symbol : 'custom'
+										}`
+									)
+								)
 							}
 						/>
 					</Grid>

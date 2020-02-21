@@ -7,7 +7,7 @@ export const getTopTokenListSize = state => state.walletTokens.topTokenListSize;
 
 export const getTokens = state => {
 	const tokens = state.walletTokens.tokens.slice(0);
-	const wallet = { ...getWallet(state) };
+	const wallet = { decimal: 18, ...getWallet(state) };
 	tokens.forEach(token => {
 		const price = getPrices(state).prices.filter(price => price.symbol === token.symbol)[0];
 		const priceUSD = price ? price.priceUSD : 0;

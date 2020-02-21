@@ -357,7 +357,7 @@ export class CryptoChartBoxComponent extends React.Component {
 							? `${classes.active} ${classes.token}`
 							: `${classes.token}`
 					}
-					onClick={manageTransferAction}
+					onClick={e => manageTransferAction(e, token)}
 				>
 					<div className={classes.flexContainer}>
 						<div className={classes.flex}>
@@ -391,6 +391,7 @@ export class CryptoChartBoxComponent extends React.Component {
 										locale={locale}
 										style="decimal"
 										currency={token.symbol}
+										fractionDigits={token.decimal}
 										className={classes.prices}
 										valueClass={classes.texts}
 										value={token.balance}

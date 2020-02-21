@@ -142,7 +142,7 @@ class AddTokenContainerComponent extends PureComponent {
 
 	handleBackClick = evt => {
 		evt && evt.preventDefault();
-		this.props.dispatch(history.getHistory().goBack());
+		history.getHistory().goBack();
 	};
 
 	handleFieldChange = async event => {
