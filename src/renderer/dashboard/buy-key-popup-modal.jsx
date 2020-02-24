@@ -27,6 +27,7 @@ const styles = theme => ({
 		columnBreakInside: 'avoid',
 		color: '#FFFFFF',
 		marginBottom: 0,
+		position: 'initial',
 		'& a': {
 			textDecoration: 'none',
 			color: '#FFFFFF'
@@ -44,11 +45,20 @@ const styles = theme => ({
 	}
 });
 
+const handleLinkClick = e => {
+	window.openExternal(e, e.target.href || e.currentTarget.href);
+};
+
 const getExchanges = (exchanges, classes) => {
 	return exchanges.map(exchange => {
 		return (
-			<ListItem key={exchange.name} className={classes.exchangeItem}>
-				<a href={exchange.url} target="_blank" rel="noopener noreferrer">
+			<ListItem key={exchange.id} className={classes.exchangeItem}>
+				<a
+					href={exchange.trade_url || exchange.url}
+					target="_blank"
+					rel="noopener noreferrer"
+					onClick={handleLinkClick}
+				>
 					<Typography variant="body1">
 						<span className={classes.circle}>&#9675;</span> {exchange.name}
 					</Typography>
