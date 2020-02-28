@@ -103,7 +103,7 @@
 		"objection": "1.6.8",
 		"prop-types": "15.7.2",
 		"qrcode-generator": "1.4.3",
-		"qrcode.react": "0.9.3",
+		"qrcode.react": "1.0.0",
 		"react": "16.6.3",
 		"react-dom": "16.6.3",
 		"react-jsonschema-form": "https://github.com/SelfKeyFoundation/react-jsonschema-form.git#57c07f0842f649baaf484e014a5069f55aca8b4f",
