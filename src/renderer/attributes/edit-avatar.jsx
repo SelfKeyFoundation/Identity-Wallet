@@ -23,6 +23,13 @@ const styles = theme => ({
 	},
 	center: {
 		margin: '0 auto'
+	},
+	newImage: {
+		cursor: 'pointer',
+		height: '44px',
+		opacity: 0,
+		position: 'absolute',
+		zIndex: 999999
 	}
 });
 
@@ -60,7 +67,7 @@ class EditAvatarComponent extends PureComponent {
 				<Grid container direction="column">
 					<div className={classes.image}>
 						<ButtonBase component="label" className={classes.avatarImage}>
-							<HexagonAvatar src={avatar} />
+							<HexagonAvatar src={avatar} largeSize />
 							<input type="file" hidden onChange={this.handleImageChange} />
 						</ButtonBase>
 
@@ -72,15 +79,14 @@ class EditAvatarComponent extends PureComponent {
 							>
 								Delete current
 							</Button>
-							<ButtonBase component="label">
-								<Button
-									variant="contained"
-									size="large"
+							<Button variant="contained" size="large">
+								<input
+									type="file"
 									onChange={this.handleImageChange}
-								>
-									Upload new image
-								</Button>
-							</ButtonBase>
+									className={classes.newImage}
+								/>
+								Upload new image
+							</Button>
 						</div>
 					</div>
 					<Divider className={classes.divider} />
