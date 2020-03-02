@@ -1,10 +1,37 @@
 /* global FileReader */
 import React, { PureComponent } from 'react';
-import { ButtonBase, withStyles, Button, Grid } from '@material-ui/core';
+import { ButtonBase, withStyles, Button, Grid, Divider } from '@material-ui/core';
 import { HexagonAvatar } from '../individual/common/hexagon-avatar';
 import { Popup } from '../common/popup';
 
-const styles = theme => ({});
+const styles = theme => ({
+	buttons: {
+		'& button:first-child': {
+			marginRight: '20px'
+		}
+	},
+	divider: {
+		margin: '60px 0 30px'
+	},
+	image: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center'
+	},
+	avatarImage: {
+		marginBottom: '30px'
+	},
+	center: {
+		margin: '0 auto'
+	},
+	newImage: {
+		cursor: 'pointer',
+		height: '44px',
+		opacity: 0,
+		position: 'absolute',
+		zIndex: 999999
+	}
+});
 
 class EditAvatarComponent extends PureComponent {
 	constructor(props) {
@@ -27,35 +54,51 @@ class EditAvatarComponent extends PureComponent {
 			this.setState({ avatar: reader.result });
 		};
 	};
+	handleDeleteAvatar = () => {
+		this.setState({ avatar: null });
+	};
 
 	render() {
-		const { open, onClose, text } = this.props;
+		const { classes, open, onClose, text } = this.props;
 		const { avatar } = this.state;
 
 		return (
 			<Popup open={open} closeAction={onClose} text={text}>
-				<Grid container direction="column" spacing={32}>
-					<Grid item container justify="center">
-						<ButtonBase component="label">
-							<HexagonAvatar src={avatar} />
+				<Grid container direction="column">
+					<div className={classes.image}>
+						<ButtonBase component="label" className={classes.avatarImage}>
+							<HexagonAvatar src={avatar} largeSize />
 							<input type="file" hidden onChange={this.handleImageChange} />
 						</ButtonBase>
-					</Grid>
-					<Grid item>
-						<Grid container spacing={24}>
-							<Grid item>
-								<Button variant="contained" size="large" onClick={this.handleSave}>
-									Save
-								</Button>
-							</Grid>
 
-							<Grid item>
-								<Button variant="outlined" size="large" onClick={this.handleCancel}>
-									Cancel
-								</Button>
-							</Grid>
-						</Grid>
-					</Grid>
+						<div className={`${classes.buttons} ${classes.center}`}>
+							<Button
+								variant="outlined"
+								size="large"
+								onClick={this.handleDeleteAvatar}
+							>
+								Delete current
+							</Button>
+							<Button variant="contained" size="large">
+								<input
+									type="file"
+									onChange={this.handleImageChange}
+									className={classes.newImage}
+								/>
+								Upload new image
+							</Button>
+						</div>
+					</div>
+					<Divider className={classes.divider} />
+					<div className={classes.buttons}>
+						<Button variant="contained" size="large" onClick={this.handleSave}>
+							Save
+						</Button>
+
+						<Button variant="outlined" size="large" onClick={onClose}>
+							Cancel
+						</Button>
+					</div>
 				</Grid>
 			</Popup>
 		);
