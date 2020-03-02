@@ -6,15 +6,27 @@ import { getWallet } from 'common/wallet/selectors';
 export const getTopTokenListSize = state => state.walletTokens.topTokenListSize;
 
 export const getTokens = state => {
-	const tokens = state.walletTokens.tokens.slice(0);
+	let tokens = state.walletTokens.tokens.slice(0);
 	const wallet = { decimal: 18, ...getWallet(state) };
-	tokens.forEach(token => {
-		const price = getPrices(state).prices.filter(price => price.symbol === token.symbol)[0];
+	tokens = tokens.map(token => {
+		token = { ...token };
+		const symbol = (token.symbol || '').toUpperCase();
+		const price = getPrices(state).prices.filter(
+			price => price.symbol.toUpperCase() === symbol
+		)[0];
 		const priceUSD = price ? price.priceUSD : 0;
 		token.balanceInFiat = token.balance * priceUSD;
 		token.price = priceUSD;
+		token.symbol = symbol;
 		// Workaround for Tokens with different Symbols than the ones in price table
-		token.name = token.name ? token.name : 'Token';
+		if (token.name) {
+			return token;
+		}
+		if (['KEY', 'KI'].includes(symbol)) {
+			token.name = 'Selfkey';
+		}
+
+		return token;
 	});
 	delete wallet.address;
 	return [wallet, ...tokens];
