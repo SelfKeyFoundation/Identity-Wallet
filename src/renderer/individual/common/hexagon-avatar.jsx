@@ -30,23 +30,41 @@ const styles = theme => ({
 	},
 	smallAvatar: {
 		borderRadius: '50%'
+	},
+	largeSize: {
+		height: '240px',
+		width: '208px'
 	}
 });
 
 export const HexagonAvatar = withStyles(styles)(
-	({ classes, smallAvatar = false, src = avatarPlaceholder, onClick, className }) => (
-		<div className={`${classes.hexagon} ${className}`} onClick={onClick}>
-			<div className={classes.hexagonIn}>
-				<div
-					className={`${classes.hexagonIn2} ${smallAvatar ? classes.smallAvatar : ''}`}
-					style={{
-						backgroundImage: `url(${src === null ? avatarPlaceholder : src})`,
-						backgroundSize: src === null ? 'auto' : 'cover'
-					}}
-				/>
+	({
+		classes,
+		smallAvatar = false,
+		largeSize = false,
+		src = avatarPlaceholder,
+		onClick,
+		className
+	}) => {
+		return (
+			<div
+				className={`${classes.hexagon} ${className} ${largeSize ? classes.largeSize : ''}`}
+				onClick={onClick}
+			>
+				<div className={classes.hexagonIn}>
+					<div
+						className={`${classes.hexagonIn2} ${
+							smallAvatar ? classes.smallAvatar : ''
+						}`}
+						style={{
+							backgroundImage: `url(${src === null ? avatarPlaceholder : src})`,
+							backgroundSize: src === null ? 'auto' : 'cover'
+						}}
+					/>
+				</div>
 			</div>
-		</div>
-	)
+		);
+	}
 );
 
 export default HexagonAvatar;
