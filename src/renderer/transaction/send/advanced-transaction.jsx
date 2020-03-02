@@ -278,9 +278,9 @@ class TransactionSendBoxContainer extends PureComponent {
 	}
 
 	renderButtons() {
-		const { classes, addressError, address, ethFee, locked, sending } = this.props;
-		const sendBtnIsEnabled =
-			address && +this.state.amount && !addressError && ethFee && !locked;
+		const { classes, addressError, address, ethFee, locked } = this.props;
+		const { sending, amount } = this.state;
+		const sendBtnIsEnabled = address && +amount && !addressError && ethFee && !locked;
 
 		if (sending) {
 			return (
@@ -367,7 +367,7 @@ class TransactionSendBoxContainer extends PureComponent {
 						<Tab id="receive" value="receive" label="Receive" />
 					</Tabs>
 					{this.state.tab === 'send' && (
-						<>
+						<React.Fragment>
 							<div className={classes.bottomSpace}>
 								Available: {this.state.amount}
 							</div>
@@ -437,7 +437,7 @@ class TransactionSendBoxContainer extends PureComponent {
 								{...this.props}
 							/>
 							{this.renderButtons()}
-						</>
+						</React.Fragment>
 					)}
 					{this.state.tab === 'receive' && (
 						<ReceiveTokenTab
