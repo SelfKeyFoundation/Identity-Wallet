@@ -20930,12 +20930,12 @@ trezor-link@1.6.0:
     semver-compare "^1.0.0"
     whatwg-fetch "0.11.0"
 
-"trezor-wallet-provider@https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#94f3b88":
+"trezor-wallet-provider@https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#fa3f49406bf469402f611cc752f8f3f45867e3cb":
   version "0.2.0"
-  resolved "https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#94f3b88a0374668b4e00025b492a4c2dcf8848a3"
+  resolved "https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#fa3f49406bf469402f611cc752f8f3f45867e3cb"
   dependencies:
     bignumber.js "^8.0.2"
-    ethereumjs-tx "^1.3.7"
+    ethereumjs-tx "^2.1.2"
     ethereumjs-util "^6.0.0"
     hdkey "^1.1.0"
     promise-timeout "^1.3.0"
