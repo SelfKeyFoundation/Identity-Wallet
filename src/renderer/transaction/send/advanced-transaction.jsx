@@ -381,7 +381,11 @@ class TransactionSendBoxContainer extends PureComponent {
 						<React.Fragment>
 							<div className={classes.bottomSpace}>
 								<Typography variant="body2" color="secondary">
-									Available: {this.state.amount}
+									Available:{' '}
+									<span style={{ color: '#fff', fontWeight: 'bold' }}>
+										{this.state.amount}{' '}
+										{cryptoCurrency !== 'custom' ? cryptoCurrency : ''}
+									</span>
 								</Typography>
 							</div>
 							<div className={classes.amountBottomSpace}>
