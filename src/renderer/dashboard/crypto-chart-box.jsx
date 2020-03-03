@@ -38,6 +38,7 @@ const styles = () => ({
 		transform: 'translate(-50%, -50%)'
 	},
 	prices: {
+		flexGrow: 1,
 		margin: 0,
 		padding: 0,
 		width: 'auto',
