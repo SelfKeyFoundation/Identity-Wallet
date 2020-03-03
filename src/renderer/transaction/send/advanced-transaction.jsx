@@ -108,14 +108,18 @@ const styles = theme => ({
 		backgroundColor: '#1E262E',
 		color: '#FFFFFF'
 	},
+	amountBottomSpace: {
+		marginBottom: '36px'
+	},
 	tokenBottomSpace: {
-		marginBottom: '30px'
+		marginBottom: '20px'
 	},
 	flexColumn: {
 		flexDirection: 'column'
 	},
 	fiatPrice: {
-		display: 'flex'
+		display: 'flex',
+		marginTop: '5px'
 	},
 	amount: {
 		marginRight: '20px'
@@ -152,6 +156,13 @@ const styles = theme => ({
 			position: 'relative',
 			top: '20px'
 		}
+	},
+	bottomSpace: {
+		marginBottom: '23px'
+	},
+	tokenMax: {
+		display: 'flex',
+		flexWrap: 'nowrap'
 	}
 });
 
@@ -369,9 +380,15 @@ class TransactionSendBoxContainer extends PureComponent {
 					{this.state.tab === 'send' && (
 						<React.Fragment>
 							<div className={classes.bottomSpace}>
-								Available: {this.state.amount}
+								<Typography variant="body2" color="secondary">
+									Available:{' '}
+									<span style={{ color: '#fff', fontWeight: 'bold' }}>
+										{this.state.amount}{' '}
+										{cryptoCurrency !== 'custom' ? cryptoCurrency : ''}
+									</span>
+								</Typography>
 							</div>
-							<div className={classes.tokenBottomSpace}>
+							<div className={classes.amountBottomSpace}>
 								<InputTitle title="Amount" />
 								<div className={classes.tokenMax}>
 									<Input
