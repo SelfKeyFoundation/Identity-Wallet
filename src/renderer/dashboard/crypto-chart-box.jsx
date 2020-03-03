@@ -20,10 +20,12 @@ const styles = () => ({
 		height: '100%',
 		padding: '16px 30px'
 	},
+	iconRightSpace: {
+		marginRight: '10px'
+	},
 	coloredBox: {
 		borderRadius: '8px !important',
 		height: '44px !important',
-		marginRight: '10px',
 		position: 'relative',
 		width: '44px !important'
 	},
@@ -37,8 +39,8 @@ const styles = () => ({
 	},
 	prices: {
 		margin: 0,
-		width: '100%',
 		padding: 0,
+		width: 'auto',
 		'& >div': {
 			paddingRight: '0 !important'
 		}
@@ -135,13 +137,7 @@ const styles = () => ({
 		overflowY: 'scroll'
 	},
 	tokenName: {
-		maxWidth: '130px',
-		width: '130px'
-	},
-	overflowEllipsis: {
-		overflow: 'hidden',
-		textOverflow: 'ellipsis',
-		whiteSpace: 'nowrap'
+		marginRight: '10px'
 	},
 	tokenActionButtons: {
 		marginBottom: '40px',
@@ -157,6 +153,11 @@ const styles = () => ({
 		alignItems: 'flex-start',
 		display: 'flex',
 		justifyContent: 'space-between'
+	},
+	infoWrap: {
+		display: 'flex',
+		flexDirection: 'column',
+		width: '100%'
 	}
 });
 
@@ -327,13 +328,13 @@ export class CryptoChartBoxComponent extends React.Component {
 	getTokenIcon(classes, token, index) {
 		switch (token.name) {
 			case 'Ethereum':
-				return <EthereumIcon />;
+				return <EthereumIcon className={classes.iconRightSpace} />;
 			case 'Selfkey':
-				return <SelfkeyIcon />;
+				return <SelfkeyIcon className={classes.iconRightSpace} />;
 			default:
 				return (
 					<div
-						className={classes.coloredBox}
+						className={`${classes.coloredBox} ${classes.iconRightSpace}`}
 						style={{
 							backgroundColor:
 								index <= 4 ? this.getColors()[index] : this.OTHERS_COLOR
@@ -360,55 +361,40 @@ export class CryptoChartBoxComponent extends React.Component {
 					onClick={e => manageTransferAction(e, token)}
 				>
 					<div className={classes.flexContainer}>
-						<div className={classes.flex}>
-							{this.getTokenIcon(classes, token, index)}
-							<div className={classes.tokenName}>
-								<Grid container alignItems="flex-start">
-									<Grid item xs={12}>
-										<Typography
-											variant="h2"
-											title={token.name}
-											className={classes.overflowEllipsis}
-										>
-											{token.name === 'Selfkey' ? 'SelfKey' : token.name}
-										</Typography>
-									</Grid>
-									<Grid item xs={12}>
-										<Typography
-											variant="subtitle1"
-											className={classes.textColor}
-										>
-											{token.symbol}
-										</Typography>
-									</Grid>
-								</Grid>
-							</div>
-						</div>
-						<div>
-							<Grid container alignItems="flex-start">
-								<Grid item xs={12}>
-									<PriceSummary
-										locale={locale}
-										style="decimal"
-										currency={token.symbol}
-										fractionDigits={token.decimal}
-										className={classes.prices}
-										valueClass={classes.texts}
-										value={token.balance}
-										justify="flex-end"
-									/>
-								</Grid>
-								<Grid item xs={12}>
-									<PriceSummary
-										locale={locale}
-										priceStyle="currency"
-										currency={fiatCurrency}
-										className={classes.smallText}
-										valueClass={classes.texts}
-										value={token.balanceInFiat}
-										justify="flex-end"
-									/>
-								</Grid>
+						<div>{this.getTokenIcon(classes, token, index)}</div>
+						<div className={classes.infoWrap}>
+							<Grid container alignItems="flex-start" justify="space-between">
+								<Typography
+									variant="h2"
+									title={token.name}
+									className={classes.tokenName}
+								>
+									{token.name === 'Selfkey' ? 'SelfKey' : token.name}
+								</Typography>
+								<PriceSummary
+									locale={locale}
+									style="decimal"
+									currency={token.symbol}
+									fractionDigits={token.decimal}
+									className={classes.prices}
+									valueClass={classes.texts}
+									value={token.balance}
+									justify="flex-end"
+								/>
+							</Grid>
+							<Grid container alignItems="flex-start" wrap="nowrap">
+								<Typography variant="subtitle1" className={classes.textColor}>
+									{token.symbol}
+								</Typography>
+								<PriceSummary
+									locale={locale}
+									priceStyle="currency"
+									currency={fiatCurrency}
+									className={classes.smallText}
+									valueClass={classes.texts}
+									value={token.balanceInFiat}
+									justify="flex-end"
+								/>
 							</Grid>
 						</div>
 					</div>
