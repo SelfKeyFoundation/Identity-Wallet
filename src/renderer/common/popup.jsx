@@ -38,6 +38,7 @@ const PopupWrap = props => {
 		open = true,
 		isHeaderVisible = true,
 		displayLogo = false,
+		headerClass = '',
 		xtraClass = ''
 	} = props;
 	return (
@@ -65,7 +66,7 @@ const PopupWrap = props => {
 							</ModalCloseButton>
 						)}
 						{isHeaderVisible && (
-							<ModalHeader>
+							<ModalHeader className={headerClass}>
 								{typeof text === 'string' ? (
 									<Typography variant="body1" className={classes.title}>
 										{text}

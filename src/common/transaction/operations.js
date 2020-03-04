@@ -68,17 +68,25 @@ export const getGasLimit = async (
 	cryptoCurrency,
 	address,
 	amount,
+	decimals,
 	walletAddress,
 	nonce,
 	tokenContract
 ) => {
+	const { tokenService, walletService } = getGlobalContext();
 	// Return default gas limit for Ethereum
 	if (cryptoCurrency === 'ETH') {
-		return DEFAULT_ETH_GAS_LIMIT;
+		const amountInWei = EthUnits.unitToUnit(amount, 'ether', 'wei');
+		const gasLimit = await walletService.estimateGas({
+			to: address,
+			value: amountInWei,
+			nonce
+		});
+
+		return gasLimit || DEFAULT_ETH_GAS_LIMIT;
 	}
 
-	const tokenService = getGlobalContext().tokenService;
-	return tokenService.getGasLimit(tokenContract, address, amount, walletAddress);
+	return tokenService.getGasLimit(tokenContract, address, amount, decimals, walletAddress, nonce);
 };
 
 const getTransactionCount = async address => {
@@ -112,6 +120,7 @@ export const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimi
 
 		if (address && amount) {
 			const tokenContract = transaction.contractAddress;
+			const tokenDecimal = transaction.tokenDecimal;
 			const nonce = await getTransactionCount(walletAddress);
 			const cryptoCurrency = transaction.cryptoCurrency;
 			let gasLimit = DEFAULT_ETH_GAS_LIMIT;
@@ -127,6 +136,7 @@ export const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimi
 					cryptoCurrency,
 					address,
 					amount,
+					tokenDecimal,
 					walletAddress,
 					nonce,
 					tokenContract

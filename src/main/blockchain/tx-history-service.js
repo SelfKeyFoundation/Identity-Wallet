@@ -289,8 +289,10 @@ export class TxHistoryService {
 					}
 
 					walletSetting = await that.getWalletSetting(walletId);
-					walletSetting.txHistoryLastSyncedBlock = endblock;
-					await WalletSetting.updateById(walletSetting.id, walletSetting);
+					if (endblock) {
+						walletSetting.txHistoryLastSyncedBlock = endblock;
+						await WalletSetting.updateById(walletSetting.id, walletSetting);
+					}
 
 					return resolve();
 				}
