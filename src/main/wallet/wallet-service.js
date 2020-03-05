@@ -225,6 +225,10 @@ export class WalletService {
 		return this._getWallets(page, accountsQuantity);
 	}
 
+	estimateGas(transactionObject) {
+		return this.web3Service.web3.eth.estimateGas(transactionObject);
+	}
+
 	sendTransaction(transactionObject) {
 		return this.web3Service.web3.eth.sendTransaction(transactionObject);
 	}

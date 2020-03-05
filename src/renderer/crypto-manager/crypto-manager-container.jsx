@@ -148,6 +148,7 @@ class CryptoManagerContainerComponent extends PureComponent {
 									locale={locale}
 									style="decimal"
 									currency={tokenAdded.symbol}
+									fractionDigits={tokenAdded.decimal}
 									value={tokenAdded.balance}
 									className={`${classes.summary} ${classes.bold}`}
 								/>
