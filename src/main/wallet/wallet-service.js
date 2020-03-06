@@ -188,7 +188,7 @@ export class WalletService {
 				} else {
 					const promises = accounts.map(async (address, index) => {
 						const balanceInWei = await this.web3Service.web3.eth.getBalance(address);
-						let paths = ["44'/60'/0'/x'"];
+						let paths = ["44'/60'/0'/x"];
 						if (walletType === 'ledger') {
 							paths = this.web3Service.ledgerConfig
 								? this.web3Service.ledgerConfig.paths
