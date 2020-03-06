@@ -179,7 +179,7 @@ export class WalletService {
 		return wallet;
 	}
 
-	async _getWallets(page, accountsQuantity) {
+	async _getWallets(page, accountsQuantity, walletType) {
 		return new Promise((resolve, reject) => {
 			this.web3Service.web3.eth.getAccounts((error, accounts) => {
 				if (error) {
@@ -188,10 +188,20 @@ export class WalletService {
 				} else {
 					const promises = accounts.map(async (address, index) => {
 						const balanceInWei = await this.web3Service.web3.eth.getBalance(address);
+						let paths = ["44'/60'/0'/x'"];
+						if (walletType === 'ledger') {
+							paths = this.web3Service.ledgerConfig
+								? this.web3Service.ledgerConfig.paths
+								: paths;
+						}
+						const i = page * accountsQuantity + index;
+						const x = Math.floor(i / paths.length);
+						const pathIndex = i - paths.length * x;
+						const path = paths[pathIndex].replace('x', String(x));
 						return {
 							address,
 							balance: EthUnits.toEther(balanceInWei, 'wei'),
-							path: `44'/60'/0'/${page * accountsQuantity + index}`
+							path
 						};
 					});
 					resolve(Promise.all(promises));
@@ -217,12 +227,12 @@ export class WalletService {
 
 	async getLedgerWallets(page, accountsQuantity) {
 		await this.web3Service.switchToLedgerWallet(page, accountsQuantity);
-		return this._getWallets(page, accountsQuantity);
+		return this._getWallets(page, accountsQuantity, 'ledger');
 	}
 
 	async getTrezorWallets(page, accountsQuantity, eventEmitter) {
 		await this.web3Service.switchToTrezorWallet(page, accountsQuantity, eventEmitter);
-		return this._getWallets(page, accountsQuantity);
+		return this._getWallets(page, accountsQuantity, 'trezor');
 	}
 
 	estimateGas(transactionObject) {

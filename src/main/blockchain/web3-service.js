@@ -78,11 +78,14 @@ export class Web3Service {
 		}
 		const engine = new ProviderEngine();
 		this.getLedgerTransport = () => HWTransportNodeHid.create();
-		const ledger = Web3SubProvider(this.getLedgerTransport, {
+		this.ledgerConfig = {
 			networkId: CONFIG.chainId,
 			accountsLength: accountsQuantity,
-			accountsOffset: accountsOffset
-		});
+			accountsOffset: accountsOffset,
+			paths: ["44'/60'/x'/0/0", "44'/60'/0'/x"]
+		};
+		const ledger = Web3SubProvider(this.getLedgerTransport, this.ledgerConfig);
+
 		const subscriptionSubprovider = new SubscriptionSubprovider();
 
 		engine.addProvider(ledger);
