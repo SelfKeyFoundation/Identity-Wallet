@@ -173,6 +173,7 @@ class CryptoPriceTableComponent extends PureComponent {
 							locale={locale}
 							style="decimal"
 							currency={token.symbol}
+							fractionDigits={token.decimal}
 							value={token.balance}
 							className={classes.summary}
 						/>

@@ -30,16 +30,27 @@ export class WalletService {
 	}
 
 	async loadAccountFromKeystore(filePath, password, address, walletsPath = null) {
+		let keystore = await this.loadKeyStoreValue(filePath, address, walletsPath);
+		return this.web3Service.decryptAccount(keystore, password);
+	}
+
+	async loadKeyStoreValue(filePath, address, walletsPath = null) {
 		try {
 			await fs.promises.access(filePath, fs.constants.R_OK);
 		} catch (error) {
 			if (!filePath && !address) {
+				log.error('load keystore error %s', error);
 				throw error;
 			}
 			filePath = this.getWalletKeystorePath(filePath || address, walletsPath);
 		}
-		let keystore = await fs.promises.readFile(filePath);
-		return this.web3Service.decryptAccount(keystore, password);
+		try {
+			let keystore = await fs.promises.readFile(filePath);
+			return keystore;
+		} catch (error) {
+			log.error('load keystore error %s', error);
+			throw error;
+		}
 	}
 
 	async copyKeystoreFile(id, toPath) {
@@ -212,6 +223,10 @@ export class WalletService {
 	async getTrezorWallets(page, accountsQuantity, eventEmitter) {
 		await this.web3Service.switchToTrezorWallet(page, accountsQuantity, eventEmitter);
 		return this._getWallets(page, accountsQuantity);
+	}
+
+	estimateGas(transactionObject) {
+		return this.web3Service.web3.eth.estimateGas(transactionObject);
 	}
 
 	sendTransaction(transactionObject) {

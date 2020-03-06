@@ -17067,11 +17067,12 @@ qrcode-generator@1.4.3:
   resolved "https://registry.yarnpkg.com/qrcode-generator/-/qrcode-generator-1.4.3.tgz#4876e8f280e65b6c94615f4c19c484f6b964b199"
   integrity sha512-++rVRvMRq5BlHfmAafl8a4ppUntzUxCCUTT2t0siUgqKwdnqRzY8IH6f6WSX5dZUhD2Ul5/MIKuTJddflwrGzw==
 
-qrcode.react@0.9.3:
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/qrcode.react/-/qrcode.react-0.9.3.tgz#91de1287912bdc5ccfb3b091737b828d6ced60c5"
-  integrity sha512-gGd30Ez7cmrKxyN2M3nueaNLk/f9J7NDRgaD5fVgxGpPLsYGWMn9UQ+XnDpv95cfszTQTdaf4QGLNMf3xU0hmw==
+qrcode.react@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/qrcode.react/-/qrcode.react-1.0.0.tgz#7e8889db3b769e555e8eb463d4c6de221c36d5de"
+  integrity sha512-jBXleohRTwvGBe1ngV+62QvEZ/9IZqQivdwzo9pJM4LQMoCM2VnvNBnKdjvGnKyDZ/l0nCDgsPod19RzlPvm/Q==
   dependencies:
+    loose-envify "^1.4.0"
     prop-types "^15.6.0"
     qr.js "0.0.0"
 
@@ -18736,9 +18737,9 @@ select@^1.1.2:
   resolved "https://registry.yarnpkg.com/select/-/select-1.1.2.tgz#0e7350acdec80b1108528786ec1d4418d11b396d"
   integrity sha1-DnNQrN7ICxEIUoeG7B1EGNEbOW0=
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#5e170daf0adfa291f2d3dd94b4e7413bc5585415":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#af1a27282db3a4460da4f22bc4c806d8319900a1":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#5e170daf0adfa291f2d3dd94b4e7413bc5585415"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#af1a27282db3a4460da4f22bc4c806d8319900a1"
   dependencies:
     "@material-ui/core" "3.9.2"
     "@material-ui/icons" "3.0.2"
@@ -20929,12 +20930,12 @@ trezor-link@1.6.0:
     semver-compare "^1.0.0"
     whatwg-fetch "0.11.0"
 
-"trezor-wallet-provider@https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#94f3b88":
+"trezor-wallet-provider@https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#fa3f49406bf469402f611cc752f8f3f45867e3cb":
   version "0.2.0"
-  resolved "https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#94f3b88a0374668b4e00025b492a4c2dcf8848a3"
+  resolved "https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#fa3f49406bf469402f611cc752f8f3f45867e3cb"
   dependencies:
     bignumber.js "^8.0.2"
-    ethereumjs-tx "^1.3.7"
+    ethereumjs-tx "^2.1.2"
     ethereumjs-util "^6.0.0"
     hdkey "^1.1.0"
     promise-timeout "^1.3.0"

@@ -2,7 +2,7 @@ import React from 'react';
 import { Chart } from 'react-google-charts';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { NumberFormat, PriceSummary } from 'selfkey-ui';
+import { NumberFormat, PriceSummary, EthereumIcon, SelfkeyIcon } from 'selfkey-ui';
 import { Grid, Paper, Typography, Button } from '@material-ui/core';
 import { getLocale } from 'common/locale/selectors';
 import { getViewAll } from 'common/view-all-tokens/selectors';
@@ -20,11 +20,14 @@ const styles = () => ({
 		height: '100%',
 		padding: '16px 30px'
 	},
+	iconRightSpace: {
+		marginRight: '10px'
+	},
 	coloredBox: {
-		width: '44px !important',
-		height: '44px !important',
 		borderRadius: '8px !important',
-		position: 'relative'
+		height: '44px !important',
+		position: 'relative',
+		width: '44px !important'
 	},
 	coloredBoxText: {
 		position: 'absolute',
@@ -35,9 +38,10 @@ const styles = () => ({
 		transform: 'translate(-50%, -50%)'
 	},
 	prices: {
+		flexGrow: 1,
 		margin: 0,
-		width: '100%',
 		padding: 0,
+		width: 'auto',
 		'& >div': {
 			paddingRight: '0 !important'
 		}
@@ -130,28 +134,31 @@ const styles = () => ({
 		justifyContent: 'space-between',
 		marginBottom: '30px',
 		maxHeight: '240px',
-		overflow: 'scroll'
+		overflowX: 'hidden',
+		overflowY: 'scroll'
 	},
 	tokenName: {
-		maxWidth: '130px',
-		width: '130px'
-	},
-	overflowEllipsis: {
-		overflow: 'hidden',
-		textOverflow: 'ellipsis',
-		whiteSpace: 'nowrap'
+		marginRight: '10px'
 	},
 	tokenActionButtons: {
 		marginBottom: '40px',
 		marginTop: '20px'
 	},
 	flex: {
-		display: 'flex'
+		display: 'flex',
+		'& svg': {
+			marginRight: '10px'
+		}
 	},
 	flexContainer: {
 		alignItems: 'flex-start',
 		display: 'flex',
 		justifyContent: 'space-between'
+	},
+	infoWrap: {
+		display: 'flex',
+		flexDirection: 'column',
+		width: '100%'
 	}
 });
 
@@ -319,6 +326,27 @@ export class CryptoChartBoxComponent extends React.Component {
 		}, 0);
 	};
 
+	getTokenIcon(classes, token, index) {
+		switch (token.name) {
+			case 'Ethereum':
+				return <EthereumIcon className={classes.iconRightSpace} />;
+			case 'Selfkey':
+				return <SelfkeyIcon className={classes.iconRightSpace} />;
+			default:
+				return (
+					<div
+						className={`${classes.coloredBox} ${classes.iconRightSpace}`}
+						style={{
+							backgroundColor:
+								index <= 4 ? this.getColors()[index] : this.OTHERS_COLOR
+						}}
+					>
+						<div className={classes.coloredBoxText}>{token.name.charAt(0)}</div>
+					</div>
+				);
+		}
+	}
+
 	getTokensLegend(classes, tokens, locale, fiatCurrency, manageTransferAction) {
 		return tokens.map((token, index) => {
 			return (
@@ -331,66 +359,43 @@ export class CryptoChartBoxComponent extends React.Component {
 							? `${classes.active} ${classes.token}`
 							: `${classes.token}`
 					}
-					onClick={manageTransferAction}
+					onClick={e => manageTransferAction(e, token)}
 				>
 					<div className={classes.flexContainer}>
-						<div className={classes.flex}>
-							<div
-								className={classes.coloredBox}
-								style={{
-									backgroundColor:
-										index <= 4 ? this.getColors()[index] : this.OTHERS_COLOR,
-									marginRight: '10px'
-								}}
-							>
-								<div className={classes.coloredBoxText}>{token.name.charAt(0)}</div>
-							</div>
-							<div className={classes.tokenName}>
-								<Grid container alignItems="flex-start">
-									<Grid item xs={12}>
-										<Typography
-											variant="h2"
-											title={token.name}
-											className={classes.overflowEllipsis}
-										>
-											{token.name}
-										</Typography>
-									</Grid>
-									<Grid item xs={12}>
-										<Typography
-											variant="subtitle1"
-											className={classes.textColor}
-										>
-											{token.symbol}
-										</Typography>
-									</Grid>
-								</Grid>
-							</div>
-						</div>
-						<div>
-							<Grid container alignItems="flex-start">
-								<Grid item xs={12}>
-									<PriceSummary
-										locale={locale}
-										style="decimal"
-										currency={token.symbol}
-										className={classes.prices}
-										valueClass={classes.texts}
-										value={token.balance}
-										justify="flex-end"
-									/>
-								</Grid>
-								<Grid item xs={12}>
-									<PriceSummary
-										locale={locale}
-										style="currency"
-										currency={fiatCurrency}
-										className={classes.smallText}
-										valueClass={classes.texts}
-										value={token.balanceInFiat}
-										justify="flex-end"
-									/>
-								</Grid>
+						<div>{this.getTokenIcon(classes, token, index)}</div>
+						<div className={classes.infoWrap}>
+							<Grid container alignItems="flex-start" justify="space-between">
+								<Typography
+									variant="h2"
+									title={token.name}
+									className={classes.tokenName}
+								>
+									{token.name === 'Selfkey' ? 'SelfKey' : token.name}
+								</Typography>
+								<PriceSummary
+									locale={locale}
+									style="decimal"
+									currency={token.symbol}
+									fractionDigits={token.decimal}
+									className={classes.prices}
+									valueClass={classes.texts}
+									value={token.balance}
+									justify="flex-end"
+								/>
+							</Grid>
+							<Grid container alignItems="flex-start" wrap="nowrap">
+								<Typography variant="subtitle1" className={classes.textColor}>
+									{token.symbol}
+								</Typography>
+								<PriceSummary
+									locale={locale}
+									priceStyle="currency"
+									currency={fiatCurrency}
+									className={classes.smallText}
+									valueClass={classes.texts}
+									value={token.balanceInFiat}
+									justify="flex-end"
+								/>
 							</Grid>
 						</div>
 					</div>
