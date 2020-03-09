@@ -3,7 +3,7 @@ export const corporateProfiles = [
 		name: 'full profile',
 		profile: {
 			identity: { type: 'corporate' },
-			entityType: 'Company Limited by Shares (LTD)',
+			entityType: 'ltd',
 			members: [
 				{
 					identity: {
@@ -11,7 +11,7 @@ export const corporateProfiles = [
 						positions: ['director-ltd', 'shareholder'],
 						equity: 10
 					},
-					entityType: 'Company Limited by Shares (LTD)',
+					entityType: 'ltd',
 					entityName: 'Test LTD',
 					email: 'test@corporate.com'
 				},
@@ -28,12 +28,12 @@ export const corporateProfiles = [
 			]
 		},
 		attribute: {
-			companyType: 'Company Limited by Shares (LTD)',
+			companyType: 'ltd',
 			members: [
 				{
 					entity: {
 						type: 'corporate',
-						companyType: 'Company Limited by Shares (LTD)',
+						companyType: 'ltd',
 						companyName: 'Test LTD',
 						email: 'test@corporate.com'
 					},
@@ -63,10 +63,10 @@ export const corporateProfiles = [
 		name: 'No members',
 		profile: {
 			identity: { type: 'corporate' },
-			entityType: 'Company Limited by Shares (LTD)'
+			entityType: 'ltd'
 		},
 		attribute: {
-			companyType: 'Company Limited by Shares (LTD)',
+			companyType: 'ltd',
 			members: []
 		},
 		throws: false,
@@ -76,7 +76,7 @@ export const corporateProfiles = [
 		name: 'individual profile',
 		profile: {
 			identity: { type: 'individual' },
-			entityType: 'Company Limited by Shares (LTD)',
+			entityType: 'ltd',
 			members: [
 				{
 					identity: {
@@ -84,7 +84,7 @@ export const corporateProfiles = [
 						positions: ['director-ltd', 'shareholder'],
 						equity: 10
 					},
-					entityType: 'Company Limited by Shares (LTD)',
+					entityType: 'ltd',
 					entityName: 'Test LTD',
 					email: 'test@corporate.com'
 				},
