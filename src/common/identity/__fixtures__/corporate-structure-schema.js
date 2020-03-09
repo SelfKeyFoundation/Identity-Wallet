@@ -1,18 +1,11 @@
-export const companyTypes = [
-	'Company Limited by Shares (LTD)',
-	'Limited Liability Company (LLC)',
-	'Trust (TST)',
-	'Foundation (FND)',
-	'Limited Partnership (LLP)',
-	'Other'
-];
+export const companyTypes = ['ltd', 'llc', 'tst', 'fnd', 'llp', 'other'];
 export const companyEquity = {
-	'Company Limited by Shares (LTD)': 'Shares',
-	'Limited Liability Company (LLC)': 'Membership Interest',
-	'Trust (TST)': false,
-	'Foundation (FND)': false,
-	'Limited Partnership (LLP)': 'Percentage',
-	Other: 'Membership Interest'
+	ltd: 'Shares',
+	llc: 'Membership Interest',
+	tst: false,
+	fnd: false,
+	llp: 'Percentage',
+	other: 'Membership Interest'
 };
 
 export const positionEquity = {
@@ -36,12 +29,12 @@ export const positionEquity = {
 };
 
 export const companyPositionWithEquity = {
-	'Company Limited by Shares (LTD)': ['shareholder'],
-	'Limited Liability Company (LLC)': ['member-llc'],
-	'Trust (TST)': [],
-	'Foundation (FND)': [],
-	'Limited Partnership (LLP)': ['general-partner', 'limited-partner'],
-	Other: ['member']
+	ltd: ['shareholder'],
+	llc: ['member-llc'],
+	tst: [],
+	fnd: [],
+	llp: ['general-partner', 'limited-partner'],
+	other: ['member']
 };
 
 const directorFnd = {
@@ -158,33 +151,10 @@ const supervisor = {
 };
 
 export const companyPositions = {
-	'Company Limited by Shares (LTD)': [
-		directorLtd,
-		shareholder,
-		ubo,
-		observer,
-		authorizedSignatory,
-		other
-	],
-	'Limited Liability Company (LLC)': [
-		manager,
-		memberLlc,
-		ubo,
-		observer,
-		authorizedSignatory,
-		otherLlc
-	],
-	'Trust (TST)': [
-		grantor,
-		beneficiaryTst,
-		trustee,
-		protector,
-		ubo,
-		observer,
-		authorizedSignatory,
-		other
-	],
-	'Foundation (FND)': [
+	ltd: [directorLtd, shareholder, ubo, observer, authorizedSignatory, other],
+	llc: [manager, memberLlc, ubo, observer, authorizedSignatory, otherLlc],
+	tst: [grantor, beneficiaryTst, trustee, protector, ubo, observer, authorizedSignatory, other],
+	fnd: [
 		founder,
 		directorFnd,
 		supervisor,
@@ -194,15 +164,8 @@ export const companyPositions = {
 		authorizedSignatory,
 		other
 	],
-	'Limited Partnership (LLP)': [
-		generalPartner,
-		limitedPartner,
-		ubo,
-		observer,
-		authorizedSignatory,
-		other
-	],
-	Other: [member, ubo, observer, authorizedSignatory]
+	llp: [generalPartner, limitedPartner, ubo, observer, authorizedSignatory, other],
+	other: [member, ubo, observer, authorizedSignatory]
 };
 export const resolvedCorporateSchema = {
 	url: 'http://platform.selfkey.org/schema/attribute/corporate-structure.json',
@@ -255,7 +218,7 @@ export const resolvedCorporateSchema = {
 				type: 'object',
 				properties: {
 					companyType: {
-						enum: ['Company Limited by Shares (LTD)']
+						enum: ['ltd']
 					},
 					members: {
 						$ref: '#/definitions/members/ltd'
@@ -266,7 +229,7 @@ export const resolvedCorporateSchema = {
 				type: 'object',
 				properties: {
 					companyType: {
-						enum: ['Limited Liability Company (LLC)']
+						enum: ['llc']
 					},
 					members: {
 						$ref: '#/definitions/members/llc'
@@ -277,7 +240,7 @@ export const resolvedCorporateSchema = {
 				type: 'object',
 				properties: {
 					companyType: {
-						enum: ['Trust (TST)']
+						enum: ['tst']
 					},
 					members: {
 						$ref: '#/definitions/members/tst'
@@ -288,7 +251,7 @@ export const resolvedCorporateSchema = {
 				type: 'object',
 				properties: {
 					companyType: {
-						enum: ['Foundation (FND)']
+						enum: ['fnd']
 					},
 					members: {
 						$ref: '#/definitions/members/fnd'
@@ -299,7 +262,7 @@ export const resolvedCorporateSchema = {
 				type: 'object',
 				properties: {
 					companyType: {
-						enum: ['Limited Partnership (LLP)']
+						enum: ['llp']
 					},
 					members: {
 						$ref: '#/definitions/members/llp'
@@ -310,7 +273,7 @@ export const resolvedCorporateSchema = {
 				type: 'object',
 				properties: {
 					companyType: {
-						enum: ['Other']
+						enum: ['other']
 					},
 					members: {
 						$ref: '#/definitions/members/other_company'
@@ -881,7 +844,8 @@ export const resolvedCorporateSchema = {
 				title: 'Legal Entity Type',
 				description: 'Please specify the type of legal entity.',
 				type: 'string',
-				enum: [
+				enum: ['ltd', 'llc', 'tst', 'fnd', 'llp', 'other'],
+				enumNames: [
 					'Company Limited by Shares (LTD)',
 					'Limited Liability Company (LLC)',
 					'Trust (TST)',
@@ -898,7 +862,7 @@ export const resolvedCorporateSchema = {
 						type: 'object',
 						properties: {
 							companyType: {
-								enum: ['Company Limited by Shares (LTD)']
+								enum: ['ltd']
 							},
 							members: {
 								type: 'array',
@@ -1060,6 +1024,14 @@ export const resolvedCorporateSchema = {
 																'Please specify the type of legal entity.',
 															type: 'string',
 															enum: [
+																'ltd',
+																'llc',
+																'tst',
+																'fnd',
+																'llp',
+																'other'
+															],
+															enumNames: [
 																'Company Limited by Shares (LTD)',
 																'Limited Liability Company (LLC)',
 																'Trust (TST)',
@@ -1117,7 +1089,7 @@ export const resolvedCorporateSchema = {
 						type: 'object',
 						properties: {
 							companyType: {
-								enum: ['Limited Liability Company (LLC)']
+								enum: ['llc']
 							},
 							members: {
 								type: 'array',
@@ -1278,6 +1250,14 @@ export const resolvedCorporateSchema = {
 																'Please specify the type of legal entity.',
 															type: 'string',
 															enum: [
+																'ltd',
+																'llc',
+																'tst',
+																'fnd',
+																'llp',
+																'other'
+															],
+															enumNames: [
 																'Company Limited by Shares (LTD)',
 																'Limited Liability Company (LLC)',
 																'Trust (TST)',
@@ -1335,7 +1315,7 @@ export const resolvedCorporateSchema = {
 						type: 'object',
 						properties: {
 							companyType: {
-								enum: ['Trust (TST)']
+								enum: ['tst']
 							},
 							members: {
 								type: 'array',
@@ -1511,6 +1491,14 @@ export const resolvedCorporateSchema = {
 																'Please specify the type of legal entity.',
 															type: 'string',
 															enum: [
+																'ltd',
+																'llc',
+																'tst',
+																'fnd',
+																'llp',
+																'other'
+															],
+															enumNames: [
 																'Company Limited by Shares (LTD)',
 																'Limited Liability Company (LLC)',
 																'Trust (TST)',
@@ -1568,7 +1556,7 @@ export const resolvedCorporateSchema = {
 						type: 'object',
 						properties: {
 							companyType: {
-								enum: ['Foundation (FND)']
+								enum: ['fnd']
 							},
 							members: {
 								type: 'array',
@@ -1744,6 +1732,14 @@ export const resolvedCorporateSchema = {
 																'Please specify the type of legal entity.',
 															type: 'string',
 															enum: [
+																'ltd',
+																'llc',
+																'tst',
+																'fnd',
+																'llp',
+																'other'
+															],
+															enumNames: [
 																'Company Limited by Shares (LTD)',
 																'Limited Liability Company (LLC)',
 																'Trust (TST)',
@@ -1801,7 +1797,7 @@ export const resolvedCorporateSchema = {
 						type: 'object',
 						properties: {
 							companyType: {
-								enum: ['Limited Partnership (LLP)']
+								enum: ['llp']
 							},
 							members: {
 								type: 'array',
@@ -1967,6 +1963,14 @@ export const resolvedCorporateSchema = {
 																'Please specify the type of legal entity.',
 															type: 'string',
 															enum: [
+																'ltd',
+																'llc',
+																'tst',
+																'fnd',
+																'llp',
+																'other'
+															],
+															enumNames: [
 																'Company Limited by Shares (LTD)',
 																'Limited Liability Company (LLC)',
 																'Trust (TST)',
@@ -2024,7 +2028,7 @@ export const resolvedCorporateSchema = {
 						type: 'object',
 						properties: {
 							companyType: {
-								enum: ['Other']
+								enum: ['other']
 							},
 							members: {
 								type: 'array',
@@ -2162,6 +2166,14 @@ export const resolvedCorporateSchema = {
 																'Please specify the type of legal entity.',
 															type: 'string',
 															enum: [
+																'ltd',
+																'llc',
+																'tst',
+																'fnd',
+																'llp',
+																'other'
+															],
+															enumNames: [
 																'Company Limited by Shares (LTD)',
 																'Limited Liability Company (LLC)',
 																'Trust (TST)',
@@ -2229,7 +2241,7 @@ export const resolvedCorporateSchema = {
 				type: 'object',
 				properties: {
 					companyType: {
-						enum: ['Company Limited by Shares (LTD)']
+						enum: ['ltd']
 					},
 					members: {
 						type: 'array',
@@ -2391,6 +2403,14 @@ export const resolvedCorporateSchema = {
 														'Please specify the type of legal entity.',
 													type: 'string',
 													enum: [
+														'ltd',
+														'llc',
+														'tst',
+														'fnd',
+														'llp',
+														'other'
+													],
+													enumNames: [
 														'Company Limited by Shares (LTD)',
 														'Limited Liability Company (LLC)',
 														'Trust (TST)',
@@ -2448,7 +2468,7 @@ export const resolvedCorporateSchema = {
 				type: 'object',
 				properties: {
 					companyType: {
-						enum: ['Limited Liability Company (LLC)']
+						enum: ['llc']
 					},
 					members: {
 						type: 'array',
@@ -2609,6 +2629,14 @@ export const resolvedCorporateSchema = {
 														'Please specify the type of legal entity.',
 													type: 'string',
 													enum: [
+														'ltd',
+														'llc',
+														'tst',
+														'fnd',
+														'llp',
+														'other'
+													],
+													enumNames: [
 														'Company Limited by Shares (LTD)',
 														'Limited Liability Company (LLC)',
 														'Trust (TST)',
@@ -2666,7 +2694,7 @@ export const resolvedCorporateSchema = {
 				type: 'object',
 				properties: {
 					companyType: {
-						enum: ['Trust (TST)']
+						enum: ['tst']
 					},
 					members: {
 						type: 'array',
@@ -2842,6 +2870,14 @@ export const resolvedCorporateSchema = {
 														'Please specify the type of legal entity.',
 													type: 'string',
 													enum: [
+														'ltd',
+														'llc',
+														'tst',
+														'fnd',
+														'llp',
+														'other'
+													],
+													enumNames: [
 														'Company Limited by Shares (LTD)',
 														'Limited Liability Company (LLC)',
 														'Trust (TST)',
@@ -2899,7 +2935,7 @@ export const resolvedCorporateSchema = {
 				type: 'object',
 				properties: {
 					companyType: {
-						enum: ['Foundation (FND)']
+						enum: ['fnd']
 					},
 					members: {
 						type: 'array',
@@ -3075,6 +3111,14 @@ export const resolvedCorporateSchema = {
 														'Please specify the type of legal entity.',
 													type: 'string',
 													enum: [
+														'ltd',
+														'llc',
+														'tst',
+														'fnd',
+														'llp',
+														'other'
+													],
+													enumNames: [
 														'Company Limited by Shares (LTD)',
 														'Limited Liability Company (LLC)',
 														'Trust (TST)',
@@ -3132,7 +3176,7 @@ export const resolvedCorporateSchema = {
 				type: 'object',
 				properties: {
 					companyType: {
-						enum: ['Limited Partnership (LLP)']
+						enum: ['llp']
 					},
 					members: {
 						type: 'array',
@@ -3298,6 +3342,14 @@ export const resolvedCorporateSchema = {
 														'Please specify the type of legal entity.',
 													type: 'string',
 													enum: [
+														'ltd',
+														'llc',
+														'tst',
+														'fnd',
+														'llp',
+														'other'
+													],
+													enumNames: [
 														'Company Limited by Shares (LTD)',
 														'Limited Liability Company (LLC)',
 														'Trust (TST)',
@@ -3355,7 +3407,7 @@ export const resolvedCorporateSchema = {
 				type: 'object',
 				properties: {
 					companyType: {
-						enum: ['Other']
+						enum: ['other']
 					},
 					members: {
 						type: 'array',
@@ -3493,6 +3545,14 @@ export const resolvedCorporateSchema = {
 														'Please specify the type of legal entity.',
 													type: 'string',
 													enum: [
+														'ltd',
+														'llc',
+														'tst',
+														'fnd',
+														'llp',
+														'other'
+													],
+													enumNames: [
 														'Company Limited by Shares (LTD)',
 														'Limited Liability Company (LLC)',
 														'Trust (TST)',
@@ -3704,7 +3764,8 @@ export const resolvedCorporateSchema = {
 												description:
 													'Please specify the type of legal entity.',
 												type: 'string',
-												enum: [
+												enum: ['ltd', 'llc', 'tst', 'fnd', 'llp', 'other'],
+												enumNames: [
 													'Company Limited by Shares (LTD)',
 													'Limited Liability Company (LLC)',
 													'Trust (TST)',
@@ -3907,7 +3968,8 @@ export const resolvedCorporateSchema = {
 												description:
 													'Please specify the type of legal entity.',
 												type: 'string',
-												enum: [
+												enum: ['ltd', 'llc', 'tst', 'fnd', 'llp', 'other'],
+												enumNames: [
 													'Company Limited by Shares (LTD)',
 													'Limited Liability Company (LLC)',
 													'Trust (TST)',
@@ -4124,7 +4186,8 @@ export const resolvedCorporateSchema = {
 												description:
 													'Please specify the type of legal entity.',
 												type: 'string',
-												enum: [
+												enum: ['ltd', 'llc', 'tst', 'fnd', 'llp', 'other'],
+												enumNames: [
 													'Company Limited by Shares (LTD)',
 													'Limited Liability Company (LLC)',
 													'Trust (TST)',
@@ -4341,7 +4404,8 @@ export const resolvedCorporateSchema = {
 												description:
 													'Please specify the type of legal entity.',
 												type: 'string',
-												enum: [
+												enum: ['ltd', 'llc', 'tst', 'fnd', 'llp', 'other'],
+												enumNames: [
 													'Company Limited by Shares (LTD)',
 													'Limited Liability Company (LLC)',
 													'Trust (TST)',
@@ -4548,7 +4612,8 @@ export const resolvedCorporateSchema = {
 												description:
 													'Please specify the type of legal entity.',
 												type: 'string',
-												enum: [
+												enum: ['ltd', 'llc', 'tst', 'fnd', 'llp', 'other'],
+												enumNames: [
 													'Company Limited by Shares (LTD)',
 													'Limited Liability Company (LLC)',
 													'Trust (TST)',
@@ -4728,7 +4793,8 @@ export const resolvedCorporateSchema = {
 												description:
 													'Please specify the type of legal entity.',
 												type: 'string',
-												enum: [
+												enum: ['ltd', 'llc', 'tst', 'fnd', 'llp', 'other'],
+												enumNames: [
 													'Company Limited by Shares (LTD)',
 													'Limited Liability Company (LLC)',
 													'Trust (TST)',
@@ -5561,7 +5627,8 @@ export const resolvedCorporateSchema = {
 									title: 'Legal Entity Type',
 									description: 'Please specify the type of legal entity.',
 									type: 'string',
-									enum: [
+									enum: ['ltd', 'llc', 'tst', 'fnd', 'llp', 'other'],
+									enumNames: [
 										'Company Limited by Shares (LTD)',
 										'Limited Liability Company (LLC)',
 										'Trust (TST)',
@@ -5662,7 +5729,8 @@ export const resolvedCorporateSchema = {
 							title: 'Legal Entity Type',
 							description: 'Please specify the type of legal entity.',
 							type: 'string',
-							enum: [
+							enum: ['ltd', 'llc', 'tst', 'fnd', 'llp', 'other'],
+							enumNames: [
 								'Company Limited by Shares (LTD)',
 								'Limited Liability Company (LLC)',
 								'Trust (TST)',

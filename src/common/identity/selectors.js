@@ -27,7 +27,10 @@ import {
 const createRootSelector = rootKey => (...fields) => state => _.pick(state[rootKey], fields);
 
 const selectRoot = createRootSelector('identity');
-const selectProps = (...fields) => (state, props = {}) => _.pick(props, fields);
+const selectProps = (...fields) => (state, props = {}) => {
+	console.log('XXX', props);
+	return _.pick(props, fields);
+};
 
 // Repositories
 
@@ -475,14 +478,26 @@ export const selectAttributeValue = createSelector(
 
 export const selectCorporateJurisdictions = createSelector(
 	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: JURISDICTION_ATTRIBUTE }),
-	idType => (idType ? idType.content.enum : [])
+	idType =>
+		idType
+			? idType.content.enum.map((code, index) => ({
+					code,
+					name: idType.content.enumNames[index]
+			  }))
+			: []
 );
 
 // Entity Types
 
 export const selectCorporateLegalEntityTypes = createSelector(
 	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: ENTITY_TYPE_ATTRIBUTE }),
-	idType => (idType ? idType.content.enum : [])
+	idType =>
+		idType
+			? idType.content.enum.map((code, index) => ({
+					code,
+					name: idType.content.enumNames[index]
+			  }))
+			: []
 );
 
 // Countries
@@ -589,6 +604,7 @@ export const selectChildrenProfilesByType = createSelector(
 );
 
 export const selectCorporateProfile = createSelector(
+	state => state,
 	selectProfile,
 	selectChildrenProfiles,
 	selectBasicAttributeInfo(EMAIL_ATTRIBUTE),
@@ -598,6 +614,7 @@ export const selectCorporateProfile = createSelector(
 	selectBasicAttributeInfo(CREATION_DATE_ATTRIBUTE),
 	selectBasicAttributeInfo(JURISDICTION_ATTRIBUTE),
 	(
+		state,
 		{
 			identity,
 			wallet,
@@ -645,8 +662,10 @@ export const selectCorporateProfile = createSelector(
 		taxId,
 		entityName,
 		entityType,
+		entityTypeName: selectCompanyTypeName(state, { companyType: entityType }),
 		creationDate,
 		jurisdiction,
+		jurisdictionName: selectJurisdictionName(state, { jurisdiction }),
 		members
 	})
 );
@@ -658,6 +677,27 @@ export const selectPositionsForCompanyType = createSelector(
 		return new CorporateStructureSchema(attrType.content).getPositionsForCompanyType(
 			props.companyType
 		);
+	}
+);
+
+export const selectCompanyTypeName = createSelector(
+	state => selectAttributeTypeByUrl(state, { attributeTypeUrl: CORPORATE_STRUCTURE_ATTRIBUTE }),
+	selectProps('companyType'),
+	(attrType, props) => {
+		return new CorporateStructureSchema(attrType.content).getCompanyTypeNameByCode(
+			props.companyType
+		);
+	}
+);
+
+export const selectJurisdictionName = createSelector(
+	state => selectAttributeTypeByUrl(state, { attributeTypeUrl: JURISDICTION_ATTRIBUTE }),
+	selectProps('jurisdiction'),
+	(attrType, props) => {
+		const codes = attrType.content.enum;
+		const index = codes.findIndex(j => props.jurisdiction === j);
+		if (index === -1) return null;
+		return attrType.content.enumNames[index];
 	}
 );
 

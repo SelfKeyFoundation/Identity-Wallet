@@ -110,13 +110,13 @@ const CorporateDetails = withStyles(styles)(props => {
 						<Typography className="label" color="secondary">
 							Jurisdiction
 						</Typography>
-						<DetailsAttribute attr={profile.jurisdiction} />
+						<DetailsAttribute attr={profile.jurisdictionName} />
 					</div>
 					<div className={classes.attr}>
 						<Typography className="label" color="secondary">
 							Entity Type
 						</Typography>
-						<DetailsAttribute attr={profile.entityType} />
+						<DetailsAttribute attr={profile.entityTypeName} />
 					</div>
 					<div className={classes.attr}>
 						<Typography className="label" color="secondary">

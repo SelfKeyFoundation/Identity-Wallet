@@ -14,6 +14,22 @@ export class CorporateStructureSchema {
 			throw new Error('Invalid Schema');
 		}
 	}
+	getCompanyTypeNames() {
+		try {
+			return this.schema.properties.companyType.enumNames;
+		} catch (error) {
+			log.error(error);
+			throw new Error('Invalid Schema');
+		}
+	}
+	getCompanyTypeNameByCode(code) {
+		const types = this.getCompanyTypes();
+		const index = types.findIndex(c => c === code);
+		if (index === -1) {
+			return null;
+		}
+		return this.getCompanyTypeNames()[index];
+	}
 	getPositionsForCompanyType(companyType) {
 		if (!this.getCompanyTypes().includes(companyType)) {
 			throw new Error('Unknown company type');
