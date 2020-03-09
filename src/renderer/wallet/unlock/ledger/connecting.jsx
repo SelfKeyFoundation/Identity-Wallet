@@ -10,10 +10,17 @@ import {
 	WarningShieldIcon
 } from 'selfkey-ui';
 import { connect } from 'react-redux';
+import { withStyles } from '@material-ui/core/styles';
 import HelpStepsSection from './help-steps-section';
 import { appOperations, appSelectors } from 'common/app';
 import HelpStepsErrorSection from './help-steps-error-section';
 import { push } from 'connected-react-router';
+
+const styles = theme => ({
+	closeIcon: {
+		marginTop: '20px'
+	}
+});
 
 class ConnectingLedger extends PureComponent {
 	async componentDidMount() {
@@ -148,12 +155,13 @@ class ConnectingLedger extends PureComponent {
 	};
 
 	render() {
+		const { classes } = this.props;
 		return (
 			<div>
 				<Modal open={true}>
 					<ModalWrap>
 						<ModalCloseButton onClick={this.handleClose}>
-							<ModalCloseIcon />
+							<ModalCloseIcon className={classes.closeIcon} />
 						</ModalCloseButton>
 						<ModalHeader>
 							<Grid
@@ -185,4 +193,4 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-export default connect(mapStateToProps)(ConnectingLedger);
+export default connect(mapStateToProps)(withStyles(styles)(ConnectingLedger));

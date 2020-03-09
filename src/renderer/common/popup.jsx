@@ -24,6 +24,9 @@ const styles = theme => ({
 		border: 'none',
 		backgroundColor: 'transparent'
 	},
+	paper: {
+		boxShadow: 'inherit'
+	},
 	popup: {
 		position: 'relative'
 	}
