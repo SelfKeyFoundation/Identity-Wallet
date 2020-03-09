@@ -143,8 +143,8 @@ const CompanyInformation = withStyles(styles)(props => {
 											<em>Choose...</em>
 										</MenuItem>
 										{jurisdictions.map(item => (
-											<MenuItem key={item} value={item}>
-												{item}
+											<MenuItem key={item} value={item.code}>
+												{item.name}
 											</MenuItem>
 										))}
 									</Select>
@@ -190,8 +190,8 @@ const CompanyInformation = withStyles(styles)(props => {
 											<em>Choose...</em>
 										</MenuItem>
 										{entityTypes.map(item => (
-											<MenuItem key={item} value={item}>
-												{item}
+											<MenuItem key={item} value={item.code}>
+												{item.name}
 											</MenuItem>
 										))}
 									</Select>
