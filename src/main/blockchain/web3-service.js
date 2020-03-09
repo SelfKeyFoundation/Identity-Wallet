@@ -78,11 +78,16 @@ export class Web3Service {
 		}
 		const engine = new ProviderEngine();
 		this.getLedgerTransport = () => HWTransportNodeHid.create();
-		const ledger = Web3SubProvider(this.getLedgerTransport, {
+		// ledger firmware 1.6 changed the path derivation scheme to be "44'/60'/x'/0/0"
+		// to support legacy accounts, we will also search accounts in previous path scheme "44'/60'/0'/x"
+		this.ledgerConfig = {
 			networkId: CONFIG.chainId,
 			accountsLength: accountsQuantity,
-			accountsOffset: accountsOffset
-		});
+			accountsOffset: accountsOffset,
+			paths: ["44'/60'/x'/0/0", "44'/60'/0'/x"]
+		};
+		const ledger = Web3SubProvider(this.getLedgerTransport, this.ledgerConfig);
+
 		const subscriptionSubprovider = new SubscriptionSubprovider();
 
 		engine.addProvider(ledger);
