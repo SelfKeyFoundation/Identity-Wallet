@@ -69,6 +69,9 @@ const styles = theme => ({
 	},
 	next: {
 		minWidth: '120px'
+	},
+	paper: {
+		boxShadow: 'inherit'
 	}
 });
 
@@ -107,7 +110,7 @@ class Password extends PureComponent {
 							<SelfkeyLogoTemp />
 						</Grid>
 					</Grid>
-					<Paper>
+					<Paper className={classes.paper}>
 						<ModalCloseButton component={gotBackHome}>
 							<ModalCloseIcon className={classes.closeIcon} />
 						</ModalCloseButton>

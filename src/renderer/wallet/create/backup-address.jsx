@@ -42,9 +42,11 @@ const styles = theme => ({
 			border: `1px solid ${warning}`
 		}
 	},
-
 	root: {
 		top: '-50px'
+	},
+	paper: {
+		boxShadow: 'inherit'
 	}
 });
 
@@ -88,7 +90,7 @@ class BackupAddress extends PureComponent {
 							<SelfkeyLogoTemp />
 						</Grid>
 					</Grid>
-					<Paper>
+					<Paper className={classes.paper}>
 						<ModalHeader>
 							<Typography variant="body1" id="modal-title">
 								Step 3: Backup Your Ethereum Address

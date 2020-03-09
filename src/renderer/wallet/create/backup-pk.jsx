@@ -50,6 +50,9 @@ const styles = theme => ({
 	},
 	root: {
 		top: '-50px'
+	},
+	paper: {
+		boxShadow: 'inherit'
 	}
 });
 
@@ -95,7 +98,7 @@ class BackupPK extends PureComponent {
 								<SelfkeyLogoTemp />
 							</Grid>
 						</Grid>
-						<Paper className="modalContent">
+						<Paper className={`${classes.paper} modalContent`}>
 							<ModalHeader>
 								<Typography variant="body1" id="modal-title">
 									Step 4: Backup Your Private Keys
