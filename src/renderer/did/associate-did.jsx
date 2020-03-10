@@ -8,8 +8,9 @@ const styles = theme => ({
 		height: '71px'
 	},
 	modalPosition: {
-		position: 'static',
-		marginTop: '30px'
+		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)',
+		marginTop: '30px',
+		position: 'static'
 	},
 	loading: {
 		position: 'relative',
