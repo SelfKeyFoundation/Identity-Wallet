@@ -74,7 +74,6 @@ const styles = theme => ({
 	modalWrap: {
 		border: 'none',
 		backgroundColor: 'transparent',
-		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)',
 		position: 'static',
 		width: '471px'
 	},

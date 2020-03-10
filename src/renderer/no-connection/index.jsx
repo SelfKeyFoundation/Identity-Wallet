@@ -21,9 +21,6 @@ const styles = theme => ({
 	marginBottom: {
 		marginBottom: '70px'
 	},
-	modalWrap: {
-		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
-	},
 	spacing: {
 		padding: '30px 30px 40px'
 	}
@@ -36,7 +33,7 @@ export const NoConnection = withStyles(styles)(props => {
 	};
 	return (
 		<Modal open={true}>
-			<ModalWrap className={`${classes.closeModal} ${classes.modalWrap}`}>
+			<ModalWrap className={classes.closeModal}>
 				<ModalBody className={classes.spacing}>
 					<Grid
 						container

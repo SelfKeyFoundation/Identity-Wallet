@@ -31,7 +31,6 @@ import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	modalWrap: {
-		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)',
 		width: '800px'
 	},
 	closeButton: {

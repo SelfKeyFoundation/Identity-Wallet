@@ -28,9 +28,6 @@ const styles = theme => ({
 	},
 	h1: {
 		marginBottom: '0.5em'
-	},
-	modalWrap: {
-		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
 	}
 });
 
@@ -213,11 +210,10 @@ class EnterPassphrase extends PureComponent {
 	};
 
 	render() {
-		const { classes } = this.props;
 		return (
 			<div>
 				<Modal open={true}>
-					<ModalWrap className={classes.modalWrap}>
+					<ModalWrap>
 						<ModalCloseButton onClick={this.handleCancel}>
 							<ModalCloseIcon style={{ marginTop: '20px' }} />
 						</ModalCloseButton>

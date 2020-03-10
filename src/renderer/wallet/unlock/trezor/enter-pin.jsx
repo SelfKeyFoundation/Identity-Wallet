@@ -44,9 +44,6 @@ const styles = theme => ({
 	},
 	password: {
 		width: '330px'
-	},
-	modalWrap: {
-		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
 	}
 });
 
@@ -253,11 +250,10 @@ class EnterPIN extends PureComponent {
 	};
 
 	render() {
-		const { classes } = this.props;
 		return (
 			<div>
 				<Modal open={true}>
-					<ModalWrap className={classes.modalWrap}>
+					<ModalWrap>
 						<ModalCloseButton onClick={this.handleCancel}>
 							<ModalCloseIcon style={{ marginTop: '20px' }} />
 						</ModalCloseButton>

@@ -19,9 +19,6 @@ import { push } from 'connected-react-router';
 const styles = theme => ({
 	closeIcon: {
 		marginTop: '20px'
-	},
-	modalWrap: {
-		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
 	}
 });
 
@@ -162,7 +159,7 @@ class ConnectingLedger extends PureComponent {
 		return (
 			<div>
 				<Modal open={true}>
-					<ModalWrap className={classes.modalWrap}>
+					<ModalWrap>
 						<ModalCloseButton onClick={this.handleClose}>
 							<ModalCloseIcon className={classes.closeIcon} />
 						</ModalCloseButton>
