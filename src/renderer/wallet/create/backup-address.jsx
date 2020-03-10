@@ -22,7 +22,8 @@ const styles = theme => ({
 	},
 	modalWrap: {
 		border: 'none',
-		backgroundColor: 'transparent'
+		backgroundColor: 'transparent',
+		boxShadow: 'none'
 	},
 	logoSection: {
 		paddingBottom: '50px'
