@@ -36,6 +36,9 @@ const styles = theme => ({
 		width: '66px',
 		height: '76px'
 	},
+	modalContentWrapper: {
+		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
+	},
 	modalWrap: {
 		border: 'none',
 		backgroundColor: 'transparent',
