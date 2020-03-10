@@ -7,7 +7,7 @@ const styles = theme => ({
 	modalWrap: {
 		position: 'relative',
 		width: '100%',
-		margin: '0 auto',
+		margin: '0',
 		maxWidth: '780px'
 	},
 	containerHeader: {
@@ -70,76 +70,63 @@ export const BankAccountsPaymentComplete = withStyles(styles)(props => {
 		<ModalWrap className={classes.modalWrap}>
 			<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
 			<ModalHeader className={classes.modalHeader}>
+				<Typography variant="body1">Payment Received</Typography>
+			</ModalHeader>
+			<ModalBody>
 				<Grid
 					container
 					justify="flex-start"
 					alignItems="flex-start"
-					className={classes.containerHeader}
+					className={classes.content}
 				>
-					<Typography variant="body1">Payment Received</Typography>
-				</Grid>
-			</ModalHeader>
-			<ModalBody>
-				<div className={classes.contentContainer}>
-					<Grid
-						container
-						justify="flex-start"
-						alignItems="flex-start"
-						className={classes.content}
-					>
-						<div className={classes.icon}>
-							<HourGlassLargeIcon />
-						</div>
-						<div className={classes.content}>
-							<div className={classes.description}>
-								<Typography variant="h1" gutterBottom>
-									Bank Account KYC Process Started
+					<div className={classes.icon}>
+						<HourGlassLargeIcon />
+					</div>
+					<div className={classes.content}>
+						<div className={classes.description}>
+							<Typography variant="h1" gutterBottom>
+								Bank Account KYC Process Started
+							</Typography>
+							<Typography variant="body1" gutterBottom>
+								Thank you for payment!
+							</Typography>
+							{simpleFlow && (
+								<Typography variant="body2" gutterBottom>
+									One of our managers is reviewing the information you submitted
+									and{' '}
+									<strong>
+										will contact you shortly on the e-mail you provided{' '}
+									</strong>
+									, to continue the process. If you have any questions in the
+									meantime, you can reach us at:
 								</Typography>
-								<Typography variant="body1" gutterBottom>
-									Thank you for payment!
-								</Typography>
-								{simpleFlow && (
-									<Typography variant="body2" gutterBottom>
-										One of our managers is reviewing the information you
-										submitted and{' '}
-										<strong>
-											will contact you shortly on the e-mail you provided{' '}
-										</strong>
-										, to continue the process. If you have any questions in the
-										meantime, you can reach us at:
-									</Typography>
-								)}
-
-								{!simpleFlow && (
-									<Typography variant="body2" gutterBottom>
-										Please click the continue button and select your preferred
-										Bank to continue the process. If you have any questions in
-										the meantime, you can reach us at:
-									</Typography>
-								)}
-								<Typography
-									variant="body2"
-									color="primary"
-									gutterBottom
-									className="email"
-								>
-									{email}
-								</Typography>
-							</div>
-							{!simpleFlow && (
-								<div className={classes.footer}>
-									<Button
-										variant="contained"
-										size="large"
-										onClick={onContinueClick}
-									>
-										Continue
-									</Button>
-								</div>
 							)}
+
+							{!simpleFlow && (
+								<Typography variant="body2" gutterBottom>
+									Please click the continue button and select your preferred Bank
+									to continue the process. If you have any questions in the
+									meantime, you can reach us at:
+								</Typography>
+							)}
+							<Typography
+								variant="body2"
+								color="primary"
+								gutterBottom
+								className="email"
+							>
+								{email}
+							</Typography>
 						</div>
-					</Grid>
-				</div>
+						{!simpleFlow && (
+							<div className={classes.footer}>
+								<Button variant="contained" size="large" onClick={onContinueClick}>
+									Continue
+								</Button>
+							</div>
+						)}
+					</div>
+				</Grid>
 			</ModalBody>
 		</ModalWrap>
 	);
