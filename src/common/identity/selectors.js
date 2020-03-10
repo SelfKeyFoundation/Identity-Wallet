@@ -27,10 +27,7 @@ import {
 const createRootSelector = rootKey => (...fields) => state => _.pick(state[rootKey], fields);
 
 const selectRoot = createRootSelector('identity');
-const selectProps = (...fields) => (state, props = {}) => {
-	console.log('XXX', props);
-	return _.pick(props, fields);
-};
+const selectProps = (...fields) => (state, props = {}) => _.pick(props, fields);
 
 // Repositories
 
