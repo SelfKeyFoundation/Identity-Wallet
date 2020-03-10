@@ -27,10 +27,7 @@ import {
 const createRootSelector = rootKey => (...fields) => state => _.pick(state[rootKey], fields);
 
 const selectRoot = createRootSelector('identity');
-const selectProps = (...fields) => (state, props = {}) => {
-	console.log('XXX', props);
-	return _.pick(props, fields);
-};
+const selectProps = (...fields) => (state, props = {}) => _.pick(props, fields);
 
 // Repositories
 
@@ -482,7 +479,9 @@ export const selectCorporateJurisdictions = createSelector(
 		idType
 			? idType.content.enum.map((code, index) => ({
 					code,
-					name: idType.content.enumNames[index]
+					name: !idType.content.enumNames
+						? idType.content.enum[index]
+						: idType.content.enumNames[index]
 			  }))
 			: []
 );
@@ -495,7 +494,9 @@ export const selectCorporateLegalEntityTypes = createSelector(
 		idType
 			? idType.content.enum.map((code, index) => ({
 					code,
-					name: idType.content.enumNames[index]
+					name: !idType.content.enumNames
+						? idType.content.enum[index]
+						: idType.content.enumNames[index]
 			  }))
 			: []
 );
@@ -697,7 +698,9 @@ export const selectJurisdictionName = createSelector(
 		const codes = attrType.content.enum;
 		const index = codes.findIndex(j => props.jurisdiction === j);
 		if (index === -1) return null;
-		return attrType.content.enumNames[index];
+		return !attrType.content.enumNames
+			? attrType.content.enum[index]
+			: attrType.content.enumNames[index];
 	}
 );
 

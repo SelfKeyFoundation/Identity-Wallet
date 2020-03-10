@@ -1,6 +1,7 @@
 import sinon from 'sinon';
+import _ from 'lodash';
 import { setGlobalContext } from '../context';
-import { identitySelectors } from '../identity';
+import { identitySelectors, initialState as identityInitialState } from '../identity';
 import { kycActions, kycTypes, reducers, initialState, kycSelectors, testExports } from './index';
 
 describe('KYC Duck', () => {
@@ -16,7 +17,7 @@ describe('KYC Duck', () => {
 	};
 	beforeEach(() => {
 		sinon.restore();
-		state = { kyc: { ...initialState } };
+		state = { kyc: _.cloneDeep(initialState), identity: _.cloneDeep(identityInitialState) };
 		setGlobalContext({ kycApplicationService: kycApplicationService });
 	});
 	describe('Applications', () => {
@@ -77,6 +78,40 @@ describe('KYC Duck', () => {
 			});
 			it('selectApplications', () => {
 				expect(kycSelectors.selectApplications(state)).toEqual(testApplications);
+			});
+			describe('selectMemberRequirementsForTemplate', () => {
+				let identity = null;
+				let template = {};
+				let childrenIdentities = null;
+				beforeEach(() => {
+					identity = { id: 1, type: 'corporate' };
+					childrenIdentities = [
+						{ id: 2, type: 'individual', parentId: 1 },
+						{ id: 3, type: 'corporate', parentId: 1 },
+						{ id: 4, type: 'individual', parentId: 3 }
+					];
+					template = {
+						memberTemplates: true
+					};
+				});
+				it('should be null for non corporate identities', () => {
+					sinon
+						.stub(identitySelectors, 'selectIdentity')
+						.returns({ ...identity, type: 'individual' });
+					expect(
+						kycSelectors.selectMemberRequirementsForTemplate(state, 'rest', 'test')
+					).toBe(null);
+				});
+				it('should receive member requirements', () => {
+					sinon.stub(identitySelectors, 'selectIdentity').returns(identity);
+					sinon.stub(kycSelectors, 'oneTemplateSelector').returns(template);
+					sinon
+						.stub(identitySelectors, 'selectChildrenIdentities')
+						.returns(childrenIdentities);
+					expect(
+						kycSelectors.selectMemberRequirementsForTemplate(state, 'rest', 'test')
+					).toBe(childrenIdentities);
+				});
 			});
 		});
 	});

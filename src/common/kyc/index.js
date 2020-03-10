@@ -115,6 +115,21 @@ export const kycSelectors = {
 		return templates.find(tpl => tpl.id === templateId);
 	},
 
+	selectMemberRequirementsForTemplate(state, rpName, templateId) {
+		const template = this.oneTemplateSelector(state, rpName, templateId);
+		const identity = identitySelectors.selectIdentity(state);
+		if (!identity || identity.type !== 'corporate' || !template || !template.memberTemplates) {
+			return null;
+		}
+
+		const members = identitySelectors.selectChildrenIdentities(state, {
+			identityId: identity.id
+		});
+
+		// const { memberTemplates } = template;
+
+		return members;
+	},
 	selectRequirementsForTemplate(state, rpName, templateId) {
 		const template = this.oneTemplateSelector(state, rpName, templateId);
 		if (!template) return null;
@@ -127,6 +142,7 @@ export const kycSelectors = {
 			return acc;
 		}, {});
 		const identity = identitySelectors.selectIdentity(state);
+
 		const walletAttributes = identitySelectors
 			.selectFullIdAttributesByIds(state, { identityId: identity.id })
 			.reduce((acc, curr) => {
@@ -166,6 +182,7 @@ export const kycSelectors = {
 			};
 		});
 	},
+
 	selectKYCAttributes(state, identityId, attributes = []) {
 		const kycAttributes = identitySelectors
 			.selectFullIdAttributesByIds(state, {
@@ -203,6 +220,7 @@ export const kycSelectors = {
 			let attr = kycAttributes.find(attr => attr.schemaId === url);
 			if (!attr) {
 				attr = (identitySelectors.selectAttributesByUrl(state, {
+					identityId,
 					attributeTypeUrls: [url]
 				}) || [])[0];
 			}
