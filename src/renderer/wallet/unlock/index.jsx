@@ -39,6 +39,7 @@ const styles = theme => ({
 	modalWrap: {
 		border: 'none',
 		backgroundColor: 'transparent',
+		boxShadow: 'none',
 		top: '100px'
 	},
 	logoSection: {
@@ -65,6 +66,9 @@ const styles = theme => ({
 	},
 	closeIcon: {
 		marginTop: '20px'
+	},
+	paper: {
+		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
 	}
 });
 
@@ -172,7 +176,7 @@ class Unlock extends PureComponent {
 					>
 						<SelfkeyLogoTemp />
 					</Grid>
-					<Paper className={classes.modalContentWrapper}>
+					<Paper className={`lofasz ${classes.paper}`}>
 						<ModalCloseButton component={gotBackHome}>
 							<ModalCloseIcon className={classes.closeIcon} />
 						</ModalCloseButton>

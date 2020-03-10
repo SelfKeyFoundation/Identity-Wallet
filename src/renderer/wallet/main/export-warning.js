@@ -9,6 +9,12 @@ const styles = theme => ({
 	},
 	buttonContainer: {
 		marginTop: '10px'
+	},
+	popup: {
+		boxShadow: 'none',
+		'& .paper': {
+			boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
+		}
 	}
 });
 
@@ -16,7 +22,13 @@ class WalletExportWarningComponent extends PureComponent {
 	render() {
 		const { classes, onCancel, onExport } = this.props;
 		return (
-			<Popup open={true} text="Step 1: Privacy" closeAction={onCancel} displayLogo>
+			<Popup
+				open={true}
+				text="Step 1: Privacy"
+				closeAction={onCancel}
+				displayLogo
+				popupClass={classes.popup}
+			>
 				<Grid container direction="row" justify="flex-start" alignItems="stretch">
 					<Grid item xs={2}>
 						<WarningShieldIcon />

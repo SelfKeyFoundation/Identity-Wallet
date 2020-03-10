@@ -1,23 +1,14 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
-import { CloseButtonIcon, HourGlassLargeIcon } from 'selfkey-ui';
+import { CloseButtonIcon, HourGlassLargeIcon, ModalWrap, ModalBody, ModalHeader } from 'selfkey-ui';
 
 const styles = theme => ({
 	container: {
-		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)',
 		position: 'relative',
 		width: '100%',
 		margin: '0 auto',
 		maxWidth: '780px'
-	},
-	containerHeader: {
-		padding: '22px 30px',
-		background: '#2A3540',
-		'& div': {
-			display: 'inline-block',
-			color: '#FFF'
-		}
 	},
 	closeIcon: {
 		position: 'absolute',
@@ -69,17 +60,14 @@ const styles = theme => ({
 
 const MarketplaceProcessStarted = withStyles(styles)(
 	({ classes, title, body, onBackClick, onSelfKeyClick }) => (
-		<div className={classes.container}>
+		<ModalWrap>
 			<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
-			<Grid
-				container
-				justify="flex-start"
-				alignItems="flex-start"
-				className={classes.containerHeader}
-			>
-				<Typography variant="h2">{title}</Typography>
-			</Grid>
-			<div className={classes.contentContainer}>
+			<ModalHeader>
+				<Grid container justify="flex-start" alignItems="flex-start">
+					<Typography variant="body1">{title}</Typography>
+				</Grid>
+			</ModalHeader>
+			<ModalBody>
 				<Grid
 					container
 					justify="flex-start"
@@ -108,8 +96,8 @@ const MarketplaceProcessStarted = withStyles(styles)(
 						</div>
 					</div>
 				</Grid>
-			</div>
-		</div>
+			</ModalBody>
+		</ModalWrap>
 	)
 );
 
