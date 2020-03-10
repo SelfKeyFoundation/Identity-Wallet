@@ -74,8 +74,13 @@ const styles = theme => ({
 	modalWrap: {
 		border: 'none',
 		backgroundColor: 'transparent',
+		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)',
 		position: 'static',
 		width: '471px'
+	},
+	modalBody: {
+		border: '1px solid #303C49',
+		borderTop: 'none'
 	},
 	tooltip: {
 		padding: '7px 0 0 10px'
@@ -200,7 +205,7 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 						<ModalHeader className={classes.modalHeader}>
 							<Typography variant="h2">Identity Wallet Details</Typography>
 						</ModalHeader>
-						<ModalBody>
+						<ModalBody className={classes.modalBody}>
 							<form onSubmit={this.handleSave} noValidate>
 								<Grid
 									container
