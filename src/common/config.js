@@ -128,7 +128,8 @@ const common = {
 		certifiers: false,
 		corporateMarketplace: false,
 		kyccUsersEndpoint: false,
-		walletExport: false
+		walletExport: false,
+		swapTokens: false
 	}
 };
 
@@ -153,7 +154,8 @@ const dev = {
 		certifiers: true,
 		corporateMarketplace: false,
 		kyccUsersEndpoint: true,
-		walletExport: true
+		walletExport: true,
+		swapTokens: true
 	},
 	testWalletAddress: '0x23d233933c86f93b74705cf0d236b39f474249f8',
 	testDidAddress: '0xee10a3335f48e10b444e299cf017d57879109c1e32cec3e31103ceca7718d0ec',
@@ -181,7 +183,8 @@ const prod = {
 		certifiers: false,
 		corporateMarketplace: false,
 		kyccUsersEndpoint: false,
-		walletExport: false
+		walletExport: false,
+		swapTokens: false
 	},
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'
 };
