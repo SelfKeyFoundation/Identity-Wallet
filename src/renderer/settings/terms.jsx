@@ -39,18 +39,19 @@ const styles = theme => ({
 	logoSection: {
 		paddingBottom: '50px'
 	},
-
 	flexSection: {
 		flexGrow: 1,
 		display: 'flex',
 		flexDirection: 'column',
 		minHeight: 0
 	},
-
 	flexColScroll: {
 		flexGrow: 1,
 		overflow: 'auto',
 		maxHeight: '300px'
+	},
+	paper: {
+		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
 	}
 });
 
@@ -93,7 +94,7 @@ class Terms extends PureComponent {
 							<Typography variant="h1">SELFKEY</Typography>
 						</Grid>
 					</Grid>
-					<Paper>
+					<Paper className={classes.paper}>
 						<ModalHeader>
 							<Typography variant="h3" id="modal-title">
 								Terms of Service Agreement
