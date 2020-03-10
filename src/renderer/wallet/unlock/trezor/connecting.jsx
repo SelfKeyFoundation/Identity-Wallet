@@ -10,9 +10,19 @@ import {
 	WarningShieldIcon,
 	TrezorBridgeIcon
 } from 'selfkey-ui';
+import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
+
+const styles = theme => ({
+	closeIcon: {
+		marginTop: '20px'
+	},
+	modalWrap: {
+		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
+	}
+});
 
 class ConnectingToTrezor extends PureComponent {
 	async componentDidMount() {
@@ -241,12 +251,13 @@ class ConnectingToTrezor extends PureComponent {
 	};
 
 	render() {
+		const { classes } = this.props;
 		return (
 			<div>
 				<Modal open={true}>
-					<ModalWrap>
+					<ModalWrap className={classes.modalWrap}>
 						<ModalCloseButton onClick={this.handleClose}>
-							<ModalCloseIcon style={{ marginTop: '20px' }} />
+							<ModalCloseIcon className={classes.closeIcon} />
 						</ModalCloseButton>
 						<ModalHeader>
 							<Grid
@@ -278,4 +289,4 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-export default connect(mapStateToProps)(ConnectingToTrezor);
+export default connect(mapStateToProps)(withStyles(styles)(ConnectingToTrezor));
