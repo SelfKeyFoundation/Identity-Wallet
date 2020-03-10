@@ -1,13 +1,13 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
-import { CloseButtonIcon, HourGlassLargeIcon } from 'selfkey-ui';
+import { CloseButtonIcon, HourGlassLargeIcon, ModalWrap, ModalHeader, ModalBody } from 'selfkey-ui';
 
 const styles = theme => ({
-	container: {
+	modalWrap: {
 		position: 'relative',
 		width: '100%',
-		margin: '0 auto',
+		margin: '0',
 		maxWidth: '780px'
 	},
 	containerHeader: {
@@ -67,17 +67,12 @@ export const BankAccountsPaymentComplete = withStyles(styles)(props => {
 	const { classes, email, identity, onBackClick, onContinueClick } = props;
 	const simpleFlow = identity.type === 'corporate';
 	return (
-		<div className={classes.container}>
+		<ModalWrap className={classes.modalWrap}>
 			<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
-			<Grid
-				container
-				justify="flex-start"
-				alignItems="flex-start"
-				className={classes.containerHeader}
-			>
+			<ModalHeader className={classes.modalHeader}>
 				<Typography variant="body1">Payment Received</Typography>
-			</Grid>
-			<div className={classes.contentContainer}>
+			</ModalHeader>
+			<ModalBody>
 				<Grid
 					container
 					justify="flex-start"
@@ -132,8 +127,8 @@ export const BankAccountsPaymentComplete = withStyles(styles)(props => {
 						)}
 					</div>
 				</Grid>
-			</div>
-		</div>
+			</ModalBody>
+		</ModalWrap>
 	);
 });
 

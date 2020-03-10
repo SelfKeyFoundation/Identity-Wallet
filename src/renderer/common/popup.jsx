@@ -24,6 +24,9 @@ const styles = theme => ({
 		border: 'none',
 		backgroundColor: 'transparent'
 	},
+	paper: {
+		boxShadow: 'none'
+	},
 	popup: {
 		position: 'relative'
 	}
@@ -39,11 +42,12 @@ const PopupWrap = props => {
 		isHeaderVisible = true,
 		displayLogo = false,
 		headerClass = '',
-		xtraClass = ''
+		xtraClass = '',
+		popupClass = ''
 	} = props;
 	return (
 		<Modal open={open} className={`${classes.modal} ${props.className}`}>
-			<ModalWrap className={classes.modalWrap}>
+			<ModalWrap className={`${classes.modalWrap} ${popupClass}`}>
 				{displayLogo && (
 					<Grid
 						container
@@ -58,7 +62,7 @@ const PopupWrap = props => {
 						</Grid>
 					</Grid>
 				)}
-				<Paper className={classes.paper}>
+				<Paper className={`${classes.paper} paper`}>
 					<div className={classes.popup}>
 						{closeAction && (
 							<ModalCloseButton onClick={closeAction} className={classes.closeButton}>

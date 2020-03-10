@@ -22,10 +22,14 @@ const styles = theme => ({
 	},
 	modalWrap: {
 		border: 'none',
-		backgroundColor: 'transparent'
+		backgroundColor: 'transparent',
+		boxShadow: 'none'
 	},
 	logoSection: {
 		paddingBottom: '50px'
+	},
+	paper: {
+		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
 	}
 });
 
@@ -58,7 +62,7 @@ class TermsWarning extends PureComponent {
 							<Typography variant="h1">SELFKEY</Typography>
 						</Grid>
 					</Grid>
-					<Paper>
+					<Paper className={classes.paper}>
 						<ModalHeader>
 							<Typography variant="h3" id="modal-title">
 								Need to Accept Terms
