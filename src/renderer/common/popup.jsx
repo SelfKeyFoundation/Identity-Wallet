@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Typography, withStyles, Grid, Paper, CircularProgress } from '@material-ui/core';
+import { Modal, Typography, withStyles, Grid, Paper } from '@material-ui/core';
 import {
 	ModalWrap,
 	ModalCloseButton,
@@ -27,10 +27,11 @@ const styles = theme => ({
 	},
 	modalWrap: {
 		border: 'none',
-		backgroundColor: 'transparent'
+		backgroundColor: 'transparent',
+		boxShadow: 'none'
 	},
 	paper: {
-		boxShadow: 'none'
+		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
 	},
 	popup: {
 		position: 'relative'
@@ -43,8 +44,8 @@ const PopupWrap = props => {
 		children,
 		closeAction,
 		text,
-		loading = 'false',
 		open = true,
+		closeComponent,
 		isHeaderVisible = true,
 		displayLogo = false,
 		headerClass = '',
@@ -70,10 +71,16 @@ const PopupWrap = props => {
 				)}
 				<Paper className={`${classes.paper} paper`}>
 					<div className={classes.popup}>
-						{closeAction && (
-							<ModalCloseButton onClick={closeAction} className={classes.closeButton}>
+						{closeAction || closeComponent ? (
+							<ModalCloseButton
+								onClick={closeAction}
+								component={closeComponent}
+								className={classes.closeButton}
+							>
 								<ModalCloseIcon />
 							</ModalCloseButton>
+						) : (
+							''
 						)}
 						{isHeaderVisible && (
 							<ModalHeader className={`${headerClass} ${classes.header}`}>
@@ -84,7 +91,6 @@ const PopupWrap = props => {
 								) : (
 									text
 								)}
-								{loading && <CircularProgress />}
 							</ModalHeader>
 						)}
 						<ModalBody className={xtraClass}>{children}</ModalBody>
