@@ -176,7 +176,7 @@ class Unlock extends PureComponent {
 					>
 						<SelfkeyLogoTemp />
 					</Grid>
-					<Paper className={`lofasz ${classes.paper}`}>
+					<Paper className={classes.paper}>
 						<ModalCloseButton component={gotBackHome}>
 							<ModalCloseIcon className={classes.closeIcon} />
 						</ModalCloseButton>
