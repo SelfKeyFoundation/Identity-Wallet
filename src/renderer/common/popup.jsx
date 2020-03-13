@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Typography, withStyles, Grid, Paper } from '@material-ui/core';
+import { Modal, Typography, withStyles, Grid, Paper, CircularProgress } from '@material-ui/core';
 import {
 	ModalWrap,
 	ModalCloseButton,
@@ -15,6 +15,11 @@ const styles = theme => ({
 	},
 	closeButton: {
 		top: '20px'
+	},
+	header: {
+		alignItems: 'center',
+		display: 'flex',
+		justifyContent: 'space-between'
 	},
 	logoSection: {
 		paddingBottom: '50px',
@@ -38,6 +43,7 @@ const PopupWrap = props => {
 		children,
 		closeAction,
 		text,
+		loading = 'false',
 		open = true,
 		isHeaderVisible = true,
 		displayLogo = false,
@@ -70,7 +76,7 @@ const PopupWrap = props => {
 							</ModalCloseButton>
 						)}
 						{isHeaderVisible && (
-							<ModalHeader className={headerClass}>
+							<ModalHeader className={`${headerClass} ${classes.header}`}>
 								{typeof text === 'string' ? (
 									<Typography variant="body1" className={classes.title}>
 										{text}
@@ -78,6 +84,7 @@ const PopupWrap = props => {
 								) : (
 									text
 								)}
+								{loading && <CircularProgress />}
 							</ModalHeader>
 						)}
 						<ModalBody className={xtraClass}>{children}</ModalBody>
