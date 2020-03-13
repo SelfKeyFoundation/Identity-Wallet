@@ -1,38 +1,20 @@
 import React, { PureComponent } from 'react';
-import { Grid, Typography, Paper, Modal, Input, Button, InputAdornment } from '@material-ui/core';
-import {
-	ModalWrap,
-	ModalHeader,
-	ModalBody,
-	Copy,
-	DownloadIcon2,
-	SelfkeyLogoTemp,
-	warning
-} from 'selfkey-ui';
+import { Grid, Typography, Input, Button, InputAdornment } from '@material-ui/core';
+import { Copy, DownloadIcon2, warning } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { walletSelectors } from 'common/wallet';
 import { createWalletSelectors, createWalletOperations } from 'common/create-wallet';
 import { Link } from 'react-router-dom';
+import { Popup } from '../../common';
 
 const styles = theme => ({
 	downloadIcon: {
 		width: '66px',
 		height: '71px'
 	},
-	modalWrap: {
-		border: 'none',
-		backgroundColor: 'transparent',
-		boxShadow: 'none'
-	},
-	logoSection: {
-		paddingBottom: '50px'
-	},
 	button: {
 		width: '100%'
-	},
-	input: {
-		display: 'none'
 	},
 	orange: {
 		border: `1px solid ${warning}`,
@@ -42,12 +24,6 @@ const styles = theme => ({
 		'&:hover': {
 			border: `1px solid ${warning}`
 		}
-	},
-	root: {
-		top: '-50px'
-	},
-	paper: {
-		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
 	}
 });
 
@@ -77,91 +53,65 @@ class BackupAddress extends PureComponent {
 	render() {
 		const { classes } = this.props;
 		return (
-			<Modal open={true} className={classes.root}>
-				<ModalWrap className={classes.modalWrap}>
-					<Grid
-						container
-						direction="column"
-						justify="flex-start"
-						alignItems="center"
-						spacing={8}
-						className={classes.logoSection}
-					>
-						<Grid item>
-							<SelfkeyLogoTemp />
-						</Grid>
+			<Popup
+				closeAction={this.handleBackAction}
+				open
+				displayLogo
+				text="Step 3: Backup Your Ethereum AddressPassword"
+			>
+				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
+					<Grid item xs={2}>
+						<DownloadIcon2 className={classes.downloadIcon} />
 					</Grid>
-					<Paper className={classes.paper}>
-						<ModalHeader>
-							<Typography variant="body1" id="modal-title">
-								Step 3: Backup Your Ethereum Address
-							</Typography>
-						</ModalHeader>
-
-						<ModalBody>
-							<Grid
-								container
-								direction="row"
-								justify="flex-start"
-								alignItems="flex-start"
-							>
-								<Grid item xs={2}>
-									<DownloadIcon2 className={classes.downloadIcon} />
-								</Grid>
-								<Grid item xs={10}>
-									<Typography variant="body1" gutterBottom>
-										Your address in Ethereum network. Think of it like a bank
-										account number that you own, used to send and receive Ether
-										or tokens. The ability to authorize transactions on this
-										address is encrypted by the password you just created.
-										Download a backup and save this address in a convenient
-										location.
-									</Typography>
-									<br />
-									<Typography variant="overline" gutterBottom>
-										Your Address
-									</Typography>
-									<Input
-										id="publicKey"
-										fullWidth
-										disableUnderline={true}
-										value={this.props.address}
-										endAdornment={
-											<InputAdornment position="start">
-												<Copy text={this.props.address} />
-											</InputAdornment>
-										}
-										disabled
-									/>
-									<br />
-									<br />
-									<Button
-										variant="contained"
-										size="large"
-										className={classes.button}
-										onClick={this.handleDownload}
-									>
-										DOWNLOAD KEYSTORE FILE (UTC/JSON)
-									</Button>
-									{this.state.showFileDownloadedResult &&
-										this.showFileDownloadedResult()}
-									<br />
-									<br />
-									<Button
-										id="keystoreNext"
-										variant="outlined"
-										component={backupPrivateKey}
-										size="large"
-										className={classes.orange}
-									>
-										MY ADDRESS IS BACKED UP, CONTINUE
-									</Button>
-								</Grid>
-							</Grid>
-						</ModalBody>
-					</Paper>
-				</ModalWrap>
-			</Modal>
+					<Grid item xs={10}>
+						<Typography variant="body1" gutterBottom>
+							Your address in Ethereum network. Think of it like a bank account number
+							that you own, used to send and receive Ether or tokens. The ability to
+							authorize transactions on this address is encrypted by the password you
+							just created. Download a backup and save this address in a convenient
+							location.
+						</Typography>
+						<br />
+						<Typography variant="overline" gutterBottom>
+							Your Address
+						</Typography>
+						<Input
+							id="publicKey"
+							fullWidth
+							disableUnderline={true}
+							value={this.props.address}
+							endAdornment={
+								<InputAdornment position="start">
+									<Copy text={this.props.address} />
+								</InputAdornment>
+							}
+							disabled
+						/>
+						<br />
+						<br />
+						<Button
+							variant="contained"
+							size="large"
+							className={classes.button}
+							onClick={this.handleDownload}
+						>
+							DOWNLOAD KEYSTORE FILE (UTC/JSON)
+						</Button>
+						{this.state.showFileDownloadedResult && this.showFileDownloadedResult()}
+						<br />
+						<br />
+						<Button
+							id="keystoreNext"
+							variant="outlined"
+							component={backupPrivateKey}
+							size="large"
+							className={classes.orange}
+						>
+							MY ADDRESS IS BACKED UP, CONTINUE
+						</Button>
+					</Grid>
+				</Grid>
+			</Popup>
 		);
 	}
 }

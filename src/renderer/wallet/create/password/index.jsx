@@ -1,19 +1,12 @@
 import React, { PureComponent } from 'react';
-import { Grid, Typography, Paper, Modal, Input, LinearProgress, Button } from '@material-ui/core';
-import {
-	PasswordIcon,
-	ModalWrap,
-	ModalCloseButton,
-	ModalCloseIcon,
-	ModalHeader,
-	ModalBody,
-	SelfkeyLogoTemp
-} from 'selfkey-ui';
+import { Grid, Typography, Input, LinearProgress, Button } from '@material-ui/core';
+import { PasswordIcon } from 'selfkey-ui';
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import { handlePassword, renderPasswordStrength } from './password-util';
 import { connect } from 'react-redux';
 import { createWalletOperations } from 'common/create-wallet';
+import { Popup } from '../../../common';
 
 const styles = theme => ({
 	logoText: {
@@ -70,9 +63,6 @@ const styles = theme => ({
 	},
 	next: {
 		minWidth: '120px'
-	},
-	paper: {
-		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
 	}
 });
 
@@ -97,92 +87,56 @@ class Password extends PureComponent {
 	render() {
 		const { classes } = this.props;
 		return (
-			<Modal open={true} className={classes.root}>
-				<ModalWrap className={classes.modalWrap}>
-					<Grid
-						container
-						direction="column"
-						justify="flex-start"
-						alignItems="center"
-						spacing={8}
-						className={classes.logoSection}
-					>
-						<Grid item>
-							<SelfkeyLogoTemp />
-						</Grid>
+			<Popup closeComponent={gotBackHome} open displayLogo text="Step 1: Create Password">
+				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
+					<Grid item xs={2}>
+						<PasswordIcon className={classes.passwordIcon} />
 					</Grid>
-					<Paper className={classes.paper}>
-						<ModalCloseButton component={gotBackHome}>
-							<ModalCloseIcon className={classes.closeIcon} />
-						</ModalCloseButton>
-
-						<ModalHeader>
-							<Typography variant="body1" id="modal-title">
-								Step 1: Create Password
-							</Typography>
-						</ModalHeader>
-
-						<ModalBody>
-							<Grid
-								container
-								direction="row"
-								justify="flex-start"
-								alignItems="flex-start"
-							>
-								<Grid item xs={2}>
-									<PasswordIcon className={classes.passwordIcon} />
-								</Grid>
-								<Grid item xs={10}>
-									<Typography variant="body1" gutterBottom>
-										Protect your SelfKey Identity Wallet and Ethereum address
-										with a password. Your address is like a bank account number
-										on the blockchain, used to send and receive Ether or tokens.
-										This password is required to unlock your wallet.
-									</Typography>
-									<br />
-									<br />
-									<Input
-										id="pwd1"
-										disableUnderline={true}
-										placeholder="Password"
-										type="password"
-										value={this.state.password}
-										onChange={e => this.setState(handlePassword(e, this.state))}
-										className={classes.passwordInput}
-									/>
-									<Grid container className={classes.maskContainer}>
-										<div className={classes.maskElement} />
-										<div className={classes.maskElement} />
-										<div className={classes.maskElement} />
-									</Grid>
-									<LinearProgress
-										variant="determinate"
-										value={this.state.passwordScore}
-										className={classes.passwordScore}
-									/>
-									{renderPasswordStrength(
-										this.state.password,
-										this.state.strength
-									)}
-									<br />
-									<br />
-									<Button
-										id="pwdNext"
-										variant="contained"
-										component={createPasswordConfirmationLink}
-										disabled={this.state.password === ''}
-										onClick={this.handleNext}
-										className={classes.next}
-										size="large"
-									>
-										NEXT
-									</Button>
-								</Grid>
-							</Grid>
-						</ModalBody>
-					</Paper>
-				</ModalWrap>
-			</Modal>
+					<Grid item xs={10}>
+						<Typography variant="body1" gutterBottom>
+							Protect your SelfKey Identity Wallet and Ethereum address with a
+							password. Your address is like a bank account number on the blockchain,
+							used to send and receive Ether or tokens. This password is required to
+							unlock your wallet.
+						</Typography>
+						<br />
+						<br />
+						<Input
+							id="pwd1"
+							disableUnderline={true}
+							placeholder="Password"
+							type="password"
+							value={this.state.password}
+							onChange={e => this.setState(handlePassword(e, this.state))}
+							className={classes.passwordInput}
+						/>
+						<Grid container className={classes.maskContainer}>
+							<div className={classes.maskElement} />
+							<div className={classes.maskElement} />
+							<div className={classes.maskElement} />
+						</Grid>
+						<LinearProgress
+							variant="determinate"
+							value={this.state.passwordScore}
+							className={classes.passwordScore}
+						/>
+						{renderPasswordStrength(this.state.password, this.state.strength)}
+						<br />
+						<br />
+						<Button
+							id="pwdNext"
+							variant="contained"
+							component={createPasswordConfirmationLink}
+							disabled={this.state.password === ''}
+							onClick={this.handleNext}
+							className={classes.next}
+							size="large"
+						>
+							NEXT
+						</Button>
+					</Grid>
+				</Grid>
+			</Popup>
 		);
 	}
 }
