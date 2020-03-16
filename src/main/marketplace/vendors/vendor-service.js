@@ -15,7 +15,7 @@ export class VendorService {
 	async fetchVendors() {
 		const fetched = await request.get({ url: VENDOR_API_ENDPOINT, json: true });
 		return fetched.entities
-			.filter(entity => !!entity.data.vendorId)
+			.filter(entity => !!entity.data.vendor_id)
 			.map(entity => {
 				let vendor = _.mapKeys(entity.data, (value, key) => _.camelCase(key));
 				if (vendor.relyingPartyConfig) {
