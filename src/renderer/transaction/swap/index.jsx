@@ -1,26 +1,16 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { getWallet } from 'common/wallet/selectors';
+import { Popup, InputTitle } from '../../common';
 /*
 import {
 	transactionHistoryOperations,
 	transactionHistorySelectors
 } from 'common/transaction-history';
 */
-import { Grid, Typography, Paper, Modal, Divider /* Button */ } from '@material-ui/core';
-import {
-	/*
-	SelfkeyIcon,
-	EthereumIcon,
-	CustomIcon,
-	*/
-	ModalWrap,
-	ModalCloseButton,
-	ModalCloseIcon,
-	ModalBody
-} from 'selfkey-ui';
-import { Link } from 'react-router-dom';
+import { Grid, Select, Input, Typography, Button, Divider } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { KeyboardArrowDown } from '@material-ui/icons';
 /*
 import TokenPrice from '../../common/token-price';
 import { push } from 'connected-react-router';
@@ -28,90 +18,46 @@ import TransactionsHistory from '../transactions-history';
 */
 
 const styles = theme => ({
-	cryptoIcon: {
-		marginRight: '20px'
-	},
-	cryptoSymbol: {
-		fontSize: '14px',
-		fontWeight: 'normal'
-	},
-	modal: {
-		height: '100%',
-		overflow: 'auto'
-	},
-	modalWrap: {
-		border: 'none',
-		backgroundColor: 'transparent',
-		width: '850px',
-		left: 'calc(50% - 425px)'
-	},
-	modalContentWrapper: {
-		boxShadow: 'none',
-		marginBottom: '20px'
-	},
-	closeIcon: {
-		'& svg': {
-			position: 'relative',
-			top: '20px',
-			left: '70px'
+	body: {
+		color: '#FFFFFF',
+		fontFamily: 'Proxima Nova',
+		fontSize: '18px',
+		lineHeight: '30px',
+		width: '100%',
+		'& > div': {
+			marginBottom: '30px'
 		}
 	},
-	tokenPrice: {
-		padding: '20px 0'
+	cryptoSelect: {
+		width: '100%'
 	},
-	tokenAddress: {
-		padding: '20px 0'
+	selectItem: {
+		border: 0,
+		backgroundColor: '#1E262E',
+		color: '#FFFFFF'
 	},
-	actionButtons: {
-		padding: '36px 0 12px 0',
-		'& button': {
-			marginRight: '20px'
-		},
-		'& svg': {
-			width: '0.9em !important',
-			height: '0.9em !important',
-			marginRight: '0.5em'
-		},
-		'& svg path': {
-			fill: '#09a8ba'
-		}
-	},
-	tokenPublicKey: {
-		'& > p': {
-			display: 'inline'
-		},
-		'& > button': {
-			display: 'inline'
-		}
-	},
-	transactionEntry: {
+	tokenMax: {
 		display: 'flex',
-		padding: '20px 0',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		'& svg path': {
-			fill: 'transparent',
-			stroke: '#93B0C1'
-		}
+		flexWrap: 'nowrap'
 	},
-	transactionEntryDate: {
-		width: '50px',
-		textAlign: 'center'
+	amountInput: {
+		borderTopRightRadius: '0',
+		borderBottomRightRadius: '0'
 	},
-	transactionEntryIcon: {
-		width: '100px',
-		textAlign: 'center'
+	maxSourceInput: {
+		border: '1px solid #384656',
+		marginRight: '45px',
+		fontWeight: 'normal',
+		color: '#93B0C1',
+		background: '#1E262E',
+		borderTopLeftRadius: '0',
+		borderBottomLeftRadius: '0'
 	},
-	transactionEntryStatus: {
-		width: 'calc(100% - 200px)'
-	},
-	transactionEntryAmount: {
-		width: '100px',
-		textAlign: 'right'
+	divider: {
+		margin: '40px 0'
 	}
 });
 
-const goBackDashboard = props => <Link to="/main/dashboard" {...props} />;
 /*
 const getIconForToken = token => {
 	let icon = null;
@@ -144,46 +90,137 @@ const getNameForToken = token => {
 };
 */
 export class TokenSwapComponent extends PureComponent {
+	state = {
+		sourceToken: 'ETH',
+		targetToken: 'KEY',
+		amount: 0
+	};
 	componentDidMount() {}
 
 	handleSend = () => {};
 
-	handleReceive = _ => {};
+	handleReceive = () => {};
+
+	handleSourceTokenChange = () => {};
+
+	handleTargetTokenChange = () => {};
+
+	handleAmountChange = () => {};
+
+	handleExchange = () => {};
+
+	renderSelectSourceTokenItems = () => null;
+
+	renderSelectTargetTokenItems = () => null;
 
 	render() {
-		const { classes } = this.props;
+		const { classes, closeAction } = this.props;
 
 		return (
-			<Modal open={true} className={classes.modal}>
-				<ModalWrap className={classes.modalWrap}>
-					<Paper className={classes.modalContentWrapper}>
-						<ModalCloseButton className={classes.closeIcon} component={goBackDashboard}>
-							<ModalCloseIcon />
-						</ModalCloseButton>
-
-						<ModalBody style={{ boxShadow: 'none' }}>
-							<Grid
-								container
-								direction="row"
-								justify="flex-start"
-								alignItems="flex-start"
-								spacing={16}
+			<Popup closeAction={closeAction} text="Swap your tokens">
+				<Grid container direction="column" justify="flex-start" alignItems="flex-start">
+					<Grid item id="body" className={classes.body}>
+						<div>
+							<InputTitle title="Token" />
+							<Select
+								className={classes.cryptoSelect}
+								value={this.state.sourceToken}
+								onChange={e => this.handleSourceTokenChange(e)}
+								name="source"
+								disableUnderline
+								IconComponent={KeyboardArrowDown}
+								input={<Input disableUnderline />}
 							>
-								<div className={classes.cryptoIcon} />
-								<div>
-									<Typography variant="h5" />
-									<Typography variant="h2" className={classes.cryptoSymbol} />
-								</div>
+								{this.renderSelectSourceTokenItems()}
+							</Select>
+						</div>
+						<div>
+							<InputTitle title="Change to" />
+							<Select
+								className={classes.cryptoSelect}
+								value={this.state.targetToken}
+								onChange={e => this.handleTargetTokenChange(e)}
+								name="target"
+								disableUnderline
+								IconComponent={KeyboardArrowDown}
+								input={<Input disableUnderline />}
+							>
+								{this.renderSelectTargetTokenItems()}
+							</Select>
+						</div>
+						<div>
+							<Typography variant="body2" color="secondary">
+								Available:
+								<span style={{ color: '#fff', fontWeight: 'bold' }}>
+									{this.state.amount}
+									{'USD'}
+								</span>
+							</Typography>
+						</div>
+						<div>
+							<InputTitle title="Amount" />
+							<div className={classes.tokenMax}>
+								<Input
+									type="text"
+									onChange={this.handleAmountChange}
+									value={this.state.amount}
+									placeholder="0.00"
+									className={classes.amountInput}
+									fullWidth
+								/>
+								<Button
+									onClick={this.handleAllAmountClick}
+									variant="outlined"
+									size="large"
+									className={classes.maxSourceInput}
+								>
+									USD
+								</Button>
+								<Button
+									onClick={this.handleAllAmountClick}
+									variant="outlined"
+									size="large"
+								>
+									Max
+								</Button>
+							</div>
+						</div>
+						<Divider className={classes.divider} />
+						<div>
+							<Typography variant="body2" color="secondary">
+								Network Transaction Fee:
+								<span style={{ color: '#fff', fontWeight: 'bold' }}>
+									{this.state.amount}
+									{'USD'}
+								</span>
+							</Typography>
+						</div>
+						<Grid
+							container
+							direction="column"
+							justify="center"
+							alignItems="center"
+							className={classes.actionButtonsContainer}
+							spacing={24}
+						>
+							<Grid item>
+								<Button
+									variant="contained"
+									size="large"
+									onClick={this.handleExchange}
+								>
+									Exchange
+								</Button>
 							</Grid>
-							<div className={classes.tokenPrice} />
-							<Divider />
-							<div className={classes.tokenAddress} />
-							<Divider />
-							<div className={classes.actionButtons} />
-						</ModalBody>
-					</Paper>
-				</ModalWrap>
-			</Modal>
+							<Grid item>
+								<Typography variant="body2" color="secondary">
+									Exchange Rate:
+								</Typography>
+							</Grid>
+						</Grid>
+					</Grid>
+				</Grid>
+			</Popup>
 		);
 	}
 }
