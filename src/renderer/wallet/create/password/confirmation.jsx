@@ -25,7 +25,8 @@ const styles = theme => ({
 	},
 	modalWrap: {
 		border: 'none',
-		backgroundColor: 'transparent'
+		backgroundColor: 'transparent',
+		boxShadow: 'none'
 	},
 	logoSection: {
 		paddingBottom: '50px'
@@ -60,6 +61,9 @@ const styles = theme => ({
 	},
 	next: {
 		minWidth: '120px'
+	},
+	paper: {
+		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
 	}
 });
 
@@ -99,7 +103,7 @@ class PasswordConfirmation extends PureComponent {
 							<SelfkeyLogoTemp />
 						</Grid>
 					</Grid>
-					<Paper>
+					<Paper className={classes.paper}>
 						<ModalCloseButton component={goBackCreatePassword}>
 							<ModalCloseIcon className={classes.closeIcon} />
 						</ModalCloseButton>

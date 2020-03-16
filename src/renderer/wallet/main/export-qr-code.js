@@ -9,6 +9,12 @@ const styles = theme => ({
 	},
 	buttonContainer: {
 		marginTop: '20px'
+	},
+	popup: {
+		boxShadow: 'none',
+		'& .paper': {
+			boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
+		}
 	}
 });
 
@@ -16,7 +22,7 @@ class WalletExportQRCodeComponent extends PureComponent {
 	render() {
 		const { classes, onCancel, keystore } = this.props;
 		return (
-			<Popup open={true} text="Step 2: QR Code" displayLogo>
+			<Popup open={true} text="Step 2: QR Code" displayLogo popupClass={classes.popup}>
 				<Grid
 					container
 					direction="column"

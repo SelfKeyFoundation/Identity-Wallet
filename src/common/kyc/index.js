@@ -5,6 +5,7 @@ import { getGlobalContext } from '../context';
 import { push } from 'connected-react-router';
 import config from 'common/config';
 import { createAliasedAction } from 'electron-redux';
+import _ from 'lodash';
 import uuidv1 from 'uuid/v1';
 import { Logger } from 'common/logger';
 import {
@@ -843,7 +844,7 @@ export const setApplicationsReducer = (state, { payload }) => {
 		acc[curr.id] = curr;
 		return acc;
 	}, {});
-	applications = applications.map(app => app.id);
+	applications = _.uniq(applications.map(app => app.id));
 	return { ...state, applications, applicationsById };
 };
 
