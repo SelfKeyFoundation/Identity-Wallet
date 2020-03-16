@@ -358,6 +358,8 @@ export class RelyingPartyRest {
 				},
 				json: true
 			});
+
+			/*
 			let sendApps = [];
 			for (let application of applications) {
 				let messages = await this.getKYCApplicationChat(ctx, application.id);
@@ -365,6 +367,9 @@ export class RelyingPartyRest {
 				sendApps.push(application);
 			}
 			return sendApps;
+			*/
+
+			return applications;
 		} catch (error) {
 			if (error.statusCode === 404) {
 				return [];

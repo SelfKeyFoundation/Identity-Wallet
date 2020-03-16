@@ -408,7 +408,9 @@ const loadRelyingPartyOperation = (
 		if (authenticate) {
 			applications = await session.listKYCApplications();
 			for (const application of applications) {
-				const formattedMessages = messageFilter(application.messages);
+				// application.messages = await session.getKYCApplicationChat(application.id);
+				// application.messages = [];
+				// const formattedMessages = messageFilter(application.messages);
 				const template = templates.find(t => t.id === application.template);
 				await dispatch(
 					kycOperations.updateApplicationsOperation({
@@ -420,8 +422,8 @@ const loadRelyingPartyOperation = (
 						owner: application.owner,
 						scope: application.scope,
 						applicationDate: application.createdAt,
-						title: template ? template.name : rpName,
-						messages: formattedMessages
+						title: template ? template.name : rpName
+						// messages: formattedMessages
 					})
 				);
 			}
@@ -488,6 +490,8 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 		let application = await rp.session.createKYCApplication(templateId, attributes);
 		application = await rp.session.getKYCApplication(application.id);
 		await dispatch(kycActions.addKYCApplication(rpName, application));
+		// application.messages = await rp.session.getKYCApplicationChat(application.id);
+		application.messages = [];
 		const formattedMessages = messageFilter(application.messages);
 		await dispatch(
 			kycOperations.updateApplicationsOperation({
@@ -563,7 +567,9 @@ const updateRelyingPartyKYCApplication = (
 		let application = await rp.session.updateKYCApplication(updatedApplication);
 		application = await rp.session.getKYCApplication(application.id);
 		await dispatch(kycActions.addKYCApplication(rpName, application));
-		const formattedMessages = messageFilter(application.messages);
+		// application.messages = await rp.session.getKYCApplicationChat(application.id);
+		application.messages = [];
+
 		await dispatch(
 			kycOperations.updateApplicationsOperation({
 				id: application.id,
@@ -574,7 +580,7 @@ const updateRelyingPartyKYCApplication = (
 				owner: application.owner,
 				scope: application.scope,
 				applicationDate: application.createdAt,
-				messages: formattedMessages
+				messages: messageFilter(application.messages)
 			})
 		);
 	} catch (error) {
@@ -888,7 +894,7 @@ export const reducer = (state = initialState, action) => {
 	return state;
 };
 
-export const messageFilter = messages => {
+export const messageFilter = (messages = []) => {
 	let result = [];
 	for (let m of messages) {
 		let fm = {};

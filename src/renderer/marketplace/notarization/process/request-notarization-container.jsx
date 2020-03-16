@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core';
 import { identitySelectors } from 'common/identity';
+import { kycOperations } from 'common/kyc';
+import { marketplaceSelectors } from 'common/marketplace';
 import MarketplaceNotariesComponent from '../common/marketplace-notaries-component';
 import RequestNotarizationPage from './request-notarization-page';
 import { CreateAttributeContainer } from '../../../attributes';
@@ -11,23 +13,37 @@ const styles = theme => ({});
 
 class RequestNotarizationContainer extends MarketplaceNotariesComponent {
 	state = {
-		popup: null,
-		isTocAccepted: false
+		popup: null
 	};
 
 	onBackClick = () => this.props.dispatch(push(this.rootPath()));
-	onStartClick = () => this.props.dispatch(push(this.tocPath()));
-	// onStartClick = () => {
-	// 	this.state.isTocAccepted ? '' : this.props.dispatch(push(this.tocPath()));
-	// };
 
-	handleAddDocument = () => {
-		this.setState({ popup: 'create-attribute', isDocument: true });
+	onStartClick = () => {
+		const { templateId, vendorId, dispatch, vendor } = this.props;
+
+		// TODO: Check available key
+
+		dispatch(
+			kycOperations.startCurrentApplicationOperation(
+				vendorId,
+				templateId,
+				this.payRoute(),
+				this.cancelRoute(),
+				`Notarization Checklist`,
+				`You are about to start the notarisation process.
+				Please double check your required documents are valid where necessary.
+				Failure to do so will result in delays in the notarisation process.
+				You may also be asked to provide more information by the service provider.`,
+				vendor.name,
+				vendor.privacyPolicy,
+				vendor.termsOfService
+			)
+		);
 	};
 
-	handlePopupClose = () => {
-		this.setState({ popup: null });
-	};
+	handleAddDocument = () => this.setState({ popup: 'create-attribute', isDocument: true });
+
+	handlePopupClose = () => this.setState({ popup: null });
 
 	render() {
 		const { documents } = this.props;
@@ -56,7 +72,13 @@ class RequestNotarizationContainer extends MarketplaceNotariesComponent {
 }
 
 const mapStateToProps = (state, props) => {
+	const { templateId, vendorId, productId } = props.match.params;
+
 	return {
+		templateId,
+		vendorId,
+		productId,
+		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
 		...identitySelectors.selectIndividualProfile(state)
 	};
 };

@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/core/styles';
-import { BankingOffersPage } from './offers-page';
+import { pricesSelectors } from 'common/prices';
 import { marketplaceSelectors } from 'common/marketplace';
-import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 import { identitySelectors } from 'common/identity';
+import { BankingOffersPage } from './offers-page';
+import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
 
 const styles = theme => ({});
 

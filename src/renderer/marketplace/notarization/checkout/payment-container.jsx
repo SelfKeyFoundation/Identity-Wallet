@@ -4,6 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { featureIsEnabled } from 'common/feature-flags';
 import { getWallet } from 'common/wallet/selectors';
 import { kycSelectors } from 'common/kyc';
+import { marketplaceSelectors } from 'common/marketplace';
+import { identitySelectors } from 'common/identity';
 import { pricesSelectors } from 'common/prices';
 import { ordersOperations } from 'common/marketplace/orders';
 import { MarketplaceNotariesComponent } from '../common/marketplace-notaries-component';
@@ -13,7 +15,8 @@ const VENDOR_NAME = 'SelfKey Certifier';
 
 class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 	async componentDidMount() {
-		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: true });
+		const { vendorId } = this.props;
+		await this.loadRelyingParty({ rp: vendorId, authenticated: true });
 		await this.createOrder();
 	}
 
@@ -33,6 +36,13 @@ class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 		const vendorDID = program.didAddress;
 		// const vendorDID = '0x96a101c36b1ac67098d85e4fac750ac538ed9800942ac5def9272c19accced9e';
 		const vendorName = VENDOR_NAME;
+		/*
+		const { product, vendor, vendorId, productId } = this.props;
+		const application = this.getLastApplication();
+		const price = this.priceInKEY(product.price);
+		const vendorDID = vendor.paymentAddress;
+		const vendorName = vendor.name;
+		*/
 
 		this.props.dispatch(
 			ordersOperations.startOrderOperation({
@@ -40,12 +50,12 @@ class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 				applicationId: application.id,
 				amount: price,
 				vendorId,
-				itemId: companyCode,
+				itemId: productId,
 				vendorDID,
 				vendorName,
 				backUrl: this.cancelRoute(),
 				completeUrl: this.paymentCompleteRoute(),
-				vendorWallet: featureIsEnabled('paymentContract') ? '' : walletAddress
+				vendorWallet: featureIsEnabled('paymentContract') ? '' : vendor.paymentAddres
 			})
 		);
 	}
@@ -54,12 +64,21 @@ class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 }
 
 const mapStateToProps = (state, props) => {
-	const { companyCode, templateId, vendorId } = props.match.params;
+	const { templateId, vendorId, productId } = props.match.params;
 	const authenticated = true;
+	const identity = identitySelectors.selectIdentity(state);
+
 	return {
-		companyCode,
 		templateId,
 		vendorId,
+		productId,
+		product: marketplaceSelectors.selectInventoryItemByFilter(
+			state,
+			'notaries',
+			p => p.sku === productId,
+			identity.type
+		),
+		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
 		address: getWallet(state).address,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		currentApplication: kycSelectors.selectCurrentApplication(state),

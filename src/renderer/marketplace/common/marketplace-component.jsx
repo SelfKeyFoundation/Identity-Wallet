@@ -11,7 +11,13 @@ import ReactPiwik from 'react-piwik';
 class MarketplaceComponent extends PureComponent {
 	marketplaceRootPath = () => `/main/marketplace`;
 
-	manageApplicationsRoute = () => `/main/selfkeyIdApplications`;
+	selfKeyIdRoute = () => `/main/individual`;
+
+	selfkeyIdRequiredRoute = () => `/main/marketplace/selfkey-id-required`;
+
+	selfkeyDIDRequiredRoute = () => `/main/marketplace/selfkey-did-required`;
+
+	manageApplicationsRoute = () => `/main/individual/dashboard/applications`;
 
 	loadRelyingParty = async ({ rp, authenticated = false }) => {
 		if (this.props.rpShouldUpdate) {
@@ -144,7 +150,11 @@ class MarketplaceComponent extends PureComponent {
 		await this.props.dispatch(kycOperations.clearRelyingPartyOperation());
 	};
 
-	selfKeyIdRoute = () => `/main/selfkeyId`;
+	selfKeyIdRoute = () => `/main/individual`;
+
+	selfkeyIdRequiredRoute = () => `/main/marketplace/selfkey-id-required`;
+
+	selfkeyDIDRequiredRoute = () => `/main/marketplace/selfkey-did-required`;
 }
 
 export { MarketplaceComponent };

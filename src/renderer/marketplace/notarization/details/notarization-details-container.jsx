@@ -14,14 +14,15 @@ import config from 'common/config';
 
 const styles = theme => ({});
 
-class NotarizationDetailsContainer extends MarketplaceNotariesComponent {
+class NotarizationDetailsContainerComponent extends MarketplaceNotariesComponent {
 	state = {
 		tab: 'types',
 		loading: false
 	};
 
 	componentDidMount() {
-		window.scrollTo(0, 0);
+		const { vendorId } = this.props;
+		this.loadRelyingParty({ rp: vendorId, authenticated: false });
 	}
 
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
@@ -35,14 +36,28 @@ class NotarizationDetailsContainer extends MarketplaceNotariesComponent {
 		const requestNotarizationRoute = '/main/marketplace/notaries/process';
 		const authenticated = true;
 
+		const { rp, identity, vendorId, dispatch } = this.props;
+		const authenticated = true;
+
 		this.setState({ loading: true }, async () => {
 			if (!identity.isSetupFinished) {
-				return this.props.dispatch(push(selfkeyIdRequiredRoute));
+				return dispatch(push(this.selfkeyIdRequiredRoute()));
 			}
 			if (!identity.did) {
-				return this.props.dispatch(push(selfkeyDIDRequiredRoute));
+				return dispatch(push(this.selfkeyDIDRequiredRoute()));
+			}
+
+			if (!rp || !rp.authenticated) {
+				await dispatch(
+					kycOperations.loadRelyingParty(
+						vendorId,
+						authenticated,
+						this.checkoutRoute(),
+						this.cancelRoute()
+					)
+				);
 			} else {
-				await this.props.dispatch(push(requestNotarizationRoute));
+				await dispatch(push(this.checkoutRoute()));
 			}
 			if (!rp || !rp.authenticated) {
 				await this.props.dispatch(
@@ -60,7 +75,7 @@ class NotarizationDetailsContainer extends MarketplaceNotariesComponent {
 	};
 
 	render() {
-		const { keyRate, kycRequirements, templateId } = this.props;
+		const { keyRate, kycRequirements, templateId, product } = this.props;
 		return (
 			<NotarizationDetailsPage
 				onBackClick={this.onBackClick}
@@ -71,27 +86,40 @@ class NotarizationDetailsContainer extends MarketplaceNotariesComponent {
 				templateId={templateId}
 				onTabChange={this.onTabChange}
 				startNotarize={this.onApplyClick}
+				product={product}
 			/>
 		);
 	}
 }
 
-NotarizationDetailsContainer.propTypes = {
+NotarizationDetailsContainerComponent.propTypes = {
 	isLoading: PropTypes.bool,
-	keyRate: PropTypes.number
+	keyRate: PropTypes.number,
+	templateId: PropTypes.string,
+	vendorId: PropTypes.string
 };
 
-const mapStateToProps = async (state, props) => {
-	const { templateId, vendorId } = props.match.params;
+const mapStateToProps = (state, props) => {
+	const { templateId, vendorId, productId } = props.match.params;
 	const authenticated = true;
-	let primaryToken = {
+
+	const primaryToken = {
 		...props,
 		cryptoCurrency: config.constants.primaryToken
 	};
+	const identity = identitySelectors.selectIdentity(state);
+
 	return {
 		templateId,
 		vendorId,
-		// isLoading: marketplaceSelectors.isLoading(state),
+		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
+		productId,
+		product: marketplaceSelectors.selectInventoryItemByFilter(
+			state,
+			'notaries',
+			p => p.sku === productId,
+			identity.type
+		),
 		isLoading: marketplaceSelectors.isInventoryLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		rp: kycSelectors.relyingPartySelector(state, vendorId),
@@ -101,12 +129,11 @@ const mapStateToProps = async (state, props) => {
 			authenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(state, vendorId, templateId),
-		identity: identitySelectors.selectIdentity(state),
+		identity,
 		cryptoValue: getCryptoValue(state, primaryToken)
 	};
 };
 
-const styledComponent = withStyles(styles)(NotarizationDetailsContainer);
+const styledComponent = withStyles(styles)(NotarizationDetailsContainerComponent);
 const connectedComponent = connect(mapStateToProps)(styledComponent);
-export default connectedComponent;
 export { connectedComponent as NotarizationDetailsContainer };
