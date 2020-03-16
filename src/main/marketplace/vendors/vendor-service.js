@@ -14,20 +14,22 @@ export class VendorService {
 	}
 	async fetchVendors() {
 		const fetched = await request.get({ url: VENDOR_API_ENDPOINT, json: true });
-		return fetched.entities.map(entity => {
-			let vendor = _.mapKeys(entity.data, (value, key) => _.camelCase(key));
-			if (vendor.relyingPartyConfig) {
-				try {
-					vendor.relyingPartyConfig = JSON.parse(vendor.relyingPartyConfig);
-					if (typeof vendor.relyingPartyConfig !== 'object') {
+		return fetched.entities
+			.filter(entity => !!entity.vendorId)
+			.map(entity => {
+				let vendor = _.mapKeys(entity.data, (value, key) => _.camelCase(key));
+				if (vendor.relyingPartyConfig) {
+					try {
+						vendor.relyingPartyConfig = JSON.parse(vendor.relyingPartyConfig);
+						if (typeof vendor.relyingPartyConfig !== 'object') {
+							vendor.relyingPartyConfig = {};
+						}
+					} catch (error) {
 						vendor.relyingPartyConfig = {};
 					}
-				} catch (error) {
-					vendor.relyingPartyConfig = {};
 				}
-			}
-			return vendor;
-		});
+				return vendor;
+			});
 	}
 	start() {
 		this.schedulerService.queueJob(null, VENDOR_SYNC_JOB, 0, null, {
