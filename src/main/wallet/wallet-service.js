@@ -183,21 +183,29 @@ export class WalletService {
 		return new Promise((resolve, reject) => {
 			this.web3Service.web3.eth.getAccounts((error, accounts) => {
 				if (error) {
-					log.debug('error: %j', error);
+					log.error('error: %j', error);
 					reject(error);
 				} else {
+					let paths = ["44'/60'/0'/x"];
+					if (walletType === 'ledger') {
+						paths = this.web3Service.ledgerConfig
+							? this.web3Service.ledgerConfig.paths
+							: paths;
+					}
+					log.info('HD_WALLET: paths %2j', paths);
 					const promises = accounts.map(async (address, index) => {
 						const balanceInWei = await this.web3Service.web3.eth.getBalance(address);
-						let paths = ["44'/60'/0'/x"];
-						if (walletType === 'ledger') {
-							paths = this.web3Service.ledgerConfig
-								? this.web3Service.ledgerConfig.paths
-								: paths;
-						}
+
 						const i = page * accountsQuantity + index;
 						const x = Math.floor(i / paths.length);
 						const pathIndex = i - paths.length * x;
 						const path = paths[pathIndex].replace('x', String(x));
+						log.info(
+							'HD_WALLET: address: %s, path %s, balanced: %s',
+							address,
+							path,
+							EthUnits.toEther(balanceInWei, 'wei')
+						);
 						return {
 							address,
 							balance: EthUnits.toEther(balanceInWei, 'wei'),
