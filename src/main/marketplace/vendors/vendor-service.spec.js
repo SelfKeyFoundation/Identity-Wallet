@@ -24,7 +24,6 @@ describe('VendorService', () => {
 				json: true
 			}
 		]);
-
 		expect(vendors).toEqual(vendorsFetched);
 	});
 	it('should load vendors from db', async () => {
