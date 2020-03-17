@@ -2,13 +2,15 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { getWallet } from 'common/wallet/selectors';
 import { Popup, InputTitle } from '../../common';
+import { getTokens } from 'common/wallet-tokens/selectors';
+import { tokenSwapOperations, tokenSwapSelectors } from 'common/token-swap';
 /*
 import {
 	transactionHistoryOperations,
 	transactionHistorySelectors
 } from 'common/transaction-history';
 */
-import { Grid, Select, Input, Typography, Button, Divider } from '@material-ui/core';
+import { MenuItem, Grid, Select, Input, Typography, Button, Divider } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { KeyboardArrowDown } from '@material-ui/icons';
 /*
@@ -95,13 +97,19 @@ export class TokenSwapComponent extends PureComponent {
 		targetToken: 'KEY',
 		amount: 0
 	};
-	componentDidMount() {}
+	componentDidMount() {
+		this.props.dispatch(tokenSwapOperations.loadTokensOperation());
+	}
 
 	handleSend = () => {};
 
 	handleReceive = () => {};
 
-	handleSourceTokenChange = () => {};
+	handleSourceTokenChange = event => {
+		const sourceToken = event.target.value;
+		this.setState({ sourceToken });
+		// this.props.dispatch(transactionOperations.setCryptoCurrency(value));
+	};
 
 	handleTargetTokenChange = () => {};
 
@@ -109,12 +117,31 @@ export class TokenSwapComponent extends PureComponent {
 
 	handleExchange = () => {};
 
-	renderSelectSourceTokenItems = () => null;
+	renderSelectSourceTokenItems = () => {
+		const { tokens, classes } = this.props;
+		const activeTokens = tokens.filter(token => token.recordState === 1);
 
-	renderSelectTargetTokenItems = () => null;
+		return activeTokens.map(token => (
+			<MenuItem key={token.symbol} value={token.symbol} className={classes.selectItem}>
+				{`${token.symbol} - ${token.name}`}
+			</MenuItem>
+		));
+	};
+
+	renderSelectTargetTokenItems = () => {
+		const { swapTokens, classes } = this.props;
+		const activeTokens = swapTokens.filter(token => token.tradable);
+
+		return activeTokens.map(token => (
+			<MenuItem key={token.symbol} value={token.symbol} className={classes.selectItem}>
+				{`${token.symbol} - ${token.name}`}
+			</MenuItem>
+		));
+	};
 
 	render() {
 		const { classes, closeAction } = this.props;
+		console.log(this.props.swapTokens);
 
 		return (
 			<Popup closeAction={closeAction} text="Swap your tokens">
@@ -227,7 +254,9 @@ export class TokenSwapComponent extends PureComponent {
 
 const mapStateToProps = state => {
 	return {
-		address: getWallet(state).address
+		address: getWallet(state).address,
+		tokens: getTokens(state),
+		swapTokens: tokenSwapSelectors.selectTokens(state)
 	};
 };
 

@@ -55,6 +55,7 @@ const common = {
 	forceUpdateAttributes: process.env.FORCE_UPDATE_ATTRIBUTES === 'true' && !isTestMode(),
 	userAgent: `SelfKeyIDW/${pkg.version}`,
 	airtableBaseUrl: 'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=',
+	totleApiUrl: 'https://api.totle.com',
 
 	kyccUrlOverride: KYCC_API_OVERRIDE,
 	incorporationsPriceOverride: INCORPORATIONS_PRICE_OVERRIDE,
