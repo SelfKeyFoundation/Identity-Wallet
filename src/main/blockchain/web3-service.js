@@ -100,6 +100,7 @@ export class Web3Service {
 
 		this.web3 = new Web3(engine);
 		this.web3.transactionConfirmationBlocks = 1;
+		global.__ledgerLogsListen(l => log.info('ledger log: %2j', l));
 	}
 
 	createAccount(password) {
