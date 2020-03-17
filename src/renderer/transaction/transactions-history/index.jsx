@@ -341,7 +341,6 @@ class TransactionsHistory extends PureComponent {
 									);
 								})}
 							</TableBody>
-							)
 							{transactions.length > 4 ? (
 								<TableFooter className={classes.tableFooter}>
 									<TableRow className={classes.transparent}>
