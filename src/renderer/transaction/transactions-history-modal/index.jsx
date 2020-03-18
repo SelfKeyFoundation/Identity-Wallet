@@ -392,8 +392,12 @@ class TransactionsHistoryModal extends PureComponent {
 										<MenuItem value={-1} className={classes.dropdown}>
 											<em>Choose...</em>
 										</MenuItem>
-										{['sent', 'buy', 'receive'].map(option => (
-											<MenuItem key={option} value={option}>
+										{['Send', 'Receive', 'Buy', 'Swap'].map(option => (
+											<MenuItem
+												key={option}
+												value={option}
+												style={{ textTransform: 'capitalize' }}
+											>
 												{option}
 											</MenuItem>
 										))}
