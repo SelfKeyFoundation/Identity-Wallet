@@ -1,34 +1,10 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
-import { CloseButtonIcon, HourGlassLargeIcon, ModalWrap, ModalHeader, ModalBody } from 'selfkey-ui';
+import { HourGlassLargeIcon } from 'selfkey-ui';
+import { Popup } from '../../../common';
 
 const styles = theme => ({
-	modalWrap: {
-		position: 'relative',
-		width: '100%',
-		margin: '0',
-		maxWidth: '780px'
-	},
-	containerHeader: {
-		padding: '22px 30px',
-		background: '#2A3540',
-		'& div': {
-			display: 'inline-block',
-			color: '#FFF'
-		}
-	},
-	closeIcon: {
-		position: 'absolute',
-		right: '-19px',
-		top: '-20px'
-	},
-	contentContainer: {
-		border: '1px solid #303C49',
-		borderRadius: '4px',
-		boxShadow: '0 50px 70px -50px black',
-		padding: '30px'
-	},
 	icon: {
 		width: '120px'
 	},
@@ -51,10 +27,6 @@ const styles = theme => ({
 			fontWeight: '700'
 		}
 	},
-	instructions: {
-		padding: '30px 0',
-		borderTop: '1px solid #475768'
-	},
 	footer: {
 		width: '100%',
 		'& button': {
@@ -67,68 +39,56 @@ export const BankAccountsPaymentComplete = withStyles(styles)(props => {
 	const { classes, email, identity, onBackClick, onContinueClick } = props;
 	const simpleFlow = identity.type === 'corporate';
 	return (
-		<ModalWrap className={classes.modalWrap}>
-			<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
-			<ModalHeader className={classes.modalHeader}>
-				<Typography variant="body1">Payment Received</Typography>
-			</ModalHeader>
-			<ModalBody>
-				<Grid
-					container
-					justify="flex-start"
-					alignItems="flex-start"
-					className={classes.content}
-				>
-					<div className={classes.icon}>
-						<HourGlassLargeIcon />
-					</div>
-					<div className={classes.content}>
-						<div className={classes.description}>
-							<Typography variant="h1" gutterBottom>
-								Bank Account KYC Process Started
+		<Popup closeAction={onBackClick} open text="Payment Received">
+			<Grid
+				container
+				justify="flex-start"
+				alignItems="flex-start"
+				className={classes.content}
+			>
+				<div className={classes.icon}>
+					<HourGlassLargeIcon />
+				</div>
+				<div className={classes.content}>
+					<div className={classes.description}>
+						<Typography variant="h1" gutterBottom>
+							Bank Account KYC Process Started
+						</Typography>
+						<Typography variant="body1" gutterBottom>
+							Thank you for payment!
+						</Typography>
+						{simpleFlow && (
+							<Typography variant="body2" gutterBottom>
+								One of our managers is reviewing the information you submitted and{' '}
+								<strong>
+									will contact you shortly on the e-mail you provided{' '}
+								</strong>
+								, to continue the process. If you have any questions in the
+								meantime, you can reach us at:
 							</Typography>
-							<Typography variant="body1" gutterBottom>
-								Thank you for payment!
-							</Typography>
-							{simpleFlow && (
-								<Typography variant="body2" gutterBottom>
-									One of our managers is reviewing the information you submitted
-									and{' '}
-									<strong>
-										will contact you shortly on the e-mail you provided{' '}
-									</strong>
-									, to continue the process. If you have any questions in the
-									meantime, you can reach us at:
-								</Typography>
-							)}
-
-							{!simpleFlow && (
-								<Typography variant="body2" gutterBottom>
-									Please click the continue button and select your preferred Bank
-									to continue the process. If you have any questions in the
-									meantime, you can reach us at:
-								</Typography>
-							)}
-							<Typography
-								variant="body2"
-								color="primary"
-								gutterBottom
-								className="email"
-							>
-								{email}
-							</Typography>
-						</div>
-						{!simpleFlow && (
-							<div className={classes.footer}>
-								<Button variant="contained" size="large" onClick={onContinueClick}>
-									Continue
-								</Button>
-							</div>
 						)}
+
+						{!simpleFlow && (
+							<Typography variant="body2" gutterBottom>
+								Please click the continue button and select your preferred Bank to
+								continue the process. If you have any questions in the meantime, you
+								can reach us at:
+							</Typography>
+						)}
+						<Typography variant="body2" color="primary" gutterBottom className="email">
+							{email}
+						</Typography>
 					</div>
-				</Grid>
-			</ModalBody>
-		</ModalWrap>
+					{!simpleFlow && (
+						<div className={classes.footer}>
+							<Button variant="contained" size="large" onClick={onContinueClick}>
+								Continue
+							</Button>
+						</div>
+					)}
+				</div>
+			</Grid>
+		</Popup>
 	);
 });
 

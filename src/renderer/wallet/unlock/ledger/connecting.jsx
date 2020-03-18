@@ -1,20 +1,13 @@
 import React, { PureComponent } from 'react';
-import { Modal, Typography, Button, Grid, CircularProgress } from '@material-ui/core';
-import {
-	ModalWrap,
-	ModalCloseButton,
-	ModalHeader,
-	ModalBody,
-	ModalCloseIcon,
-	HourGlassLargeIcon,
-	WarningShieldIcon
-} from 'selfkey-ui';
+import { Typography, Button, Grid } from '@material-ui/core';
+import { HourGlassLargeIcon, WarningShieldIcon } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import HelpStepsSection from './help-steps-section';
 import { appOperations, appSelectors } from 'common/app';
 import HelpStepsErrorSection from './help-steps-error-section';
 import { push } from 'connected-react-router';
+import { Popup } from '../../../common';
 
 const styles = theme => ({
 	closeIcon: {
@@ -155,33 +148,10 @@ class ConnectingLedger extends PureComponent {
 	};
 
 	render() {
-		const { classes } = this.props;
 		return (
-			<div>
-				<Modal open={true}>
-					<ModalWrap>
-						<ModalCloseButton onClick={this.handleClose}>
-							<ModalCloseIcon className={classes.closeIcon} />
-						</ModalCloseButton>
-						<ModalHeader>
-							<Grid
-								container
-								direction="row"
-								justify="space-between"
-								alignItems="center"
-							>
-								<Grid item>
-									<Typography variant="body1">Connecting</Typography>
-								</Grid>
-								<Grid item>
-									<CircularProgress size={25} />
-								</Grid>
-							</Grid>
-						</ModalHeader>
-						<ModalBody>{this.renderModalBody()}</ModalBody>
-					</ModalWrap>
-				</Modal>
-			</div>
+			<Popup closeAction={this.handleClose} open text="Connecting">
+				{this.renderModalBody()}
+			</Popup>
 		);
 	}
 }
