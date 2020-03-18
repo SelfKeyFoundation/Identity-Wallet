@@ -48,6 +48,7 @@ const PopupWrap = props => {
 		closeComponent,
 		isHeaderVisible = true,
 		displayLogo = false,
+		closeButtonClass = '',
 		headerClass = '',
 		xtraClass = '',
 		popupClass = ''
@@ -75,7 +76,7 @@ const PopupWrap = props => {
 							<ModalCloseButton
 								onClick={closeAction}
 								component={closeComponent}
-								className={classes.closeButton}
+								className={`${classes.closeButton} ${closeButtonClass}`}
 							>
 								<ModalCloseIcon />
 							</ModalCloseButton>
