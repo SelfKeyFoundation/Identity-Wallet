@@ -5,10 +5,10 @@ import { Typography, withStyles, Button, Grid, CircularProgress } from '@materia
 
 const styles = theme => ({
 	title: {
-		marginBottom: '17px'
+		marginBottom: '7px'
 	},
 	buttonContainer: {
-		marginTop: '20px'
+		marginTop: '10px'
 	},
 	popup: {
 		boxShadow: 'none',
@@ -28,7 +28,7 @@ class WalletExportQRCodeComponent extends PureComponent {
 					direction="column"
 					justify="flex-start"
 					alignItems="center"
-					spacing={16}
+					spacing={8}
 				>
 					<Grid item className={classes.title}>
 						<Typography variant="h2">
@@ -44,7 +44,7 @@ class WalletExportQRCodeComponent extends PureComponent {
 					<Grid item>
 						{keystore && keystore.length ? (
 							<QRCode
-								size={350}
+								size={500}
 								bgColor={'#262f39'}
 								fgColor={'#ffffff'}
 								includeMargin={true}
