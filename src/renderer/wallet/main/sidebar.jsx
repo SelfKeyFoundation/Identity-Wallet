@@ -91,6 +91,9 @@ const styles = theme => ({
 				fill: '#ffffff',
 				stroke: '#ffffff'
 			}
+		},
+		'&:focus': {
+			outline: 0
 		}
 	},
 	secondaryButtons: {

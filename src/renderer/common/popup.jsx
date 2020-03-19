@@ -16,16 +16,22 @@ const styles = theme => ({
 	closeButton: {
 		top: '20px'
 	},
+	header: {
+		alignItems: 'center',
+		display: 'flex',
+		justifyContent: 'space-between'
+	},
 	logoSection: {
 		paddingBottom: '50px',
 		marginTop: '-100px'
 	},
 	modalWrap: {
 		border: 'none',
-		backgroundColor: 'transparent'
+		backgroundColor: 'transparent',
+		boxShadow: 'none'
 	},
 	paper: {
-		boxShadow: 'none'
+		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
 	},
 	popup: {
 		position: 'relative'
@@ -39,8 +45,10 @@ const PopupWrap = props => {
 		closeAction,
 		text,
 		open = true,
+		closeComponent,
 		isHeaderVisible = true,
 		displayLogo = false,
+		closeButtonClass = '',
 		headerClass = '',
 		xtraClass = '',
 		popupClass = ''
@@ -64,13 +72,19 @@ const PopupWrap = props => {
 				)}
 				<Paper className={`${classes.paper} paper`}>
 					<div className={classes.popup}>
-						{closeAction && (
-							<ModalCloseButton onClick={closeAction} className={classes.closeButton}>
+						{closeAction || closeComponent ? (
+							<ModalCloseButton
+								onClick={closeAction}
+								component={closeComponent}
+								className={`${classes.closeButton} ${closeButtonClass}`}
+							>
 								<ModalCloseIcon />
 							</ModalCloseButton>
+						) : (
+							''
 						)}
 						{isHeaderVisible && (
-							<ModalHeader className={headerClass}>
+							<ModalHeader className={`${headerClass} ${classes.header}`}>
 								{typeof text === 'string' ? (
 									<Typography variant="body1" className={classes.title}>
 										{text}
