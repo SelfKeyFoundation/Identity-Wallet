@@ -18,32 +18,6 @@ export class TotleSwapService {
 		}
 	}
 
-	/* Example payload
-	{
-		"config":
-			{
-				"transactions":"true",
-				"fillNonce":"true",
-
-				// Validates if wallet has enough funds
-				"skipBalanceChecks":"false"
-			},
-			"swap":{
-				"sourceAsset":"ETH",
-				"destinationAsset":"KEY",
-				"sourceAmount":1,
-				"isOptional":false,
-
-				// Percentage of maximum acceptable market price slippage that can occur based off of 0.1 unit of source token while finding best rates off-chain.
-				// Value must be between 1-99, inclusive.
-				"maxMarketSlippagePercent":"10",
-
-				// Percentage of maximum acceptable slippage of market rate from the time the API finds the rate and executing swap on-chain.
-				// Value must be between 1-99, inclusive.
-				"maxExecutionSlippagePercent":"3"
-			}
-	}";
-	*/
 	async swap(address, transaction) {
 		const payload = {
 			apiKey: TOTLE_API_KEY,
