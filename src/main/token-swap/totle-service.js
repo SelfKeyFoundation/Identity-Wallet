@@ -1,12 +1,11 @@
 import config from 'common/config';
 import request from 'request-promise-native';
-// import urljoin from 'url-join';
-// import _ from 'lodash';
 import { Logger } from '../../common/logger';
 
 const log = new Logger('TokenSwapTotleService');
 
-export const TOTLE_API_ENDPOINT = config.totleApiUrl;
+const TOTLE_API_ENDPOINT = config.totleApiUrl;
+const TOTLE_API_KEY = config.totleApiKey;
 
 export class TotleSwapService {
 	async fetchTokens() {
@@ -16,6 +15,64 @@ export class TotleSwapService {
 		} catch (error) {
 			log.error(error);
 			return [];
+		}
+	}
+
+	/* Example payload
+	{
+		"config":
+			{
+				"transactions":"true",
+				"fillNonce":"true",
+
+				// Validates if wallet has enough funds
+				"skipBalanceChecks":"false"
+			},
+			"swap":{
+				"sourceAsset":"ETH",
+				"destinationAsset":"KEY",
+				"sourceAmount":1,
+				"isOptional":false,
+
+				// Percentage of maximum acceptable market price slippage that can occur based off of 0.1 unit of source token while finding best rates off-chain.
+				// Value must be between 1-99, inclusive.
+				"maxMarketSlippagePercent":"10",
+
+				// Percentage of maximum acceptable slippage of market rate from the time the API finds the rate and executing swap on-chain.
+				// Value must be between 1-99, inclusive.
+				"maxExecutionSlippagePercent":"3"
+			}
+	}";
+	*/
+	async swap(address, transaction) {
+		const payload = {
+			apiKey: TOTLE_API_KEY,
+			address,
+			config: {
+				transactions: true,
+				fillNonce: true,
+				skipBalanceChecks: config.dev
+			},
+			swap: {
+				...transaction,
+				isOptional: false,
+				maxMarketSlippagePercent: 10,
+				maxExecutionSlippagePercent: 3
+			}
+		};
+
+		log.debug(payload);
+
+		try {
+			const postRequest = await request.post({
+				url: `${TOTLE_API_ENDPOINT}/swap`,
+				body: payload,
+				json: true
+			});
+			return postRequest;
+		} catch (error) {
+			log.error(error);
+			return false;
 		}
 	}
 }

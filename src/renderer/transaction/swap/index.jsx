@@ -1,18 +1,19 @@
 import React, { PureComponent } from 'react';
+import BN from 'bignumber.js';
 import { connect } from 'react-redux';
+import { getLocale } from 'common/locale/selectors';
 import { getWallet } from 'common/wallet/selectors';
+import { pricesSelectors } from 'common/prices';
 import { Popup, InputTitle } from '../../common';
 import { getTokens } from 'common/wallet-tokens/selectors';
+import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { tokenSwapOperations, tokenSwapSelectors } from 'common/token-swap';
-/*
-import {
-	transactionHistoryOperations,
-	transactionHistorySelectors
-} from 'common/transaction-history';
-*/
+import { convertExponentialToDecimal } from 'common/utils/exponential-to-decimal';
+import { transactionOperations } from 'common/transaction';
 import { MenuItem, Grid, Select, Input, Typography, Button, Divider } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { KeyboardArrowDown } from '@material-ui/icons';
+import { NumberFormat } from 'selfkey-ui';
 /*
 import TokenPrice from '../../common/token-price';
 import { push } from 'connected-react-router';
@@ -57,65 +58,158 @@ const styles = theme => ({
 	},
 	divider: {
 		margin: '40px 0'
+	},
+	availableAmountUsd: {
+		color: '#FFF',
+		'& div': {
+			display: 'inline-block',
+			marginRight: '0.25em'
+		},
+		'& p': {
+			color: '#FFF',
+			fontWeight: 'bold'
+		}
+	},
+	separator: {
+		marginRight: '1em'
+	},
+	errorText: {
+		color: theme.palette.error.main,
+		fontFamily: 'Lato',
+		textAlign: 'center'
+	},
+	actionButtonsContainer: {
+		width: '100%'
+	},
+	fees: {
+		display: 'inline-flex',
+		color: '#FFF',
+		marginLeft: '0.5em',
+		'& > div': {
+			margin: '0 0.25em'
+		}
+	},
+	rate: {
+		fontSize: '0.7em'
 	}
 });
 
-/*
-const getIconForToken = token => {
-	let icon = null;
-	switch (token) {
-		case 'KEY':
-			icon = <SelfkeyIcon />;
-			break;
-		case 'ETH':
-			icon = <EthereumIcon />;
-			break;
-		default:
-			icon = <CustomIcon />;
+const formatValue = value => {
+	if (!value) {
+		return '';
 	}
-	return icon;
+	const v = value.toLocaleString('en-US', {
+		minimumFractionDigits: 0,
+		maximumFractionDigits: 4
+	});
+	return `${convertExponentialToDecimal(v)}`;
 };
 
-const getNameForToken = token => {
-	let name = '';
-	switch (token) {
-		case 'KEY':
-			name = 'Selfkey';
-			break;
-		case 'ETH':
-			name = 'Ethereum';
-			break;
-		default:
-			name = 'Custom Tokens';
-	}
-	return name;
-};
-*/
 export class TokenSwapComponent extends PureComponent {
 	state = {
-		sourceToken: 'ETH',
-		targetToken: 'KEY',
+		sourceCurrency: 'USD',
 		amount: 0
 	};
-	componentDidMount() {
-		this.props.dispatch(tokenSwapOperations.loadTokensOperation());
+
+	async componentWillMount() {
+		this.props.dispatch(tokenSwapOperations.clearOperation());
 	}
 
-	handleSend = () => {};
+	async componentDidMount() {
+		const defaultSource = this.props.tokens ? this.props.tokens[0].symbol : '';
+		const defaultTarget = 'KEY';
 
-	handleReceive = () => {};
+		this.props.dispatch(tokenSwapOperations.setSourceOperation(defaultSource));
+		this.props.dispatch(tokenSwapOperations.setTargetOperation(defaultTarget));
+		await this.props.dispatch(tokenSwapOperations.loadTokensOperation());
+	}
 
-	handleSourceTokenChange = event => {
-		const sourceToken = event.target.value;
-		this.setState({ sourceToken });
-		// this.props.dispatch(transactionOperations.setCryptoCurrency(value));
+	isValid = () => this.state.amount && this.props.sourceToken && this.props.targetToken;
+
+	getTokenFiatBalance = token => {
+		const t = this.props.tokens.find(t => t.symbol === token);
+		return t ? BN(t.balanceInFiat).toFixed(18) : false;
 	};
 
-	handleTargetTokenChange = () => {};
+	getTokenBalance = token => {
+		const t = this.props.tokens.find(t => t.symbol === token);
+		return t ? BN(t.balance).toFixed(18) : false;
+	};
 
-	handleAmountChange = () => {};
+	getFiatValue = (amount, token) => {
+		const t = this.props.tokens.find(t => t.symbol === token);
+		return t ? BN(amount * t.price).toFixed(18) : 0;
+	};
 
-	handleExchange = () => {};
+	getCryptoValue = (amount, token) => {
+		const t = this.props.tokens.find(t => t.symbol === token);
+		return t ? BN(amount / t.price).toFixed(18) : 0;
+	};
+
+	getAmount = () => {
+		const { sourceCurrency, amount } = this.state;
+		const { fiatCurrency, sourceToken } = this.props;
+
+		return sourceCurrency === fiatCurrency ? this.getCryptoValue(amount, sourceToken) : amount;
+	};
+
+	setSourceToken = sourceToken => {
+		this.setState({ amount: 0 });
+		this.props.dispatch(tokenSwapOperations.setSourceOperation(sourceToken));
+	};
+
+	setTargetToken = targetToken => {
+		this.setState({ amount: 0 });
+		this.props.dispatch(tokenSwapOperations.setTargetOperation(targetToken));
+	};
+
+	handleSourceTokenChange = event => this.setSourceToken(event.target.value);
+
+	handleTargetTokenChange = event => this.setTargetToken(event.target.value);
+
+	handleAmountChange = event => {
+		let value = event.target.value;
+		let maxAmount = 0;
+		if (this.state.sourceCurrency === this.props.fiatCurrency) {
+			maxAmount = this.getTokenFiatBalance(this.props.sourceToken);
+		} else {
+			maxAmount = this.getTokenBalance(this.props.sourceToken);
+		}
+		if (isNaN(Number(value))) {
+			value = 0;
+		}
+		// Do not allow to enter values above the balance
+		if (Number(value) > maxAmount) {
+			value = String(maxAmount);
+		}
+		this.setState({ amount: value });
+	};
+
+	handleAllAmountClick = () => {
+		const { fiatCurrency, sourceToken } = this.props;
+		let maxAmount = 0;
+		if (this.state.sourceCurrency === fiatCurrency) {
+			maxAmount = this.getTokenFiatBalance(sourceToken);
+			this.setState({ amount: maxAmount });
+		} else {
+			maxAmount = this.getTokenBalance(sourceToken);
+			this.setState({ amount: maxAmount });
+		}
+	};
+
+	handleSourceCurrencyClick = () => {
+		const { fiatCurrency, sourceToken } = this.props;
+		let { amount } = this.state;
+		const sourceCurrency =
+			this.state.sourceCurrency === fiatCurrency ? sourceToken : fiatCurrency;
+
+		if (sourceCurrency === fiatCurrency) {
+			amount = this.getFiatValue(amount, sourceToken);
+		} else {
+			amount = this.getCryptoValue(amount, sourceToken);
+		}
+		this.setState({ sourceCurrency, amount });
+	};
 
 	renderSelectSourceTokenItems = () => {
 		const { tokens, classes } = this.props;
@@ -130,7 +224,12 @@ export class TokenSwapComponent extends PureComponent {
 
 	renderSelectTargetTokenItems = () => {
 		const { swapTokens, classes } = this.props;
-		const activeTokens = swapTokens.filter(token => token.tradable);
+		const { sourceToken } = this.props;
+
+		// Show only active tokens and hide source token
+		const activeTokens = swapTokens
+			.filter(t => t.tradable)
+			.filter(t => t.symbol !== sourceToken);
 
 		return activeTokens.map(token => (
 			<MenuItem key={token.symbol} value={token.symbol} className={classes.selectItem}>
@@ -139,9 +238,28 @@ export class TokenSwapComponent extends PureComponent {
 		));
 	};
 
+	handleCalculateFees = async () => {
+		const { sourceToken, wallet, tokens } = this.props;
+
+		const token = tokens.find(t => t.symbol === sourceToken);
+		const amount = this.getAmount();
+
+		await this.props.dispatch(
+			tokenSwapOperations.swapTokensOperation({
+				address: wallet.address,
+				amount: amount,
+				decimal: token.decimal
+			})
+		);
+	};
+
+	handleSwap = async () => {
+		const transaction = this.props.transaction.transactions[0].tx;
+		await this.props.dispatch(transactionOperations.sendCustomTransaction({ transaction }));
+	};
+
 	render() {
 		const { classes, closeAction } = this.props;
-		console.log(this.props.swapTokens);
 
 		return (
 			<Popup closeAction={closeAction} text="Swap your tokens">
@@ -151,9 +269,9 @@ export class TokenSwapComponent extends PureComponent {
 							<InputTitle title="Token" />
 							<Select
 								className={classes.cryptoSelect}
-								value={this.state.sourceToken}
+								value={this.props.sourceToken}
 								onChange={e => this.handleSourceTokenChange(e)}
-								name="source"
+								name="sourceToken"
 								disableUnderline
 								IconComponent={KeyboardArrowDown}
 								input={<Input disableUnderline />}
@@ -165,9 +283,9 @@ export class TokenSwapComponent extends PureComponent {
 							<InputTitle title="Change to" />
 							<Select
 								className={classes.cryptoSelect}
-								value={this.state.targetToken}
+								value={this.props.targetToken}
 								onChange={e => this.handleTargetTokenChange(e)}
-								name="target"
+								name="targetToken"
 								disableUnderline
 								IconComponent={KeyboardArrowDown}
 								input={<Input disableUnderline />}
@@ -176,13 +294,41 @@ export class TokenSwapComponent extends PureComponent {
 							</Select>
 						</div>
 						<div>
-							<Typography variant="body2" color="secondary">
-								Available:
-								<span style={{ color: '#fff', fontWeight: 'bold' }}>
-									{this.state.amount}
-									{'USD'}
-								</span>
-							</Typography>
+							<Grid
+								container
+								direction="row"
+								justify="flex-start"
+								alignItems="center"
+								className={classes.actionButtonsContainer}
+								spacing={8}
+							>
+								<Grid item>
+									<Typography variant="body2" color="secondary">
+										Available:
+									</Typography>
+								</Grid>
+								<Grid item className={classes.availableAmountUsd}>
+									<Typography variant="body2" color="secondary">
+										<NumberFormat
+											locale={this.props.locale}
+											priceStyle="currency"
+											currency={this.props.fiatCurrency}
+											value={this.getTokenFiatBalance(this.props.sourceToken)}
+											fractionDigits={15}
+										/>
+										{this.props.fiatCurrency}
+									</Typography>
+								</Grid>
+								<Grid item style={{}}>
+									<Typography variant="subtitle2" color="secondary">
+										<span className={classes.separator}>|</span>
+										{formatValue(
+											this.getTokenBalance(this.props.sourceToken)
+										)}{' '}
+										{this.props.sourceToken}
+									</Typography>
+								</Grid>
+							</Grid>
 						</div>
 						<div>
 							<InputTitle title="Amount" />
@@ -190,18 +336,20 @@ export class TokenSwapComponent extends PureComponent {
 								<Input
 									type="text"
 									onChange={this.handleAmountChange}
-									value={this.state.amount}
+									value={this.state.amount.toString()}
 									placeholder="0.00"
 									className={classes.amountInput}
 									fullWidth
 								/>
 								<Button
-									onClick={this.handleAllAmountClick}
+									onClick={this.handleSourceCurrencyClick}
 									variant="outlined"
 									size="large"
 									className={classes.maxSourceInput}
 								>
-									USD
+									{this.state.sourceCurrency === this.props.sourceToken
+										? this.props.sourceToken
+										: this.props.fiatCurrency}
 								</Button>
 								<Button
 									onClick={this.handleAllAmountClick}
@@ -213,37 +361,103 @@ export class TokenSwapComponent extends PureComponent {
 							</div>
 						</div>
 						<Divider className={classes.divider} />
-						<div>
-							<Typography variant="body2" color="secondary">
-								Network Transaction Fee:
-								<span style={{ color: '#fff', fontWeight: 'bold' }}>
-									{this.state.amount}
-									{'USD'}
-								</span>
-							</Typography>
-						</div>
 						<Grid
 							container
 							direction="column"
 							justify="center"
 							alignItems="center"
-							className={classes.actionButtonsContainer}
 							spacing={24}
 						>
-							<Grid item>
-								<Button
-									variant="contained"
-									size="large"
-									onClick={this.handleExchange}
-								>
-									Exchange
-								</Button>
-							</Grid>
-							<Grid item>
-								<Typography variant="body2" color="secondary">
-									Exchange Rate:
-								</Typography>
-							</Grid>
+							{this.props.error && (
+								<Grid item>
+									<div className={classes.errorText}>{this.props.error}</div>
+								</Grid>
+							)}
+
+							{!this.props.transaction && (
+								<Grid item>
+									{this.props.loading && (
+										<Button variant="contained" size="large" disabled="1">
+											Loading ...
+										</Button>
+									)}
+									{!this.props.loading && (
+										<Button
+											variant="contained"
+											size="large"
+											onClick={this.handleCalculateFees}
+											disabled={!this.isValid()}
+										>
+											Calculate Fees
+										</Button>
+									)}
+								</Grid>
+							)}
+
+							{this.props.transaction && (
+								<Grid item style={{ width: '100%' }}>
+									<div style={{ width: '100%', paddingBottom: '20px' }}>
+										<Typography variant="body2" color="secondary">
+											Network Transaction Fee:
+											<div className={classes.fees}>
+												{this.props.gas} ETH{' / '}
+												<NumberFormat
+													locale={this.props.locale}
+													priceStyle="currency"
+													currency={this.props.fiatCurrency}
+													value={this.props.gas * this.props.ethRate}
+													fractionDigits={15}
+												/>{' '}
+												{this.props.fiatCurrency}
+											</div>
+										</Typography>
+										<Typography variant="body2" color="secondary">
+											Swap Fee:
+											<div className={classes.fees}>
+												{this.props.fee} ETH{' / '}
+												<NumberFormat
+													locale={this.props.locale}
+													priceStyle="currency"
+													currency={this.props.fiatCurrency}
+													value={this.props.fee * this.props.ethRate}
+													fractionDigits={15}
+												/>{' '}
+												{this.props.fiatCurrency}
+											</div>
+										</Typography>
+									</div>
+									<Grid
+										container
+										direction="column"
+										justify="center"
+										alignItems="center"
+										className={classes.actionButtonsContainer}
+										spacing={24}
+									>
+										<Grid item>
+											<Button
+												variant="contained"
+												size="large"
+												onClick={this.handleSwap}
+											>
+												Swap
+											</Button>
+										</Grid>
+
+										<Grid item>
+											<Typography
+												variant="body2"
+												color="secondary"
+												className={classes.rate}
+											>
+												Exchange Rate: 1 {this.props.sourceToken} ={' '}
+												{formatValue(parseFloat(this.props.rate))}{' '}
+												{this.props.targetToken}
+											</Typography>
+										</Grid>
+									</Grid>
+								</Grid>
+							)}
 						</Grid>
 					</Grid>
 				</Grid>
@@ -253,10 +467,23 @@ export class TokenSwapComponent extends PureComponent {
 }
 
 const mapStateToProps = state => {
+	const currency = getFiatCurrency(state);
+
 	return {
-		address: getWallet(state).address,
+		...getLocale(state),
+		wallet: getWallet(state),
+		fiatCurrency: currency.fiatCurrency,
 		tokens: getTokens(state),
-		swapTokens: tokenSwapSelectors.selectTokens(state)
+		swapTokens: tokenSwapSelectors.selectTokens(state),
+		error: tokenSwapSelectors.selectError(state),
+		sourceToken: tokenSwapSelectors.selectSource(state),
+		targetToken: tokenSwapSelectors.selectTarget(state),
+		loading: tokenSwapSelectors.selectLoading(state),
+		transaction: tokenSwapSelectors.selectTransaction(state),
+		fee: tokenSwapSelectors.selectFee(state),
+		gas: tokenSwapSelectors.selectGas(state),
+		ethRate: pricesSelectors.getRate(state, 'ETH', 'USD'),
+		rate: tokenSwapSelectors.selectRate(state)
 	};
 };
 

@@ -55,7 +55,6 @@ const common = {
 	forceUpdateAttributes: process.env.FORCE_UPDATE_ATTRIBUTES === 'true' && !isTestMode(),
 	userAgent: `SelfKeyIDW/${pkg.version}`,
 	airtableBaseUrl: 'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=',
-	totleApiUrl: 'https://api.totle.com',
 
 	kyccUrlOverride: KYCC_API_OVERRIDE,
 	incorporationsPriceOverride: INCORPORATIONS_PRICE_OVERRIDE,
@@ -76,6 +75,9 @@ const common = {
 			address: '10 Anson Road International Plaza #27-15 Singapore 079903'
 		}
 	},
+
+	totleApiUrl: 'https://api.totle.com',
+	totleApiKey: '3c5645ed-a34e-409d-b179-19a998bd509b',
 
 	constants: {
 		initialIdAttributes: {
