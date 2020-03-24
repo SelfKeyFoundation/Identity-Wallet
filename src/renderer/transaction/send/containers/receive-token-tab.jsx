@@ -85,6 +85,12 @@ const styles = {
 const ReceiveTokenTabComponent = props => {
 	const { classes, sendingAddress, cryptoCurrency } = props;
 
+	let link = `mailto:?body=${sendingAddress}`;
+
+	let printDiv = () => {
+		window.print();
+	};
+
 	return (
 		<div className={classes.tokenAddress}>
 			<div className={classes.qrCode}>
@@ -102,7 +108,7 @@ const ReceiveTokenTabComponent = props => {
 				<div className={classes.space}>
 					<CopyWithIcon text={sendingAddress} />
 				</div>
-				<a href={'link'} className={`${classes.space} ${classes.padding} ${classes.icon}`}>
+				<a href={link} className={`${classes.space} ${classes.padding} ${classes.icon}`}>
 					<MailIcon className={classes.mailIcon} style={{ marginTop: '5px' }} />
 					<Typography
 						variant="subtitle2"
@@ -114,7 +120,7 @@ const ReceiveTokenTabComponent = props => {
 				</a>
 				<div
 					className={`${classes.space} ${classes.padding} ${classes.icon}`}
-					onClick={'printDiv'}
+					onClick={printDiv}
 				>
 					<PrintSmallIcon className={classes.printIcon} />
 					<Typography
