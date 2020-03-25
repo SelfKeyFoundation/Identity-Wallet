@@ -29,8 +29,9 @@ import ReceiveTokenTab from './containers/receive-token-tab';
 import { NumberFormat, TransactionFeeBox } from 'selfkey-ui';
 
 const styles = theme => ({
-	container: {
-		fontFamily: 'Lato, arial, sans-serif'
+	balance: {
+		color: '#fff',
+		fontWeight: 'bold'
 	},
 	selectAllAmountBtn: {
 		cursor: 'pointer',
@@ -158,11 +159,17 @@ const styles = theme => ({
 		}
 	},
 	bottomSpace: {
-		marginBottom: '23px'
+		marginBottom: '13px'
 	},
 	tokenMax: {
 		display: 'flex',
 		flexWrap: 'nowrap'
+	},
+	tabsWrap: {
+		'& .feeTitle': {
+			display: 'table',
+			marginBottom: '5px'
+		}
 	}
 });
 
@@ -368,101 +375,105 @@ class TransactionSendBoxContainer extends PureComponent {
 						{this.renderSelectTokenItems()}
 					</Select>
 				</div>
-				<div className={classes.tabsWrap}>
-					<Tabs
-						value={this.state.tab}
-						onChange={(evt, value) => this.onTabChange(value)}
-						className={classes.tabs}
-					>
-						<Tab id="send" value="send" label="Send" />
-						<Tab id="receive" value="receive" label="Receive" />
-					</Tabs>
-					{this.state.tab === 'send' && (
-						<React.Fragment>
-							<div className={classes.bottomSpace}>
-								<Typography variant="body2" color="secondary">
-									Available:{' '}
-									<span style={{ color: '#fff', fontWeight: 'bold' }}>
-										{this.state.amount}{' '}
-										{cryptoCurrency !== 'custom' ? cryptoCurrency : ''}
-									</span>
-								</Typography>
-							</div>
-							<div className={classes.amountBottomSpace}>
-								<InputTitle title="Amount" />
-								<div className={classes.tokenMax}>
-									<Input
-										type="text"
-										onChange={this.handleAmountChange}
-										value={this.state.amount}
-										placeholder="0.00"
-										className={classes.amount}
-										fullWidth
-									/>
-									<Button
-										onClick={this.handleAllAmountClick}
-										variant="outlined"
-										size="large"
-									>
-										Max
-									</Button>
+				{this.state.cryptoCurrency !== 'custom' ? (
+					<div className={classes.tabsWrap}>
+						<Tabs
+							value={this.state.tab}
+							onChange={(evt, value) => this.onTabChange(value)}
+							className={classes.tabs}
+						>
+							<Tab id="send" value="send" label="Send" />
+							<Tab id="receive" value="receive" label="Receive" />
+						</Tabs>
+						{this.state.tab === 'send' && (
+							<React.Fragment>
+								<div className={classes.bottomSpace}>
+									<Typography variant="body2" color="secondary">
+										Available:{' '}
+										<span className={classes.balance}>
+											{this.props.balance}{' '}
+											{cryptoCurrency !== 'custom' ? cryptoCurrency : ''}
+										</span>
+									</Typography>
 								</div>
-								<div className={classes.fiatPrice}>
-									<Typography
-										variant="subtitle2"
-										color="secondary"
-										style={{ marginRight: '3px' }}
-									>
-										<NumberFormat
-											locale={locale}
-											priceStyle="currency"
-											currency={fiatCurrency}
-											value={amountUsd}
-											fractionDigits={15}
+								<div className={classes.amountBottomSpace}>
+									<InputTitle title="Amount" />
+									<div className={classes.tokenMax}>
+										<Input
+											type="text"
+											onChange={this.handleAmountChange}
+											value={this.state.amount}
+											placeholder="0.00"
+											className={classes.amount}
+											fullWidth
 										/>
-									</Typography>
-									<Typography variant="subtitle2" color="secondary">
-										USD
-									</Typography>
+										<Button
+											onClick={this.handleAllAmountClick}
+											variant="outlined"
+											size="large"
+										>
+											Max
+										</Button>
+									</div>
+									<div className={classes.fiatPrice}>
+										<Typography
+											variant="subtitle2"
+											color="secondary"
+											style={{ marginRight: '3px' }}
+										>
+											<NumberFormat
+												locale={locale}
+												priceStyle="currency"
+												currency={fiatCurrency}
+												value={amountUsd}
+												fractionDigits={15}
+											/>
+										</Typography>
+										<Typography variant="subtitle2" color="secondary">
+											USD
+										</Typography>
+									</div>
 								</div>
-							</div>
 
-							<div>
-								<InputTitle title="Send to" />
-								<div className={`${classes.tokenMax} ${classes.flexColumn}`}>
-									<Input
-										type="text"
-										onChange={this.handleAddressChange}
-										value={this.state.address}
-										placeholder="0x"
-										className={labelInputClass}
-										fullWidth
-									/>
+								<div>
+									<InputTitle title="Send to" />
+									<div className={`${classes.tokenMax} ${classes.flexColumn}`}>
+										<Input
+											type="text"
+											onChange={this.handleAddressChange}
+											value={this.state.address}
+											placeholder="0x"
+											className={labelInputClass}
+											fullWidth
+										/>
+									</div>
 								</div>
-							</div>
-							{addressError && (
-								<span id="labelError" className={classes.errorText}>
-									Invalid address. Please check and try again.
-								</span>
-							)}
-							<Divider className={classes.divider} />
+								{addressError && (
+									<span id="labelError" className={classes.errorText}>
+										Invalid address. Please check and try again.
+									</span>
+								)}
+								<Divider className={classes.divider} />
 
-							<TransactionFeeBox
-								changeGasLimitAction={this.withLock(this.handleGasLimitChange)}
-								changeGasPriceAction={this.withLock(this.handleGasPriceChange)}
-								reloadEthGasStationInfoAction={this.loadData}
-								{...this.props}
+								<TransactionFeeBox
+									changeGasLimitAction={this.withLock(this.handleGasLimitChange)}
+									changeGasPriceAction={this.withLock(this.handleGasPriceChange)}
+									reloadEthGasStationInfoAction={this.loadData}
+									{...this.props}
+								/>
+								{this.renderButtons()}
+							</React.Fragment>
+						)}
+						{this.state.tab === 'receive' && (
+							<ReceiveTokenTab
+								sendingAddress={sendingAddress}
+								cryptoCurrency={cryptoCurrency}
 							/>
-							{this.renderButtons()}
-						</React.Fragment>
-					)}
-					{this.state.tab === 'receive' && (
-						<ReceiveTokenTab
-							sendingAddress={sendingAddress}
-							cryptoCurrency={cryptoCurrency}
-						/>
-					)}
-				</div>
+						)}
+					</div>
+				) : (
+					''
+				)}
 			</TransactionBox>
 		);
 	}
