@@ -205,10 +205,8 @@ const setEncryptedPrivateKey = (privateKey, password) => async dispatch => {
 	const hash = crypto.createHash('sha256');
 	hash.update(password);
 	const key = hash.digest();
-	console.log('XXX', key.toString('hex'));
 	const iv = Buffer.concat([crypto.randomBytes(12), Buffer.alloc(4, 0)]);
 	const cipher = crypto.createCipheriv('aes-256-ctr', key, iv);
-
 	let ctext = iv.toString('hex') + cipher.update(privateKey, 'utf8', 'hex');
 	ctext += cipher.final('hex');
 	await dispatch(appActions.setKeystoreValue(ctext));
