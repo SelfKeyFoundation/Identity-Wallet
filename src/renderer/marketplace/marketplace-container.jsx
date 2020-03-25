@@ -13,7 +13,8 @@ import {
 	MarketplaceSelfkeyIdRequired,
 	MarketplaceSelfkeyDIDRequiredContainer,
 	MarketplaceOrdersPage,
-	MarketplaceNotariesPage
+	MarketplaceNotariesPage,
+	MarketplaceLoansPage
 } from '../marketplace';
 import { MarketplaceCorporatePreviewContainer } from './corporate-preview-container';
 import { inventorySelectors } from '../../common/marketplace/inventory/index';
@@ -77,6 +78,7 @@ class MarketplaceContainerComponent extends PureComponent {
 				/>
 				<Route path={`${match.path}/orders`} component={MarketplaceOrdersPage} />
 				<Route path={`${match.path}/notaries`} component={MarketplaceNotariesPage} />
+				<Route path={`${match.path}/loans`} component={MarketplaceLoansPage} />
 			</React.Fragment>
 		);
 	}
