@@ -1,7 +1,7 @@
 import React from 'react';
 import { PageLoading } from '../../common';
 import { Button, Typography, Grid, withStyles } from '@material-ui/core';
-import { TransferIcon } from 'selfkey-ui';
+import { LoanIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	pageContent: {
@@ -73,7 +73,7 @@ const LoansListPage = withStyles(styles)(
 							className={classes.pageContent}
 						>
 							<Grid item id="header" className={classes.header}>
-								<TransferIcon className={classes.icon} />
+								<LoanIcon className={classes.icon} />
 								<Typography variant="h1" className={classes.headerTitle}>
 									Loans
 								</Typography>
