@@ -130,7 +130,6 @@ class SendTokenTabComponent extends PureComponent {
 			handleAddressChange
 		} = this.props;
 		const labelInputClass = `${addressError ? classes.errorColor : ''}`;
-		console.log(this.props);
 		return (
 			<>
 				<div className={classes.bottomSpace}>Available: {amount}</div>

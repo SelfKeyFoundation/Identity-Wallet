@@ -35,6 +35,7 @@ import { TaxTreatiesSyncJobHandler } from './marketplace/tax-treaties/tax-treati
 import { PaymentService } from './blockchain/payment-service';
 import { SelfkeyService } from './blockchain/selfkey-service';
 import { MarketplaceOrdersService } from './marketplace/orders/orders-service';
+import { TotleSwapService } from './token-swap/totle-service';
 
 export const registerMainServices = container => {
 	container.register({
@@ -78,6 +79,7 @@ export const registerMainServices = container => {
 		kycApplicationService: asClass(KycApplicationService).singleton(),
 		didService: asClass(DIDService).singleton(),
 		autoUpdateService: asClass(AutoUpdateService).singleton(),
-		marketplaceOrdersService: asClass(MarketplaceOrdersService).singleton()
+		marketplaceOrdersService: asClass(MarketplaceOrdersService).singleton(),
+		TotleSwapService: asClass(TotleSwapService).singleton()
 	});
 };

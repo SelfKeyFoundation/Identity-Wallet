@@ -76,6 +76,9 @@ const common = {
 		}
 	},
 
+	totleApiUrl: 'https://api.totle.com',
+	totleApiKey: '3c5645ed-a34e-409d-b179-19a998bd509b',
+
 	constants: {
 		initialIdAttributes: {
 			REQ_1: { id: '1', attributeType: 'name' },
@@ -129,6 +132,7 @@ const common = {
 		corporateMarketplace: false,
 		kyccUsersEndpoint: false,
 		walletExport: false,
+		swapTokens: false,
 		transactionsListFilter: false
 	}
 };
@@ -155,6 +159,7 @@ const dev = {
 		corporateMarketplace: false,
 		kyccUsersEndpoint: true,
 		walletExport: true,
+		swapTokens: true,
 		transactionsListFilter: true
 	},
 	testWalletAddress: '0x23d233933c86f93b74705cf0d236b39f474249f8',
@@ -184,6 +189,7 @@ const prod = {
 		corporateMarketplace: false,
 		kyccUsersEndpoint: false,
 		walletExport: false,
+		swapTokens: false,
 		transactionsListFilter: false
 	},
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'

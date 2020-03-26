@@ -20,9 +20,11 @@ import {
 	CreateDIDPopupContainer,
 	CreateDIDProcessingContainer
 } from '../../did';
+
 import Transfer from '../../transaction/send';
 import AdvancedTransaction from '../../transaction/send/advanced-transaction';
 import ReceiveTransfer from '../../transaction/receive';
+import TokenSwap from '../../transaction/swap';
 
 import { Grid, withStyles } from '@material-ui/core';
 import Toolbar from './toolbar-container';
@@ -169,6 +171,7 @@ class Main extends PureComponent {
 						path={`${match.path}/advancedTransaction/:cryptoCurrency`}
 						component={AdvancedTransaction}
 					/>
+					<Route path={`${match.path}/token-swap`} component={TokenSwap} />
 					<Route
 						path={`${match.path}/transfer/receive/:crypto`}
 						render={props => (
