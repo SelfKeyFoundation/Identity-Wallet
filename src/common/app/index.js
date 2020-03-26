@@ -1,4 +1,5 @@
 import { getGlobalContext } from 'common/context';
+import crypto from 'crypto';
 import { createAliasedAction } from 'electron-redux';
 import { walletOperations, walletSelectors } from '../wallet';
 import { push } from 'connected-react-router';
@@ -147,6 +148,7 @@ const loadWallets = () => async dispatch => {
 };
 
 const unlockWalletOperation = (wallet, type) => async dispatch => {
+	await dispatch(setEncryptedPrivateKey());
 	await dispatch(walletOperations.updateWalletWithBalance(wallet));
 	await dispatch(identityOperations.loadIdentitiesOperation(wallet.id));
 	await dispatch(identityOperations.unlockIdentityOperation());
@@ -160,6 +162,7 @@ const unlockWalletWithPassword = (walletId, password) => async dispatch => {
 	try {
 		const wallet = await walletService.unlockWalletWithPassword(walletId, password);
 		await dispatch(appOperations.unlockWalletOperation(wallet, 'existingAddress'));
+		await dispatch(setEncryptedPrivateKey(wallet.privateKey, password));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
@@ -173,6 +176,7 @@ const unlockWalletWithNewFile = (filePath, password) => async dispatch => {
 	try {
 		const wallet = await walletService.unlockWalletWithNewFile(filePath, password);
 		await dispatch(appOperations.unlockWalletOperation(wallet, 'newAddress'));
+		await dispatch(setEncryptedPrivateKey(wallet.privateKey, password));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
@@ -191,6 +195,21 @@ const unlockWalletWithPrivateKey = privateKey => async dispatch => {
 		const message = transformErrorMessage(error.message);
 		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
+};
+
+const setEncryptedPrivateKey = (privateKey, password) => async dispatch => {
+	if (!privateKey || !password) {
+		await dispatch(appActions.setKeystoreValue(null));
+		return;
+	}
+	const hash = crypto.createHash('sha256');
+	hash.update(password);
+	const key = hash.digest();
+	const iv = Buffer.concat([crypto.randomBytes(12), Buffer.alloc(4, 0)]);
+	const cipher = crypto.createCipheriv('aes-256-ctr', key, iv);
+	let ctext = iv.toString('hex') + cipher.update(privateKey, 'utf8', 'hex');
+	ctext += cipher.final('hex');
+	await dispatch(appActions.setKeystoreValue(ctext));
 };
 
 const unlockWalletWithPublicKey = (address, path) => async (dispatch, getState) => {
