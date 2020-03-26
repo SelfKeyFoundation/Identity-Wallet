@@ -121,7 +121,7 @@
 		"reselect": "4.0.0",
 		"sanitize-html": "1.20.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#64fccf013b897a4aafec6317f2df03dac0f46325",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#a44f94ab16584ed7840305c3c55137cbd1966e8b",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"snyk": "1.235.0",
