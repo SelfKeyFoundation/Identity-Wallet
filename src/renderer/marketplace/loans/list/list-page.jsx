@@ -2,6 +2,8 @@ import React from 'react';
 import { PageLoading } from '../../common';
 import { Button, Typography, Grid, withStyles } from '@material-ui/core';
 import { LoanIcon } from 'selfkey-ui';
+import { LoansCalculatorCard } from '../common/calculator-card';
+import { LoansTabs } from '../common/tabs';
 
 const styles = theme => ({
 	pageContent: {
@@ -79,11 +81,13 @@ const LoansListPage = withStyles(styles)(
 								</Typography>
 							</Grid>
 
-							<Grid item className={classes.tabs}>
-								Tabs
+							<Grid item>
+								<LoansCalculatorCard />
 							</Grid>
 
-							<Grid item>Table</Grid>
+							<Grid item className={classes.tabs}>
+								<LoansTabs />
+							</Grid>
 						</Grid>
 					</Grid>
 				)}
