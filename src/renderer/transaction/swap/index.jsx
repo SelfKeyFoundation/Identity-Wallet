@@ -13,12 +13,7 @@ import { transactionOperations } from 'common/transaction';
 import { MenuItem, Grid, Select, Input, Typography, Button, Divider } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { KeyboardArrowDown } from '@material-ui/icons';
-import { NumberFormat } from 'selfkey-ui';
-/*
-import TokenPrice from '../../common/token-price';
-import { push } from 'connected-react-router';
-import TransactionsHistory from '../transactions-history';
-*/
+import { NumberFormat, TransferIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	body: {
@@ -41,7 +36,12 @@ const styles = theme => ({
 	},
 	tokenMax: {
 		display: 'flex',
-		flexWrap: 'nowrap'
+		flexWrap: 'nowrap',
+		'& svg': {
+			height: '0.7em !important',
+			width: '0.7em !important',
+			marginRight: '0.5em'
+		}
 	},
 	amountInput: {
 		borderTopRightRadius: '0',
@@ -347,6 +347,7 @@ export class TokenSwapComponent extends PureComponent {
 									size="large"
 									className={classes.maxSourceInput}
 								>
+									<TransferIcon />
 									{this.state.sourceCurrency === this.props.sourceToken
 										? this.props.sourceToken
 										: this.props.fiatCurrency}
