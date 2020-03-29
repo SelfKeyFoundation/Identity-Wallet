@@ -80,6 +80,13 @@ const styles = theme => ({
 	},
 	topSpace: {
 		paddingBottom: '0 !important'
+	},
+	popupClass: {
+		left: 'calc(50% - 480px)',
+		width: '960px'
+	},
+	closeBtn: {
+		marginLeft: '180px'
 	}
 });
 
@@ -143,6 +150,7 @@ class SelectAddress extends PureComponent {
 				justify="flex-start"
 				alignItems="flex-start"
 				spacing={40}
+				className="lofaszKa"
 			>
 				<Grid item className={this.props.classes.topSpace}>
 					<Typography variant="h4" className={this.props.classes.h4}>
@@ -275,12 +283,15 @@ class SelectAddress extends PureComponent {
 	};
 
 	render() {
+		const { classes } = this.props;
 		return (
 			<Popup
 				closeAction={this.handleClose}
 				open
 				text="Choose An Ethereum Address"
 				loading={this.state.loading}
+				popupClass={classes.popupClass}
+				closeButtonClass={classes.closeBtn}
 			>
 				{this.renderModalBody()}
 			</Popup>
