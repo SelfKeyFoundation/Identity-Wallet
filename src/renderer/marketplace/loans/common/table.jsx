@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 // import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
 import { LargeTableHeadRow /*TagTableCell, Tag, KeyTooltip, InfoTooltip*/ } from 'selfkey-ui';
+import { LoansFilters } from './filters';
 
 const styles = theme => ({
 	table: {
@@ -28,35 +29,6 @@ const styles = theme => ({
 			border: 'none'
 		}
 	},
-	tableBodyRow: {
-		'& span.category': {
-			display: 'inline-block',
-			margin: '2px 5px',
-			padding: '2px 8px',
-			color: '#93B0C1',
-			background: '#1E262E',
-			borderRadius: '10px',
-			fontSize: '12px',
-			lineHeight: '19px'
-		},
-		'& span.price-key': {
-			color: '#93B0C1',
-			fontSize: '12px',
-			display: 'block',
-			whiteSpace: 'nowrap',
-			margin: '2px auto'
-		}
-	},
-	tableRow: {
-		'& td': {
-			padding: '15px 20px'
-		}
-	},
-
-	flagCell: {
-		width: '10px'
-	},
-
 	detailsCell: {
 		width: '55px',
 		color: '#00C0D9',
@@ -68,33 +40,38 @@ const styles = theme => ({
 
 const LoansTable = withStyles(styles)(({ classes, inventory = [], onDetails, className }) => {
 	return (
-		<Table className={classNames(classes.table, className)}>
-			<TableHead>
-				<LargeTableHeadRow>
-					<TableCell className={classes.flagCell} />
-					<TableCell>
-						<Typography variant="overline">Name</Typography>
-					</TableCell>
-					<TableCell>
-						<Typography variant="overline">Type</Typography>
-					</TableCell>
-					<TableCell>
-						<Typography variant="overline">Assets Accepted</Typography>
-					</TableCell>
-					<TableCell>
-						<Typography variant="overline">Interest Rates</Typography>
-					</TableCell>
-					<TableCell>
-						<Typography variant="overline">Interest Amounts</Typography>
-					</TableCell>
-					<TableCell>
-						<Typography variant="overline">Revenue</Typography>
-					</TableCell>
-					<TableCell className={classes.detailsCell} />
-				</LargeTableHeadRow>
-			</TableHead>
-			<TableBody className={classes.tableBodyRow} />
-		</Table>
+		<React.Fragment>
+			<div>
+				<LoansFilters />
+			</div>
+			<Table className={classNames(classes.table, className)}>
+				<TableHead>
+					<LargeTableHeadRow>
+						<TableCell className={classes.flagCell} />
+						<TableCell>
+							<Typography variant="overline">Name</Typography>
+						</TableCell>
+						<TableCell>
+							<Typography variant="overline">Type</Typography>
+						</TableCell>
+						<TableCell>
+							<Typography variant="overline">Assets Accepted</Typography>
+						</TableCell>
+						<TableCell>
+							<Typography variant="overline">Interest Rates</Typography>
+						</TableCell>
+						<TableCell>
+							<Typography variant="overline">Interest Amounts</Typography>
+						</TableCell>
+						<TableCell>
+							<Typography variant="overline">Revenue</Typography>
+						</TableCell>
+						<TableCell className={classes.detailsCell} />
+					</LargeTableHeadRow>
+				</TableHead>
+				<TableBody className={classes.tableBodyRow} />
+			</Table>
+		</React.Fragment>
 	);
 });
 

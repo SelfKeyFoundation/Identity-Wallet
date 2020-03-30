@@ -3,7 +3,7 @@ import { PageLoading } from '../../common';
 import { Button, Typography, Grid, withStyles } from '@material-ui/core';
 import { LoanIcon } from 'selfkey-ui';
 import { LoansCalculatorCard } from '../common/calculator-card';
-import { LoansTabs } from '../common/tabs';
+import { LoansTabs } from './tabs';
 
 const styles = theme => ({
 	pageContent: {

@@ -3,9 +3,10 @@ import React from 'react';
 // import { linkTo } from '@storybook/addon-links';
 import { storiesOf } from '@storybook/react';
 import LoansListPage from '../src/renderer/marketplace/loans/list/list-page';
-import LoansTabs from '../src/renderer/marketplace/loans/common/tabs';
+import LoansTabs from '../src/renderer/marketplace/loans/list/tabs';
 import LoansCalculatorCard from '../src/renderer/marketplace/loans/common/calculator-card';
 import LoansTable from '../src/renderer/marketplace/loans/common/table';
+import LoansFilters from '../src/renderer/marketplace/loans/common/filters';
 
 storiesOf('Loans', module)
 	.add('List Table', () => (
@@ -23,6 +24,12 @@ storiesOf('Loans', module)
 	.add('Calculator Card', () => (
 		<div style={{ width: '1140px' }}>
 			<LoansCalculatorCard />
+		</div>
+	))
+
+	.add('Filters', () => (
+		<div style={{ width: '1140px' }}>
+			<LoansFilters />
 		</div>
 	))
 
