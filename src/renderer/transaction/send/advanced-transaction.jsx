@@ -369,9 +369,11 @@ class TransactionSendBoxContainer extends PureComponent {
 						onChange={e => this.handleCryptoCurrencyChange(e)}
 						name="cryptoCurrency"
 						disableUnderline
+						displayEmpty
 						IconComponent={KeyboardArrowDown}
-						input={<Input disableUnderline />}
+						input={<Input disableUnderline placeholder="Choose..." />}
 					>
+						<MenuItem value="custom">Choose...</MenuItem>
 						{this.renderSelectTokenItems()}
 					</Select>
 				</div>

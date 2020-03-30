@@ -135,7 +135,7 @@ const styles = () => ({
 		marginBottom: '30px',
 		maxHeight: '240px',
 		overflowX: 'hidden',
-		overflowY: 'scroll'
+		overflowY: 'auto'
 	},
 	tokenName: {
 		marginRight: '10px'
