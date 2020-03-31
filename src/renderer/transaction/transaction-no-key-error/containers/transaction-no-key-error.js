@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { TransactionNoKeyError } from '../components/transaction-no-key-error';
 import { getWallet } from 'common/wallet/selectors';
 import { kycOperations } from 'common/kyc';
+import { exchangesSelectors } from 'common/exchanges';
 import history from 'common/store/history';
 
 class TransactionNoKeyErrorContainer extends PureComponent {
@@ -25,6 +26,7 @@ const mapStateToProps = (state, props) => {
 	const { keyPrice } = props.match.params;
 	return {
 		address: getWallet(state).address,
+		listingExchanges: exchangesSelectors.selectListingExchanges(state),
 		keyPrice
 	};
 };

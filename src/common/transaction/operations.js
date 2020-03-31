@@ -35,7 +35,7 @@ const init = args => async dispatch => {
 			usdFee: 0,
 			gasPrice: 0,
 			gasLimit: 0,
-			nouce: 0,
+			nonce: 0,
 			signedHex: '',
 			transactionHash: '',
 			addressError: false,
@@ -68,17 +68,25 @@ export const getGasLimit = async (
 	cryptoCurrency,
 	address,
 	amount,
+	decimals,
 	walletAddress,
 	nonce,
 	tokenContract
 ) => {
+	const { tokenService, walletService } = getGlobalContext();
 	// Return default gas limit for Ethereum
 	if (cryptoCurrency === 'ETH') {
-		return DEFAULT_ETH_GAS_LIMIT;
+		const amountInWei = EthUnits.unitToUnit(amount, 'ether', 'wei');
+		const gasLimit = await walletService.estimateGas({
+			to: address,
+			value: amountInWei,
+			nonce
+		});
+
+		return gasLimit || DEFAULT_ETH_GAS_LIMIT;
 	}
 
-	const tokenService = getGlobalContext().tokenService;
-	return tokenService.getGasLimit(tokenContract, address, amount, walletAddress);
+	return tokenService.getGasLimit(tokenContract, address, amount, decimals, walletAddress, nonce);
 };
 
 const getTransactionCount = async address => {
@@ -112,6 +120,7 @@ export const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimi
 
 		if (address && amount) {
 			const tokenContract = transaction.contractAddress;
+			const tokenDecimal = transaction.tokenDecimal;
 			const nonce = await getTransactionCount(walletAddress);
 			const cryptoCurrency = transaction.cryptoCurrency;
 			let gasLimit = DEFAULT_ETH_GAS_LIMIT;
@@ -127,6 +136,7 @@ export const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimi
 					cryptoCurrency,
 					address,
 					amount,
+					tokenDecimal,
 					walletAddress,
 					nonce,
 					tokenContract
@@ -415,6 +425,73 @@ const incorporationSend = (companyCode, countryCode) => async (dispatch, getStat
 	});
 };
 
+const sendCustomTransaction = ({
+	transaction,
+	onReceipt,
+	onTransactionHash,
+	onTransactionError
+}) => async (dispatch, getState) => {
+	const walletService = getGlobalContext().walletService;
+	const state = getState();
+	const transactionEventEmitter = walletService.sendTransaction(transaction);
+
+	let hardwalletConfirmationTimeout = null;
+	const walletType = appSelectors.selectWalletType(state);
+
+	if (walletType === 'ledger' || walletType === 'trezor') {
+		hardwalletConfirmationTimeout = setTimeout(async () => {
+			clearTimeout(hardwalletConfirmationTimeout);
+			transactionEventEmitter.removeAllListeners('transactionHash');
+			transactionEventEmitter.removeAllListeners('receipt');
+			transactionEventEmitter.removeAllListeners('error');
+			await dispatch(push('/main/transaction-timeout'));
+		}, hardwalletConfirmationTime);
+	}
+
+	transactionEventEmitter.on('transactionHash', async hash => {
+		clearTimeout(hardwalletConfirmationTimeout);
+		await dispatch(
+			actions.updateTransaction({
+				status: 'Pending',
+				transactionHash: hash
+			})
+		);
+		await dispatch(push('/main/transaction-progress'));
+		dispatch(createTxHistry(hash));
+	});
+
+	transactionEventEmitter.on('receipt', async receipt => {
+		await dispatch(updateBalances());
+	});
+
+	transactionEventEmitter.on('error', async error => {
+		clearTimeout(hardwalletConfirmationTimeout);
+		log.error('transactionEventEmitter ERROR: %j', error);
+		const message = error.toString().toLowerCase();
+		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'NoBalance'
+				})
+			);
+			await dispatch(push('/main/transaction-no-gas-error'));
+		} else if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
+			await dispatch(push('/main/transaction-declined/Ledger'));
+		} else if (error.code === 'Failure_ActionCancelled') {
+			await dispatch(push('/main/transaction-declined/Trezor'));
+		} else if (error.statusText === 'UNKNOWN_ERROR') {
+			await dispatch(push('/main/transaction-unlock'));
+		} else {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'Error'
+				})
+			);
+			await dispatch(push('/main/transaction-error'));
+		}
+	});
+};
+
 const updateBalances = () => async (dispatch, getState) => {
 	let wallet = getWallet(getState());
 
@@ -470,5 +547,6 @@ export default {
 	incorporationSend: createAliasedAction(types.INCORPORATION_SEND, incorporationSend),
 	marketplaceSend: createAliasedAction(types.MARKETPLACE_SEND, marketplaceSend),
 	setCryptoCurrency: createAliasedAction(types.CRYPTO_CURRENCY_SET, setCryptoCurrency),
+	sendCustomTransaction: createAliasedAction(types.CUSTOM_SEND, sendCustomTransaction),
 	setLocked: createAliasedAction(types.LOCKED_SET, setLocked)
 };

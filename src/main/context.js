@@ -27,6 +27,7 @@ import { VendorService } from './marketplace/vendors/vendor-service';
 import { VendorSyncJobHandler } from './marketplace/vendors/vendor-sync-job-handler';
 import { InventoryService } from './marketplace/inventory/inventory-service';
 import { InventorySyncJobHandler } from './marketplace/inventory/inventory-sync-job-handler';
+import { ListingExchangesSyncJobHandler } from './exchanges/listing-exchanges-sync-job-handler';
 import { MarketplaceCountryService } from './marketplace/countries/marketplace-country-service';
 import { MarketplaceCountrySyncJobHandler } from './marketplace/countries/marketplace-country-sync-job-handler';
 import { TaxTreatiesService } from './marketplace/tax-treaties/tax-treaties-service';
@@ -34,6 +35,7 @@ import { TaxTreatiesSyncJobHandler } from './marketplace/tax-treaties/tax-treati
 import { PaymentService } from './blockchain/payment-service';
 import { SelfkeyService } from './blockchain/selfkey-service';
 import { MarketplaceOrdersService } from './marketplace/orders/orders-service';
+import { TotleSwapService } from './token-swap/totle-service';
 
 export const registerMainServices = container => {
 	container.register({
@@ -48,6 +50,7 @@ export const registerMainServices = container => {
 		marketplaceCountrySyncJobHandler: asClass(MarketplaceCountrySyncJobHandler).singleton(),
 		taxTreatiesService: asClass(TaxTreatiesService).singleton(),
 		taxTreatiesSyncJobHandler: asClass(TaxTreatiesSyncJobHandler).singleton(),
+		listingExchangesSyncJobHandler: asClass(ListingExchangesSyncJobHandler).singleton(),
 		web3Service: asClass(Web3Service).singleton(),
 		walletService: asClass(WalletService).singleton(),
 		addressBookService: asClass(AddressBookService).singleton(),
@@ -76,6 +79,7 @@ export const registerMainServices = container => {
 		kycApplicationService: asClass(KycApplicationService).singleton(),
 		didService: asClass(DIDService).singleton(),
 		autoUpdateService: asClass(AutoUpdateService).singleton(),
-		marketplaceOrdersService: asClass(MarketplaceOrdersService).singleton()
+		marketplaceOrdersService: asClass(MarketplaceOrdersService).singleton(),
+		TotleSwapService: asClass(TotleSwapService).singleton()
 	});
 };

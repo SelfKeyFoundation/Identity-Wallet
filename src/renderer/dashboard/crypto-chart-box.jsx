@@ -2,8 +2,8 @@ import React from 'react';
 import { Chart } from 'react-google-charts';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { GearIcon, NumberFormat, PriceSummary } from 'selfkey-ui';
-import { Grid, Paper, Typography, IconButton, Divider } from '@material-ui/core';
+import { NumberFormat, PriceSummary, EthereumIcon, SelfkeyIcon } from 'selfkey-ui';
+import { Grid, Paper, Typography, Button } from '@material-ui/core';
 import { getLocale } from 'common/locale/selectors';
 import { getViewAll } from 'common/view-all-tokens/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
@@ -17,16 +17,18 @@ const styles = () => ({
 		backgroundColor: '#262F39',
 		boxShadow: 'none',
 		boxSizing: 'border-box',
+		height: '100%',
 		padding: '16px 30px'
 	},
-
-	coloredBox: {
-		width: '44px !important',
-		height: '44px !important',
-		borderRadius: '8px !important',
-		position: 'relative'
+	iconRightSpace: {
+		marginRight: '10px'
 	},
-
+	coloredBox: {
+		borderRadius: '8px !important',
+		height: '44px !important',
+		position: 'relative',
+		width: '44px !important'
+	},
 	coloredBoxText: {
 		position: 'absolute',
 		textAlign: 'center',
@@ -35,20 +37,18 @@ const styles = () => ({
 		left: '50%',
 		transform: 'translate(-50%, -50%)'
 	},
-
 	prices: {
+		flexGrow: 1,
 		margin: 0,
-		width: '100%',
 		padding: 0,
+		width: 'auto',
 		'& >div': {
 			paddingRight: '0 !important'
 		}
 	},
-
 	texts: {
 		fontSize: '18px'
 	},
-
 	active: {
 		backgroundColor: '#313D49',
 		borderRadius: '4px',
@@ -56,7 +56,6 @@ const styles = () => ({
 		border: 'none',
 		padding: '10px'
 	},
-
 	chartCenterContainer: {
 		position: 'absolute',
 		textAlign: 'center',
@@ -65,11 +64,10 @@ const styles = () => ({
 		left: '50%',
 		transform: 'translate(-50%, -50%)'
 	},
-
 	chart: {
+		maxWidth: 'initial',
 		position: 'relative'
 	},
-
 	buttonViewMore: {
 		outline: 'none',
 		fontSize: '12px',
@@ -77,34 +75,28 @@ const styles = () => ({
 		cursor: 'pointer',
 		textTransform: 'uppercase'
 	},
-
 	buttonViewMoreText: {
 		borderBottom: '1px dashed #93b0c1'
 	},
-
 	expandMore: {
 		verticalAlign: 'middle !important'
 	},
-
 	textRight: {
 		textAlign: 'right'
 	},
-
 	smallText: {
 		marginTop: '0 !important',
 		'& >div': {
 			fontSize: '14px'
 		}
 	},
-
 	textColor: {
 		color: 'rgba(255, 255, 255, 0.7)'
 	},
-
 	title: {
-		fontSize: '20px'
+		fontSize: '20px',
+		paddingTop: '12px'
 	},
-
 	chartWrap: {
 		'& div.google-visualization-tooltip': {
 			backgroundColor: '#1F2830',
@@ -121,6 +113,52 @@ const styles = () => ({
 				color: '#FFFFFF !important'
 			}
 		}
+	},
+	button: {
+		margin: '0 10px'
+	},
+	token: {
+		flexBasis: '48%',
+		margin: '13px 0',
+		'&:hover': {
+			backgroundColor: '#313D49',
+			border: 'none',
+			borderRadius: '4px',
+			cursor: 'pointer',
+			outlineWidth: 0
+		}
+	},
+	tokenContainer: {
+		display: 'flex',
+		flexWrap: 'wrap',
+		justifyContent: 'space-between',
+		marginBottom: '30px',
+		maxHeight: '240px',
+		overflowX: 'hidden',
+		overflowY: 'auto'
+	},
+	tokenName: {
+		marginRight: '10px'
+	},
+	tokenActionButtons: {
+		marginBottom: '40px',
+		marginTop: '20px'
+	},
+	flex: {
+		display: 'flex',
+		'& svg': {
+			marginRight: '10px'
+		}
+	},
+	flexContainer: {
+		alignItems: 'flex-start',
+		display: 'flex',
+		justifyContent: 'space-between'
+	},
+	infoWrap: {
+		display: 'flex',
+		flexDirection: 'column',
+		width: '100%'
 	}
 });
 
@@ -179,8 +217,8 @@ class ChartContainerComponent extends React.Component {
 						}
 					}}
 					graph_id="PieChart"
-					width="100%"
-					height="300px"
+					width="270px"
+					height="270px"
 					legend_toggle
 					chartEvents={events}
 					ref={c => {
@@ -266,7 +304,7 @@ export class CryptoChartBoxComponent extends React.Component {
 		}
 	};
 
-	getColors = () => ['#46dfba', '#46b7df', '#238db4', '#1d7999', '#0e4b61'];
+	getColors = () => ['#46dfba', '#05538E', '#006CBE', '#006CBE', '#00C0D9'];
 
 	getChartEvents = () => {
 		return this.hasBalance() ? [this.selectEvent, this.readyEvent] : [];
@@ -288,7 +326,30 @@ export class CryptoChartBoxComponent extends React.Component {
 		}, 0);
 	};
 
-	getTokensLegend(classes, tokens, locale, fiatCurrency) {
+	getTokenIcon(classes, token, index) {
+		switch (token.name) {
+			case 'Ethereum':
+				return <EthereumIcon className={classes.iconRightSpace} />;
+			case 'Selfkey':
+				return <SelfkeyIcon className={classes.iconRightSpace} />;
+			default:
+				return (
+					<div
+						className={`${classes.coloredBox} ${classes.iconRightSpace}`}
+						style={{
+							backgroundColor:
+								index <= 4 ? this.getColors()[index] : this.OTHERS_COLOR
+						}}
+					>
+						<div className={classes.coloredBoxText}>
+							{(token.name || token.symbol).charAt(0)}
+						</div>
+					</div>
+				);
+		}
+	}
+
+	getTokensLegend(classes, tokens, locale, fiatCurrency, manageTransferAction) {
 		return tokens.map((token, index) => {
 			return (
 				<Grid
@@ -297,61 +358,49 @@ export class CryptoChartBoxComponent extends React.Component {
 					key={index}
 					className={
 						this.state.activations[index] && this.state.activations[index].active
-							? classes.active
-							: ''
+							? `${classes.active} ${classes.token}`
+							: `${classes.token}`
 					}
+					onClick={e => manageTransferAction(e, token)}
 				>
-					<Grid container alignItems="flex-start" justify="space-between">
-						<Grid item xs={2}>
-							<div
-								className={classes.coloredBox}
-								style={{
-									backgroundColor:
-										index <= 4 ? this.getColors()[index] : this.OTHERS_COLOR
-								}}
-							>
-								<div className={classes.coloredBoxText}>{token.name.charAt(0)}</div>
-							</div>
-						</Grid>
-						<Grid item xs={5}>
-							<Grid container alignItems="flex-start">
-								<Grid item xs={12}>
-									<Typography variant="h2">{token.name}</Typography>
-								</Grid>
-								<Grid item xs={12}>
-									<Typography variant="subtitle1" className={classes.textColor}>
-										{token.symbol}
-									</Typography>
-								</Grid>
+					<div className={classes.flexContainer}>
+						<div>{this.getTokenIcon(classes, token, index)}</div>
+						<div className={classes.infoWrap}>
+							<Grid container alignItems="flex-start" justify="space-between">
+								<Typography
+									variant="h2"
+									title={token.name}
+									className={classes.tokenName}
+								>
+									{token.name === 'Selfkey' ? 'SelfKey' : token.name}
+								</Typography>
+								<PriceSummary
+									locale={locale}
+									style="decimal"
+									currency={token.symbol}
+									fractionDigits={token.decimal}
+									className={classes.prices}
+									valueClass={classes.texts}
+									value={token.balance}
+									justify="flex-end"
+								/>
 							</Grid>
-						</Grid>
-						<Grid item xs={5}>
-							<Grid container alignItems="flex-start">
-								<Grid item xs={12}>
-									<PriceSummary
-										locale={locale}
-										style="decimal"
-										currency={token.symbol}
-										className={classes.prices}
-										valueClass={classes.texts}
-										value={token.balance}
-										justify="flex-end"
-									/>
-								</Grid>
-								<Grid item xs={12}>
-									<PriceSummary
-										locale={locale}
-										style="currency"
-										currency={fiatCurrency}
-										className={classes.smallText}
-										valueClass={classes.texts}
-										value={token.balanceInFiat}
-										justify="flex-end"
-									/>
-								</Grid>
+							<Grid container alignItems="flex-start" wrap="nowrap">
+								<Typography variant="subtitle1" className={classes.textColor}>
+									{token.symbol}
+								</Typography>
+								<PriceSummary
+									locale={locale}
+									priceStyle="currency"
+									currency={fiatCurrency}
+									className={classes.smallText}
+									valueClass={classes.texts}
+									value={token.balanceInFiat}
+									justify="flex-end"
+								/>
 							</Grid>
-						</Grid>
-					</Grid>
+						</div>
+					</div>
 				</Grid>
 			);
 		});
@@ -392,30 +441,24 @@ export class CryptoChartBoxComponent extends React.Component {
 	}
 
 	render() {
-		const { classes, locale, fiatCurrency, tokens, manageCryptoAction } = this.props;
+		const {
+			classes,
+			locale,
+			fiatCurrency,
+			tokens,
+			manageCryptoAction,
+			manageAddTokenAction,
+			manageTransferAction
+		} = this.props;
 
 		return (
 			<Paper className={classes.paper}>
 				<Grid container alignItems="center" spacing={16}>
+					<Typography variant="h1" className={classes.title}>
+						My Tokens
+					</Typography>
 					<Grid item xs={12}>
-						<Grid container justify="space-between" alignItems="center">
-							<Grid item xs={11}>
-								<Typography variant="h1" className={classes.title}>
-									My Crypto
-								</Typography>
-							</Grid>
-							<Grid item xs={1} className={classes.textRight}>
-								<IconButton onClick={manageCryptoAction}>
-									<GearIcon />
-								</IconButton>
-							</Grid>
-						</Grid>
-					</Grid>
-					<Grid item xs={12}>
-						<Divider />
-					</Grid>
-					<Grid item xs={12}>
-						<Grid container alignItems="flex-start" spacing={0}>
+						<Grid container justify="center" spacing={0}>
 							<Grid item xs={4} className={classes.chart}>
 								<ChartContainer
 									events={this.getChartEvents()}
@@ -432,15 +475,52 @@ export class CryptoChartBoxComponent extends React.Component {
 											value={this.getTotalBalanceInFiat(tokens)}
 										/>
 									</Typography>
-									<Typography variant="h3">Total Value {fiatCurrency}</Typography>
+									<Typography variant="subtitle2" color="secondary">
+										Total Value {fiatCurrency}
+									</Typography>
 								</div>
 							</Grid>
-							<Grid item xs={8}>
-								<Grid container spacing={16} justify="space-between">
-									{this.getTokensLegend(classes, tokens, locale, fiatCurrency)}
-								</Grid>
-							</Grid>
 						</Grid>
+					</Grid>
+					<Grid container justify="center" className={classes.tokenActionButtons}>
+						<Button
+							className={classes.button}
+							variant="outlined"
+							color="secondary"
+							onClick={manageAddTokenAction}
+						>
+							+ Add Token
+						</Button>
+						<Button
+							className={classes.button}
+							variant="outlined"
+							color="secondary"
+							onClick={manageCryptoAction}
+						>
+							Manage Tokens
+						</Button>
+						<Button
+							className={classes.button}
+							variant="outlined"
+							color="secondary"
+							onClick={manageTransferAction}
+						>
+							Send/Receive
+						</Button>
+					</Grid>
+					<Grid
+						container
+						spacing={16}
+						justify="space-between"
+						className={classes.tokenContainer}
+					>
+						{this.getTokensLegend(
+							classes,
+							tokens,
+							locale,
+							fiatCurrency,
+							manageTransferAction
+						)}
 					</Grid>
 					{this.getViewAllSection()}
 				</Grid>

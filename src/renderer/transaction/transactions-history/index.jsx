@@ -4,10 +4,10 @@ import {
 	transactionHistorySelectors
 } from 'common/transaction-history';
 import { walletSelectors } from 'common/wallet';
-import { TX_HISTORY_API_ENDPOINT } from 'main/blockchain/tx-history-service';
 import { connect } from 'react-redux';
 import config from 'common/config';
 import {
+	Button,
 	Grid,
 	Table,
 	Typography,
@@ -16,9 +16,6 @@ import {
 	TableRow,
 	TableCell,
 	TableFooter,
-	TablePagination,
-	Paper,
-	Divider,
 	CircularProgress
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -26,77 +23,72 @@ import {
 	RefreshIcon,
 	HourGlassIcon,
 	HourGlassSmallIcon,
-	ViewIcon,
 	FailedIcon,
-	ReceiveIcon,
-	SentIcon,
-	CopyIcon
+	ReceivedRoundedIcon,
+	FilterIcon,
+	DropdownIcon,
+	SentRoundedIcon
 } from 'selfkey-ui';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { convertExponentialToDecimal } from 'common/utils/exponential-to-decimal';
+import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	iconSpacing: {
 		marginRight: '10px'
 	},
-
 	toolbar: {
 		justifyContent: 'space-between'
 	},
-
 	rightSpace: {
 		marginRight: '20px'
 	},
-
-	paper: {
-		backgroundColor: '#262F39',
-		boxShadow: 'none',
-		boxSizing: 'border-box',
-		padding: '16px 30px'
-	},
-
 	tableRow: {
 		backgroundColor: 'transparent !important',
-		borderBottom: '1px solid #303C49'
+		borderBottom: '1px solid #303C49',
+		'& td': {
+			padding: '17px 0',
+			'&:last-child': {
+				paddingRight: 0
+			}
+		}
 	},
-
+	tableFooter: {
+		'& td': {
+			paddingBottom: 0
+		}
+	},
 	title: {
 		fontSize: '20px'
 	},
-
 	narrowCell: {
 		padding: 0
 	},
-
 	smallPadding: {
 		padding: '0 10px'
 	},
-
 	zeroRightPadding: {
 		paddingRight: '0 !important'
 	},
-
 	iconWrap: {
 		display: 'flex',
-		justifyContent: 'flex-end'
+		justifyContent: 'flex-end',
+		'& button:last-child': {
+			paddingRight: 0
+		}
 	},
-
 	bottomSpace: {
 		marginBottom: '30px'
 	},
-
 	transparent: {
 		'&:nth-of-type(odd)': {
 			backgroundColor: 'transparent'
 		}
 	},
-
 	loading: {
 		position: 'relative',
 		marginLeft: '10px',
 		top: '5px'
 	},
-
 	searching: {
 		height: '19px',
 		width: '242px',
@@ -106,6 +98,15 @@ const styles = theme => ({
 		lineHeight: '19px',
 		textTransform: 'none',
 		marginLeft: '10px'
+	},
+	moreTransactions: {
+		'& svg': {
+			marginRight: '10px'
+		},
+		'& span': {
+			fontWeight: '500',
+			letterSpacing: 0
+		}
 	}
 });
 
@@ -116,7 +117,7 @@ const getIconForTransaction = (isError, sent) => {
 		case undefined:
 			return <HourGlassIcon />;
 		default:
-			return sent ? <SentIcon /> : <ReceiveIcon />;
+			return sent ? <SentRoundedIcon /> : <ReceivedRoundedIcon />;
 	}
 };
 
@@ -156,7 +157,11 @@ const getCustomStatusText = (transaction, sent) => {
 
 const getCustomValue = (transaction, sent) => {
 	if (transaction.isError !== 1) {
-		return `${sent ? '-' : '+'}${convertExponentialToDecimal(transaction.value)}`;
+		const a = transaction.value.toLocaleString('en-US', {
+			minimumFractionDigits: 0,
+			maximumFractionDigits: 4
+		});
+		return `${sent ? '-' : '+'}${convertExponentialToDecimal(a)}`;
 	}
 };
 
@@ -212,7 +217,7 @@ const filterTransactionByToken = (transaction, token) => {
 
 class TransactionsHistory extends PureComponent {
 	state = {
-		rowsPerPage: 10,
+		rowsPerPage: 4,
 		page: 0
 	};
 
@@ -229,24 +234,20 @@ class TransactionsHistory extends PureComponent {
 		this.props.dispatch(transactionHistoryOperations.reloadTransactionsOperation());
 	};
 
-	handleChangePage = (event, page) => {
-		this.setState({ page });
-	};
-
-	handleChangeRowsPerPage = (event, rowsPerPage) => {
-		this.setState({ rowsPerPage: rowsPerPage.props.value });
-	};
-
 	hasSent = transaction => {
 		const address = this.props.wallet.address || '';
 		return transaction.from.toLowerCase() === address.toLowerCase();
 	};
 
+	handleAllTransactions = () => {
+		this.props.dispatch(push('/main/transactions-history'));
+	};
+
 	renderDate(timestamp) {
-		const { year, month, day, hours, minutes } = getAbrDateFromTimestamp(timestamp);
+		const { year, month, day } = getAbrDateFromTimestamp(timestamp);
 		return (
 			<div>
-				{day} {month} {year} {hours}:{minutes}
+				{day} {month} {year}
 			</div>
 		);
 	}
@@ -261,145 +262,112 @@ class TransactionsHistory extends PureComponent {
 		const { rowsPerPage, page } = this.state;
 
 		return (
-			<Paper className={classes.paper}>
-				<Grid container alignItems="center" spacing={16}>
-					<Grid item xs={12}>
-						<Grid container justify="space-between" alignItems="center">
-							<Grid item xs={11}>
-								<Typography variant="h1" className={classes.title}>
-									Transactions
-								</Typography>
-							</Grid>
-							<Grid item xs={1} className={classes.iconWrap}>
-								<IconButton
-									aria-label="Refresh"
-									onClick={this.handleRefresh}
-									disabled={processing}
-								>
-									{processing ? <HourGlassSmallIcon /> : <RefreshIcon />}
-								</IconButton>
-							</Grid>
-						</Grid>
+			<Grid container alignItems="center" spacing={16}>
+				<Grid item xs={12}>
+					<Grid container justify="space-between" alignItems="center">
+						<div>
+							<Typography variant="h1" className={classes.title}>
+								Transactions
+							</Typography>
+						</div>
+						<div className={classes.iconWrap}>
+							<IconButton
+								label="Filter"
+								title="Filter"
+								disabled={processing}
+								onClick={this.handleAllTransactions}
+							>
+								<FilterIcon />
+							</IconButton>
+							<IconButton
+								aria-label="Refresh"
+								title="Refresh"
+								onClick={this.handleRefresh}
+								disabled={processing}
+							>
+								{processing ? <HourGlassSmallIcon /> : <RefreshIcon />}
+							</IconButton>
+						</div>
 					</Grid>
-					<Grid item xs={12}>
-						<Divider />
-					</Grid>
-					<Grid item xs={12}>
-						{processing ? (
-							<React.Fragment>
-								<span className={classes.loading}>
-									<CircularProgress size={20} />
-								</span>
-								<span id="searching" className={classes.searching}>
-									Please wait. Checking the blockchain for transactions history
-									information.
-								</span>
-							</React.Fragment>
-						) : (
-							<Table className={classes.bottomSpace}>
-								<TableBody>
-									{paginate(transactions, rowsPerPage, page).map(transaction => {
-										return (
-											<TableRow
-												key={transaction.id}
-												className={classes.tableRow}
-											>
-												<TableCell className={classes.narrowCell}>
-													{getIconForTransaction(
-														transaction.isError,
-														this.hasSent(transaction)
-													)}
-												</TableCell>
-												<TableCell className={classes.smallPadding}>
-													<Typography component="span" variant="body2">
-														{this.renderDate(transaction.timeStamp)}
-													</Typography>
-												</TableCell>
-												<TableCell>
-													<Typography component="span" variant="body2">
-														{transaction.statusText ||
-															getCustomStatusText(
-																transaction,
-																this.hasSent(transaction)
-															)}
-													</Typography>
-												</TableCell>
-												<TableCell align="right">
-													<Typography component="span" variant="body2">
-														{getCustomValue(
+				</Grid>
+				<Grid item xs={12}>
+					{processing ? (
+						<React.Fragment>
+							<span className={classes.loading}>
+								<CircularProgress size={20} />
+							</span>
+							<span id="searching" className={classes.searching}>
+								Please wait. Checking the blockchain for transactions history
+								information.
+							</span>
+						</React.Fragment>
+					) : transactions.length > 0 ? (
+						<Table>
+							<TableBody>
+								{paginate(transactions, rowsPerPage, page).map(transaction => {
+									return (
+										<TableRow key={transaction.id} className={classes.tableRow}>
+											<TableCell className={classes.narrowCell}>
+												{getIconForTransaction(
+													transaction.isError,
+													this.hasSent(transaction)
+												)}
+											</TableCell>
+											<TableCell className={classes.smallPadding}>
+												<Typography component="span" variant="h6">
+													{transaction.statusText ||
+														getCustomStatusText(
 															transaction,
 															this.hasSent(transaction)
 														)}
-													</Typography>
-												</TableCell>
-												<TableCell
-													align="right"
-													className={classes.zeroRightPadding}
+												</Typography>
+												<Typography
+													component="span"
+													variant="subtitle2"
+													color="secondary"
 												>
-													<IconButton className={classes.rightSpace}>
-														<CopyToClipboard
-															text={`${TX_HISTORY_API_ENDPOINT}/${
-																transaction.hash
-															}`}
-														>
-															<Grid container>
-																<CopyIcon
-																	className={classes.iconSpacing}
-																/>
-																<Typography
-																	variant="subtitle1"
-																	color="secondary"
-																>
-																	Copy
-																</Typography>
-															</Grid>
-														</CopyToClipboard>
-													</IconButton>
-													<IconButton
-														onClick={e => {
-															window.openExternal(
-																e,
-																`${TX_HISTORY_API_ENDPOINT}/${
-																	transaction.hash
-																}`
-															);
-														}}
-													>
-														<ViewIcon className={classes.iconSpacing} />
-														<Typography
-															variant="subtitle1"
-															color="secondary"
-														>
-															View
-														</Typography>
-													</IconButton>
-												</TableCell>
-											</TableRow>
-										);
-									})}
-								</TableBody>
-								<TableFooter>
+													{this.renderDate(transaction.timeStamp)}
+												</Typography>
+											</TableCell>
+											<TableCell align="right">
+												<Typography component="span" variant="h6">
+													{getCustomValue(
+														transaction,
+														this.hasSent(transaction)
+													)}
+												</Typography>
+											</TableCell>
+										</TableRow>
+									);
+								})}
+							</TableBody>
+							{transactions.length > 4 ? (
+								<TableFooter className={classes.tableFooter}>
 									<TableRow className={classes.transparent}>
-										<TablePagination
-											count={transactions.length}
-											page={page}
-											onChangePage={this.handleChangePage}
-											rowsPerPage={rowsPerPage}
-											onChangeRowsPerPage={this.handleChangeRowsPerPage}
-											backIconButtonProps={{
-												'aria-label': 'Previous Page'
-											}}
-											nextIconButtonProps={{
-												'aria-label': 'Next Page'
-											}}
-										/>
+										<TableCell colSpan={3} align="center">
+											<Button
+												className={classes.moreTransactions}
+												onClick={this.handleAllTransactions}
+											>
+												<DropdownIcon />
+												<Typography variant="overline" color="secondary">
+													View All Transactions
+												</Typography>
+											</Button>
+										</TableCell>
 									</TableRow>
 								</TableFooter>
-							</Table>
-						)}
-					</Grid>
+							) : (
+								''
+							)}
+						</Table>
+					) : (
+						<Typography variant="body2">
+							You {"don't"} have any transactions yet.
+						</Typography>
+					)}
 				</Grid>
-			</Paper>
+			</Grid>
 		);
 	}
 }

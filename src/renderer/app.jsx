@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Logger } from 'common/logger';
 import { connect } from 'react-redux';
-import { Route, HashRouter } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter, push } from 'connected-react-router';
 import ReactPiwik from 'react-piwik';
 import { SelfkeyDarkTheme } from 'selfkey-ui';
@@ -28,9 +28,6 @@ import Terms from './settings/terms';
 import TermsWarning from './settings/terms-warning';
 import Loading from './home/loading';
 import ConnectingToLedger from './wallet/unlock/ledger/connecting';
-import { SelfKeyIdCreate } from './selfkey-id/main/components/selfkey-id-create';
-import { SelfKeyIdCreateAbout } from './selfkey-id/main/components/selfkey-id-create-about';
-import { SelfKeyIdCreateDisclaimer } from './selfkey-id/main/components/selfkey-id-create-disclaimer';
 import { SelfKeyIdCreateForm } from './selfkey-id/main/components/selfkey-id-create-form';
 import AutoUpdate from './auto-update/auto-update-contatiner';
 import AutoUpdateProgress from './auto-update/auto-update-progress-contatiner';
@@ -73,40 +70,29 @@ class AppContainerComponent extends PureComponent {
 			return <GlobalError onRefresh={this.handleRefresh} />;
 		}
 		return (
-			<ConnectedRouter history={piwik.connectToHistory(this.props.history.getHistory())}>
-				<HashRouter>
-					<div>
-						<Route exact path="/" component={Loading} />
-						<Route exact path="/home" component={Home} />
-						<Route path="/no-connection" component={NoConnection} />
-						<Route path="/createWallet" component={CreateWallet} />
-						<Route path="/createPassword" component={CreatePassword} />
-						<Route
-							path="/createPasswordConfirmation"
-							component={PasswordConfirmation}
-						/>
-						<Route path="/backupAddress" component={BackupAddress} />
-						<Route path="/backupPrivateKey" component={BackupPK} />
-						<Route path="/main" component={Main} />
-						<Route path="/unlockWallet" component={Unlock} />
-						<Route path="/enterTrezorPin" component={EnterPin} />
-						<Route path="/enterTrezorPassphrase" component={EnterPassphrase} />
-						<Route path="/selectAddress" component={SelectAddress} />
-						<Route path="/connectingToLedger" component={ConnectingToLedger} />
-						<Route path="/connectingToTrezor" component={ConnectingToTrezor} />
-						<Route path="/terms" component={Terms} />
-						<Route path="/termsWarning" component={TermsWarning} />
-						<Route path="/selfkeyIdCreateAbout" component={SelfKeyIdCreateAbout} />
-						<Route
-							path="/selfkeyIdCreateDisclaimer"
-							component={SelfKeyIdCreateDisclaimer}
-						/>
-						<Route path="/selfKeyIdCreate" component={SelfKeyIdCreate} />
-						<Route path="/selfkeyIdForm" component={SelfKeyIdCreateForm} />
-						<Route path="/auto-update" component={AutoUpdate} />
-						<Route path="/auto-update-progress" component={AutoUpdateProgress} />
-					</div>
-				</HashRouter>
+			<ConnectedRouter history={this.props.history}>
+				<Switch>
+					<Route exact path="/" component={Loading} />
+					<Route exact path="/home" component={Home} />
+					<Route path="/no-connection" component={NoConnection} />
+					<Route path="/createWallet" component={CreateWallet} />
+					<Route path="/createPassword" component={CreatePassword} />
+					<Route path="/createPasswordConfirmation" component={PasswordConfirmation} />
+					<Route path="/backupAddress" component={BackupAddress} />
+					<Route path="/backupPrivateKey" component={BackupPK} />
+					<Route path="/main" component={Main} />
+					<Route path="/unlockWallet" component={Unlock} />
+					<Route path="/enterTrezorPin" component={EnterPin} />
+					<Route path="/enterTrezorPassphrase" component={EnterPassphrase} />
+					<Route path="/selectAddress" component={SelectAddress} />
+					<Route path="/connectingToLedger" component={ConnectingToLedger} />
+					<Route path="/connectingToTrezor" component={ConnectingToTrezor} />
+					<Route path="/terms" component={Terms} />
+					<Route path="/termsWarning" component={TermsWarning} />
+					<Route path="/selfkeyIdForm" component={SelfKeyIdCreateForm} />
+					<Route path="/auto-update" component={AutoUpdate} />
+					<Route path="/auto-update-progress" component={AutoUpdateProgress} />
+				</Switch>
 			</ConnectedRouter>
 		);
 	}
@@ -116,7 +102,7 @@ const AppContainer = connect()(AppContainerComponent);
 
 const App = ({ store, history }) => (
 	<SelfkeyDarkTheme>
-		<AppContainer history={history} />
+		<AppContainer history={piwik.connectToHistory(history.getHistory())} />
 	</SelfkeyDarkTheme>
 );
 

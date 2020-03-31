@@ -1,17 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import {
-	StyledButton,
-	ModalWrap,
-	ModalCloseButton,
-	ModalCloseIcon,
-	ModalHeader,
-	ModalBody
-} from 'selfkey-ui';
+import { StyledButton } from 'selfkey-ui';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
-import { Grid, Modal, Typography, Input } from '@material-ui/core';
+import { Grid, Input } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { push } from 'connected-react-router';
+import { Popup } from '../../common';
 
 const styles = theme => ({
 	errorText: {
@@ -102,103 +96,86 @@ class AddressBookAddContainer extends PureComponent {
 		const addressInputClass = `${classes.input} ${hasAddressError ? classes.errorColor : ''}`;
 
 		return (
-			<Modal open={true}>
-				<ModalWrap>
-					<ModalCloseButton onClick={this.closeAction}>
-						<ModalCloseIcon style={{ marginTop: '20px' }} />
-					</ModalCloseButton>
-					<ModalHeader>
-						<Grid container direction="row" justify="space-between" alignItems="center">
-							<Grid item>
-								<Typography variant="body1">Add Address</Typography>
+			<Popup closeAction={this.closeAction} open text="Add Address">
+				<form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
+					<Grid container direction="column" spacing={32}>
+						<Grid item>
+							<Grid container direction="column" spacing={8}>
+								<Grid item>
+									<label className={classes.label}>LABEL</label>
+								</Grid>
+								<Grid item>
+									<Input
+										type="text"
+										id="labelInput"
+										onChange={this.handleLabelChange}
+										value={this.state.label}
+										className={labelInputClass}
+										placeholder="Address label"
+									/>
+									{hasLabelError && (
+										<span id="labelError" className={classes.errorText}>
+											{labelError}
+										</span>
+									)}
+								</Grid>
 							</Grid>
 						</Grid>
-					</ModalHeader>
-					<ModalBody>
-						<form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
-							<Grid container direction="column" spacing={32}>
+						<Grid item>
+							<Grid container direction="column" spacing={8}>
 								<Grid item>
-									<Grid container direction="column" spacing={8}>
-										<Grid item>
-											<label className={classes.label}>LABEL</label>
-										</Grid>
-										<Grid item>
-											<Input
-												type="text"
-												id="labelInput"
-												onChange={this.handleLabelChange}
-												value={this.state.label}
-												className={labelInputClass}
-												placeholder="Address label"
-											/>
-											{hasLabelError && (
-												<span id="labelError" className={classes.errorText}>
-													{labelError}
-												</span>
-											)}
-										</Grid>
-									</Grid>
+									<label className={classes.label}>ETH ADDRESS</label>
 								</Grid>
 								<Grid item>
-									<Grid container direction="column" spacing={8}>
-										<Grid item>
-											<label className={classes.label}>ETH ADDRESS</label>
-										</Grid>
-										<Grid item>
-											<Input
-												type="text"
-												id="addressInput"
-												onChange={this.handleAddressChange}
-												value={this.state.address}
-												className={addressInputClass}
-												placeholder="0x"
-											/>
-											{hasAddressError && (
-												<span
-													id="addressError"
-													className={classes.errorText}
-												>
-													{addressError}
-												</span>
-											)}
-										</Grid>
-									</Grid>
-								</Grid>
-								<Grid item>
-									<Grid container direction="row" spacing={24}>
-										<Grid item>
-											<StyledButton
-												id="saveButton"
-												variant="contained"
-												size="large"
-												type="submit"
-												disabled={
-													!this.state.label ||
-													!this.state.address ||
-													hasAddressError ||
-													hasLabelError
-												}
-											>
-												Save
-											</StyledButton>
-										</Grid>
-										<Grid item>
-											<StyledButton
-												id="cancelButton"
-												variant="outlined"
-												size="large"
-												onClick={this.closeAction}
-											>
-												Cancel
-											</StyledButton>
-										</Grid>
-									</Grid>
+									<Input
+										type="text"
+										id="addressInput"
+										onChange={this.handleAddressChange}
+										value={this.state.address}
+										className={addressInputClass}
+										placeholder="0x"
+									/>
+									{hasAddressError && (
+										<span id="addressError" className={classes.errorText}>
+											{addressError}
+										</span>
+									)}
 								</Grid>
 							</Grid>
-						</form>
-					</ModalBody>
-				</ModalWrap>
-			</Modal>
+						</Grid>
+						<Grid item>
+							<Grid container direction="row" spacing={24}>
+								<Grid item>
+									<StyledButton
+										id="saveButton"
+										variant="contained"
+										size="large"
+										type="submit"
+										disabled={
+											!this.state.label ||
+											!this.state.address ||
+											hasAddressError ||
+											hasLabelError
+										}
+									>
+										Save
+									</StyledButton>
+								</Grid>
+								<Grid item>
+									<StyledButton
+										id="cancelButton"
+										variant="outlined"
+										size="large"
+										onClick={this.closeAction}
+									>
+										Cancel
+									</StyledButton>
+								</Grid>
+							</Grid>
+						</Grid>
+					</Grid>
+				</form>
+			</Popup>
 		);
 	}
 }

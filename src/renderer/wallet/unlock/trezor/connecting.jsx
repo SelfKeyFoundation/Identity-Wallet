@@ -1,18 +1,32 @@
 import React, { PureComponent } from 'react';
-import { Modal, Typography, Button, Grid, CircularProgress } from '@material-ui/core';
 import {
-	ModalWrap,
-	ModalCloseButton,
-	ModalHeader,
-	ModalBody,
-	ModalCloseIcon,
+	// Modal,
+	Typography,
+	Button,
+	Grid
+	// CircularProgress
+} from '@material-ui/core';
+import {
+	// ModalWrap,
+	// ModalCloseButton,
+	// ModalHeader,
+	// ModalBody,
+	// ModalCloseIcon,
 	HourGlassLargeIcon,
 	WarningShieldIcon,
 	TrezorBridgeIcon
 } from 'selfkey-ui';
+import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
+import { Popup } from '../../../common';
+
+const styles = theme => ({
+	closeIcon: {
+		marginTop: '20px'
+	}
+});
 
 class ConnectingToTrezor extends PureComponent {
 	async componentDidMount() {
@@ -242,31 +256,9 @@ class ConnectingToTrezor extends PureComponent {
 
 	render() {
 		return (
-			<div>
-				<Modal open={true}>
-					<ModalWrap>
-						<ModalCloseButton onClick={this.handleClose}>
-							<ModalCloseIcon style={{ marginTop: '20px' }} />
-						</ModalCloseButton>
-						<ModalHeader>
-							<Grid
-								container
-								direction="row"
-								justify="space-between"
-								alignItems="center"
-							>
-								<Grid item>
-									<Typography variant="body1">Connecting</Typography>
-								</Grid>
-								<Grid item>
-									<CircularProgress size={25} />
-								</Grid>
-							</Grid>
-						</ModalHeader>
-						<ModalBody>{this.renderModalBody()}</ModalBody>
-					</ModalWrap>
-				</Modal>
-			</div>
+			<Popup closeAction={this.handleClose} open text="Connecting">
+				{this.renderModalBody()}
+			</Popup>
 		);
 	}
 }
@@ -278,4 +270,4 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-export default connect(mapStateToProps)(ConnectingToTrezor);
+export default connect(mapStateToProps)(withStyles(styles)(ConnectingToTrezor));

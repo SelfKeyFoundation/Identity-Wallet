@@ -161,20 +161,24 @@ export class TxHistory extends BaseModel {
 	 * @return {Promise}
 	 */
 	static async syncTx(localTx) {
-		const web3Service = getGlobalContext().web3Service;
+		try {
+			const web3Service = getGlobalContext().web3Service;
 
-		const tx = await web3Service.getTransaction(localTx.hash);
-		const status = await web3Service.getTransactionStatus(tx);
+			const tx = await web3Service.getTransaction(localTx.hash);
+			const status = await web3Service.getTransactionStatus(tx);
 
-		if (status === 'failed') {
-			await this.query().patchAndFetchById(localTx.id, {
-				isError: 1
-			});
-		} else if (status === 'success') {
-			await this.query().patchAndFetchById(localTx.id, {
-				blockHash: tx.blockHash,
-				blockNumber: tx.blockNumber
-			});
+			if (status === 'failed') {
+				await this.query().patchAndFetchById(localTx.id, {
+					isError: 1
+				});
+			} else if (status === 'success') {
+				await this.query().patchAndFetchById(localTx.id, {
+					blockHash: tx.blockHash,
+					blockNumber: tx.blockNumber
+				});
+			}
+		} catch (error) {
+			log.error('syncTx error %2j, %s', localTx, error);
 		}
 	}
 }

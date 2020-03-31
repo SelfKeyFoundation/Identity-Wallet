@@ -20,7 +20,9 @@ class SelfkeyIdContainerComponent extends PureComponent {
 			return this.props.dispatch(identityOperations.navigateToProfileOperation());
 		}
 		if (!identity.isSetupFinished) {
-			await dispatch(push('/selfkeyIdCreate'));
+			await dispatch(push('/selfkeyIdForm'));
+			// TODO: later refactor to individual profile folder
+			// await dispatch(push('/main/individual/setup-individual-profile'));
 		}
 
 		this.setState({ tab: tab ? parseInt(tab) : 0 });

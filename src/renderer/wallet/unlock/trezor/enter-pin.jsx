@@ -1,18 +1,12 @@
 import React, { PureComponent } from 'react';
-import { Modal, Typography, Grid, Paper, Button, Input, InputAdornment } from '@material-ui/core';
+import { Typography, Grid, Paper, Button, Input, InputAdornment } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-import {
-	ModalWrap,
-	ModalCloseButton,
-	ModalHeader,
-	ModalBody,
-	ModalCloseIcon,
-	ClearIcon
-} from 'selfkey-ui';
+import { ClearIcon } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
+import { Popup } from '../../../common';
 
 const boxComponentStyles = theme => ({
 	square: {
@@ -251,28 +245,9 @@ class EnterPIN extends PureComponent {
 
 	render() {
 		return (
-			<div>
-				<Modal open={true}>
-					<ModalWrap>
-						<ModalCloseButton onClick={this.handleCancel}>
-							<ModalCloseIcon style={{ marginTop: '20px' }} />
-						</ModalCloseButton>
-						<ModalHeader>
-							<Grid
-								container
-								direction="row"
-								justify="space-between"
-								alignItems="center"
-							>
-								<Grid item>
-									<Typography variant="body1">Trezor PIN</Typography>
-								</Grid>
-							</Grid>
-						</ModalHeader>
-						<ModalBody>{this.renderModalBody()}</ModalBody>
-					</ModalWrap>
-				</Modal>
-			</div>
+			<Popup closeAction={this.handleCancel} open text="Trezor PIN">
+				{this.renderModalBody()}
+			</Popup>
 		);
 	}
 }

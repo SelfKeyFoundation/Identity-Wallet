@@ -5,7 +5,7 @@ import path from 'path';
 import EthUnits from 'common/utils/eth-units';
 import * as EthUtil from 'ethereumjs-util';
 
-const log = new Logger('wallet-model');
+const log = new Logger('wallet-service');
 export class WalletService {
 	constructor({ web3Service, config }) {
 		this.web3Service = web3Service;
@@ -30,16 +30,27 @@ export class WalletService {
 	}
 
 	async loadAccountFromKeystore(filePath, password, address, walletsPath = null) {
+		let keystore = await this.loadKeyStoreValue(filePath, address, walletsPath);
+		return this.web3Service.decryptAccount(keystore, password);
+	}
+
+	async loadKeyStoreValue(filePath, address, walletsPath = null) {
 		try {
 			await fs.promises.access(filePath, fs.constants.R_OK);
 		} catch (error) {
 			if (!filePath && !address) {
+				log.error('load keystore error %s', error);
 				throw error;
 			}
 			filePath = this.getWalletKeystorePath(filePath || address, walletsPath);
 		}
-		let keystore = await fs.promises.readFile(filePath);
-		return this.web3Service.decryptAccount(keystore, password);
+		try {
+			let keystore = await fs.promises.readFile(filePath);
+			return keystore;
+		} catch (error) {
+			log.error('load keystore error %s', error);
+			throw error;
+		}
 	}
 
 	async copyKeystoreFile(id, toPath) {
@@ -168,19 +179,30 @@ export class WalletService {
 		return wallet;
 	}
 
-	async _getWallets(page, accountsQuantity) {
+	async _getWallets(page, accountsQuantity, walletType) {
 		return new Promise((resolve, reject) => {
 			this.web3Service.web3.eth.getAccounts((error, accounts) => {
 				if (error) {
-					log.debug('error: %j', error);
+					log.error('error: %s', error);
 					reject(error);
 				} else {
+					let paths = ["44'/60'/0'/x"];
+					if (walletType === 'ledger') {
+						paths = this.web3Service.ledgerConfig
+							? this.web3Service.ledgerConfig.paths
+							: paths;
+					}
 					const promises = accounts.map(async (address, index) => {
 						const balanceInWei = await this.web3Service.web3.eth.getBalance(address);
+
+						const i = page * accountsQuantity + index;
+						const x = Math.floor(i / paths.length);
+						const pathIndex = i - paths.length * x;
+						const path = paths[pathIndex].replace('x', String(x));
 						return {
 							address,
 							balance: EthUnits.toEther(balanceInWei, 'wei'),
-							path: `44'/60'/0'/${page * accountsQuantity + index}`
+							path
 						};
 					});
 					resolve(Promise.all(promises));
@@ -206,12 +228,16 @@ export class WalletService {
 
 	async getLedgerWallets(page, accountsQuantity) {
 		await this.web3Service.switchToLedgerWallet(page, accountsQuantity);
-		return this._getWallets(page, accountsQuantity);
+		return this._getWallets(page, accountsQuantity, 'ledger');
 	}
 
 	async getTrezorWallets(page, accountsQuantity, eventEmitter) {
 		await this.web3Service.switchToTrezorWallet(page, accountsQuantity, eventEmitter);
-		return this._getWallets(page, accountsQuantity);
+		return this._getWallets(page, accountsQuantity, 'trezor');
+	}
+
+	estimateGas(transactionObject) {
+		return this.web3Service.web3.eth.estimateGas(transactionObject);
 	}
 
 	sendTransaction(transactionObject) {

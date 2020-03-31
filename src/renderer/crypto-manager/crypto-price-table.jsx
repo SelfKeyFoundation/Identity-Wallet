@@ -55,7 +55,7 @@ export const styles = theme => ({
 		}
 	},
 	address: {
-		maxWidth: '270px',
+		maxWidth: '211px',
 		overflow: 'hidden',
 		textOverflow: 'ellipsis'
 	},
@@ -173,6 +173,7 @@ class CryptoPriceTableComponent extends PureComponent {
 							locale={locale}
 							style="decimal"
 							currency={token.symbol}
+							fractionDigits={token.decimal}
 							value={token.balance}
 							className={classes.summary}
 						/>
@@ -180,18 +181,20 @@ class CryptoPriceTableComponent extends PureComponent {
 					<TableCell numeric>
 						<PriceSummary
 							locale={locale}
-							style="currency"
+							priceStyle="currency"
 							currency={fiatCurrency}
 							value={token.price}
+							showCurrency={fiatCurrency}
 							className={classes.summary}
 						/>
 					</TableCell>
 					<TableCell numeric>
 						<PriceSummary
 							locale={locale}
-							style="currency"
+							priceStyle="currency"
 							currency={fiatCurrency}
 							value={token.balanceInFiat}
+							showCurrency={fiatCurrency}
 							className={classes.summary}
 						/>
 					</TableCell>

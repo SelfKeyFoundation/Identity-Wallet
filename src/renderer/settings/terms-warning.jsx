@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
-import { Grid, Typography, Paper, Modal, Button } from '@material-ui/core';
-import { SelfkeyLogo, ModalWrap, ModalHeader, ModalBody } from 'selfkey-ui';
+import { Grid, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
+import { Popup } from '../common';
 
 const styles = theme => ({
 	logo: {
@@ -22,10 +22,14 @@ const styles = theme => ({
 	},
 	modalWrap: {
 		border: 'none',
-		backgroundColor: 'transparent'
+		backgroundColor: 'transparent',
+		boxShadow: 'none'
 	},
 	logoSection: {
 		paddingBottom: '50px'
+	},
+	paper: {
+		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
 	}
 });
 
@@ -39,81 +43,48 @@ class TermsWarning extends PureComponent {
 	};
 
 	render() {
-		const { classes } = this.props;
 		return (
-			<Modal open={true}>
-				<ModalWrap className={classes.modalWrap}>
-					<Grid
-						container
-						direction="column"
-						justify="flex-start"
-						alignItems="center"
-						spacing={8}
-						className={classes.logoSection}
-					>
-						<Grid item>
-							<SelfkeyLogo className={classes.logo} />
-						</Grid>
-						<Grid item>
-							<Typography variant="h1">SELFKEY</Typography>
+			<Popup open displayLogo text="Need to Accept Terms">
+				<Grid
+					container
+					direction="column"
+					justify="flex-start"
+					alignItems="flex-start"
+					spacing={8}
+				>
+					<Grid item>
+						<Typography variant="body1" paragraph>
+							You will need to accept the Terms of Service in order to use the SelfKey
+							Identity Wallet or you will be unable to proceed. Return to the TOS
+							agreement below or exit and close the application.
+						</Typography>
+					</Grid>
+					<Grid item>
+						<Grid
+							container
+							direction="row"
+							justify="flex-start"
+							alignItems="center"
+							spacing={24}
+						>
+							<Grid item>
+								<Button
+									variant="contained"
+									size="large"
+									onClick={this.handleReturn}
+								>
+									RETURN TO TOS
+								</Button>
+							</Grid>
+							<Grid item>
+								<Button variant="outlined" size="large" onClick={this.handlClose}>
+									EXIT AND CLOSE
+								</Button>
+							</Grid>
 						</Grid>
 					</Grid>
-					<Paper>
-						<ModalHeader>
-							<Typography variant="h3" id="modal-title">
-								Need to Accept Terms
-							</Typography>
-						</ModalHeader>
-
-						<ModalBody>
-							<Grid
-								container
-								direction="column"
-								justify="flex-start"
-								alignItems="flex-start"
-								spacing={8}
-							>
-								<Grid item>
-									<Typography variant="body1" paragraph>
-										You will need to accept the Terms of Service in order to use
-										the SelfKey Identity Wallet or you will be unable to
-										proceed. Return to the TOS agreement below or exit and close
-										the application.
-									</Typography>
-								</Grid>
-								<Grid item>
-									<Grid
-										container
-										direction="row"
-										justify="flex-start"
-										alignItems="center"
-										spacing={24}
-									>
-										<Grid item>
-											<Button
-												variant="contained"
-												size="large"
-												onClick={this.handleReturn}
-											>
-												RETURN TO TOS
-											</Button>
-										</Grid>
-										<Grid item>
-											<Button
-												variant="outlined"
-												size="large"
-												onClick={this.handlClose}
-											>
-												EXIT AND CLOSE
-											</Button>
-										</Grid>
-									</Grid>
-								</Grid>
-							</Grid>
-						</ModalBody>
-					</Paper>
-				</ModalWrap>
-			</Modal>
+				</Grid>
+			</Popup>
 		);
 	}
 }

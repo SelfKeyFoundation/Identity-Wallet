@@ -14,7 +14,6 @@ class MarketplacePaymentCompleteContainer extends PureComponent {
 	};
 	render() {
 		const { vendor } = this.props;
-		console.log(vendor);
 		return (
 			<MarketplacePaymentComplete
 				onBackClick={this.handleBackClick}
