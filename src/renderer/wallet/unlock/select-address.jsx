@@ -150,7 +150,6 @@ class SelectAddress extends PureComponent {
 				justify="flex-start"
 				alignItems="flex-start"
 				spacing={40}
-				className="lofaszKa"
 			>
 				<Grid item className={this.props.classes.topSpace}>
 					<Typography variant="h4" className={this.props.classes.h4}>
