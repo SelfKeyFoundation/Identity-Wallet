@@ -538,7 +538,7 @@ const createIndividualProfile = (identityId, data) => async (dispatch, getState)
 
 	await dispatch(identityOperations.updateIdentitySetupOperation(true, identityId));
 
-	await dispatch(push('/selfkeyIdCreateAbout'));
+	return dispatch(push('/main/individual'));
 };
 
 const switchProfileOperation = identity => async (dispatch, getState) => {
@@ -549,11 +549,14 @@ const navigateToProfileOperation = () => async (dispatch, getState) => {
 	const identity = identitySelectors.selectIdentity(getState());
 
 	if (identity.type === 'individual' && !identity.isSetupFinished) {
-		return dispatch(push('/selfkeyIdCreate'));
+		return dispatch(push('/selfkeyIdForm'));
+		// TODO: later refactor to individual profile folder
+		// return dispatch(push('/main/individual/setup-individual-profile'));
 	}
 
 	if (identity.type === 'individual') {
-		return dispatch(push('/main/selfkeyId'));
+		// return dispatch(push('/main/selfkeyId'));
+		return dispatch(push('/main/individual'));
 	}
 
 	if (identity.isSetupFinished) {

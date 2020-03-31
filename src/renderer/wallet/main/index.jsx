@@ -12,6 +12,7 @@ import { appSelectors } from 'common/app';
 
 import { MarketplaceContainer } from '../../marketplace';
 import { CorporateContainer } from '../../corporate';
+import { IndividualContainer } from '../../individual';
 
 import { SelfkeyIdContainer } from '../../selfkey-id/main';
 import {
@@ -19,9 +20,11 @@ import {
 	CreateDIDPopupContainer,
 	CreateDIDProcessingContainer
 } from '../../did';
+
 import Transfer from '../../transaction/send';
 import AdvancedTransaction from '../../transaction/send/advanced-transaction';
 import ReceiveTransfer from '../../transaction/receive';
+import TokenSwap from '../../transaction/swap';
 
 import { Grid, withStyles } from '@material-ui/core';
 import Toolbar from './toolbar-container';
@@ -34,6 +37,7 @@ import TransactionError from '../../transaction/transaction-error/containers/tra
 import TransactionDeclined from '../../transaction/transaction-declined/containers/transaction-declined';
 import TransactionUnlock from '../../transaction/transaction-unlock';
 import TransactionTimeout from '../../transaction/transaction-timeout';
+import TransactionsHistoryModal from '../../transaction/transactions-history-modal';
 import HardwareWalletTimer from '../../marketplace/authentication/hardware-wallet/timer';
 import HardwareWalletTimeout from '../../marketplace/authentication/hardware-wallet/timeout';
 import HardwareWalletDeclined from '../../marketplace/authentication/hardware-wallet/declined';
@@ -41,10 +45,14 @@ import HardwareWalletUnlock from '../../marketplace/authentication/hardware-wall
 import HardwareWalletError from '../../marketplace/authentication/hardware-wallet/error';
 import AuthenticationError from '../../marketplace/authentication/error';
 import { CurrentApplication, ApplicationInProgress } from '../../kyc';
+import WalletExportContainer from './export-container';
+import { WalletExportWarning } from './export-warning';
+import { WalletExportQRCode } from './export-qr-code';
 
 import md5 from 'md5';
 import ReactPiwik from 'react-piwik';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
+import { exchangesOperations } from '../../../common/exchanges';
 
 const styles = theme => ({
 	headerSection: {
@@ -80,11 +88,12 @@ class Main extends PureComponent {
 	async componentDidMount() {
 		await this.props.dispatch(walletTokensOperations.loadWalletTokens());
 		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
+		await this.props.dispatch(exchangesOperations.loadListingExchangesOperation());
 		this.setMatomoId();
 	}
 
 	render() {
-		const { match, classes } = this.props;
+		const { match, classes, isExportable } = this.props;
 		return (
 			<Grid
 				container
@@ -151,6 +160,10 @@ class Main extends PureComponent {
 						component={TransactionTimeout}
 					/>
 					<Route
+						path={`${match.path}/transactions-history`}
+						component={TransactionsHistoryModal}
+					/>
+					<Route
 						path={`${match.path}/hd-transaction-timer`}
 						component={HardwareWalletTransactionTimer}
 					/>
@@ -158,6 +171,7 @@ class Main extends PureComponent {
 						path={`${match.path}/advancedTransaction/:cryptoCurrency`}
 						component={AdvancedTransaction}
 					/>
+					<Route path={`${match.path}/token-swap`} component={TokenSwap} />
 					<Route
 						path={`${match.path}/transfer/receive/:crypto`}
 						render={props => (
@@ -188,6 +202,37 @@ class Main extends PureComponent {
 					/>
 
 					<Route path={`${match.path}/corporate`} component={CorporateContainer} />
+					<Route path={`${match.path}/individual`} component={IndividualContainer} />
+					{isExportable && (
+						<Route
+							path={`${match.path}/export-wallet/warning`}
+							render={() => (
+								<WalletExportContainer>
+									{({ onCancel, onExport }) => (
+										<WalletExportWarning
+											onExport={onExport}
+											onCancel={onCancel}
+										/>
+									)}
+								</WalletExportContainer>
+							)}
+						/>
+					)}
+					{isExportable && (
+						<Route
+							path={`${match.path}/export-wallet/qr`}
+							render={() => (
+								<WalletExportContainer>
+									{({ onCancel, keystore }) => (
+										<WalletExportQRCode
+											onCancel={onCancel}
+											keystore={keystore}
+										/>
+									)}
+								</WalletExportContainer>
+							)}
+						/>
+					)}
 				</Grid>
 			</Grid>
 		);
@@ -197,7 +242,8 @@ class Main extends PureComponent {
 const mapStateToProps = (state, props) => {
 	return {
 		address: walletSelectors.getWallet(state).address,
-		walletType: appSelectors.selectWalletType(state)
+		walletType: appSelectors.selectWalletType(state),
+		isExportable: appSelectors.selectCanExportWallet(state)
 	};
 };
 

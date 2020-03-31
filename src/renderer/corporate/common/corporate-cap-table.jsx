@@ -154,7 +154,7 @@ const CorporateCapTable = withStyles(styles)(props => {
 									</SmallTableCell>
 									<SmallTableCell>
 										<Typography variant="subtitle1">
-											{getMemberEquity(s)}
+											{getMemberEquity(s)}%
 										</Typography>
 									</SmallTableCell>
 								</SmallTableRow>

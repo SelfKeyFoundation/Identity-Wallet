@@ -10,6 +10,10 @@ import { Popup } from '../common/popup';
 import { walletTokensOperations } from 'common/wallet-tokens';
 
 const styles = theme => ({
+	wrap: {
+		margin: 0,
+		width: '100%'
+	},
 	bottomSpace: {
 		marginBottom: '15px'
 	},
@@ -49,6 +53,10 @@ class CryptoManagerContainerComponent extends PureComponent {
 		tokenAdded: undefined,
 		showRemovedModal: false
 	};
+
+	componentDidMount() {
+		window.scrollTo(0, 0);
+	}
 
 	componentDidUpdate(prevProps) {
 		let isTokenAdded = prevProps.existingTokens.length < this.props.existingTokens.length;
@@ -140,6 +148,7 @@ class CryptoManagerContainerComponent extends PureComponent {
 									locale={locale}
 									style="decimal"
 									currency={tokenAdded.symbol}
+									fractionDigits={tokenAdded.decimal}
 									value={tokenAdded.balance}
 									className={`${classes.summary} ${classes.bold}`}
 								/>
@@ -217,7 +226,7 @@ class CryptoManagerContainerComponent extends PureComponent {
 				justify="flex-start"
 				alignItems="center"
 				spacing={32}
-				style={{ width: '100%', margin: 0 }}
+				className={classes.wrap}
 			>
 				<BackButton onclick={this.handleBackClick} />
 				<Grid item className={classes.topSpace}>

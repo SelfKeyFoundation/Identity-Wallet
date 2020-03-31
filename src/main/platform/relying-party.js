@@ -307,6 +307,7 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
+
 	static async listKYCApplications(ctx) {
 		let url = ctx.getEndpoint(KYC_APPLICATIONS_LIST_ENDPOINT_NAME);
 		log.debug(`[listKYCApplications] GET ${url}`);
@@ -378,6 +379,7 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
+
 	static uploadKYCApplicationFile(ctx, doc) {
 		let url = ctx.getEndpoint(KYC_APPLICATIONS_FILE_ENDPOINT_NAME);
 		let formData = {
@@ -523,8 +525,12 @@ export class RelyingPartySession {
 	}
 
 	async createKYCApplication(templateId, attributes) {
-		attributes = await Promise.all(
-			attributes.map(async attr => {
+		// ignore empty non-required attributes
+		let filteredAttributes = attributes.filter(
+			attr => attr.data || attr.documents || attr.required
+		);
+		filteredAttributes = await Promise.all(
+			filteredAttributes.map(async attr => {
 				const attrDocs = await Promise.all(
 					attr.documents.map(async doc => {
 						if (doc.content) {
@@ -545,7 +551,7 @@ export class RelyingPartySession {
 				return { ...attr, data: value, documents: undefined };
 			})
 		);
-		return RelyingPartyRest.createKYCApplication(this.ctx, templateId, attributes);
+		return RelyingPartyRest.createKYCApplication(this.ctx, templateId, filteredAttributes);
 	}
 
 	updateKYCApplication(application) {

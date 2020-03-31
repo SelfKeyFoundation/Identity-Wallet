@@ -76,6 +76,9 @@ const common = {
 		}
 	},
 
+	totleApiUrl: 'https://api.totle.com',
+	totleApiKey: '3c5645ed-a34e-409d-b179-19a998bd509b',
+
 	constants: {
 		initialIdAttributes: {
 			REQ_1: { id: '1', attributeType: 'name' },
@@ -127,7 +130,11 @@ const common = {
 		corporate: false,
 		certifiers: false,
 		corporateMarketplace: false,
-		kyccUsersEndpoint: false
+		kyccUsersEndpoint: false,
+		walletExport: false,
+		transactionsListFilter: false,
+		loansMarketplace: false,
+		swapTokens: false
 	}
 };
 
@@ -151,7 +158,11 @@ const dev = {
 		corporate: true,
 		certifiers: true,
 		corporateMarketplace: false,
-		kyccUsersEndpoint: true
+		kyccUsersEndpoint: true,
+		walletExport: true,
+		transactionsListFilter: true,
+		loansMarketplace: true,
+		swapTokens: true
 	},
 	testWalletAddress: '0x23d233933c86f93b74705cf0d236b39f474249f8',
 	testDidAddress: '0xee10a3335f48e10b444e299cf017d57879109c1e32cec3e31103ceca7718d0ec',
@@ -178,7 +189,11 @@ const prod = {
 		corporate: true,
 		certifiers: false,
 		corporateMarketplace: false,
-		kyccUsersEndpoint: false
+		kyccUsersEndpoint: false,
+		walletExport: false,
+		transactionsListFilter: false,
+		loansMarketplace: false,
+		swapTokens: false
 	},
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'
 };

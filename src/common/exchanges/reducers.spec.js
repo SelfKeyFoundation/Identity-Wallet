@@ -1,12 +1,9 @@
-import reducer from './reducers';
+import reducer, { initialState } from './reducers';
 import * as types from './types';
 
 describe('exchanges reducer', () => {
 	it('should return the initial state', () => {
-		expect(reducer(undefined, {})).toEqual({
-			byId: {},
-			allIds: []
-		});
+		expect(reducer(undefined, {})).toEqual(initialState);
 	});
 
 	it('should handle EXCHANGES_UPDATE', () => {
@@ -60,10 +57,13 @@ describe('exchanges reducer', () => {
 		];
 
 		expect(
-			reducer([], {
-				type: types.EXCHANGES_UPDATE,
-				payload: exchanges
-			})
+			reducer(
+				{},
+				{
+					type: types.EXCHANGES_UPDATE,
+					payload: exchanges
+				}
+			)
 		).toEqual({
 			byId: {
 				Gatecoin: {

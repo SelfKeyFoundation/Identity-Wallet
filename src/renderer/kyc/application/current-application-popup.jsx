@@ -177,13 +177,15 @@ const KycChecklistItem = withStyles(styles)(
 			: item.type && item.type.content
 			? item.type.content.title
 			: item.schemaId;
-		const warning = !item.options || !item.options.length;
+		const itemEmpty = !item.options || !item.options.length;
+		const warning = item.required && itemEmpty;
+
 		const warningClassname = warning ? classes.rowWarning : '';
-		let icon = warning ? (
+		const icon = warning ? (
 			<AttributeAlertIcon />
-		) : (
+		) : !itemEmpty ? (
 			<CheckOutlined className={classes.checkIcon} />
-		);
+		) : null;
 
 		return (
 			<SmallTableRow>
@@ -207,7 +209,7 @@ const KycChecklistItem = withStyles(styles)(
 						<IconButton aria-label="Add" onClick={event => addItem(item)}>
 							<MuiAddIcon />
 						</IconButton>
-						{!warning ? (
+						{!itemEmpty ? (
 							<IconButton aria-label="Edit" onClick={event => editItem(item)}>
 								<MuiEditIcon />
 							</IconButton>

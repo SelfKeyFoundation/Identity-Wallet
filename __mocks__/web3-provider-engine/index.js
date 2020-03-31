@@ -1,5 +1,6 @@
 class ProviderEngine {
 	addProvider() {}
+	on() {}
 	start() {}
 }
 

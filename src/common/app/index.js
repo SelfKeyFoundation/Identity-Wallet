@@ -1,11 +1,13 @@
 import { getGlobalContext } from 'common/context';
+import crypto from 'crypto';
 import { createAliasedAction } from 'electron-redux';
-import { walletOperations } from '../wallet';
+import { walletOperations, walletSelectors } from '../wallet';
 import { push } from 'connected-react-router';
 import { identityOperations } from '../identity';
 import timeoutPromise from 'common/utils/timeout-promise';
 import EventEmitter from 'events';
 import { Logger } from 'common/logger';
+import { featureIsEnabled } from 'common/feature-flags';
 import { kycOperations } from '../kyc';
 import { schedulerOperations } from '../scheduler';
 
@@ -34,7 +36,8 @@ export const initialState = {
 		info: {},
 		progress: {},
 		downloaded: false
-	}
+	},
+	keyStoreValue: null
 };
 
 export const appTypes = {
@@ -66,7 +69,9 @@ export const appTypes = {
 	APP_SET_AUTO_UPDATE_DOWNLOADED: 'app/auto/update/downloaded/SET',
 	APP_DOWNLOAD_UPDATE: 'app/update/DOWNLOAD',
 	APP_INSTALL_UPDATE: 'app/update/INSTALL',
-	APP_UNLOCK_WALLET: 'app/unlock/wallet'
+	APP_UNLOCK_WALLET: 'app/unlock/wallet',
+	APP_SET_KEYSTORE_VALUE: 'app/keystore/SET',
+	LOAD_KEYSTORE_VALUE: 'app/keystore/LOAD'
 };
 
 const appActions = {
@@ -117,6 +122,10 @@ const appActions = {
 	setAutoUpdateDownloadedAction: downloaded => ({
 		type: appTypes.APP_SET_AUTO_UPDATE_DOWNLOADED,
 		payload: downloaded
+	}),
+	setKeystoreValue: payload => ({
+		type: appTypes.APP_SET_KEYSTORE_VALUE,
+		payload
 	})
 };
 
@@ -139,6 +148,7 @@ const loadWallets = () => async dispatch => {
 };
 
 const unlockWalletOperation = (wallet, type) => async dispatch => {
+	await dispatch(setEncryptedPrivateKey());
 	await dispatch(walletOperations.updateWalletWithBalance(wallet));
 	await dispatch(identityOperations.loadIdentitiesOperation(wallet.id));
 	await dispatch(identityOperations.unlockIdentityOperation());
@@ -152,6 +162,7 @@ const unlockWalletWithPassword = (walletId, password) => async dispatch => {
 	try {
 		const wallet = await walletService.unlockWalletWithPassword(walletId, password);
 		await dispatch(appOperations.unlockWalletOperation(wallet, 'existingAddress'));
+		await dispatch(setEncryptedPrivateKey(wallet.privateKey, password));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
@@ -165,6 +176,7 @@ const unlockWalletWithNewFile = (filePath, password) => async dispatch => {
 	try {
 		const wallet = await walletService.unlockWalletWithNewFile(filePath, password);
 		await dispatch(appOperations.unlockWalletOperation(wallet, 'newAddress'));
+		await dispatch(setEncryptedPrivateKey(wallet.privateKey, password));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
@@ -183,6 +195,21 @@ const unlockWalletWithPrivateKey = privateKey => async dispatch => {
 		const message = transformErrorMessage(error.message);
 		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
+};
+
+const setEncryptedPrivateKey = (privateKey, password) => async dispatch => {
+	if (!privateKey || !password) {
+		await dispatch(appActions.setKeystoreValue(null));
+		return;
+	}
+	const hash = crypto.createHash('sha256');
+	hash.update(password);
+	const key = hash.digest();
+	const iv = Buffer.concat([crypto.randomBytes(12), Buffer.alloc(4, 0)]);
+	const cipher = crypto.createCipheriv('aes-256-ctr', key, iv);
+	let ctext = iv.toString('hex') + cipher.update(privateKey, 'utf8', 'hex');
+	ctext += cipher.final('hex');
+	await dispatch(appActions.setKeystoreValue(ctext));
 };
 
 const unlockWalletWithPublicKey = (address, path) => async (dispatch, getState) => {
@@ -346,6 +373,16 @@ const installUpdate = () => async () => {
 	await autoUpdateService.quitAndInstall();
 };
 
+const loadKeystoreValue = () => async (dispatch, getState) => {
+	const walletService = getGlobalContext().walletService;
+	const wallet = walletSelectors.getWallet(getState());
+	if (wallet.profile !== 'local' || !wallet.keystoreFilePath) {
+		return;
+	}
+	const keystore = await walletService.loadKeyStoreValue(wallet.keystoreFilePath, wallet.address);
+	await dispatch(appActions.setKeystoreValue(Buffer.from(keystore).toString('base64')));
+};
+
 const operations = {
 	loadWallets,
 	unlockWalletWithPassword,
@@ -363,7 +400,8 @@ const operations = {
 	startAutoUpdate,
 	downloadUpdate,
 	installUpdate,
-	unlockWalletOperation
+	unlockWalletOperation,
+	loadKeystoreValue
 };
 
 const appOperations = {
@@ -429,6 +467,10 @@ const appOperations = {
 	unlockWalletOperation: createAliasedAction(
 		appTypes.APP_UNLOCK_WALLET,
 		operations.unlockWalletOperation
+	),
+	loadKeystoreValueOperation: createAliasedAction(
+		appTypes.LOAD_KEYSTORE_VALUE,
+		operations.loadKeystoreValue
 	)
 };
 
@@ -480,6 +522,10 @@ const setAutoUpdateDownloadedReducer = (state, action) => {
 	return { ...state, autoUpdate: { ...state.autoUpdate, downloaded: action.payload } };
 };
 
+const setKeystoreValueReducer = (state, action) => {
+	return { ...state, keyStoreValue: action.payload };
+};
+
 const appReducers = {
 	setWalletsReducer,
 	setWalletsLoadingReducer,
@@ -492,7 +538,8 @@ const appReducers = {
 	setGoBackPathReducer,
 	setAutoUpdateInfoReducer,
 	setAutoUpdateProgressReducer,
-	setAutoUpdateDownloadedReducer
+	setAutoUpdateDownloadedReducer,
+	setKeystoreValueReducer
 };
 
 const reducer = (state = initialState, action) => {
@@ -521,6 +568,8 @@ const reducer = (state = initialState, action) => {
 			return appReducers.setAutoUpdateProgressReducer(state, action);
 		case appTypes.APP_SET_AUTO_UPDATE_DOWNLOADED:
 			return appReducers.setAutoUpdateDownloadedReducer(state, action);
+		case appTypes.APP_SET_KEYSTORE_VALUE:
+			return appReducers.setKeystoreValueReducer(state, action);
 	}
 	return state;
 };
@@ -561,6 +610,16 @@ const selectAutoUpdateDownloaded = state => {
 	return selectApp(state).autoUpdate.downloaded;
 };
 
+const selectCanExportWallet = state => {
+	const wallet = walletSelectors.getWallet(state);
+	return (
+		featureIsEnabled('walletExport') &&
+		!!(wallet && wallet.profile === 'local' && wallet.keystoreFilePath)
+	);
+};
+
+const selectKeystoreValue = state => selectApp(state).keyStoreValue;
+
 const appSelectors = {
 	selectApp,
 	hasConnected,
@@ -570,7 +629,9 @@ const appSelectors = {
 	selectWalletType,
 	selectAutoUpdateInfo,
 	selectAutoUpdateProgress,
-	selectAutoUpdateDownloaded
+	selectAutoUpdateDownloaded,
+	selectCanExportWallet,
+	selectKeystoreValue
 };
 
 export { appSelectors, appReducers, appActions, appOperations };

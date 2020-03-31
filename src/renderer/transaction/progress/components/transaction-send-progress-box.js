@@ -3,6 +3,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { TransactionBox } from '../../common/transaction-box';
 import { Grid, Typography, withStyles, Button } from '@material-ui/core';
 import { HourGlassLargeIcon, OkayIcon, NumberFormat } from 'selfkey-ui';
+import config from 'common/config';
 
 const styles = theme => ({
 	amount: {
@@ -31,7 +32,7 @@ const handleViewTransaction = (event, openLink, transactionHash) => {
 	if (!openLink) {
 		return;
 	}
-	openLink(`https://etherscan.io/tx/${transactionHash}`);
+	openLink(`https://${config.chainId === 3 ? 'ropsten.' : ''}etherscan.io/tx/${transactionHash}`);
 };
 
 const renderIcon = status => {

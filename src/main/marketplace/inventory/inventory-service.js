@@ -14,7 +14,9 @@ export const INVENTORY_API_ENDPOINT = `${config.airtableBaseUrl}Inventory${
 export const dataEndpoints = {
 	exchanges: `${config.airtableBaseUrl}Exchanges${isDevMode() ? 'Dev' : ''}`,
 	incorporations: `${config.airtableBaseUrl}Incorporations${isDevMode() ? 'Dev' : ''}`,
-	banking: `${config.airtableBaseUrl}Banking${isDevMode() ? 'Dev' : ''}`
+	banking: `${config.airtableBaseUrl}Banking${isDevMode() ? 'Dev' : ''}`,
+	notaries: `${config.airtableBaseUrl}Notaries${isDevMode() ? 'Dev' : ''}`,
+	loans: `${config.airtableBaseUrl}Loans${isDevMode() ? 'Dev' : ''}`
 };
 
 export const FT_INCORPORATIONS_ENDPOINT = config.incorporationApiUrl;

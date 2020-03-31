@@ -4,7 +4,7 @@ import { CorporateDetails } from '../common/corporate-details';
 import { CorporateApplicationsSummary } from '../common/corporate-applications';
 import { CorporateCapTable } from '../common/corporate-cap-table';
 import { CorporateShareholding } from '../common/corporate-shareholding';
-import { DisplayDid } from '../../did';
+import { DisplayDid } from '../../did/display-did';
 // import { CorporateOrgChart } from '../common/corporate-org-chart';
 
 const styles = theme => ({
@@ -28,12 +28,23 @@ const styles = theme => ({
 			'& .halfWidth:last-child': {
 				marginLeft: 15
 			}
+		},
+		'& .corporateShareholding': {
+			margin: '30px 0'
 		}
 	}
 });
 
 const CorporateOverviewTab = withStyles(styles)(
-	({ classes, applications, profile, members, onEditCorporateDetails, didComponent }) => (
+	({
+		classes,
+		applications,
+		profile,
+		members,
+		onEditCorporateDetails,
+		onEditManageMembers,
+		didComponent
+	}) => (
 		<div>
 			<div className={classes.overviewBox}>
 				{!profile.identity.did && <Grid item>{didComponent}</Grid>}
@@ -50,10 +61,14 @@ const CorporateOverviewTab = withStyles(styles)(
 					</div>
 				</div>
 				<div>
-					<CorporateCapTable profile={profile} members={members} />
+					<CorporateCapTable
+						profile={profile}
+						members={members}
+						onEdit={onEditManageMembers}
+					/>
 				</div>
-				<div className="halfWidgetBox">
-					<div className="halfWidth" styles={{ marginRight: 15 }}>
+				<div className="corporateShareholding">
+					<div>
 						<CorporateShareholding profile={profile} members={members} />
 					</div>
 					{/*
