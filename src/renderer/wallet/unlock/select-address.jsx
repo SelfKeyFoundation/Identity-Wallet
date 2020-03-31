@@ -80,6 +80,13 @@ const styles = theme => ({
 	},
 	topSpace: {
 		paddingBottom: '0 !important'
+	},
+	popupClass: {
+		left: 'calc(50% - 480px)',
+		width: '960px'
+	},
+	closeBtn: {
+		marginLeft: '180px'
 	}
 });
 
@@ -275,12 +282,15 @@ class SelectAddress extends PureComponent {
 	};
 
 	render() {
+		const { classes } = this.props;
 		return (
 			<Popup
 				closeAction={this.handleClose}
 				open
 				text="Choose An Ethereum Address"
 				loading={this.state.loading}
+				popupClass={classes.popupClass}
+				closeButtonClass={classes.closeBtn}
 			>
 				{this.renderModalBody()}
 			</Popup>
