@@ -18,7 +18,7 @@ class TransactionNoKeyErrorContainer extends PureComponent {
 		history.getHistory().goBack();
 	};
 	render() {
-		return <TransactionNoKeyError closeAction={this.closeAction} {...this.props} />;
+		return <TransactionNoKeyError closeAction={this.closeAction} keyPrice {...this.props} />;
 	}
 }
 

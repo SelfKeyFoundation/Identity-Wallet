@@ -307,7 +307,6 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
-
 	static async listKYCApplications(ctx) {
 		let url = ctx.getEndpoint(KYC_APPLICATIONS_LIST_ENDPOINT_NAME);
 		log.debug(`[listKYCApplications] GET ${url}`);
