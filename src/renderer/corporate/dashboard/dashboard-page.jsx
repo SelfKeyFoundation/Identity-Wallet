@@ -18,7 +18,7 @@ class CorporateDashboardPage extends CorporateComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
-			tab: props.match.params.tab || 'overview'
+			tab: props.tab || 'overview'
 		};
 	}
 
