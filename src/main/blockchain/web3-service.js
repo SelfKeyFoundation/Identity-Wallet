@@ -66,9 +66,11 @@ export class Web3Service {
 		engine.on('error', error => {
 			log.error('Web3Service provider error %s', error);
 		});
-		engine.start();
-
 		this.web3 = new Web3(engine);
+		engine.on('start', async () => {
+			await this.web3.eth.getBlockNumber();
+		});
+		engine.start();
 		this.web3.transactionConfirmationBlocks = 1;
 	}
 
@@ -96,9 +98,11 @@ export class Web3Service {
 		engine.on('error', error => {
 			log.error('Web3Service provider error %s', error);
 		});
-		engine.start();
-
 		this.web3 = new Web3(engine);
+		engine.on('start', async () => {
+			await this.web3.eth.getBlockNumber();
+		});
+		engine.start();
 		this.web3.transactionConfirmationBlocks = 1;
 	}
 
@@ -149,8 +153,13 @@ export class Web3Service {
 		engine.addProvider(this.trezorWalletSubProvider);
 		engine.addProvider(subscriptionSubprovider);
 		engine.addProvider(new WebsocketProvider({ rpcUrl: SELECTED_SERVER_URL }));
-		engine.start();
 		this.web3 = new Web3(engine);
+		engine.on('start', async () => {
+			// block tracking does not work if not manually started for some reason
+			// causing incorrect balances to be returned on getBalance call
+			await this.web3.eth.getBlockNumber();
+		});
+		engine.start();
 		this.web3.transactionConfirmationBlocks = 1;
 	}
 
