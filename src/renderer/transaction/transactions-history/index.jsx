@@ -22,12 +22,12 @@ import { withStyles } from '@material-ui/core/styles';
 import {
 	RefreshIcon,
 	HourGlassIcon,
-	HourGlassSmallIcon,
 	FailedIcon,
 	ReceivedRoundedIcon,
 	FilterIcon,
 	DropdownIcon,
-	SentRoundedIcon
+	SentRoundedIcon,
+	typography
 } from 'selfkey-ui';
 import { convertExponentialToDecimal } from 'common/utils/exponential-to-decimal';
 import { push } from 'connected-react-router';
@@ -107,6 +107,10 @@ const styles = theme => ({
 			fontWeight: '500',
 			letterSpacing: 0
 		}
+	},
+	iconDisabled: {
+		color: typography,
+		opacity: '0.2'
 	}
 });
 
@@ -285,7 +289,7 @@ class TransactionsHistory extends PureComponent {
 								onClick={this.handleRefresh}
 								disabled={processing}
 							>
-								{processing ? <HourGlassSmallIcon /> : <RefreshIcon />}
+								<RefreshIcon className={processing ? classes.iconDisabled : null} />
 							</IconButton>
 						</div>
 					</Grid>
