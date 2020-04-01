@@ -62,8 +62,6 @@ export class Web3Service {
 		const engine = new ProviderEngine();
 
 		engine.addProvider(this.getWalletEthTxSubprovider());
-		const subscriptionSubprovider = new SubscriptionSubprovider();
-		engine.addProvider(subscriptionSubprovider);
 		engine.addProvider(new WebsocketProvider({ rpcUrl: SELECTED_SERVER_URL }));
 		engine.on('error', error => {
 			log.error('Web3Service provider error %s', error);
