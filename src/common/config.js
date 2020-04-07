@@ -131,7 +131,7 @@ const common = {
 		certifiers: false,
 		corporateMarketplace: false,
 		kyccUsersEndpoint: false,
-		walletExport: false,
+		walletExport: true,
 		transactionsListFilter: false,
 		loansMarketplace: false,
 		swapTokens: false
@@ -190,7 +190,7 @@ const prod = {
 		certifiers: false,
 		corporateMarketplace: false,
 		kyccUsersEndpoint: false,
-		walletExport: false,
+		walletExport: true,
 		transactionsListFilter: false,
 		loansMarketplace: false,
 		swapTokens: false
