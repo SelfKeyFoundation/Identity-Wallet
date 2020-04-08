@@ -189,9 +189,15 @@ export const tokenSwapSelectors = {
 	selectTransaction: state => tokenSwapSelectors.selectRoot(state).transaction,
 	selectFee: state => {
 		const transaction = tokenSwapSelectors.selectTransaction(state);
-		const total = transaction
-			? +transaction.summary[0].partnerFee.amount + +transaction.summary[0].totleFee.amount
-			: 0;
+		const totleFee =
+			transaction && transaction.summary[0].totleFee
+				? +transaction.summary[0].totleFee.amount
+				: 0;
+		const partnerFee =
+			transaction && transaction.summary[0].partnerFee
+				? +transaction.summary[0].partnerFee.amount
+				: 0;
+		const total = transaction ? totleFee + partnerFee : 0;
 		return transaction ? toUnit(total, 18) : false;
 	},
 	selectGas: state => {
