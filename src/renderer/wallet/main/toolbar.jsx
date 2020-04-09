@@ -26,7 +26,7 @@ const styles = theme => ({
 			'inset 0 -1px 0 0 #475768, 1px 0 0 0 rgba(118,128,147,0.2), 2px 0 2px 0 rgba(0,0,0,0.2)',
 		padding: '0 2%',
 		position: 'fixed',
-		zIndex: 1
+		zIndex: 2
 	},
 	logo: {
 		width: '38px',

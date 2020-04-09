@@ -25,7 +25,9 @@ export const getTokens = state => {
 		if (['KEY', 'KI'].includes(symbol)) {
 			token.name = 'Selfkey';
 		}
-
+		if (!token.name) {
+			token.name = token.symbol;
+		}
 		return token;
 	});
 	delete wallet.address;

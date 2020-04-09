@@ -12,6 +12,7 @@ const TRANSACTION_FEE_SET = 'app/transaction/fee/SET';
 const CONFIRM_SEND = 'app/transaction/comfirmSend';
 const INCORPORATION_SEND = 'app/transaction/incorporationSend';
 const MARKETPLACE_SEND = 'app/transaction/marketplaceSend';
+const CUSTOM_SEND = 'app/transactions/customSend';
 const CRYPTO_CURRENCY_SET = 'app/transaction/cryptoCurrency/SET';
 const LOCKED_SET = 'app/transaction/locked/SET';
 
@@ -30,5 +31,6 @@ export {
 	INCORPORATION_SEND,
 	MARKETPLACE_SEND,
 	CRYPTO_CURRENCY_SET,
-	LOCKED_SET
+	LOCKED_SET,
+	CUSTOM_SEND
 };
