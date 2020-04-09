@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { PageLoading } from '../../common';
 import { Button, Typography, Grid, withStyles } from '@material-ui/core';
 import { LoanIcon } from 'selfkey-ui';
@@ -40,8 +40,46 @@ const styles = theme => ({
 	}
 });
 
-const LoansListPage = withStyles(styles)(
-	({ classes, loading, inventory, keyRate, onDetails, onBackClick }) => {
+class LoansListPageComponent extends PureComponent {
+	state = {
+		tab: 'lending',
+		range: false,
+		selectedToken: false,
+		isP2P: false,
+		isLicensed: false
+	};
+
+	onTabChange = tab => this.setState({ tab });
+
+	onTokenFilterChange = evt => this.setState({ selectedToken: evt.target.value });
+
+	onP2pFilterChange = evt => this.setState(prevState => ({ isP2P: !prevState.isP2P }));
+
+	onLicensedFilterChange = evt =>
+		this.setState(prevState => ({ isLicensed: !prevState.isLicensed }));
+
+	render() {
+		const { classes, loading, inventory, onDetailsClick, onBackClick, tokens } = this.props;
+		const { selectedToken, tab, isLicensed, isP2P } = this.state;
+
+		let filteredInventory = inventory.filter(offer => offer.data.loanType.includes(tab));
+
+		if (selectedToken) {
+			filteredInventory = filteredInventory.filter(offer =>
+				offer.data.assets.includes(selectedToken)
+			);
+		}
+
+		if (isLicensed) {
+			filteredInventory = filteredInventory.filter(offer => !!offer.data.licensed);
+		}
+
+		if (isP2P) {
+			filteredInventory = filteredInventory.filter(
+				offer => !!offer.data.type === 'Decentralized'
+			);
+		}
+
 		return (
 			<Grid container>
 				<Grid item>
@@ -86,7 +124,16 @@ const LoansListPage = withStyles(styles)(
 							</Grid>
 
 							<Grid item className={classes.tabs}>
-								<LoansTabs />
+								<LoansTabs
+									inventory={filteredInventory}
+									onTabChange={this.onTabChange}
+									onTokenFilterChange={this.onTokenFilterChange}
+									onP2pFilterChange={this.onP2pFilterChange}
+									onLicensedFilterChange={this.onLicensedFilterChange}
+									onDetailsClick={onDetailsClick}
+									tokens={tokens}
+									{...this.state}
+								/>
 							</Grid>
 						</Grid>
 					</Grid>
@@ -94,7 +141,8 @@ const LoansListPage = withStyles(styles)(
 			</Grid>
 		);
 	}
-);
+}
 
-export default LoansListPage;
-export { LoansListPage };
+const styledComponent = withStyles(styles)(LoansListPageComponent);
+export default styledComponent;
+export { styledComponent as LoansListPage };

@@ -8,14 +8,11 @@ import { LoansListPage } from './list-page';
 import { marketplaceSelectors } from 'common/marketplace';
 import { MarketplaceLoansComponent } from '../common/marketplace-loans-component';
 import { identitySelectors } from 'common/identity';
+import { getTokens } from 'common/wallet-tokens/selectors';
 
 const styles = theme => ({});
 
 class LoansListContainer extends MarketplaceLoansComponent {
-	state = {
-		accountType: 'personal'
-	};
-
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
 
 	onDetailsClick = offer => {
@@ -29,7 +26,7 @@ class LoansListContainer extends MarketplaceLoansComponent {
 	};
 
 	render() {
-		const { isLoading, keyRate, vendors, inventory } = this.props;
+		const { isLoading, keyRate, vendors, inventory, tokens } = this.props;
 
 		return (
 			<LoansListPage
@@ -37,8 +34,9 @@ class LoansListContainer extends MarketplaceLoansComponent {
 				vendors={vendors}
 				inventory={inventory}
 				onBackClick={this.onBackClick}
-				onDetails={this.onDetailsClick}
+				onDetailsClick={this.onDetailsClick}
 				loading={isLoading}
+				tokens={tokens}
 			/>
 		);
 	}
@@ -59,7 +57,8 @@ const mapStateToProps = (state, props) => {
 		vendors: marketplaceSelectors.selectVendorsForCategory(state, 'loans'),
 		inventory: marketplaceSelectors.selectLoansInventory(state, identity.type),
 		isLoading: marketplaceSelectors.isInventoryLoading(state),
-		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')
+		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
+		tokens: getTokens(state)
 	};
 };
 
