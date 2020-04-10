@@ -6,6 +6,7 @@ import {
 import { walletSelectors } from 'common/wallet';
 import { connect } from 'react-redux';
 import config from 'common/config';
+import { featureIsEnabled } from 'common/feature-flags';
 import { TX_HISTORY_API_ENDPOINT } from 'main/blockchain/tx-history-service';
 import {
 	Grid,
@@ -356,52 +357,68 @@ class TransactionsHistoryModal extends PureComponent {
 					>
 						<Typography variant="body1">Transactions</Typography>
 					</Grid>
-					<Grid
-						container
-						justify="flex-start"
-						alignItems="stretch"
-						wrap="nowrap"
-						spacing={40}
-						className={classes.content}
-					>
+					{featureIsEnabled('transactionsListFilter') ? (
 						<Grid
 							container
-							direction="column"
-							style={{ width: '290px', marginRight: '30px' }}
+							justify="flex-start"
+							alignItems="stretch"
+							wrap="nowrap"
+							spacing={40}
+							className={classes.content}
 						>
-							<Typography variant="overline" className={classes.label} gutterBottom>
-								Transaction Type
-							</Typography>
-							<FormControl variant="filled" fullWidth>
-								<Select
-									value={option}
-									displayEmpty
-									onChange={this.handleOptionSelection}
-									disableUnderline
-									IconComponent={KeyboardArrowDown}
-									input={<Input disableUnderline fullWidth />}
-									autoWidth
-									className={classes.filterInput}
+							<Grid
+								container
+								direction="column"
+								style={{ width: '290px', marginRight: '30px' }}
+							>
+								<Typography
+									variant="overline"
+									className={classes.label}
+									gutterBottom
 								>
-									<MenuItem value={-1} className={classes.dropdown}>
-										<em>Choose...</em>
-									</MenuItem>
-									{['sent', 'buy', 'receive'].map(option => (
-										<MenuItem key={option} value={option}>
-											{option}
+									Transaction Type
+								</Typography>
+								<FormControl variant="filled" fullWidth>
+									<Select
+										value={option}
+										displayEmpty
+										onChange={this.handleOptionSelection}
+										disableUnderline
+										IconComponent={KeyboardArrowDown}
+										input={<Input disableUnderline fullWidth />}
+										autoWidth
+										className={classes.filterInput}
+									>
+										<MenuItem value={-1} className={classes.dropdown}>
+											<em>Choose...</em>
 										</MenuItem>
-									))}
-								</Select>
-							</FormControl>
-						</Grid>
+										{['Send', 'Receive', 'Buy', 'Swap'].map(option => (
+											<MenuItem
+												key={option}
+												value={option}
+												style={{ textTransform: 'capitalize' }}
+											>
+												{option}
+											</MenuItem>
+										))}
+									</Select>
+								</FormControl>
+							</Grid>
 
-						<Grid container direction="column" style={{ width: '290px' }}>
-							<Typography variant="overline" className={classes.label} gutterBottom>
-								Date
-							</Typography>
-							<KeyPicker id="creationDate" required />
+							<Grid container direction="column" style={{ width: '290px' }}>
+								<Typography
+									variant="overline"
+									className={classes.label}
+									gutterBottom
+								>
+									Date
+								</Typography>
+								<KeyPicker id="creationDate" required />
+							</Grid>
 						</Grid>
-					</Grid>
+					) : (
+						''
+					)}
 					<Grid
 						container
 						direction="column"

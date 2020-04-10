@@ -5,7 +5,7 @@ import path from 'path';
 import EthUnits from 'common/utils/eth-units';
 import * as EthUtil from 'ethereumjs-util';
 
-const log = new Logger('wallet-model');
+const log = new Logger('wallet-service');
 export class WalletService {
 	constructor({ web3Service, config }) {
 		this.web3Service = web3Service;
@@ -183,17 +183,18 @@ export class WalletService {
 		return new Promise((resolve, reject) => {
 			this.web3Service.web3.eth.getAccounts((error, accounts) => {
 				if (error) {
-					log.debug('error: %j', error);
+					log.error('error: %s', error);
 					reject(error);
 				} else {
+					let paths = ["44'/60'/0'/x"];
+					if (walletType === 'ledger') {
+						paths = this.web3Service.ledgerConfig
+							? this.web3Service.ledgerConfig.paths
+							: paths;
+					}
 					const promises = accounts.map(async (address, index) => {
 						const balanceInWei = await this.web3Service.web3.eth.getBalance(address);
-						let paths = ["44'/60'/0'/x"];
-						if (walletType === 'ledger') {
-							paths = this.web3Service.ledgerConfig
-								? this.web3Service.ledgerConfig.paths
-								: paths;
-						}
+
 						const i = page * accountsQuantity + index;
 						const x = Math.floor(i / paths.length);
 						const pathIndex = i - paths.length * x;

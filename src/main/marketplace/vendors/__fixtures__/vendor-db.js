@@ -17,6 +17,7 @@ export default [
 		paymentAddress: null
 	},
 	{
+		id: 2,
 		vendorId: 'xstar',
 		name: 'XStar.io',
 		entityTypes: ['individual', 'corporate'],

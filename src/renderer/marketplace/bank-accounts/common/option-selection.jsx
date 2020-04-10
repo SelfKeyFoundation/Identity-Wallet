@@ -7,6 +7,7 @@ import BankingAccountOption from './account-option';
 
 const styles = theme => ({
 	container: {
+		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)',
 		position: 'relative',
 		width: '100%',
 		margin: '0 auto',

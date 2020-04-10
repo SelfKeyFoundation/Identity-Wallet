@@ -17,7 +17,11 @@ export const dummyIncompleteProfile = {
 	entityType: 'LLC',
 	creationDate: '08/08/2018',
 	did: false,
-	allAttributes: []
+	allAttributes: [],
+	identity: {
+		id: 5,
+		type: 'corporate'
+	}
 };
 
 export const corporateApplications = [
@@ -463,7 +467,8 @@ export const corporateDocuments = [
 		documents: [
 			{
 				name: 'certificate.pdf',
-				mimeType: 'application/pdf'
+				mimeType: 'application/pdf',
+				content: 'test,test'
 			}
 		],
 		data: {
@@ -486,7 +491,8 @@ export const corporateDocuments = [
 		documents: [
 			{
 				name: 'member_register.doc',
-				mimeType: 'application/msword'
+				mimeType: 'application/msword',
+				content: 'test,test'
 			}
 		],
 		data: {

@@ -135,7 +135,7 @@ const styles = () => ({
 		marginBottom: '30px',
 		maxHeight: '240px',
 		overflowX: 'hidden',
-		overflowY: 'scroll'
+		overflowY: 'auto'
 	},
 	tokenName: {
 		marginRight: '10px'
@@ -341,7 +341,9 @@ export class CryptoChartBoxComponent extends React.Component {
 								index <= 4 ? this.getColors()[index] : this.OTHERS_COLOR
 						}}
 					>
-						<div className={classes.coloredBoxText}>{token.name.charAt(0)}</div>
+						<div className={classes.coloredBoxText}>
+							{(token.name || token.symbol).charAt(0)}
+						</div>
 					</div>
 				);
 		}

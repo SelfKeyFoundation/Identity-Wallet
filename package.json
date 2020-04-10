@@ -1,7 +1,7 @@
 {
 	"name": "selfkey-identity-wallet",
 	"productName": "SelfKey Identity Wallet",
-	"version": "1.4.4",
+	"version": "1.5.0",
 	"description": "The Official SelfKey Identity Wallet for Desktop",
 	"repository": {
 		"type": "git",
@@ -121,7 +121,7 @@
 		"reselect": "4.0.0",
 		"sanitize-html": "1.20.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#af1a27282db3a4460da4f22bc4c806d8319900a1",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#a44f94ab16584ed7840305c3c55137cbd1966e8b",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"snyk": "1.235.0",

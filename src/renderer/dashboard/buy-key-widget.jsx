@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
+import { featureIsEnabled } from 'common/feature-flags';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { CustomIcon, CoinsIcon } from 'selfkey-ui';
+import { CustomIcon, CoinsIcon, ExchangeSmallIcon } from 'selfkey-ui';
 import BuyKeyPopup from './buy-key-popup-container';
+import TokenSwap from '../transaction/swap';
 
 const styles = theme => ({
 	bgIcon: {
@@ -31,9 +33,14 @@ const styles = theme => ({
 		maxWidth: '100%',
 		marginLeft: 'auto',
 		marginRight: '0',
+		marginBottom: '1em',
 		width: '100%',
 		'& span': {
 			flexGrow: 1
+		},
+		'& svg': {
+			width: '24px !important',
+			height: '24px !important'
 		}
 	},
 	title: {
@@ -52,8 +59,12 @@ class BuyKeyWidget extends PureComponent {
 		popup: null
 	};
 
-	handlePopup = () => {
-		this.setState({ popup: 'open' });
+	handleBuyPopup = () => {
+		this.setState({ popup: 'buy' });
+	};
+
+	handleSwapPopup = () => {
+		this.setState({ popup: 'swap' });
 	};
 
 	handlePopupClose = () => {
@@ -72,11 +83,14 @@ class BuyKeyWidget extends PureComponent {
 		const { popup } = this.state;
 		return (
 			<React.Fragment>
-				{popup !== null && (
+				{popup !== null && popup === 'buy' && (
 					<BuyKeyPopup
 						closeAction={this.handlePopupClose}
 						externalLink={this.handleExternalLink}
 					/>
+				)}
+				{popup !== null && popup === 'swap' && (
+					<TokenSwap closeAction={this.handlePopupClose} />
 				)}
 				<Grid item className={classes.buyKey}>
 					<Typography variant="h1" className={classes.title}>
@@ -86,11 +100,23 @@ class BuyKeyWidget extends PureComponent {
 						variant="outlined"
 						size="large"
 						className={classes.ctabutton}
-						onClick={this.handlePopup}
+						onClick={this.handleBuyPopup}
 					>
 						<CustomIcon width="24px" height="24px" />
 						<span>Buy KEY</span>
 					</Button>
+
+					{featureIsEnabled('swapTokens') && (
+						<Button
+							variant="outlined"
+							size="large"
+							className={classes.ctabutton}
+							onClick={this.handleSwapPopup}
+						>
+							<ExchangeSmallIcon width="24px" height="24px" />
+							<span>Swap Tokens</span>
+						</Button>
+					)}
 					<div className={classes.bgIcon}>
 						<CoinsIcon width="76px" height="79px" fill="#313B49" />
 					</div>

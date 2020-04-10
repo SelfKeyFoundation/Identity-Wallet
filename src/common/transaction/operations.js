@@ -425,6 +425,73 @@ const incorporationSend = (companyCode, countryCode) => async (dispatch, getStat
 	});
 };
 
+const sendCustomTransaction = ({
+	transaction,
+	onReceipt,
+	onTransactionHash,
+	onTransactionError
+}) => async (dispatch, getState) => {
+	const walletService = getGlobalContext().walletService;
+	const state = getState();
+	const transactionEventEmitter = walletService.sendTransaction(transaction);
+
+	let hardwalletConfirmationTimeout = null;
+	const walletType = appSelectors.selectWalletType(state);
+
+	if (walletType === 'ledger' || walletType === 'trezor') {
+		hardwalletConfirmationTimeout = setTimeout(async () => {
+			clearTimeout(hardwalletConfirmationTimeout);
+			transactionEventEmitter.removeAllListeners('transactionHash');
+			transactionEventEmitter.removeAllListeners('receipt');
+			transactionEventEmitter.removeAllListeners('error');
+			await dispatch(push('/main/transaction-timeout'));
+		}, hardwalletConfirmationTime);
+	}
+
+	transactionEventEmitter.on('transactionHash', async hash => {
+		clearTimeout(hardwalletConfirmationTimeout);
+		await dispatch(
+			actions.updateTransaction({
+				status: 'Pending',
+				transactionHash: hash
+			})
+		);
+		await dispatch(push('/main/transaction-progress'));
+		dispatch(createTxHistry(hash));
+	});
+
+	transactionEventEmitter.on('receipt', async receipt => {
+		await dispatch(updateBalances());
+	});
+
+	transactionEventEmitter.on('error', async error => {
+		clearTimeout(hardwalletConfirmationTimeout);
+		log.error('transactionEventEmitter ERROR: %j', error);
+		const message = error.toString().toLowerCase();
+		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'NoBalance'
+				})
+			);
+			await dispatch(push('/main/transaction-no-gas-error'));
+		} else if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
+			await dispatch(push('/main/transaction-declined/Ledger'));
+		} else if (error.code === 'Failure_ActionCancelled') {
+			await dispatch(push('/main/transaction-declined/Trezor'));
+		} else if (error.statusText === 'UNKNOWN_ERROR') {
+			await dispatch(push('/main/transaction-unlock'));
+		} else {
+			await dispatch(
+				actions.updateTransaction({
+					status: 'Error'
+				})
+			);
+			await dispatch(push('/main/transaction-error'));
+		}
+	});
+};
+
 const updateBalances = () => async (dispatch, getState) => {
 	let wallet = getWallet(getState());
 
@@ -480,5 +547,6 @@ export default {
 	incorporationSend: createAliasedAction(types.INCORPORATION_SEND, incorporationSend),
 	marketplaceSend: createAliasedAction(types.MARKETPLACE_SEND, marketplaceSend),
 	setCryptoCurrency: createAliasedAction(types.CRYPTO_CURRENCY_SET, setCryptoCurrency),
+	sendCustomTransaction: createAliasedAction(types.CUSTOM_SEND, sendCustomTransaction),
 	setLocked: createAliasedAction(types.LOCKED_SET, setLocked)
 };

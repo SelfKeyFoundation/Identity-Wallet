@@ -22,12 +22,12 @@ import { withStyles } from '@material-ui/core/styles';
 import {
 	RefreshIcon,
 	HourGlassIcon,
-	HourGlassSmallIcon,
 	FailedIcon,
 	ReceivedRoundedIcon,
 	FilterIcon,
 	DropdownIcon,
-	SentRoundedIcon
+	SentRoundedIcon,
+	typography
 } from 'selfkey-ui';
 import { convertExponentialToDecimal } from 'common/utils/exponential-to-decimal';
 import { push } from 'connected-react-router';
@@ -107,6 +107,10 @@ const styles = theme => ({
 			fontWeight: '500',
 			letterSpacing: 0
 		}
+	},
+	iconDisabled: {
+		color: typography,
+		opacity: '0.2'
 	}
 });
 
@@ -285,7 +289,7 @@ class TransactionsHistory extends PureComponent {
 								onClick={this.handleRefresh}
 								disabled={processing}
 							>
-								{processing ? <HourGlassSmallIcon /> : <RefreshIcon />}
+								<RefreshIcon className={processing ? classes.iconDisabled : null} />
 							</IconButton>
 						</div>
 					</Grid>
@@ -301,54 +305,45 @@ class TransactionsHistory extends PureComponent {
 								information.
 							</span>
 						</React.Fragment>
-					) : (
+					) : transactions.length > 0 ? (
 						<Table>
 							<TableBody>
-								{transactions.length > 0 ? (
-									paginate(transactions, rowsPerPage, page).map(transaction => {
-										return (
-											<TableRow
-												key={transaction.id}
-												className={classes.tableRow}
-											>
-												<TableCell className={classes.narrowCell}>
-													{getIconForTransaction(
-														transaction.isError,
-														this.hasSent(transaction)
-													)}
-												</TableCell>
-												<TableCell className={classes.smallPadding}>
-													<Typography component="span" variant="h6">
-														{transaction.statusText ||
-															getCustomStatusText(
-																transaction,
-																this.hasSent(transaction)
-															)}
-													</Typography>
-													<Typography
-														component="span"
-														variant="subtitle2"
-														color="secondary"
-													>
-														{this.renderDate(transaction.timeStamp)}
-													</Typography>
-												</TableCell>
-												<TableCell align="right">
-													<Typography component="span" variant="h6">
-														{getCustomValue(
+								{paginate(transactions, rowsPerPage, page).map(transaction => {
+									return (
+										<TableRow key={transaction.id} className={classes.tableRow}>
+											<TableCell className={classes.narrowCell}>
+												{getIconForTransaction(
+													transaction.isError,
+													this.hasSent(transaction)
+												)}
+											</TableCell>
+											<TableCell className={classes.smallPadding}>
+												<Typography component="span" variant="h6">
+													{transaction.statusText ||
+														getCustomStatusText(
 															transaction,
 															this.hasSent(transaction)
 														)}
-													</Typography>
-												</TableCell>
-											</TableRow>
-										);
-									})
-								) : (
-									<Typography variant="body2">
-										You {"don't"} have any transactions yet.
-									</Typography>
-								)}
+												</Typography>
+												<Typography
+													component="span"
+													variant="subtitle2"
+													color="secondary"
+												>
+													{this.renderDate(transaction.timeStamp)}
+												</Typography>
+											</TableCell>
+											<TableCell align="right">
+												<Typography component="span" variant="h6">
+													{getCustomValue(
+														transaction,
+														this.hasSent(transaction)
+													)}
+												</Typography>
+											</TableCell>
+										</TableRow>
+									);
+								})}
 							</TableBody>
 							{transactions.length > 4 ? (
 								<TableFooter className={classes.tableFooter}>
@@ -370,6 +365,10 @@ class TransactionsHistory extends PureComponent {
 								''
 							)}
 						</Table>
+					) : (
+						<Typography variant="body2">
+							You {"don't"} have any transactions yet.
+						</Typography>
 					)}
 				</Grid>
 			</Grid>

@@ -109,6 +109,7 @@ class CorporateDashboardContainer extends PureComponent {
 
 				<CorporateDashboardPage
 					{...this.props}
+					tab={this.props.match.params.tab}
 					attributes={[...profile.basicAttributes, ...profile.attributes]}
 					attributeOptions={profile.attributeOptions}
 					documents={profile.documents}
