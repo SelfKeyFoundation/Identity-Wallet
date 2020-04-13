@@ -29,26 +29,12 @@ module.exports = [
 		memberTemplates: [
 			{
 				legalEntityTypes: [],
-				memberRoles: [
-					'director',
-					'shareholder',
-					'UBO',
-					'primary contact',
-					'authorised signatory',
-					'member',
-					'manager'
-				],
+				memberRoles: ['director_ltd', 'shareholder', 'ubo', 'authorizedSignatory'],
 				template: '5dfb5f3f42279f41d1c864e0'
 			},
 			{
 				legalEntityTypes: ['LTD'],
-				memberRoles: [
-					'director',
-					'shareholder',
-					'UBO',
-					'primary contact',
-					'authorised signatory'
-				],
+				memberRoles: ['director_ltd', 'shareholder', 'ubo', 'authorizedSignatory'],
 				template: '5dfb613542279f4e79c864e6'
 			}
 		],

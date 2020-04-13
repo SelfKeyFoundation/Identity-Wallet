@@ -140,7 +140,7 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 		const description = program.data.walletDescription
 			? program.data.walletDescription
 			: program.data.servicesDescription;
-
+		console.log('XXX', this.props.memberKycRequirements);
 		return (
 			<IncorporationsDetailsPage
 				applicationStatus={this.getApplicationStatus()}
@@ -202,6 +202,11 @@ const mapStateToProps = (state, props) => {
 			notAuthenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(state, vendorId, templateId),
+		memberKycRequirements: kycSelectors.selectMemberRequirementsForTemplate(
+			state,
+			vendorId,
+			templateId
+		),
 		identity: identitySelectors.selectIdentity(state)
 	};
 };
