@@ -94,6 +94,8 @@ const styles = theme => ({
 	}
 });
 
+const KEY_ADDRESS = '0x4cc19356f2d37338b9802aa8e8fc58b0373296e7';
+
 const formatValue = value => {
 	if (!value) {
 		return '';
@@ -153,14 +155,40 @@ export class TokenSwapComponent extends PureComponent {
 		return sourceCurrency === fiatCurrency ? this.getCryptoValue(amount, sourceToken) : amount;
 	};
 
+	/**
+	 * Match a token address to a symbol
+	 * Force KEY to use a hard coded contract address
+	 */
+	findTokenSymbol = tokenString => {
+		const token = this.props.tokens.find(t => t.address === tokenString);
+		if (token && token.symbol) {
+			return token.symbol;
+		} else if (tokenString === KEY_ADDRESS) {
+			return 'KEY';
+		}
+		return tokenString;
+	};
+
 	setSourceToken = sourceToken => {
 		this.setState({ amount: 0 });
-		this.props.dispatch(tokenSwapOperations.setSourceOperation(sourceToken));
+		// Use token address if we have it
+		const token = this.props.tokens.find(t => t.symbol === sourceToken);
+		const source = token && token.address ? token.address : sourceToken;
+		this.props.dispatch(tokenSwapOperations.setSourceOperation(source));
 	};
 
 	setTargetToken = targetToken => {
 		this.setState({ amount: 0 });
-		this.props.dispatch(tokenSwapOperations.setTargetOperation(targetToken));
+		let target = targetToken;
+		// Use token address if we have it
+		const token = this.props.tokens.find(t => t.symbol === targetToken);
+		if (token && token.address) {
+			target = token.address;
+		} else if (target === 'KEY') {
+			// Force KEY to use Selfkey
+			target = KEY_ADDRESS;
+		}
+		this.props.dispatch(tokenSwapOperations.setTargetOperation(target));
 	};
 
 	handleSourceTokenChange = event => this.setSourceToken(event.target.value);
@@ -260,7 +288,6 @@ export class TokenSwapComponent extends PureComponent {
 
 	render() {
 		const { classes, closeAction } = this.props;
-
 		return (
 			<Popup closeAction={closeAction} text="Swap your tokens">
 				<Grid container direction="column" justify="flex-start" alignItems="flex-start">
@@ -269,7 +296,7 @@ export class TokenSwapComponent extends PureComponent {
 							<InputTitle title="Token" />
 							<Select
 								className={classes.cryptoSelect}
-								value={this.props.sourceToken}
+								value={this.findTokenSymbol(this.props.sourceToken)}
 								onChange={e => this.handleSourceTokenChange(e)}
 								name="sourceToken"
 								disableUnderline
@@ -283,7 +310,7 @@ export class TokenSwapComponent extends PureComponent {
 							<InputTitle title="Change to" />
 							<Select
 								className={classes.cryptoSelect}
-								value={this.props.targetToken}
+								value={this.findTokenSymbol(this.props.targetToken)}
 								onChange={e => this.handleTargetTokenChange(e)}
 								name="targetToken"
 								disableUnderline
@@ -314,7 +341,7 @@ export class TokenSwapComponent extends PureComponent {
 											priceStyle="currency"
 											currency={this.props.fiatCurrency}
 											value={this.getTokenFiatBalance(this.props.sourceToken)}
-											fractionDigits={15}
+											fractionDigits={2}
 										/>
 										{this.props.fiatCurrency}
 									</Typography>
