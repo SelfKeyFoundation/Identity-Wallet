@@ -12,7 +12,8 @@ import {
 	EMAIL_ATTRIBUTE,
 	ENTITY_NAME_ATTRIBUTE,
 	FIRST_NAME_ATTRIBUTE,
-	LAST_NAME_ATTRIBUTE
+	LAST_NAME_ATTRIBUTE,
+	ENTITY_TYPE_ATTRIBUTE
 } from '../identity/constants';
 
 export const RP_UPDATE_INTERVAL = 1000 * 60 * 60 * 3; // 3h
@@ -116,7 +117,96 @@ export const kycSelectors = {
 		return templates.find(tpl => tpl.id === templateId);
 	},
 
-	selectRequirementsForTemplate(state, rpName, templateId) {
+	selectMemberRequirementsForTemplate(
+		state,
+		rpName,
+		templateId,
+		identityId = null,
+		maxDepth = 10
+	) {
+		const template = this.oneTemplateSelector(state, rpName, templateId);
+		const identity = identitySelectors.selectIdentity(
+			state,
+			identityId ? { identityId } : null
+		);
+		if (
+			!identity ||
+			identity.type !== 'corporate' ||
+			!template ||
+			!template.memberTemplates ||
+			maxDepth <= 0
+		) {
+			return null;
+		}
+
+		let members =
+			identitySelectors.selectChildrenIdentities(state, {
+				identityId: identity.id
+			}) || [];
+
+		// select entity type for all members
+		members = members.map(m => {
+			if (m.type === 'individual') {
+				return m;
+			}
+			const entityType = identitySelectors.selectBasicAttributeInfo(ENTITY_TYPE_ATTRIBUTE, {
+				identityId: m.id
+			});
+			return { ...m, entityType };
+		});
+
+		const { memberTemplates } = template;
+
+		// build kyc requirements tree for all members
+		const requirements = members.reduce((acc, curr) => {
+			const isCorporate = curr.type === 'corporate';
+			const { entityType, positions } = curr;
+			// match all possible member templates to current member
+			const matchedTemplates = memberTemplates.filter(t => {
+				if (t.legalEntityTypes.length !== 0 && !isCorporate) {
+					return false;
+				}
+				if (isCorporate && !t.legalEntityTypes.includes((entityType || '').toUpperCase())) {
+					return false;
+				}
+				return positions.reduce((acc, curr) => {
+					if (acc) return acc;
+
+					return t.memberRoles.includes((curr || '').replace(/-/, '_'));
+				}, false);
+			});
+
+			// fetch member requirements based on member templates
+			const memberRequirements = matchedTemplates.reduce((acc, t) => {
+				const requirements = this.selectRequirementsForTemplate(
+					state,
+					rpName,
+					t.template,
+					curr.id
+				);
+				const memberRequirements =
+					this.selectMemberRequirementsForTemplate(
+						state,
+						rpName,
+						t.template,
+						curr.id,
+						maxDepth - 1
+					) || [];
+				const memberTemplate = t;
+				return acc.concat([
+					{ ...curr, requirements, memberTemplate },
+					...memberRequirements
+				]);
+			}, []);
+			return acc.concat(memberRequirements);
+		}, []);
+
+		return _.uniqWith(
+			requirements,
+			(a, b) => a.id === b.id && a.memberTemplate.template === b.memberTemplate.template
+		);
+	},
+	selectRequirementsForTemplate(state, rpName, templateId, identityId) {
 		const template = this.oneTemplateSelector(state, rpName, templateId);
 		if (!template) return null;
 		const templateAttributes = template.attributes || [];
@@ -127,7 +217,12 @@ export const kycSelectors = {
 			acc[curr.schemaId] = [];
 			return acc;
 		}, {});
-		const identity = identitySelectors.selectIdentity(state);
+
+		const identity = identitySelectors.selectIdentity(
+			state,
+			identityId ? { identityId } : null
+		);
+
 		const walletAttributes = identitySelectors
 			.selectFullIdAttributesByIds(state, { identityId: identity.id })
 			.reduce((acc, curr) => {
@@ -169,6 +264,7 @@ export const kycSelectors = {
 
 		return requirements;
 	},
+
 	selectKYCAttributes(state, identityId, attributes = []) {
 		const kycAttributes = identitySelectors
 			.selectFullIdAttributesByIds(state, {
@@ -206,6 +302,7 @@ export const kycSelectors = {
 			let attr = kycAttributes.find(attr => attr.schemaId === url);
 			if (!attr) {
 				attr = (identitySelectors.selectAttributesByUrl(state, {
+					identityId,
 					attributeTypeUrls: [url]
 				}) || [])[0];
 			}
