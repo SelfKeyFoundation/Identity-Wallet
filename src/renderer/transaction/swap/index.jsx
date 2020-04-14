@@ -21,10 +21,10 @@ const styles = theme => ({
 		fontFamily: 'Proxima Nova',
 		fontSize: '18px',
 		lineHeight: '30px',
-		width: '100%',
-		'& > div': {
-			marginBottom: '30px'
-		}
+		width: '100%'
+	},
+	formField: {
+		marginBottom: '30px'
 	},
 	cryptoSelect: {
 		width: '100%'
@@ -37,10 +37,10 @@ const styles = theme => ({
 	tokenMax: {
 		display: 'flex',
 		flexWrap: 'nowrap',
+		marginBottom: '0.5em',
 		'& svg': {
 			height: '0.7em !important',
-			width: '0.7em !important',
-			marginRight: '0.5em'
+			width: '0.7em !important'
 		}
 	},
 	amountInput: {
@@ -54,7 +54,9 @@ const styles = theme => ({
 		color: '#93B0C1',
 		background: '#1E262E',
 		borderTopLeftRadius: '0',
-		borderBottomLeftRadius: '0'
+		borderBottomLeftRadius: '0',
+		display: 'flex',
+		justifyContent: 'space-around'
 	},
 	divider: {
 		margin: '40px 0'
@@ -79,15 +81,28 @@ const styles = theme => ({
 		textAlign: 'center'
 	},
 	actionButtonsContainer: {
+		width: '100%',
+		paddingTop: '50px'
+	},
+	feesContainer: {
 		width: '100%'
 	},
 	fees: {
-		display: 'inline-flex',
-		color: '#FFF',
-		marginLeft: '0.5em',
-		'& > div': {
-			margin: '0 0.25em'
+		width: '100%',
+		display: 'flex',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		marginBottom: '20px'
+	},
+	fiatFee: {
+		fontWeight: 'bold',
+		'& div': {
+			display: 'inline-block',
+			textAlign: 'right'
 		}
+	},
+	ethFee: {
+		textAlign: 'right'
 	},
 	rate: {
 		fontSize: '0.7em'
@@ -119,7 +134,7 @@ export class TokenSwapComponent extends PureComponent {
 
 	async componentDidMount() {
 		const defaultSource = this.props.tokens ? this.props.tokens[0].symbol : '';
-		const defaultTarget = 'KEY';
+		const defaultTarget = KEY_ADDRESS;
 
 		this.props.dispatch(tokenSwapOperations.setSourceOperation(defaultSource));
 		this.props.dispatch(tokenSwapOperations.setTargetOperation(defaultTarget));
@@ -211,6 +226,7 @@ export class TokenSwapComponent extends PureComponent {
 			value = String(maxAmount);
 		}
 		this.setState({ amount: value });
+		this.props.dispatch(tokenSwapOperations.clearOperation());
 	};
 
 	handleAllAmountClick = () => {
@@ -223,6 +239,7 @@ export class TokenSwapComponent extends PureComponent {
 			maxAmount = this.getTokenBalance(sourceToken);
 			this.setState({ amount: maxAmount });
 		}
+		this.props.dispatch(tokenSwapOperations.clearOperation());
 	};
 
 	handleSourceCurrencyClick = () => {
@@ -292,7 +309,7 @@ export class TokenSwapComponent extends PureComponent {
 			<Popup closeAction={closeAction} text="Swap your tokens">
 				<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 					<Grid item id="body" className={classes.body}>
-						<div>
+						<div className={classes.formField}>
 							<InputTitle title="Token" />
 							<Select
 								className={classes.cryptoSelect}
@@ -306,7 +323,7 @@ export class TokenSwapComponent extends PureComponent {
 								{this.renderSelectSourceTokenItems()}
 							</Select>
 						</div>
-						<div>
+						<div className={classes.formField}>
 							<InputTitle title="Change to" />
 							<Select
 								className={classes.cryptoSelect}
@@ -320,13 +337,12 @@ export class TokenSwapComponent extends PureComponent {
 								{this.renderSelectTargetTokenItems()}
 							</Select>
 						</div>
-						<div>
+						<div className={classes.formField}>
 							<Grid
 								container
 								direction="row"
 								justify="flex-start"
 								alignItems="center"
-								className={classes.actionButtonsContainer}
 								spacing={8}
 							>
 								<Grid item>
@@ -374,10 +390,10 @@ export class TokenSwapComponent extends PureComponent {
 									size="large"
 									className={classes.maxSourceInput}
 								>
-									<TransferIcon />
 									{this.state.sourceCurrency === this.props.sourceToken
 										? this.props.sourceToken
 										: this.props.fiatCurrency}
+									<TransferIcon />
 								</Button>
 								<Button
 									onClick={this.handleAllAmountClick}
@@ -402,47 +418,18 @@ export class TokenSwapComponent extends PureComponent {
 								</Grid>
 							)}
 
-							{!this.props.transaction && (
-								<Grid item>
-									{this.props.loading && (
-										<Button variant="contained" size="large" disabled="1">
-											Loading ...
-										</Button>
-									)}
-									{!this.props.loading && (
-										<Button
-											variant="contained"
-											size="large"
-											onClick={this.handleCalculateFees}
-											disabled={!this.isValid()}
-										>
-											Calculate Fees
-										</Button>
-									)}
-								</Grid>
-							)}
-
-							{this.props.transaction && (
-								<Grid item style={{ width: '100%' }}>
-									<div style={{ width: '100%', paddingBottom: '20px' }}>
-										<Typography variant="body2" color="secondary">
-											Network Transaction Fee:
-											<div className={classes.fees}>
-												{this.props.gas} ETH{' / '}
-												<NumberFormat
-													locale={this.props.locale}
-													priceStyle="currency"
-													currency={this.props.fiatCurrency}
-													value={this.props.gas * this.props.ethRate}
-													fractionDigits={15}
-												/>{' '}
-												{this.props.fiatCurrency}
-											</div>
-										</Typography>
-										<Typography variant="body2" color="secondary">
-											Swap Fee:
-											<div className={classes.fees}>
-												{this.props.fee} ETH{' / '}
+							<Grid item className={classes.feesContainer}>
+								<div className={classes.fees}>
+									<Typography variant="body2" color="secondary">
+										Swap Fee
+									</Typography>
+									{this.props.transaction && (
+										<div>
+											<Typography
+												variant="body2"
+												color="primary"
+												className={classes.fiatFee}
+											>
 												<NumberFormat
 													locale={this.props.locale}
 													priceStyle="currency"
@@ -451,40 +438,132 @@ export class TokenSwapComponent extends PureComponent {
 													fractionDigits={15}
 												/>{' '}
 												{this.props.fiatCurrency}
+											</Typography>
+											<div>
+												<Typography
+													variant="subtitle2"
+													color="secondary"
+													className={classes.ethFee}
+												>
+													{this.props.fee} ETH
+												</Typography>
 											</div>
-										</Typography>
-									</div>
-									<Grid
-										container
-										direction="column"
-										justify="center"
-										alignItems="center"
-										className={classes.actionButtonsContainer}
-										spacing={24}
-									>
-										<Grid item>
-											<Button
-												variant="contained"
-												size="large"
-												onClick={this.handleSwap}
-											>
-												Swap
-											</Button>
-										</Grid>
-
-										<Grid item>
+										</div>
+									)}
+								</div>
+								<div className={classes.fees}>
+									<Typography variant="body2" color="secondary">
+										Network Transaction Fee
+									</Typography>
+									{this.props.transaction && (
+										<div>
 											<Typography
 												variant="body2"
-												color="secondary"
-												className={classes.rate}
+												color="primary"
+												className={classes.fiatFee}
 											>
-												Exchange Rate: 1 {this.props.sourceToken} ={' '}
-												{formatValue(parseFloat(this.props.rate))}{' '}
-												{this.props.targetToken}
+												<NumberFormat
+													locale={this.props.locale}
+													priceStyle="currency"
+													currency={this.props.fiatCurrency}
+													value={this.props.gas * this.props.ethRate}
+													fractionDigits={15}
+												/>{' '}
+												{this.props.fiatCurrency}
 											</Typography>
-										</Grid>
+											<div>
+												<Typography
+													variant="subtitle2"
+													color="secondary"
+													className={classes.ethFee}
+												>
+													{this.props.gas} ETH
+												</Typography>
+											</div>
+										</div>
+									)}
+								</div>
+								<div className={classes.fees}>
+									<Typography variant="body1">Amount Total</Typography>
+									{this.props.transaction && (
+										<div>
+											<Typography
+												variant="body2"
+												color="primary"
+												className={classes.fiatFee}
+											>
+												<NumberFormat
+													locale={this.props.locale}
+													priceStyle="currency"
+													currency={this.props.fiatCurrency}
+													value={
+														(this.props.gas + this.props.fee) *
+														this.props.ethRate
+													}
+													fractionDigits={15}
+												/>{' '}
+												{this.props.fiatCurrency}
+											</Typography>
+											<div>
+												<Typography
+													variant="subtitle2"
+													color="secondary"
+													className={classes.ethFee}
+												>
+													{this.props.gas + this.props.fee} ETH
+												</Typography>
+											</div>
+										</div>
+									)}
+								</div>
+
+								<Grid
+									container
+									direction="row"
+									justify="center"
+									alignItems="center"
+									className={classes.actionButtonsContainer}
+									spacing={24}
+								>
+									<Grid item>
+										{this.props.loading && (
+											<Button variant="outlined" size="large" disabled="1">
+												Loading ...
+											</Button>
+										)}
+										{!this.props.loading && (
+											<Button
+												variant="outlined"
+												size="large"
+												onClick={this.handleCalculateFees}
+												disabled={!this.isValid()}
+											>
+												Calculate Fees
+											</Button>
+										)}
+									</Grid>
+									<Grid item>
+										<Button
+											variant="contained"
+											size="large"
+											onClick={this.handleSwap}
+											disabled={!this.props.transaction}
+										>
+											Exchange
+										</Button>
 									</Grid>
 								</Grid>
+							</Grid>
+							{this.props.rate && (
+								<Typography
+									variant="body2"
+									color="secondary"
+									className={classes.rate}
+								>
+									Exchange Rate: 1 {this.props.sourceToken} ={' '}
+									{formatValue(parseFloat(this.props.rate))}{' '}
+									{this.props.targetToken}
+								</Typography>
 							)}
 						</Grid>
 					</Grid>
