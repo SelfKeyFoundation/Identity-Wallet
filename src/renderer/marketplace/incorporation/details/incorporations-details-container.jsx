@@ -140,7 +140,6 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 		const description = program.data.walletDescription
 			? program.data.walletDescription
 			: program.data.servicesDescription;
-		console.log('XXX', this.props.memberKycRequirements);
 		return (
 			<IncorporationsDetailsPage
 				applicationStatus={this.getApplicationStatus()}
