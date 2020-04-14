@@ -16,6 +16,9 @@ export class CorporateStructureSchema {
 	}
 	getCompanyTypeNames() {
 		try {
+			if (!this.schema.properties.companyType.enumNames) {
+				return this.getCompanyTypes();
+			}
 			return this.schema.properties.companyType.enumNames;
 		} catch (error) {
 			log.error(error);

@@ -7,6 +7,7 @@ module.exports = {
 	],
 	testPathIgnorePatterns: ['/node_modules/', '/dist/'],
 	modulePaths: ['<rootDir>/src'],
+	modulePathIgnorePatterns: ['<rootDir>/dist/'],
 	testMatch: ['**/src/**/*.spec.js', '**/src/**/*.steps.js'],
 	verbose: true,
 	testEnvironment: 'jsdom',
