@@ -7,7 +7,7 @@ import LoansTabs from '../src/renderer/marketplace/loans/list/tabs';
 import LoansCalculatorCard from '../src/renderer/marketplace/loans/common/calculator-card';
 import LoansTable from '../src/renderer/marketplace/loans/common/table';
 import LoansFilters from '../src/renderer/marketplace/loans/common/filters';
-import { tokens, inventory } from './loans-data';
+import { tokens, inventory } from './__fixtures__/loans-data';
 
 storiesOf('Loans', module)
 	.add('List Page', () => (

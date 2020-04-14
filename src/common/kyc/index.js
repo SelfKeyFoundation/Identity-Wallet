@@ -144,7 +144,7 @@ export const kycSelectors = {
 			return acc;
 		}, {});
 
-		return templateAttributes.map(tplAttr => {
+		const requirements = templateAttributes.map(tplAttr => {
 			if (typeof tplAttr === 'string') {
 				tplAttr = { schemaId: tplAttr };
 			}
@@ -166,6 +166,8 @@ export const kycSelectors = {
 				duplicateType: tplOccurrence[tplAttr.schemaId] > 1
 			};
 		});
+
+		return requirements;
 	},
 	selectKYCAttributes(state, identityId, attributes = []) {
 		const kycAttributes = identitySelectors
