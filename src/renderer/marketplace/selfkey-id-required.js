@@ -36,7 +36,7 @@ class MarketplaceSelfkeyIdRequiredComponent extends PureComponent {
 							direction="column"
 							justify="flex-start"
 							alignItems="stretch"
-							spacing={8}
+							spacing={1}
 						>
 							<Grid item>
 								<Typography variant="h1" className={classes.title}>

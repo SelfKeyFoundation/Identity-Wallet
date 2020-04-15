@@ -97,7 +97,7 @@ const CorporateMemberSelectType = withStyles(styles)(props => {
 		selected
 	} = props;
 	return (
-		<Grid container direction="column" spacing={8}>
+		<Grid container direction="column" spacing={1}>
 			<Grid item>
 				<Typography variant="body1" align="center" className={classes.title}>
 					Select Entity Type

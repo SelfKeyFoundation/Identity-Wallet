@@ -82,7 +82,7 @@ class Terms extends PureComponent {
 					justify="flex-start"
 					alignItems="flex-start"
 					className={classes.flexSection}
-					spacing={40}
+					spacing={5}
 				>
 					<Grid id="terms" item className={classes.flexColScroll}>
 						<Typography variant="h3" paragraph>
@@ -489,7 +489,7 @@ class Terms extends PureComponent {
 							direction="row"
 							justify="flex-start"
 							alignItems="center"
-							spacing={24}
+							spacing={3}
 						>
 							<Grid item>
 								<Button

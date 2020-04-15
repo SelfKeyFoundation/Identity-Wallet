@@ -45,8 +45,8 @@ const TokenBox = props => {
 	} = props;
 	return (
 		<Paper className={classes.paper}>
-			<Grid container spacing={8}>
-				<Grid container className={classes.tokenBoxHeader} spacing={16}>
+			<Grid container spacing={1}>
+				<Grid container className={classes.tokenBoxHeader} spacing={2}>
 					<Grid item>
 						<CryptoCurrencyIconComponent />
 					</Grid>

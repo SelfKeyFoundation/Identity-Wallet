@@ -107,7 +107,7 @@ export const AssociateDid = withStyles(styles)(props => {
 							{associateError}
 						</span>
 					)}
-					<Grid container spacing={24} className={classes.buttoms}>
+					<Grid container spacing={3} className={classes.buttoms}>
 						<Grid item>
 							<Button
 								variant="contained"

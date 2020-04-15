@@ -179,9 +179,9 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 		} = this.props;
 
 		return (
-			<Grid id="viewOverview" container direction="column" spacing={32}>
+			<Grid id="viewOverview" container direction="column" spacing={4}>
 				<Grid item>
-					<Grid container direction="row" spacing={32}>
+					<Grid container direction="row" spacing={4}>
 						<Grid item xs={9}>
 							<Card>
 								<CardHeader
@@ -218,7 +218,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 					</Grid>
 				</Grid>
 				<Grid item>
-					<Grid container direction="column" spacing={32}>
+					<Grid container direction="column" spacing={4}>
 						{this.props.didCard && <Grid item>{this.props.didCard}</Grid>}
 						<Grid item>
 							<Card>
@@ -233,7 +233,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 										direction="column"
 										justify="center"
 										alignItems="center"
-										spacing={24}
+										spacing={3}
 									>
 										<Grid container item spacing={0} justify="space-between">
 											<Grid
@@ -243,7 +243,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 												alignItems="center"
 												direction="column"
 												wrap="nowrap"
-												spacing={24}
+												spacing={3}
 												className={classes.info}
 											>
 												<Grid item>
@@ -358,7 +358,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 										direction="column"
 										justify="center"
 										alignItems="center"
-										spacing={24}
+										spacing={3}
 									>
 										<Grid container item spacing={0} justify="space-between">
 											<Grid
@@ -368,7 +368,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 												alignItems="center"
 												direction="column"
 												wrap="nowrap"
-												spacing={24}
+												spacing={3}
 												className={classes.info}
 											>
 												<Grid item>
@@ -502,7 +502,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 										direction="column"
 										justify="center"
 										alignItems="center"
-										spacing={24}
+										spacing={3}
 									>
 										<Grid container item spacing={0} justify="center">
 											<Grid item xs={12}>

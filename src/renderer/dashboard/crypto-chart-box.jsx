@@ -453,7 +453,7 @@ export class CryptoChartBoxComponent extends React.Component {
 
 		return (
 			<Paper className={classes.paper}>
-				<Grid container alignItems="center" spacing={16}>
+				<Grid container alignItems="center" spacing={2}>
 					<Typography variant="h1" className={classes.title}>
 						My Tokens
 					</Typography>
@@ -510,7 +510,7 @@ export class CryptoChartBoxComponent extends React.Component {
 					</Grid>
 					<Grid
 						container
-						spacing={16}
+						spacing={2}
 						justify="space-between"
 						className={classes.tokenContainer}
 					>

@@ -294,7 +294,7 @@ const CorporateMembers = withStyles(styles)(props => {
 													direction="column"
 													justify="flex-start"
 													alignItems="stretch"
-													spacing={16}
+													spacing={2}
 												>
 													<Grid item>
 														<CorporateInformation

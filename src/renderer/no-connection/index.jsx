@@ -36,7 +36,7 @@ export const NoConnection = withStyles(styles)(props => {
 		<Popup open popupClass={classes.closeModal} isHeaderVisible={false}>
 			<Grid
 				container
-				spacing={24}
+				spacing={3}
 				direction="column"
 				justify="center"
 				alignItems="center"

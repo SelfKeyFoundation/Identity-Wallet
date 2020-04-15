@@ -51,7 +51,7 @@ class RegisterDidCardComponent extends PureComponent {
 						direction="column"
 						justify="center"
 						alignItems="center"
-						spacing={24}
+						spacing={3}
 					>
 						<Grid container item spacing={0} justify="space-between">
 							<Grid
@@ -61,7 +61,7 @@ class RegisterDidCardComponent extends PureComponent {
 								alignItems="center"
 								direction="column"
 								wrap="nowrap"
-								spacing={24}
+								spacing={3}
 								className={classes.info}
 							>
 								<Grid item>
@@ -85,7 +85,7 @@ class RegisterDidCardComponent extends PureComponent {
 									Getting a DID requires an Ethereum transaction. This is a one
 									time only transaction.
 								</Typography>
-								<Grid container spacing={16} className={classes.didButtons}>
+								<Grid container spacing={2} className={classes.didButtons}>
 									<Grid item className={classes.extraSpace}>
 										<Button
 											disabled={this.props.pending}

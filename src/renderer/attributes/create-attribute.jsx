@@ -238,7 +238,7 @@ class CreateAttributeComponent extends PureComponent {
 									{this.state.documentError}
 								</Typography>
 							)}
-							<Grid container spacing={24} className={classes.buttonContainer}>
+							<Grid container spacing={3} className={classes.buttonContainer}>
 								<Grid item>
 									<Button
 										variant="contained"

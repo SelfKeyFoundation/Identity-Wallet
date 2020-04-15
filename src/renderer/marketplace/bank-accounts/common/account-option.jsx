@@ -190,14 +190,14 @@ export const BankingAccountOption = withStyles(styles)(
 						style={{ borderRadius: '0 4px 4px 0' }}
 					>
 						<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
-							<Grid container direction="column" spacing={8}>
+							<Grid container direction="column" spacing={1}>
 								<Grid item>
 									<Grid
 										container
 										direction="row"
 										justify="flex-start"
 										alignItems="baseline"
-										spacing={8}
+										spacing={1}
 									>
 										<Grid item>
 											<Typography variant="h2">
@@ -242,7 +242,7 @@ export const BankingAccountOption = withStyles(styles)(
 						<Divider />
 						<ExpansionPanelDetails className={classes.flexColumn}>
 							<br />
-							<Grid container spacing={32}>
+							<Grid container spacing={4}>
 								<Grid item xs>
 									<AttributesTable title="Account" attributes={accountOptions} />
 								</Grid>

@@ -32,7 +32,7 @@ const SelfkeyIdCompanies = () => (
 
 			<ExpansionPanelDetails>
 				<br />
-				<Grid container spacing={32}>
+				<Grid container spacing={4}>
 					<Grid item xs>
 						<Card>
 							<CardHeader title="Company Details" />
@@ -104,7 +104,7 @@ const SelfkeyIdCompanies = () => (
 
 			<ExpansionPanelDetails>
 				<br />
-				<Grid container spacing={32}>
+				<Grid container spacing={4}>
 					<Grid item xs>
 						<Card>
 							<CardHeader title="Company Details" />

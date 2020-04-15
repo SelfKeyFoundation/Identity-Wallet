@@ -35,7 +35,7 @@ export const DisplayDid = withStyles(styles)(({ classes, did }) => (
 		<CardHeader title="Decentralised ID" className={classes.regularText} />
 		<hr className={classes.hr} />
 		<CardContent>
-			<Grid container spacing={16} direction="row" justify="flex-start" alignItems="center">
+			<Grid container spacing={2} direction="row" justify="flex-start" alignItems="center">
 				<Grid item>
 					<DIDIcon />
 				</Grid>

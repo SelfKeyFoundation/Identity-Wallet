@@ -62,7 +62,7 @@ const PopupWrap = props => {
 						direction="column"
 						justify="flex-start"
 						alignItems="center"
-						spacing={8}
+						spacing={1}
 						className={classes.logoSection}
 					>
 						<Grid item>

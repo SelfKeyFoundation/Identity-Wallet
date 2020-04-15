@@ -351,7 +351,7 @@ export const CurrentApplicationPopup = withStyles(styles)(
 				<Grid
 					container
 					className={classes.root}
-					spacing={32}
+					spacing={4}
 					direction="column"
 					justify="flex-start"
 					alignItems="stretch"
@@ -397,7 +397,7 @@ export const CurrentApplicationPopup = withStyles(styles)(
 						</Grid>
 					) : null}
 					<Grid item>
-						<Grid container spacing={24}>
+						<Grid container spacing={3}>
 							<Grid item>
 								<Button
 									variant="contained"

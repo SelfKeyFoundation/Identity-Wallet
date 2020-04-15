@@ -20,13 +20,7 @@ class Ledger extends PureComponent {
 		const { classes } = this.props;
 		return (
 			<div className={classes.root}>
-				<Grid
-					container
-					direction="column"
-					justify="center"
-					alignItems="center"
-					spacing={24}
-				>
+				<Grid container direction="column" justify="center" alignItems="center" spacing={3}>
 					<HelpStepsSection />
 					<Grid item>
 						<Button variant="contained" size="large" onClick={this.handleConnectAction}>

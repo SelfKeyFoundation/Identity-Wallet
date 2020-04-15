@@ -136,7 +136,7 @@ export const ExchangesList = withStyles(styles)(
 							direction="row"
 							justify="start"
 							alignItems="center"
-							spacing={24}
+							spacing={3}
 							className={classes.content}
 						>
 							{isLoading && <PageLoading />}

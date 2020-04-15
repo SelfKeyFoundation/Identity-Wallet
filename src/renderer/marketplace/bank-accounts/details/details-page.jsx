@@ -136,7 +136,7 @@ export const BankingDetailsPage = withStyles(styles)(props => {
 						direction="column"
 						justify="flex-start"
 						alignItems="stretch"
-						spacing={40}
+						spacing={5}
 						className={classes.content}
 					>
 						<Grid item>

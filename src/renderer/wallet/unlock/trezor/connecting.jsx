@@ -55,7 +55,7 @@ class ConnectingToTrezor extends PureComponent {
 						direction="row"
 						justify="flex-start"
 						alignItems="flex-start"
-						spacing={40}
+						spacing={5}
 					>
 						<Grid item xs={2}>
 							<TrezorBridgeIcon />
@@ -66,7 +66,7 @@ class ConnectingToTrezor extends PureComponent {
 								direction="column"
 								justify="flex-start"
 								alignItems="flex-start"
-								spacing={40}
+								spacing={5}
 							>
 								<Grid item>
 									<Typography variant="h1" style={{ marginBottom: '0.75em' }}>
@@ -86,7 +86,7 @@ class ConnectingToTrezor extends PureComponent {
 										direction="row"
 										justify="flex-start"
 										alignItems="center"
-										spacing={16}
+										spacing={2}
 									>
 										<Grid item>
 											<Typography variant="h3">URL:</Typography>
@@ -119,7 +119,7 @@ class ConnectingToTrezor extends PureComponent {
 										direction="row"
 										justify="flex-start"
 										alignItems="center"
-										spacing={24}
+										spacing={3}
 									>
 										<Grid item>
 											<Button
@@ -152,7 +152,7 @@ class ConnectingToTrezor extends PureComponent {
 						direction="row"
 						justify="flex-start"
 						alignItems="flex-start"
-						spacing={40}
+						spacing={5}
 					>
 						<Grid item xs={2}>
 							<WarningShieldIcon />
@@ -163,7 +163,7 @@ class ConnectingToTrezor extends PureComponent {
 								direction="column"
 								justify="flex-start"
 								alignItems="flex-start"
-								spacing={40}
+								spacing={5}
 							>
 								<Grid item>
 									<Typography variant="h1" style={{ marginBottom: '0.75em' }}>
@@ -181,7 +181,7 @@ class ConnectingToTrezor extends PureComponent {
 										direction="row"
 										justify="flex-start"
 										alignItems="center"
-										spacing={24}
+										spacing={3}
 									>
 										<Grid item>
 											<Button
@@ -215,7 +215,7 @@ class ConnectingToTrezor extends PureComponent {
 					direction="row"
 					justify="flex-start"
 					alignItems="flex-start"
-					spacing={40}
+					spacing={5}
 				>
 					<Grid item xs={2}>
 						<HourGlassLargeIcon />
@@ -226,7 +226,7 @@ class ConnectingToTrezor extends PureComponent {
 							direction="column"
 							justify="flex-start"
 							alignItems="flex-start"
-							spacing={40}
+							spacing={5}
 						>
 							<Grid item>
 								<Typography variant="h1" style={{ marginBottom: '0.75em' }}>

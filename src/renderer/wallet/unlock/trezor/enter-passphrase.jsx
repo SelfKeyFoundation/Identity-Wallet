@@ -94,7 +94,7 @@ class EnterPassphrase extends PureComponent {
 	renderModalBody = () => {
 		const { classes } = this.props;
 		return (
-			<Grid container direction="column" justify="center" alignItems="center" spacing={40}>
+			<Grid container direction="column" justify="center" alignItems="center" spacing={5}>
 				<Grid
 					container
 					direction="column"
@@ -115,7 +115,7 @@ class EnterPassphrase extends PureComponent {
 						direction="column"
 						justify="flex-start"
 						alignItems="flex-start"
-						spacing={8}
+						spacing={1}
 					>
 						<Grid item>
 							<Typography variant="overline" gutterBottom>
@@ -146,7 +146,7 @@ class EnterPassphrase extends PureComponent {
 						direction="column"
 						justify="flex-start"
 						alignItems="flex-start"
-						spacing={8}
+						spacing={1}
 					>
 						<Grid item>
 							<Typography variant="overline" gutterBottom>
@@ -184,7 +184,7 @@ class EnterPassphrase extends PureComponent {
 						direction="row"
 						justify="flex-start"
 						alignItems="center"
-						spacing={24}
+						spacing={3}
 					>
 						<Grid item>
 							<Button variant="contained" size="large" onClick={this.handleEnter}>

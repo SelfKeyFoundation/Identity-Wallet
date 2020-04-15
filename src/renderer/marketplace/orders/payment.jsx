@@ -73,7 +73,7 @@ export const MarketplacePayment = withStyles(styles)(
 							direction="column"
 							justify="flex-start"
 							alignItems="stretch"
-							spacing={16}
+							spacing={2}
 						>
 							<Grid item>
 								<Typography variant="h1" className={classes.bottomSpace}>

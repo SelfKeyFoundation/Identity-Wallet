@@ -129,7 +129,7 @@ class Unlock extends PureComponent {
 						direction="column"
 						justify="center"
 						alignItems="center"
-						spacing={40}
+						spacing={5}
 					>
 						<Grid item>
 							<Grid container direction="row" justify="center" alignItems="center">

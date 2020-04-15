@@ -56,7 +56,7 @@ class SelfKeyIdCreateComponent extends PureComponent {
 							direction="column"
 							justify="flex-start"
 							alignItems="center"
-							spacing={32}
+							spacing={4}
 						>
 							<Grid item>
 								<IdCardIcon />
@@ -77,7 +77,7 @@ class SelfKeyIdCreateComponent extends PureComponent {
 											direction="column"
 											justify="center"
 											alignItems="center"
-											spacing={32}
+											spacing={4}
 										>
 											<Grid
 												container
@@ -91,7 +91,7 @@ class SelfKeyIdCreateComponent extends PureComponent {
 													alignItems="center"
 													direction="column"
 													wrap="nowrap"
-													spacing={32}
+													spacing={4}
 													className={classes.info}
 												>
 													<Grid item>

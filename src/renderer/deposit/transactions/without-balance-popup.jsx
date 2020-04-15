@@ -70,7 +70,7 @@ export const WithoutBalanceContent = withStyles(styles)(({ classes, children, ex
 						direction="column"
 						justify="flex-start"
 						alignItems="flex-start"
-						spacing={16}
+						spacing={2}
 					>
 						<Grid item>
 							<Typography variant="body1" className={classes.bottomSpace}>

@@ -63,14 +63,14 @@ class NewAddress extends PureComponent {
 		const fileSelected = filePath !== '';
 
 		return (
-			<Grid container direction="column" justify="center" alignItems="center" spacing={24}>
+			<Grid container direction="column" justify="center" alignItems="center" spacing={3}>
 				<Grid
 					container
 					item
 					direction="column"
 					justify="flex-start"
 					alignItems="flex-start"
-					spacing={24}
+					spacing={3}
 				>
 					<Grid item>
 						<Grid
@@ -78,7 +78,7 @@ class NewAddress extends PureComponent {
 							direction="row"
 							justify="flex-start"
 							alignItems="center"
-							spacing={16}
+							spacing={2}
 						>
 							<Grid item>
 								<Avatar>
@@ -128,7 +128,7 @@ class NewAddress extends PureComponent {
 							direction="row"
 							justify="flex-start"
 							alignItems="center"
-							spacing={16}
+							spacing={2}
 						>
 							<Grid item>
 								<Avatar>

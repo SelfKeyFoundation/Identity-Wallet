@@ -308,7 +308,7 @@ class TransactionSendBoxContainer extends PureComponent {
 					justify="center"
 					alignItems="center"
 					className={classes.actionButtonsContainer}
-					spacing={24}
+					spacing={3}
 				>
 					<Grid item>
 						<Button variant="contained" size="large" onClick={this.handleConfirm}>

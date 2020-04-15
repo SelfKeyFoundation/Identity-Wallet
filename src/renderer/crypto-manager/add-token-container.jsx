@@ -238,7 +238,7 @@ class AddTokenContainerComponent extends PureComponent {
 				direction="column"
 				justify="flex-start"
 				alignItems="center"
-				spacing={32}
+				spacing={4}
 				className={classes.wrap}
 			>
 				<BackButton onclick={this.handleBackClick} />
@@ -274,7 +274,7 @@ class AddTokenContainerComponent extends PureComponent {
 							direction="column"
 							justify="center"
 							alignItems="stretch"
-							spacing={32}
+							spacing={4}
 						>
 							<Grid item>
 								<Typography variant="overline" gutterBottom>
@@ -367,7 +367,7 @@ class AddTokenContainerComponent extends PureComponent {
 								/>
 							</Grid>
 							<Grid item>
-								<Grid container spacing={24}>
+								<Grid container spacing={3}>
 									<Grid item>
 										<Button
 											variant="contained"

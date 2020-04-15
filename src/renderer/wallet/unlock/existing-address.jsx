@@ -65,14 +65,14 @@ class ExistingAddress extends PureComponent {
 		const { classes, wallets } = this.props;
 		const { wallet, password } = this.state;
 		return (
-			<Grid container direction="column" justify="center" alignItems="center" spacing={24}>
+			<Grid container direction="column" justify="center" alignItems="center" spacing={3}>
 				<Grid
 					container
 					item
 					direction="column"
 					justify="flex-start"
 					alignItems="flex-start"
-					spacing={24}
+					spacing={3}
 				>
 					<Grid item>
 						<Grid
@@ -80,7 +80,7 @@ class ExistingAddress extends PureComponent {
 							direction="row"
 							justify="flex-start"
 							alignItems="center"
-							spacing={16}
+							spacing={2}
 						>
 							<Grid item>
 								<Avatar>
@@ -138,7 +138,7 @@ class ExistingAddress extends PureComponent {
 							direction="row"
 							justify="flex-start"
 							alignItems="center"
-							spacing={16}
+							spacing={2}
 						>
 							<Grid item>
 								<Avatar>

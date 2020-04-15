@@ -523,7 +523,7 @@ class ExchangesDetailsComponent extends PureComponent {
 							direction="column"
 							justify="flex-start"
 							alignItems="flex-start"
-							spacing={32}
+							spacing={4}
 						>
 							<Grid
 								item
@@ -536,7 +536,7 @@ class ExchangesDetailsComponent extends PureComponent {
 									direction="row"
 									justify="center"
 									alignItems="flex-start"
-									spacing={40}
+									spacing={5}
 								>
 									<Grid item xs={8}>
 										<Typography
@@ -567,7 +567,7 @@ class ExchangesDetailsComponent extends PureComponent {
 									direction="column"
 									justify="flex-start"
 									alignItems="flex-start"
-									spacing={16}
+									spacing={2}
 								>
 									<Grid item>
 										<Typography variant="h2">Exchange Highlights</Typography>
@@ -691,7 +691,7 @@ class ExchangesDetailsComponent extends PureComponent {
 										direction="column"
 										justify="flex-start"
 										alignItems="flex-start"
-										spacing={16}
+										spacing={2}
 									>
 										<Grid
 											item

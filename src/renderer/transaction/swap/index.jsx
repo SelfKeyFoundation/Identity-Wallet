@@ -300,7 +300,7 @@ export class TokenSwapComponent extends PureComponent {
 								justify="flex-start"
 								alignItems="center"
 								className={classes.actionButtonsContainer}
-								spacing={8}
+								spacing={1}
 							>
 								<Grid item>
 									<Typography variant="body2" color="secondary">
@@ -367,7 +367,7 @@ export class TokenSwapComponent extends PureComponent {
 							direction="column"
 							justify="center"
 							alignItems="center"
-							spacing={24}
+							spacing={3}
 						>
 							{this.props.error && (
 								<Grid item>
@@ -433,7 +433,7 @@ export class TokenSwapComponent extends PureComponent {
 										justify="center"
 										alignItems="center"
 										className={classes.actionButtonsContainer}
-										spacing={24}
+										spacing={3}
 									>
 										<Grid item>
 											<Button

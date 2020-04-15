@@ -66,19 +66,19 @@ export const TransactionSendProgressBox = withStyles(styles)(
 					direction="row"
 					justify="flex-start"
 					alignItems="stretch"
-					spacing={40}
+					spacing={5}
 					zeroMinWidth
 				>
 					<Grid item xs={2}>
 						{renderIcon(status)}
 					</Grid>
 					<Grid item xs={10}>
-						<Grid container direction="column" spacing={16}>
+						<Grid container direction="column" spacing={2}>
 							<Grid item>
 								<Typography variant="h4">{status}</Typography>
 							</Grid>
 							<Grid item>
-								<Grid container spacing={8}>
+								<Grid container spacing={1}>
 									<Grid item className={classes.amount}>
 										<NumberFormat
 											locale={locale}
@@ -109,7 +109,7 @@ export const TransactionSendProgressBox = withStyles(styles)(
 										direction="row"
 										justify="flex-start"
 										alignItems="flex-start"
-										spacing={24}
+										spacing={3}
 									>
 										<Grid item>
 											<Button

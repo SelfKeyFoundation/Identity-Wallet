@@ -28,7 +28,7 @@ class WalletExportQRCodeComponent extends PureComponent {
 					direction="column"
 					justify="flex-start"
 					alignItems="center"
-					spacing={8}
+					spacing={1}
 				>
 					<Grid item className={classes.title}>
 						<Typography variant="h2">

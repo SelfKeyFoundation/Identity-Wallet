@@ -27,7 +27,7 @@ class HardwareWalletUnlock extends PureComponent {
 					direction="row"
 					justify="flex-start"
 					alignItems="flex-start"
-					spacing={40}
+					spacing={5}
 				>
 					<Grid item xs={2}>
 						<UnlockLargeIcon className={this.props.classes.unlockIcon} />
@@ -38,7 +38,7 @@ class HardwareWalletUnlock extends PureComponent {
 							direction="column"
 							justify="flex-start"
 							alignItems="flex-start"
-							spacing={40}
+							spacing={5}
 						>
 							<Grid item>
 								<Typography variant="h2">Please Unlock Your {typeText}</Typography>

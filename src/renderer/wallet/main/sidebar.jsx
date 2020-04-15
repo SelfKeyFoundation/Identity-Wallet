@@ -224,7 +224,7 @@ class Sidebar extends PureComponent {
 				justify="flex-start"
 				alignItems="flex-start"
 				className={`${classes.list} sidebarContainer`}
-				spacing={40}
+				spacing={5}
 			>
 				<Grid item style={{ padding: '21px 0', flexGrow: 0 }}>
 					<Grid

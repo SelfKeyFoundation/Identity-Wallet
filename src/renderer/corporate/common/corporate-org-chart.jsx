@@ -82,7 +82,7 @@ const CorporateOrgChart = withStyles(styles)(props => {
 		return null;
 	}
 	return (
-		<Grid container direction="column" spacing={32}>
+		<Grid container direction="column" spacing={4}>
 			<Grid item>
 				<Card>
 					<CardHeader

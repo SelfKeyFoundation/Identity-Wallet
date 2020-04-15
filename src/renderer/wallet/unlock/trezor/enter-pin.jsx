@@ -89,7 +89,7 @@ class EnterPIN extends PureComponent {
 	renderModalBody = () => {
 		const { classes } = this.props;
 		return (
-			<Grid container direction="column" justify="center" alignItems="center" spacing={40}>
+			<Grid container direction="column" justify="center" alignItems="center" spacing={5}>
 				<Grid
 					container
 					direction="column"
@@ -110,7 +110,7 @@ class EnterPIN extends PureComponent {
 						direction="column"
 						justify="center"
 						alignItems="center"
-						spacing={24}
+						spacing={3}
 					>
 						<Grid item>
 							<Grid
@@ -118,7 +118,7 @@ class EnterPIN extends PureComponent {
 								direction="row"
 								justify="center"
 								alignItems="center"
-								spacing={24}
+								spacing={3}
 							>
 								<Grid item>
 									<Button
@@ -146,7 +146,7 @@ class EnterPIN extends PureComponent {
 								direction="row"
 								justify="center"
 								alignItems="center"
-								spacing={24}
+								spacing={3}
 							>
 								<Grid item>
 									<Button
@@ -174,7 +174,7 @@ class EnterPIN extends PureComponent {
 								direction="row"
 								justify="center"
 								alignItems="center"
-								spacing={24}
+								spacing={3}
 							>
 								<Grid item>
 									<Button
@@ -225,7 +225,7 @@ class EnterPIN extends PureComponent {
 						direction="row"
 						justify="flex-start"
 						alignItems="center"
-						spacing={24}
+						spacing={3}
 					>
 						<Grid item>
 							<Button variant="contained" size="large" onClick={this.handleEnter}>

@@ -34,7 +34,7 @@ class DeleteMemberComponent extends PureComponent {
 
 		return (
 			<Popup open={open} closeAction={this.handleCancel} isHeaderVisible={false}>
-				<Grid container direction="column" spacing={8}>
+				<Grid container direction="column" spacing={1}>
 					<Grid item>
 						<Typography variant="h2">{text}</Typography>
 					</Grid>
@@ -45,7 +45,7 @@ class DeleteMemberComponent extends PureComponent {
 						</Typography>
 					</Grid>
 					<Grid item>
-						<Grid container spacing={24} className={classes.buttonContainer}>
+						<Grid container spacing={3} className={classes.buttonContainer}>
 							<Grid item>
 								<Button
 									variant="contained"

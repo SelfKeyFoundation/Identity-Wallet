@@ -107,7 +107,7 @@ export class Transfer extends React.Component {
 					direction="row"
 					justify="flex-start"
 					alignItems="flex-start"
-					spacing={16}
+					spacing={2}
 				>
 					<div className={classes.cryptoIcon}>{getIconForToken(cryptoCurrency)}</div>
 					<div>

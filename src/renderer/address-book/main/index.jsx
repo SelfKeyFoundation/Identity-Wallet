@@ -78,7 +78,7 @@ class AddressBookContainer extends PureComponent {
 				direction="column"
 				justify="flex-start"
 				alignItems="center"
-				spacing={32}
+				spacing={4}
 			>
 				<Grid item>
 					<AddressBookIcon />
