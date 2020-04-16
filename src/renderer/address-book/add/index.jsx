@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { StyledButton } from 'selfkey-ui';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
-import { Grid, Input } from '@material-ui/core';
+import { Button, Grid, Input } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { push } from 'connected-react-router';
 import { Popup } from '../../common';
@@ -146,7 +145,7 @@ class AddressBookAddContainer extends PureComponent {
 						<Grid item>
 							<Grid container direction="row" spacing={3}>
 								<Grid item>
-									<StyledButton
+									<Button
 										id="saveButton"
 										variant="contained"
 										size="large"
@@ -159,17 +158,17 @@ class AddressBookAddContainer extends PureComponent {
 										}
 									>
 										Save
-									</StyledButton>
+									</Button>
 								</Grid>
 								<Grid item>
-									<StyledButton
+									<Button
 										id="cancelButton"
 										variant="outlined"
 										size="large"
 										onClick={this.closeAction}
 									>
 										Cancel
-									</StyledButton>
+									</Button>
 								</Grid>
 							</Grid>
 						</Grid>
