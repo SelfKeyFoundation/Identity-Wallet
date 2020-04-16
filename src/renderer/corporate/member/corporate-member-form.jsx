@@ -1,13 +1,6 @@
 import React, { PureComponent } from 'react';
-import {
-	ModalWrap,
-	ModalCloseButton,
-	ModalCloseIcon,
-	ModalHeader,
-	ModalBody,
-	StyledButton
-} from 'selfkey-ui';
-import { Grid, Modal, Typography } from '@material-ui/core';
+import { ModalWrap, ModalCloseButton, ModalCloseIcon, ModalHeader, ModalBody } from 'selfkey-ui';
+import { Button, Grid, Modal, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { CorporateMemberIndividualForm } from './member-individual-form';
 import { CorporateMemberCorporateForm } from './member-corporate-form';
@@ -172,7 +165,7 @@ class CorporateMemberFormComponent extends PureComponent {
 								)}
 
 								<div className={`${classes.formActionArea} ${classes.fullWidth}`}>
-									<StyledButton
+									<Button
 										id="saveButton"
 										variant="contained"
 										size="large"
@@ -180,15 +173,15 @@ class CorporateMemberFormComponent extends PureComponent {
 										onClick={onContinueClick}
 									>
 										Continue
-									</StyledButton>
-									<StyledButton
+									</Button>
+									<Button
 										id="cancelButton"
 										variant="outlined"
 										size="large"
 										onClick={onCancelClick}
 									>
 										Cancel
-									</StyledButton>
+									</Button>
 								</div>
 							</Grid>
 						</form>
