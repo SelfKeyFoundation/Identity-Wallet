@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { StyledButton } from 'selfkey-ui';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
 import { Grid, Input } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { push } from 'connected-react-router';
 import { Popup } from '../../common';
 

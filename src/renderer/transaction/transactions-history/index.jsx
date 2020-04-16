@@ -18,7 +18,7 @@ import {
 	TableFooter,
 	CircularProgress
 } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import {
 	RefreshIcon,
 	HourGlassIcon,

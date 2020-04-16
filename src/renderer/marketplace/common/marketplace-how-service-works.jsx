@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Typography, Grid } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	howItWorksBox: {

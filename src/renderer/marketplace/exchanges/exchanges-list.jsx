@@ -1,7 +1,6 @@
 import React from 'react';
 import {
 	Grid,
-	withStyles,
 	Typography,
 	Divider,
 	Table,
@@ -9,6 +8,7 @@ import {
 	TableBody,
 	TableCell
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { LargeTableHeadRow, BackButton } from 'selfkey-ui';
 import { ExchangesListItem } from './exchanges-list-item';
 import { MarketplaceDisclaimer } from '../common/disclaimer';

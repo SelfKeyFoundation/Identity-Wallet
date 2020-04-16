@@ -9,7 +9,7 @@ import {
 	Checkbox,
 	FormControlLabel
 } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { appOperations } from 'common/app';
 import { push } from 'connected-react-router';

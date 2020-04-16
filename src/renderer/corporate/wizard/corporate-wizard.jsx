@@ -7,9 +7,9 @@ import {
 	Button,
 	Input,
 	MenuItem,
-	Select,
-	withStyles
+	Select
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { KeyboardArrowDown } from '@material-ui/icons';
 import { KeyPicker } from 'selfkey-ui';
 

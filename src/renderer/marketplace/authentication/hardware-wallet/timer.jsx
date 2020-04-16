@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Typography, Grid, withStyles } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import Popup from '../../../common/popup';
 import { kycSelectors } from 'common/kyc';

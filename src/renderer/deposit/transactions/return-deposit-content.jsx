@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
-
-import { Button, Grid, withStyles, Typography } from '@material-ui/core';
+import { Button, Grid, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { ReturnLargeIcon, TransactionFeeSelector } from 'selfkey-ui';
 import config from 'common/config';
 

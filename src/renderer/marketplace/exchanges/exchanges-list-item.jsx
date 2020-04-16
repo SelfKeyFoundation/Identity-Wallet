@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, TableRow, TableCell, Typography, Grid, withStyles } from '@material-ui/core';
+import { Button, TableRow, TableCell, Typography, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Tag } from 'selfkey-ui';
 
 const styles = theme => ({

@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-	withStyles,
 	Grid,
 	Typography,
 	Divider,
@@ -9,6 +8,7 @@ import {
 	ExpansionPanelSummary,
 	Radio
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { AttributesTable, Alert } from '../../../common';
 import { typography } from 'selfkey-ui';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';

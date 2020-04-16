@@ -1,7 +1,8 @@
 import React from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { TransactionBox } from '../../common/transaction-box';
-import { Grid, Typography, withStyles, Button } from '@material-ui/core';
+import { Grid, Typography, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { HourGlassLargeIcon, OkayIcon, NumberFormat } from 'selfkey-ui';
 import config from 'common/config';
 

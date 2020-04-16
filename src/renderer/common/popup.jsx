@@ -1,5 +1,6 @@
 import React from 'react';
-import { Modal, Typography, withStyles, Grid, Paper } from '@material-ui/core';
+import { Modal, Typography, Grid, Paper } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import {
 	ModalWrap,
 	ModalCloseButton,

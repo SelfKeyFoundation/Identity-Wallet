@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { getWallet } from 'common/wallet/selectors';
 import { Copy, TransferIcon } from 'selfkey-ui';
 import { Grid, Paper, IconButton, Typography, Divider } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { AddressShortener } from '../common/address-shortener';
 
 const styles = theme => ({

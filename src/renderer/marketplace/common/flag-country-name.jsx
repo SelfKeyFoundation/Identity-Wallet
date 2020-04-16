@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import 'flag-icon-css/css/flag-icon.css';
 
 const styles = theme => ({

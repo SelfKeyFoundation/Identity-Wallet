@@ -25,7 +25,7 @@ import {
 	Input,
 	FormControl
 } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import {
 	HourGlassIcon,
 	FailedIcon,

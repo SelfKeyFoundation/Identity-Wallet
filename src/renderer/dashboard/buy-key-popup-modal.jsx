@@ -1,5 +1,6 @@
 import React from 'react';
-import { Grid, List, ListItem, withStyles, Typography, Divider } from '@material-ui/core';
+import { Grid, List, ListItem, Typography, Divider } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { PaymentIcon, Copy } from 'selfkey-ui';
 
 const styles = theme => ({

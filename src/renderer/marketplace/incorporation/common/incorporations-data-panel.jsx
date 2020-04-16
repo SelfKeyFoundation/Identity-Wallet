@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Grid, List, ListItem, Typography } from '@material-ui/core';
+import { Grid, List, ListItem, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { GreenTick, DeniedTick } from 'selfkey-ui';
 
 const styles = theme => ({

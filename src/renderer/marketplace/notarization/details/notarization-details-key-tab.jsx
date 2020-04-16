@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { withStyles, Typography, List, ListItem } from '@material-ui/core';
+import { Typography, List, ListItem } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	tabContainer: {

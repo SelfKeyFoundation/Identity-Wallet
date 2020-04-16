@@ -1,6 +1,5 @@
 import React from 'react';
-
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { FlagCountryName } from '.';
 import { WhatYouGet } from './marketplace-what-you-get';

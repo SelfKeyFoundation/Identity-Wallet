@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Typography, Grid, Paper, Button, Input, InputAdornment } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 
 import { ClearIcon } from 'selfkey-ui';
 import { connect } from 'react-redux';

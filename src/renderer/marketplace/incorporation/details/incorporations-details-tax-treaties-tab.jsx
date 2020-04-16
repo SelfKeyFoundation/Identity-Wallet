@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { TaxTreatiesMap } from '../../common/tax-treaties-map';
 import { TaxTreatiesTable } from '../../common/tax-treaties-table';
 

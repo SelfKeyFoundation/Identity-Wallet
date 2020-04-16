@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
-import { Table, TableBody, IconButton, TableHead, Typography, withStyles } from '@material-ui/core';
+import { Table, TableBody, IconButton, TableHead, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import {
 	EditTransparentIcon,
 	DeleteIcon,

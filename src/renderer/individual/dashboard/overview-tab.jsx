@@ -1,13 +1,6 @@
 import React from 'react';
-import {
-	Grid,
-	CardHeader,
-	Card,
-	CardContent,
-	Typography,
-	Button,
-	withStyles
-} from '@material-ui/core';
+import { Grid, CardHeader, Card, CardContent, Typography, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { BookIcon, IdCardIcon } from 'selfkey-ui';
 import { HexagonAvatar } from '../common/hexagon-avatar';
 import backgroundImage from '../../../../static/assets/images/icons/icon-marketplace.png';

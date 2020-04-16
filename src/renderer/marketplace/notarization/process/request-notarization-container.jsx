@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { identitySelectors } from 'common/identity';
 import MarketplaceNotariesComponent from '../common/marketplace-notaries-component';
 import RequestNotarizationPage from './request-notarization-page';

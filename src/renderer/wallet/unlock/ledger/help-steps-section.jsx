@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Grid, Avatar, Typography } from '@material-ui/core';
+import { Grid, Avatar, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	avatar: {

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import BecomeCertifierPage from './become-certifier-page';
 
 const styles = theme => ({});

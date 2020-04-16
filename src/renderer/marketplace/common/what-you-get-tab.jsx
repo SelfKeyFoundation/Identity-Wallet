@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { WhatYouGet } from './marketplace-what-you-get';
 import { HowServiceWorks } from './marketplace-how-service-works';
 

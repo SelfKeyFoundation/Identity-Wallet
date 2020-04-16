@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getExchangeLinks } from 'common/exchanges/selectors';
-import { Grid, List, ListItem, withStyles, Typography } from '@material-ui/core';
+import { Grid, List, ListItem, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { WarningShieldIcon } from 'selfkey-ui';
 import { Popup } from '../../common/popup';
 

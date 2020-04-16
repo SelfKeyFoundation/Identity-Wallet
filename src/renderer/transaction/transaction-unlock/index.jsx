@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Typography, Button, Grid, withStyles } from '@material-ui/core';
+import { Typography, Button, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { UnlockLargeIcon } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import history from 'common/store/history';

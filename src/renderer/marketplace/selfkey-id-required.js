@@ -3,7 +3,8 @@ import { WarningShieldIcon } from 'selfkey-ui';
 import { Popup } from '../common/popup';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { Typography, withStyles, Button, Grid } from '@material-ui/core';
+import { Typography, Button, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	title: {

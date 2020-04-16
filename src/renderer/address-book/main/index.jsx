@@ -10,7 +10,7 @@ import {
 	AddressBookIcon,
 	SmallTableHeadRow
 } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import {
 	Grid,
 	Typography,

@@ -5,15 +5,8 @@ import { addressBookSelectors, addressBookOperations } from 'common/address-book
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { walletTokensOperations } from 'common/wallet-tokens';
 import history from 'common/store/history';
-import {
-	Grid,
-	Button,
-	Typography,
-	withStyles,
-	Input,
-	IconButton,
-	CircularProgress
-} from '@material-ui/core';
+import { Grid, Button, Typography, Input, IconButton, CircularProgress } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import {
 	MyCryptoLargeIcon,
 	ModalWrap,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { Grid, Typography, List, ListItem, CircularProgress } from '@material-ui/core';
 import { CheckedIcon, StepIcon } from 'selfkey-ui';
 

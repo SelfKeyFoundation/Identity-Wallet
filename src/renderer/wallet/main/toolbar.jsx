@@ -1,12 +1,6 @@
 import React, { PureComponent } from 'react';
-import {
-	createStyles,
-	withStyles,
-	Button,
-	Grid,
-	Typography,
-	ClickAwayListener
-} from '@material-ui/core';
+import { Button, Grid, Typography, ClickAwayListener } from '@material-ui/core';
+import { createStyles, withStyles } from '@material-ui/styles';
 import {
 	MenuNewIcon,
 	DropdownIcon,
