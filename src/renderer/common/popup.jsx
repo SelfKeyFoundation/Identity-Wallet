@@ -12,10 +12,8 @@ import {
 const styles = theme => ({
 	modal: {
 		overflow: 'auto',
-		// temporary solution
 		'& > div:nth-of-type(1)': {
-			background: `linear-gradient(135deg, rgba(43, 53, 64, 0.85) 0%, rgba(30, 38, 46, 0.85) 100%)`,
-			backgroundColor: 'transparent !important'
+			background: `linear-gradient(135deg, rgba(43, 53, 64, 0.9) 0%, rgba(30, 38, 46, 0.9) 100%)`
 		}
 	},
 	closeButton: {
