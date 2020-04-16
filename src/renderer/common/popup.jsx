@@ -11,7 +11,11 @@ import {
 
 const styles = theme => ({
 	modal: {
-		overflow: 'auto'
+		overflow: 'auto',
+		// temporary solution
+		'& > div:nth-of-type(1)': {
+			backgroundColor: 'transparent !important'
+		}
 	},
 	closeButton: {
 		top: '20px'
