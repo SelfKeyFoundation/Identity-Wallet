@@ -7,3 +7,4 @@ export { MarketplaceNotariesPage } from './notarization';
 export { MarketplaceSelfkeyDIDRequiredContainer } from './selfkey-did-required-container';
 export { MarketplaceOrdersPage } from './orders';
 export { MarketplaceContainer } from './marketplace-container';
+export { MarketplaceLoansPage } from './loans';
