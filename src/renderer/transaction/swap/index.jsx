@@ -134,12 +134,12 @@ export class TokenSwapComponent extends PureComponent {
 
 	getTokenFiatBalance = token => {
 		const t = this.props.walletTokens.find(t => t.symbol === token);
-		return t ? BN(t.balanceInFiat).toFixed(18) : false;
+		return t ? BN(t.balanceInFiat).toFixed(18) : 0;
 	};
 
 	getTokenBalance = token => {
 		const t = this.props.walletTokens.find(t => t.symbol === token);
-		return t ? BN(t.balance).toFixed(18) : false;
+		return t ? BN(t.balance).toFixed(18) : 0;
 	};
 
 	getFiatValue = (amount, token) => {
@@ -167,7 +167,7 @@ export class TokenSwapComponent extends PureComponent {
 	setSourceToken = sourceToken => {
 		this.setState({ amount: 0 });
 		// Use token address if we have it
-		const token = this.props.walletTokens.find(t => t.symbol === sourceToken);
+		const token = this.props.tokens.find(t => t.symbol === sourceToken);
 		const source = token && token.address ? token.address : sourceToken;
 		this.props.dispatch(tokenSwapOperations.setSourceOperation(source));
 	};
@@ -191,6 +191,9 @@ export class TokenSwapComponent extends PureComponent {
 			maxAmount = this.getTokenFiatBalance(this.props.sourceToken);
 		} else {
 			maxAmount = this.getTokenBalance(this.props.sourceToken);
+		}
+		if (isNaN(Number(maxAmount))) {
+			maxAmount = 0;
 		}
 		if (isNaN(Number(value))) {
 			value = 0;
