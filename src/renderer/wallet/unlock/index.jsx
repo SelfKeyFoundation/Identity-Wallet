@@ -9,7 +9,7 @@ import {
 	LedgerIcon,
 	TrezorIcon
 } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { Link, Route, Redirect, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';

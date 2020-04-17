@@ -1,13 +1,6 @@
 import React from 'react';
-import {
-	Table,
-	TableBody,
-	TableRow,
-	TableCell,
-	TableHead,
-	Typography,
-	withStyles
-} from '@material-ui/core';
+import { Table, TableBody, TableRow, TableCell, TableHead, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { SmallTableHeadRow, ViewIcon, RefreshIcon } from 'selfkey-ui';
 
 const styles = theme => ({

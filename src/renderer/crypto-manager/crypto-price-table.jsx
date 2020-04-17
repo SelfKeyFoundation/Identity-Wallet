@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import {
-	withStyles,
 	Table,
 	TableBody,
 	TableHead,
@@ -10,6 +9,7 @@ import {
 	Grid,
 	Button
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { PriceSummary, DeleteIcon, SmallTableHeadRow } from 'selfkey-ui';
 import { Popup } from '../common/popup';
 

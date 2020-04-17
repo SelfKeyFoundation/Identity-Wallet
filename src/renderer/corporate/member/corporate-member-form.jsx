@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { ModalWrap, ModalCloseButton, ModalCloseIcon, ModalHeader, ModalBody } from 'selfkey-ui';
 import { Button, Grid, Modal, Typography } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { CorporateMemberIndividualForm } from './member-individual-form';
 import { CorporateMemberCorporateForm } from './member-corporate-form';
 import { CorporateMemberSharesForm } from './member-shares-form';

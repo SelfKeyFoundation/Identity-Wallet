@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Tabs, Tab } from '@material-ui/core';
+import { Tabs, Tab } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { IncorporationsLegalTab } from './incorporations-details-legal-tab';
 import { IncorporationsTaxesTab } from './incorporations-details-taxes-tab';
 import { IncorporationsTaxTreatiesTab } from './incorporations-details-tax-treaties-tab';

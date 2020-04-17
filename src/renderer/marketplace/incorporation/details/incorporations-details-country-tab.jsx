@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Typography, Grid, List, ListItem } from '@material-ui/core';
+import { Typography, Grid, List, ListItem } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { PageLoading, sanitize } from '../../common';
 import 'flag-icon-css/css/flag-icon.css';
 
@@ -47,7 +48,6 @@ const styles = theme => ({
 			color: theme.palette.secondary.main,
 			display: 'block',
 			padding: '0',
-			borderBottom: '1px solid #435160',
 			marginBottom: '0.5em',
 			marginTop: '0em'
 		},

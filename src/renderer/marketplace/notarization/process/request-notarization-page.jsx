@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { Button, Typography, IconButton, Divider } from '@material-ui/core';
 import { KeyTooltip, TooltipArrow, InfoTooltip, baseDark, grey, CloseButtonIcon } from 'selfkey-ui';
 import RequestDocumentsList from './request-documents-list-container';

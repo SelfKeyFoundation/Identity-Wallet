@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
 import { Button, Grid, Input } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { push } from 'connected-react-router';
 import { Popup } from '../../common';
 

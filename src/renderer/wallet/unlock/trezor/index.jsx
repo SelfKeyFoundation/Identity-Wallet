@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Button, Grid } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import HelpStepsSection from './help-steps-section';
 import { push } from 'connected-react-router';

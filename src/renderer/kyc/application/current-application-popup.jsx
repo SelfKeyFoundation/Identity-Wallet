@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-	withStyles,
 	Typography,
 	CircularProgress,
 	FormControlLabel,
@@ -17,7 +16,7 @@ import {
 	RadioGroup,
 	TableCell
 } from '@material-ui/core';
-
+import { withStyles } from '@material-ui/styles';
 import {
 	SmallTableHeadRow,
 	SmallTableCell,

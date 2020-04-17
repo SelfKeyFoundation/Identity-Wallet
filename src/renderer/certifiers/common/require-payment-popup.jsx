@@ -1,5 +1,6 @@
 import React from 'react';
-import { Typography, Button, withStyles, Divider, Input } from '@material-ui/core';
+import { Typography, Button, Divider, Input } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { PaymentIcon, Copy, baseDark, grey } from 'selfkey-ui';
 import { Popup } from '../../common';
 

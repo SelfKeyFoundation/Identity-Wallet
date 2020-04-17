@@ -1,6 +1,6 @@
 import React from 'react';
-
-import { Grid, CircularProgress, withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { Grid, CircularProgress } from '@material-ui/core';
 
 const styles = theme => ({
 	loading: {

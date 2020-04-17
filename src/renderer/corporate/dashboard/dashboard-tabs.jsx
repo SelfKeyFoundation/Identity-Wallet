@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Tabs, Tab } from '@material-ui/core';
+import { Tabs, Tab } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { CorporateOverviewTab } from './overview-tab';
 import { CorporateInformationTab } from './information-tab';
 import { CorporateMembersTab } from './members-tab';

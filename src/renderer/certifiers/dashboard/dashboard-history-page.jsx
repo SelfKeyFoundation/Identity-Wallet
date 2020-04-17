@@ -1,7 +1,6 @@
 import React from 'react';
 import moment from 'moment';
 import {
-	withStyles,
 	Typography,
 	Paper,
 	Divider,
@@ -12,6 +11,7 @@ import {
 	TableRow,
 	TablePagination
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { SmallTableHeadRow, ViewIcon, RefreshIcon } from 'selfkey-ui';
 
 const styles = theme => ({

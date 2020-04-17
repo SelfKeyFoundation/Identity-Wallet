@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { BigNumber } from 'bignumber.js';
 import config from 'common/config';
 import EthUnits from 'common/utils/eth-units';

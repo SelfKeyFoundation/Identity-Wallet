@@ -6,7 +6,7 @@ import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorp
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { identitySelectors } from 'common/identity';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { marketplaceSelectors } from 'common/marketplace';
 import { IncorporationsDetailsPage } from './incorporations-details-page';
 
@@ -140,7 +140,6 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 		const description = program.data.walletDescription
 			? program.data.walletDescription
 			: program.data.servicesDescription;
-
 		return (
 			<IncorporationsDetailsPage
 				applicationStatus={this.getApplicationStatus()}
@@ -202,6 +201,11 @@ const mapStateToProps = (state, props) => {
 			notAuthenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(state, vendorId, templateId),
+		memberKycRequirements: kycSelectors.selectMemberRequirementsForTemplate(
+			state,
+			vendorId,
+			templateId
+		),
 		identity: identitySelectors.selectIdentity(state)
 	};
 };

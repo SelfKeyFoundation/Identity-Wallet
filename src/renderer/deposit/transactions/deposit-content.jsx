@@ -6,10 +6,10 @@ import {
 	FormControlLabel,
 	FormControl,
 	FormHelperText,
-	withStyles,
 	Button,
 	Typography
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
 import { TransactionFeeSelector, ExchangeLargeIcon } from 'selfkey-ui';
 

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Typography, Button, withStyles } from '@material-ui/core';
+import { Typography, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { CloseButtonIcon } from 'selfkey-ui';
 
 const styles = theme => ({

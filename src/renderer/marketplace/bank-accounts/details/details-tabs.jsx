@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Tabs, Tab } from '@material-ui/core';
+import { Tabs, Tab } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { BankingTypesTab } from './details-types-tab';
 import { BankingCountryTab } from './details-country-tab';
 import { BankingDescriptionTab } from './details-description-tab';

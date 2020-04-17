@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Grid, withStyles, Typography, Divider } from '@material-ui/core';
+import { Grid, Typography, Divider } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { WarningShieldIcon, Copy } from 'selfkey-ui';
 import Popup from '../../common/popup';
 

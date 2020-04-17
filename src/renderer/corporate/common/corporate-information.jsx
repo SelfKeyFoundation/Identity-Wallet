@@ -10,9 +10,9 @@ import {
 	TableHead,
 	TableBody,
 	IconButton,
-	Button,
-	withStyles
+	Button
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import {
 	BookIcon,
 	SmallTableHeadRow,

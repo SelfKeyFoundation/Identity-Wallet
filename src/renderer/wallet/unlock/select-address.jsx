@@ -1,14 +1,6 @@
 import React, { PureComponent } from 'react';
-import {
-	Typography,
-	Button,
-	Grid,
-	Table,
-	TableHead,
-	Radio,
-	TableBody,
-	withStyles
-} from '@material-ui/core';
+import { Typography, Button, Grid, Table, TableHead, Radio, TableBody } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import {
 	ViewIcon,
 	SmallTableRow,

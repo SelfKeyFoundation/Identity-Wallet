@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Grid, Button, Typography, withStyles, List } from '@material-ui/core';
+import { Grid, Button, Typography, List } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import CryptoPriceTableContainer from './crypto-price-table-container';
 import { push } from 'connected-react-router';

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { identitySelectors } from 'common/identity';

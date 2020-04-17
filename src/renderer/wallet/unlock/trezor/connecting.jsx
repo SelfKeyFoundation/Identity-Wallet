@@ -16,7 +16,7 @@ import {
 	WarningShieldIcon,
 	TrezorBridgeIcon
 } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
 import { push } from 'connected-react-router';

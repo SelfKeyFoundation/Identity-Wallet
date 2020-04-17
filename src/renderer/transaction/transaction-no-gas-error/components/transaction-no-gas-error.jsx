@@ -1,6 +1,7 @@
 import * as React from 'react';
 import TransactionErrorBox from '../../common/transaction-error-box';
-import { withStyles, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { primary } from 'selfkey-ui';
 
 const styles = theme => ({

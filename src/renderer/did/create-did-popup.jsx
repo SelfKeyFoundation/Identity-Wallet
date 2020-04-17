@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Grid, withStyles, Typography, Button, IconButton, Divider } from '@material-ui/core';
+import { Grid, Typography, Button, IconButton, Divider } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Popup } from '../common/popup';
 import { KeyTooltip, TooltipArrow, PaymentIcon, InfoTooltip } from 'selfkey-ui';
 

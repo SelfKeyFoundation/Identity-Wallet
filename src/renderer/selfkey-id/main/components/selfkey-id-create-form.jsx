@@ -1,13 +1,6 @@
 import React, { PureComponent } from 'react';
-import {
-	Grid,
-	Button,
-	Typography,
-	withStyles,
-	Divider,
-	Input,
-	IconButton
-} from '@material-ui/core';
+import { Grid, Button, Typography, Divider, Input, IconButton } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import {
 	IdCardIcon,
 	ModalWrap,

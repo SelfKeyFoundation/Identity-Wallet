@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Grid, Modal, Button, Typography, Card, CardContent, withStyles } from '@material-ui/core';
+import { Grid, Modal, Button, Typography, Card, CardContent } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { IdCardIcon, SKIDIcon, ModalWrap } from 'selfkey-ui';
 import { Link } from 'react-router-dom';
 
