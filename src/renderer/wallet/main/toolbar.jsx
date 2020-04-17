@@ -383,12 +383,12 @@ class Toolbar extends PureComponent {
 					/>
 					<Grid item xs={9} className={classes.priceBox}>
 						<Grid container direction="row" justify="flex-end" alignItems="center">
-							<Grid item>
+							<div>
 								<PriceBox cryptoCurrency={primaryToken} />
-							</Grid>
-							<Grid item>
+							</div>
+							<div>
 								<PriceBox cryptoCurrency="ETH" />
-							</Grid>
+							</div>
 						</Grid>
 					</Grid>
 					<Grid item xs={2} className={classes.maxWidth}>

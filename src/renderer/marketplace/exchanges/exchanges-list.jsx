@@ -16,7 +16,7 @@ import { PageLoading } from '../common';
 
 const styles = theme => ({
 	wrapper: {
-		width: '1080px'
+		width: '1074px'
 	},
 	'@media screen and (min-width: 1230px)': {
 		wrapper: {

@@ -7,7 +7,7 @@ import { BankIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	pageContent: {
-		width: '1080px',
+		width: '1074px',
 		margin: '0 auto'
 	},
 	'@media screen and (min-width: 1230px)': {
