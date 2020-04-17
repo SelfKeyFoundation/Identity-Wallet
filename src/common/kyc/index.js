@@ -146,9 +146,6 @@ export const kycSelectors = {
 
 		// select entity type for all members
 		members = members.map(m => {
-			if (m.type === 'individual') {
-				return m;
-			}
 			const userData = this.selectKYCUserData(state, m.id);
 			return { ...m, userData };
 		});
@@ -158,7 +155,7 @@ export const kycSelectors = {
 		// build kyc requirements tree for all members
 		const requirements = members.reduce((acc, curr) => {
 			const isCorporate = curr.type === 'corporate';
-			const { positions, userData } = curr;
+			const { positions, userData = {} } = curr;
 			const { entityType } = userData;
 
 			// match all possible member templates to current member
