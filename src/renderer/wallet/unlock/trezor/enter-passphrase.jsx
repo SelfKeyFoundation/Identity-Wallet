@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Typography, Grid, Button, Input, InputAdornment } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-
+import { withStyles } from '@material-ui/styles';
 import { VisibilityOffIcon, VisibilityOnIcon } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';

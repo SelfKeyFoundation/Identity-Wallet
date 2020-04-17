@@ -1,7 +1,8 @@
 import React from 'react';
 import { IncorporationsListTable } from './incorporations-list-table';
 import { PageLoading } from '../../common';
-import { Button, Typography, Grid, withStyles } from '@material-ui/core';
+import { Button, Typography, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { IncorporationsIcon } from 'selfkey-ui';
 
 const styles = theme => ({

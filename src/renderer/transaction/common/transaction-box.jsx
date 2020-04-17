@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Grid, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Erc20Icon } from 'selfkey-ui';
 import Popup from '../../common/popup';
 

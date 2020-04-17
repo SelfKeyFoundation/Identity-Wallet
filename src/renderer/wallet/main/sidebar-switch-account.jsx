@@ -1,14 +1,6 @@
 import React, { PureComponent } from 'react';
-import {
-	withStyles,
-	Button,
-	Drawer,
-	Grid,
-	List,
-	ListItem,
-	Typography,
-	Divider
-} from '@material-ui/core';
+import { Button, Drawer, Grid, List, ListItem, Typography, Divider } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import Close from '@material-ui/icons/Close';
 import { SelfkeyLogo } from 'selfkey-ui';
 import PersonIcon from 'selfkey-ui/build/lib/icons/person';

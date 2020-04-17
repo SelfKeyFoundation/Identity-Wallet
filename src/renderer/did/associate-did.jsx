@@ -1,5 +1,6 @@
 import React from 'react';
-import { Grid, Button, Typography, withStyles, Input, CircularProgress } from '@material-ui/core';
+import { Grid, Button, Typography, Input, CircularProgress } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { MergeIcon } from 'selfkey-ui';
 import { Popup } from '../common';
 

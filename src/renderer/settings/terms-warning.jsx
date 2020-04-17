@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Grid, Typography, Button } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { Popup } from '../common';

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { ActualTransactionFeeBox } from 'renderer/transaction/send/containers/actual-transaction-fee-box';
-import { Grid, withStyles } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Loop as LoopIcon } from '@material-ui/icons';
 
 const styles = theme => ({

@@ -12,10 +12,9 @@ import {
 	Divider,
 	ExpansionPanelDetails,
 	List,
-	ListItem,
-	createStyles,
-	withStyles
+	ListItem
 } from '@material-ui/core';
+import { createStyles, withStyles } from '@material-ui/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import {

@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { CorporateMembers } from '../common/corporate-members';
 
 const styles = theme => ({});

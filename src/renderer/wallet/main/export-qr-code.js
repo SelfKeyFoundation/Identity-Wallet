@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import QRCode from 'qrcode.react';
 import { Popup } from '../../common/popup';
-import { Typography, withStyles, Button, Grid, CircularProgress } from '@material-ui/core';
+import { Typography, Button, Grid, CircularProgress } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	title: {

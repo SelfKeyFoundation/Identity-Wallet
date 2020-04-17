@@ -1,5 +1,6 @@
 import React from 'react';
-import { Typography, Grid, Button, withStyles } from '@material-ui/core';
+import { Typography, Grid, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import { WarningShieldIcon, warning } from 'selfkey-ui';
 import { Popup } from '../../common';

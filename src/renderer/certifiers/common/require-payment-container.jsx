@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import RequirePayment from './require-payment-popup';
 
 const styles = theme => ({});

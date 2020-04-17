@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Typography, withStyles, Button, Grid } from '@material-ui/core';
+import { Typography, Button, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Popup } from '../common/popup';
 
 const styles = theme => ({

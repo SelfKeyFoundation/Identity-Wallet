@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { Typography, Divider } from '@material-ui/core';
 import { marketplaceSelectors } from 'common/marketplace';
 import { MarketplaceProcessStarted } from '../../common/marketplace-process-started';

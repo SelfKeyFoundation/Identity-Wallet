@@ -1,6 +1,7 @@
 import React from 'react';
 import { DIDIcon } from 'selfkey-ui';
-import { Grid, withStyles, Typography, Card, CardHeader, CardContent } from '@material-ui/core';
+import { Grid, Typography, Card, CardHeader, CardContent } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	hr: {

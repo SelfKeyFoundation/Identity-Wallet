@@ -11,7 +11,7 @@ import { tokenSwapOperations, tokenSwapSelectors } from 'common/token-swap';
 import { convertExponentialToDecimal } from 'common/utils/exponential-to-decimal';
 import { transactionOperations } from 'common/transaction';
 import { MenuItem, Grid, Select, Input, Typography, Button, Divider } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { KeyboardArrowDown } from '@material-ui/icons';
 import { NumberFormat, TransferIcon } from 'selfkey-ui';
 

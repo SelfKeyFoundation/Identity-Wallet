@@ -8,7 +8,7 @@ import DashboardMarketplaceApplications from './dashboard-marketplace-applicatio
 import DashboardSelfkeyProfile from './dashboard-selfkey-profile';
 import TransactionsHistory from '../transaction/transactions-history';
 import { Alert } from '../common';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { appSelectors } from 'common/app';
 
 const styles = theme => ({

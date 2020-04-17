@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import {
-	withStyles,
 	List,
 	ListItem,
 	Drawer,
@@ -13,6 +12,7 @@ import {
 	// IconButton
 	Divider
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import {
 	DashboardMenuIcon,

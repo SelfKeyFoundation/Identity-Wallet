@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Grid, Typography, Input, LinearProgress, Button } from '@material-ui/core';
 import { PasswordIcon } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import { handlePassword, renderPasswordStrength } from './password-util';
 import { connect } from 'react-redux';

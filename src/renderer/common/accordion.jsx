@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-	withStyles,
 	Typography,
 	ExpansionPanel,
 	ExpansionPanelSummary,
@@ -13,9 +12,11 @@ import {
 	List,
 	ListItem
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { typography } from 'selfkey-ui';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { Alert } from './alert';
+
 const styles = theme => ({
 	tabContent: {
 		marginTop: '15px',

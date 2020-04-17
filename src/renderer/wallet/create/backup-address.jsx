@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Grid, Typography, Input, Button, InputAdornment } from '@material-ui/core';
 import { Copy, DownloadIcon2, warning } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { walletSelectors } from 'common/wallet';
 import { createWalletSelectors, createWalletOperations } from 'common/create-wallet';

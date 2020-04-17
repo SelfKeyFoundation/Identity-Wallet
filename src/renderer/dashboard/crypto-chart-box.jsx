@@ -9,7 +9,7 @@ import { getViewAll } from 'common/view-all-tokens/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getVisibleTokens, getTopTokenListSize } from 'common/wallet-tokens/selectors';
 import { viewAllOperations } from 'common/view-all-tokens';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { ExpandMore, ExpandLess } from '@material-ui/icons';
 
 const styles = () => ({
