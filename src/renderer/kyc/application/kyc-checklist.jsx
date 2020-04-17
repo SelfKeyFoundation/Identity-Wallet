@@ -85,7 +85,8 @@ const styles = {
 		width: '265px',
 		padding: '10px 15px',
 		borderBottom: '1px solid #303C49',
-		position: 'relative'
+		position: 'relative',
+		cursor: 'pointer'
 	},
 	kycMembersListItemSelected: {
 		'&:before': {
@@ -107,7 +108,7 @@ const styles = {
 };
 
 export const KycChecklistItemLabel = withStyles(styles)(
-	({ item, className, classes, selectedAttributes, onSelected, addItem }) => {
+	({ item, className, classes, selectedAttributes, selectedIdentityId, onSelected, addItem }) => {
 		const { options } = item;
 		if (!options || options.length <= 1) {
 			return (
@@ -127,8 +128,9 @@ export const KycChecklistItemLabel = withStyles(styles)(
 				</Typography>
 			);
 		}
-		const selectedAttr = selectedAttributes[item.uiId] || options[0];
-		onSelected(item.uiId, selectedAttr);
+		const attributeName = `${selectedIdentityId || ''}${item.uiId}`;
+		const selectedAttr = selectedAttributes[attributeName] || options[0];
+		onSelected(attributeName, selectedAttr);
 
 		return (
 			<RadioGroup
@@ -136,7 +138,7 @@ export const KycChecklistItemLabel = withStyles(styles)(
 				value={selectedAttr.id}
 				onChange={evt =>
 					onSelected(
-						item.uiId,
+						attributeName,
 						options.find(itm => '' + itm.id === '' + evt.target.value)
 					)
 				}
@@ -166,7 +168,7 @@ export const KycChecklistItemLabel = withStyles(styles)(
 );
 
 export const KycChecklistItem = withStyles(styles)(
-	({ item, classes, selectedAttributes, onSelected, editItem, addItem }) => {
+	({ item, classes, selectedAttributes, selectedIdentityId, onSelected, editItem, addItem }) => {
 		const type = item.title
 			? item.title
 			: item.type && item.type.content
@@ -195,6 +197,7 @@ export const KycChecklistItem = withStyles(styles)(
 						item={item}
 						className={warningClassname}
 						selectedAttributes={selectedAttributes}
+						selectedIdentityId={selectedIdentityId}
 						onSelected={onSelected}
 						addItem={addItem}
 					/>
@@ -217,7 +220,15 @@ export const KycChecklistItem = withStyles(styles)(
 );
 
 export const KycChecklistList = withStyles(styles)(
-	({ classes, requirements, selectedAttributes, onSelected, editItem, addItem }) => {
+	({
+		classes,
+		requirements,
+		selectedAttributes,
+		selectedIdentityId,
+		onSelected,
+		editItem,
+		addItem
+	}) => {
 		return (
 			<Table className={classes.kycChecklist}>
 				<TableHead>
@@ -242,6 +253,7 @@ export const KycChecklistList = withStyles(styles)(
 								item={item}
 								key={indx}
 								selectedAttributes={selectedAttributes}
+								selectedIdentityId={selectedIdentityId}
 								onSelected={onSelected}
 								editItem={editItem}
 								addItem={addItem}
@@ -261,7 +273,7 @@ const requirementsHaveWarning = requirements => {
 	}, false);
 };
 
-export const KycMembersListItem = withStyles(styles)(({ classes, item }) => (
+export const KycMembersListItem = withStyles(styles)(({ classes, item, onClick }) => (
 	<Grid
 		container
 		direction="row"
@@ -271,6 +283,7 @@ export const KycMembersListItem = withStyles(styles)(({ classes, item }) => (
 			classes.kycMembersListItem,
 			item.selected ? classes.kycMembersListItemSelected : null
 		)}
+		onClick={e => onClick(item)}
 		spacing={2}
 	>
 		<Grid item>
@@ -322,7 +335,7 @@ export const KycMembersList = withStyles(styles)(
 			<Grid container direction="column" alignItems="stretch" justify="flex-start">
 				{members.map(m => (
 					<Grid item key={m.id}>
-						<KycMembersListItem item={m} />
+						<KycMembersListItem item={m} onClick={onMemberClick} />
 					</Grid>
 				))}
 			</Grid>
@@ -330,22 +343,46 @@ export const KycMembersList = withStyles(styles)(
 	}
 );
 
-export const KycChecklist = withStyles(styles)(
-	({
-		classes,
-		userData,
-		requirements,
-		memberRequirements,
-		selectedAttributes,
-		onSelected,
-		editItem,
-		addItem
-	}) => {
+class KycChecklistComponent extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = { selectedIdentityId: null };
+	}
+
+	handleMemberClick = member => {
+		if (member.id === 'main-company') {
+			return this.setState({ selectedIdentityId: null });
+		}
+		return this.setState({ selectedIdentityId: member.id });
+	};
+
+	render() {
+		const {
+			classes,
+			userData,
+			requirements,
+			memberRequirements,
+			selectedAttributes,
+			onSelected,
+			editItem,
+			addItem
+		} = this.props;
+
+		const { selectedIdentityId } = this.state;
+
+		let displayRequirements = requirements;
+
+		if (selectedIdentityId) {
+			displayRequirements =
+				(memberRequirements.find(m => m.id === selectedIdentityId) || {}).requirements ||
+				[];
+		}
+
 		if (!memberRequirements) {
 			return (
 				<Scrollable>
 					<KycChecklistList
-						requirements={requirements}
+						requirements={displayRequirements}
 						selectedAttributes={selectedAttributes}
 						onSelected={onSelected}
 						editItem={editItem}
@@ -366,16 +403,18 @@ export const KycChecklist = withStyles(styles)(
 					<Scrollable>
 						<KycMembersList
 							userData={userData}
+							onMemberClick={this.handleMemberClick}
 							requirements={requirements}
 							memberRequirements={memberRequirements}
+							selectedIdentityId={selectedIdentityId}
 						/>
 					</Scrollable>
 				</Grid>
 				<Grid item xs className={classes.checklistWrapper}>
 					<Scrollable>
 						<KycChecklistList
-							requirements={requirements}
-							memberRequirements={memberRequirements}
+							requirements={displayRequirements}
+							selectedIdentityId={selectedIdentityId}
 							selectedAttributes={selectedAttributes}
 							onSelected={onSelected}
 							editItem={editItem}
@@ -386,6 +425,8 @@ export const KycChecklist = withStyles(styles)(
 			</Grid>
 		);
 	}
-);
+}
+
+export const KycChecklist = withStyles(styles)(KycChecklistComponent);
 
 export default KycChecklist;
