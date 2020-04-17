@@ -27,7 +27,6 @@ const styles = theme => ({
 			color: theme.palette.secondary.main,
 			display: 'block',
 			padding: '0',
-			borderBottom: '1px solid #435160',
 			marginBottom: '0.5em',
 			marginTop: '0em'
 		},

@@ -11,20 +11,6 @@ import { LargeTableHeadRow, TagTableCell, Tag } from 'selfkey-ui';
 import { ProgramPrice, FlagCountryName } from '../../common';
 
 const styles = theme => ({
-	/*
-	header: {
-		borderBottom: 'solid 1px #475768',
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'flex-start',
-		paddingBottom: '30px',
-		marginBottom: '40px',
-		marginTop: '50px'
-	},
-	headerTitle: {
-		paddingLeft: '21px'
-	},
-	*/
 	table: {
 		'& td': {
 			height: 'auto'
