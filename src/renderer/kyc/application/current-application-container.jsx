@@ -88,10 +88,11 @@ class CurrentApplicationComponent extends PureComponent {
 			editAttribute: this.state.selected[item.id] || item.options[0]
 		});
 	};
-	handleAdd = item => {
+	handleAdd = (item, identityId) => {
 		this.setState({
 			showCreateAttribute: true,
 			typeId: item.type.id,
+			identityId,
 			isDocument: jsonSchema.containsFile(item.type.content)
 		});
 	};
@@ -100,14 +101,17 @@ class CurrentApplicationComponent extends PureComponent {
 	};
 	render() {
 		const {
+			userData,
 			currentApplication,
 			relyingParty,
 			requirements,
-			existingApplicationId
+			existingApplicationId,
+			memberRequirements
 		} = this.props;
 		return (
 			<div>
 				<CurrentApplicationPopup
+					userData={userData}
 					currentApplication={currentApplication}
 					agreement={currentApplication.agreement}
 					vendor={currentApplication.vendor}
@@ -119,6 +123,7 @@ class CurrentApplicationComponent extends PureComponent {
 					error={this.state.error}
 					relyingParty={relyingParty}
 					requirements={requirements}
+					memberRequirements={memberRequirements}
 					onClose={this.handleClose}
 					onSubmit={this.handleSubmit}
 					selectedAttributes={this.state.selected}
@@ -155,6 +160,7 @@ const mapStateToProps = (state, props) => {
 	const existingApplicationId =
 		qs.parse(props.location.search, { ignoreQueryPrefix: true }).applicationId || undefined;
 	return {
+		userData: kycSelectors.selectKYCUserData(state),
 		relyingParty: kycSelectors.relyingPartySelector(state, relyingPartyName),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
@@ -163,6 +169,11 @@ const mapStateToProps = (state, props) => {
 		),
 		currentApplication,
 		requirements: kycSelectors.selectRequirementsForTemplate(
+			state,
+			relyingPartyName,
+			currentApplication.templateId
+		),
+		memberRequirements: kycSelectors.selectMemberRequirementsForTemplate(
 			state,
 			relyingPartyName,
 			currentApplication.templateId

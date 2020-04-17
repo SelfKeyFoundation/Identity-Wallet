@@ -10,7 +10,8 @@ import {
 	Radio,
 	RadioGroup,
 	FormControlLabel,
-	Button
+	Button,
+	Grid
 } from '@material-ui/core';
 import { CheckOutlined } from '@material-ui/icons';
 import {
@@ -23,6 +24,8 @@ import {
 	warning,
 	success
 } from 'selfkey-ui';
+import { Scrollable } from '../../common';
+import classNames from 'classnames';
 
 const styles = {
 	duplicateAddItemBtnSmall: {
@@ -64,6 +67,42 @@ const styles = {
 	},
 	editColumn: {
 		textAlign: 'right'
+	},
+	kycChecklist: {
+		width: '100%',
+		minWidth: '600px'
+	},
+	corporateChecklistWrapper: {
+		border: '1px solid #303C49',
+		borderRadius: '4px',
+		maxHeight: '450px'
+	},
+	checklistWrapper: {
+		padding: '20px',
+		maxHeight: '450px'
+	},
+	kycMembersListItem: {
+		width: '265px',
+		padding: '10px 15px',
+		borderBottom: '1px solid #303C49',
+		position: 'relative'
+	},
+	kycMembersListItemSelected: {
+		'&:before': {
+			content: '""',
+			position: 'absolute',
+			height: '100%',
+			left: '0px',
+			width: '4px',
+			display: 'block',
+			top: '0',
+			background: '#00C0D9'
+		}
+	},
+	memberListWrapper: {
+		borderRight: '1px solid #303C49',
+		overflow: 'visible',
+		maxHeight: '450px'
 	}
 };
 
@@ -177,10 +216,10 @@ export const KycChecklistItem = withStyles(styles)(
 	}
 );
 
-export const KycChecklist = withStyles(styles)(
+export const KycChecklistList = withStyles(styles)(
 	({ classes, requirements, selectedAttributes, onSelected, editItem, addItem }) => {
 		return (
-			<Table>
+			<Table className={classes.kycChecklist}>
 				<TableHead>
 					<SmallTableHeadRow>
 						<TableCell className={classes.headCell}> </TableCell>
@@ -211,6 +250,140 @@ export const KycChecklist = withStyles(styles)(
 					})}
 				</TableBody>
 			</Table>
+		);
+	}
+);
+
+const requirementsHaveWarning = requirements => {
+	return requirements.reduce((acc, curr) => {
+		if (acc) return acc;
+		return curr.required && (!curr.options || !curr.options.length);
+	}, false);
+};
+
+export const KycMembersListItem = withStyles(styles)(({ classes, item }) => (
+	<Grid
+		container
+		direction="row"
+		alignItems="flex-start"
+		justify="space-between"
+		className={classNames(
+			classes.kycMembersListItem,
+			item.selected ? classes.kycMembersListItemSelected : null
+		)}
+		spacing={2}
+	>
+		<Grid item>
+			<Grid
+				container
+				direction="column"
+				alignItems="flex-start"
+				justify="flex-start"
+				spacing={8}
+			>
+				<Grid item>
+					<Typography variant="h6">{item.name}</Typography>
+				</Grid>
+				<Grid item>
+					<Typography variant="subtitle1" color="secondary">
+						{Array.isArray(item.positions) ? item.positions.join(', ') : item.positions}
+					</Typography>
+				</Grid>
+			</Grid>
+		</Grid>
+		<Grid item>
+			{item.warning ? (
+				<AttributeAlertIcon />
+			) : (
+				<CheckOutlined className={classes.checkIcon} />
+			)}
+		</Grid>
+	</Grid>
+));
+
+export const KycMembersList = withStyles(styles)(
+	({ userData, requirements, memberRequirements, onMemberClick, selectedIdentityId = null }) => {
+		const members = memberRequirements.map(r => ({
+			id: r.id,
+			name: r.userData.name,
+			positions: r.positions,
+			selected: r.id === selectedIdentityId,
+			warning: requirementsHaveWarning(r.requirements)
+		}));
+		members.unshift({
+			id: 'main-company',
+			name: userData.name,
+			positions: 'Main Company',
+			selected: selectedIdentityId === null,
+			warning: requirementsHaveWarning(requirements)
+		});
+
+		return (
+			<Grid container direction="column" alignItems="stretch" justify="flex-start">
+				{members.map(m => (
+					<Grid item key={m.id}>
+						<KycMembersListItem item={m} />
+					</Grid>
+				))}
+			</Grid>
+		);
+	}
+);
+
+export const KycChecklist = withStyles(styles)(
+	({
+		classes,
+		userData,
+		requirements,
+		memberRequirements,
+		selectedAttributes,
+		onSelected,
+		editItem,
+		addItem
+	}) => {
+		if (!memberRequirements) {
+			return (
+				<Scrollable>
+					<KycChecklistList
+						requirements={requirements}
+						selectedAttributes={selectedAttributes}
+						onSelected={onSelected}
+						editItem={editItem}
+						addItem={addItem}
+					/>
+				</Scrollable>
+			);
+		}
+		return (
+			<Grid
+				container
+				direction="row"
+				alignItems="stretch"
+				justify="flex-start"
+				className={classes.corporateChecklistWrapper}
+			>
+				<Grid item className={classes.memberListWrapper}>
+					<Scrollable>
+						<KycMembersList
+							userData={userData}
+							requirements={requirements}
+							memberRequirements={memberRequirements}
+						/>
+					</Scrollable>
+				</Grid>
+				<Grid item xs className={classes.checklistWrapper}>
+					<Scrollable>
+						<KycChecklistList
+							requirements={requirements}
+							memberRequirements={memberRequirements}
+							selectedAttributes={selectedAttributes}
+							onSelected={onSelected}
+							editItem={editItem}
+							addItem={addItem}
+						/>
+					</Scrollable>
+				</Grid>
+			</Grid>
 		);
 	}
 );

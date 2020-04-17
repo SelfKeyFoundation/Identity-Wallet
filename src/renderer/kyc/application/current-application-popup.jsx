@@ -17,6 +17,12 @@ const styles = theme => ({
 	},
 	headCell: {
 		paddingLeft: '15px'
+	},
+	popupClass: {
+		width: '990px'
+	},
+	closeButtonClass: {
+		left: '20px'
 	}
 });
 
@@ -28,7 +34,9 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		onSubmit,
 		open = true,
 		relyingParty,
+		userData,
 		requirements,
+		memberRequirements,
 		selectedAttributes,
 		agreement,
 		vendor,
@@ -76,7 +84,13 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		const submitDisabled = (agreement && agreementError && !agreementValue) || error;
 
 		return (
-			<Popup open={open} text={title} closeAction={onClose}>
+			<Popup
+				open={open}
+				text={title}
+				closeAction={onClose}
+				popupClass={classes.popupClass}
+				closeButtonClass={classes.closeButtonClass}
+			>
 				<Grid
 					container
 					className={classes.root}
@@ -90,6 +104,8 @@ export const CurrentApplicationPopup = withStyles(styles)(
 					</Grid>
 					<Grid item>
 						<KycChecklist
+							userData={userData}
+							memberRequirements={memberRequirements}
 							requirements={requirements}
 							selectedAttributes={selectedAttributes}
 							onSelected={onSelected}
