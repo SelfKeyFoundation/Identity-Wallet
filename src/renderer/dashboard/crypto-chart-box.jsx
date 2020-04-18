@@ -85,7 +85,7 @@ const styles = () => ({
 		textAlign: 'right'
 	},
 	smallText: {
-		marginTop: '0 !important',
+		marginTop: '-2px !important',
 		'& >div': {
 			fontSize: '14px'
 		}
@@ -133,7 +133,7 @@ const styles = () => ({
 		flexWrap: 'wrap',
 		justifyContent: 'space-between',
 		marginBottom: '30px',
-		maxHeight: '240px',
+		maxHeight: '250px',
 		overflowX: 'hidden',
 		overflowY: 'auto'
 	},
@@ -141,7 +141,7 @@ const styles = () => ({
 		marginRight: '10px'
 	},
 	tokenActionButtons: {
-		marginBottom: '40px',
+		marginBottom: '30px',
 		marginTop: '20px'
 	},
 	flex: {
