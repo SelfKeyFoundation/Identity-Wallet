@@ -18802,9 +18802,9 @@ select@^1.1.2:
     reset-jss "1.0.0"
     snyk "^1.193.2"
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#f6a7d3d8e2ec13e2155910ab276083ce85ba37af":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#5351b0c04b390053f3e4e8f0068c51a45df0f884":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#f6a7d3d8e2ec13e2155910ab276083ce85ba37af"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#5351b0c04b390053f3e4e8f0068c51a45df0f884"
   dependencies:
     "@material-ui/core" "4.9.9"
     "@material-ui/icons" "4.9.1"
