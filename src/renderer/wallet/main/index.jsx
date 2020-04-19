@@ -61,7 +61,7 @@ const styles = theme => ({
 		width: '100%'
 	},
 	bodySection: {
-		maxWidth: '1080px',
+		maxWidth: '1074px',
 		width: '100%'
 	},
 	'@media screen and (min-width: 1230px)': {
