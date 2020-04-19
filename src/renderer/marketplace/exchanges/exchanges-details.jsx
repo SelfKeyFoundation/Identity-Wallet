@@ -23,7 +23,7 @@ const styles = theme => ({
 	},
 
 	title: {
-		margin: '20px 20px 20px 12px'
+		margin: '20px 20px 20px 7px'
 	},
 
 	header: {
@@ -43,13 +43,14 @@ const styles = theme => ({
 		fontWeight: 400,
 		lineHeight: 1.67,
 		margin: 0,
-		padding: '44px 16px 16px',
+		padding: '44px 30px 16px',
 		textAlign: 'justify',
 		width: '100%'
 	},
 
 	formControl: {
-		marginRight: '100px'
+		marginRight: '100px',
+		maxWidth: '45%'
 	},
 
 	divider: {
@@ -147,10 +148,6 @@ const styles = theme => ({
 		top: '120px'
 	},
 
-	descriptionContainer: {
-		width: '100%'
-	},
-
 	bottomSpace: {
 		marginBottom: '20px'
 	},
@@ -224,7 +221,7 @@ const styles = theme => ({
 		alignItems: 'center',
 		display: 'flex',
 		height: '44px',
-		marginLeft: '12px'
+		marginLeft: '22px'
 	},
 	defaultIcon: {
 		alignItems: 'center',
@@ -525,18 +522,13 @@ class ExchangesDetailsComponent extends PureComponent {
 							alignItems="flex-start"
 							spacing={4}
 						>
-							<Grid
-								item
-								id="description"
-								xs={12}
-								className={classes.descriptionContainer}
-							>
+							<Grid item id="description" xs={12}>
 								<Grid
 									container
 									direction="row"
-									justify="center"
+									justify="space-between"
 									alignItems="flex-start"
-									spacing={5}
+									spacing={4}
 								>
 									<Grid item xs={8}>
 										<Typography

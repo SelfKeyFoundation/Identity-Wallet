@@ -15,7 +15,7 @@ const styles = theme => ({
 		height: '30px'
 	},
 	noRightPadding: {
-		padding: '0 0 0 20px'
+		padding: '0 0 0 20px !important'
 	},
 	link: {
 		cursor: 'pointer'
@@ -80,11 +80,6 @@ const styles = theme => ({
 		maxWidth: '120px',
 		paddingLeft: '15px',
 		whiteSpace: 'pre-line'
-	},
-	tableRow: {
-		'& td': {
-			padding: '0 15px'
-		}
 	}
 });
 
@@ -139,7 +134,7 @@ export const ExchangesListItem = withStyles(styles)(
 			fiatPayments[0] !== 'Not Available';
 
 		return (
-			<TableRow key={name} className={classes.tableRow}>
+			<TableRow key={name}>
 				<TableCell className={classes.noRightPadding}>{icon}</TableCell>
 				<TableCell className={classes.exchangeName}>
 					<Typography variant="h6">{name}</Typography>

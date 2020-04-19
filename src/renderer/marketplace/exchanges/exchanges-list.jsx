@@ -40,10 +40,7 @@ const styles = theme => ({
 	content: {
 		marginTop: '30px',
 		margin: 0,
-		width: '100%',
-		'& th': {
-			padding: '0 15px'
-		}
+		width: '100%'
 	},
 	button: {
 		color: '#93b0c1',
@@ -148,7 +145,7 @@ export const ExchangesList = withStyles(styles)(
 												<TableCell className={classes.icon}>
 													&nbsp;
 												</TableCell>
-												<TableCell>
+												<TableCell style={{ paddingLeft: '15px' }}>
 													<Typography variant="overline">
 														Exchange
 													</Typography>
