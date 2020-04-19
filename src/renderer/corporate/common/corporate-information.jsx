@@ -7,6 +7,7 @@ import {
 	CardContent,
 	Typography,
 	Table,
+	TableCell,
 	TableHead,
 	TableBody,
 	IconButton,
@@ -17,7 +18,6 @@ import {
 	BookIcon,
 	SmallTableHeadRow,
 	SmallTableRow,
-	SmallTableCell,
 	EditTransparentIcon,
 	DeleteIcon
 } from 'selfkey-ui';
@@ -141,29 +141,29 @@ const CorporateInformation = withStyles(styles)(props => {
 							<Table>
 								<TableHead>
 									<SmallTableHeadRow>
-										<SmallTableCell variant="head">
+										<TableCell variant="head">
 											<Typography variant="overline">Information</Typography>
-										</SmallTableCell>
-										<SmallTableCell variant="head">
+										</TableCell>
+										<TableCell variant="head">
 											<Typography variant="overline">Label</Typography>
-										</SmallTableCell>
-										<SmallTableCell variant="head">
+										</TableCell>
+										<TableCell variant="head">
 											<Typography variant="overline">Last edited</Typography>
-										</SmallTableCell>
-										<SmallTableCell variant="head" align="right">
+										</TableCell>
+										<TableCell variant="head" align="right">
 											<Typography variant="overline">Actions</Typography>
-										</SmallTableCell>
+										</TableCell>
 									</SmallTableHeadRow>
 								</TableHead>
 								<TableBody>
 									{attributes.map(attr => (
 										<SmallTableRow key={attr.id}>
-											<SmallTableCell>
+											<TableCell>
 												<Typography variant="subtitle1">
 													{renderAttributeTitle(attr)}
 												</Typography>
-											</SmallTableCell>
-											<SmallTableCell>
+											</TableCell>
+											<TableCell>
 												<Typography
 													variant="subtitle1"
 													className={classes.noOverflow}
@@ -171,13 +171,13 @@ const CorporateInformation = withStyles(styles)(props => {
 												>
 													{renderAttributeLabel(attr)}
 												</Typography>
-											</SmallTableCell>
-											<SmallTableCell>
+											</TableCell>
+											<TableCell>
 												<Typography variant="subtitle1">
 													{renderLastUpdateDate(attr)}
 												</Typography>
-											</SmallTableCell>
-											<SmallTableCell align="right">
+											</TableCell>
+											<TableCell align="right">
 												{canEdit(attr.type, attributeOptions) && (
 													<IconButton
 														id="editButton"
@@ -194,7 +194,7 @@ const CorporateInformation = withStyles(styles)(props => {
 														<DeleteIcon />
 													</IconButton>
 												)}
-											</SmallTableCell>
+											</TableCell>
 										</SmallTableRow>
 									))}
 								</TableBody>
