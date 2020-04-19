@@ -32,7 +32,7 @@ const styles = theme => ({
 	},
 	content: {
 		background: '#262F39',
-		padding: '22px 30px',
+		padding: '45px 30px 50px',
 		width: '100%',
 		justifyContent: 'space-between',
 		boxSizing: 'border-box',
@@ -62,6 +62,9 @@ const styles = theme => ({
 	},
 	certificateIcon: {
 		marginRight: '18px'
+	},
+	contentHeader: {
+		marginBottom: '40px'
 	}
 });
 
@@ -139,48 +142,39 @@ export const IncorporationsDetailsPage = withStyles(styles)(props => {
 						spacing={5}
 						className={classes.content}
 					>
-						<Grid item>
-							<Grid
-								container
-								direction="row"
-								justify="space-between"
-								alignItems="flex-start"
-							>
-								<Grid item>
-									<ResumeBox itemSets={resume} />
-								</Grid>
-								<Grid item className={classes.applyButton}>
-									<IncorporationsApplicationButton
-										canIncorporate={canIncorporate}
-										price={price}
-										loading={loading}
-										startApplication={startApplication}
-										keyRate={keyRate}
-									/>
-									<ProgramPrice
-										id="fees"
-										price={price}
-										rate={keyRate}
-										label="Pricing: $"
-									/>
-								</Grid>
+						<Grid
+							container
+							direction="row"
+							justify="space-between"
+							alignItems="flex-start"
+							className={classes.contentHeader}
+						>
+							<Grid item>
+								<ResumeBox itemSets={resume} />
+							</Grid>
+							<Grid item className={classes.applyButton}>
+								<IncorporationsApplicationButton
+									canIncorporate={canIncorporate}
+									price={price}
+									loading={loading}
+									startApplication={startApplication}
+									keyRate={keyRate}
+								/>
+								<ProgramPrice
+									id="fees"
+									price={price}
+									rate={keyRate}
+									label="Pricing: $"
+								/>
 							</Grid>
 						</Grid>
-						<Grid item>
-							<IncorporationsDetailsTabs
-								{...props}
-								tab={tab}
-								onTabChange={onTabChange}
-							/>
-						</Grid>
-						<Grid item>
-							<MarketplaceKycRequirements
-								requirements={kycRequirements}
-								loading={loading}
-								templateId={templateId}
-								title="KYC Requirements and Forms"
-							/>
-						</Grid>
+						<IncorporationsDetailsTabs {...props} tab={tab} onTabChange={onTabChange} />
+						<MarketplaceKycRequirements
+							requirements={kycRequirements}
+							loading={loading}
+							templateId={templateId}
+							title="KYC Requirements and Forms"
+						/>
 					</Grid>
 				</Grid>
 			</Grid>
