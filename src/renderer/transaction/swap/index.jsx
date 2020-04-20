@@ -407,8 +407,11 @@ export class TokenSwapComponent extends PureComponent {
 	};
 
 	handleSwap = async () => {
+		const { dispatch, sourceToken, trezorAccountIndex } = this.props;
 		const transaction = this.props.transaction.transactions[0].tx;
-		await this.props.dispatch(transactionOperations.sendCustomTransaction({ transaction }));
+		await dispatch(transactionOperations.init({ trezorAccountIndex, sourceToken }));
+		await dispatch(transactionOperations.setAddress(transaction.to));
+		await dispatch(transactionOperations.sendCustomTransaction({ transaction }));
 	};
 
 	render() {
