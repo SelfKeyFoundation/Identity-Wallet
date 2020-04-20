@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import BN from 'bignumber.js';
+import config from 'common/config';
 import { connect } from 'react-redux';
 import { getLocale } from 'common/locale/selectors';
 import { getWallet } from 'common/wallet/selectors';
@@ -8,7 +9,6 @@ import { Popup, InputTitle } from '../../common';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { tokenSwapOperations, tokenSwapSelectors } from 'common/token-swap';
-import { convertExponentialToDecimal } from 'common/utils/exponential-to-decimal';
 import { transactionOperations } from 'common/transaction';
 import { MenuItem, Grid, Select, Input, Typography, Button, Divider } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -34,18 +34,28 @@ const styles = theme => ({
 		backgroundColor: '#1E262E',
 		color: '#FFFFFF'
 	},
+	tokenMaxContainer: {
+		display: 'flex'
+	},
 	tokenMax: {
 		display: 'flex',
-		flexWrap: 'nowrap',
-		marginBottom: '0.5em',
+		flexWrap: 'wrap',
+		width: '100%',
 		'& svg': {
 			height: '0.7em !important',
 			width: '0.7em !important'
 		}
 	},
+	tokenMaxSubsection: {
+		flexBasis: '100%',
+		display: 'flex',
+		justifyContent: 'space-between',
+		marginTop: '0.25em'
+	},
 	amountInput: {
 		borderTopRightRadius: '0',
-		borderBottomRightRadius: '0'
+		borderBottomRightRadius: '0',
+		width: '420px'
 	},
 	maxSourceInput: {
 		border: '1px solid #384656',
@@ -72,9 +82,6 @@ const styles = theme => ({
 			fontWeight: 'bold'
 		}
 	},
-	separator: {
-		marginRight: '1em'
-	},
 	errorText: {
 		color: theme.palette.error.main,
 		fontFamily: 'Lato',
@@ -94,6 +101,25 @@ const styles = theme => ({
 		alignItems: 'center',
 		marginBottom: '20px'
 	},
+	feesValues: {
+		textAlign: 'right',
+		'& p': {
+			fontWeight: 'bold'
+		}
+	},
+	smallFeesValues: {
+		textAlign: 'right',
+		marginTop: '0.5em',
+		'& p': {
+			fontWeight: 'bold',
+			fontSize: '0.7em',
+			lineHeight: '1',
+			marginTop: '1em'
+		},
+		'& h6': {
+			fontSize: '0.6em'
+		}
+	},
 	fiatFee: {
 		fontWeight: 'bold',
 		'& div': {
@@ -105,22 +131,81 @@ const styles = theme => ({
 		textAlign: 'right'
 	},
 	rate: {
-		fontSize: '0.7em'
+		fontSize: '0.7em',
+		'& div': {
+			display: 'inline-block',
+			marginRight: '.5em'
+		}
+	},
+	valueDisplay: {
+		'& div': {
+			display: 'inline-block',
+			marginRight: '.5em'
+		}
+	},
+	maxSwapDisplay: {
+		marginRight: '60px'
+	},
+	separator: {
+		marginRight: '.5em'
 	}
 });
 
 const KEY_ADDRESS = '0x4cc19356f2d37338b9802aa8e8fc58b0373296e7';
 
-const formatValue = value => {
-	if (!value) {
-		return '';
-	}
-	const v = value.toLocaleString('en-US', {
-		minimumFractionDigits: 0,
-		maximumFractionDigits: 4
-	});
-	return `${convertExponentialToDecimal(v)}`;
-};
+const TokenValue = withStyles(styles)(
+	({
+		classes,
+		prefix,
+		value = 0,
+		locale,
+		token,
+		separator = false,
+		variant = 'subtitle2',
+		color = 'secondary',
+		fractionDigits = 8
+	}) => (
+		<Typography variant={variant} color={color} className={classes.valueDisplay}>
+			{separator && <span className={classes.separator}>|</span>}
+			{prefix && <span>{prefix}</span>}
+			<NumberFormat
+				locale={locale}
+				priceStyle="decimal"
+				currency={token}
+				value={value}
+				fractionDigits={fractionDigits}
+				className="token-value"
+			/>
+			{token}
+		</Typography>
+	)
+);
+
+const FiatValue = withStyles(styles)(
+	({
+		classes,
+		value,
+		currency,
+		separator = false,
+		locale,
+		variant = 'subtitle2',
+		color = 'secondary',
+		fractionDigits = 2
+	}) => (
+		<Typography variant={variant} color={color} className={classes.valueDisplay}>
+			{separator && <span className={classes.separator}>|</span>}
+			<NumberFormat
+				locale={locale}
+				priceStyle="currency"
+				currency={currency}
+				value={value}
+				fractionDigits={fractionDigits}
+				className="fiat-value"
+			/>
+			{currency}
+		</Typography>
+	)
+);
 
 export class TokenSwapComponent extends PureComponent {
 	state = {
@@ -166,8 +251,18 @@ export class TokenSwapComponent extends PureComponent {
 	getAmount = () => {
 		const { sourceCurrency, amount } = this.state;
 		const { fiatCurrency, sourceToken } = this.props;
+		let filteredAmount = amount;
+		if (sourceCurrency === fiatCurrency) {
+			filteredAmount = Math.min(filteredAmount, config.totleMaxSwap);
+			filteredAmount = this.getCryptoValue(filteredAmount, sourceToken);
+		} else {
+			filteredAmount = Math.min(
+				amount,
+				this.getCryptoValue(config.totleMaxSwap, sourceToken)
+			);
+		}
 
-		return sourceCurrency === fiatCurrency ? this.getCryptoValue(amount, sourceToken) : amount;
+		return filteredAmount;
 	};
 
 	/**
@@ -211,12 +306,15 @@ export class TokenSwapComponent extends PureComponent {
 	handleTargetTokenChange = event => this.setTargetToken(event.target.value);
 
 	handleAmountChange = event => {
+		const { fiatCurrency, sourceToken } = this.props;
 		let value = event.target.value;
 		let maxAmount = 0;
-		if (this.state.sourceCurrency === this.props.fiatCurrency) {
-			maxAmount = this.getTokenFiatBalance(this.props.sourceToken);
+		if (this.state.sourceCurrency === fiatCurrency) {
+			maxAmount = this.getTokenFiatBalance(sourceToken);
+			maxAmount = Math.min(maxAmount, config.totleMaxSwap);
 		} else {
-			maxAmount = this.getTokenBalance(this.props.sourceToken);
+			maxAmount = this.getTokenBalance(sourceToken);
+			maxAmount = Math.min(maxAmount, this.getCryptoValue(config.totleMaxSwap, sourceToken));
 		}
 		if (isNaN(Number(value))) {
 			value = 0;
@@ -234,9 +332,11 @@ export class TokenSwapComponent extends PureComponent {
 		let maxAmount = 0;
 		if (this.state.sourceCurrency === fiatCurrency) {
 			maxAmount = this.getTokenFiatBalance(sourceToken);
+			maxAmount = Math.min(maxAmount, config.totleMaxSwap);
 			this.setState({ amount: maxAmount });
 		} else {
 			maxAmount = this.getTokenBalance(sourceToken);
+			maxAmount = Math.min(maxAmount, this.getCryptoValue(config.totleMaxSwap, sourceToken));
 			this.setState({ amount: maxAmount });
 		}
 		this.props.dispatch(tokenSwapOperations.clearOperation());
@@ -261,7 +361,11 @@ export class TokenSwapComponent extends PureComponent {
 		const activeTokens = tokens.filter(token => token.recordState === 1);
 
 		return activeTokens.map(token => (
-			<MenuItem key={token.symbol} value={token.symbol} className={classes.selectItem}>
+			<MenuItem
+				key={`${token.symbol}-${token.createdAt}`}
+				value={token.symbol}
+				className={classes.selectItem}
+			>
 				{`${token.symbol} - ${token.name}`}
 			</MenuItem>
 		));
@@ -277,7 +381,11 @@ export class TokenSwapComponent extends PureComponent {
 			.filter(t => t.symbol !== sourceToken);
 
 		return activeTokens.map(token => (
-			<MenuItem key={token.symbol} value={token.symbol} className={classes.selectItem}>
+			<MenuItem
+				key={`${token.symbol}-${token.name}`}
+				value={token.symbol}
+				className={classes.selectItem}
+			>
 				{`${token.symbol} - ${token.name}`}
 			</MenuItem>
 		));
@@ -304,7 +412,8 @@ export class TokenSwapComponent extends PureComponent {
 	};
 
 	render() {
-		const { classes, closeAction } = this.props;
+		const { classes, closeAction, sourceToken, targetToken, fiatCurrency, locale } = this.props;
+		const { amount } = this.state;
 		return (
 			<Popup closeAction={closeAction} text="Swap your tokens">
 				<Grid container direction="column" justify="flex-start" alignItems="flex-start">
@@ -313,7 +422,7 @@ export class TokenSwapComponent extends PureComponent {
 							<InputTitle title="Token" />
 							<Select
 								className={classes.cryptoSelect}
-								value={this.findTokenSymbol(this.props.sourceToken)}
+								value={this.findTokenSymbol(sourceToken)}
 								onChange={e => this.handleSourceTokenChange(e)}
 								name="sourceToken"
 								disableUnderline
@@ -327,7 +436,7 @@ export class TokenSwapComponent extends PureComponent {
 							<InputTitle title="Change to" />
 							<Select
 								className={classes.cryptoSelect}
-								value={this.findTokenSymbol(this.props.targetToken)}
+								value={this.findTokenSymbol(targetToken)}
 								onChange={e => this.handleTargetTokenChange(e)}
 								name="targetToken"
 								disableUnderline
@@ -351,50 +460,79 @@ export class TokenSwapComponent extends PureComponent {
 									</Typography>
 								</Grid>
 								<Grid item className={classes.availableAmountUsd}>
-									<Typography variant="body2" color="secondary">
-										<NumberFormat
-											locale={this.props.locale}
-											priceStyle="currency"
-											currency={this.props.fiatCurrency}
-											value={this.getTokenFiatBalance(this.props.sourceToken)}
-											fractionDigits={2}
-										/>
-										{this.props.fiatCurrency}
-									</Typography>
+									<FiatValue
+										variant="body2"
+										locale={locale}
+										currency={fiatCurrency}
+										value={this.getTokenFiatBalance(sourceToken)}
+									/>
 								</Grid>
-								<Grid item style={{}}>
-									<Typography variant="subtitle2" color="secondary">
-										<span className={classes.separator}>|</span>
-										{formatValue(
-											this.getTokenBalance(this.props.sourceToken)
-										)}{' '}
-										{this.props.sourceToken}
-									</Typography>
+								<Grid item>
+									<TokenValue
+										value={this.getTokenBalance(sourceToken)}
+										separator={true}
+										locale={locale}
+										token={sourceToken}
+									/>
 								</Grid>
 							</Grid>
 						</div>
 						<div>
 							<InputTitle title="Amount" />
-							<div className={classes.tokenMax}>
-								<Input
-									type="text"
-									onChange={this.handleAmountChange}
-									value={this.state.amount.toString()}
-									placeholder="0.00"
-									className={classes.amountInput}
-									fullWidth
-								/>
-								<Button
-									onClick={this.handleSourceCurrencyClick}
-									variant="outlined"
-									size="large"
-									className={classes.maxSourceInput}
-								>
-									{this.state.sourceCurrency === this.props.sourceToken
-										? this.props.sourceToken
-										: this.props.fiatCurrency}
-									<TransferIcon />
-								</Button>
+							<div className={classes.tokenMaxContainer}>
+								<div className={classes.tokenMax}>
+									<Input
+										type="text"
+										onChange={this.handleAmountChange}
+										value={amount.toString()}
+										placeholder="0.00"
+										className={classes.amountInput}
+									/>
+									<Button
+										onClick={this.handleSourceCurrencyClick}
+										variant="outlined"
+										size="large"
+										className={classes.maxSourceInput}
+									>
+										{this.state.sourceCurrency === sourceToken
+											? sourceToken
+											: fiatCurrency}
+										<TransferIcon />
+									</Button>
+									<div className={classes.tokenMaxSubsection}>
+										<div>
+											{this.state.sourceCurrency === sourceToken &&
+												amount > 0 && (
+													<FiatValue
+														value={this.getFiatValue(
+															amount,
+															sourceToken
+														)}
+														currency={fiatCurrency}
+														locale={locale}
+													/>
+												)}
+											{this.state.sourceCurrency !== sourceToken &&
+												amount > 0 && (
+													<TokenValue
+														locale={locale}
+														value={this.getCryptoValue(
+															amount,
+															sourceToken
+														)}
+														token={sourceToken}
+													/>
+												)}
+										</div>
+										<Typography
+											variant="subtitle2"
+											color="secondary"
+											className={classes.maxSwapDisplay}
+										>
+											Max ${config.totleMaxSwap}/Swap
+										</Typography>
+									</div>
+								</div>
 								<Button
 									onClick={this.handleAllAmountClick}
 									variant="outlined"
@@ -404,6 +542,7 @@ export class TokenSwapComponent extends PureComponent {
 								</Button>
 							</div>
 						</div>
+
 						<Divider className={classes.divider} />
 						<Grid
 							container
@@ -424,29 +563,20 @@ export class TokenSwapComponent extends PureComponent {
 										Swap Fee
 									</Typography>
 									{this.props.transaction && (
-										<div>
-											<Typography
+										<div className={classes.feesValues}>
+											<FiatValue
+												locale={locale}
+												currency={fiatCurrency}
+												value={this.props.fee * this.props.ethRate}
 												variant="body2"
 												color="primary"
-												className={classes.fiatFee}
-											>
-												<NumberFormat
-													locale={this.props.locale}
-													priceStyle="currency"
-													currency={this.props.fiatCurrency}
-													value={this.props.fee * this.props.ethRate}
-													fractionDigits={15}
-												/>{' '}
-												{this.props.fiatCurrency}
-											</Typography>
+											/>
 											<div>
-												<Typography
-													variant="subtitle2"
-													color="secondary"
-													className={classes.ethFee}
-												>
-													{this.props.fee} ETH
-												</Typography>
+												<TokenValue
+													locale={locale}
+													token="ETH"
+													value={this.props.fee}
+												/>
 											</div>
 										</div>
 									)}
@@ -456,29 +586,20 @@ export class TokenSwapComponent extends PureComponent {
 										Network Transaction Fee
 									</Typography>
 									{this.props.transaction && (
-										<div>
-											<Typography
+										<div className={classes.feesValues}>
+											<FiatValue
+												locale={locale}
+												currency={fiatCurrency}
+												value={this.props.gas * this.props.ethRate}
 												variant="body2"
 												color="primary"
-												className={classes.fiatFee}
-											>
-												<NumberFormat
-													locale={this.props.locale}
-													priceStyle="currency"
-													currency={this.props.fiatCurrency}
-													value={this.props.gas * this.props.ethRate}
-													fractionDigits={15}
-												/>{' '}
-												{this.props.fiatCurrency}
-											</Typography>
+											/>
 											<div>
-												<Typography
-													variant="subtitle2"
-													color="secondary"
-													className={classes.ethFee}
-												>
-													{this.props.gas} ETH
-												</Typography>
+												<TokenValue
+													locale={locale}
+													token="ETH"
+													value={this.props.gas}
+												/>
 											</div>
 										</div>
 									)}
@@ -487,31 +608,44 @@ export class TokenSwapComponent extends PureComponent {
 									<Typography variant="body1">Amount Total</Typography>
 									{this.props.transaction && (
 										<div>
-											<Typography
-												variant="body2"
-												color="primary"
-												className={classes.fiatFee}
-											>
-												<NumberFormat
-													locale={this.props.locale}
-													priceStyle="currency"
-													currency={this.props.fiatCurrency}
+											<div className={classes.feesValues}>
+												<FiatValue
+													locale={locale}
+													currency={fiatCurrency}
+													value={this.getFiatValue(
+														this.getAmount(),
+														sourceToken
+													)}
+													variant="body2"
+													color="primary"
+												/>
+												<div>
+													<TokenValue
+														locale={locale}
+														token={sourceToken}
+														value={this.getAmount()}
+													/>
+												</div>
+											</div>
+
+											<div className={classes.smallFeesValues}>
+												<FiatValue
+													locale={locale}
+													currency={fiatCurrency}
 													value={
 														(this.props.gas + this.props.fee) *
 														this.props.ethRate
 													}
-													fractionDigits={15}
-												/>{' '}
-												{this.props.fiatCurrency}
-											</Typography>
-											<div>
-												<Typography
-													variant="subtitle2"
-													color="secondary"
-													className={classes.ethFee}
-												>
-													{this.props.gas + this.props.fee} ETH
-												</Typography>
+													variant="body2"
+													color="primary"
+												/>
+												<div>
+													<TokenValue
+														locale={locale}
+														token="ETH"
+														value={this.props.gas + this.props.fee}
+													/>
+												</div>
 											</div>
 										</div>
 									)}
@@ -560,9 +694,12 @@ export class TokenSwapComponent extends PureComponent {
 									color="secondary"
 									className={classes.rate}
 								>
-									Exchange Rate: 1 {this.props.sourceToken} ={' '}
-									{formatValue(parseFloat(this.props.rate))}{' '}
-									{this.props.targetToken}
+									<TokenValue
+										prefix={`Exchange Rate: 1 ${sourceToken} = `}
+										locale={locale}
+										value={this.props.rate}
+										token={targetToken}
+									/>
 								</Typography>
 							)}
 						</Grid>
