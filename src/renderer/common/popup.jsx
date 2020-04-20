@@ -17,9 +17,6 @@ const styles = theme => ({
 			background: `linear-gradient(135deg, rgba(43, 53, 64, 0.9) 0%, rgba(30, 38, 46, 0.9) 100%)`
 		}
 	},
-	closeButton: {
-		top: '20px'
-	},
 	header: {
 		alignItems: 'center',
 		display: 'flex',
