@@ -37,15 +37,6 @@
 			"svgIcon": "https://dl.airtable.com/wghrFU8FRI6rSM1MnYp6_icon-exchange-bank.svg.png"
 		},
 		{
-			"id": "translations_individual",
-			"name": "translations",
-			"title": "Translations",
-			"description": "Professionally translate your text or documents into the required language.",
-			"entityType": "individual",
-			"active": false,
-			"svgIcon": "https://dl.airtable.com/gqwI3QPQwmwc4Jsu4vep_icon-exchange-translations.svg.png"
-		},
-		{
 			"id": "notaries_individual",
 			"name": "notaries",
 			"title": "Notaries",
@@ -53,6 +44,15 @@
 			"entityType": "individual",
 			"active": false,
 			"svgIcon": "https://dl.airtable.com/cQcRdsGeQSeM3ekJFo3E_icon-exchange-notaries.svg.png"
+		},
+		{
+			"id": "loans_individual",
+			"name": "loans",
+			"title": "Loans",
+			"description": "Start earning interest on your cryptocurrency or get a cash loan with you crpto assets as collaterals.",
+			"entityType": "individual",
+			"active": true,
+			"svgIcon": "https://dl.airtable.com/.attachments/f3f557d642883b0fb004c49dfe3b89aa/6547f314/icon-marketplace-loans.svg"
 		},
 		{
 			"id": "exchanges_corporate",
@@ -69,7 +69,7 @@
 			"title": "Incorporation",
 			"description": "Find the best jurisdiction to set up your business. Filter by corporate ownership, minimum shareholders, accounting requirements, privacy, tax rates, offshore tax laws, and more.",
 			"entityType": "corporate",
-			"active": false,
+			"active": true,
 			"svgIcon": "https://dl.airtable.com/dt74JnTkRhae2c9zvrgW_icon-exchange-incorporations.svg.png"
 		},
 		{
@@ -91,15 +91,6 @@
 			"svgIcon": "https://dl.airtable.com/wghrFU8FRI6rSM1MnYp6_icon-exchange-bank.svg.png"
 		},
 		{
-			"id": "translations_corporate",
-			"name": "translations",
-			"title": "Translations",
-			"description": "Professionally translate your text or documents into the required language.",
-			"entityType": "corporate",
-			"active": false,
-			"svgIcon": "https://dl.airtable.com/gqwI3QPQwmwc4Jsu4vep_icon-exchange-translations.svg.png"
-		},
-		{
 			"id": "notaries_corporate",
 			"name": "notaries",
 			"title": "Notaries",
@@ -107,6 +98,15 @@
 			"entityType": "corporate",
 			"active": false,
 			"svgIcon": "https://dl.airtable.com/cQcRdsGeQSeM3ekJFo3E_icon-exchange-notaries.svg.png"
+		},
+		{
+			"id": "loans_corporate",
+			"name": "loans",
+			"title": "Loans",
+			"description": "Start earning interest on your cryptocurrency or get a cash loan with you crpto assets as collaterals. ",
+			"entityType": "corporate",
+			"active": false,
+			"svgIcon": "https://dl.airtable.com/.attachments/f3f557d642883b0fb004c49dfe3b89aa/6547f314/icon-marketplace-loans.svg"
 		}
 	]
 }
