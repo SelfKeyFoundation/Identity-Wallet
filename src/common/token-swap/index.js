@@ -1,3 +1,4 @@
+import config from 'common/config';
 import { getGlobalContext } from 'common/context';
 import { createAliasedAction } from 'electron-redux';
 import BN from 'bignumber.js';
@@ -88,6 +89,7 @@ const swapTokensOperation = ({ address, amount, decimal }) => async (dispatch, g
 
 	const sourceAsset = tokenSwapSelectors.selectSource(getState());
 	const destinationAsset = tokenSwapSelectors.selectTarget(getState());
+	const partnerContractAddress = config.totlePartnerContract;
 
 	const ctx = getGlobalContext();
 	const swapRequestPayload = {
@@ -95,7 +97,11 @@ const swapTokensOperation = ({ address, amount, decimal }) => async (dispatch, g
 		destinationAsset,
 		sourceAmount: toBaseUnit(amount, decimal)
 	};
-	const request = await ctx.TotleSwapService.swap(address, swapRequestPayload);
+	const request = await ctx.TotleSwapService.swap(
+		address,
+		swapRequestPayload,
+		partnerContractAddress
+	);
 
 	if (!request.success) {
 		await dispatch(tokenSwapActions.setError(request.response.message));
