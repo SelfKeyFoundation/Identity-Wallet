@@ -137,6 +137,7 @@ class CurrentApplicationComponent extends PureComponent {
 						open={true}
 						onClose={this.handlePopupClose}
 						typeId={this.state.typeId}
+						identityId={this.state.identityId}
 						isDocument={this.state.isDocument}
 					/>
 				)}

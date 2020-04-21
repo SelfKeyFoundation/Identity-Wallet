@@ -119,7 +119,7 @@ export const KycChecklistItemLabel = withStyles(styles)(
 						<Button
 							color="primary"
 							size="small"
-							onClick={() => addItem(item)}
+							onClick={() => addItem(item, selectedIdentityId)}
 							className={classes.duplicateAddItemBtnSmall}
 						>
 							+ Add Item
@@ -156,7 +156,7 @@ export const KycChecklistItemLabel = withStyles(styles)(
 					<Button
 						color="primary"
 						size="small"
-						onClick={() => addItem(item)}
+						onClick={() => addItem(item, selectedIdentityId)}
 						className={classes.duplicateAddItemBtnSmall}
 					>
 						+ Add Item
@@ -204,7 +204,10 @@ export const KycChecklistItem = withStyles(styles)(
 				</SmallTableCell>
 				<SmallTableCell className={classes.editColumn}>
 					<Typography variant="subtitle1">
-						<IconButton aria-label="Add" onClick={event => addItem(item)}>
+						<IconButton
+							aria-label="Add"
+							onClick={event => addItem(item, selectedIdentityId)}
+						>
 							<MuiAddIcon />
 						</IconButton>
 						{!itemEmpty ? (
