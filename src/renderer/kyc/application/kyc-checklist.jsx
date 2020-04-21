@@ -315,12 +315,19 @@ export const KycMembersListItem = withStyles(styles)(({ classes, item, onClick }
 ));
 
 export const KycMembersList = withStyles(styles)(
-	({ userData, requirements, memberRequirements, onMemberClick, selectedIdentityId = null }) => {
+	({
+		userData,
+		requirements,
+		memberRequirements,
+		onMemberClick,
+		selectedIdentityId = null,
+		selectedTemplate = null
+	}) => {
 		const members = memberRequirements.map(r => ({
 			id: r.id,
 			name: r.userData.name,
 			positions: r.positions,
-			selected: r.id === selectedIdentityId,
+			selected: r.id === selectedIdentityId && r.template === selectedTemplate,
 			warning: requirementsHaveWarning(r.requirements || [])
 		}));
 		members.unshift({
@@ -346,14 +353,14 @@ export const KycMembersList = withStyles(styles)(
 class KycChecklistComponent extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { selectedIdentityId: null };
+		this.state = { selectedIdentityId: null, selectedTemplate: null };
 	}
 
 	handleMemberClick = member => {
 		if (member.id === 'main-company') {
-			return this.setState({ selectedIdentityId: null });
+			return this.setState({ selectedIdentityId: null, selectedTemplate: null });
 		}
-		return this.setState({ selectedIdentityId: member.id });
+		return this.setState({ selectedIdentityId: member.id, selectedTemplate: member.template });
 	};
 
 	render() {
@@ -368,14 +375,17 @@ class KycChecklistComponent extends React.Component {
 			addItem
 		} = this.props;
 
-		const { selectedIdentityId } = this.state;
+		const { selectedIdentityId, selectedTemplate } = this.state;
 
 		let displayRequirements = requirements;
 
 		if (selectedIdentityId) {
 			displayRequirements =
-				(memberRequirements.find(m => m.id === selectedIdentityId) || {}).requirements ||
-				[];
+				(
+					memberRequirements.find(
+						m => m.id === selectedIdentityId && m.template === selectedTemplate
+					) || {}
+				).requirements || [];
 		}
 
 		if (!memberRequirements) {
@@ -407,6 +417,7 @@ class KycChecklistComponent extends React.Component {
 							requirements={requirements}
 							memberRequirements={memberRequirements}
 							selectedIdentityId={selectedIdentityId}
+							selectedTemplate={selectedTemplate}
 						/>
 					</Scrollable>
 				</Grid>
@@ -415,6 +426,7 @@ class KycChecklistComponent extends React.Component {
 						<KycChecklistList
 							requirements={displayRequirements}
 							selectedIdentityId={selectedIdentityId}
+							selectedTemplate={selectedTemplate}
 							selectedAttributes={selectedAttributes}
 							onSelected={onSelected}
 							editItem={editItem}
