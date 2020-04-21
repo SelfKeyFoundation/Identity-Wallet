@@ -82,10 +82,11 @@ class CurrentApplicationComponent extends PureComponent {
 		if (selected[uiId] === item) return;
 		this.setState({ selected: { ...selected, [uiId]: item } });
 	};
-	handleEdit = item => {
+	handleEdit = (item, identityId) => {
+		const attrName = `${identityId || ''}${item.uiId}`;
 		this.setState({
 			showEditAttribute: true,
-			editAttribute: this.state.selected[item.id] || item.options[0]
+			editAttribute: this.state.selected[attrName] || item.options[0]
 		});
 	};
 	handleAdd = (item, identityId) => {

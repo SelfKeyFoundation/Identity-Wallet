@@ -211,7 +211,10 @@ export const KycChecklistItem = withStyles(styles)(
 							<MuiAddIcon />
 						</IconButton>
 						{!itemEmpty ? (
-							<IconButton aria-label="Edit" onClick={event => editItem(item)}>
+							<IconButton
+								aria-label="Edit"
+								onClick={event => editItem(item, selectedIdentityId)}
+							>
 								<MuiEditIcon />
 							</IconButton>
 						) : null}
