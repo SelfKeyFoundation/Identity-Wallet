@@ -34,9 +34,7 @@ export const getTokens = state => {
 	return [wallet, ...tokens];
 };
 
-const getTokensForDisplay = state => {
-	return getTokens(state).filter(token => token.recordState);
-};
+const getTokensForDisplay = state => getTokens(state).filter(token => token.recordState);
 
 const getFilteredTokens = state => {
 	const tokens = getTokensForDisplay(state);
