@@ -321,7 +321,7 @@ export const KycMembersList = withStyles(styles)(
 			name: r.userData.name,
 			positions: r.positions,
 			selected: r.id === selectedIdentityId,
-			warning: requirementsHaveWarning(r.requirements)
+			warning: requirementsHaveWarning(r.requirements || [])
 		}));
 		members.unshift({
 			id: 'main-company',

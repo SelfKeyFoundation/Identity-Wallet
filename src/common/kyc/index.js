@@ -150,20 +150,24 @@ export const kycSelectors = {
 			return { ...m, userData };
 		});
 
+		const mainUserData = this.selectKYCUserData(state, identity.id);
+		const mainEntityType = mainUserData.entityType;
+
 		const { memberTemplates } = template;
 
 		// build kyc requirements tree for all members
 		const requirements = members.reduce((acc, curr) => {
-			const isCorporate = curr.type === 'corporate';
-			const { positions, userData = {} } = curr;
-			const { entityType } = userData;
+			const { positions } = curr;
 
 			// match all possible member templates to current member
 			const matchedTemplates = memberTemplates.filter(t => {
-				if (t.legalEntityTypes.length !== 0 && !isCorporate) {
+				if (!t.template || t.memberType !== curr.type) {
 					return false;
 				}
-				if (isCorporate && !t.legalEntityTypes.includes((entityType || '').toUpperCase())) {
+				if (
+					t.legalEntityTypes.length === 0 ||
+					!t.legalEntityTypes.includes(mainEntityType)
+				) {
 					return false;
 				}
 				return positions.reduce((acc, curr) => {
