@@ -325,9 +325,12 @@ export const KycMembersList = withStyles(styles)(
 	}) => {
 		const members = memberRequirements.map(r => ({
 			id: r.id,
+			template: r.memberTemplate ? r.memberTemplate.template : null,
 			name: r.userData.name,
 			positions: r.positions,
-			selected: r.id === selectedIdentityId && r.template === selectedTemplate,
+			selected:
+				r.id === selectedIdentityId &&
+				(r.memberTemplate ? r.memberTemplate.template : null) === selectedTemplate,
 			warning: requirementsHaveWarning(r.requirements || [])
 		}));
 		members.unshift({
@@ -341,7 +344,7 @@ export const KycMembersList = withStyles(styles)(
 		return (
 			<Grid container direction="column" alignItems="stretch" justify="flex-start">
 				{members.map(m => (
-					<Grid item key={m.id}>
+					<Grid item key={`${m.id}_${m.template}`}>
 						<KycMembersListItem item={m} onClick={onMemberClick} />
 					</Grid>
 				))}
@@ -360,6 +363,7 @@ class KycChecklistComponent extends React.Component {
 		if (member.id === 'main-company') {
 			return this.setState({ selectedIdentityId: null, selectedTemplate: null });
 		}
+		console.log('XXX', member);
 		return this.setState({ selectedIdentityId: member.id, selectedTemplate: member.template });
 	};
 
@@ -383,7 +387,9 @@ class KycChecklistComponent extends React.Component {
 			displayRequirements =
 				(
 					memberRequirements.find(
-						m => m.id === selectedIdentityId && m.template === selectedTemplate
+						m =>
+							m.id === selectedIdentityId &&
+							m.memberTemplate.template === selectedTemplate
 					) || {}
 				).requirements || [];
 		}
