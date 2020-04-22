@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { getLocale } from 'common/locale/selectors';
 import { PriceSummary } from 'selfkey-ui';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { UserPlusIcon, primary, CalendarDepositIcon, typography } from 'selfkey-ui';
 import { MarketplaceDisclaimer } from '../common/disclaimer';
 import { Grid, Divider, FormGroup, FormControl, Button, Typography } from '@material-ui/core';
@@ -23,7 +23,7 @@ const styles = theme => ({
 	},
 
 	title: {
-		margin: '20px 20px 20px 12px'
+		margin: '20px 20px 20px 7px'
 	},
 
 	header: {
@@ -43,13 +43,14 @@ const styles = theme => ({
 		fontWeight: 400,
 		lineHeight: 1.67,
 		margin: 0,
-		padding: '44px 16px 16px',
+		padding: '44px 30px 16px',
 		textAlign: 'justify',
 		width: '100%'
 	},
 
 	formControl: {
-		marginRight: '100px'
+		marginRight: '100px',
+		maxWidth: '45%'
 	},
 
 	divider: {
@@ -147,10 +148,6 @@ const styles = theme => ({
 		top: '120px'
 	},
 
-	descriptionContainer: {
-		width: '100%'
-	},
-
 	bottomSpace: {
 		marginBottom: '20px'
 	},
@@ -224,7 +221,7 @@ const styles = theme => ({
 		alignItems: 'center',
 		display: 'flex',
 		height: '44px',
-		marginLeft: '12px'
+		marginLeft: '22px'
 	},
 	defaultIcon: {
 		alignItems: 'center',
@@ -523,20 +520,15 @@ class ExchangesDetailsComponent extends PureComponent {
 							direction="column"
 							justify="flex-start"
 							alignItems="flex-start"
-							spacing={32}
+							spacing={4}
 						>
-							<Grid
-								item
-								id="description"
-								xs={12}
-								className={classes.descriptionContainer}
-							>
+							<Grid item id="description" xs={12}>
 								<Grid
 									container
 									direction="row"
-									justify="center"
+									justify="space-between"
 									alignItems="flex-start"
-									spacing={40}
+									spacing={4}
 								>
 									<Grid item xs={8}>
 										<Typography
@@ -567,7 +559,7 @@ class ExchangesDetailsComponent extends PureComponent {
 									direction="column"
 									justify="flex-start"
 									alignItems="flex-start"
-									spacing={16}
+									spacing={2}
 								>
 									<Grid item>
 										<Typography variant="h2">Exchange Highlights</Typography>
@@ -691,7 +683,7 @@ class ExchangesDetailsComponent extends PureComponent {
 										direction="column"
 										justify="flex-start"
 										alignItems="flex-start"
-										spacing={16}
+										spacing={2}
 									>
 										<Grid
 											item

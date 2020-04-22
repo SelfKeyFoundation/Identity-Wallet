@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Tabs, Tab } from '@material-ui/core';
+import { Tabs, Tab } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { NotarizationTypesTab } from './notarization-details-types-tab';
 import { NotarizationKeyTab } from './notarization-details-key-tab';
 

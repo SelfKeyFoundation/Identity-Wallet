@@ -1,6 +1,6 @@
 import React from 'react';
-
-import { withStyles, Grid, Typography, Button, IconButton } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { Grid, Typography, Button, IconButton } from '@material-ui/core';
 import { Popup } from '../../common';
 import { PaymentIcon, KeyTooltip, InfoTooltip } from 'selfkey-ui';
 
@@ -73,7 +73,7 @@ export const MarketplacePayment = withStyles(styles)(
 							direction="column"
 							justify="flex-start"
 							alignItems="stretch"
-							spacing={16}
+							spacing={2}
 						>
 							<Grid item>
 								<Typography variant="h1" className={classes.bottomSpace}>

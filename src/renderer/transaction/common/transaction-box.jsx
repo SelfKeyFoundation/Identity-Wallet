@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Grid, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Erc20Icon } from 'selfkey-ui';
 import Popup from '../../common/popup';
 
@@ -19,7 +20,7 @@ const styles = theme => ({
 
 const IconTitle = withStyles(styles)(({ classes, title }) => {
 	return (
-		<Grid container direction="row" justify="flex-start" alignItems="center" spacing={16}>
+		<Grid container direction="row" justify="flex-start" alignItems="center" spacing={2}>
 			<Grid item>
 				<Erc20Icon classes={{ root: classes.custom }} />
 			</Grid>

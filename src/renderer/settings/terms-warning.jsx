@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Grid, Typography, Button } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { Popup } from '../common';
@@ -50,7 +50,7 @@ class TermsWarning extends PureComponent {
 					direction="column"
 					justify="flex-start"
 					alignItems="flex-start"
-					spacing={8}
+					spacing={1}
 				>
 					<Grid item>
 						<Typography variant="body1" paragraph>
@@ -65,7 +65,7 @@ class TermsWarning extends PureComponent {
 							direction="row"
 							justify="flex-start"
 							alignItems="center"
-							spacing={24}
+							spacing={3}
 						>
 							<Grid item>
 								<Button

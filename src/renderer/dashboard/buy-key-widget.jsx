@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { featureIsEnabled } from 'common/feature-flags';
 import { Grid, Typography, Button } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { CustomIcon, CoinsIcon, ExchangeSmallIcon } from 'selfkey-ui';
 import BuyKeyPopup from './buy-key-popup-container';
 import TokenSwap from '../transaction/swap';

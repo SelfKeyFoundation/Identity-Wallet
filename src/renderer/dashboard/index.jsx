@@ -8,7 +8,7 @@ import DashboardMarketplaceApplications from './dashboard-marketplace-applicatio
 import DashboardSelfkeyProfile from './dashboard-selfkey-profile';
 import TransactionsHistory from '../transaction/transactions-history';
 import { Alert } from '../common';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { appSelectors } from 'common/app';
 
 const styles = theme => ({
@@ -75,7 +75,7 @@ const Dashboard = connect(mapStateToProps)(
 				direction="column"
 				justify="flex-start"
 				alignItems="center"
-				spacing={32}
+				spacing={4}
 			>
 				{props.info && props.info.version && (
 					<Grid item style={{ width: '100%' }}>
@@ -110,7 +110,7 @@ const Dashboard = connect(mapStateToProps)(
 					container
 					justify="space-between"
 					className={classes.padding}
-					spacing={10}
+					spacing={1}
 					wrap="nowrap"
 				>
 					<Grid item className={classes.leftSideWidget}>
@@ -145,7 +145,7 @@ const Dashboard = connect(mapStateToProps)(
 					container
 					justify="space-between"
 					className={classes.padding}
-					spacing={10}
+					spacing={1}
 					wrap="nowrap"
 				>
 					<Grid item className={classes.leftSideWidget} style={{ overflow: 'hidden' }}>

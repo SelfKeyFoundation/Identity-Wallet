@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Grid, Typography, Button, withStyles } from '@material-ui/core';
+import { Grid, Typography, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import history from 'common/store/history';
 import { Popup } from '../../../common';

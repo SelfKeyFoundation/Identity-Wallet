@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import NotarizationProcess from './notarization-process-popup';
 
 const styles = theme => ({});

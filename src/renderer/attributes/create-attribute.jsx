@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { PureComponent } from 'react';
-import { withStyles, Divider, Button, Grid, Select, Typography, Input } from '@material-ui/core';
+import { Divider, Button, Grid, Select, Typography, Input } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { identityAttributes, jsonSchema } from 'common/identity/utils';
 import Form from 'react-jsonschema-form-material-theme';
 import transformErrors from './transform-errors';
@@ -238,7 +239,7 @@ class CreateAttributeComponent extends PureComponent {
 									{this.state.documentError}
 								</Typography>
 							)}
-							<Grid container spacing={24} className={classes.buttonContainer}>
+							<Grid container spacing={3} className={classes.buttonContainer}>
 								<Grid item>
 									<Button
 										variant="contained"

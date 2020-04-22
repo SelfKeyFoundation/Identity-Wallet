@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-	withStyles,
 	Typography,
 	ExpansionPanel,
 	ExpansionPanelSummary,
@@ -13,9 +12,11 @@ import {
 	List,
 	ListItem
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { typography } from 'selfkey-ui';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { Alert } from './alert';
+
 const styles = theme => ({
 	tabContent: {
 		marginTop: '15px',
@@ -338,7 +339,7 @@ export const Accordion = withStyles(styles)(({ classes, data, open, extraKYCRequ
 
 		<ExpansionPanelDetails className={classes.flexColumn}>
 			<br />
-			<Grid container spacing={32}>
+			<Grid container spacing={4}>
 				{data.account ? <Account data={data.account} /> : ''}
 				{data.accountOpening ? <AccountOpening data={data.accountOpening} /> : ''}
 			</Grid>

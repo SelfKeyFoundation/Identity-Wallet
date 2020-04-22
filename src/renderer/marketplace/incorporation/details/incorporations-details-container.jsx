@@ -6,7 +6,7 @@ import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorp
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { identitySelectors } from 'common/identity';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { marketplaceSelectors } from 'common/marketplace';
 import { IncorporationsDetailsPage } from './incorporations-details-page';
 

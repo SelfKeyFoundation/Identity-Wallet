@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { withStyles, Typography, Grid, List, ListItem } from '@material-ui/core';
+import { Typography, Grid, List, ListItem } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { PageLoading, sanitize } from '../../common';
 import 'flag-icon-css/css/flag-icon.css';
 

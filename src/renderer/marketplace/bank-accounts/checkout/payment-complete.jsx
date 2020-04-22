@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { HourGlassLargeIcon } from 'selfkey-ui';
 import { Popup } from '../../../common';

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import _ from 'lodash';
 import { CorporateMemberForm } from './corporate-member-form';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { push } from 'connected-react-router';
 import { appSelectors } from 'common/app';
 import { identityAttributes } from 'common/identity/utils';

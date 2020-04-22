@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Grid, CardHeader, CardContent, List, Divider, Card } from '@material-ui/core';
+import { Grid, CardHeader, CardContent, List, Divider, Card } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
 import { typography } from 'selfkey-ui';
 

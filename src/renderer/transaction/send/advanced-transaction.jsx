@@ -6,7 +6,7 @@ import { transactionOperations, transactionSelectors } from 'common/transaction'
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import {
 	MenuItem,
 	Select,
@@ -308,7 +308,7 @@ class TransactionSendBoxContainer extends PureComponent {
 					justify="center"
 					alignItems="center"
 					className={classes.actionButtonsContainer}
-					spacing={24}
+					spacing={3}
 				>
 					<Grid item>
 						<Button variant="contained" size="large" onClick={this.handleConfirm}>

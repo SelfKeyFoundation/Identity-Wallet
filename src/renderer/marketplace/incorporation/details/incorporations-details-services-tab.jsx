@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { sanitize } from '../../common';
 
 const styles = theme => ({

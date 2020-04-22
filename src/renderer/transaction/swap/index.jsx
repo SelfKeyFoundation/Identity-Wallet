@@ -12,7 +12,7 @@ import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { tokenSwapOperations, tokenSwapSelectors } from 'common/token-swap';
 import { transactionOperations } from 'common/transaction';
 import { MenuItem, Grid, Select, Input, Typography, Button, Divider } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { KeyboardArrowDown } from '@material-ui/icons';
 import { NumberFormat, TransferIcon } from 'selfkey-ui';
 
@@ -547,7 +547,7 @@ export class TokenSwapComponent extends PureComponent {
 							direction="column"
 							justify="center"
 							alignItems="center"
-							spacing={24}
+							spacing={3}
 						>
 							{this.props.error && (
 								<Grid item>
