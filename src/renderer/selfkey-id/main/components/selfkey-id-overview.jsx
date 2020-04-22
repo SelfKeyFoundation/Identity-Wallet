@@ -26,7 +26,6 @@ import {
 	IdCardIcon,
 	SmallTableHeadRow,
 	SmallTableRow,
-	SmallTableCell,
 	FileAudioIcon,
 	FileLinkWithModal
 } from 'selfkey-ui';
@@ -264,29 +263,26 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 												<Table>
 													<TableHead>
 														<SmallTableHeadRow>
-															<SmallTableCell variant="head">
+															<TableCell variant="head">
 																<Typography variant="overline">
 																	Type
 																</Typography>
-															</SmallTableCell>
-															<SmallTableCell variant="head">
+															</TableCell>
+															<TableCell variant="head">
 																<Typography variant="overline">
 																	Label
 																</Typography>
-															</SmallTableCell>
-															<SmallTableCell variant="head">
+															</TableCell>
+															<TableCell variant="head">
 																<Typography variant="overline">
 																	Last edited
 																</Typography>
-															</SmallTableCell>
-															<SmallTableCell
-																variant="head"
-																align="right"
-															>
+															</TableCell>
+															<TableCell variant="head" align="right">
 																<Typography variant="overline">
 																	Actions
 																</Typography>
-															</SmallTableCell>
+															</TableCell>
 														</SmallTableHeadRow>
 													</TableHead>
 													<TableBody>
@@ -294,7 +290,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 															basicAttributes.map(entry => {
 																return (
 																	<SmallTableRow key={entry.id}>
-																		<SmallTableCell
+																		<TableCell
 																			className={
 																				classes.labelCell
 																			}
@@ -306,8 +302,8 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 																						.title
 																				}
 																			</Typography>
-																		</SmallTableCell>
-																		<SmallTableCell
+																		</TableCell>
+																		<TableCell
 																			className={
 																				classes.labelCell
 																			}
@@ -317,15 +313,15 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 																					entry
 																				)}
 																			</Typography>
-																		</SmallTableCell>
-																		<SmallTableCell>
+																		</TableCell>
+																		<TableCell>
 																			<Typography variant="subtitle1">
 																				{this.renderLastUpdateDate(
 																					entry
 																				)}
 																			</Typography>
-																		</SmallTableCell>
-																		<SmallTableCell align="right">
+																		</TableCell>
+																		<TableCell align="right">
 																			<IconButton id="editButton">
 																				<EditTransparentIcon
 																					onClick={() => {
@@ -335,7 +331,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 																					}}
 																				/>
 																			</IconButton>
-																		</SmallTableCell>
+																		</TableCell>
 																	</SmallTableRow>
 																);
 															})}
@@ -383,29 +379,26 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 												<Table>
 													<TableHead>
 														<SmallTableHeadRow>
-															<SmallTableCell variant="head">
+															<TableCell variant="head">
 																<Typography variant="overline">
 																	Type
 																</Typography>
-															</SmallTableCell>
-															<SmallTableCell variant="head">
+															</TableCell>
+															<TableCell variant="head">
 																<Typography variant="overline">
 																	Label
 																</Typography>
-															</SmallTableCell>
-															<SmallTableCell variant="head">
+															</TableCell>
+															<TableCell variant="head">
 																<Typography variant="overline">
 																	Last edited
 																</Typography>
-															</SmallTableCell>
-															<SmallTableCell
-																variant="head"
-																align="right"
-															>
+															</TableCell>
+															<TableCell variant="head" align="right">
 																<Typography variant="overline">
 																	Actions
 																</Typography>
-															</SmallTableCell>
+															</TableCell>
 														</SmallTableHeadRow>
 													</TableHead>
 													<TableBody>
@@ -413,7 +406,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 															attributes.map(entry => {
 																return (
 																	<SmallTableRow key={entry.id}>
-																		<SmallTableCell
+																		<TableCell
 																			className={
 																				classes.labelCell
 																			}
@@ -425,8 +418,8 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 																						.title
 																				}
 																			</Typography>
-																		</SmallTableCell>
-																		<SmallTableCell
+																		</TableCell>
+																		<TableCell
 																			className={
 																				classes.labelCell
 																			}
@@ -436,15 +429,15 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 																					entry
 																				)}
 																			</Typography>
-																		</SmallTableCell>
-																		<SmallTableCell>
+																		</TableCell>
+																		<TableCell>
 																			<Typography variant="subtitle1">
 																				{this.renderLastUpdateDate(
 																					entry
 																				)}
 																			</Typography>
-																		</SmallTableCell>
-																		<SmallTableCell align="right">
+																		</TableCell>
+																		<TableCell align="right">
 																			<IconButton id="editButton">
 																				<EditTransparentIcon
 																					onClick={() => {
@@ -464,7 +457,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 																			>
 																				<DeleteIcon />
 																			</IconButton>
-																		</SmallTableCell>
+																		</TableCell>
 																	</SmallTableRow>
 																);
 															})}
