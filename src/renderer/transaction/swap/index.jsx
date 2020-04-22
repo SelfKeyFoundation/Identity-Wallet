@@ -6,6 +6,7 @@ import { getLocale } from 'common/locale/selectors';
 import { getWallet } from 'common/wallet/selectors';
 import { pricesSelectors } from 'common/prices';
 import { Popup, InputTitle } from '../../common';
+import { tokensSelectors } from 'common/tokens';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { tokenSwapOperations, tokenSwapSelectors } from 'common/token-swap';
@@ -151,8 +152,6 @@ const styles = theme => ({
 	}
 });
 
-const KEY_ADDRESS = '0x4cc19356f2d37338b9802aa8e8fc58b0373296e7';
-
 const TokenValue = withStyles(styles)(
 	({
 		classes,
@@ -218,8 +217,13 @@ export class TokenSwapComponent extends PureComponent {
 	}
 
 	async componentDidMount() {
-		const defaultSource = this.props.tokens ? this.props.tokens[0].symbol : '';
-		const defaultTarget = KEY_ADDRESS;
+		const { tokens, walletTokens } = this.props;
+		const defaultToken =
+			walletTokens && tokens ? tokens.find(t => t.symbol === walletTokens[0].symbol) : false;
+		const keyToken = walletTokens && tokens ? tokens.find(t => t.symbol === 'KEY') : false;
+
+		const defaultSource = defaultToken ? defaultToken.address : 'ETH';
+		const defaultTarget = keyToken ? keyToken.address : '';
 
 		this.props.dispatch(tokenSwapOperations.setSourceOperation(defaultSource));
 		this.props.dispatch(tokenSwapOperations.setTargetOperation(defaultTarget));
@@ -228,24 +232,33 @@ export class TokenSwapComponent extends PureComponent {
 
 	isValid = () => this.state.amount && this.props.sourceToken && this.props.targetToken;
 
+	findTokenSymbol = tokenString => {
+		const token = this.props.tokens.find(t => t.address === tokenString);
+		return token && token.symbol ? token.symbol : tokenString;
+	};
+
 	getTokenFiatBalance = token => {
-		const t = this.props.tokens.find(t => t.symbol === token);
-		return t ? BN(t.balanceInFiat).toFixed(18) : false;
+		const symb = this.findTokenSymbol(token);
+		const t = this.props.walletTokens.find(t => t.symbol === symb);
+		return t ? BN(t.balanceInFiat).toFixed(18) : 0;
 	};
 
 	getTokenBalance = token => {
-		const t = this.props.tokens.find(t => t.symbol === token);
-		return t ? BN(t.balance).toFixed(18) : false;
+		const symb = this.findTokenSymbol(token);
+		const t = this.props.walletTokens.find(t => t.symbol === symb);
+		return t ? BN(t.balance).toFixed(18) : 0;
 	};
 
 	getFiatValue = (amount, token) => {
-		const t = this.props.tokens.find(t => t.symbol === token);
-		return t ? BN(amount * t.price).toFixed(18) : 0;
+		const symb = this.findTokenSymbol(token);
+		const t = this.props.walletTokens.find(t => t.symbol === symb);
+		return t && t.price > 0 ? BN(amount * t.price).toFixed(18) : 0;
 	};
 
 	getCryptoValue = (amount, token) => {
-		const t = this.props.tokens.find(t => t.symbol === token);
-		return t ? BN(amount / t.price).toFixed(18) : 0;
+		const symb = this.findTokenSymbol(token);
+		const t = this.props.walletTokens.find(t => t.symbol === symb);
+		return t && t.price > 0 ? BN(amount / t.price).toFixed(18) : 0;
 	};
 
 	getAmount = () => {
@@ -261,22 +274,7 @@ export class TokenSwapComponent extends PureComponent {
 				this.getCryptoValue(config.totleMaxSwap, sourceToken)
 			);
 		}
-
 		return filteredAmount;
-	};
-
-	/**
-	 * Match a token address to a symbol
-	 * Force KEY to use a hard coded contract address
-	 */
-	findTokenSymbol = tokenString => {
-		const token = this.props.tokens.find(t => t.address === tokenString);
-		if (token && token.symbol) {
-			return token.symbol;
-		} else if (tokenString === KEY_ADDRESS) {
-			return 'KEY';
-		}
-		return tokenString;
 	};
 
 	setSourceToken = sourceToken => {
@@ -289,15 +287,9 @@ export class TokenSwapComponent extends PureComponent {
 
 	setTargetToken = targetToken => {
 		this.setState({ amount: 0 });
-		let target = targetToken;
 		// Use token address if we have it
 		const token = this.props.tokens.find(t => t.symbol === targetToken);
-		if (token && token.address) {
-			target = token.address;
-		} else if (target === 'KEY') {
-			// Force KEY to use Selfkey
-			target = KEY_ADDRESS;
-		}
+		const target = token && token.address ? token.address : targetToken;
 		this.props.dispatch(tokenSwapOperations.setTargetOperation(target));
 	};
 
@@ -315,6 +307,9 @@ export class TokenSwapComponent extends PureComponent {
 		} else {
 			maxAmount = this.getTokenBalance(sourceToken);
 			maxAmount = Math.min(maxAmount, this.getCryptoValue(config.totleMaxSwap, sourceToken));
+		}
+		if (isNaN(Number(maxAmount))) {
+			maxAmount = 0;
 		}
 		if (isNaN(Number(value))) {
 			value = 0;
@@ -357,8 +352,8 @@ export class TokenSwapComponent extends PureComponent {
 	};
 
 	renderSelectSourceTokenItems = () => {
-		const { tokens, classes } = this.props;
-		const activeTokens = tokens.filter(token => token.recordState === 1);
+		const { walletTokens, classes } = this.props;
+		const activeTokens = walletTokens.filter(token => token.recordState === 1);
 
 		return activeTokens.map(token => (
 			<MenuItem
@@ -378,7 +373,7 @@ export class TokenSwapComponent extends PureComponent {
 		// Show only active tokens and hide source token
 		const activeTokens = swapTokens
 			.filter(t => t.tradable)
-			.filter(t => t.symbol !== sourceToken);
+			.filter(t => t.symbol !== sourceToken || t.address !== sourceToken);
 
 		return activeTokens.map(token => (
 			<MenuItem
@@ -392,9 +387,9 @@ export class TokenSwapComponent extends PureComponent {
 	};
 
 	handleCalculateFees = async () => {
-		const { sourceToken, wallet, tokens } = this.props;
+		const { sourceToken, wallet, walletTokens } = this.props;
 
-		const token = tokens.find(t => t.symbol === sourceToken);
+		const token = walletTokens.find(t => t.symbol === sourceToken);
 		const amount = this.getAmount();
 
 		await this.props.dispatch(
@@ -475,7 +470,7 @@ export class TokenSwapComponent extends PureComponent {
 										value={this.getTokenBalance(sourceToken)}
 										separator={true}
 										locale={locale}
-										token={sourceToken}
+										token={this.findTokenSymbol(sourceToken)}
 									/>
 								</Grid>
 							</Grid>
@@ -498,7 +493,7 @@ export class TokenSwapComponent extends PureComponent {
 										className={classes.maxSourceInput}
 									>
 										{this.state.sourceCurrency === sourceToken
-											? sourceToken
+											? this.findTokenSymbol(sourceToken)
 											: fiatCurrency}
 										<TransferIcon />
 									</Button>
@@ -523,7 +518,7 @@ export class TokenSwapComponent extends PureComponent {
 															amount,
 															sourceToken
 														)}
-														token={sourceToken}
+														token={this.findTokenSymbol(sourceToken)}
 													/>
 												)}
 										</div>
@@ -625,7 +620,7 @@ export class TokenSwapComponent extends PureComponent {
 												<div>
 													<TokenValue
 														locale={locale}
-														token={sourceToken}
+														token={this.findTokenSymbol(sourceToken)}
 														value={this.getAmount()}
 													/>
 												</div>
@@ -698,10 +693,12 @@ export class TokenSwapComponent extends PureComponent {
 									className={classes.rate}
 								>
 									<TokenValue
-										prefix={`Exchange Rate: 1 ${sourceToken} = `}
+										prefix={`Exchange Rate: 1 ${this.findTokenSymbol(
+											sourceToken
+										)} = `}
 										locale={locale}
 										value={this.props.rate}
-										token={targetToken}
+										token={this.findTokenSymbol(targetToken)}
 									/>
 								</Typography>
 							)}
@@ -720,7 +717,8 @@ const mapStateToProps = state => {
 		...getLocale(state),
 		wallet: getWallet(state),
 		fiatCurrency: currency.fiatCurrency,
-		tokens: getTokens(state),
+		tokens: tokensSelectors.allTokens(state),
+		walletTokens: getTokens(state),
 		swapTokens: tokenSwapSelectors.selectTokens(state),
 		error: tokenSwapSelectors.selectError(state),
 		sourceToken: tokenSwapSelectors.selectSource(state),
