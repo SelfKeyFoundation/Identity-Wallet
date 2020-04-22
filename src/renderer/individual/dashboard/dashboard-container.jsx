@@ -65,14 +65,15 @@ class IndividualDashboardContainerComponent extends PureComponent {
 	async loadRelyingParties(vendors) {
 		const authenticated = true;
 		const { afterAuthRoute, cancelRoute, dispatch } = this.props;
-
+		const loadInBackground = true;
 		for (const vendor of vendors) {
 			await dispatch(
 				kycOperations.loadRelyingParty(
 					vendor.vendorId,
 					authenticated,
 					afterAuthRoute,
-					cancelRoute
+					cancelRoute,
+					loadInBackground
 				)
 			);
 		}
