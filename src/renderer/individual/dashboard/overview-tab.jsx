@@ -1,13 +1,6 @@
 import React from 'react';
-import {
-	Grid,
-	CardHeader,
-	Card,
-	CardContent,
-	Typography,
-	Button,
-	withStyles
-} from '@material-ui/core';
+import { Grid, CardHeader, Card, CardContent, Typography, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { BookIcon, IdCardIcon } from 'selfkey-ui';
 import { HexagonAvatar } from '../common/hexagon-avatar';
 import backgroundImage from '../../../../static/assets/images/icons/icon-marketplace.png';
@@ -69,9 +62,9 @@ const IndividualOverviewTab = withStyles(styles)(
 		onAddAttribute,
 		onAddDocument
 	}) => (
-		<Grid id="viewOverview" container direction="column" spacing={32}>
+		<Grid id="viewOverview" container direction="column" spacing={4}>
 			<Grid item>
-				<Grid container direction="row" spacing={32}>
+				<Grid container direction="row" spacing={4}>
 					<Grid item xs={9}>
 						<Card>
 							<CardHeader
@@ -110,7 +103,7 @@ const IndividualOverviewTab = withStyles(styles)(
 				</Grid>
 			</Grid>
 			<Grid item>
-				<Grid container direction="column" spacing={32}>
+				<Grid container direction="column" spacing={4}>
 					{!profile.identity.did && <Grid item>{didComponent}</Grid>}
 					<Grid item>
 						<Card>
@@ -122,7 +115,7 @@ const IndividualOverviewTab = withStyles(styles)(
 									direction="column"
 									justify="center"
 									alignItems="center"
-									spacing={24}
+									spacing={3}
 								>
 									<Grid container item spacing={0} justify="space-between">
 										<Grid
@@ -132,7 +125,7 @@ const IndividualOverviewTab = withStyles(styles)(
 											alignItems="center"
 											direction="column"
 											wrap="nowrap"
-											spacing={24}
+											spacing={3}
 											className={classes.info}
 										>
 											<Grid item>
@@ -169,7 +162,7 @@ const IndividualOverviewTab = withStyles(styles)(
 									direction="column"
 									justify="center"
 									alignItems="center"
-									spacing={24}
+									spacing={3}
 								>
 									<Grid container item spacing={0} justify="space-between">
 										<Grid
@@ -179,7 +172,7 @@ const IndividualOverviewTab = withStyles(styles)(
 											alignItems="center"
 											direction="column"
 											wrap="nowrap"
-											spacing={24}
+											spacing={3}
 											className={classes.info}
 										>
 											<Grid item>
@@ -228,7 +221,7 @@ const IndividualOverviewTab = withStyles(styles)(
 									direction="column"
 									justify="center"
 									alignItems="center"
-									spacing={24}
+									spacing={3}
 								>
 									<Grid container item spacing={0} justify="center">
 										<Grid item xs={12}>

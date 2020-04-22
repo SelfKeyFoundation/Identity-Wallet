@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { marketplacesSelectors } from 'common/marketplaces';
 import { marketplaceSelectors } from 'common/marketplace';
 import { kycSelectors, kycOperations } from 'common/kyc';

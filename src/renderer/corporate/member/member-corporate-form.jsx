@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Input, Select, MenuItem } from '@material-ui/core';
 import { KeyboardArrowDown } from '@material-ui/icons';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { KeyPicker } from 'selfkey-ui';
 
 const styles = theme => ({

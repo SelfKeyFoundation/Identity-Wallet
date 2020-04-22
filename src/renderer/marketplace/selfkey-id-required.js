@@ -3,7 +3,8 @@ import { WarningShieldIcon } from 'selfkey-ui';
 import { Popup } from '../common/popup';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { Typography, withStyles, Button, Grid } from '@material-ui/core';
+import { Typography, Button, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	title: {
@@ -36,7 +37,7 @@ class MarketplaceSelfkeyIdRequiredComponent extends PureComponent {
 							direction="column"
 							justify="flex-start"
 							alignItems="stretch"
-							spacing={8}
+							spacing={1}
 						>
 							<Grid item>
 								<Typography variant="h1" className={classes.title}>

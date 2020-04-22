@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Grid, Typography } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import {
 	DirectorIcon,
 	ObserverIcon,
@@ -136,7 +136,7 @@ class CorporateMemberSelectRoleComponent extends PureComponent {
 	render() {
 		const { classes, availablePositions, errors } = this.props;
 		return (
-			<Grid container direction="column" spacing={8}>
+			<Grid container direction="column" spacing={1}>
 				<Grid item>
 					<Typography variant="body1" align="center" className={classes.title}>
 						Select one or multiple roles

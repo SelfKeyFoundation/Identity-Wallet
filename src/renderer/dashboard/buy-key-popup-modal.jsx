@@ -1,5 +1,6 @@
 import React from 'react';
-import { Grid, List, ListItem, withStyles, Typography, Divider } from '@material-ui/core';
+import { Grid, List, ListItem, Typography, Divider } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { PaymentIcon, Copy } from 'selfkey-ui';
 
 const styles = theme => ({
@@ -87,7 +88,7 @@ export const BuyKeyContent = withStyles(styles)(
 							direction="column"
 							justify="flex-start"
 							alignItems="flex-start"
-							spacing={16}
+							spacing={2}
 						>
 							<Grid item>
 								<Typography variant="body1" className={classes.bottomSpace}>

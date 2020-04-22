@@ -5,15 +5,8 @@ import { addressBookSelectors, addressBookOperations } from 'common/address-book
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { walletTokensOperations } from 'common/wallet-tokens';
 import history from 'common/store/history';
-import {
-	Grid,
-	Button,
-	Typography,
-	withStyles,
-	Input,
-	IconButton,
-	CircularProgress
-} from '@material-ui/core';
+import { Grid, Button, Typography, Input, IconButton, CircularProgress } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import {
 	MyCryptoLargeIcon,
 	ModalWrap,
@@ -238,7 +231,7 @@ class AddTokenContainerComponent extends PureComponent {
 				direction="column"
 				justify="flex-start"
 				alignItems="center"
-				spacing={32}
+				spacing={4}
 				className={classes.wrap}
 			>
 				<BackButton onclick={this.handleBackClick} />
@@ -274,7 +267,7 @@ class AddTokenContainerComponent extends PureComponent {
 							direction="column"
 							justify="center"
 							alignItems="stretch"
-							spacing={32}
+							spacing={4}
 						>
 							<Grid item>
 								<Typography variant="overline" gutterBottom>
@@ -367,7 +360,7 @@ class AddTokenContainerComponent extends PureComponent {
 								/>
 							</Grid>
 							<Grid item>
-								<Grid container spacing={24}>
+								<Grid container spacing={3}>
 									<Grid item>
 										<Button
 											variant="contained"

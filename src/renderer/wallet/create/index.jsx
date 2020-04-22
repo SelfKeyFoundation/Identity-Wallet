@@ -1,5 +1,6 @@
 import React from 'react';
-import { Typography, Grid, Button, withStyles } from '@material-ui/core';
+import { Typography, Grid, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import { WarningShieldIcon, warning } from 'selfkey-ui';
 import { Popup } from '../../common';
@@ -38,7 +39,7 @@ export const CreateWallet = props => {
 					</Typography>
 					<br />
 					<br />
-					<Grid container spacing={24}>
+					<Grid container spacing={3}>
 						<Grid item>
 							<Button
 								id="protectWallet"

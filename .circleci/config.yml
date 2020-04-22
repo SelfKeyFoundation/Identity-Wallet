@@ -48,7 +48,7 @@ aliases:
 jobs:
     'unit-test':
         docker: &DOCKERIMAGE
-            - image: circleci/node:10.12.0-stretch-browsers
+            - image: circleci/node:10.13.0-stretch-browsers
         environment:
             CACHE_VERSION: *cache_version
             JEST_JUNIT_OUTPUT_DIR: dist/junit

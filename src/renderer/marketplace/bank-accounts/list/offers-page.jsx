@@ -2,12 +2,13 @@ import React from 'react';
 import { BankingOffersTable } from './offers-table';
 import { BankingAccountTypeTabs } from './account-type-tabs';
 import { PageLoading } from '../../common';
-import { Button, Typography, Grid, withStyles } from '@material-ui/core';
+import { Button, Typography, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { BankIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	pageContent: {
-		width: '1080px',
+		width: '1074px',
 		margin: '0 auto'
 	},
 	'@media screen and (min-width: 1230px)': {

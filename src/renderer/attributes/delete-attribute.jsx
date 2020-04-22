@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 
-import { Input, Typography, withStyles, Button, Grid } from '@material-ui/core';
+import { Input, Typography, Button, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Popup } from '../common/popup';
 
 const styles = theme => ({
@@ -41,7 +42,7 @@ class DeleteAttributeComponent extends PureComponent {
 				text={text}
 				className={classes.disableTransparency}
 			>
-				<Grid container direction="column" spacing={8}>
+				<Grid container direction="column" spacing={1}>
 					<Grid item>
 						<Typography variant="outlined" className={classes.text}>
 							You are deleting this information and all related history. Once deleted,
@@ -71,7 +72,7 @@ class DeleteAttributeComponent extends PureComponent {
 						/>
 					</Grid>
 					<Grid item>
-						<Grid container spacing={24} className={classes.buttonContainer}>
+						<Grid container spacing={3} className={classes.buttonContainer}>
 							<Grid item>
 								<Button
 									variant="contained"

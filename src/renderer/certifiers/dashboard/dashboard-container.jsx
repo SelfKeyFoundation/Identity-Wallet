@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { Typography, withStyles } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import DashboardPageTabs from './dashboard-tabs';
 
 const styles = theme => ({
 	pageContent: {
-		width: '1080px',
+		width: '1074px',
 		margin: '0 auto'
 	},
 	'@media screen and (min-width: 1230px)': {

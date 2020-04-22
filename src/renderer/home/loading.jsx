@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Paper, CircularProgress } from '@material-ui/core';
-
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { appOperations } from 'common/app';
 import backgroundImage from '../../../static/assets/images/bgs/background.jpg';

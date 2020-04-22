@@ -12,10 +12,9 @@ import {
 	Divider,
 	ExpansionPanelDetails,
 	List,
-	ListItem,
-	createStyles,
-	withStyles
+	ListItem
 } from '@material-ui/core';
+import { createStyles, withStyles } from '@material-ui/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import {
@@ -279,7 +278,7 @@ class IndividualApplicationsTabComponent extends PureComponent {
 
 		if (!loading && applications && applications.length === 0) {
 			return (
-				<Grid container spacing={32}>
+				<Grid container spacing={4}>
 					<Grid item xs={12}>
 						<Card>
 							<Grid container direction="row" className={classes.cardHeader}>
@@ -371,7 +370,7 @@ class IndividualApplicationsTabComponent extends PureComponent {
 								/>
 							</Grid>
 							<ExpansionPanelDetails>
-								<Grid container spacing={32}>
+								<Grid container spacing={4}>
 									<Grid item xs>
 										<Card>
 											<Typography variant="h2" className={classes.title}>

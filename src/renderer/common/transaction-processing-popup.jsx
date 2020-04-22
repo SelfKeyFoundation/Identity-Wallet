@@ -1,6 +1,7 @@
 import React from 'react';
 import { Popup } from './popup';
-import { Grid, Typography, withStyles } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { HourGlassLargeIcon } from 'selfkey-ui';
 
 const styles = theme => ({

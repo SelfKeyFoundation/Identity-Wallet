@@ -7,9 +7,9 @@ import {
 	Button,
 	Input,
 	MenuItem,
-	Select,
-	withStyles
+	Select
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { KeyboardArrowDown } from '@material-ui/icons';
 import { KeyPicker } from 'selfkey-ui';
 
@@ -271,7 +271,7 @@ const CompanyInformation = withStyles(styles)(props => {
 // const MembersList = withStyles(styles)(props => {
 // 	const { classes, members } = props;
 // 	return (
-// 		<Grid container direction="column" spacing={32}>
+// 		<Grid container direction="column" spacing={4}>
 // 			<Grid item>
 // 				<Card>
 // 					<CardHeader title="Step 2. Company Members" className={classes.regularText} />
@@ -282,7 +282,7 @@ const CompanyInformation = withStyles(styles)(props => {
 // 							direction="column"
 // 							justify="center"
 // 							alignItems="center"
-// 							spacing={24}
+// 							spacing={3}
 // 						>
 // 							<Grid container item spacing={0} justify="center">
 // 								<Grid item xs={12}>

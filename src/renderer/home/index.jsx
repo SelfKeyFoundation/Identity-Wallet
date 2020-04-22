@@ -3,7 +3,7 @@ import { Grid, Typography, Paper, Button } from '@material-ui/core';
 import { primary, HelpIcon, QuitIcon, SelfkeyLogoTemp } from 'selfkey-ui';
 import { tokensOperations } from 'common/tokens';
 import backgroundImage from '../../../static/assets/images/bgs/background.jpg';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { appOperations, appSelectors } from 'common/app';
@@ -86,7 +86,7 @@ class Home extends PureComponent {
 					direction="column"
 					justify="space-between"
 					alignItems="center"
-					spacing={40}
+					spacing={5}
 					className={classes.parentGrid}
 				>
 					<Grid
@@ -95,7 +95,7 @@ class Home extends PureComponent {
 						direction="column"
 						justify="center"
 						alignItems="center"
-						spacing={40}
+						spacing={5}
 						className={classes.insideGrid}
 					>
 						<Grid
@@ -104,7 +104,7 @@ class Home extends PureComponent {
 							direction="column"
 							justify="flex-start"
 							alignItems="center"
-							spacing={8}
+							spacing={1}
 							className={classes.scrollFix}
 						>
 							<Grid item>
@@ -122,7 +122,7 @@ class Home extends PureComponent {
 							direction="column"
 							justify="flex-end"
 							alignItems="center"
-							spacing={32}
+							spacing={4}
 						>
 							<Grid item>
 								<Button
@@ -152,7 +152,7 @@ class Home extends PureComponent {
 						direction="row"
 						justify="center"
 						alignItems="flex-end"
-						spacing={24}
+						spacing={3}
 						className={classes.scrollFix}
 					>
 						<Grid item>

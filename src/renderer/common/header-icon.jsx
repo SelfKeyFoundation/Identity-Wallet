@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { CheckMaIcon, DeniedIcon, HourGlassIcon } from 'selfkey-ui';
 
 const styles = theme => ({

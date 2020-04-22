@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
-
 import {
 	Grid,
 	CardHeader,
@@ -13,9 +12,9 @@ import {
 	IconButton,
 	TableHead,
 	Typography,
-	Button,
-	withStyles
+	Button
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import {
 	EditTransparentIcon,
 	DeleteIcon,
@@ -27,7 +26,6 @@ import {
 	IdCardIcon,
 	SmallTableHeadRow,
 	SmallTableRow,
-	SmallTableCell,
 	FileAudioIcon,
 	FileLinkWithModal
 } from 'selfkey-ui';
@@ -179,9 +177,9 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 		} = this.props;
 
 		return (
-			<Grid id="viewOverview" container direction="column" spacing={32}>
+			<Grid id="viewOverview" container direction="column" spacing={4}>
 				<Grid item>
-					<Grid container direction="row" spacing={32}>
+					<Grid container direction="row" spacing={4}>
 						<Grid item xs={9}>
 							<Card>
 								<CardHeader
@@ -218,7 +216,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 					</Grid>
 				</Grid>
 				<Grid item>
-					<Grid container direction="column" spacing={32}>
+					<Grid container direction="column" spacing={4}>
 						{this.props.didCard && <Grid item>{this.props.didCard}</Grid>}
 						<Grid item>
 							<Card>
@@ -233,7 +231,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 										direction="column"
 										justify="center"
 										alignItems="center"
-										spacing={24}
+										spacing={3}
 									>
 										<Grid container item spacing={0} justify="space-between">
 											<Grid
@@ -243,7 +241,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 												alignItems="center"
 												direction="column"
 												wrap="nowrap"
-												spacing={24}
+												spacing={3}
 												className={classes.info}
 											>
 												<Grid item>
@@ -265,29 +263,26 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 												<Table>
 													<TableHead>
 														<SmallTableHeadRow>
-															<SmallTableCell variant="head">
+															<TableCell variant="head">
 																<Typography variant="overline">
 																	Type
 																</Typography>
-															</SmallTableCell>
-															<SmallTableCell variant="head">
+															</TableCell>
+															<TableCell variant="head">
 																<Typography variant="overline">
 																	Label
 																</Typography>
-															</SmallTableCell>
-															<SmallTableCell variant="head">
+															</TableCell>
+															<TableCell variant="head">
 																<Typography variant="overline">
 																	Last edited
 																</Typography>
-															</SmallTableCell>
-															<SmallTableCell
-																variant="head"
-																align="right"
-															>
+															</TableCell>
+															<TableCell variant="head" align="right">
 																<Typography variant="overline">
 																	Actions
 																</Typography>
-															</SmallTableCell>
+															</TableCell>
 														</SmallTableHeadRow>
 													</TableHead>
 													<TableBody>
@@ -295,7 +290,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 															basicAttributes.map(entry => {
 																return (
 																	<SmallTableRow key={entry.id}>
-																		<SmallTableCell
+																		<TableCell
 																			className={
 																				classes.labelCell
 																			}
@@ -307,8 +302,8 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 																						.title
 																				}
 																			</Typography>
-																		</SmallTableCell>
-																		<SmallTableCell
+																		</TableCell>
+																		<TableCell
 																			className={
 																				classes.labelCell
 																			}
@@ -318,15 +313,15 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 																					entry
 																				)}
 																			</Typography>
-																		</SmallTableCell>
-																		<SmallTableCell>
+																		</TableCell>
+																		<TableCell>
 																			<Typography variant="subtitle1">
 																				{this.renderLastUpdateDate(
 																					entry
 																				)}
 																			</Typography>
-																		</SmallTableCell>
-																		<SmallTableCell align="right">
+																		</TableCell>
+																		<TableCell align="right">
 																			<IconButton id="editButton">
 																				<EditTransparentIcon
 																					onClick={() => {
@@ -336,7 +331,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 																					}}
 																				/>
 																			</IconButton>
-																		</SmallTableCell>
+																		</TableCell>
 																	</SmallTableRow>
 																);
 															})}
@@ -358,7 +353,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 										direction="column"
 										justify="center"
 										alignItems="center"
-										spacing={24}
+										spacing={3}
 									>
 										<Grid container item spacing={0} justify="space-between">
 											<Grid
@@ -368,7 +363,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 												alignItems="center"
 												direction="column"
 												wrap="nowrap"
-												spacing={24}
+												spacing={3}
 												className={classes.info}
 											>
 												<Grid item>
@@ -384,29 +379,26 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 												<Table>
 													<TableHead>
 														<SmallTableHeadRow>
-															<SmallTableCell variant="head">
+															<TableCell variant="head">
 																<Typography variant="overline">
 																	Type
 																</Typography>
-															</SmallTableCell>
-															<SmallTableCell variant="head">
+															</TableCell>
+															<TableCell variant="head">
 																<Typography variant="overline">
 																	Label
 																</Typography>
-															</SmallTableCell>
-															<SmallTableCell variant="head">
+															</TableCell>
+															<TableCell variant="head">
 																<Typography variant="overline">
 																	Last edited
 																</Typography>
-															</SmallTableCell>
-															<SmallTableCell
-																variant="head"
-																align="right"
-															>
+															</TableCell>
+															<TableCell variant="head" align="right">
 																<Typography variant="overline">
 																	Actions
 																</Typography>
-															</SmallTableCell>
+															</TableCell>
 														</SmallTableHeadRow>
 													</TableHead>
 													<TableBody>
@@ -414,7 +406,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 															attributes.map(entry => {
 																return (
 																	<SmallTableRow key={entry.id}>
-																		<SmallTableCell
+																		<TableCell
 																			className={
 																				classes.labelCell
 																			}
@@ -426,8 +418,8 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 																						.title
 																				}
 																			</Typography>
-																		</SmallTableCell>
-																		<SmallTableCell
+																		</TableCell>
+																		<TableCell
 																			className={
 																				classes.labelCell
 																			}
@@ -437,15 +429,15 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 																					entry
 																				)}
 																			</Typography>
-																		</SmallTableCell>
-																		<SmallTableCell>
+																		</TableCell>
+																		<TableCell>
 																			<Typography variant="subtitle1">
 																				{this.renderLastUpdateDate(
 																					entry
 																				)}
 																			</Typography>
-																		</SmallTableCell>
-																		<SmallTableCell align="right">
+																		</TableCell>
+																		<TableCell align="right">
 																			<IconButton id="editButton">
 																				<EditTransparentIcon
 																					onClick={() => {
@@ -465,7 +457,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 																			>
 																				<DeleteIcon />
 																			</IconButton>
-																		</SmallTableCell>
+																		</TableCell>
 																	</SmallTableRow>
 																);
 															})}
@@ -502,7 +494,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 										direction="column"
 										justify="center"
 										alignItems="center"
-										spacing={24}
+										spacing={3}
 									>
 										<Grid container item spacing={0} justify="center">
 											<Grid item xs={12}>

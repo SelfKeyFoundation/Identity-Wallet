@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Button, Grid } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import HelpStepsSection from './help-steps-section';
 import { push } from 'connected-react-router';
@@ -20,13 +20,7 @@ class Ledger extends PureComponent {
 		const { classes } = this.props;
 		return (
 			<div className={classes.root}>
-				<Grid
-					container
-					direction="column"
-					justify="center"
-					alignItems="center"
-					spacing={24}
-				>
+				<Grid container direction="column" justify="center" alignItems="center" spacing={3}>
 					<HelpStepsSection />
 					<Grid item>
 						<Button variant="contained" size="large" onClick={this.handleConnectAction}>

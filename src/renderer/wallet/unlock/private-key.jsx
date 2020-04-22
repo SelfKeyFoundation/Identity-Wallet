@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Avatar, Input, Button, Grid, Typography, InputAdornment } from '@material-ui/core';
 import { VisibilityOffIcon, VisibilityOnIcon } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
 
@@ -73,20 +73,14 @@ class PrivateKey extends PureComponent {
 		const { privateKey } = this.state;
 		return (
 			<div className={classes.root}>
-				<Grid
-					container
-					direction="column"
-					justify="center"
-					alignItems="center"
-					spacing={24}
-				>
+				<Grid container direction="column" justify="center" alignItems="center" spacing={3}>
 					<Grid item>
 						<Grid
 							container
 							direction="row"
 							justify="flex-start"
 							alignItems="center"
-							spacing={16}
+							spacing={2}
 						>
 							<Grid item>
 								<Avatar>

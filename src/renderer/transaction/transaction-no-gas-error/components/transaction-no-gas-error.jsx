@@ -1,6 +1,8 @@
 import * as React from 'react';
 import TransactionErrorBox from '../../common/transaction-error-box';
-import { withStyles, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { primary } from 'selfkey-ui';
 
 const styles = theme => ({
 	bodyText: {
@@ -14,6 +16,7 @@ const styles = theme => ({
 		lineHeight: '19px'
 	},
 	learnMoreLink: {
+		color: primary,
 		textDecoration: 'none'
 	}
 });
@@ -38,13 +41,13 @@ export const TransactionNoGasError = withStyles(styles)(
 						address of this wallet is listed below.
 					</Typography>
 					<div className={classes.learnMoreText}>
-						To learn more about transaction fees, click{' '}
+						To learn more about transaction fees,{' '}
 						<a
 							className={`${classes.learnMoreText}  ${classes.learnMoreLink}`}
 							href={gasExplanationUrl}
 							onClick={handleLinkClick}
 						>
-							here.
+							click here.
 						</a>
 					</div>
 				</div>
