@@ -6,9 +6,9 @@ import RequestNotarizationPage from '../src/renderer/marketplace/notarization/pr
 import TOCPopup from '../src/renderer/marketplace/notarization/common/toc-popup';
 import TOCDisagreementPopup from '../src/renderer/marketplace/notarization/common/toc-disagreement-popup';
 import RequirePayment from '../src/renderer/certifiers/common/require-payment-popup';
-import KYCRequirementData from './kyc-requirements-data';
+import KYCRequirementData from './__fixtures__/kyc-requirements-data';
 import NotarizationProcess from '../src/renderer/certifiers/common/notarization-process-popup';
-import { summary } from './notarization-data';
+import { summary } from './__fixtures__/notarization-data';
 
 const documents = [
 	{

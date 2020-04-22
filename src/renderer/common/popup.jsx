@@ -29,7 +29,10 @@ const styles = theme => ({
 	modalWrap: {
 		border: 'none',
 		backgroundColor: 'transparent',
-		boxShadow: 'none'
+		boxShadow: 'none',
+		left: 0,
+		right: 0,
+		margin: '0 auto'
 	},
 	paper: {
 		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'

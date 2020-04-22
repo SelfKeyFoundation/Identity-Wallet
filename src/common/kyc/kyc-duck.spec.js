@@ -112,10 +112,10 @@ describe('KYC Duck', () => {
 							c.type === 'corporate'
 								? template.memberTemplates[1]
 								: template.memberTemplates[0];
-						const entityType = c.type === 'corporate' ? 'ltd' : undefined;
+						const userData = c.type === 'corporate' ? { entityType: 'ltd' } : {};
 						return {
 							...c,
-							entityType,
+							userData,
 							memberTemplate,
 							requirements: [
 								{
@@ -163,6 +163,9 @@ describe('KYC Duck', () => {
 					sinon.stub(identitySelectors, 'selectIdentity').returns(identity);
 					sinon.stub(identitySelectors, 'selectBasicAttributeInfo').returns('ltd');
 					sinon.stub(kycSelectors, 'oneTemplateSelector').returns(template);
+					sinon
+						.stub(kycSelectors, 'selectKYCUserData')
+						.callsFake((state, id) => (id === 3 ? { entityType: 'ltd' } : {}));
 					sinon
 						.stub(identitySelectors, 'selectChildrenIdentities')
 						.returns(childrenIdentities);

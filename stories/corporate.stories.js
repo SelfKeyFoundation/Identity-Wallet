@@ -36,7 +36,7 @@ import {
 	corporateDocuments,
 	corporateMembers,
 	corporatePositionsLLC
-} from './corporate-data';
+} from './__fixtures__/corporate-data';
 
 storiesOf('Corporate Profile', module).add('Dashboard', () => (
 	<div style={{ width: '1140px' }}>
