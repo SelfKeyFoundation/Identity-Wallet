@@ -425,14 +425,19 @@ export const kycActions = {
 	}
 };
 
-const getSession = async (config, authenticate, dispatch, walletType) => {
+/**
+ * If loadInBackground is true, failure to load RP will not trigger an application UI error
+ */
+const getSession = async (config, authenticate, dispatch, walletType, loadInBackground = false) => {
 	let mpService = (getGlobalContext() || {}).marketplaceService;
 	let session;
 	try {
 		session = mpService.createRelyingPartySession(config);
 	} catch (error) {
 		log.error('getSession createRelyingPartySession %s', error);
-		throw error;
+		if (!loadInBackground) {
+			throw error;
+		}
 	}
 
 	if (authenticate) {
@@ -460,19 +465,27 @@ const getSession = async (config, authenticate, dispatch, walletType) => {
 					await dispatch(push('/main/hd-error'));
 				}
 			} else {
-				await dispatch(push('/main/auth-error'));
+				if (!loadInBackground) {
+					await dispatch(push('/main/auth-error'));
+				}
 			}
-			throw error;
+			if (!loadInBackground) {
+				throw error;
+			}
 		}
 	}
 	return session;
 };
 
+/**
+ * If loadInBackground is true, failure to load RP will not trigger an application UI error
+ */
 const loadRelyingPartyOperation = (
 	rpName,
 	authenticate = true,
 	afterAuthRoute,
-	cancelRoute
+	cancelRoute,
+	loadInBackground = false
 ) => async (dispatch, getState) => {
 	const state = getState();
 	const walletType = appSelectors.selectApp(state).walletType;
@@ -498,7 +511,13 @@ const loadRelyingPartyOperation = (
 
 	try {
 		await dispatch(kycActions.setCancelRoute(cancelRoute));
-		const session = await getSession(config, authenticate, dispatch, walletType);
+		const session = await getSession(
+			config,
+			authenticate,
+			dispatch,
+			walletType,
+			loadInBackground
+		);
 
 		let templates = await Promise.all(
 			(await session.listKYCTemplates()).map(async tpl => {
