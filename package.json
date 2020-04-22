@@ -107,7 +107,7 @@
 		"qrcode.react": "1.0.0",
 		"react": "16.13.1",
 		"react-dom": "16.13.1",
-		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#7999882b097e8156bb69ed8e26b06d25e11d5823",
+		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#163802e4ed0a123035c89a525b2a60396e1e622f",
 		"react-orgchart": "1.0.5",
 		"react-piwik": "1.6.0",
 		"react-redux": "6.0.1",
@@ -230,7 +230,7 @@
 		"html-loader": "1.0.0-alpha.0",
 		"react": "16.13.1",
 		"react-dom": "16.13.1",
-		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#96377c75f96adb7dd527712a8450badb55a237d1",
+		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#163802e4ed0a123035c89a525b2a60396e1e622f",
 		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#46eb760ba2bf7076449020a704d7f0afb6ccec55"
 	},
 	"migrations": {
