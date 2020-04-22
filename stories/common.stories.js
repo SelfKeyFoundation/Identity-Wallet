@@ -8,7 +8,8 @@ import {
 	AlertIcon,
 	AttributesTable,
 	TransactionErrorPopup,
-	TransactionProcessingPopup
+	TransactionProcessingPopup,
+	Scrollable
 } from '../src/renderer/common';
 
 const data = {
@@ -45,6 +46,16 @@ const data = {
 			'Please make sure you understand the bank requirements and that you are able/willing to fulfill them before placing your order.'
 	}
 };
+
+storiesOf('Common/Scrollable', module).add('default', () => (
+	<div style={{ width: '1140px' }}>
+		<Scrollable data={data} open={true} style={{ maxHeight: '100px', width: '100px' }}>
+			Bank Specific KYC Requirements might apply. If this is the case you will be asked for
+			additional documents tp fill, after the basic KYC information and documents have been
+			validated.
+		</Scrollable>
+	</div>
+));
 
 storiesOf('Common/Accordion', module).add('Option', () => (
 	<div style={{ width: '1140px' }}>

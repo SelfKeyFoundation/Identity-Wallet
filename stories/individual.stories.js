@@ -12,7 +12,7 @@ import { IndividualApplicationsTab } from '../src/renderer/individual/dashboard/
 import { AttributesTable } from '../src/renderer/individual/common/attributes-table';
 import { DocumentsTable } from '../src/renderer/individual/common/documents-table';
 
-import { dummyProfile, dummyProfileWithoutDid } from './individual-data';
+import { dummyProfile, dummyProfileWithoutDid } from './__fixtures__/individual-data';
 
 storiesOf('Individual Profile', module).add('Dashboard', () => (
 	<div style={{ width: '1140px' }}>
