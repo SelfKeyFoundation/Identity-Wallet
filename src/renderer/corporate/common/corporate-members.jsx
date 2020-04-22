@@ -11,9 +11,9 @@ import {
 	TableHead,
 	TableBody,
 	IconButton,
-	Button,
-	withStyles
+	Button
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { SmallTableHeadRow, EditTransparentIcon, DeleteIcon, DropdownIcon } from 'selfkey-ui';
 import CorporateDocuments from './corporate-documents';
 import CorporateInformation from './corporate-information';
@@ -294,7 +294,7 @@ const CorporateMembers = withStyles(styles)(props => {
 													direction="column"
 													justify="flex-start"
 													alignItems="stretch"
-													spacing={16}
+													spacing={2}
 												>
 													<Grid item>
 														<CorporateInformation

@@ -1,7 +1,6 @@
 import React from 'react';
 import {
 	Grid,
-	withStyles,
 	Typography,
 	Divider,
 	Table,
@@ -9,6 +8,7 @@ import {
 	TableBody,
 	TableCell
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { LargeTableHeadRow, BackButton } from 'selfkey-ui';
 import { ExchangesListItem } from './exchanges-list-item';
 import { MarketplaceDisclaimer } from '../common/disclaimer';
@@ -16,7 +16,7 @@ import { PageLoading } from '../common';
 
 const styles = theme => ({
 	wrapper: {
-		width: '1080px'
+		width: '1074px'
 	},
 	'@media screen and (min-width: 1230px)': {
 		wrapper: {
@@ -40,10 +40,7 @@ const styles = theme => ({
 	content: {
 		marginTop: '30px',
 		margin: 0,
-		width: '100%',
-		'& th': {
-			padding: '0 15px'
-		}
+		width: '100%'
 	},
 	button: {
 		color: '#93b0c1',
@@ -136,7 +133,7 @@ export const ExchangesList = withStyles(styles)(
 							direction="row"
 							justify="start"
 							alignItems="center"
-							spacing={24}
+							spacing={3}
 							className={classes.content}
 						>
 							{isLoading && <PageLoading />}
@@ -148,7 +145,7 @@ export const ExchangesList = withStyles(styles)(
 												<TableCell className={classes.icon}>
 													&nbsp;
 												</TableCell>
-												<TableCell>
+												<TableCell style={{ paddingLeft: '15px' }}>
 													<Typography variant="overline">
 														Exchange
 													</Typography>

@@ -11,10 +11,9 @@ import {
 	Divider,
 	ExpansionPanelDetails,
 	List,
-	ListItem,
-	createStyles,
-	withStyles
+	ListItem
 } from '@material-ui/core';
+import { createStyles, withStyles } from '@material-ui/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import {
@@ -272,7 +271,7 @@ class SelfkeyIdApplicationsComponent extends PureComponent {
 			<Grid
 				container
 				className={this.props.classes.root}
-				spacing={32}
+				spacing={4}
 				direction="column"
 				justify="flex-start"
 				alignItems="stretch"
@@ -283,7 +282,7 @@ class SelfkeyIdApplicationsComponent extends PureComponent {
 					</Typography>
 				</Grid>
 				<Grid item>
-					<Grid container spacing={24}>
+					<Grid container spacing={3}>
 						<Grid item>
 							<Button
 								variant="outlined"
@@ -319,7 +318,7 @@ class SelfkeyIdApplicationsComponent extends PureComponent {
 
 		if (!loading && applications && applications.length === 0) {
 			return (
-				<Grid container spacing={32}>
+				<Grid container spacing={4}>
 					<Grid item xs={12}>
 						<Card>
 							<Grid container direction="row" className={classes.cardHeader}>
@@ -414,7 +413,7 @@ class SelfkeyIdApplicationsComponent extends PureComponent {
 									/>
 								</Grid>
 								<ExpansionPanelDetails>
-									<Grid container spacing={32}>
+									<Grid container spacing={4}>
 										<Grid item xs>
 											<Card>
 												<Typography variant="h2" className={classes.title}>

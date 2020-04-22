@@ -15,9 +15,9 @@ const ActualTransactionFeeBoxComponent = props => {
 	const { classes, locale, ethFee, fiatCurrency, usdFee } = props;
 
 	return (
-		<Grid container className={classes.root} direction="row" spacing={8}>
+		<Grid container className={classes.root} direction="row" spacing={1}>
 			<Grid item>
-				<Grid container spacing={8}>
+				<Grid container spacing={1}>
 					<Grid item>
 						<NumberFormat
 							locale={locale}
@@ -32,7 +32,7 @@ const ActualTransactionFeeBoxComponent = props => {
 				</Grid>
 			</Grid>
 			<Grid item>
-				<Grid container spacing={8}>
+				<Grid container spacing={1}>
 					<Grid item>
 						<NumberFormat
 							locale={locale}

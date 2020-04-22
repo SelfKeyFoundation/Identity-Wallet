@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Typography, withStyles, Button, Grid } from '@material-ui/core';
+import { Typography, Button, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Popup } from '../common/popup';
 
 const styles = theme => ({
@@ -34,7 +35,7 @@ class DeleteMemberComponent extends PureComponent {
 
 		return (
 			<Popup open={open} closeAction={this.handleCancel} isHeaderVisible={false}>
-				<Grid container direction="column" spacing={8}>
+				<Grid container direction="column" spacing={1}>
 					<Grid item>
 						<Typography variant="h2">{text}</Typography>
 					</Grid>
@@ -45,7 +46,7 @@ class DeleteMemberComponent extends PureComponent {
 						</Typography>
 					</Grid>
 					<Grid item>
-						<Grid container spacing={24} className={classes.buttonContainer}>
+						<Grid container spacing={3} className={classes.buttonContainer}>
 							<Grid item>
 								<Button
 									variant="contained"

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Grid, CardHeader, Card, CardContent, withStyles } from '@material-ui/core';
+import { Grid, CardHeader, Card, CardContent } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { grey, EditTransparentIcon, typography } from 'selfkey-ui';
 import 'react-orgchart/index.css';
 import OrgChart from 'react-orgchart';
@@ -82,7 +83,7 @@ const CorporateOrgChart = withStyles(styles)(props => {
 		return null;
 	}
 	return (
-		<Grid container direction="column" spacing={32}>
+		<Grid container direction="column" spacing={4}>
 			<Grid item>
 				<Card>
 					<CardHeader

@@ -1,6 +1,6 @@
 import React from 'react';
-
-import { Grid, Button, withStyles, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { Grid, Button, Typography } from '@material-ui/core';
 
 const styles = theme => ({
 	root: {

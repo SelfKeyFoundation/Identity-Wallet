@@ -1,13 +1,6 @@
 import React, { PureComponent } from 'react';
-import {
-	Grid,
-	Button,
-	Typography,
-	withStyles,
-	Divider,
-	Input,
-	IconButton
-} from '@material-ui/core';
+import { Grid, Button, Typography, Divider, Input, IconButton } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import {
 	IdCardIcon,
 	ModalWrap,
@@ -185,7 +178,7 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 					direction="column"
 					justify="flex-start"
 					alignItems="center"
-					spacing={32}
+					spacing={4}
 					className={classes.wrap}
 				>
 					<BackButton onclick={this.handleBackClick} className={classes.bb} />
@@ -211,13 +204,13 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 									direction="column"
 									justify="center"
 									alignItems="center"
-									spacing={32}
+									spacing={4}
 								>
 									<Grid item>
 										<Grid
 											container
 											direction="column"
-											spacing={40}
+											spacing={5}
 											justify="flex-start"
 											alignItems="flex-start"
 										>
@@ -295,7 +288,7 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 												<Grid
 													container
 													direction="column"
-													spacing={32}
+													spacing={4}
 													justify="flex-start"
 													alignItems="flex-start"
 												>

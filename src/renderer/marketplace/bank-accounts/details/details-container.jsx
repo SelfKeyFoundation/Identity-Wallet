@@ -6,7 +6,7 @@ import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-acc
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { identitySelectors } from 'common/identity';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { BankingDetailsPage } from './details-page';
 import { marketplaceSelectors } from 'common/marketplace';
 

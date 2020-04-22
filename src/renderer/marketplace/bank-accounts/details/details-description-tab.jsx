@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { withStyles, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { sanitize } from '../../common';
 
 const styles = theme => ({

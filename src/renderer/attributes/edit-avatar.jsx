@@ -1,6 +1,7 @@
 /* global FileReader */
 import React, { PureComponent } from 'react';
-import { ButtonBase, withStyles, Button, Grid, Divider } from '@material-ui/core';
+import { ButtonBase, Button, Grid, Divider } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { HexagonAvatar } from '../individual/common/hexagon-avatar';
 import { Popup } from '../common/popup';
 

@@ -1,5 +1,6 @@
 import React from 'react';
-import { CardHeader, Card, CardContent, Typography, withStyles, Grid } from '@material-ui/core';
+import { CardHeader, Card, CardContent, Typography, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { CheckMaIcon, AttributeAlertIcon, EditTransparentIcon } from 'selfkey-ui';
 
 const styles = theme => ({

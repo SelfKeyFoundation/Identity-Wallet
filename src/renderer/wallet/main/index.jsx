@@ -25,8 +25,8 @@ import Transfer from '../../transaction/send';
 import AdvancedTransaction from '../../transaction/send/advanced-transaction';
 import ReceiveTransfer from '../../transaction/receive';
 import TokenSwap from '../../transaction/swap';
-
-import { Grid, withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { Grid } from '@material-ui/core';
 import Toolbar from './toolbar-container';
 import { connect } from 'react-redux';
 
@@ -61,7 +61,7 @@ const styles = theme => ({
 		width: '100%'
 	},
 	bodySection: {
-		maxWidth: '1080px',
+		maxWidth: '1074px',
 		width: '100%'
 	},
 	'@media screen and (min-width: 1230px)': {

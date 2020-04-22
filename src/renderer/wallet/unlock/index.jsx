@@ -9,7 +9,7 @@ import {
 	LedgerIcon,
 	TrezorIcon
 } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { Link, Route, Redirect, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
@@ -129,7 +129,7 @@ class Unlock extends PureComponent {
 						direction="column"
 						justify="center"
 						alignItems="center"
-						spacing={40}
+						spacing={5}
 					>
 						<Grid item>
 							<Grid container direction="row" justify="center" alignItems="center">

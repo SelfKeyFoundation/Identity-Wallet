@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import {
-	withStyles,
 	Table,
 	TableBody,
 	TableHead,
@@ -10,6 +9,7 @@ import {
 	Grid,
 	Button
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { PriceSummary, DeleteIcon, SmallTableHeadRow } from 'selfkey-ui';
 import { Popup } from '../common/popup';
 
@@ -45,7 +45,7 @@ export const styles = theme => ({
 	},
 	cryptoPriceTable: {
 		bodySection: {
-			maxWidth: '1080px',
+			maxWidth: '1074px',
 			width: '100%'
 		},
 		'@media screen and (min-width: 1230px)': {
@@ -101,7 +101,7 @@ class CryptoPriceTableComponent extends PureComponent {
 				<Grid
 					container
 					className={classes.root}
-					spacing={32}
+					spacing={4}
 					direction="column"
 					justify="flex-start"
 					alignItems="stretch"
@@ -113,7 +113,7 @@ class CryptoPriceTableComponent extends PureComponent {
 						</Typography>
 					</Grid>
 					<Grid item>
-						<Grid container spacing={24}>
+						<Grid container spacing={3}>
 							<Grid item>
 								<Button
 									variant="contained"

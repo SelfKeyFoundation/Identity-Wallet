@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { StyledButton } from 'selfkey-ui';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
-import { Grid, Input } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { Button, Grid, Input } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { push } from 'connected-react-router';
 import { Popup } from '../../common';
 
@@ -98,9 +97,9 @@ class AddressBookEditContainer extends PureComponent {
 		return (
 			<Popup closeAction={this.closeAction} open text="Edit Label">
 				<form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
-					<Grid container direction="column" spacing={32}>
+					<Grid container direction="column" spacing={4}>
 						<Grid item>
-							<Grid container direction="column" spacing={8}>
+							<Grid container direction="column" spacing={1}>
 								<Grid item>
 									<label className={classes.label}>LABEL</label>
 								</Grid>
@@ -122,9 +121,9 @@ class AddressBookEditContainer extends PureComponent {
 							</Grid>
 						</Grid>
 						<Grid item>
-							<Grid container direction="row" spacing={24}>
+							<Grid container direction="row" spacing={3}>
 								<Grid item>
-									<StyledButton
+									<Button
 										id="saveButton"
 										variant="contained"
 										size="large"
@@ -132,17 +131,17 @@ class AddressBookEditContainer extends PureComponent {
 										disabled={!this.state.label || hasLabelError}
 									>
 										Save
-									</StyledButton>
+									</Button>
 								</Grid>
 								<Grid item>
-									<StyledButton
+									<Button
 										id="cancelButton"
 										variant="outlined"
 										size="large"
 										onClick={this.closeAction}
 									>
 										Cancel
-									</StyledButton>
+									</Button>
 								</Grid>
 							</Grid>
 						</Grid>

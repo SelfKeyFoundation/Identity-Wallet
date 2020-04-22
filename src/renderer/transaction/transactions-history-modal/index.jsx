@@ -25,7 +25,7 @@ import {
 	Input,
 	FormControl
 } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import {
 	HourGlassIcon,
 	FailedIcon,
@@ -363,7 +363,7 @@ class TransactionsHistoryModal extends PureComponent {
 							justify="flex-start"
 							alignItems="stretch"
 							wrap="nowrap"
-							spacing={40}
+							spacing={5}
 							className={classes.content}
 						>
 							<Grid
@@ -425,7 +425,7 @@ class TransactionsHistoryModal extends PureComponent {
 						justify="flex-start"
 						wrap="nowrap"
 						alignItems="stretch"
-						spacing={40}
+						spacing={5}
 						className={classes.content}
 					>
 						{processing ? (

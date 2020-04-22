@@ -18,7 +18,7 @@ import {
 	TableFooter,
 	CircularProgress
 } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import {
 	RefreshIcon,
 	HourGlassIcon,
@@ -266,7 +266,7 @@ class TransactionsHistory extends PureComponent {
 		const { rowsPerPage, page } = this.state;
 
 		return (
-			<Grid container alignItems="center" spacing={16}>
+			<Grid container alignItems="center" spacing={2}>
 				<Grid item xs={12}>
 					<Grid container justify="space-between" alignItems="center">
 						<div>

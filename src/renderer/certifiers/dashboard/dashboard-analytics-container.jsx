@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import CertifiersDashboardAnalyticsPage from './dashboard-analytics-page';
 
 const styles = theme => ({});

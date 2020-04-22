@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import { WarningShieldIcon } from 'selfkey-ui';
 import { Popup } from '../../common/popup';
-import { Typography, withStyles, Button, Grid } from '@material-ui/core';
+import { Typography, Button, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	title: {
@@ -39,7 +40,7 @@ class WalletExportWarningComponent extends PureComponent {
 							direction="column"
 							justify="flex-start"
 							alignItems="stretch"
-							spacing={8}
+							spacing={1}
 						>
 							<Grid item>
 								<Typography variant="body2" gutterBottom>
@@ -49,7 +50,7 @@ class WalletExportWarningComponent extends PureComponent {
 								</Typography>
 							</Grid>
 							<Grid item className={classes.buttonContainer}>
-								<Grid container direction="row" spacing={16}>
+								<Grid container direction="row" spacing={2}>
 									<Grid item>
 										<Button variant="contained" size="large" onClick={onExport}>
 											It&apos;s safe, Continue
