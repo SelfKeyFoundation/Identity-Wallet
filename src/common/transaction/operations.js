@@ -433,6 +433,7 @@ const sendCustomTransaction = ({
 }) => async (dispatch, getState) => {
 	const walletService = getGlobalContext().walletService;
 	const state = getState();
+
 	const transactionEventEmitter = walletService.sendTransaction(transaction);
 
 	let hardwalletConfirmationTimeout = null;

@@ -78,6 +78,8 @@ const common = {
 
 	totleApiUrl: 'https://api.totle.com',
 	totleApiKey: '3c5645ed-a34e-409d-b179-19a998bd509b',
+	totleMaxSwap: 1000, // Max allowed totle Swap in USD
+	totlePartnerContract: false,
 
 	constants: {
 		initialIdAttributes: {
