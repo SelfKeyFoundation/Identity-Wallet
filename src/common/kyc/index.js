@@ -146,27 +146,28 @@ export const kycSelectors = {
 
 		// select entity type for all members
 		members = members.map(m => {
-			if (m.type === 'individual') {
-				return m;
-			}
-			const entityType = identitySelectors.selectBasicAttributeInfo(ENTITY_TYPE_ATTRIBUTE, {
-				identityId: m.id
-			});
-			return { ...m, entityType };
+			const userData = this.selectKYCUserData(state, m.id);
+			return { ...m, userData };
 		});
+
+		const mainUserData = this.selectKYCUserData(state, identity.id);
+		const mainEntityType = mainUserData.entityType;
 
 		const { memberTemplates } = template;
 
 		// build kyc requirements tree for all members
 		const requirements = members.reduce((acc, curr) => {
-			const isCorporate = curr.type === 'corporate';
-			const { entityType, positions } = curr;
+			const { positions } = curr;
+
 			// match all possible member templates to current member
 			const matchedTemplates = memberTemplates.filter(t => {
-				if (t.legalEntityTypes.length !== 0 && !isCorporate) {
+				if (!t.template || t.memberType !== curr.type) {
 					return false;
 				}
-				if (isCorporate && !t.legalEntityTypes.includes((entityType || '').toUpperCase())) {
+				if (
+					t.legalEntityTypes.length === 0 ||
+					!t.legalEntityTypes.includes(mainEntityType)
+				) {
 					return false;
 				}
 				return positions.reduce((acc, curr) => {
@@ -193,8 +194,14 @@ export const kycSelectors = {
 						maxDepth - 1
 					) || [];
 				const memberTemplate = t;
+				const requirementPositions = positions.reduce((acc, curr) => {
+					if (t.memberRoles.includes((curr || '').replace(/-/, '_'))) {
+						acc.push(curr);
+					}
+					return acc;
+				}, []);
 				return acc.concat([
-					{ ...curr, requirements, memberTemplate },
+					{ ...curr, requirements, memberTemplate, positions: requirementPositions },
 					...memberRequirements
 				]);
 			}, []);
@@ -239,7 +246,7 @@ export const kycSelectors = {
 			return acc;
 		}, {});
 
-		return templateAttributes.map(tplAttr => {
+		const requirements = templateAttributes.map(tplAttr => {
 			if (typeof tplAttr === 'string') {
 				tplAttr = { schemaId: tplAttr };
 			}
@@ -261,6 +268,8 @@ export const kycSelectors = {
 				duplicateType: tplOccurrence[tplAttr.schemaId] > 1
 			};
 		});
+
+		return requirements;
 	},
 
 	selectKYCAttributes(state, identityId, attributes = []) {
@@ -295,7 +304,8 @@ export const kycSelectors = {
 			EMAIL_ATTRIBUTE,
 			FIRST_NAME_ATTRIBUTE,
 			LAST_NAME_ATTRIBUTE,
-			ENTITY_NAME_ATTRIBUTE
+			ENTITY_NAME_ATTRIBUTE,
+			ENTITY_TYPE_ATTRIBUTE
 		].map(url => {
 			let attr = kycAttributes.find(attr => attr.schemaId === url);
 			if (!attr) {
@@ -319,7 +329,8 @@ export const kycSelectors = {
 
 		const data = {
 			email: attrData[EMAIL_ATTRIBUTE],
-			name: attrData[ENTITY_NAME_ATTRIBUTE]
+			name: attrData[ENTITY_NAME_ATTRIBUTE],
+			entityType: attrData[ENTITY_TYPE_ATTRIBUTE]
 		};
 
 		if (!data.name) {
