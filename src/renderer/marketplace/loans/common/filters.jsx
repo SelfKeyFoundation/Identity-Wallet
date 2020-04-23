@@ -1,7 +1,6 @@
 import React from 'react';
-import { withStyles, Typography, Grid, Input, Select, MenuItem } from '@material-ui/core';
+import { withStyles, Typography, Grid, Input, Select, MenuItem, Slider } from '@material-ui/core';
 import { KeyboardArrowDown } from '@material-ui/icons';
-// import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 
 const styles = theme => ({
@@ -21,8 +20,12 @@ const LoansFilters = withStyles(styles)(
 		onTokenFilterChange,
 		isP2P = false,
 		onP2pFilterChange,
+		onRateRangeChange,
 		isLicensed = false,
-		onLicensedFilterChange
+		onLicensedFilterChange,
+		maxRange = 100,
+		minRange = 0,
+		selectedRange = [0, 100]
 	}) => {
 		return (
 			<Grid
@@ -30,7 +33,7 @@ const LoansFilters = withStyles(styles)(
 				container
 				direction="fow"
 				justify="flex-start"
-				spacing={40}
+				spacing={5}
 				className={classes.container}
 			>
 				<Grid item>
@@ -52,6 +55,14 @@ const LoansFilters = withStyles(styles)(
 					<Typography variant="overline" gutterBottom>
 						Current Rates
 					</Typography>
+					<Slider
+						value={selectedRange}
+						max={maxRange}
+						min={minRange}
+						onChange={onRateRangeChange}
+						valueLabelDisplay="auto"
+						aria-labelledby="range-slider"
+					/>
 				</Grid>
 				<Grid item>
 					<Typography variant="overline" gutterBottom>
@@ -70,8 +81,11 @@ const LoansFilters = withStyles(styles)(
 							<em>Choose...</em>
 						</MenuItem>
 						{tokens.map(token => (
-							<MenuItem key={token.symbol} value={token.symbol}>
-								{token.symbol}
+							<MenuItem
+								key={`${token.symbol}-${token.createdAt}`}
+								value={token.symbol}
+							>
+								{token.symbol} - {token.name}
 							</MenuItem>
 						))}
 					</Select>

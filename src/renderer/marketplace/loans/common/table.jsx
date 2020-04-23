@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Typography, Grid } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
@@ -46,31 +46,64 @@ const styles = theme => ({
 	}
 });
 
-const LoansTable = withStyles(styles)(
-	({
-		classes,
-		inventory = [],
-		onDetailsClick,
-		className,
-		tokens,
-		selectedToken,
-		onTokenFilterChange,
-		isP2P,
-		onP2pFilterChange,
-		isLicensed,
-		onLicensedFilterChange
-	}) => {
+class LoansTableComponent extends PureComponent {
+	state = {
+		selectedToken: false,
+		isP2P: false,
+		isLicensed: false,
+		selectedRange: [0, 100]
+	};
+
+	onTokenFilterChange = e => this.selectToken(e.target.value);
+
+	selectToken = selectedToken => this.setState({ selectedToken });
+
+	onP2pFilterChange = e => this.setState(prevState => ({ isP2P: !prevState.isP2P }));
+
+	onLicensedFilterChange = e =>
+		this.setState(prevState => ({ isLicensed: !prevState.isLicensed }));
+
+	onRateRangeChange = (e, selectedRange) => this.setState({ selectedRange });
+
+	render() {
+		const { classes, inventory = [], onDetailsClick, className, tokens } = this.props;
+		const { selectedToken, isLicensed, isP2P, selectedRange } = this.state;
+
+		let filteredInventory = inventory;
+
+		if (selectedToken) {
+			filteredInventory = filteredInventory.filter(offer =>
+				offer.data.assets.includes(selectedToken)
+			);
+		}
+
+		if (isLicensed) {
+			filteredInventory = filteredInventory.filter(offer => !!offer.data.licensed);
+		}
+
+		if (isP2P) {
+			filteredInventory = filteredInventory.filter(
+				({ data: { type } }) => !!type === 'Decentralized'
+			);
+		}
+
+		filteredInventory = filteredInventory.filter(({ data: { interestRate: rate } }) => {
+			return parseFloat(rate) >= selectedRange[0] && parseFloat(rate) <= selectedRange[1];
+		});
+
 		return (
 			<React.Fragment>
 				<div>
 					<LoansFilters
 						tokens={tokens}
 						selectedToken={selectedToken}
-						onTokenFilterChange={onTokenFilterChange}
+						onTokenFilterChange={this.onTokenFilterChange}
 						isP2P={isP2P}
-						onP2pFilterChange={onP2pFilterChange}
+						onP2pFilterChange={this.onP2pFilterChange}
 						isLicensed={isLicensed}
-						onLicensedFilterChange={onLicensedFilterChange}
+						onLicensedFilterChange={this.onLicensedFilterChange}
+						selectedRange={selectedRange}
+						onRateRangeChange={this.onRateRangeChange}
 					/>
 				</div>
 				<Table className={classNames(classes.table, className)}>
@@ -102,7 +135,7 @@ const LoansTable = withStyles(styles)(
 						</LargeTableHeadRow>
 					</TableHead>
 					<TableBody className={classes.tableBodyRow}>
-						{inventory.map(offer => (
+						{filteredInventory.map(offer => (
 							<TableRow key={offer.sku}>
 								<TableCell className={classes.logoCell}>
 									{offer.data.logoUrl && <img src={offer.data.logoUrl} />}
@@ -116,7 +149,12 @@ const LoansTable = withStyles(styles)(
 									<Grid container>
 										{offer.data.assets &&
 											offer.data.assets.map(tag => (
-												<Tag key={tag}>{tag}</Tag>
+												<Tag
+													key={tag}
+													onClick={() => this.selectToken(tag)}
+												>
+													{tag}
+												</Tag>
 											))}
 									</Grid>
 								</TableCell>
@@ -131,7 +169,8 @@ const LoansTable = withStyles(styles)(
 			</React.Fragment>
 		);
 	}
-);
+}
 
+const LoansTable = withStyles(styles)(LoansTableComponent);
 export default LoansTable;
 export { LoansTable };
