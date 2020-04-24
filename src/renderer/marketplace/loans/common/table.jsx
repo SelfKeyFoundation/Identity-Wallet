@@ -54,6 +54,22 @@ class LoansTableComponent extends PureComponent {
 		selectedRange: [0, 100]
 	};
 
+	inventoryUniqueTokens = inventory => {
+		const tokens = inventory.reduce((acc, offer) => {
+			const { assets } = offer.data;
+			assets.forEach(t => acc.add(t));
+			return acc;
+		}, new Set());
+
+		return [...tokens];
+	};
+
+	inventoryRateRange = inventory => {
+		const min = Math.min.apply(Math, inventory.map(o => parseFloat(o.data.interestRate)));
+		const max = Math.max.apply(Math, inventory.map(o => parseFloat(o.data.interestRate)));
+		return { min, max };
+	};
+
 	onTokenFilterChange = e => this.selectToken(e.target.value);
 
 	selectToken = selectedToken => this.setState({ selectedToken });
@@ -66,7 +82,7 @@ class LoansTableComponent extends PureComponent {
 	onRateRangeChange = (e, selectedRange) => this.setState({ selectedRange });
 
 	render() {
-		const { classes, inventory = [], onDetailsClick, className, tokens } = this.props;
+		const { classes, inventory = [], onDetailsClick, className } = this.props;
 		const { selectedToken, isLicensed, isP2P, selectedRange } = this.state;
 
 		let filteredInventory = inventory;
@@ -95,7 +111,7 @@ class LoansTableComponent extends PureComponent {
 			<React.Fragment>
 				<div>
 					<LoansFilters
-						tokens={tokens}
+						tokens={this.inventoryUniqueTokens(inventory)}
 						selectedToken={selectedToken}
 						onTokenFilterChange={this.onTokenFilterChange}
 						isP2P={isP2P}
@@ -104,6 +120,7 @@ class LoansTableComponent extends PureComponent {
 						onLicensedFilterChange={this.onLicensedFilterChange}
 						selectedRange={selectedRange}
 						onRateRangeChange={this.onRateRangeChange}
+						range={this.inventoryRateRange(inventory)}
 					/>
 				</div>
 				<Table className={classNames(classes.table, className)}>
@@ -113,17 +130,16 @@ class LoansTableComponent extends PureComponent {
 							<TableCell>
 								<Typography variant="overline">Name</Typography>
 							</TableCell>
+							{/*
 							<TableCell>
 								<Typography variant="overline">Trust Score</Typography>
 							</TableCell>
+							*/}
 							<TableCell>
 								<Typography variant="overline">Type</Typography>
 							</TableCell>
 							<TableCell>
 								<Typography variant="overline">Current Rates</Typography>
-							</TableCell>
-							<TableCell>
-								<Typography variant="overline">30 Days AVG</Typography>
 							</TableCell>
 							<TableCell>
 								<Typography variant="overline">Assets Accepted</Typography>
@@ -141,10 +157,11 @@ class LoansTableComponent extends PureComponent {
 									{offer.data.logoUrl && <img src={offer.data.logoUrl} />}
 								</TableCell>
 								<TableCell>{offer.name}</TableCell>
+								{/*
 								<TableCell />
+								*/}
 								<TableCell>{offer.data.type}</TableCell>
 								<TableCell>{offer.data.interestRate}</TableCell>
-								<TableCell />
 								<TableCell>
 									<Grid container>
 										{offer.data.assets &&

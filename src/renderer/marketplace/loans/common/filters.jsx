@@ -16,17 +16,17 @@ const LoansFilters = withStyles(styles)(
 	({
 		classes,
 		tokens = [],
-		selectedToken = false,
+		selectedToken = '',
 		onTokenFilterChange,
 		isP2P = false,
 		onP2pFilterChange,
 		onRateRangeChange,
 		isLicensed = false,
 		onLicensedFilterChange,
-		maxRange = 100,
-		minRange = 0,
-		selectedRange = [0, 100]
+		range = { min: 0, max: 100 },
+		selectedRange = false
 	}) => {
+		console.log(range);
 		return (
 			<Grid
 				id="loans-filter"
@@ -57,8 +57,8 @@ const LoansFilters = withStyles(styles)(
 					</Typography>
 					<Slider
 						value={selectedRange}
-						max={maxRange}
-						min={minRange}
+						min={range.min}
+						max={range.max}
 						onChange={onRateRangeChange}
 						valueLabelDisplay="auto"
 						aria-labelledby="range-slider"
@@ -81,11 +81,8 @@ const LoansFilters = withStyles(styles)(
 							<em>Choose...</em>
 						</MenuItem>
 						{tokens.map(token => (
-							<MenuItem
-								key={`${token.symbol}-${token.createdAt}`}
-								value={token.symbol}
-							>
-								{token.symbol} - {token.name}
+							<MenuItem key={token} value={token}>
+								{token}
 							</MenuItem>
 						))}
 					</Select>

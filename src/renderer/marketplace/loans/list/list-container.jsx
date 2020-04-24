@@ -16,6 +16,9 @@ class LoansListContainer extends MarketplaceLoansComponent {
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
 
 	onDetailsClick = offer => {
+		console.log(offer);
+		this.props.dispatch(push(this.detailsRoute(offer.id)));
+
 		/*
 		const { accountCode, countryCode } = jurisdiction.data;
 		const { templateId, vendorId } = jurisdiction;
