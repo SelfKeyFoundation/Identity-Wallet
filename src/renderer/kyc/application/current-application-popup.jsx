@@ -19,9 +19,6 @@ const styles = theme => ({
 	},
 	popupClass: {
 		width: '990px'
-	},
-	closeButtonClass: {
-		left: '20px'
 	}
 });
 

@@ -100,6 +100,7 @@ const styles = {
 			background: '#00C0D9'
 		}
 	},
+	membersList: {},
 	memberListWrapper: {
 		borderRight: '1px solid #303C49',
 		overflow: 'visible',
@@ -128,7 +129,7 @@ export const KycChecklistItemLabel = withStyles(styles)(
 				</Typography>
 			);
 		}
-		const attributeName = `${selectedIdentityId || ''}${item.uiId}`;
+		const attributeName = `${selectedIdentityId || ''}_${item.uiId}`;
 		const selectedAttr = selectedAttributes[attributeName] || options[0];
 		onSelected(attributeName, selectedAttr);
 
@@ -290,24 +291,33 @@ export const KycMembersListItem = withStyles(styles)(({ classes, item, onClick }
 			item.selected ? classes.kycMembersListItemSelected : null
 		)}
 		onClick={e => onClick(item)}
-		spacing={2}
+		spacing={0}
 	>
-		<Grid item>
+		<Grid item xs>
 			<Grid
 				container
 				direction="column"
 				alignItems="flex-start"
 				justify="flex-start"
-				spacing={8}
+				spacing={1}
 			>
 				<Grid item>
 					<Typography variant="h6">{item.name}</Typography>
 				</Grid>
 				<Grid item>
 					<Typography variant="subtitle1" color="secondary">
-						{Array.isArray(item.positions) ? item.positions.join(', ') : item.positions}
+						{item.parentCompany}
 					</Typography>
 				</Grid>
+				{item.positions && item.positions.length > 0 && (
+					<Grid item>
+						<Typography variant="subtitle1" color="secondary">
+							{Array.isArray(item.positions)
+								? item.positions.join(', ')
+								: item.positions}
+						</Typography>
+					</Grid>
+				)}
 			</Grid>
 		</Grid>
 		<Grid item>
@@ -322,6 +332,7 @@ export const KycMembersListItem = withStyles(styles)(({ classes, item, onClick }
 
 export const KycMembersList = withStyles(styles)(
 	({
+		classes,
 		userData,
 		requirements,
 		memberRequirements,
@@ -329,10 +340,28 @@ export const KycMembersList = withStyles(styles)(
 		selectedIdentityId = null,
 		selectedTemplate = null
 	}) => {
+		console.log(
+			'XXX',
+			selectedTemplate,
+			selectedIdentityId,
+			memberRequirements.map(r => [
+				r.memberTemplate,
+				r.id,
+				r.id === selectedIdentityId &&
+					(r.memberTemplate ? r.memberTemplate.template : null) === selectedTemplate
+			])
+		);
+		const companies = memberRequirements.reduce((acc, curr) => {
+			if (curr.type === 'corporate') {
+				acc[curr.id] = curr.userDate.name;
+			}
+			return acc;
+		}, {});
 		const members = memberRequirements.map(r => ({
 			id: r.id,
 			template: r.memberTemplate ? r.memberTemplate.template : null,
 			name: r.userData.name,
+			parentCompany: companies[r.parentIdentity],
 			positions: r.positions,
 			selected:
 				r.id === selectedIdentityId &&
@@ -342,13 +371,20 @@ export const KycMembersList = withStyles(styles)(
 		members.unshift({
 			id: 'main-company',
 			name: userData.name,
-			positions: 'Main Company',
+			parentCompany: 'Main Company',
 			selected: selectedIdentityId === null,
 			warning: requirementsHaveWarning(requirements)
 		});
 
 		return (
-			<Grid container direction="column" alignItems="stretch" justify="flex-start">
+			<Grid
+				container
+				direction="column"
+				alignItems="stretch"
+				justify="flex-start"
+				spacing={0}
+				className={classes.membersList}
+			>
 				{members.map(m => (
 					<Grid item key={`${m.id}_${m.template}`}>
 						<KycMembersListItem item={m} onClick={onMemberClick} />

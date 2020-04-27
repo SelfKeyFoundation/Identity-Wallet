@@ -27,6 +27,7 @@ const KYC_APPLICATIONS_PAYMENT_ENDPOINT_NAME = '/applications/:id/payments';
 const KYC_APPLICATIONS_LIST_ENDPOINT_NAME = '/applications';
 const KYC_USERS_GET_ENDPOINT_NAME = '/kyc-users/me';
 const KYC_USERS_CREATE_ENDPOINT_NAME = '/kyc-users';
+const KYC_CORPORATE_MEMBERS_ENDPOINT_NAME = '/applications/:applicationId/members';
 const KYC_GET_ACCESS_TOKEN_ENDPOINT_NAME = '/auth/token';
 
 export class RelyingPartyError extends Error {
@@ -277,6 +278,23 @@ export class RelyingPartyRest {
 			json: true
 		});
 	}
+
+	static createKYCMemberApplication(ctx, applicationId, templateId, attributes) {
+		let url = ctx.getEndpoint(KYC_CORPORATE_MEMBERS_ENDPOINT_NAME);
+		url = url.replace(':applicationId', applicationId);
+		log.debug(`[createKYCMemberApplication] POST ${url}`);
+		return request.post({
+			url,
+			body: { attributes, templateId },
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+
 	static updateKYCApplication(ctx, application) {
 		let url = ctx.getEndpoint(KYC_APPLICATIONS_UPDATE_ENDPOINT_NAME);
 		url = url.replace(':id', application.id);
@@ -552,6 +570,41 @@ export class RelyingPartySession {
 			})
 		);
 		return RelyingPartyRest.createKYCApplication(this.ctx, templateId, filteredAttributes);
+	}
+
+	async createKYCMemberApplication(applicationId, templateId, attributes) {
+		// ignore empty non-required attributes
+		let filteredAttributes = attributes.filter(
+			attr => attr.data || attr.documents || attr.required
+		);
+		filteredAttributes = await Promise.all(
+			filteredAttributes.map(async attr => {
+				const attrDocs = await Promise.all(
+					attr.documents.map(async doc => {
+						if (doc.content) {
+							doc.buffer = bufferFromDataUrl(doc.content);
+						}
+						const res = await RelyingPartyRest.uploadKYCApplicationFile(this.ctx, doc);
+						let newDoc = { ...doc };
+						delete newDoc.buffer;
+						newDoc.content = res.id;
+						return newDoc;
+					})
+				);
+				const { value } = identityAttributes.denormalizeDocumentsSchema(
+					attr.schema,
+					(attr.data || {}).value,
+					attrDocs
+				);
+				return { ...attr, data: value, documents: undefined };
+			})
+		);
+		return RelyingPartyRest.createKYCMemberApplication(
+			this.ctx,
+			applicationId,
+			templateId,
+			filteredAttributes
+		);
 	}
 
 	updateKYCApplication(application) {

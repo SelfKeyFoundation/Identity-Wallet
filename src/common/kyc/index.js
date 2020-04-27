@@ -42,8 +42,9 @@ export const kycTypes = {
 	KYC_APPLICATION_CURRENT_SET: 'kyc/application/current/set',
 	KYC_APPLICATION_CANCEL_ROUTE_SET: 'kyc/application/cancel/route/set',
 	KYC_APPLICATION_CURRENT_CLEAR: 'kyc/application/current/clear',
-	KYC_APPLICATION_CURRENT_CENCEL: 'kyc/application/current/cancel',
-	p: 'kyc/application/current/submit',
+	KYC_APPLICATION_CURRENT_CANCEL: 'kyc/application/current/cancel',
+	KYC_APPLICATION_CURRENT_SUBMIT: 'kyc/application/current/submit',
+	KYC_APPLICATION_CURRENT_MEMBERS_SUBMIT: 'kyc/application/current/members/submit',
 	KYC_APPLICATIONS_LOAD: 'kyc/applications/load',
 	KYC_APPLICATIONS_SET: 'kyc/applications/set',
 	KYC_APPLICATIONS_UPDATE: 'kyc/applications/update',
@@ -122,7 +123,7 @@ export const kycSelectors = {
 		rpName,
 		templateId,
 		identityId = null,
-		maxDepth = 10
+		maxDepth = 3
 	) {
 		const template = this.oneTemplateSelector(state, rpName, templateId);
 		const identity = identitySelectors.selectIdentity(
@@ -211,6 +212,32 @@ export const kycSelectors = {
 			requirements,
 			(a, b) => a.id === b.id && a.memberTemplate.template === b.memberTemplate.template
 		);
+	},
+	selectMemberApplicationAttributes(state, rpName, templateId, selected) {
+		const memberRequirements = kycSelectors.selectMemberRequirementsForTemplate(
+			state,
+			rpName,
+			templateId
+		);
+		const selectedMemberRequirements = memberRequirements.map(m => ({
+			...m,
+			requirements: m.requirements.map(r => {
+				const attributeName = `${m.id}_${r.uiId}`;
+				const sel =
+					!r.options || !r.options.length
+						? null
+						: selected[attributeName] || r.options[0];
+				return {
+					id: r.id,
+					attributeId: sel ? sel.id : undefined,
+					schemaId: r.schemaId,
+					schema: r.schema || r.type ? r.type.content : undefined,
+					required: r.required,
+					type: r.tType || 'individual'
+				};
+			})
+		}));
+		return selectedMemberRequirements;
 	},
 	selectRequirementsForTemplate(state, rpName, templateId, identityId) {
 		const template = this.oneTemplateSelector(state, rpName, templateId);
@@ -624,8 +651,60 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 				title: title || rpName
 			})
 		);
+		return application;
 	} catch (error) {
 		log.error('createKycApplication %s', error);
+		throw error;
+	}
+};
+
+const createMemberKYCApplication = (
+	applicationId,
+	identityId,
+	rpName,
+	templateId,
+	attributes,
+	title
+) => async (dispatch, getState) => {
+	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
+	if (!rp || !rp.session) throw new Error('relying party does not exist');
+	if (!rp.templates.find(tpl => tpl.id === templateId)) {
+		throw new Error('template does not exist');
+	}
+
+	const identity = identitySelectors.selectIdentity(getState(), { identityId });
+	if (!identity) return;
+
+	if (!rp.session.isActive()) {
+		await rp.session.establish();
+	}
+
+	attributes = kycSelectors.selectKYCAttributes(getState(), identity.id, attributes);
+	try {
+		let application = await rp.session.createKYCMemberApplication(
+			applicationId,
+			templateId,
+			attributes
+		);
+		application = await rp.session.getKYCApplication(application.id);
+		await dispatch(kycActions.addKYCApplication(rpName, application, identity.id));
+
+		await dispatch(
+			kycOperations.updateApplicationsOperation({
+				id: application.id,
+				identityId: identity.id,
+				rpName: rpName,
+				currentStatus: application.currentStatus,
+				currentStatusName: application.statusName,
+				owner: application.owner,
+				scope: application.scope,
+				applicationDate: application.createdAt,
+				title: title || rpName
+			})
+		);
+		return application;
+	} catch (error) {
+		log.error('createMemberKycApplication %s', error);
 		throw error;
 	}
 };
@@ -765,22 +844,26 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 		termsOfService,
 		attributes
 	} = currentApplication;
-	const requirements = kycSelectors.selectRequirementsForTemplate(
-		state,
-		relyingPartyName,
-		templateId
-	);
-	const requiredAttributes = requirements.map(r => {
-		const sel = !r.options || !r.options.length ? null : selected[r.uiId] || r.options[0];
-		return {
-			id: r.id,
-			attributeId: sel ? sel.id : undefined,
-			schemaId: r.schemaId,
-			schema: r.schema || r.type ? r.type.content : undefined,
-			required: r.required,
-			type: r.tType || 'individual'
-		};
-	});
+	const identity = identitySelectors.selectIdentity(state);
+	// const requirements = kycSelectors.selectRequirementsForTemplate(
+	// 	state,
+	// 	relyingPartyName,
+	// 	templateId
+	// );
+
+	// const requiredAttributes = requirements.map(r => {
+	// 	const attributeName = `_${r.uiId}`;
+	// 	const sel =
+	// 		!r.options || !r.options.length ? null : selected[attributeName] || r.options[0];
+	// 	return {
+	// 		id: r.id,
+	// 		attributeId: sel ? sel.id : undefined,
+	// 		schemaId: r.schemaId,
+	// 		schema: r.schema || r.type ? r.type.content : undefined,
+	// 		required: r.required,
+	// 		type: r.tType || 'individual'
+	// 	};
+	// });
 
 	try {
 		await dispatch(
@@ -798,14 +881,18 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 				attributes
 			)
 		);
-		await dispatch(
-			kycOperations.createRelyingPartyKYCApplication(
-				relyingPartyName,
-				templateId,
-				requiredAttributes,
-				title
-			)
-		);
+		// await dispatch(
+		// 	kycOperations.createRelyingPartyKYCApplication(
+		// 		relyingPartyName,
+		// 		templateId,
+		// 		requiredAttributes,
+		// 		title
+		// 	)
+		// );
+
+		if (identity.type === 'corporate') {
+			await dispatch(kycOperations.submitCurrentApplicationMembers(selected));
+		}
 
 		await dispatch(push(currentApplication.returnRoute));
 	} catch (error) {
@@ -813,6 +900,7 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 		if (error.error) {
 			applicationError = error.error;
 		}
+		log.error('submit application error %2j', applicationError);
 		await dispatch(
 			kycActions.setCurrentApplication(
 				relyingPartyName,
@@ -834,6 +922,87 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 	if (kycSelectors.relyingPartyShouldUpdateSelector(state, relyingPartyName)) {
 		await dispatch(kycOperations.loadRelyingParty(relyingPartyName));
 	}
+};
+
+const submitCurrentApplicationMembers = (selected, parentApplication, identityId) => async (
+	dispatch,
+	getState
+) => {
+	const state = getState();
+	const currentApplication = kycSelectors.selectCurrentApplication(state);
+	const {
+		relyingPartyName,
+		templateId
+		// returnRoute,
+		// cancelRoute,
+		// title,
+		// description,
+		// agreement,
+		// vendor,
+		// privacyPolicy,
+		// termsOfService,
+		// attributes
+	} = currentApplication;
+	const memberRequirements = kycSelectors.selectMemberApplicationAttributes(
+		state,
+		relyingPartyName,
+		templateId,
+		selected
+	);
+	const membersByParentId = memberRequirements.reduce((acc, curr) => {
+		acc[curr.parentIdentity] = curr;
+		return acc;
+	}, {});
+
+	const currMembers = membersByParentId[identityId];
+
+	if (!currMembers) {
+		return;
+	}
+	const submitOneMemberApplication = async (
+		m,
+		applicationId,
+		identityId,
+		relyingPartyName,
+		membersByParentId
+	) => {
+		const members = currMembers[m.id];
+
+		const application = await dispatch(
+			kycOperations.createKYCMemberApplication(
+				applicationId,
+				m.memberTemplate.template,
+				m.requirements
+			)
+		);
+
+		await Promise.all(
+			members.map(mm =>
+				dispatch(
+					submitOneMemberApplication(
+						mm,
+						application.id,
+						identityId,
+						relyingPartyName,
+						membersByParentId
+					)
+				)
+			)
+		);
+	};
+	await Promise.all(
+		currMembers.map(m =>
+			dispatch(
+				submitOneMemberApplication(
+					m,
+					parentApplication.id,
+					identityId,
+					relyingPartyName,
+					membersByParentId
+				)
+			)
+		)
+	);
 };
 
 const cancelCurrentApplicationOperation = () => async (dispatch, getState) => {
@@ -881,6 +1050,10 @@ export const kycOperations = {
 		kycTypes.KYC_RP_APPLICATION_CREATE,
 		createRelyingPartyKYCApplication
 	),
+	createMemberKYCApplication: createAliasedAction(
+		kycTypes.KYC_RP_MEMBER_APPLICATION_CREATE,
+		createMemberKYCApplication
+	),
 	updateRelyingPartyKYCApplication: createAliasedAction(
 		kycTypes.KYC_RP_APPLICATION_UPDATE,
 		updateRelyingPartyKYCApplication
@@ -890,7 +1063,7 @@ export const kycOperations = {
 		updateRelyingPartyKYCApplicationPayment
 	),
 	cancelCurrentApplicationOperation: createAliasedAction(
-		kycTypes.KYC_APPLICATION_CURRENT_CENCEL,
+		kycTypes.KYC_APPLICATION_CURRENT_CANCEL,
 		cancelCurrentApplicationOperation
 	),
 	startCurrentApplicationOperation: createAliasedAction(
@@ -900,6 +1073,10 @@ export const kycOperations = {
 	submitCurrentApplicationOperation: createAliasedAction(
 		kycTypes.KYC_APPLICATION_CURRENT_SUBMIT,
 		submitCurrentApplicationOperation
+	),
+	submitCurrentApplicationMembers: createAliasedAction(
+		kycTypes.KYC_APPLICATION_CURRENT_MEMBERS_SUBMIT,
+		submitCurrentApplicationMembers
 	),
 	clearRelyingPartyOperation: createAliasedAction(
 		kycTypes.KYC_RP_CLEAR,
