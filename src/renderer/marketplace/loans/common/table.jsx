@@ -64,9 +64,35 @@ class LoansTableComponent extends PureComponent {
 		return [...tokens];
 	};
 
-	inventoryRateRange = inventory => {
-		const min = Math.min.apply(Math, inventory.map(o => parseFloat(o.data.interestRate)));
-		const max = Math.max.apply(Math, inventory.map(o => parseFloat(o.data.interestRate)));
+	inventoryByType = (inventory, type) =>
+		inventory
+			.filter(offer => offer.data.loanType.includes(type))
+			.map(offer => {
+				offer.data.interestRate =
+					type === 'lending'
+						? offer.data.interestRateLending
+						: offer.data.interestRateBorrowing;
+				offer.data.maxLoan =
+					type === 'lending' ? offer.data.maxLoanLending : offer.data.maxLoanBorrowing;
+				offer.data.minLoan =
+					type === 'lending' ? offer.data.minLoanLending : offer.data.minLoanBorrowing;
+				offer.data.maxLoanTerm =
+					type === 'lending'
+						? offer.data.maxLoanTermLending
+						: offer.data.maxLoanTermBorrowing;
+				return offer;
+			});
+
+	inventoryRateRangeLimits = (inventory, type) => {
+		const filteredInventory = this.inventoryByType(inventory, type);
+		const min = Math.min.apply(
+			Math,
+			filteredInventory.map(o => parseFloat(o.data.interestRate))
+		);
+		const max = Math.max.apply(
+			Math,
+			filteredInventory.map(o => parseFloat(o.data.interestRate))
+		);
 		return { min, max };
 	};
 
@@ -82,29 +108,48 @@ class LoansTableComponent extends PureComponent {
 	onRateRangeChange = (e, selectedRange) => this.setState({ selectedRange });
 
 	render() {
-		const { classes, inventory = [], onDetailsClick, className } = this.props;
+		const {
+			classes,
+			inventory = [],
+			onDetailsClick,
+			className,
+			filter = 'lending'
+		} = this.props;
 		const { selectedToken, isLicensed, isP2P, selectedRange } = this.state;
 
+		console.log(inventory);
 		let filteredInventory = inventory;
 
+		// Filter by type (loanType)
+		if (filter) {
+			filteredInventory = this.inventoryByType(inventory, filter);
+		}
+
+		// Filter by token (assets)
 		if (selectedToken) {
 			filteredInventory = filteredInventory.filter(offer =>
 				offer.data.assets.includes(selectedToken)
 			);
 		}
 
+		// Filter by Licensing (licensed)
 		if (isLicensed) {
 			filteredInventory = filteredInventory.filter(offer => !!offer.data.licensed);
 		}
 
+		// Filter by P2P (type)
 		if (isP2P) {
 			filteredInventory = filteredInventory.filter(
 				({ data: { type } }) => !!type === 'Decentralized'
 			);
 		}
 
-		filteredInventory = filteredInventory.filter(({ data: { interestRate: rate } }) => {
-			return parseFloat(rate) >= selectedRange[0] && parseFloat(rate) <= selectedRange[1];
+		// Filter by Rate range
+		filteredInventory = filteredInventory.filter(offer => {
+			return (
+				parseFloat(offer.data.interestRate) >= selectedRange[0] &&
+				parseFloat(offer.data.interestRate) <= selectedRange[1]
+			);
 		});
 
 		return (
@@ -120,7 +165,7 @@ class LoansTableComponent extends PureComponent {
 						onLicensedFilterChange={this.onLicensedFilterChange}
 						selectedRange={selectedRange}
 						onRateRangeChange={this.onRateRangeChange}
-						range={this.inventoryRateRange(inventory)}
+						range={this.inventoryRateRangeLimits(inventory, filter)}
 					/>
 				</div>
 				<Table className={classNames(classes.table, className)}>

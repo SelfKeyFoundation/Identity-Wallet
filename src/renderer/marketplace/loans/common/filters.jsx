@@ -26,7 +26,6 @@ const LoansFilters = withStyles(styles)(
 		range = { min: 0, max: 100 },
 		selectedRange = false
 	}) => {
-		console.log(range);
 		return (
 			<Grid
 				id="loans-filter"
