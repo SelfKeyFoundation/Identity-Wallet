@@ -43,7 +43,7 @@ export const kycTypes = {
 	KYC_APPLICATION_CANCEL_ROUTE_SET: 'kyc/application/cancel/route/set',
 	KYC_APPLICATION_CURRENT_CLEAR: 'kyc/application/current/clear',
 	KYC_APPLICATION_CURRENT_CENCEL: 'kyc/application/current/cancel',
-	KYC_APPLICATION_CURRENT_SUBMIT: 'kyc/application/current/submit',
+	p: 'kyc/application/current/submit',
 	KYC_APPLICATIONS_LOAD: 'kyc/applications/load',
 	KYC_APPLICATIONS_SET: 'kyc/applications/set',
 	KYC_APPLICATIONS_UPDATE: 'kyc/applications/update',
@@ -158,7 +158,6 @@ export const kycSelectors = {
 		// build kyc requirements tree for all members
 		const requirements = members.reduce((acc, curr) => {
 			const { positions } = curr;
-
 			// match all possible member templates to current member
 			const matchedTemplates = memberTemplates.filter(t => {
 				if (!t.template || t.memberType !== curr.type) {
