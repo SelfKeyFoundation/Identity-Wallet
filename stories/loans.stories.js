@@ -7,12 +7,12 @@ import LoansTabs from '../src/renderer/marketplace/loans/list/tabs';
 import LoansCalculatorCard from '../src/renderer/marketplace/loans/common/calculator-card';
 import LoansTable from '../src/renderer/marketplace/loans/common/table';
 import LoansFilters from '../src/renderer/marketplace/loans/common/filters';
-import { tokens, inventory } from './__fixtures__/loans-data';
+import { inventory } from './__fixtures__/loans-data';
 
 storiesOf('Loans', module)
 	.add('List Page', () => (
 		<div style={{ width: '1140px' }}>
-			<LoansListPage inventory={inventory} tokens={tokens} />
+			<LoansListPage inventory={inventory} />
 		</div>
 	))
 
@@ -36,18 +36,29 @@ storiesOf('Loans', module)
 
 	.add('Filters', () => (
 		<div style={{ width: '1140px' }}>
-			<LoansFilters tokens={tokens} />
+			<LoansFilters />
 		</div>
 	))
 
 	.add('Filters with selected values', () => (
 		<div style={{ width: '1140px' }}>
-			<LoansFilters tokens={tokens} selectedToken={'KEY'} isLicensed={true} isP2P={true} />
+			<LoansFilters
+				selectedToken={'KEY'}
+				isLicensed={true}
+				isP2P={true}
+				range={{ min: 5, max: 50 }}
+			/>
 		</div>
 	))
 
-	.add('Loans Table', () => (
+	.add('Loans Table Lending', () => (
 		<div style={{ width: '1140px' }}>
-			<LoansTable tokens={tokens} inventory={inventory} />
+			<LoansTable inventory={inventory} filter="lending" />
+		</div>
+	))
+
+	.add('Loans Table Borrowing', () => (
+		<div style={{ width: '1140px' }}>
+			<LoansTable inventory={inventory} filter="borrowing" />
 		</div>
 	));
