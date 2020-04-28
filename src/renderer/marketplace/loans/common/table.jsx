@@ -117,7 +117,6 @@ class LoansTableComponent extends PureComponent {
 		} = this.props;
 		const { selectedToken, isLicensed, isP2P, selectedRange } = this.state;
 
-		console.log(inventory);
 		let filteredInventory = inventory;
 
 		// Filter by type (loanType)

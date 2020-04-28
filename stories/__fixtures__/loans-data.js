@@ -1,14 +1,25 @@
 export const inventory = [
 	{
 		name: 'YouHodler',
+		description: 'Lorem ipsum',
 		data: {
 			loanType: ['lending', 'borrowing'],
 			type: 'Centralized',
 			interestRateLending: '6.5%',
 			interestRateBorrowing: '1.5%',
 			assets: ['BTC', 'ETH'],
+			paymentMethods: ['Credit Card', 'Stable Coins'],
 			maxLoanLending: '$ 100,000 USD',
 			maxLoanBorrowing: '$ 100,000 USD',
+			maxLoanTermBorrowing: '6 months',
+			maxLoanTermLending: '12 months',
+			affiliateUrl: 'https://selfkey.org',
+			location: ['Estonia'],
+			yearLaunched: '2020',
+			email: 'mail@youholder.com',
+			url: 'http://youholder.com',
+			kyc: true,
+			kycPolicyUrl: 'http://www.selfkey.org',
 			logoUrl:
 				'https://global-uploads.webflow.com/5cc19fbd198b8d31a9c64876/5cee8faeaeff6f36241942f1_fav_large.png'
 		}

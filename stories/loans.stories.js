@@ -6,6 +6,9 @@ import LoansListPage from '../src/renderer/marketplace/loans/list/list-page';
 import LoansTabs from '../src/renderer/marketplace/loans/list/tabs';
 import LoansCalculatorCard from '../src/renderer/marketplace/loans/common/calculator-card';
 import LoansTable from '../src/renderer/marketplace/loans/common/table';
+import LoansDetails from '../src/renderer/marketplace/loans/details/details';
+import LoansDetailsHighlights from '../src/renderer/marketplace/loans/details/details-highlights';
+import LoansDetailsTabs from '../src/renderer/marketplace/loans/details/details-tabs';
 import LoansFilters from '../src/renderer/marketplace/loans/common/filters';
 import { inventory } from './__fixtures__/loans-data';
 
@@ -60,5 +63,23 @@ storiesOf('Loans', module)
 	.add('Loans Table Borrowing', () => (
 		<div style={{ width: '1140px' }}>
 			<LoansTable inventory={inventory} filter="borrowing" />
+		</div>
+	))
+
+	.add('Loans Details', () => (
+		<div style={{ width: '1140px' }}>
+			<LoansDetails item={inventory[0]} />
+		</div>
+	))
+
+	.add('Loans Details Tabs', () => (
+		<div style={{ width: '1140px' }}>
+			<LoansDetailsTabs item={inventory[0]} />
+		</div>
+	))
+
+	.add('Loans Details Highlight', () => (
+		<div style={{ width: '1140px' }}>
+			<LoansDetailsHighlights item={inventory[0]} />
 		</div>
 	));
