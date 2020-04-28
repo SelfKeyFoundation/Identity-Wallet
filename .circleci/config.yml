@@ -74,11 +74,32 @@ jobs:
             - run:
                   name: Coveralls
                   command: yarn coveralls
+            - run:
+                  name: Build Storybook
+                  command: yarn build-storybook
             - store_test_results:
                   path: dist/junit
             - store_artifacts:
                   path: dist
             - *step_save_cache
+    'publish-storybook':
+        docker: *DOCKERIMAGE
+        environment:
+            CACHE_VERSION: *cache_version
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: /tmp/linux
+            - *step_prepare_cache_buster
+            - *step_restore_cache
+            - run:
+                  name: Install Node Packages
+                  command: yarn install
+            - run:
+                  name: Story book
+                  command: yarn deploy-storybook-ci
+            - *step_save_cache
+
     'build-mac':
         macos:
             xcode: '11.1.0'
@@ -340,6 +361,14 @@ workflows:
                               - nightly
                               - release
                               - /staging.*/
+            - 'publish-storybook':
+                  requires:
+                      - unit-test
+                      - build-linux
+                  filters:
+                      branches:
+                          only:
+                              - dev
             - 'publish-mac':
                   requires:
                       - build-mac

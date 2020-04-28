@@ -3,6 +3,9 @@
 	"productName": "SelfKey Identity Wallet",
 	"version": "1.5.0",
 	"description": "The Official SelfKey Identity Wallet for Desktop",
+	"browser": [
+		"chrome"
+	],
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/SelfKeyFoundation/Identity-Wallet.git"
@@ -52,7 +55,8 @@
 		"build-dll": "rm -rf node_modules/.cache && electron-webpack dll --env.production=${BUILD_DLL_PRODUCTION:-true}",
 		"build-dev-dll": "BUILD_DLL_PRODUCTION=false yarn build-dll",
 		"storybook": "start-storybook -p 6007",
-		"build-storybook": "build-storybook"
+		"build-storybook": "build-storybook -o dist/storybook && mkdir -p dist/storybook/.circleci && cp .circleci/ignore-storybook.yml dist/storybook/.circleci/config.yml",
+		"deploy-storybook-ci": "storybook-to-ghpages -ci --existing-output-dir=dist/storybook"
 	},
 	"lint-staged": {
 		"*.js": [
@@ -149,13 +153,14 @@
 		"@babel/preset-react": "7.0.0",
 		"@commitlint/cli": "7.2.1",
 		"@commitlint/config-conventional": "7.1.2",
-		"@emotion/core": "10.0.10",
+		"@emotion/core": "10.0.28",
 		"@emotion/style": "0.8.0",
 		"@sentry/cli": "1.37.0",
 		"@storybook/addon-actions": "5.0.11",
 		"@storybook/addon-links": "5.0.11",
 		"@storybook/addons": "5.0.11",
 		"@storybook/react": "5.0.11",
+		"@storybook/storybook-deployer": "^2.8.5",
 		"acorn": "6.1.1",
 		"babel-core": "7.0.0-bridge.0",
 		"babel-eslint": "10.0.1",
