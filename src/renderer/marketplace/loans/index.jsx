@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { marketplaceOperations } from 'common/marketplace';
 import { LoansListContainer } from './list/list-container';
+import { LoansDetailsContainer } from './details/details-container';
 
 class MarketplaceLoansComponent extends PureComponent {
 	async componentDidMount() {
@@ -13,6 +14,7 @@ class MarketplaceLoansComponent extends PureComponent {
 		return (
 			<React.Fragment>
 				<Route exact path={`${path}`} component={LoansListContainer} />
+				<Route path={`${path}/details/:inventoryId`} component={LoansDetailsContainer} />
 			</React.Fragment>
 		);
 	}
