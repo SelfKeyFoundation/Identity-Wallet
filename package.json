@@ -55,7 +55,7 @@
 		"build-dll": "rm -rf node_modules/.cache && electron-webpack dll --env.production=${BUILD_DLL_PRODUCTION:-true}",
 		"build-dev-dll": "BUILD_DLL_PRODUCTION=false yarn build-dll",
 		"storybook": "start-storybook -p 6007",
-		"build-storybook": "build-storybook -o dist/storybook",
+		"build-storybook": "build-storybook -o dist/storybook && mkdir -p dist/storybook/.circleci && cp .circleci/ignore-storybook.yml dist/storybook/.circleci/config.yml",
 		"deploy-storybook-ci": "storybook-to-ghpages -ci --existing-output-dir=dist/storybook"
 	},
 	"lint-staged": {
