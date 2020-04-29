@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Grid, Typography, Input, Button, InputAdornment } from '@material-ui/core';
-import { PrintIcon, VisibilityOnIcon, VisibilityOffIcon, warning } from 'selfkey-ui';
+import { PrintIcon, VisibilityOnIcon, VisibilityOffIcon } from 'selfkey-ui';
 import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { walletSelectors } from 'common/wallet';
@@ -8,44 +8,42 @@ import { Link } from 'react-router-dom';
 import { Popup } from '../../common';
 
 const styles = theme => ({
-	container: {
-		minHeight: '100vh'
+	bottomSpace: {
+		marginBottom: '50px'
 	},
-	parentGrid: {
+	buttonBottomSpace: {
+		marginBottom: '20px'
+	},
+	container: {
 		minHeight: '100vh'
 	},
 	downloadIcon: {
 		width: '66px',
 		height: '71px'
 	},
+	input: {
+		display: 'none'
+	},
+	logoSection: {
+		paddingBottom: '50px'
+	},
 	modalWrap: {
 		border: 'none',
 		backgroundColor: 'transparent',
 		boxShadow: 'none'
 	},
-	logoSection: {
-		paddingBottom: '50px'
+	paper: {
+		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
 	},
-	button: {
-		width: '100%'
+	parentGrid: {
+		minHeight: '100vh'
 	},
-	input: {
-		display: 'none'
-	},
-	orange: {
-		border: `1px solid ${warning}`,
-		background: 'transparent',
-		color: warning,
-		width: '100%',
-		'&:hover': {
-			border: `1px solid ${warning}`
-		}
+	publicKey: {
+		color: '#fff !important',
+		opacity: '1 !important'
 	},
 	root: {
 		top: '-50px'
-	},
-	paper: {
-		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
 	}
 });
 
@@ -87,14 +85,13 @@ class BackupPK extends PureComponent {
 						<PrintIcon className={classes.downloadIcon} />
 					</Grid>
 					<Grid item xs={10}>
-						<Typography variant="body1" gutterBottom>
+						<Typography variant="body1" className={classes.bottomSpace}>
 							Your private key is used to authorize transactions for sending Ether or
 							tokens on your Ethereum address. Do not share this with anyone, as this
 							will give them full access to move your assets somewhere else. You can
 							print a copy to make an offline backup. This is also known as &#34;cold
 							storage&#34;.
 						</Typography>
-						<br />
 						<Typography variant="overline" gutterBottom>
 							Your Private Key
 						</Typography>
@@ -112,27 +109,25 @@ class BackupPK extends PureComponent {
 							}
 							type={this.state.inputType}
 							disabled
+							className={`${classes.publicKey} ${classes.bottomSpace}`}
 						/>
-						<br />
-						<br />
 						<Button
 							variant="contained"
 							size="large"
-							className={classes.button}
+							fullWidth
 							onClick={e => window.print()}
+							className={classes.buttonBottomSpace}
 						>
 							PRINT MY PRIVATE KEY
 						</Button>
 						{this.state.showFileDownloadedResult && this.showFileDownloadedResult()}
-						<br />
-						<br />
 						<Button
 							id="printWalletNext"
 							variant="outlined"
 							color="secondary"
 							component={main}
 							size="large"
-							className={classes.orange}
+							fullWidth
 						>
 							MY PRIVATE KEY IS BACKED UP, CONTINUE
 						</Button>

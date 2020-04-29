@@ -2,23 +2,15 @@ import React from 'react';
 import { Typography, Grid, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
-import { WarningShieldIcon, warning } from 'selfkey-ui';
+import { WarningShieldIcon } from 'selfkey-ui';
 import { Popup } from '../../common';
 
 const createPasswordLink = props => <Link to="/createPassword" {...props} />;
 const backHome = props => <Link to="/home" {...props} />;
 
 const styles = theme => ({
-	orange: {
-		border: `1px solid ${warning}`,
-		background: 'transparent',
-		color: warning,
-		'&:hover': {
-			border: `1px solid ${warning}`
-		}
-	},
-	closeIcon: {
-		marginTop: '20px'
+	bottomSpace: {
+		marginBottom: '50px'
 	}
 });
 
@@ -31,14 +23,12 @@ export const CreateWallet = props => {
 					<WarningShieldIcon />
 				</Grid>
 				<Grid item xs={10}>
-					<Typography variant="body1" gutterBottom>
+					<Typography variant="body1" className={classes.bottomSpace}>
 						The SelfKey Identity Wallet protects your wallet and Ethereum address with a
 						password. You must remember this password to unlock the wallet. It cannot be
 						restored or reset. As the wallet is stored locally in your device, SelfKey
 						does not have access and cannot help you if the password is lost.
 					</Typography>
-					<br />
-					<br />
 					<Grid container spacing={3}>
 						<Grid item>
 							<Button
@@ -46,7 +36,8 @@ export const CreateWallet = props => {
 								variant="outlined"
 								component={createPasswordLink}
 								size="large"
-								className={classes.orange}
+								color="secondary"
+								fullWidth
 							>
 								I UNDERSTAND, THERE IS NO WAY TO RECOVER THIS PASSWORD
 							</Button>

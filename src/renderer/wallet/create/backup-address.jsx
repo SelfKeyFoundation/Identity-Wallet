@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Grid, Typography, Input, Button, InputAdornment } from '@material-ui/core';
-import { Copy, DownloadIcon2, warning } from 'selfkey-ui';
+import { Copy, DownloadIcon2 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { walletSelectors } from 'common/wallet';
@@ -9,21 +9,19 @@ import { Link } from 'react-router-dom';
 import { Popup } from '../../common';
 
 const styles = theme => ({
+	bottomSpace: {
+		marginBottom: '50px'
+	},
+	buttonBottomSpace: {
+		marginBottom: '20px'
+	},
 	downloadIcon: {
 		width: '66px',
 		height: '71px'
 	},
-	button: {
-		width: '100%'
-	},
-	orange: {
-		border: `1px solid ${warning}`,
-		background: 'transparent',
-		color: warning,
-		width: '100%',
-		'&:hover': {
-			border: `1px solid ${warning}`
-		}
+	publicKey: {
+		color: '#fff !important',
+		opacity: '1 !important'
 	}
 });
 
@@ -64,14 +62,13 @@ class BackupAddress extends PureComponent {
 						<DownloadIcon2 className={classes.downloadIcon} />
 					</Grid>
 					<Grid item xs={10}>
-						<Typography variant="body1" gutterBottom>
+						<Typography variant="body1" className={classes.bottomSpace}>
 							Your address in Ethereum network. Think of it like a bank account number
 							that you own, used to send and receive Ether or tokens. The ability to
 							authorize transactions on this address is encrypted by the password you
 							just created. Download a backup and save this address in a convenient
 							location.
 						</Typography>
-						<br />
 						<Typography variant="overline" gutterBottom>
 							Your Address
 						</Typography>
@@ -86,26 +83,25 @@ class BackupAddress extends PureComponent {
 								</InputAdornment>
 							}
 							disabled
+							className={`${classes.publicKey} ${classes.bottomSpace}`}
 						/>
-						<br />
-						<br />
 						<Button
 							variant="contained"
 							size="large"
-							className={classes.button}
+							fullWidth
 							onClick={this.handleDownload}
+							className={classes.buttonBottomSpace}
 						>
 							DOWNLOAD KEYSTORE FILE (UTC/JSON)
 						</Button>
 						{this.state.showFileDownloadedResult && this.showFileDownloadedResult()}
-						<br />
-						<br />
 						<Button
 							id="keystoreNext"
 							variant="outlined"
 							component={backupPrivateKey}
 							size="large"
-							className={classes.orange}
+							color="secondary"
+							fullWidth
 						>
 							MY ADDRESS IS BACKED UP, CONTINUE
 						</Button>
