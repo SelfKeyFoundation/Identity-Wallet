@@ -21,6 +21,9 @@ const styles = theme => ({
 		width: '66px',
 		height: '71px'
 	},
+	icon: {
+		marginRight: '45px'
+	},
 	input: {
 		display: 'none'
 	},
@@ -80,11 +83,17 @@ class BackupPK extends PureComponent {
 				displayLogo
 				text="Step 4: Backup Your Private Keys"
 			>
-				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
-					<Grid item xs={2}>
+				<Grid
+					container
+					direction="row"
+					justify="flex-start"
+					alignItems="flex-start"
+					wrap="nowrap"
+				>
+					<Grid item className={classes.icon}>
 						<PrintIcon className={classes.downloadIcon} />
 					</Grid>
-					<Grid item xs={10}>
+					<Grid item>
 						<Typography variant="body1" className={classes.bottomSpace}>
 							Your private key is used to authorize transactions for sending Ether or
 							tokens on your Ethereum address. Do not share this with anyone, as this

@@ -19,6 +19,9 @@ const styles = theme => ({
 		width: '66px',
 		height: '71px'
 	},
+	icon: {
+		marginRight: '45px'
+	},
 	publicKey: {
 		color: '#fff !important',
 		opacity: '1 !important'
@@ -57,11 +60,17 @@ class BackupAddress extends PureComponent {
 				displayLogo
 				text="Step 3: Backup Your Ethereum AddressPassword"
 			>
-				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
-					<Grid item xs={2}>
+				<Grid
+					container
+					direction="row"
+					justify="flex-start"
+					alignItems="flex-start"
+					wrap="nowrap"
+				>
+					<Grid item className={classes.icon}>
 						<DownloadIcon2 className={classes.downloadIcon} />
 					</Grid>
-					<Grid item xs={10}>
+					<Grid item>
 						<Typography variant="body1" className={classes.bottomSpace}>
 							Your address in Ethereum network. Think of it like a bank account number
 							that you own, used to send and receive Ether or tokens. The ability to
