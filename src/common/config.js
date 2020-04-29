@@ -40,6 +40,7 @@ const COUNTRY_INFO_URL = process.env.COUNTRY_INFO_URL;
 const ALL_COUNTRIES_INFO_URL = process.env.ALL_COUNTRIES_INFO_URL;
 const MATOMO_SITE = process.env.MATOMO_SITE;
 const DEPOSIT_PRICE_OVERRIDE = process.env.DEPOSIT_PRICE_OVERRIDE;
+const SWAP_MAX_VALUE = +process.env.SWAP_MAX_VALUE;
 
 // development or production
 const ATTRIBUTE_TYPE_SOURCE_OVERRIDE = process.env.ATTRIBUTE_TYPE_SOURCE_OVERRIDE;
@@ -78,8 +79,8 @@ const common = {
 
 	totleApiUrl: 'https://api.totle.com',
 	totleApiKey: '3c5645ed-a34e-409d-b179-19a998bd509b',
-	totleMaxSwap: 1000, // Max allowed totle Swap in USD
-	totlePartnerContract: false,
+	totleMaxSwap: SWAP_MAX_VALUE || 1000, // Max allowed totle Swap in USD
+	totlePartnerContract: '0x48100908d674ed1361da558d987995e60581b649',
 
 	constants: {
 		initialIdAttributes: {
