@@ -16,10 +16,10 @@ import { LoansFilters } from './filters';
 const styles = theme => ({
 	table: {
 		'& td': {
-			padding: '0 20px'
+			padding: '5px 20px'
 		},
 		'& th': {
-			padding: '0 20px'
+			padding: '15px 20px'
 		}
 	},
 	logoCell: {
