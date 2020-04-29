@@ -6,6 +6,9 @@ import {
 	tokenSwapSelectors
 } from './index';
 // import sinon from 'sinon';
+import BN from 'bignumber.js';
+
+const toUnit = (amount, decimals) => new BN(amount).div(new BN(10).pow(decimals)).toString(10);
 
 const tokensFixture = [
 	{
@@ -291,8 +294,10 @@ describe('token-swap', () => {
 			expect(tokenSwapSelectors.selectGas(state)).toEqual(initialState.gas);
 			const action = tokenSwapActions.setTransaction(transactionFixture);
 			state.tokenSwap = tokenSwapReducers.setTransactionReducer(state, action);
-			// 10000000000 Wei to Ether
-			expect(tokenSwapSelectors.selectGas(state)).toEqual('0.00000001');
+			const gas =
+				transactionFixture.transactions[0].tx.gas *
+				transactionFixture.transactions[0].tx.gasPrice;
+			expect(tokenSwapSelectors.selectGas(state)).toEqual(toUnit(gas, 18));
 		});
 		it('selectRate', () => {
 			expect(tokenSwapSelectors.selectGas(state)).toEqual(initialState.rate);
