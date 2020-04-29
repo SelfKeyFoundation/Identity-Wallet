@@ -317,6 +317,12 @@ const RelyingPartyLinkButton = withStyles(styles)(({ classes, onClick }) => (
 ));
 
 class LoansDetailsComponent extends PureComponent {
+	state = {
+		tab: 'highlights'
+	};
+
+	onTabChange = tab => this.setState({ tab });
+
 	async componentDidMount() {
 		window.scrollTo(0, 0);
 	}
@@ -453,7 +459,11 @@ class LoansDetailsComponent extends PureComponent {
 								<Divider className={classes.divider} />
 							</Grid>
 							<Grid item id="highlights" className={classes.fullWidth}>
-								<LoansDetailsTabs item={item} />
+								<LoansDetailsTabs
+									item={item}
+									tab={this.state.tab}
+									onTabChange={this.onTabChange}
+								/>
 							</Grid>
 						</Grid>
 					</Grid>

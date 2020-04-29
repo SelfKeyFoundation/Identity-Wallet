@@ -1,6 +1,8 @@
 import React from 'react';
-import { withStyles, Tabs, Tab } from '@material-ui/core';
+import { Tabs, Tab } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { LoansDetailsHighlights } from './details-highlights';
+import { LoansDetailsRequirements } from './details-requirements';
 
 const styles = theme => ({
 	LoansTabs: {
@@ -24,10 +26,13 @@ export const LoansDetailsTabs = withStyles(styles)(
 					onChange={(evt, value) => onTabChange(value)}
 				>
 					<Tab id="highlights" value="highlights" label="Provider Highlights" />
-					<Tab id="requirements" value="requirements" label="Requirements" disabled />
+					<Tab id="requirements" value="requirements" label="Requirements" />
 				</Tabs>
 				{tab === 'highlights' && (
 					<LoansDetailsHighlights id="highlights-tab" {...tabProps} />
+				)}
+				{tab === 'requirements' && (
+					<LoansDetailsRequirements id="requirements-tab" {...tabProps} />
 				)}
 			</div>
 		);

@@ -1,11 +1,7 @@
 import React from 'react';
 import { PageLoading } from '../../common';
-import { Button, Typography, Grid, withStyles } from '@material-ui/core';
-/*
-import { LoanIcon } from 'selfkey-ui';
-import { LoansCalculatorCard } from '../common/calculator-card';
-import { LoansTabs } from './tabs';
-*/
+import { Button, Typography, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	backButtonContainer: {

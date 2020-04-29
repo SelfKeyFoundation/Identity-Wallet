@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Typography, Grid, FormControl, FormGroup } from '@material-ui/core';
+import { Typography, Grid, FormControl, FormGroup } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	formControl: {
@@ -22,8 +23,15 @@ const styles = theme => ({
 				display: 'inline'
 			}
 		}
+	},
+	link: {
+		color: '#00C0D9',
+		cursor: 'pointer',
+		marginLeft: '1em'
 	}
 });
+
+const onKycPolicyClick = url => window.openExternal(null, url);
 
 const LoansDetailsHighlights = withStyles(styles)(({ classes, item }) => (
 	<Grid container direction="column" justify="flex-start" alignItems="flex-start" spacing={2}>
@@ -44,7 +52,7 @@ const LoansDetailsHighlights = withStyles(styles)(({ classes, item }) => (
 						<Typography variant="body2">{item.data.yearLaunched}</Typography>
 					</span>
 					<span>
-						<Typography variant="h5">Type</Typography>
+						<Typography variant="h5">Type:</Typography>
 						<Typography variant="body2">{item.data.type}</Typography>
 					</span>
 					{item.data.interestRateLending && (
@@ -62,7 +70,7 @@ const LoansDetailsHighlights = withStyles(styles)(({ classes, item }) => (
 						</span>
 					)}
 					<span>
-						<Typography variant="h5">URL</Typography>
+						<Typography variant="h5">URL:</Typography>
 						<Typography variant="body2">{item.data.url}</Typography>
 					</span>
 					<span>
@@ -118,9 +126,14 @@ const LoansDetailsHighlights = withStyles(styles)(({ classes, item }) => (
 					<span>
 						<Typography variant="h5">KYC/AML:</Typography>
 						<Typography variant="body2">
-							{item.data.kyc ? 'Yes' : 'No'}
+							{item.data.kyc ? 'Yes ' : 'No '}
 							{item.data.kyc && item.data.kycPolicyUrl ? (
-								<a href={item.data.kycPolicyUrl}>KYC Policy</a>
+								<span
+									className={classes.link}
+									onClick={() => onKycPolicyClick(item.data.kycPolicyUrl)}
+								>
+									KYC Policy
+								</span>
 							) : null}
 						</Typography>
 					</span>
