@@ -51,6 +51,7 @@ module.exports = {
 		])
 	],
 	resolve: {
-		modules: [path.resolve(__dirname, '..', 'src'), 'node_modules']
+		modules: [path.resolve(__dirname, '..', 'src'), 'node_modules'],
+		extensions: ['.js', '.jsx', '.css', '.svg', '.json']
 	}
 };

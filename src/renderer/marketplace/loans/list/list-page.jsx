@@ -42,43 +42,16 @@ const styles = theme => ({
 
 class LoansListPageComponent extends PureComponent {
 	state = {
-		tab: 'lending',
-		range: false,
-		selectedToken: false,
-		isP2P: false,
-		isLicensed: false
+		tab: 'lending'
 	};
 
 	onTabChange = tab => this.setState({ tab });
 
-	onTokenFilterChange = evt => this.setState({ selectedToken: evt.target.value });
-
-	onP2pFilterChange = evt => this.setState(prevState => ({ isP2P: !prevState.isP2P }));
-
-	onLicensedFilterChange = evt =>
-		this.setState(prevState => ({ isLicensed: !prevState.isLicensed }));
-
 	render() {
 		const { classes, loading, inventory, onDetailsClick, onBackClick, tokens } = this.props;
-		const { selectedToken, tab, isLicensed, isP2P } = this.state;
+		const { tab } = this.state;
 
 		let filteredInventory = inventory.filter(offer => offer.data.loanType.includes(tab));
-
-		if (selectedToken) {
-			filteredInventory = filteredInventory.filter(offer =>
-				offer.data.assets.includes(selectedToken)
-			);
-		}
-
-		if (isLicensed) {
-			filteredInventory = filteredInventory.filter(offer => !!offer.data.licensed);
-		}
-
-		if (isP2P) {
-			filteredInventory = filteredInventory.filter(
-				offer => !!offer.data.type === 'Decentralized'
-			);
-		}
 
 		return (
 			<Grid container>
@@ -127,12 +100,9 @@ class LoansListPageComponent extends PureComponent {
 								<LoansTabs
 									inventory={filteredInventory}
 									onTabChange={this.onTabChange}
-									onTokenFilterChange={this.onTokenFilterChange}
-									onP2pFilterChange={this.onP2pFilterChange}
-									onLicensedFilterChange={this.onLicensedFilterChange}
 									onDetailsClick={onDetailsClick}
 									tokens={tokens}
-									{...this.state}
+									tab={tab}
 								/>
 							</Grid>
 						</Grid>

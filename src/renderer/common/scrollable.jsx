@@ -1,5 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core';
+import { PropTypes } from 'prop-types';
 
 const styles = {
 	scrollableContainer: {
@@ -47,3 +48,9 @@ export const Scrollable = withStyles(styles)(({ classes, className = '', style, 
 		{children}
 	</div>
 ));
+
+Scrollable.propTypes = {
+	children: PropTypes.any,
+	style: PropTypes.object,
+	className: PropTypes.string
+};

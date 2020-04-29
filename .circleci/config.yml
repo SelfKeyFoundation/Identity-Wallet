@@ -74,11 +74,44 @@ jobs:
             - run:
                   name: Coveralls
                   command: yarn coveralls
+            - run:
+                  name: Build Storybook
+                  command: yarn build-storybook
             - store_test_results:
                   path: dist/junit
             - store_artifacts:
                   path: dist
             - *step_save_cache
+    'publish-storybook':
+        docker: *DOCKERIMAGE
+        environment:
+            CACHE_VERSION: *cache_version
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: /tmp/linux
+            - *step_prepare_cache_buster
+            - *step_restore_cache
+            - run:
+                  name: Install OS Dependecies
+                  command: |
+                      sudo apt-get update
+                      sudo apt-get install build-essential
+                      sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
+            - run:
+                  name: Install Node Packages
+                  command: yarn install
+            - run:
+                  name: Get storybook from attach_workspace
+                  command: |
+                      mkdir -p dist
+                      cp -r /tmp/linux/dist/storybook dist/storybook
+
+            - run:
+                  name: Story book
+                  command: yarn deploy-storybook-ci
+            - *step_save_cache
+
     'build-mac':
         macos:
             xcode: '11.1.0'
@@ -340,6 +373,14 @@ workflows:
                               - nightly
                               - release
                               - /staging.*/
+            - 'publish-storybook':
+                  requires:
+                      - unit-test
+                      - build-linux
+                  filters:
+                      branches:
+                          only:
+                              - dev
             - 'publish-mac':
                   requires:
                       - build-mac
