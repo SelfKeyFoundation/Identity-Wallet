@@ -403,15 +403,20 @@ export class TokenSwapComponent extends PureComponent {
 
 	handleSwap = async () => {
 		const { dispatch, sourceToken, trezorAccountIndex } = this.props;
-		const transaction = this.props.transaction.transactions[0].tx;
-		await dispatch(transactionOperations.init({ trezorAccountIndex, sourceToken }));
-		await dispatch(transactionOperations.setAddress(transaction.to));
-		await dispatch(transactionOperations.sendCustomTransaction({ transaction }));
+		const transactions = this.props.transaction.transactions;
+		for (const t of transactions) {
+			const transaction = t.tx;
+			await dispatch(transactionOperations.init({ trezorAccountIndex, sourceToken }));
+			await dispatch(transactionOperations.setAddress(transaction.to));
+			await dispatch(transactionOperations.sendCustomTransaction({ transaction }));
+		}
 	};
 
 	render() {
 		const { classes, closeAction, sourceToken, targetToken, fiatCurrency, locale } = this.props;
 		const { amount } = this.state;
+		const gas = +this.props.gas;
+		const fee = +this.props.fee;
 		return (
 			<Popup closeAction={closeAction} text="Swap your tokens">
 				<Grid container direction="column" justify="flex-start" alignItems="flex-start">
@@ -565,7 +570,7 @@ export class TokenSwapComponent extends PureComponent {
 											<FiatValue
 												locale={locale}
 												currency={fiatCurrency}
-												value={this.props.fee * this.props.ethRate}
+												value={fee * this.props.ethRate}
 												variant="body2"
 												color="primary"
 											/>
@@ -573,7 +578,7 @@ export class TokenSwapComponent extends PureComponent {
 												<TokenValue
 													locale={locale}
 													token="ETH"
-													value={this.props.fee}
+													value={fee}
 												/>
 											</div>
 										</div>
@@ -588,7 +593,7 @@ export class TokenSwapComponent extends PureComponent {
 											<FiatValue
 												locale={locale}
 												currency={fiatCurrency}
-												value={this.props.gas * this.props.ethRate}
+												value={gas * this.props.ethRate}
 												variant="body2"
 												color="primary"
 											/>
@@ -596,7 +601,7 @@ export class TokenSwapComponent extends PureComponent {
 												<TokenValue
 													locale={locale}
 													token="ETH"
-													value={this.props.gas}
+													value={gas}
 												/>
 											</div>
 										</div>
@@ -630,10 +635,7 @@ export class TokenSwapComponent extends PureComponent {
 												<FiatValue
 													locale={locale}
 													currency={fiatCurrency}
-													value={
-														(this.props.gas + this.props.fee) *
-														this.props.ethRate
-													}
+													value={(gas + fee) * this.props.ethRate}
 													variant="body2"
 													color="primary"
 												/>
@@ -641,7 +643,7 @@ export class TokenSwapComponent extends PureComponent {
 													<TokenValue
 														locale={locale}
 														token="ETH"
-														value={this.props.gas + this.props.fee}
+														value={gas + fee}
 													/>
 												</div>
 											</div>
@@ -655,7 +657,7 @@ export class TokenSwapComponent extends PureComponent {
 									justify="center"
 									alignItems="center"
 									className={classes.actionButtonsContainer}
-									spacing={24}
+									spacing={2}
 								>
 									<Grid item>
 										{this.props.loading && (

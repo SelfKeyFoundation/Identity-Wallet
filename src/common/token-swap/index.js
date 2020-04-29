@@ -195,20 +195,25 @@ export const tokenSwapSelectors = {
 	selectTransaction: state => tokenSwapSelectors.selectRoot(state).transaction,
 	selectFee: state => {
 		const transaction = tokenSwapSelectors.selectTransaction(state);
-		const totleFee =
-			transaction && transaction.summary[0].totleFee
-				? +transaction.summary[0].totleFee.amount
-				: 0;
-		const partnerFee =
-			transaction && transaction.summary[0].partnerFee
-				? +transaction.summary[0].partnerFee.amount
-				: 0;
-		const total = transaction ? totleFee + partnerFee : 0;
+		let totleFee = 0;
+		let partnerFee = 0;
+		if (transaction) {
+			totleFee = transaction.summary.reduce((acc, curr) => acc + curr.totleFee.amount, 0);
+			partnerFee = transaction.summary.reduce((acc, curr) => acc + curr.partnerFee.amount, 0);
+		}
+		const total = transaction ? +totleFee + +partnerFee : 0;
 		return transaction ? toUnit(total, 18) : false;
 	},
 	selectGas: state => {
 		const transaction = tokenSwapSelectors.selectTransaction(state);
-		return transaction ? toUnit(transaction.transactions[0].tx.gasPrice, 18) : false;
+		let gas = 0;
+		if (transaction) {
+			gas = transaction.transactions.reduce(
+				(acc, curr) => acc + curr.tx.gas * curr.tx.gasPrice,
+				0
+			);
+		}
+		return transaction ? toUnit(gas, 18) : false;
 	},
 	selectRate: state => {
 		const transaction = tokenSwapSelectors.selectTransaction(state);
