@@ -39,6 +39,9 @@ const styles = theme => ({
 		marginBottom: '30px',
 		marginLeft: '-15px'
 	},
+	icon: {
+		marginRight: '45px'
+	},
 	link: {
 		cursor: 'pointer',
 		color: '#00C0D9',
@@ -71,11 +74,11 @@ const getExchanges = (exchanges, classes) => {
 
 export const BuyKeyContent = withStyles(styles)(
 	({ classes, address, children, exchanges, externalLink }) => (
-		<Grid container direction="row" justify="flex-start" alignItems="flex-start">
-			<Grid item xs={2}>
+		<Grid container direction="row" justify="flex-start" alignItems="flex-start" wrap="nowrap">
+			<Grid item className={classes.icon}>
 				<PaymentIcon />
 			</Grid>
-			<Grid item xs={10}>
+			<Grid item>
 				<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 					<Grid item id="header">
 						<Typography variant="h1" gutterBottom>
