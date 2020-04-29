@@ -60,7 +60,7 @@ const styles = theme => ({
 	},
 	maxSourceInput: {
 		border: '1px solid #384656',
-		marginRight: '45px',
+		marginRight: '20px',
 		fontWeight: 'normal',
 		color: '#93B0C1',
 		background: '#1E262E',
@@ -149,6 +149,9 @@ const styles = theme => ({
 	},
 	separator: {
 		marginRight: '.5em'
+	},
+	buttonRightSpace: {
+		marginRight: '20px'
 	}
 });
 
@@ -450,7 +453,7 @@ export class TokenSwapComponent extends PureComponent {
 								direction="row"
 								justify="flex-start"
 								alignItems="center"
-								spacing={8}
+								spacing={1}
 							>
 								<Grid item>
 									<Typography variant="body2" color="secondary">
@@ -669,6 +672,7 @@ export class TokenSwapComponent extends PureComponent {
 												size="large"
 												onClick={this.handleCalculateFees}
 												disabled={!this.isValid()}
+												className={classes.buttonRightSpace}
 											>
 												Calculate Fees
 											</Button>
