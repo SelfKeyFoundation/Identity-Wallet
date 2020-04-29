@@ -1,0 +1,7 @@
+# Configuration for CircleCI
+# https://circleci.com/gh/tony19/logback-android
+version: 2
+general:
+    branches:
+        ignore:
+            - gh-pages
