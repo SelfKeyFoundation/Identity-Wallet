@@ -93,6 +93,12 @@ jobs:
             - *step_prepare_cache_buster
             - *step_restore_cache
             - run:
+                  name: Install OS Dependecies
+                  command: |
+                      sudo apt-get update
+                      sudo apt-get install build-essential
+                      sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
+            - run:
                   name: Install Node Packages
                   command: yarn install
             - run:
