@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { Typography, Grid } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -117,7 +117,6 @@ class LoansTableComponent extends PureComponent {
 		} = this.props;
 		const { selectedToken, isLicensed, isP2P, selectedRange } = this.state;
 
-		console.log(inventory);
 		let filteredInventory = inventory;
 
 		// Filter by type (loanType)

@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/styles';
 import { UserPlusIcon, primary, /* CalendarDepositIcon, */ typography } from 'selfkey-ui';
 import { MarketplaceDisclaimer } from '../../common/disclaimer';
 import { Grid, Divider, Button, Typography } from '@material-ui/core';
+import { LoansDetailsTabs } from './details-tabs';
 // import { Grid, Divider, FormGroup, FormControl, Button, Typography } from '@material-ui/core';
 // import { push } from 'connected-react-router';
 import {
@@ -316,6 +317,12 @@ const RelyingPartyLinkButton = withStyles(styles)(({ classes, onClick }) => (
 ));
 
 class LoansDetailsComponent extends PureComponent {
+	state = {
+		tab: 'highlights'
+	};
+
+	onTabChange = tab => this.setState({ tab });
+
 	async componentDidMount() {
 		window.scrollTo(0, 0);
 	}
@@ -366,7 +373,10 @@ class LoansDetailsComponent extends PureComponent {
 	render() {
 		// const { classes, item, backAction, relyingPartyName, templates } = this.props;
 		const { classes, item, backAction } = this.props;
-		console.log(item);
+
+		if (!item) {
+			return null;
+		}
 
 		return (
 			<Grid container>
@@ -440,12 +450,7 @@ class LoansDetailsComponent extends PureComponent {
 											{item.description}
 										</Typography>
 									</Grid>
-									<Grid
-										item
-										xs={3}
-										className={classes.ctaArea}
-										alignContent="right"
-									>
+									<Grid item xs={3} className={classes.ctaArea}>
 										{this.renderActionButton(item)}
 									</Grid>
 								</Grid>
@@ -454,17 +459,11 @@ class LoansDetailsComponent extends PureComponent {
 								<Divider className={classes.divider} />
 							</Grid>
 							<Grid item id="highlights" className={classes.fullWidth}>
-								<Grid
-									container
-									direction="column"
-									justify="flex-start"
-									alignItems="flex-start"
-									spacing={2}
-								>
-									<Grid item>
-										<Typography variant="h2">Provider Highlights</Typography>
-									</Grid>
-								</Grid>
+								<LoansDetailsTabs
+									item={item}
+									tab={this.state.tab}
+									onTabChange={this.onTabChange}
+								/>
 							</Grid>
 						</Grid>
 					</Grid>
