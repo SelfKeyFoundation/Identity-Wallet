@@ -37,7 +37,15 @@ const styles = theme => ({
 });
 
 const WhatYouGetTab = withStyles(styles)(
-	({ classes, initialDocsText, kycProcessText, getFinalDocsText, description, timeToForm }) => (
+	({
+		classes,
+		initialDocsText,
+		kycProcessText,
+		getFinalDocsText,
+		description,
+		timeToForm,
+		whatYouGet
+	}) => (
 		<div className={classes.tabContainer}>
 			<WhatYouGet
 				classes={classes}
@@ -46,6 +54,7 @@ const WhatYouGetTab = withStyles(styles)(
 				initialDocsText={initialDocsText}
 				kycProcessText={kycProcessText}
 				getFinalDocsText={getFinalDocsText}
+				whatYouGet={whatYouGet}
 			/>
 
 			<HowServiceWorks

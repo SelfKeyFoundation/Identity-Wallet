@@ -170,6 +170,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 				canOpenBankAccount={this.canApply(price)}
 				startApplication={this.onApplyClick}
 				kycRequirements={kycRequirements}
+				whatYouGet={jurisdiction.whatYouGet}
 				templateId={templateId}
 				onBack={this.onBackClick}
 				onStatusAction={this.onStatusActionClick}
