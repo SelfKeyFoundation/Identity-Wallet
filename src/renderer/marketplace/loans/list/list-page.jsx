@@ -50,9 +50,6 @@ class LoansListPageComponent extends PureComponent {
 	render() {
 		const { classes, loading, inventory, onDetailsClick, onBackClick, tokens } = this.props;
 		const { tab } = this.state;
-
-		let filteredInventory = inventory.filter(offer => offer.data.loanType.includes(tab));
-
 		return (
 			<Grid container>
 				<Grid item>
@@ -98,7 +95,7 @@ class LoansListPageComponent extends PureComponent {
 
 							<Grid item className={classes.tabs}>
 								<LoansTabs
-									inventory={filteredInventory}
+									inventory={inventory}
 									onTabChange={this.onTabChange}
 									onDetailsClick={onDetailsClick}
 									tokens={tokens}
