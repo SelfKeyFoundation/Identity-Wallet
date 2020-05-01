@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { CardContent, Card, Grid, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
-import { DIDIcon } from 'selfkey-ui';
+import { CalculatorIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	title: {
@@ -43,7 +43,7 @@ class LoansCalculatorCardComponent extends PureComponent {
 								className={classes.info}
 							>
 								<Grid item>
-									<DIDIcon />
+									<CalculatorIcon />
 								</Grid>
 
 								<Grid item>
