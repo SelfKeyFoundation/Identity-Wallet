@@ -16,7 +16,7 @@ export const createMainWindow = async () => {
 		width: +process.env.WINDOW_WIDTH || 1170,
 		height: +process.env.WINDOW_HEIGHT || 800,
 		minWidth: +process.env.WINDOW_MIN_WIDTH || 1170,
-		minHeight: +process.env.WINDOW_MIN_HEIGHT || 800,
+		minHeight: +process.env.WINDOW_MIN_HEIGHT || 600,
 		kiosk: !!process.env.WINDOW_KIOSK_MODE || false,
 		webPreferences: {
 			nodeIntegration: true,
