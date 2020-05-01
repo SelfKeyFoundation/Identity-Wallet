@@ -1,4 +1,234 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.13.5
+version: v1.14.1
 ignore: {}
-patch: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - '@ledgerhq/hw-transport-node-hid > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - knex > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - objection > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - snyk > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - electron-redux > flux-standard-action > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - electron-redux > redux > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - request-promise-native > request-promise-core > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - snyk > @snyk/dep-graph > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - snyk > inquirer > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - snyk > snyk-config > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - snyk > snyk-mvn-plugin > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - snyk > snyk-nodejs-lockfile-parser > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - selfkey-ui > snyk > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > snyk > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - redux-promise > flux-standard-action > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - snyk > snyk-nuget-plugin > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > ethereumjs-block > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > ethereumjs-vm > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - jsdom > request-promise-native > request-promise-core > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - snyk > @snyk/dep-graph > graphlib > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - snyk > snyk-nodejs-lockfile-parser > graphlib > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - snyk > snyk-go-plugin > graphlib > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - selfkey-ui > snyk > @snyk/dep-graph > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > snyk > @snyk/dep-graph > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - selfkey-ui > snyk > inquirer > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > snyk > inquirer > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - selfkey-ui > snyk > snyk-config > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > snyk > snyk-config > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - selfkey-ui > snyk > snyk-mvn-plugin > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > snyk > snyk-mvn-plugin > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - selfkey-ui > snyk > snyk-nodejs-lockfile-parser > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > snyk > snyk-nodejs-lockfile-parser > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - selfkey-ui > snyk > snyk-nuget-plugin > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - snyk > snyk-php-plugin > @snyk/composer-lockfile-parser > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > selfkey-ui > snyk > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - snyk > @snyk/snyk-cocoapods-plugin > @snyk/dep-graph > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > snyk > snyk-nuget-plugin > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - snyk > snyk-nuget-plugin > dotnet-deps-parser > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-json-rpc-middleware > ethereumjs-block > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > ethereumjs-block > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > ethereumjs-vm > async-eventemitter > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > ethereumjs-vm > ethereumjs-block > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-json-rpc-middleware > ethereumjs-vm > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > ethereumjs-vm > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-json-rpc-middleware > json-rpc-engine > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-json-rpc-filters > json-rpc-engine > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-json-rpc-infura > json-rpc-engine > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - selfkey-ui > snyk > @snyk/dep-graph > graphlib > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > snyk > @snyk/dep-graph > graphlib > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - selfkey-ui > snyk > snyk-go-plugin > graphlib > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - selfkey-ui > snyk > snyk-nodejs-lockfile-parser > graphlib > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > snyk > snyk-nodejs-lockfile-parser > graphlib > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - snyk > @snyk/snyk-cocoapods-plugin > @snyk/dep-graph > graphlib > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > snyk > snyk-go-plugin > graphlib > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > selfkey-ui > snyk > @snyk/dep-graph > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > selfkey-ui > snyk > inquirer > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > selfkey-ui > snyk > snyk-config > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > selfkey-ui > snyk > snyk-mvn-plugin > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > selfkey-ui > snyk > snyk-nodejs-lockfile-parser > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - selfkey-ui > snyk > snyk-nuget-plugin > dotnet-deps-parser > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > snyk > snyk-nuget-plugin > dotnet-deps-parser > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > selfkey-ui > snyk > snyk-nuget-plugin > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - selfkey-ui > snyk > snyk-php-plugin > @snyk/composer-lockfile-parser > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > snyk > snyk-php-plugin > @snyk/composer-lockfile-parser > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - snyk > @snyk/snyk-cocoapods-plugin > @snyk/cocoapods-lockfile-parser > @snyk/ruby-semver > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > snyk > @snyk/snyk-cocoapods-plugin > @snyk/dep-graph > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-json-rpc-filters > eth-json-rpc-middleware > ethereumjs-block > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-json-rpc-infura > eth-json-rpc-middleware > ethereumjs-block > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-json-rpc-middleware > ethereumjs-block > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-json-rpc-middleware > ethereumjs-vm > async-eventemitter > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > ethereumjs-vm > async-eventemitter > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-json-rpc-middleware > ethereumjs-vm > ethereumjs-block > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > ethereumjs-vm > ethereumjs-block > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-json-rpc-filters > eth-json-rpc-middleware > ethereumjs-vm > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-json-rpc-infura > eth-json-rpc-middleware > ethereumjs-vm > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-json-rpc-middleware > ethereumjs-vm > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-json-rpc-filters > eth-json-rpc-middleware > json-rpc-engine > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-json-rpc-infura > eth-json-rpc-middleware > json-rpc-engine > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-json-rpc-middleware > json-rpc-engine > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-json-rpc-filters > json-rpc-engine > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-json-rpc-infura > json-rpc-engine > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-block-tracker > @babel/plugin-transform-runtime > @babel/helper-module-imports > @babel/types > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > selfkey-ui > snyk > @snyk/dep-graph > graphlib > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > selfkey-ui > snyk > snyk-go-plugin > graphlib > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > selfkey-ui > snyk > snyk-nodejs-lockfile-parser > graphlib > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - snyk > @snyk/snyk-cocoapods-plugin > @snyk/cocoapods-lockfile-parser > @snyk/dep-graph > graphlib > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > snyk > @snyk/snyk-cocoapods-plugin > @snyk/dep-graph > graphlib > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > selfkey-ui > snyk > snyk-nuget-plugin > dotnet-deps-parser > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > selfkey-ui > snyk > snyk-php-plugin > @snyk/composer-lockfile-parser > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > snyk > @snyk/snyk-cocoapods-plugin > @snyk/cocoapods-lockfile-parser > @snyk/ruby-semver > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-json-rpc-filters > eth-json-rpc-middleware > ethereumjs-block > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-json-rpc-infura > eth-json-rpc-middleware > ethereumjs-block > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-json-rpc-filters > eth-json-rpc-middleware > ethereumjs-vm > async-eventemitter > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-json-rpc-infura > eth-json-rpc-middleware > ethereumjs-vm > async-eventemitter > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-json-rpc-middleware > ethereumjs-vm > async-eventemitter > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-json-rpc-filters > eth-json-rpc-middleware > ethereumjs-vm > ethereumjs-block > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - web3-provider-engine > eth-json-rpc-infura > eth-json-rpc-middleware > ethereumjs-vm > ethereumjs-block > async > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-json-rpc-middleware > ethereumjs-vm > ethereumjs-block > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-json-rpc-filters > eth-json-rpc-middleware > ethereumjs-vm > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-json-rpc-infura > eth-json-rpc-middleware > ethereumjs-vm > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-json-rpc-filters > eth-json-rpc-middleware > json-rpc-engine > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-json-rpc-infura > eth-json-rpc-middleware > json-rpc-engine > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-block-tracker > @babel/plugin-transform-runtime > @babel/helper-module-imports > @babel/types > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > snyk > @snyk/snyk-cocoapods-plugin > @snyk/cocoapods-lockfile-parser > @snyk/dep-graph > graphlib > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-json-rpc-filters > eth-json-rpc-middleware > ethereumjs-vm > async-eventemitter > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-json-rpc-infura > eth-json-rpc-middleware > ethereumjs-vm > async-eventemitter > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-json-rpc-filters > eth-json-rpc-middleware > ethereumjs-vm > ethereumjs-block > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - '@ledgerhq/web3-subprovider > web3-provider-engine > eth-json-rpc-infura > eth-json-rpc-middleware > ethereumjs-vm > ethereumjs-block > async > lodash':
+        patched: '2020-05-01T00:38:06.091Z'
+    - lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - selfkey-ui > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
+    - react-jsonschema-form-material-theme > selfkey-ui > lodash:
+        patched: '2020-05-01T00:38:06.091Z'
