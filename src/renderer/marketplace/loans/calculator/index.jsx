@@ -1,9 +1,18 @@
 import React from 'react';
-import { Typography, Grid, Select, Input, MenuItem, Slider, Button } from '@material-ui/core';
+import {
+	Typography,
+	Grid,
+	Select,
+	Input,
+	MenuItem,
+	Slider,
+	Button,
+	IconButton
+} from '@material-ui/core';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import { withStyles } from '@material-ui/styles';
 import { KeyboardArrowDown } from '@material-ui/icons';
-import { /* NumberFormat, */ TransferIcon } from 'selfkey-ui';
+import { TransferIcon, InfoTooltip, KeyTooltip, TooltipArrow } from 'selfkey-ui';
 import { MarketplaceLoansComponent } from '../common/marketplace-loans-component';
 import { LoansCalculatorBorrowTable } from './borrow-table';
 import { LoansCalculatorLendTable } from './lend-table';
@@ -40,6 +49,45 @@ const styles = theme => ({
 });
 
 const FIXED_TOKENS = ['BTC', 'ETH', 'KEY'];
+
+const calculateCollateral = ({ amount, token, rates }) => {
+	console.log(token);
+	const rate = rates.find(r => r.symbol === token);
+	// FIXME: data and structure for LTV is not available on airtable yet
+	const LTV = 0.7;
+	const collateral = amount / (rate.priceUSD - rate.priceUSD * LTV);
+	return `${collateral.toFixed(2)} ${rate.symbol}`;
+};
+
+const calculateSimpleInterest = ({ amount, months, apr }) => {
+	const principal = parseFloat(amount);
+	const interest = parseFloat(apr) / 100 / 12;
+
+	const monthly = 0;
+	const totalInterest = principal * interest * months;
+	const total = principal + totalInterest;
+
+	return { monthly, total, totalInterest };
+};
+
+const calculateMonthlyPayment = ({ amount, apr, months }) => {
+	const principal = parseFloat(amount);
+	const interest = parseFloat(apr) / 100 / 12;
+	const payments = months;
+
+	const x = Math.pow(1 + interest, payments);
+	let monthly = (principal * x * interest) / (x - 1);
+
+	let total = 0;
+	let totalInterest = 0;
+
+	if (isFinite(monthly)) {
+		total = monthly * payments;
+		totalInterest = monthly * payments - principal;
+	}
+
+	return { monthly, total, totalInterest };
+};
 
 class LoansCalculatorComponent extends MarketplaceLoansComponent {
 	state = {
@@ -105,16 +153,17 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 
 	calculate() {
 		const { inventory } = this.props;
-		const { amount, type, period, selectedToken } = this.state;
+		const { amount, type, period, selectedToken, repayment } = this.state;
 
 		// Filter correct type (Lending or Borrowing)
-		let results = this.inventoryByType(inventory, type);
+		const inventoryByType = this.inventoryByType(inventory, type);
 
 		// Filters offers with min and max Loan
-		results = results.filter(offer => {
+		let results = inventoryByType.filter(offer => {
 			return (
-				Number(offer.data.maxLoan.replace(/[^0-9.-]+/g, '')) <= amount &&
-				Number(offer.data.minLoan.replace(/[^0-9.-]+/g, '')) >= amount
+				(Number(offer.data.maxLoan.replace(/[^0-9.-]+/g, '')) >= +amount ||
+					offer.data.maxLoan === 'Unlimited') &&
+				Number(offer.data.minLoan.replace(/[^0-9.-]+/g, '')) <= +amount
 			);
 		});
 
@@ -124,9 +173,34 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 		});
 
 		// Filters by asset
-		results = results.filter(offer => {
-			offer.data.assets.includes(selectedToken);
+		results = results.filter(offer => offer.data.assets.includes(selectedToken));
+
+		// Calculate loan repayment for each result
+		results = results.map(offer => {
+			if (repayment === 'interest') {
+				offer.loanPayment = calculateSimpleInterest({
+					amount,
+					months: period,
+					apr: Number(offer.data.interestRate.replace(/[^0-9.-]+/g, ''))
+				});
+			} else {
+				offer.loanPayment = calculateMonthlyPayment({
+					amount,
+					months: period,
+					apr: Number(offer.data.interestRate.replace(/[^0-9.-]+/g, ''))
+				});
+			}
+			if (type === 'borrowing') {
+				offer.collateral = calculateCollateral({
+					amount,
+					rates: this.props.rates,
+					token: selectedToken
+				});
+			}
+			return offer;
 		});
+
+		console.log(results);
 
 		this.setState({ results });
 	}
@@ -229,9 +303,30 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 								/>
 							</Grid>
 							<Grid item className={classes.gridCell}>
-								<Typography variant="overline" gutterBottom>
-									Repayment
-								</Typography>
+								<div>
+									<Typography variant="overline" gutterBottom>
+										Repayment
+										<KeyTooltip
+											interactive
+											placement="top-start"
+											className={classes.tooltip}
+											title={
+												<React.Fragment>
+													<span>
+														Principal and interest loans require you to
+														pay off part of the principle loan amount as
+														well as cover the interest repayments
+													</span>
+													<TooltipArrow />
+												</React.Fragment>
+											}
+										>
+											<IconButton aria-label="Info">
+												<InfoTooltip />
+											</IconButton>
+										</KeyTooltip>
+									</Typography>
+								</div>
 								<ToggleButton
 									value="checked"
 									selected={repayment === 'interest'}
@@ -244,7 +339,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 									selected={repayment === 'interest + principle'}
 									onChange={this.onToggleRepayment}
 								>
-									<Typography variant="h5">Interest + Principe</Typography>
+									<Typography variant="h5">Interest + Principle</Typography>
 								</ToggleButton>
 							</Grid>
 						</Grid>
@@ -257,9 +352,17 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 				</Grid>
 				<div className={classes.resultsTableContainer}>
 					{type === 'borrowing' && (
-						<LoansCalculatorBorrowTable data={this.state.results} />
+						<LoansCalculatorBorrowTable
+							data={this.state.results}
+							onDetailsClick={this.props.onDetailsClick}
+						/>
 					)}
-					{type === 'lending' && <LoansCalculatorLendTable data={this.state.results} />}
+					{type === 'lending' && (
+						<LoansCalculatorLendTable
+							data={this.state.results}
+							onDetailsClick={this.props.onDetailsClick}
+						/>
+					)}
 				</div>
 			</React.Fragment>
 		);

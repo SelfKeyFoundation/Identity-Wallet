@@ -48,7 +48,15 @@ class LoansListPageComponent extends PureComponent {
 	onTabChange = tab => this.setState({ tab });
 
 	render() {
-		const { classes, loading, inventory, onDetailsClick, onBackClick, tokens } = this.props;
+		const {
+			classes,
+			loading,
+			inventory,
+			onDetailsClick,
+			onBackClick,
+			tokens,
+			rates
+		} = this.props;
 		const { tab } = this.state;
 		return (
 			<Grid container>
@@ -100,6 +108,7 @@ class LoansListPageComponent extends PureComponent {
 									onDetailsClick={onDetailsClick}
 									tokens={tokens}
 									tab={tab}
+									rates={rates}
 								/>
 							</Grid>
 						</Grid>

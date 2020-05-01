@@ -94,7 +94,12 @@ const LoansCalculatorLendTable = withStyles(styles)(({ classes, data, onDetailsC
 						</Grid>
 					</TableCell>
 					<TableCell>{offer.data.interestRate}</TableCell>
-					<TableCell />
+					<TableCell>
+						{offer.loanPayment.totalInterest.toLocaleString('en-US', {
+							style: 'currency',
+							currency: 'USD'
+						})}
+					</TableCell>
 					<TableCell className={classes.detailsCell}>
 						<span onClick={() => onDetailsClick(offer)}>Details</span>
 					</TableCell>

@@ -20,15 +20,15 @@ class LoansListContainer extends MarketplaceLoansComponent {
 	};
 
 	render() {
-		const { isLoading, keyRate, vendors, inventory, tokens } = this.props;
+		const { isLoading, rates, vendors, inventory, tokens } = this.props;
 
 		return (
 			<LoansListPage
-				keyRate={keyRate}
 				vendors={vendors}
 				inventory={inventory}
 				onBackClick={this.onBackClick}
 				onDetailsClick={this.onDetailsClick}
+				rates={rates}
 				loading={isLoading}
 				tokens={tokens}
 			/>
@@ -41,7 +41,9 @@ LoansListContainer.propTypes = {
 	inventory: PropTypes.array,
 	vendors: PropTypes.array,
 	isLoading: PropTypes.bool,
-	keyRate: PropTypes.number
+	keyRate: PropTypes.number,
+	tokens: PropTypes.array,
+	rates: PropTypes.array
 };
 
 const mapStateToProps = (state, props) => {
@@ -51,7 +53,7 @@ const mapStateToProps = (state, props) => {
 		vendors: marketplaceSelectors.selectVendorsForCategory(state, 'loans'),
 		inventory: marketplaceSelectors.selectLoansInventory(state, identity.type),
 		isLoading: marketplaceSelectors.isInventoryLoading(state),
-		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
+		rates: pricesSelectors.getPrices(state).prices,
 		tokens: getTokens(state)
 	};
 };

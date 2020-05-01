@@ -53,12 +53,9 @@ const LoansCalculatorBorrowTable = withStyles(styles)(({ classes, data, onDetail
 					<TableCell>
 						<Typography variant="overline">Trust Score</Typography>
 					</TableCell>
-					*/}
+				*/}
 				<TableCell>
 					<Typography variant="overline">Type</Typography>
-				</TableCell>
-				<TableCell>
-					<Typography variant="overline">Current Rates</Typography>
 				</TableCell>
 				<TableCell>
 					<Typography variant="overline">Collateral Needed</Typography>
@@ -89,11 +86,26 @@ const LoansCalculatorBorrowTable = withStyles(styles)(({ classes, data, onDetail
 					<TableCell />
 					*/}
 					<TableCell>{offer.data.type}</TableCell>
+					<TableCell>{offer.collateral}</TableCell>
 					<TableCell>{offer.data.interestRate}</TableCell>
-					<TableCell />
-					<TableCell />
-					<TableCell />
-					<TableCell />
+					<TableCell>
+						{offer.loanPayment.totalInterest.toLocaleString('en-US', {
+							style: 'currency',
+							currency: 'USD'
+						})}
+					</TableCell>
+					<TableCell>
+						{offer.loanPayment.monthly.toLocaleString('en-US', {
+							style: 'currency',
+							currency: 'USD'
+						})}
+					</TableCell>
+					<TableCell>
+						{parseFloat(offer.loanPayment.total).toLocaleString('en-US', {
+							style: 'currency',
+							currency: 'USD'
+						})}
+					</TableCell>
 					<TableCell className={classes.detailsCell}>
 						<span onClick={() => onDetailsClick(offer)}>Details</span>
 					</TableCell>
