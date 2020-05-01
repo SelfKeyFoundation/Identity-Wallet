@@ -335,6 +335,7 @@ class Sidebar extends PureComponent {
 								placement="top-start"
 								className={classes.tooltip}
 								classes={{ tooltip: classes.customWidth }}
+								TransitionProps={{ timeout: 0 }}
 								title={
 									<React.Fragment>
 										<span>

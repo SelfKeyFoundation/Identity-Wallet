@@ -198,6 +198,7 @@ const StatusInfo = withStyles(statusInfoStyle)(
 								<KeyTooltip
 									interactive
 									placement="top-start"
+									TransitionProps={{ timeout: 0 }}
 									title={
 										<React.Fragment>
 											<span>{tooltip}</span>

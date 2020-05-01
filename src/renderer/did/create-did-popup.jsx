@@ -110,6 +110,7 @@ class CreateDIDPopupComponent extends PureComponent {
 											<KeyTooltip
 												interactive
 												placement="top-start"
+												TransitionProps={{ timeout: 0 }}
 												title={
 													<React.Fragment>
 														<span>{tooltipNetworkFee}</span>
