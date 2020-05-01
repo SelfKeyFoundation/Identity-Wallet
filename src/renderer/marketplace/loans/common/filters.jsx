@@ -3,15 +3,45 @@ import { Typography, Grid, Input, Select, MenuItem, Slider } from '@material-ui/
 import { withStyles } from '@material-ui/styles';
 import { KeyboardArrowDown } from '@material-ui/icons';
 import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
 const styles = theme => ({
 	container: {
 		marginBottom: '2em',
 		'& .select-tokens': {
 			minWidth: '10em'
+		},
+		'& .MuiSlider-markLabel': {
+			fontSize: '12px !important',
+			marginTop: '3px'
+		},
+		'& .MuiSlider-mark': {
+			display: 'none'
+		},
+		'& .MuiSlider-markLabelActive': {
+			top: '26px'
 		}
+	},
+	rangeContainer: {
+		minWidth: '300px'
 	}
 });
+
+const generateMarks = ({ max, min, selectedRange }) => {
+	const selMin = selectedRange[0];
+	const selMax = selectedRange[1];
+	const marks = [];
+
+	marks.push({ value: min, label: `${min}%` });
+	if (selMin !== min) {
+		marks.push({ value: selMin, label: `${selMin}%` });
+	}
+	if (selMax !== max) {
+		marks.push({ value: selMax, label: `${selMax}%` });
+	}
+	marks.push({ value: max, label: `${max}%` });
+	return marks;
+};
 
 const LoansFilters = withStyles(styles)(
 	({
@@ -19,11 +49,9 @@ const LoansFilters = withStyles(styles)(
 		tokens = [],
 		selectedToken = '',
 		onTokenFilterChange,
-		isP2P = false,
-		onP2pFilterChange,
+		selectedType = 'Decentralized',
+		onTypeFilterChange,
 		onRateRangeChange,
-		isLicensed = false,
-		onLicensedFilterChange,
 		range = { min: 0, max: 100 },
 		selectedRange = false
 	}) => {
@@ -40,18 +68,16 @@ const LoansFilters = withStyles(styles)(
 					<Typography variant="overline" gutterBottom>
 						Type
 					</Typography>
-					<ToggleButton value="checked" onChange={onP2pFilterChange} selected={isP2P}>
-						<Typography variant="h5">P2P</Typography>
-					</ToggleButton>
-					<ToggleButton
-						value="checked"
-						onChange={onLicensedFilterChange}
-						selected={isLicensed}
-					>
-						<Typography variant="h5">Licensed</Typography>
-					</ToggleButton>
+					<ToggleButtonGroup value={selectedType} exclusive onChange={onTypeFilterChange}>
+						<ToggleButton value="Decentralized">
+							<Typography variant="h5">P2P</Typography>
+						</ToggleButton>
+						<ToggleButton value="Centralized">
+							<Typography variant="h5">Centralized</Typography>
+						</ToggleButton>
+					</ToggleButtonGroup>
 				</Grid>
-				<Grid item>
+				<Grid item className={classes.rangeContainer}>
 					<Typography variant="overline" gutterBottom>
 						Current Rates
 					</Typography>
@@ -59,8 +85,10 @@ const LoansFilters = withStyles(styles)(
 						value={selectedRange}
 						min={range.min}
 						max={range.max}
+						marks={generateMarks({ max: range.max, min: range.min, selectedRange })}
 						onChange={onRateRangeChange}
-						valueLabelDisplay="auto"
+						step={1}
+						valueLabelDisplay="off"
 						aria-labelledby="range-slider"
 					/>
 				</Grid>
@@ -76,8 +104,9 @@ const LoansFilters = withStyles(styles)(
 						disableUnderline
 						IconComponent={KeyboardArrowDown}
 						input={<Input disableUnderline />}
+						displayEmpty={true}
 					>
-						<MenuItem value="">
+						<MenuItem key="empty" value="">
 							<em>Choose...</em>
 						</MenuItem>
 						{tokens.map(token => (
