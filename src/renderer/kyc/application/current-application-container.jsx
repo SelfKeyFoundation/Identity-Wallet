@@ -78,7 +78,6 @@ class CurrentApplicationComponent extends PureComponent {
 	};
 	handleSelected = (uiId, item) => {
 		const { selected } = this.state;
-		console.log('XXX', selected);
 		if (selected[uiId] === item) return;
 		this.setState({ selected: { ...selected, [uiId]: item } });
 	};

@@ -31,7 +31,7 @@ export const CorporateDashboardTabs = withStyles(styles)(
 					<Tab id="overview" value="overview" label="Overview" />
 					<Tab id="information" value="information" label="Information & Documents" />
 					<Tab id="members" value="members" label="Manage Members" />
-					<Tab id="applications" value="applications" label="Applications" disabled />
+					<Tab id="applications" value="applications" label="Applications" />
 					<Tab id="history" value="history" label="History" disabled />
 				</Tabs>
 				{tab === 'overview' && <CorporateOverviewTab id="overviewTab" {...tabProps} />}

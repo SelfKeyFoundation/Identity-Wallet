@@ -159,6 +159,7 @@ export const marketplaceLoadedFromJobReducer = (state, action) => {
 		case VENDOR_SYNC_JOB:
 			return reducers.vendorsLoadedFromJobReducer(state, action);
 	}
+	return state;
 };
 
 export const reducers = {

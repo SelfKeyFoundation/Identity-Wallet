@@ -24,6 +24,7 @@ const KYC_APPLICATIONS_UPDATE_ENDPOINT_NAME = '/applications/:id';
 const KYC_APPLICATIONS_GET_ENDPOINT_NAME = '/applications/:id';
 const KYC_APPLICATIONS_FILE_ENDPOINT_NAME = '/files';
 const KYC_APPLICATIONS_PAYMENT_ENDPOINT_NAME = '/applications/:id/payments';
+const KYC_APPLICATIONS_STATUS_ENDPOINT_NAME = '/applications/:id/change_status';
 const KYC_APPLICATIONS_LIST_ENDPOINT_NAME = '/applications';
 const KYC_USERS_GET_ENDPOINT_NAME = '/kyc-users/me';
 const KYC_USERS_CREATE_ENDPOINT_NAME = '/kyc-users';
@@ -279,13 +280,17 @@ export class RelyingPartyRest {
 		});
 	}
 
-	static createKYCMemberApplication(ctx, applicationId, templateId, attributes) {
+	static createKYCMemberApplication(ctx, applicationId, memberRoles, templateId, attributes) {
 		let url = ctx.getEndpoint(KYC_CORPORATE_MEMBERS_ENDPOINT_NAME);
+		memberRoles = (memberRoles || []).map(r => r.replace(/-/, '_'));
 		url = url.replace(':applicationId', applicationId);
 		log.debug(`[createKYCMemberApplication] POST ${url}`);
 		return request.post({
 			url,
-			body: { attributes, templateId },
+			body: {
+				application: { attributes, templateId },
+				memberRoles
+			},
 			headers: {
 				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
 				'User-Agent': this.userAgent,
@@ -317,6 +322,29 @@ export class RelyingPartyRest {
 		return request.post({
 			url,
 			body: { transactionHash },
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+
+	static updateKYCApplicationStatus(ctx, applicationId, code, note) {
+		let url = ctx.getEndpoint(KYC_APPLICATIONS_STATUS_ENDPOINT_NAME);
+		url = url.replace(':id', applicationId);
+		log.debug(`[updateKYCApplicationStatus] POST ${url} : ${code} ${note}`);
+
+		const body = { code };
+
+		if (note) {
+			body.note = note;
+		}
+
+		return request.post({
+			url,
+			body,
 			headers: {
 				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
 				'User-Agent': this.userAgent,
@@ -572,7 +600,7 @@ export class RelyingPartySession {
 		return RelyingPartyRest.createKYCApplication(this.ctx, templateId, filteredAttributes);
 	}
 
-	async createKYCMemberApplication(applicationId, templateId, attributes) {
+	async createKYCMemberApplication(applicationId, memberRoles, templateId, attributes) {
 		// ignore empty non-required attributes
 		let filteredAttributes = attributes.filter(
 			attr => attr.data || attr.documents || attr.required
@@ -602,6 +630,7 @@ export class RelyingPartySession {
 		return RelyingPartyRest.createKYCMemberApplication(
 			this.ctx,
 			applicationId,
+			memberRoles,
 			templateId,
 			filteredAttributes
 		);
@@ -617,6 +646,10 @@ export class RelyingPartySession {
 			applicationId,
 			transactionHash
 		);
+	}
+
+	updateKYCApplicationStatus(applicationId, code, note) {
+		return RelyingPartyRest.updateKYCApplicationStatus(this.ctx, applicationId, code, note);
 	}
 
 	listKYCTemplates() {

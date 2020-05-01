@@ -304,11 +304,13 @@ export const KycMembersListItem = withStyles(styles)(({ classes, item, onClick }
 				<Grid item>
 					<Typography variant="h6">{item.name}</Typography>
 				</Grid>
-				<Grid item>
-					<Typography variant="subtitle1" color="secondary">
-						{item.parentCompany}
-					</Typography>
-				</Grid>
+				{item.parentCompany ? (
+					<Grid item>
+						<Typography variant="subtitle1" color="secondary">
+							{item.parentCompany}
+						</Typography>
+					</Grid>
+				) : null}
 				{item.positions && item.positions.length > 0 && (
 					<Grid item>
 						<Typography variant="subtitle1" color="secondary">
@@ -340,20 +342,9 @@ export const KycMembersList = withStyles(styles)(
 		selectedIdentityId = null,
 		selectedTemplate = null
 	}) => {
-		console.log(
-			'XXX',
-			selectedTemplate,
-			selectedIdentityId,
-			memberRequirements.map(r => [
-				r.memberTemplate,
-				r.id,
-				r.id === selectedIdentityId &&
-					(r.memberTemplate ? r.memberTemplate.template : null) === selectedTemplate
-			])
-		);
 		const companies = memberRequirements.reduce((acc, curr) => {
 			if (curr.type === 'corporate') {
-				acc[curr.id] = curr.userDate.name;
+				acc[curr.id] = curr.userData.name;
 			}
 			return acc;
 		}, {});
@@ -361,7 +352,7 @@ export const KycMembersList = withStyles(styles)(
 			id: r.id,
 			template: r.memberTemplate ? r.memberTemplate.template : null,
 			name: r.userData.name,
-			parentCompany: companies[r.parentIdentity],
+			parentCompany: companies[r.parentId],
 			positions: r.positions,
 			selected:
 				r.id === selectedIdentityId &&
@@ -405,7 +396,6 @@ class KycChecklistComponent extends React.Component {
 		if (member.id === 'main-company') {
 			return this.setState({ selectedIdentityId: null, selectedTemplate: null });
 		}
-		console.log('XXX', member);
 		return this.setState({ selectedIdentityId: member.id, selectedTemplate: member.template });
 	};
 
