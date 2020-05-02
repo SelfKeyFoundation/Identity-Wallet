@@ -14,6 +14,10 @@ import { walletSelectors, walletOperations } from 'common/wallet';
 const styles = theme => ({});
 
 class LoansListContainer extends MarketplaceLoansComponent {
+	componentDidMount() {
+		window.scrollTo(0, 0);
+	}
+
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
 
 	onDetailsClick = offer => this.props.dispatch(push(this.detailsRoute(offer.id)));
