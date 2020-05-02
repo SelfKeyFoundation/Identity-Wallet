@@ -325,7 +325,6 @@ class Sidebar extends PureComponent {
 						<Divider className={`divider`} />
 					</List>
 				</Grid>
-				<Divider />
 				<Grid item style={{ padding: '50px 0 20px' }}>
 					{/* <Grid item className={classes.network}>
 						<Typography variant="overline" gutterBottom>
