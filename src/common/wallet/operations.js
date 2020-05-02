@@ -34,9 +34,20 @@ const updateWalletName = (name, walletId) => async (dispatch, getState) => {
 	}
 };
 
+const setLoanCardStatus = (status = false) => async (dispatch, getState) => {
+	const walletFromStore = getWallet(getState());
+	console.log(walletFromStore);
+	walletFromStore.loanCardStatus = status;
+	await dispatch(updateWalletWithBalance({ ...walletFromStore, loanCardStatus: status }));
+};
+
 export default {
 	...actions,
 	updateWalletWithBalance,
 	refreshWalletBalance,
+	setLoanCardStatusOperation: createAliasedAction(
+		types.WALLET_SET_LOAN_CALCULATOR_CARD_STATUS,
+		setLoanCardStatus
+	),
 	updateWalletName: createAliasedAction(types.WALLET_NAME_UPDATE, updateWalletName)
 };

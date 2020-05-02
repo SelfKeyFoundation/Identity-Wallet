@@ -1,14 +1,22 @@
 import React, { PureComponent } from 'react';
 import { CardContent, Card, Grid, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
-import { CalculatorIcon } from 'selfkey-ui';
+import { CalculatorIcon, ModalCloseIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	card: {
 		marginBottom: '24px'
 	},
 	container: {
-		padding: '30px 24px 60px !important'
+		padding: '30px 24px 60px !important',
+		position: 'relative'
+	},
+	closeIcon: {
+		position: 'absolute',
+		right: '10px',
+		top: '10px',
+		width: '30px',
+		cursor: 'pointer'
 	},
 	title: {
 		marginBottom: '.5em'
@@ -30,10 +38,11 @@ const styles = theme => ({
 
 class LoansCalculatorCardComponent extends PureComponent {
 	render() {
-		const { classes, onCalculatorClick } = this.props;
+		const { classes, onCalculatorClick, onClose } = this.props;
 		return (
 			<Card className={classes.card}>
 				<CardContent className={classes.container}>
+					<ModalCloseIcon className={classes.closeIcon} onClick={onClose} />
 					<Grid
 						container
 						direction="column"
