@@ -70,7 +70,7 @@ jobs:
                   command: yarn install-all
             - run:
                   name: Unit Tests
-                  command: yarn test:unit:ci -- --maxWorkers=2
+                  command: yarn test:unit:ci --maxWorkers=2
             - run:
                   name: Coveralls
                   command: yarn coveralls
