@@ -93,9 +93,11 @@ const ReceiveTokenTabComponent = props => {
 			<div className={classes.qrCode}>
 				<QRCode value={sendingAddress} />
 			</div>
-			<Typography variant="h1" color="secondary" className={classes.bottomSpace}>
-				Your Ethereum address to receive {cryptoCurrency}
-			</Typography>
+			<div className={classes.bottomSpace}>
+				<Typography variant="h1" color="secondary">
+					Your Ethereum address to receive {cryptoCurrency}
+				</Typography>
+			</div>
 			<div className={classes.tokenPublicKey}>
 				<Typography variant="body2" className={classes.publicKey} id="printableArea">
 					{sendingAddress}
