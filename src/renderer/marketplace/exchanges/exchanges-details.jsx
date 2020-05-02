@@ -522,7 +522,7 @@ class ExchangesDetailsComponent extends PureComponent {
 							alignItems="flex-start"
 							spacing={4}
 						>
-							<Grid item id="description" xs={12}>
+							<Grid item id="description" className={classes.fullWidth}>
 								<Grid
 									container
 									direction="row"

@@ -150,6 +150,7 @@ export const SimpleServiceCost = withStyles(serviceCostStyle)(({ classes }) => (
 								<KeyTooltip
 									interactive
 									placement="top-start"
+									TransitionProps={{ timeout: 0 }}
 									title={
 										<React.Fragment>
 											<span>...</span>

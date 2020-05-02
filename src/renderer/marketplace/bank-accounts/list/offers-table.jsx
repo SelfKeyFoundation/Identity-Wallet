@@ -13,10 +13,10 @@ import { ProgramPrice, FlagCountryName } from '../../common';
 const styles = theme => ({
 	table: {
 		'& td': {
-			padding: '0 20px'
+			padding: '5px 20px'
 		},
 		'& th': {
-			padding: '0 20px'
+			padding: '15px 20px'
 		}
 	},
 	tableHeaderRow: {
@@ -188,6 +188,7 @@ const BankingOffersTable = withStyles(styles)(
 									interactive
 									placement="top-start"
 									className={classes.tooltip}
+									TransitionProps={{ timeout: 0 }}
 									title={
 										<React.Fragment>
 											<span>
