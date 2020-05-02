@@ -77,6 +77,10 @@ jobs:
             - run:
                   name: Build Storybook
                   command: yarn build-storybook
+            - persist_to_workspace:
+                  root: .
+                  paths:
+                      - dist
             - store_test_results:
                   path: dist/junit
             - store_artifacts:
@@ -93,8 +97,20 @@ jobs:
             - *step_prepare_cache_buster
             - *step_restore_cache
             - run:
+                  name: Install OS Dependecies
+                  command: |
+                      sudo apt-get update
+                      sudo apt-get install build-essential
+                      sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
+            - run:
                   name: Install Node Packages
                   command: yarn install
+            - run:
+                  name: Get storybook from attach_workspace
+                  command: |
+                      mkdir -p dist
+                      cp -r /tmp/linux/dist/storybook dist/storybook
+
             - run:
                   name: Story book
                   command: yarn deploy-storybook-ci
@@ -364,7 +380,6 @@ workflows:
             - 'publish-storybook':
                   requires:
                       - unit-test
-                      - build-linux
                   filters:
                       branches:
                           only:

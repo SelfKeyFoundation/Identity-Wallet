@@ -58,7 +58,11 @@ const PopupWrap = props => {
 		popupClass = ''
 	} = props;
 	return (
-		<Modal open={open} className={`${classes.modal} ${props.className}`}>
+		<Modal
+			open={open}
+			className={`${classes.modal} ${props.className}`}
+			disableEnforceFocus={!!process.env.STORYBOOK}
+		>
 			<ModalWrap className={`${classes.modalWrap} ${popupClass}`}>
 				{displayLogo && (
 					<Grid

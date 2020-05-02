@@ -26,7 +26,9 @@ export const AutoUpdate = withStyles(styles)(
 	({ classes, info, closeAction, downloadInstallAction }) => {
 		let releaseNotesRef = React.createRef();
 		const root = document.createElement('div');
-		const shadow = root.createShadowRoot();
+		const shadow = root.createShadowRoot
+			? root.createShadow()
+			: root.attachShadow({ mode: 'open' });
 		shadow.innerHTML = info.releaseNotes;
 
 		setTimeout(() => {
@@ -57,7 +59,7 @@ export const AutoUpdate = withStyles(styles)(
 								</Typography>
 							</Grid>
 							<Grid item classes={{ item: classes.footer }}>
-								<Typography variant="title" color="secondary" gutterBottom>
+								<Typography variant="h1" color="secondary" gutterBottom>
 									Release Notes:
 								</Typography>
 								<div ref={releaseNotesRef} />

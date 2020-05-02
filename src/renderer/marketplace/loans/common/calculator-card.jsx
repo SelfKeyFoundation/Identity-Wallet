@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { CardContent, Card, Grid, Typography, Button, withStyles } from '@material-ui/core';
+import { CardContent, Card, Grid, Typography, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { DIDIcon } from 'selfkey-ui';
 
 const styles = theme => ({

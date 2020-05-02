@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Typography, Grid, Input, Select, MenuItem, Slider } from '@material-ui/core';
+import { Typography, Grid, Input, Select, MenuItem, Slider } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { KeyboardArrowDown } from '@material-ui/icons';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 
