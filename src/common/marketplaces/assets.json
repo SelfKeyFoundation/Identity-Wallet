@@ -49,7 +49,7 @@
 			"id": "loans_individual",
 			"name": "loans",
 			"title": "Loans",
-			"description": "Start earning interest on your cryptocurrency or get a cash loan with you crpto assets as collaterals.",
+			"description": "Start earning interest on your cryptocurrency or get a cash loan with your crypto assets as collaterals.",
 			"entityType": "individual",
 			"active": true,
 			"svgIcon": "https://dl.airtable.com/.attachments/f3f557d642883b0fb004c49dfe3b89aa/6547f314/icon-marketplace-loans.svg"
@@ -103,7 +103,7 @@
 			"id": "loans_corporate",
 			"name": "loans",
 			"title": "Loans",
-			"description": "Start earning interest on your cryptocurrency or get a cash loan with you crpto assets as collaterals. ",
+			"description": "Start earning interest on your cryptocurrency or get a cash loan with your crypto assets as collaterals.",
 			"entityType": "corporate",
 			"active": false,
 			"svgIcon": "https://dl.airtable.com/.attachments/f3f557d642883b0fb004c49dfe3b89aa/6547f314/icon-marketplace-loans.svg"

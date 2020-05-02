@@ -240,6 +240,9 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 																		interactive
 																		placement="top-start"
 																		className={classes.tooltip}
+																		TransitionProps={{
+																			timeout: 0
+																		}}
 																		title={
 																			<React.Fragment>
 																				<span>
