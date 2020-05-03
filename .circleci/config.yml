@@ -70,13 +70,13 @@ jobs:
                   command: yarn install-all
             - run:
                   name: Unit Tests
-                  command: yarn test:unit:ci --maxWorkers=2
+                  command: yarn test:unit:ci
             - run:
                   name: Coveralls
                   command: yarn coveralls
-            - run:
-                  name: Build Storybook
-                  command: yarn build-storybook
+            # - run:
+            #       name: Build Storybook
+            #       command: yarn build-storybook
             - persist_to_workspace:
                   root: .
                   paths:
