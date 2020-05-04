@@ -391,13 +391,9 @@ export class TokenSwapComponent extends PureComponent {
 	};
 
 	handleCalculateFees = async () => {
-		await this.props.dispatch(push(`/main/swap-completed/KEY`));
-		/*
 		const { sourceToken, wallet, walletTokens } = this.props;
-
 		const token = walletTokens.find(t => t.symbol === sourceToken);
 		const amount = this.getAmount();
-
 		await this.props.dispatch(
 			tokenSwapOperations.swapTokensOperation({
 				address: wallet.address,
@@ -405,11 +401,10 @@ export class TokenSwapComponent extends PureComponent {
 				decimal: token.decimal
 			})
 		);
-		*/
 	};
 
 	handleSwap = async () => {
-		const { dispatch, sourceToken, trezorAccountIndex } = this.props;
+		const { dispatch, sourceToken, targetToken, trezorAccountIndex } = this.props;
 		const transactions = this.props.transaction.transactions;
 		for (const t of transactions) {
 			const transaction = t.tx;
@@ -418,18 +413,12 @@ export class TokenSwapComponent extends PureComponent {
 			await dispatch(
 				transactionOperations.sendSwapTransaction({
 					transaction,
-					onReceipt: () => {
-						console.log('hello2');
-					}
+					token: targetToken
 				})
 			);
 		}
 		this.props.dispatch(push('/main/dashboard'));
 	};
-
-	onReceipt(receipt) {
-		console.log('hello');
-	}
 
 	render() {
 		const { classes, closeAction, sourceToken, targetToken, fiatCurrency, locale } = this.props;

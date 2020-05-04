@@ -33,7 +33,7 @@ class SwapCompletedContainer extends PureComponent {
 		}
 	}
 
-	onBackClick() {
+	onBackClick = () => {
 		const { contractAddress } = this.props;
 
 		if (contractAddress) {
@@ -70,7 +70,7 @@ class SwapCompletedContainer extends PureComponent {
 		}
 
 		this.props.dispatch(push(`/main/dashboard`));
-	}
+	};
 
 	render() {
 		return <SwapComplete onBackClick={this.onBackClick} />;
