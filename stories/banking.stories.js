@@ -250,6 +250,10 @@ storiesOf('Banking/BankingDetailsPage', module)
 			contact="help@flagtheory.com"
 			resume={resume}
 			canOpenBankAccount
+			timeToForm={'4'}
+			whatYouGet={
+				'Bank Account opening requirements are subject to change at the discretion of the bank. There might be additional fees charged by the bank itself. Bank account opening is not guaranteed and is subject to the bank policies and compliance department. There might be restrictions on UBO nationalities, business activities and/or jurisdictions. A refund is guaranteed if the account is not successfully opened, but a 15% administrative fee applies.'
+			}
 			onTabChange={linkTo('Banking/BankingDetailsPage', tab => tab)}
 			kycRequirements={KYCRequirementData}
 			onBack={action('banking details back')}

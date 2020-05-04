@@ -56,7 +56,7 @@ const styles = theme => ({
 	}
 });
 
-const WhatYouGet = withStyles(styles)(({ classes, description, timeToForm }) => {
+const WhatYouGet = withStyles(styles)(({ classes, description, timeToForm, whatYouGet }) => {
 	return (
 		<div className={classes.whatYouGet}>
 			<Typography variant="h2" gutterBottom>
@@ -71,12 +71,7 @@ const WhatYouGet = withStyles(styles)(({ classes, description, timeToForm }) => 
 				/>
 				<div className={classes.descriptionHelp}>
 					<p>Time to form: {timeToForm} week(s).</p>
-					<p>
-						All our incorporation services include a yearly consulting session, a
-						dedicated account manager and access to our global network of trusted
-						business services, including introductions to accountants, financial, tax
-						and legal advisors at no cost.
-					</p>
+					<p>{whatYouGet}</p>
 				</div>
 			</Grid>
 		</div>
