@@ -91,14 +91,11 @@ export const BuyKeyContent = withStyles(styles)(
 							direction="column"
 							justify="flex-start"
 							alignItems="flex-start"
-							spacing={2}
 						>
-							<Grid item>
-								<Typography variant="body1" className={classes.bottomSpace}>
-									You can buy KEY tokens, to use in the wallet, from one of the
-									many exchanges worldwide.
-								</Typography>
-							</Grid>
+							<Typography variant="body1" className={classes.bottomSpace}>
+								You can buy KEY tokens, to use in the wallet, from one of the many
+								exchanges worldwide.
+							</Typography>
 							<List className={classes.exchanges}>
 								{getExchanges(exchanges, classes)}
 							</List>
