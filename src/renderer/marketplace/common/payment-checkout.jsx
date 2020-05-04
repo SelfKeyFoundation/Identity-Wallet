@@ -85,6 +85,7 @@ const PaymentCheckout = withStyles(styles)(
 		initialDocsText,
 		kycProcessText,
 		getFinalDocsText,
+		whatYouGet,
 		onBackClick,
 		onStartClick,
 		startButtonText
@@ -117,6 +118,7 @@ const PaymentCheckout = withStyles(styles)(
 						initialDocsText={initialDocsText}
 						kycProcessText={kycProcessText}
 						getFinalDocsText={getFinalDocsText}
+						whatYouGet={whatYouGet}
 					/>
 
 					<HowServiceWorks
