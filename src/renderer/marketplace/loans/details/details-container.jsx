@@ -22,7 +22,6 @@ class LoansDetailsContainerComponent extends MarketplaceLoansComponent {
 
 	render() {
 		let item = this.props.item;
-		console.log(item);
 		return (
 			<div>
 				<LoansDetails

@@ -51,7 +51,6 @@ const styles = theme => ({
 const FIXED_TOKENS = ['BTC', 'ETH', 'KEY'];
 
 const calculateCollateral = ({ amount, token, rates }) => {
-	console.log(token);
 	const rate = rates.find(r => r.symbol === token);
 	// FIXME: data and structure for LTV is not available on airtable yet
 	const LTV = 0.7;
@@ -101,14 +100,14 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 
 	minPeriod = () => {
 		// const { inventory } = this.props;
-		// const results = this.inventoryByType(inventory, type);
+		// const results = this.filterLoanType(inventory, type);
 		// TODO: do we have a min load period?
 		return 1;
 	};
 
 	maxPeriod = () => {
 		const { inventory } = this.props;
-		const data = this.inventoryByType(inventory, this.state.type);
+		const data = this.filterLoanType(inventory, this.state.type);
 		const max = Math.max.apply(
 			Math,
 			data.map(o => Number(o.data.maxLoanTerm.replace(/[^0-9.-]+/g, '')))
@@ -118,7 +117,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 
 	availableTokens = () => {
 		const { inventory } = this.props;
-		const data = this.inventoryByType(inventory, this.state.type);
+		const data = this.filterLoanType(inventory, this.state.type);
 		return this.inventoryUniqueTokens(data).filter(t => FIXED_TOKENS.indexOf(t) === -1);
 	};
 
@@ -156,7 +155,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 		const { amount, type, period, selectedToken, repayment } = this.state;
 
 		// Filter correct type (Lending or Borrowing)
-		const inventoryByType = this.inventoryByType(inventory, type);
+		const inventoryByType = this.filterLoanType(inventory, type);
 
 		// Filters offers with min and max Loan
 		let results = inventoryByType.filter(offer => {
@@ -199,8 +198,6 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 			}
 			return offer;
 		});
-
-		console.log(results);
 
 		this.setState({ results });
 	}

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { withStyles } from '@material-ui/styles';
 import { Typography, Grid } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
@@ -7,6 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
+import { MarketplaceLoansComponent } from '../common/marketplace-loans-component';
 import {
 	Tag,
 	LargeTableHeadRow /* TagTableCell, Tag, KeyTooltip, InfoTooltip */
@@ -16,10 +17,10 @@ import { LoansFilters } from './filters';
 const styles = theme => ({
 	table: {
 		'& td': {
-			padding: '0 20px'
+			padding: '5px 20px'
 		},
 		'& th': {
-			padding: '0 20px'
+			padding: '15px 20px'
 		}
 	},
 	logoCell: {
@@ -46,11 +47,10 @@ const styles = theme => ({
 	}
 });
 
-class LoansTableComponent extends PureComponent {
+class LoansTableComponent extends MarketplaceLoansComponent {
 	state = {
-		selectedToken: false,
-		isP2P: false,
-		isLicensed: false,
+		selectedToken: '',
+		type: 'Decentralized',
 		selectedRange: [0, 100]
 	};
 
@@ -64,46 +64,27 @@ class LoansTableComponent extends PureComponent {
 		return [...tokens];
 	};
 
-	inventoryByType = (inventory, type) =>
-		inventory
-			.filter(offer => offer.data.loanType.includes(type))
-			.map(offer => {
-				offer.data.interestRate =
-					type === 'lending'
-						? offer.data.interestRateLending
-						: offer.data.interestRateBorrowing;
-				offer.data.maxLoan =
-					type === 'lending' ? offer.data.maxLoanLending : offer.data.maxLoanBorrowing;
-				offer.data.minLoan =
-					type === 'lending' ? offer.data.minLoanLending : offer.data.minLoanBorrowing;
-				offer.data.maxLoanTerm =
-					type === 'lending'
-						? offer.data.maxLoanTermLending
-						: offer.data.maxLoanTermBorrowing;
-				return offer;
-			});
-
 	inventoryRateRangeLimits = (inventory, type) => {
-		const filteredInventory = this.inventoryByType(inventory, type);
+		const filteredInventory = this.filterLoanType(inventory, type);
+		/*
 		const min = Math.min.apply(
 			Math,
 			filteredInventory.map(o => parseFloat(o.data.interestRate))
 		);
-		const max = Math.max.apply(
-			Math,
-			filteredInventory.map(o => parseFloat(o.data.interestRate))
-		);
-		return { min, max };
+		*/
+		let max = Math.max.apply(Math, filteredInventory.map(o => parseFloat(o.data.interestRate)));
+		if (max === 0) {
+			max = 100;
+		}
+
+		return { min: 0, max };
 	};
 
 	onTokenFilterChange = e => this.selectToken(e.target.value);
 
 	selectToken = selectedToken => this.setState({ selectedToken });
 
-	onP2pFilterChange = e => this.setState(prevState => ({ isP2P: !prevState.isP2P }));
-
-	onLicensedFilterChange = e =>
-		this.setState(prevState => ({ isLicensed: !prevState.isLicensed }));
+	onTypeFilterChange = (e, selectedType) => this.setState({ selectedType });
 
 	onRateRangeChange = (e, selectedRange) => this.setState({ selectedRange });
 
@@ -115,13 +96,13 @@ class LoansTableComponent extends PureComponent {
 			className,
 			filter = 'lending'
 		} = this.props;
-		const { selectedToken, isLicensed, isP2P, selectedRange } = this.state;
+		const { selectedToken, selectedType, selectedRange } = this.state;
 
 		let filteredInventory = inventory;
 
-		// Filter by type (loanType)
+		// Filter by type lending or borrowing
 		if (filter) {
-			filteredInventory = this.inventoryByType(inventory, filter);
+			filteredInventory = this.filterLoanType(inventory, filter);
 		}
 
 		// Filter by token (assets)
@@ -131,16 +112,9 @@ class LoansTableComponent extends PureComponent {
 			);
 		}
 
-		// Filter by Licensing (licensed)
-		if (isLicensed) {
-			filteredInventory = filteredInventory.filter(offer => !!offer.data.licensed);
-		}
-
-		// Filter by P2P (type)
-		if (isP2P) {
-			filteredInventory = filteredInventory.filter(
-				({ data: { type } }) => !!type === 'Decentralized'
-			);
+		// Filter by Loan Type
+		if (selectedType) {
+			filteredInventory = filteredInventory.filter(offer => offer.data.type === selectedType);
 		}
 
 		// Filter by Rate range
@@ -153,20 +127,16 @@ class LoansTableComponent extends PureComponent {
 
 		return (
 			<React.Fragment>
-				<div>
-					<LoansFilters
-						tokens={this.inventoryUniqueTokens(inventory)}
-						selectedToken={selectedToken}
-						onTokenFilterChange={this.onTokenFilterChange}
-						isP2P={isP2P}
-						onP2pFilterChange={this.onP2pFilterChange}
-						isLicensed={isLicensed}
-						onLicensedFilterChange={this.onLicensedFilterChange}
-						selectedRange={selectedRange}
-						onRateRangeChange={this.onRateRangeChange}
-						range={this.inventoryRateRangeLimits(inventory, filter)}
-					/>
-				</div>
+				<LoansFilters
+					tokens={this.inventoryUniqueTokens(inventory)}
+					selectedToken={selectedToken}
+					onTokenFilterChange={this.onTokenFilterChange}
+					onTypeFilterChange={this.onTypeFilterChange}
+					selectedType={selectedType}
+					selectedRange={selectedRange}
+					onRateRangeChange={this.onRateRangeChange}
+					range={this.inventoryRateRangeLimits(inventory, filter)}
+				/>
 				<Table className={classNames(classes.table, className)}>
 					<TableHead>
 						<LargeTableHeadRow>
@@ -211,7 +181,7 @@ class LoansTableComponent extends PureComponent {
 										{offer.data.assets &&
 											offer.data.assets.map(tag => (
 												<Tag
-													key={tag}
+													key={`${offer.sku}-${tag}`}
 													onClick={() => this.selectToken(tag)}
 												>
 													{tag}

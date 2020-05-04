@@ -55,7 +55,9 @@ class LoansListPageComponent extends PureComponent {
 			onDetailsClick,
 			onBackClick,
 			tokens,
-			rates
+			rates,
+			cardHidden,
+			onCloseCalculatorCardClick
 		} = this.props;
 		const { tab } = this.state;
 		return (
@@ -97,9 +99,11 @@ class LoansListPageComponent extends PureComponent {
 								</Typography>
 							</Grid>
 
-							<Grid item>
-								<LoansCalculatorCard />
-							</Grid>
+							{!cardHidden && (
+								<Grid item>
+									<LoansCalculatorCard onClose={onCloseCalculatorCardClick} />
+								</Grid>
+							)}
 
 							<Grid item className={classes.tabs}>
 								<LoansTabs

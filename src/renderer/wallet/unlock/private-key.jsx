@@ -6,6 +6,9 @@ import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
 
 const styles = theme => ({
+	avatar: {
+		marginRight: '16px'
+	},
 	root: {
 		flexGrow: 1
 	},
@@ -17,6 +20,12 @@ const styles = theme => ({
 	},
 	bottomSpace: {
 		marginBottom: '1em'
+	},
+	itemBottomSpace: {
+		marginBottom: '2em'
+	},
+	buttonBottomSpace: {
+		marginBottom: '4em'
 	}
 });
 
@@ -73,20 +82,18 @@ class PrivateKey extends PureComponent {
 		const { privateKey } = this.state;
 		return (
 			<div className={classes.root}>
-				<Grid container direction="column" justify="center" alignItems="center" spacing={3}>
-					<Grid item>
+				<Grid container direction="column" justify="center" alignItems="center">
+					<Grid item className={classes.itemBottomSpace}>
 						<Grid
 							container
 							direction="row"
 							justify="flex-start"
-							alignItems="center"
-							spacing={2}
+							alignItems="flex-start"
+							wrap="nowrap"
 						>
-							<Grid item>
-								<Avatar>
-									<Typography variant="overline">1</Typography>
-								</Avatar>
-							</Grid>
+							<Avatar className={classes.avatar}>
+								<Typography variant="overline">1</Typography>
+							</Avatar>
 							<Grid item>
 								<Grid
 									container
@@ -135,7 +142,7 @@ class PrivateKey extends PureComponent {
 							</Grid>
 						</Grid>
 					</Grid>
-					<Grid item>
+					<Grid item className={classes.buttonBottomSpace}>
 						<Button
 							id="unlockPrivateKeyButton"
 							variant="contained"

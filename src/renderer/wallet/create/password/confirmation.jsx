@@ -10,14 +10,8 @@ import { connect } from 'react-redux';
 import { Popup } from '../../../common';
 
 const styles = theme => ({
-	passwordScore: {
-		backgroundColor: '#1E262E',
-		borderRadius: 0,
-		height: '10px',
-		width: '100%'
-	},
-	passwordInput: {
-		width: '100%'
+	icon: {
+		marginRight: '45px'
 	},
 	maskContainer: {
 		height: '10px',
@@ -34,6 +28,15 @@ const styles = theme => ({
 	},
 	next: {
 		minWidth: '120px'
+	},
+	passwordInput: {
+		width: '100%'
+	},
+	passwordScore: {
+		backgroundColor: '#1E262E',
+		borderRadius: 0,
+		height: '10px',
+		width: '100%'
 	}
 });
 
@@ -66,11 +69,17 @@ class PasswordConfirmation extends PureComponent {
 				displayLogo
 				text="Step 2: Confirm Password"
 			>
-				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
-					<Grid item xs={2}>
+				<Grid
+					container
+					direction="row"
+					justify="flex-start"
+					alignItems="flex-start"
+					wrap="nowrap"
+				>
+					<Grid item className={classes.icon}>
 						<PasswordConfirmIcon />
 					</Grid>
-					<Grid item xs={10}>
+					<Grid item>
 						<Typography variant="body1" gutterBottom>
 							Confirm the password you just created. After this step, there is no way
 							the password can be restored or reset, and SelfKey cannot you help if it

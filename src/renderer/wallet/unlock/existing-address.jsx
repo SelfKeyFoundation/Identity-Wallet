@@ -15,6 +15,9 @@ import { appOperations, appSelectors } from 'common/app';
 import { KeyboardArrowDown } from '@material-ui/icons';
 
 const styles = theme => ({
+	avatar: {
+		marginRight: '16px'
+	},
 	selectInput: {
 		width: '500px'
 	},
@@ -29,6 +32,9 @@ const styles = theme => ({
 	},
 	bottomSpace: {
 		marginBottom: '1em'
+	},
+	itemBottomSpace: {
+		marginBottom: '2em'
 	}
 });
 
@@ -65,119 +71,93 @@ class ExistingAddress extends PureComponent {
 		const { classes, wallets } = this.props;
 		const { wallet, password } = this.state;
 		return (
-			<Grid container direction="column" justify="center" alignItems="center" spacing={3}>
-				<Grid
-					container
-					item
-					direction="column"
-					justify="flex-start"
-					alignItems="flex-start"
-					spacing={3}
-				>
-					<Grid item>
+			<Grid container direction="column" justify="center" alignItems="center">
+				<Grid container direction="column" justify="flex-start" alignItems="flex-start">
+					<Grid item className={classes.itemBottomSpace}>
 						<Grid
 							container
 							direction="row"
 							justify="flex-start"
-							alignItems="center"
-							spacing={2}
+							alignItems="flex-start"
+							wrap="nowrap"
 						>
-							<Grid item>
-								<Avatar>
-									<Typography variant="overline">1</Typography>
-								</Avatar>
-							</Grid>
-							<Grid item>
-								<Grid
-									container
-									direction="column"
-									justify="flex-start"
-									alignItems="flex-start"
-								>
-									<Grid item>
-										<Typography
-											variant="overline"
-											className={classes.bottomSpace}
+							<Avatar className={classes.avatar}>
+								<Typography variant="overline">1</Typography>
+							</Avatar>
+							<Grid
+								container
+								direction="column"
+								justify="flex-start"
+								alignItems="flex-start"
+							>
+								<Grid item>
+									<Typography variant="overline" className={classes.bottomSpace}>
+										SELECT AN ETH ADDRESS STORED ON THE SELFKEY IDENTITY WALLET
+									</Typography>
+								</Grid>
+								<Grid item className={classes.selectInput}>
+									<FormControl variant="filled" fullWidth>
+										<Select
+											value={wallet}
+											onChange={this.handleWalletSelection}
+											displayEmpty
+											name="wallet"
+											disableUnderline
+											IconComponent={KeyboardArrowDown}
+											input={<Input disableUnderline fullWidth />}
+											autoWidth
 										>
-											SELECT AN ETH ADDRESS STORED ON THE SELFKEY IDENTITY
-											WALLET
-										</Typography>
-									</Grid>
-									<Grid item className={classes.selectInput}>
-										<FormControl variant="filled" fullWidth>
-											<Select
-												value={wallet}
-												onChange={this.handleWalletSelection}
-												displayEmpty
-												name="wallet"
-												disableUnderline
-												IconComponent={KeyboardArrowDown}
-												input={<Input disableUnderline fullWidth />}
-												autoWidth
-											>
-												<MenuItem value={-1} className={classes.dropdown}>
-													<em>Choose...</em>
+											<MenuItem value={-1} className={classes.dropdown}>
+												<em>Choose...</em>
+											</MenuItem>
+											{wallets.map((wallet, index) => (
+												<MenuItem key={index} value={wallet.id}>
+													{wallet.name
+														? `${wallet.name} - ${wallet.address}`
+														: wallet.address}
 												</MenuItem>
-												{wallets.map((wallet, index) => (
-													<MenuItem key={index} value={wallet.id}>
-														{wallet.name
-															? `${wallet.name} - ${wallet.address}`
-															: wallet.address}
-													</MenuItem>
-												))}
-											</Select>
-										</FormControl>
-									</Grid>
+											))}
+										</Select>
+									</FormControl>
 								</Grid>
 							</Grid>
 						</Grid>
 					</Grid>
-					<Grid item>
+					<Grid item className={classes.itemBottomSpace}>
 						<Grid
 							container
 							direction="row"
 							justify="flex-start"
-							alignItems="center"
-							spacing={2}
+							alignItems="flex-start"
+							wrap="nowrap"
 						>
-							<Grid item>
-								<Avatar>
-									<Typography variant="overline">2</Typography>
-								</Avatar>
-							</Grid>
-							<Grid item>
-								<Grid
-									container
-									direction="column"
-									justify="flex-start"
-									alignItems="flex-start"
-								>
-									<Grid item>
-										<Typography
-											variant="overline"
-											className={classes.bottomSpace}
-										>
-											UNLOCK IT WITH YOUR PASSWORD
+							<Avatar className={classes.avatar}>
+								<Typography variant="overline">2</Typography>
+							</Avatar>
+							<Grid
+								container
+								direction="column"
+								justify="flex-start"
+								alignItems="flex-start"
+							>
+								<Grid item>
+									<Typography variant="overline" className={classes.bottomSpace}>
+										UNLOCK IT WITH YOUR PASSWORD
+									</Typography>
+								</Grid>
+								<Grid item className={classes.passwordInput}>
+									<Input
+										error={this.state.error !== ''}
+										fullWidth
+										type="password"
+										onChange={this.handlePasswordChange}
+										placeholder="Password"
+									/>
+									{this.state.error !== '' && (
+										<Typography variant="subtitle2" color="error" gutterBottom>
+											{this.state.error}
 										</Typography>
-									</Grid>
-									<Grid item className={classes.passwordInput}>
-										<Input
-											error={this.state.error !== ''}
-											fullWidth
-											type="password"
-											onChange={this.handlePasswordChange}
-											placeholder="Password"
-										/>
-										{this.state.error !== '' && (
-											<Typography
-												variant="subtitle2"
-												color="error"
-												gutterBottom
-											>
-												{this.state.error}
-											</Typography>
-										)}
-									</Grid>
+									)}
 								</Grid>
 							</Grid>
 						</Grid>

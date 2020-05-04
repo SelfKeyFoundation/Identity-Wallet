@@ -17,7 +17,7 @@ export default class MarketplaceLoansComponent extends MarketplaceComponent {
 		return [...tokens];
 	};
 
-	inventoryByType = (inventory, type) =>
+	filterLoanType = (inventory, type) =>
 		inventory
 			.filter(offer => offer.data.loanType.includes(type))
 			.map(offer => {
@@ -31,7 +31,7 @@ export default class MarketplaceLoansComponent extends MarketplaceComponent {
 					type === 'lending' ? offer.data.minLoanLending : offer.data.minLoanBorrowing;
 				offer.data.maxLoanTerm =
 					type === 'lending'
-						? offer.data.maxLoadTermLending
+						? offer.data.maxLoanTermLending
 						: offer.data.maxLoanTermBorrowing;
 				return offer;
 			});

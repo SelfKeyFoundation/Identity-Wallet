@@ -159,7 +159,7 @@ const styles = theme => ({
 		}
 	},
 	bottomSpace: {
-		marginBottom: '13px'
+		marginBottom: '23px'
 	},
 	tokenMax: {
 		display: 'flex',
