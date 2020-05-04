@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/styles';
 import { marketplacesSelectors } from 'common/marketplaces';
 import { marketplaceSelectors } from 'common/marketplace';
 import { kycSelectors, kycOperations } from 'common/kyc';
-import { push } from 'connected-react-router';
+// import { push } from 'connected-react-router';
 import { walletSelectors } from 'common/wallet';
 import { LoansDetails } from './details';
 import { MarketplaceLoansComponent } from '../common/marketplace-loans-component';
@@ -18,11 +18,10 @@ class LoansDetailsContainerComponent extends MarketplaceLoansComponent {
 		}
 	}
 
-	onBackClick = () => this.props.dispatch(push(this.rootPath()));
+	onBackClick = () => window.history.back();
 
 	render() {
 		let item = this.props.item;
-		console.log(item);
 		return (
 			<div>
 				<LoansDetails

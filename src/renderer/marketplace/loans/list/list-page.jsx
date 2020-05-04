@@ -55,13 +55,11 @@ class LoansListPageComponent extends PureComponent {
 			onDetailsClick,
 			onBackClick,
 			tokens,
+			rates,
 			cardHidden,
 			onCloseCalculatorCardClick
 		} = this.props;
 		const { tab } = this.state;
-
-		let filteredInventory = inventory.filter(offer => offer.data.loanType.includes(tab));
-
 		return (
 			<Grid container>
 				<Grid item>
@@ -109,11 +107,12 @@ class LoansListPageComponent extends PureComponent {
 
 							<Grid item className={classes.tabs}>
 								<LoansTabs
-									inventory={filteredInventory}
+									inventory={inventory}
 									onTabChange={this.onTabChange}
 									onDetailsClick={onDetailsClick}
 									tokens={tokens}
 									tab={tab}
+									rates={rates}
 								/>
 							</Grid>
 						</Grid>
