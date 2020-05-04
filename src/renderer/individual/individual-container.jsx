@@ -20,6 +20,11 @@ class IndividualContainerComponent extends PureComponent {
 					render={props => <IndividualDashboardContainer {...props} />}
 				/>
 				<Route
+					exact="1"
+					path={`${match.path}/applications`}
+					render={props => <IndividualDashboardContainer {...props} />}
+				/>
+				<Route
 					path={`${match.path}/dashboard/:tab`}
 					render={props => <IndividualDashboardContainer {...props} />}
 				/>

@@ -2,8 +2,12 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { identityOperations, identitySelectors } from 'common/identity';
+import { marketplaceSelectors, marketplaceOperations } from 'common/marketplace';
 import { CorporateDashboardPage } from './dashboard-page';
 import { RegisterDidCardContainer } from '../../did';
+import { kycSelectors, kycOperations } from 'common/kyc';
+import { appSelectors } from 'common/app';
+import { walletSelectors } from 'common/wallet';
 import {
 	CreateAttributeContainer,
 	EditAttributeContainer,
@@ -18,10 +22,43 @@ class CorporateDashboardContainer extends PureComponent {
 		selectedMember: false
 	};
 
+	async componentDidMount() {
+		const { vendors, dispatch, wallet } = this.props;
+		// load marketplace store
+		dispatch(marketplaceOperations.loadMarketplaceOperation());
+
+		await dispatch(kycOperations.resetApplications());
+		// load existing kyc_applications data
+		await dispatch(kycOperations.loadApplicationsOperation());
+
+		// load RPs
+		if (wallet.profile === 'local') {
+			await this.loadRelyingParties(vendors);
+		}
+		window.scrollTo(0, 0);
+	}
+
 	componentDidUpdate() {
 		const { identity } = this.props.profile;
 		if (identity.type !== 'corporate') {
 			this.props.dispatch(identityOperations.navigateToProfileOperation());
+		}
+	}
+
+	async loadRelyingParties(vendors) {
+		const authenticated = true;
+		const { afterAuthRoute, cancelRoute, dispatch } = this.props;
+		const loadInBackground = true;
+		for (const vendor of vendors) {
+			await dispatch(
+				kycOperations.loadRelyingParty(
+					vendor.vendorId,
+					authenticated,
+					afterAuthRoute,
+					cancelRoute,
+					loadInBackground
+				)
+			);
 		}
 	}
 
@@ -66,6 +103,57 @@ class CorporateDashboardContainer extends PureComponent {
 	};
 	handlePopupClose = () => {
 		this.setState({ popup: null, member: null });
+	};
+
+	handleApplicationAdditionalRequirements = application => {
+		const { rps } = this.props;
+
+		// get current application info from RP
+		const rp = rps[application.rpName];
+		if (!rp) {
+			console.error(`Can't find RP named ${application.rpName}`);
+			return false;
+		}
+		// Later on, we will need to improve this to be able to distinguish requirements
+		// that can be fulfilled by the wallet directly and ones that need redirect to KYCC
+		// onboarding app.
+		// Redirects to KYCC with auto-login via JWT token
+		const instanceUrl = rp.session.ctx.config.rootEndpoint;
+		const url = `${instanceUrl}/applications/${application.id}?access_token=${
+			rp.session.access_token.jwt
+		}`;
+		window.openExternal(null, url);
+	};
+
+	handleApplicationRefresh = application => {
+		const { rps, wallet, dispatch, afterAuthRoute, cancelRoute } = this.props;
+
+		// get current application info from RP
+		const rp = rps[application.rpName];
+		if (!rp && wallet.profile === 'local') {
+			console.warn(`Can't find RP named ${application.rpName}`);
+			return false;
+		}
+
+		if (wallet.profile !== 'local') {
+			return dispatch(
+				kycOperations.refreshRelyingPartyForKycApplication(
+					application,
+					afterAuthRoute,
+					cancelRoute
+				)
+			);
+		}
+
+		if (rp.error) {
+			console.warn(`RP loading error`, rp);
+			this.setState({ popup: 'applications-refresh' });
+			return false;
+		}
+
+		// sync of RP applications with local database is done automatically, all done, show modal
+		this.setState({ popup: 'applications-refresh' });
+		return dispatch(kycOperations.loadRelyingParty(application.rpName, true));
 	};
 
 	render() {
@@ -125,6 +213,10 @@ class CorporateDashboardContainer extends PureComponent {
 					onOpenMemberDetails={this.handleOpenDetails}
 					selectedMember={this.state.selectedMember}
 					didComponent={<RegisterDidCardContainer returnPath={'/main/corporate'} />}
+					onApplicationAdditionalRequirements={
+						this.handleApplicationAdditionalRequirements
+					}
+					onApplicationRefresh={this.handleApplicationRefresh}
 				/>
 			</React.Fragment>
 		);
@@ -133,11 +225,22 @@ class CorporateDashboardContainer extends PureComponent {
 
 const mapStateToProps = (state, props) => {
 	const profile = identitySelectors.selectCorporateProfile(state);
+	const walletType = appSelectors.selectApp(state).walletType;
 	return {
 		profile,
+		walletType,
+		wallet: walletSelectors.getWallet(state),
 		members: identitySelectors.selectFlattenMemberHierarchy(state, {
 			identityId: profile.identity.id
-		})
+		}),
+		rps: kycSelectors.relyingPartiesSelector(state),
+		vendors: marketplaceSelectors.selectActiveVendors(state),
+		applications: kycSelectors.selectApplications(state),
+		afterAuthRoute:
+			walletType === 'ledger' || walletType === 'trezor'
+				? `/main/corporate/dashboard/applications`
+				: '',
+		cancelRoute: `/main/corporate`
 	};
 };
 
