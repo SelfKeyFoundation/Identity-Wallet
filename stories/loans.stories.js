@@ -11,9 +11,12 @@ import LoansDetailsHighlights from '../src/renderer/marketplace/loans/details/de
 import LoansDetailsRequirements from '../src/renderer/marketplace/loans/details/details-requirements';
 import LoansDetailsTabs from '../src/renderer/marketplace/loans/details/details-tabs';
 import LoansFilters from '../src/renderer/marketplace/loans/common/filters';
+import LoansCalculator from '../src/renderer/marketplace/loans/calculator';
+import LoansCalculatorLendTable from '../src/renderer/marketplace/loans/calculator/lend-table';
+import LoansCalculatorBorrowTable from '../src/renderer/marketplace/loans/calculator/borrow-table';
 import { inventory } from './__fixtures__/loans-data';
 
-storiesOf('Loans', module)
+storiesOf('Loans Marketplace', module)
 	.add('List Page', () => (
 		<div style={{ width: '1140px' }}>
 			<LoansListPage inventory={inventory} />
@@ -88,5 +91,23 @@ storiesOf('Loans', module)
 	.add('Loans Details Requirements', () => (
 		<div style={{ width: '1140px' }}>
 			<LoansDetailsRequirements item={inventory[0]} />
+		</div>
+	))
+
+	.add('Loans Calculator', () => (
+		<div style={{ width: '1140px' }}>
+			<LoansCalculator />
+		</div>
+	))
+
+	.add('Loans Calculator Lending Table', () => (
+		<div style={{ width: '1140px' }}>
+			<LoansCalculatorLendTable />
+		</div>
+	))
+
+	.add('Loans Calculator Borrow Table', () => (
+		<div style={{ width: '1140px' }}>
+			<LoansCalculatorBorrowTable />
 		</div>
 	));
