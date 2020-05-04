@@ -7,6 +7,16 @@ export default class MarketplaceLoansComponent extends MarketplaceComponent {
 	listRoute = () => MARKETPLACE_LOANS_ROOT_PATH;
 	detailsRoute = vendorId => `${MARKETPLACE_LOANS_ROOT_PATH}/details/${vendorId}`;
 
+	inventoryUniqueTokens = inventory => {
+		const tokens = inventory.reduce((acc, offer) => {
+			const { assets } = offer.data;
+			assets.forEach(t => acc.add(t));
+			return acc;
+		}, new Set());
+
+		return [...tokens];
+	};
+
 	filterLoanType = (inventory, type) =>
 		inventory
 			.filter(offer => offer.data.loanType.includes(type))

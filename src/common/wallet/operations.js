@@ -36,7 +36,6 @@ const updateWalletName = (name, walletId) => async (dispatch, getState) => {
 
 const setLoanCardStatus = (status = false) => async (dispatch, getState) => {
 	const walletFromStore = getWallet(getState());
-	console.log(walletFromStore);
 	walletFromStore.loanCardStatus = status;
 	await dispatch(updateWalletWithBalance({ ...walletFromStore, loanCardStatus: status }));
 };
