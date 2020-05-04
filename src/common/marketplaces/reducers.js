@@ -1,6 +1,6 @@
 import { schema } from 'normalizr';
 import { marketplacesTypes } from './types';
-import { categories } from './assets.json';
+import categories from './categories';
 import { schedulerTypes } from '../scheduler';
 import { MARKETPLACE_COUNTRY_SYNC_JOB } from '../../main/marketplace/countries/marketplace-country-sync-job-handler';
 import { TAX_TREATIES_SYNC_JOB } from '../../main/marketplace/tax-treaties/tax-treaties-sync-job-handler';
