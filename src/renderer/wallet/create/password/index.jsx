@@ -15,6 +15,9 @@ const styles = theme => ({
 		letterSpacing: '2.77px',
 		lineHeight: '22px'
 	},
+	icon: {
+		marginRight: '45px'
+	},
 	container: {
 		minHeight: '100vh'
 	},
@@ -88,11 +91,17 @@ class Password extends PureComponent {
 		const { classes } = this.props;
 		return (
 			<Popup closeComponent={gotBackHome} open displayLogo text="Step 1: Create Password">
-				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
-					<Grid item xs={2}>
+				<Grid
+					container
+					direction="row"
+					justify="flex-start"
+					alignItems="flex-start"
+					wrap="nowrap"
+				>
+					<Grid item className={classes.icon}>
 						<PasswordIcon className={classes.passwordIcon} />
 					</Grid>
-					<Grid item xs={10}>
+					<Grid item>
 						<Typography variant="body1" gutterBottom>
 							Protect your SelfKey Identity Wallet and Ethereum address with a
 							password. Your address is like a bank account number on the blockchain,

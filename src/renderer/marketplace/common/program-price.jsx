@@ -6,7 +6,10 @@ const styles = theme => ({
 	key: {
 		display: 'block',
 		whiteSpace: 'nowrap',
-		margin: '5px auto 0'
+		margin: '0 auto'
+	},
+	price: {
+		fontSize: '15px'
 	}
 });
 
@@ -20,7 +23,7 @@ export const ProgramPrice = withStyles(styles)(({ classes, price, rate, label, e
 	const formattedLabel = label ? `${label} ` : '';
 	const formattedExtraLabel = extraLabel ? ` ${extraLabel}` : '';
 	return (
-		<div className="price">
+		<div className={`${classes.price} price`}>
 			{formattedLabel}
 			{numeric.toLocaleString()}
 			{formattedExtraLabel}

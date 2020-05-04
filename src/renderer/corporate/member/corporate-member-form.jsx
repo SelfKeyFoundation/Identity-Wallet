@@ -11,6 +11,7 @@ import { Popup } from '../../common';
 const styles = theme => ({
 	modalWrap: {
 		left: 'calc(50% - 480px)',
+		right: 'initial',
 		width: '960px'
 	},
 	closeIcon: {

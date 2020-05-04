@@ -11,6 +11,11 @@ const walletReducer = (state = initialState, action) => {
 				...state,
 				...action.payload
 			};
+		case types.WALLET_SET_LOAN_CALCULATOR_CARD_STATUS:
+			return {
+				...state,
+				...action.payload
+			};
 		default:
 			return state;
 	}
