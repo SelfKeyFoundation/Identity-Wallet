@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import BN from 'bignumber.js';
 import config from 'common/config';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import { getLocale } from 'common/locale/selectors';
 import { getWallet } from 'common/wallet/selectors';
 import { pricesSelectors } from 'common/prices';
@@ -390,6 +391,8 @@ export class TokenSwapComponent extends PureComponent {
 	};
 
 	handleCalculateFees = async () => {
+		await this.props.dispatch(push(`/main/swap-completed/KEY`));
+		/*
 		const { sourceToken, wallet, walletTokens } = this.props;
 
 		const token = walletTokens.find(t => t.symbol === sourceToken);
@@ -402,6 +405,7 @@ export class TokenSwapComponent extends PureComponent {
 				decimal: token.decimal
 			})
 		);
+		*/
 	};
 
 	handleSwap = async () => {
@@ -411,9 +415,21 @@ export class TokenSwapComponent extends PureComponent {
 			const transaction = t.tx;
 			await dispatch(transactionOperations.init({ trezorAccountIndex, sourceToken }));
 			await dispatch(transactionOperations.setAddress(transaction.to));
-			await dispatch(transactionOperations.sendCustomTransaction({ transaction }));
+			await dispatch(
+				transactionOperations.sendSwapTransaction({
+					transaction,
+					onReceipt: () => {
+						console.log('hello2');
+					}
+				})
+			);
 		}
+		this.props.dispatch(push('/main/dashboard'));
 	};
+
+	onReceipt(receipt) {
+		console.log('hello');
+	}
 
 	render() {
 		const { classes, closeAction, sourceToken, targetToken, fiatCurrency, locale } = this.props;
