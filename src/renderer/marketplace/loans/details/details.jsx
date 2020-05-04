@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { withStyles } from '@material-ui/styles';
 import { UserPlusIcon, primary, /* CalendarDepositIcon, */ typography } from 'selfkey-ui';
 import { MarketplaceDisclaimer } from '../../common/disclaimer';
-import { Grid, Divider, Button, Typography } from '@material-ui/core';
+import { Grid, Button, Typography } from '@material-ui/core';
 import { LoansDetailsTabs } from './details-tabs';
 // import { Grid, Divider, FormGroup, FormControl, Button, Typography } from '@material-ui/core';
 // import { push } from 'connected-react-router';
@@ -419,7 +419,7 @@ class LoansDetailsComponent extends PureComponent {
 									color="secondary"
 									className={classes.exchange}
 								>
-									- Loans
+									- {item.data.type}
 								</Typography>
 							</Grid>
 						</Grid>
@@ -430,7 +430,6 @@ class LoansDetailsComponent extends PureComponent {
 							direction="column"
 							justify="flex-start"
 							style={{ width: '100%' }}
-							spacing={4}
 						>
 							<Grid item id="description" xs={12}>
 								<Grid
@@ -438,9 +437,8 @@ class LoansDetailsComponent extends PureComponent {
 									direction="row"
 									justify="space-between"
 									alignItems="flex-start"
-									spacing={4}
 								>
-									<Grid item xs={9}>
+									<Grid item xs={8}>
 										<Typography
 											variant="body1"
 											className={`${classes.bottomSpace} ${
@@ -450,13 +448,10 @@ class LoansDetailsComponent extends PureComponent {
 											{item.description}
 										</Typography>
 									</Grid>
-									<Grid item xs={3} className={classes.ctaArea}>
+									<Grid item xs={4} className={classes.ctaArea}>
 										{this.renderActionButton(item)}
 									</Grid>
 								</Grid>
-							</Grid>
-							<Grid item className={classes.dividerWrapper}>
-								<Divider className={classes.divider} />
 							</Grid>
 							<Grid item id="highlights" className={classes.fullWidth}>
 								<LoansDetailsTabs

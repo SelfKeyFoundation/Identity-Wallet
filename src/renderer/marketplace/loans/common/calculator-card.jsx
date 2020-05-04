@@ -1,9 +1,23 @@
 import React, { PureComponent } from 'react';
 import { CardContent, Card, Grid, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
-import { DIDIcon } from 'selfkey-ui';
+import { CalculatorIcon, ModalCloseIcon } from 'selfkey-ui';
 
 const styles = theme => ({
+	card: {
+		marginBottom: '24px'
+	},
+	container: {
+		padding: '30px 24px 60px !important',
+		position: 'relative'
+	},
+	closeIcon: {
+		position: 'absolute',
+		right: '10px',
+		top: '10px',
+		width: '30px',
+		cursor: 'pointer'
+	},
 	title: {
 		marginBottom: '.5em'
 	},
@@ -15,43 +29,32 @@ const styles = theme => ({
 	},
 	extraSpace: {
 		marginRight: '4px'
+	},
+	calculatorIcon: {
+		padding: '0 24px 24px',
+		marginRight: '24px'
 	}
 });
 
 class LoansCalculatorCardComponent extends PureComponent {
 	render() {
-		const { classes, onCalculatorClick } = this.props;
+		const { classes, onCalculatorClick, onClose } = this.props;
 		return (
-			<Card>
-				<CardContent>
+			<Card className={classes.card}>
+				<CardContent className={classes.container}>
+					<ModalCloseIcon className={classes.closeIcon} onClick={onClose} />
 					<Grid
 						container
 						direction="column"
 						justify="center"
-						alignItems="center"
+						alignItems="flex-start"
 						spacing={24}
 					>
-						<Grid container item spacing={0} justify="space-between">
-							<Grid
-								container
-								xs={2}
-								justify="end"
-								alignItems="center"
-								direction="column"
-								wrap="nowrap"
-								spacing={24}
-								className={classes.info}
-							>
-								<Grid item>
-									<DIDIcon />
-								</Grid>
-
-								<Grid item>
-									<Typography variant="subtitle2" color="secondary" />
-								</Grid>
-							</Grid>
-
-							<Grid item xs={10}>
+						<div style={{ display: 'flex' }}>
+							<div className={classes.calculatorIcon}>
+								<CalculatorIcon />
+							</div>
+							<div>
 								<Typography variant="h1" className={classes.title}>
 									Loan Calculator
 								</Typography>
@@ -70,8 +73,8 @@ class LoansCalculatorCardComponent extends PureComponent {
 										</Button>
 									</Grid>
 								</Grid>
-							</Grid>
-						</Grid>
+							</div>
+						</div>
 					</Grid>
 				</CardContent>
 			</Card>
