@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles, Tabs, Tab } from '@material-ui/core';
 import { LoansTable } from '../common/table';
-import { LoanCalculatorTab } from '../calculator';
+import { LoansCalculator } from '../calculator';
 
 const styles = theme => ({
 	LoansTabs: {
@@ -32,7 +32,7 @@ export const LoansTabs = withStyles(styles)(
 				{tab === 'borrowing' && (
 					<LoansTable id="borrowing-tab" {...tabProps} filter="borrowing" />
 				)}
-				{tab === 'calculate' && <LoanCalculatorTab id="calculator-tab" {...tabProps} />}
+				{tab === 'calculator' && <LoansCalculator id="calculator-tab" {...tabProps} />}
 			</div>
 		);
 	}

@@ -24,7 +24,7 @@ const styles = theme => ({
 	link: {
 		color: '#00C0D9',
 		cursor: 'pointer',
-		marginLeft: '1em'
+		marginLeft: '0.5em'
 	}
 });
 
