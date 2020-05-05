@@ -49,7 +49,7 @@ const LoansFilters = withStyles(styles)(
 		tokens = [],
 		selectedToken = '',
 		onTokenFilterChange,
-		selectedType = 'Decentralized',
+		selectedType = '',
 		onTypeFilterChange,
 		onRateRangeChange,
 		range = { min: 0, max: 100 },
