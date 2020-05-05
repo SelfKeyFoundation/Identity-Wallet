@@ -52,6 +52,7 @@ import md5 from 'md5';
 import ReactPiwik from 'react-piwik';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
 import { exchangesOperations } from '../../../common/exchanges';
+import { SwapCompletedContainer } from '../../transaction/swap/swap-complete-container';
 
 const styles = theme => ({
 	headerSection: {
@@ -115,6 +116,10 @@ class Main extends PureComponent {
 							component={CryptoMangerContainer}
 						/>
 						<Route path={`${match.path}/add-token`} component={AddTokenContainer} />
+						<Route
+							path={`${match.path}/swap-completed/:token`}
+							component={SwapCompletedContainer}
+						/>
 						<Route path={`${match.path}/addressBook`} component={AddressBook} />
 						<Redirect
 							exact="1"

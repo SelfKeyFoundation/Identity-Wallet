@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import BN from 'bignumber.js';
 import config from 'common/config';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import { getLocale } from 'common/locale/selectors';
 import { getWallet } from 'common/wallet/selectors';
 import { pricesSelectors } from 'common/prices';
@@ -391,10 +392,8 @@ export class TokenSwapComponent extends PureComponent {
 
 	handleCalculateFees = async () => {
 		const { sourceToken, wallet, walletTokens } = this.props;
-
 		const token = walletTokens.find(t => t.symbol === sourceToken);
 		const amount = this.getAmount();
-
 		await this.props.dispatch(
 			tokenSwapOperations.swapTokensOperation({
 				address: wallet.address,
@@ -405,14 +404,20 @@ export class TokenSwapComponent extends PureComponent {
 	};
 
 	handleSwap = async () => {
-		const { dispatch, sourceToken, trezorAccountIndex } = this.props;
+		const { dispatch, sourceToken, targetToken, trezorAccountIndex } = this.props;
 		const transactions = this.props.transaction.transactions;
 		for (const t of transactions) {
 			const transaction = t.tx;
 			await dispatch(transactionOperations.init({ trezorAccountIndex, sourceToken }));
 			await dispatch(transactionOperations.setAddress(transaction.to));
-			await dispatch(transactionOperations.sendCustomTransaction({ transaction }));
+			await dispatch(
+				transactionOperations.sendSwapTransaction({
+					transaction,
+					token: targetToken
+				})
+			);
 		}
+		this.props.dispatch(push('/main/dashboard'));
 	};
 
 	render() {
