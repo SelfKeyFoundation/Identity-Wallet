@@ -38,8 +38,8 @@ const styles = theme => ({
 		width: '36px'
 	},
 	backButtonContainer: {
-		left: '75px',
-		position: 'absolute'
+		// left: '75px',
+		// position: 'absolute'
 	},
 	tabs: {
 		marginBottom: '20px',

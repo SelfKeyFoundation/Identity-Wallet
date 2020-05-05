@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { withStyles } from '@material-ui/styles';
-import { UserPlusIcon, primary, /* CalendarDepositIcon, */ typography } from 'selfkey-ui';
+import { UserPlusIcon, primary, typography, BackButton } from 'selfkey-ui';
 import { MarketplaceDisclaimer } from '../../common/disclaimer';
 import { Grid, Button, Typography } from '@material-ui/core';
 import { LoansDetailsTabs } from './details-tabs';
@@ -144,12 +144,6 @@ const styles = theme => ({
 
 	bold: {
 		fontWeight: 600
-	},
-
-	backButtonContainer: {
-		left: '75px',
-		position: 'absolute',
-		top: '120px'
 	},
 
 	bottomSpace: {
@@ -381,22 +375,7 @@ class LoansDetailsComponent extends PureComponent {
 		return (
 			<Grid container>
 				<Grid item>
-					<div className={classes.backButtonContainer}>
-						<Button
-							variant="outlined"
-							color="secondary"
-							size="small"
-							onClick={backAction}
-						>
-							<Typography
-								variant="subtitle2"
-								color="secondary"
-								className={classes.bold}
-							>
-								‹ Back
-							</Typography>
-						</Button>
-					</div>
+					<BackButton onclick={backAction} />
 				</Grid>
 				<Grid container className={classes.root}>
 					<Grid

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { PageLoading } from '../../common';
-import { Button, Typography, Grid, withStyles } from '@material-ui/core';
-import { LoanIcon } from 'selfkey-ui';
+import { Typography, Grid, withStyles } from '@material-ui/core';
+import { LoanIcon, BackButton } from 'selfkey-ui';
 import { LoansCalculatorCard } from '../common/calculator-card';
 import { LoansTabs } from './tabs';
 
@@ -31,10 +31,6 @@ const styles = theme => ({
 		height: '36px',
 		width: '36px'
 	},
-	backButtonContainer: {
-		left: '75px',
-		position: 'absolute'
-	},
 	tabs: {
 		marginBottom: '15px'
 	}
@@ -63,23 +59,7 @@ class LoansListPageComponent extends PureComponent {
 		return (
 			<Grid container>
 				<Grid item>
-					<div className={classes.backButtonContainer}>
-						<Button
-							id="backToMarketplace"
-							variant="outlined"
-							color="secondary"
-							size="small"
-							onClick={onBackClick}
-						>
-							<Typography
-								variant="subtitle2"
-								color="secondary"
-								className={classes.bold}
-							>
-								‹ Back
-							</Typography>
-						</Button>
-					</div>
+					<BackButton onclick={onBackClick} id="backToMarketplace" />
 				</Grid>
 				{loading && <PageLoading />}
 				{!loading && (

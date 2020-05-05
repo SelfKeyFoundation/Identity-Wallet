@@ -49,9 +49,6 @@ const styles = theme => ({
 			color: '#48565f'
 		}
 	},
-	backButtonContainer: {
-		top: '120px'
-	},
 	listContent: {
 		margin: 0,
 		width: '100%'
