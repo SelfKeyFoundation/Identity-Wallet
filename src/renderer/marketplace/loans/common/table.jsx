@@ -174,7 +174,9 @@ class LoansTableComponent extends MarketplaceLoansComponent {
 								{/*
 								<TableCell />
 								*/}
-								<TableCell>{offer.data.type}</TableCell>
+								<TableCell>
+									{offer.data.type === 'Decentralized' ? 'P2P' : 'Centralized'}
+								</TableCell>
 								<TableCell>{offer.data.interestRate}</TableCell>
 								<TableCell>
 									<Grid container>
