@@ -32,14 +32,25 @@ const generateMarks = ({ max, min, selectedRange }) => {
 	const selMax = selectedRange[1];
 	const marks = [];
 
-	marks.push({ value: min, label: `${min}%` });
-	if (selMin !== min) {
-		marks.push({ value: selMin, label: `${selMin}%` });
-	}
-	if (selMax !== max) {
+	// Hides and shows filter markers based on selection,
+	// to avoid overlapped markers
+
+	if (selMax !== max && Math.abs(selMax - max) > 0.5) {
 		marks.push({ value: selMax, label: `${selMax}%` });
 	}
-	marks.push({ value: max, label: `${max}%` });
+	if (selMax === max || Math.abs(selMax - max) < 0.5) {
+		marks.push({ value: selMax, label: `${selMax}%` });
+	} else {
+		marks.push({ value: max, label: `${max}%` });
+	}
+
+	if (Math.abs(selMax - selMin) > 0.5) {
+		marks.push({ value: min, label: `${min}%` });
+		if (selMin !== min) {
+			marks.push({ value: selMin, label: `${selMin}%` });
+		}
+	}
+
 	return marks;
 };
 
@@ -87,7 +98,7 @@ const LoansFilters = withStyles(styles)(
 						max={range.max}
 						marks={generateMarks({ max: range.max, min: range.min, selectedRange })}
 						onChange={onRateRangeChange}
-						step={1}
+						step={0.1}
 						valueLabelDisplay="off"
 						aria-labelledby="range-slider"
 					/>
