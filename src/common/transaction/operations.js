@@ -425,12 +425,7 @@ const incorporationSend = (companyCode, countryCode) => async (dispatch, getStat
 	});
 };
 
-const sendCustomTransaction = ({
-	transaction,
-	onReceipt,
-	onTransactionHash,
-	onTransactionError
-}) => async (dispatch, getState) => {
+const sendSwapTransaction = ({ transaction, token }) => async (dispatch, getState) => {
 	const walletService = getGlobalContext().walletService;
 	const state = getState();
 
@@ -463,6 +458,7 @@ const sendCustomTransaction = ({
 
 	transactionEventEmitter.on('receipt', async receipt => {
 		await dispatch(updateBalances());
+		await dispatch(push(`/main/swap-completed/${token}`));
 	});
 
 	transactionEventEmitter.on('error', async error => {
@@ -548,6 +544,6 @@ export default {
 	incorporationSend: createAliasedAction(types.INCORPORATION_SEND, incorporationSend),
 	marketplaceSend: createAliasedAction(types.MARKETPLACE_SEND, marketplaceSend),
 	setCryptoCurrency: createAliasedAction(types.CRYPTO_CURRENCY_SET, setCryptoCurrency),
-	sendCustomTransaction: createAliasedAction(types.CUSTOM_SEND, sendCustomTransaction),
+	sendSwapTransaction: createAliasedAction(types.SWAP, sendSwapTransaction),
 	setLocked: createAliasedAction(types.LOCKED_SET, setLocked)
 };
