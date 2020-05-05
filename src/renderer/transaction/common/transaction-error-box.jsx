@@ -7,7 +7,7 @@ import Popup from '../../common/popup';
 const styles = theme => ({});
 
 export const TransactionErrorBox = withStyles(styles)(
-	({ children, address, closeAction, open = true, subtitle }) => (
+	({ children, address, closeAction, open = true, subtitle, token = 'KEY' }) => (
 		<Popup open={open} closeAction={closeAction} text="Transaction Notice">
 			<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 				<Grid item xs={2}>
@@ -21,7 +21,7 @@ export const TransactionErrorBox = withStyles(styles)(
 							<>
 								<Divider />
 								<Typography variant="body1" color="secondary">
-									Your Address to receive KEY:
+									Your Address to receive {token}:
 								</Typography>
 								<Grid container alignItems="center">
 									<Typography variant="body1">{address}</Typography>
