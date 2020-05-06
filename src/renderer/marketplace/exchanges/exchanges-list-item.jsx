@@ -58,9 +58,8 @@ const styles = theme => ({
 		flexWrap: 'wrap',
 		height: 'initial',
 		justifyContent: 'flex-start',
-		maxWidth: '143px',
-		padding: '10px',
-		width: '143px'
+		maxWidth: '300px',
+		padding: '10px'
 	},
 	fee: {
 		overflow: 'hidden',
@@ -72,14 +71,17 @@ const styles = theme => ({
 		maxWidth: '90px'
 	},
 	resident: {
-		marginBottom: '3px',
+		lineHeight: '22px',
 		marginRight: '5px',
-		marginTop: '3px'
+		whiteSpace: 'initial'
 	},
 	exchangeName: {
 		maxWidth: '120px',
 		paddingLeft: '15px',
 		whiteSpace: 'pre-line'
+	},
+	hidden: {
+		display: 'none'
 	}
 });
 
@@ -94,6 +96,7 @@ export const ExchangesListItem = withStyles(styles)(
 		fiatSupported,
 		fiatPayments,
 		excludedResidents,
+		allFeesEmpty,
 		logoUrl,
 		status,
 		viewAction
@@ -142,7 +145,7 @@ export const ExchangesListItem = withStyles(styles)(
 				<TableCell>
 					<Typography variant="h6">{location}</Typography>
 				</TableCell>
-				<TableCell className={classes.feeWrap}>
+				<TableCell className={allFeesEmpty ? classes.hidden : classes.feeWrap}>
 					<Typography variant="h6" className={classes.fee} title={fees}>
 						{fees === 'N.A.' ? '-' : fees}
 					</Typography>
@@ -176,11 +179,21 @@ export const ExchangesListItem = withStyles(styles)(
 						? '-'
 						: excludedResidents.map((excluded, index) =>
 								excludedResidents.length - 1 > index ? (
-									<p key={index} className={classes.resident}>
+									<Typography
+										variant="h6"
+										key={index}
+										className={classes.resident}
+									>
 										{excluded},
-									</p>
+									</Typography>
 								) : (
-									excluded
+									<Typography
+										variant="h6"
+										key={index}
+										className={classes.resident}
+									>
+										{excluded}
+									</Typography>
 								)
 						  )}
 				</TableCell>
