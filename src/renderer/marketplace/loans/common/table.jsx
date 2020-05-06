@@ -76,7 +76,6 @@ class LoansTableComponent extends MarketplaceLoansComponent {
 		if (max === 0) {
 			max = 100;
 		}
-
 		return { min: 0, max };
 	};
 
@@ -84,7 +83,7 @@ class LoansTableComponent extends MarketplaceLoansComponent {
 
 	selectToken = selectedToken => this.setState({ selectedToken });
 
-	onTypeFilterChange = (e, selectedType) => this.setState({ selectedType });
+	onTypeFilterChange = selectedType => this.setState({ selectedType });
 
 	onRateRangeChange = (e, selectedRange) => this.setState({ selectedRange });
 

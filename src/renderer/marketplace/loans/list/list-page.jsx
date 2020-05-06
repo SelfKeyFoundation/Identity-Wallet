@@ -36,7 +36,8 @@ const styles = theme => ({
 		position: 'absolute'
 	},
 	tabs: {
-		marginBottom: '15px'
+		marginBottom: '15px',
+		minHeight: '600px'
 	}
 });
 

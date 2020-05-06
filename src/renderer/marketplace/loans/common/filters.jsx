@@ -3,7 +3,6 @@ import { Typography, Grid, Input, Select, MenuItem, Slider } from '@material-ui/
 import { withStyles } from '@material-ui/styles';
 import { KeyboardArrowDown } from '@material-ui/icons';
 import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
 const styles = theme => ({
 	container: {
@@ -79,21 +78,27 @@ const LoansFilters = withStyles(styles)(
 					<Typography variant="overline" gutterBottom>
 						Type
 					</Typography>
-					<ToggleButtonGroup value={selectedType} exclusive onChange={onTypeFilterChange}>
-						<ToggleButton value="Decentralized">
-							<Typography variant="h5">P2P</Typography>
-						</ToggleButton>
-						<ToggleButton value="Centralized">
-							<Typography variant="h5">Centralized</Typography>
-						</ToggleButton>
-					</ToggleButtonGroup>
+					<ToggleButton
+						value="checked"
+						selected={selectedType === 'Decentralized'}
+						onChange={() => onTypeFilterChange('Decentralized')}
+					>
+						<Typography variant="h5">P2P</Typography>
+					</ToggleButton>
+					<ToggleButton
+						value="checked"
+						selected={selectedType === 'Centralized'}
+						onChange={() => onTypeFilterChange('Centralized')}
+					>
+						<Typography variant="h5">Centralized</Typography>
+					</ToggleButton>
 				</Grid>
 				<Grid item className={classes.rangeContainer}>
 					<Typography variant="overline" gutterBottom>
 						Current Rates
 					</Typography>
 					<Slider
-						value={selectedRange}
+						value={selectedRange || [range.min, range.max]}
 						min={range.min}
 						max={range.max}
 						marks={generateMarks({ max: range.max, min: range.min, selectedRange })}
