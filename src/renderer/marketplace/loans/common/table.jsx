@@ -13,6 +13,7 @@ import {
 	LargeTableHeadRow /* TagTableCell, Tag, KeyTooltip, InfoTooltip */
 } from 'selfkey-ui';
 import { LoansFilters } from './filters';
+import DetailsButton from '../../bank-accounts/common/details-button';
 
 const styles = theme => ({
 	table: {
@@ -44,6 +45,15 @@ const styles = theme => ({
 		'& span': {
 			cursor: 'pointer'
 		}
+	},
+	button: {
+		letterSpacing: 0,
+		minWidth: '70px',
+		padding: '6px 8px',
+		textTransform: 'capitalize',
+		whiteSpace: 'normal',
+		wordBreak: 'break-word',
+		wordWrap: 'normal'
 	}
 });
 
@@ -170,12 +180,18 @@ class LoansTableComponent extends MarketplaceLoansComponent {
 								<TableCell className={classes.logoCell}>
 									{offer.data.logoUrl && <img src={offer.data.logoUrl} />}
 								</TableCell>
-								<TableCell>{offer.name}</TableCell>
+								<TableCell>
+									<Typography variant="h6">{offer.name}</Typography>
+								</TableCell>
 								{/*
 								<TableCell />
 								*/}
-								<TableCell>{offer.data.type}</TableCell>
-								<TableCell>{offer.data.interestRate}</TableCell>
+								<TableCell>
+									<Typography variant="h6">{offer.data.type}</Typography>
+								</TableCell>
+								<TableCell>
+									<Typography variant="h6">{offer.data.interestRate}</Typography>
+								</TableCell>
 								<TableCell>
 									<Grid container>
 										{offer.data.assets &&
@@ -189,9 +205,11 @@ class LoansTableComponent extends MarketplaceLoansComponent {
 											))}
 									</Grid>
 								</TableCell>
-								<TableCell>{offer.data.maxLoan}</TableCell>
+								<TableCell>
+									<Typography variant="h6">{offer.data.maxLoan}</Typography>
+								</TableCell>
 								<TableCell className={classes.detailsCell}>
-									<span onClick={() => onDetailsClick(offer)}>Details</span>
+									<DetailsButton onClick={() => onDetailsClick(offer)} />
 								</TableCell>
 							</TableRow>
 						))}

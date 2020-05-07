@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, TableRow, TableCell, Typography, Grid } from '@material-ui/core';
+import { TableRow, TableCell, Typography, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { Tag } from 'selfkey-ui';
+import DetailsButton from '../bank-accounts/common/details-button';
 
 const styles = theme => ({
 	defaultIcon: {
@@ -22,18 +23,6 @@ const styles = theme => ({
 	},
 	footer: {
 		margin: '20px'
-	},
-	button: {
-		fontSize: '14px',
-		fontWeight: 400,
-		letterSpacing: 0,
-		minWidth: '70px',
-		padding: '6px 8px',
-		textAlign: 'left',
-		textTransform: 'capitalize',
-		whiteSpace: 'normal',
-		wordBreak: 'break-word',
-		wordWrap: 'normal'
 	},
 	inline: {
 		display: 'flex',
@@ -71,7 +60,6 @@ const styles = theme => ({
 		maxWidth: '90px'
 	},
 	resident: {
-		lineHeight: '22px',
 		marginRight: '5px',
 		whiteSpace: 'initial'
 	},
@@ -200,15 +188,12 @@ export const ExchangesListItem = withStyles(styles)(
 				<TableCell
 					style={status === 'Inactive' ? { padding: '0 20px' } : { padding: '0 15px' }}
 				>
-					<Button
-						disabled={status === 'Inactive'}
-						variant="text"
-						color={status === 'Inactive' ? 'secondary' : 'primary'}
-						className={classes.button}
+					<DetailsButton
+						text={getButtonText(status)}
 						onClick={() => (viewAction ? viewAction(id) : '')}
-					>
-						{getButtonText(status)}
-					</Button>
+						disabled={status === 'Inactive'}
+						color={status === 'Inactive' ? 'secondary' : 'primary'}
+					/>
 				</TableCell>
 			</TableRow>
 		);
