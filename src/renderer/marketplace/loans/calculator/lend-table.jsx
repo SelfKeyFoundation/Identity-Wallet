@@ -83,7 +83,9 @@ const LoansCalculatorLendTable = withStyles(styles)(({ classes, data, onDetailsC
 					{/*
 					<TableCell />
 					*/}
-					<TableCell>{offer.data.type}</TableCell>
+					<TableCell>
+						{offer.data.type === 'Decentralized' ? 'P2P' : 'Centralized'}
+					</TableCell>
 					<TableCell>
 						<Grid container>
 							{offer.data.assets &&

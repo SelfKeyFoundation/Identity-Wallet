@@ -86,7 +86,9 @@ const LoansCalculatorBorrowTable = withStyles(styles)(({ classes, data, onDetail
 					{/*
 					<TableCell />
 					*/}
-					<TableCell>{offer.data.type}</TableCell>
+					<TableCell>
+						{offer.data.type === 'Decentralized' ? 'P2P' : 'Centralized'}
+					</TableCell>
 					<TableCell>{offer.collateral}</TableCell>
 					<TableCell>{offer.data.interestRate}</TableCell>
 					<TableCell>

@@ -45,15 +45,6 @@ const styles = theme => ({
 		'& span': {
 			cursor: 'pointer'
 		}
-	},
-	button: {
-		letterSpacing: 0,
-		minWidth: '70px',
-		padding: '6px 8px',
-		textTransform: 'capitalize',
-		whiteSpace: 'normal',
-		wordBreak: 'break-word',
-		wordWrap: 'normal'
 	}
 });
 
@@ -187,7 +178,11 @@ class LoansTableComponent extends MarketplaceLoansComponent {
 								<TableCell />
 								*/}
 								<TableCell>
-									<Typography variant="h6">{offer.data.type}</Typography>
+									<Typography variant="h6">
+										{offer.data.type === 'Decentralized'
+											? 'P2P'
+											: 'Centralized'}
+									</Typography>
 								</TableCell>
 								<TableCell>
 									<Typography variant="h6">{offer.data.interestRate}</Typography>
