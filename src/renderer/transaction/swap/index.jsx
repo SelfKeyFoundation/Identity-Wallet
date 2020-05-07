@@ -146,7 +146,7 @@ const styles = theme => ({
 		}
 	},
 	maxSwapDisplay: {
-		marginRight: '60px'
+		marginRight: '30px'
 	},
 	separator: {
 		marginRight: '.5em'
@@ -392,7 +392,8 @@ export class TokenSwapComponent extends PureComponent {
 
 	handleCalculateFees = async () => {
 		const { sourceToken, wallet, walletTokens } = this.props;
-		const token = walletTokens.find(t => t.symbol === sourceToken);
+		const symb = this.findTokenSymbol(sourceToken);
+		const token = walletTokens.find(t => t.symbol === symb);
 		const amount = this.getAmount();
 		await this.props.dispatch(
 			tokenSwapOperations.swapTokensOperation({
@@ -610,6 +611,7 @@ export class TokenSwapComponent extends PureComponent {
 													locale={locale}
 													token="ETH"
 													value={gas}
+													fractionDigits={18}
 												/>
 											</div>
 										</div>
