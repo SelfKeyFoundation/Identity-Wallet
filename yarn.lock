@@ -1232,7 +1232,7 @@
     ajv "^6.1.0"
     ajv-keywords "^3.1.0"
 
-"@emotion/cache@^10.0.27":
+"@emotion/cache@^10.0.27", "@emotion/cache@^10.0.9":
   version "10.0.29"
   resolved "https://registry.yarnpkg.com/@emotion/cache/-/cache-10.0.29.tgz#87e7e64f412c060102d589fe7c6dc042e6f9d1e0"
   integrity sha512-fU2VtSVlHiF27empSbxi1O2JFdNWZO+2NFHfwO0pxgTep6Xa3uGb+3pVKfLww2l/IBGLNEZl5Xf/++A4wAYDYQ==
@@ -1254,7 +1254,7 @@
     "@emotion/sheet" "0.9.4"
     "@emotion/utils" "0.11.3"
 
-"@emotion/css@^10.0.27":
+"@emotion/css@^10.0.27", "@emotion/css@^10.0.9":
   version "10.0.27"
   resolved "https://registry.yarnpkg.com/@emotion/css/-/css-10.0.27.tgz#3a7458198fbbebb53b01b2b87f64e5e21241e14c"
   integrity sha512-6wZjsvYeBhyZQYNrGoR5yPMYbMBNEnanDrqmsqS1mzDm1cOTu12shvl2j4QHNS36UaTE0USIJawCH9C8oW34Zw==
@@ -20305,42 +20305,9 @@ select@^1.1.2:
   resolved "https://registry.yarnpkg.com/select/-/select-1.1.2.tgz#0e7350acdec80b1108528786ec1d4418d11b396d"
   integrity sha1-DnNQrN7ICxEIUoeG7B1EGNEbOW0=
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#37a3b8f63afdcf693afa973383864e152f42cdae":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#3e8180789f24f0599fe4e1ccaac77ee6ac52fa15":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#37a3b8f63afdcf693afa973383864e152f42cdae"
-  dependencies:
-    "@material-ui/core" "4.9.9"
-    "@material-ui/icons" "4.9.1"
-    "@material-ui/lab" "4.0.0-alpha.48"
-    "@material-ui/styles" "4.9.6"
-    "@types/classnames" "^2.2.7"
-    "@types/google.visualization" "0.0.46"
-    "@types/jss" "^10.0.0"
-    "@types/react-dom" "16.9.6"
-    bignumber.js "8.0.1"
-    classnames "^2.2.6"
-    jss "10.1.1"
-    jss-compose "5.0.0"
-    jss-expand "5.3.0"
-    jss-extend "6.2.0"
-    jss-global "3.0.0"
-    jss-preset-default "10.1.1"
-    jss-template "1.0.1"
-    lodash "4.17.13"
-    moment "^2.23.0"
-    react "16.13.1"
-    react-copy-to-clipboard "5.0.1"
-    react-datetime "^2.16.3"
-    react-dom "16.13.1"
-    react-google-charts "3.0.10"
-    react-jss "10.1.1"
-    react-truncate "2.4.0"
-    reset-jss "1.0.0"
-    snyk "^1.193.2"
-
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#46eb760ba2bf7076449020a704d7f0afb6ccec55":
-  version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#46eb760ba2bf7076449020a704d7f0afb6ccec55"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#3e8180789f24f0599fe4e1ccaac77ee6ac52fa15"
   dependencies:
     "@material-ui/core" "4.9.9"
     "@material-ui/icons" "4.9.1"
