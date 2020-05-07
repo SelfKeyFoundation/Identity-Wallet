@@ -102,7 +102,10 @@ class LoansListPageComponent extends PureComponent {
 
 							{!cardHidden && (
 								<Grid item>
-									<LoansCalculatorCard onClose={onCloseCalculatorCardClick} />
+									<LoansCalculatorCard
+										onCalculatorClick={() => this.onTabChange('calculator')}
+										onClose={onCloseCalculatorCardClick}
+									/>
 								</Grid>
 							)}
 

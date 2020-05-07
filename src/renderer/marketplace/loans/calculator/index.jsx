@@ -109,7 +109,7 @@ const calculateMonthlyPayment = ({ amount, apr, months }) => {
 class LoansCalculatorComponent extends MarketplaceLoansComponent {
 	state = {
 		type: 'borrowing',
-		selectedToken: '',
+		selectedToken: FIXED_TOKENS[0],
 		amount: '',
 		period: 1,
 		repayment: 'interest',
@@ -295,7 +295,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 							</Grid>
 							<Grid item className={classes.gridCell}>
 								<Typography variant="overline" gutterBottom>
-									Loan Amonunt
+									Loan Amount
 								</Typography>
 								<div className={classes.loanAmount}>
 									<Input
