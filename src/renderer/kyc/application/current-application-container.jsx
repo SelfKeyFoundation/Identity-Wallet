@@ -46,8 +46,7 @@ class CurrentApplicationComponent extends PureComponent {
 		}
 		const error = requirements.reduce((acc, curr) => {
 			if (acc) return acc;
-
-			const attribute = selected[curr.uiId] || curr.options[0];
+			const attribute = selected[`_${curr.uiId}`] || curr.options[0];
 			// Ignore optional empty attributes
 			if (!attribute && !curr.required) {
 				return false;
@@ -83,7 +82,7 @@ class CurrentApplicationComponent extends PureComponent {
 		this.setState({ selected: { ...selected, [uiId]: item } });
 	};
 	handleEdit = (item, identityId) => {
-		const attrName = `${identityId || ''}${item.uiId}`;
+		const attrName = `${identityId || ''}_${item.uiId}`;
 		this.setState({
 			showEditAttribute: true,
 			editAttribute: this.state.selected[attrName] || item.options[0]

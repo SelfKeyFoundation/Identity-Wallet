@@ -33,7 +33,7 @@ export const TransactionNoGasError = withStyles(styles)(
 			openLink(gasExplanationUrl);
 		};
 		return (
-			<TransactionErrorBox address={address} closeAction={closeAction}>
+			<TransactionErrorBox address={address} closeAction={closeAction} token="ETH">
 				<div className={classes.bodyText}>
 					<Typography variant="body1">
 						You do not have enough Ethereum (ETH) to pay for the network transaction

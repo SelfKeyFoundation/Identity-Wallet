@@ -5,6 +5,7 @@ export default [
 		userData: {
 			name: 'test member'
 		},
+		memberTemplate: { template: 'test1' },
 		requirements: [
 			{
 				description: 'Email',
@@ -50,6 +51,7 @@ export default [
 		userData: {
 			name: 'test member'
 		},
+		memberTemplate: { template: 'test2' },
 		requirements: [
 			{
 				description: 'Email',
@@ -95,6 +97,7 @@ export default [
 		userData: {
 			name: 'test member'
 		},
+		memberTemplate: { template: 'test3' },
 		requirements: [
 			{
 				description: 'Email',
@@ -140,6 +143,7 @@ export default [
 		userData: {
 			name: 'test member'
 		},
+		memberTemplate: { template: 'test4' },
 		requirements: [
 			{
 				description: 'Email',
@@ -185,6 +189,7 @@ export default [
 		userData: {
 			name: 'test member'
 		},
+		memberTemplate: { template: 'test5' },
 		requirements: [
 			{
 				description: 'Email',
@@ -230,6 +235,7 @@ export default [
 		userData: {
 			name: 'test member'
 		},
+		memberTemplate: { template: 'test6' },
 		requirements: [
 			{
 				description: 'Email',
@@ -275,6 +281,7 @@ export default [
 		userData: {
 			name: 'test member'
 		},
+		memberTemplate: { template: 'test7' },
 		requirements: [
 			{
 				description: 'Email',

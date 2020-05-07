@@ -15,6 +15,7 @@ import {
 	LAST_NAME_ATTRIBUTE,
 	ENTITY_TYPE_ATTRIBUTE
 } from '../identity/constants';
+import { APPLICATION_CANCELLED } from './status_codes';
 
 export const RP_UPDATE_INTERVAL = 1000 * 60 * 60 * 3; // 3h
 const log = new Logger('kyc-duck');
@@ -35,18 +36,23 @@ export const kycTypes = {
 	KYC_RP_UPDATE: 'kyc/rp/update',
 	KYC_RP_CLEAR: 'kyc/rp/clear',
 	KYC_RP_APPLICATION_ADD: 'kyc/rp/application/add',
+	KYC_RP_APPLICATION_DELETE: 'kyc/rp/application/delete',
 	KYC_RP_APPLICATION_CREATE: 'kyc/rp/application/create',
+	KYC_RP_APPLICATION_CANCEL: 'kyc/rp/application/cancel',
 	KYC_RP_APPLICATION_UPDATE: 'kyc/rp/application/update',
 	KYC_RP_APPLICATION_PAYMENT_UPDATE: 'kyc/rp/application/payment/update',
 	KYC_APPLICATION_CURRENT_START: 'kyc/application/current/start',
 	KYC_APPLICATION_CURRENT_SET: 'kyc/application/current/set',
 	KYC_APPLICATION_CANCEL_ROUTE_SET: 'kyc/application/cancel/route/set',
 	KYC_APPLICATION_CURRENT_CLEAR: 'kyc/application/current/clear',
-	KYC_APPLICATION_CURRENT_CENCEL: 'kyc/application/current/cancel',
-	p: 'kyc/application/current/submit',
+	KYC_APPLICATION_CURRENT_CANCEL: 'kyc/application/current/cancel',
+	KYC_APPLICATION_CURRENT_SUBMIT: 'kyc/application/current/submit',
+	KYC_APPLICATION_CURRENT_MEMBERS_SUBMIT: 'kyc/application/current/members/submit',
+	KYC_RP_MEMBER_APPLICATION_CREATE: 'kyc/applications/current/members/create',
 	KYC_APPLICATIONS_LOAD: 'kyc/applications/load',
 	KYC_APPLICATIONS_SET: 'kyc/applications/set',
 	KYC_APPLICATIONS_UPDATE: 'kyc/applications/update',
+	KYC_APPLICATIONS_DELETE: 'kyc/applications/delete',
 	KYC_APPLICATIONS_PROCESSING: 'kyc/applications/processing',
 	KYC_APPLICATIONS_PROCESSING_SET: 'kyc/applications/set/processing',
 	KYC_APPLICATIONS_RESET: 'kyc/applications/reset',
@@ -122,7 +128,7 @@ export const kycSelectors = {
 		rpName,
 		templateId,
 		identityId = null,
-		maxDepth = 10
+		maxDepth = 3
 	) {
 		const template = this.oneTemplateSelector(state, rpName, templateId);
 		const identity = identitySelectors.selectIdentity(
@@ -200,17 +206,50 @@ export const kycSelectors = {
 					return acc;
 				}, []);
 				return acc.concat([
-					{ ...curr, requirements, memberTemplate, positions: requirementPositions },
+					{
+						...curr,
+						requirements,
+						memberTemplate,
+						positions: requirementPositions,
+						parentTemplate: templateId
+					},
 					...memberRequirements
 				]);
 			}, []);
 			return acc.concat(memberRequirements);
 		}, []);
-
-		return _.uniqWith(
-			requirements,
-			(a, b) => a.id === b.id && a.memberTemplate.template === b.memberTemplate.template
+		requirements.sort((a, b) => {
+			if (a.parentId === null || a.id === b.parentId) return -1;
+			if (b.parentId === null || b.id === a.parentId) return 1;
+			return b.parentId - a.parentId;
+		});
+		return requirements;
+	},
+	selectMemberApplicationAttributes(state, rpName, templateId, selected) {
+		const memberRequirements = kycSelectors.selectMemberRequirementsForTemplate(
+			state,
+			rpName,
+			templateId
 		);
+		const selectedMemberRequirements = memberRequirements.map(m => ({
+			...m,
+			requirements: m.requirements.map(r => {
+				const attributeName = `${m.id}_${r.uiId}`;
+				const sel =
+					!r.options || !r.options.length
+						? null
+						: selected[attributeName] || r.options[0];
+				return {
+					id: r.id,
+					attributeId: sel ? sel.id : undefined,
+					schemaId: r.schemaId,
+					schema: r.schema || (r.type ? r.type.content : undefined),
+					required: r.required,
+					type: r.tType || 'individual'
+				};
+			})
+		}));
+		return selectedMemberRequirements;
 	},
 	selectRequirementsForTemplate(state, rpName, templateId, identityId) {
 		const template = this.oneTemplateSelector(state, rpName, templateId);
@@ -365,6 +404,12 @@ export const kycActions = {
 		return {
 			type: kycTypes.KYC_RP_APPLICATION_ADD,
 			payload: { name: rpName, application }
+		};
+	},
+	deleteKYCApplication(rpName, applicationId) {
+		return {
+			type: kycTypes.KYC_RP_APPLICATION_DELETE,
+			payload: { name: rpName, applicationId }
 		};
 	},
 	setCancelRoute(route) {
@@ -588,21 +633,22 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 	dispatch,
 	getState
 ) => {
-	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
-	if (!rp || !rp.session) throw new Error('relying party does not exist');
-	if (!rp.templates.find(tpl => tpl.id === templateId)) {
-		throw new Error('template does not exist');
-	}
-
-	const identity = identitySelectors.selectIdentity(getState());
-	if (!identity) return;
-
-	if (!rp.session.isActive()) {
-		await rp.session.establish();
-	}
-
-	attributes = kycSelectors.selectKYCAttributes(getState(), identity.id, attributes);
 	try {
+		const rp = kycSelectors.relyingPartySelector(getState(), rpName);
+		if (!rp || !rp.session) throw new Error('relying party does not exist');
+		if (!rp.templates.find(tpl => tpl.id === templateId)) {
+			throw new Error('template does not exist');
+		}
+
+		const identity = identitySelectors.selectIdentity(getState());
+		if (!identity) return;
+
+		if (!rp.session.isActive()) {
+			await rp.session.establish();
+		}
+
+		attributes = kycSelectors.selectKYCAttributes(getState(), identity.id, attributes);
+
 		if (rp.session.ctx.hasKYCUserEndpoint() && !rp.session.ctx.user) {
 			const userData = kycSelectors.selectKYCUserData(getState(), identity.id, attributes);
 			await rp.session.createKYCUser(userData);
@@ -624,8 +670,82 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 				title: title || rpName
 			})
 		);
+		return application;
 	} catch (error) {
 		log.error('createKycApplication %s', error);
+		throw error;
+	}
+};
+
+const cancelRelyingPartyKYCApplication = (rpName, applicationId, note) => async (
+	dispatch,
+	getState
+) => {
+	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
+	if (!rp || !rp.session) throw new Error('relying party does not exist');
+
+	if (!rp.session.isActive()) {
+		await rp.session.establish();
+	}
+
+	try {
+		await rp.session.updateKYCApplicationStatus(applicationId, APPLICATION_CANCELLED, note);
+		await dispatch(kycActions.deleteKYCApplication(rpName, applicationId));
+		await dispatch(kycOperations.deleteApplicationOperation(applicationId));
+	} catch (error) {
+		log.error(error);
+		throw new Error('Could not cancel application %s', applicationId);
+	}
+};
+
+const createMemberKYCApplication = (
+	applicationId,
+	identityId,
+	rpName,
+	templateId,
+	attributes,
+	positions,
+	title
+) => async (dispatch, getState) => {
+	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
+	if (!rp || !rp.session) throw new Error('relying party does not exist');
+	if (!rp.templates.find(tpl => tpl.id === templateId)) {
+		throw new Error('template does not exist');
+	}
+	const identity = identitySelectors.selectIdentity(getState(), { identityId });
+	if (!identity) return;
+
+	if (!rp.session.isActive()) {
+		await rp.session.establish();
+	}
+
+	attributes = kycSelectors.selectKYCAttributes(getState(), identity.id, attributes);
+	try {
+		let application = await rp.session.createKYCMemberApplication(
+			applicationId,
+			positions,
+			templateId,
+			attributes
+		);
+		application = await rp.session.getKYCApplication(application.id);
+		await dispatch(kycActions.addKYCApplication(rpName, application, identity.id));
+
+		await dispatch(
+			kycOperations.updateApplicationsOperation({
+				id: application.id,
+				identityId: identity.id,
+				rpName: rpName,
+				currentStatus: application.currentStatus,
+				currentStatusName: application.statusName,
+				owner: application.owner,
+				scope: application.scope,
+				applicationDate: application.createdAt,
+				title: title || rpName
+			})
+		);
+		return application;
+	} catch (error) {
+		log.error('createMemberKycApplication %s', error);
 		throw error;
 	}
 };
@@ -765,18 +885,22 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 		termsOfService,
 		attributes
 	} = currentApplication;
+	const identity = identitySelectors.selectIdentity(state);
 	const requirements = kycSelectors.selectRequirementsForTemplate(
 		state,
 		relyingPartyName,
 		templateId
 	);
+
 	const requiredAttributes = requirements.map(r => {
-		const sel = !r.options || !r.options.length ? null : selected[r.uiId] || r.options[0];
+		const attributeName = `_${r.uiId}`;
+		const sel =
+			!r.options || !r.options.length ? null : selected[attributeName] || r.options[0];
 		return {
 			id: r.id,
 			attributeId: sel ? sel.id : undefined,
 			schemaId: r.schemaId,
-			schema: r.schema || r.type ? r.type.content : undefined,
+			schema: r.schema || (r.type ? r.type.content : undefined),
 			required: r.required,
 			type: r.tType || 'individual'
 		};
@@ -798,7 +922,7 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 				attributes
 			)
 		);
-		await dispatch(
+		const application = await dispatch(
 			kycOperations.createRelyingPartyKYCApplication(
 				relyingPartyName,
 				templateId,
@@ -807,12 +931,38 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 			)
 		);
 
+		try {
+			if (identity.type === 'corporate') {
+				await dispatch(
+					kycOperations.submitCurrentApplicationMembers(
+						selected,
+						application,
+						identity.id
+					)
+				);
+			}
+		} catch (error) {
+			log.error('failed to submit member applications %s', error);
+			// TODO: kycc internal api does not support status changes
+			// await dispatch(
+			// 	kycOperations.cancelRelyingPartyKYCApplication(
+			// 		relyingPartyName,
+			// 		application.id,
+			// 		'Member submission error'
+			// 	)
+			// );
+			throw new Error('Failed to submit member applications');
+		}
+
 		await dispatch(push(currentApplication.returnRoute));
+
+		return application;
 	} catch (error) {
 		let applicationError = error;
 		if (error.error) {
 			applicationError = error.error;
 		}
+		log.error('submit application error %2j', applicationError);
 		await dispatch(
 			kycActions.setCurrentApplication(
 				relyingPartyName,
@@ -829,11 +979,91 @@ const submitCurrentApplicationOperation = selected => async (dispatch, getState)
 				applicationError
 			)
 		);
+	} finally {
+		if (kycSelectors.relyingPartyShouldUpdateSelector(state, relyingPartyName)) {
+			await dispatch(kycOperations.loadRelyingParty(relyingPartyName));
+		}
 	}
+};
 
-	if (kycSelectors.relyingPartyShouldUpdateSelector(state, relyingPartyName)) {
-		await dispatch(kycOperations.loadRelyingParty(relyingPartyName));
+const _submitOneMemberApplication = async (
+	dispatch,
+	title,
+	currentMember,
+	parentApplicationId,
+	parentIdentityId,
+	relyingPartyName,
+	membersByParentId
+) => {
+	const currMemberTemplate = currentMember.memberTemplate.template;
+	const members = membersByParentId[`${currMemberTemplate}-${currentMember.id}`];
+
+	const application = await dispatch(
+		kycOperations.createMemberKYCApplication(
+			parentApplicationId,
+			currentMember.id,
+			relyingPartyName,
+			currentMember.memberTemplate.template,
+			currentMember.requirements,
+			currentMember.positions,
+			title || relyingPartyName
+		)
+	);
+
+	if (!members) return;
+
+	await Promise.all(
+		members.map(member =>
+			_submitOneMemberApplication(
+				dispatch,
+				title,
+				member,
+				application.id,
+				parentIdentityId,
+				relyingPartyName,
+				membersByParentId
+			)
+		)
+	);
+};
+
+const submitCurrentApplicationMembers = (selected, parentApplication, mainIdentityId) => async (
+	dispatch,
+	getState
+) => {
+	const state = getState();
+	const currentApplication = kycSelectors.selectCurrentApplication(state);
+	const { relyingPartyName, templateId, title } = currentApplication;
+	const memberRequirements = kycSelectors.selectMemberApplicationAttributes(
+		state,
+		relyingPartyName,
+		templateId,
+		selected
+	);
+	const membersByParent = memberRequirements.reduce((acc, curr) => {
+		let key = `${curr.parentTemplate}-${curr.parentId}`;
+		acc[key] = acc[key] || [];
+		acc[key].push(curr);
+		return acc;
+	}, {});
+	const currMembers = membersByParent[`${templateId}-${mainIdentityId}`];
+
+	if (!currMembers) {
+		return;
 	}
+	await Promise.all(
+		currMembers.map(member =>
+			_submitOneMemberApplication(
+				dispatch,
+				title,
+				member,
+				parentApplication.id,
+				mainIdentityId,
+				relyingPartyName,
+				membersByParent
+			)
+		)
+	);
 };
 
 const cancelCurrentApplicationOperation = () => async (dispatch, getState) => {
@@ -865,6 +1095,11 @@ const updateApplicationsOperation = application => async (dispatch, getState) =>
 	await kycApplicationService.addEntry(application);
 };
 
+const deleteApplicationOperation = applicationId => async (dispatch, getState) => {
+	let kycApplicationService = getGlobalContext().kycApplicationService;
+	await kycApplicationService.deleteEntryById(applicationId);
+};
+
 const setProcessingOperation = processing => async dispatch => {
 	await dispatch(kycActions.setProcessingAction(processing));
 };
@@ -881,6 +1116,14 @@ export const kycOperations = {
 		kycTypes.KYC_RP_APPLICATION_CREATE,
 		createRelyingPartyKYCApplication
 	),
+	cancelRelyingPartyKYCApplication: createAliasedAction(
+		kycTypes.KYC_RP_APPLICATION_CANCEL,
+		cancelRelyingPartyKYCApplication
+	),
+	createMemberKYCApplication: createAliasedAction(
+		kycTypes.KYC_RP_MEMBER_APPLICATION_CREATE,
+		createMemberKYCApplication
+	),
 	updateRelyingPartyKYCApplication: createAliasedAction(
 		kycTypes.KYC_RP_APPLICATION_UPDATE,
 		updateRelyingPartyKYCApplication
@@ -890,7 +1133,7 @@ export const kycOperations = {
 		updateRelyingPartyKYCApplicationPayment
 	),
 	cancelCurrentApplicationOperation: createAliasedAction(
-		kycTypes.KYC_APPLICATION_CURRENT_CENCEL,
+		kycTypes.KYC_APPLICATION_CURRENT_CANCEL,
 		cancelCurrentApplicationOperation
 	),
 	startCurrentApplicationOperation: createAliasedAction(
@@ -900,6 +1143,10 @@ export const kycOperations = {
 	submitCurrentApplicationOperation: createAliasedAction(
 		kycTypes.KYC_APPLICATION_CURRENT_SUBMIT,
 		submitCurrentApplicationOperation
+	),
+	submitCurrentApplicationMembers: createAliasedAction(
+		kycTypes.KYC_APPLICATION_CURRENT_MEMBERS_SUBMIT,
+		submitCurrentApplicationMembers
 	),
 	clearRelyingPartyOperation: createAliasedAction(
 		kycTypes.KYC_RP_CLEAR,
@@ -912,6 +1159,10 @@ export const kycOperations = {
 	updateApplicationsOperation: createAliasedAction(
 		kycTypes.KYC_APPLICATIONS_UPDATE,
 		updateApplicationsOperation
+	),
+	deleteApplicationOperation: createAliasedAction(
+		kycTypes.KYC_APPLICATIONS_DELETE,
+		deleteApplicationOperation
 	),
 	setProcessing: createAliasedAction(
 		kycTypes.KYC_APPLICATIONS_PROCESSING_SET,
@@ -951,6 +1202,15 @@ export const addKYCApplicationReducer = (state, { payload }) => {
 	return { ...state, relyingPartiesByName: { ...state.relyingPartiesByName, [rp.name]: rp } };
 };
 
+export const deleteKYCApplicationReducer = (state, { payload }) => {
+	let rp = state.relyingPartiesByName[payload.name];
+	rp = {
+		...rp,
+		applications: (rp.applications || []).filter(a => a.id !== payload.applicationId)
+	};
+	return { ...state, relyingPartiesByName: { ...state.relyingPartiesByName, [rp.name]: rp } };
+};
+
 export const setCurrentApplicationReducer = (state, { payload }) => {
 	let currentApplication = { ...payload };
 	return { ...state, currentApplication };
@@ -981,6 +1241,7 @@ export const setProcessingReducer = (state, { payload }) => {
 export const reducers = {
 	updateRelyingPartyReducer,
 	addKYCApplicationReducer,
+	deleteKYCApplicationReducer,
 	setCurrentApplicationReducer,
 	clearCurrentApplicationReducer,
 	setCancelRoute,
@@ -994,6 +1255,8 @@ export const reducer = (state = initialState, action) => {
 			return reducers.updateRelyingPartyReducer(state, action);
 		case kycTypes.KYC_RP_APPLICATION_ADD:
 			return reducers.addKYCApplicationReducer(state, action);
+		case kycTypes.KYC_RP_APPLICATION_DELETE:
+			return reducers.deleteKYCApplicationReducer(state, action);
 		case kycTypes.KYC_APPLICATION_CURRENT_SET:
 			return reducers.setCurrentApplicationReducer(state, action);
 		case kycTypes.KYC_APPLICATION_CURRENT_CLEAR:

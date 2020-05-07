@@ -473,16 +473,26 @@ export const selectAttributeValue = createSelector(
 
 // Jurisdictions
 
-const sortedItemsFromEnum = (value = 'code', name = 'name') => idType => {
+const sortedItemsFromEnum = (value = 'code', name = 'name', propertyName) => idType => {
 	if (!idType) {
 		return [];
 	}
 
-	let items = idType.content.enum.map((code, index) => ({
+	let items = idType.content.enum;
+	let names = idType.content.entityName;
+
+	if (propertyName && idType.content.properties && idType.content.properties[propertyName]) {
+		items = idType.content.properties[propertyName].enum;
+		names = idType.content.properties[propertyName].enumNames;
+	}
+
+	if (!items) {
+		return [];
+	}
+
+	items = items.map((code, index) => ({
 		[value]: code,
-		[name]: !idType.content.enumNames
-			? idType.content.enum[index]
-			: idType.content.enumNames[index]
+		[name]: !names ? items[index] : names[index]
 	}));
 
 	items.sort((a, b) => {
@@ -515,7 +525,7 @@ export const selectCorporateLegalEntityTypes = createSelector(
 
 export const selectCountries = createSelector(
 	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: COUNTRY_ATTRIBUTE }),
-	sortedItemsFromEnum('country')
+	sortedItemsFromEnum('country', undefined, 'country')
 );
 
 // Profile
