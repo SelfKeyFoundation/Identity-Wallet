@@ -18911,9 +18911,9 @@ react-is@^16.12.0, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.0, react-i
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#163802e4ed0a123035c89a525b2a60396e1e622f":
+"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#463a0c8a10147173cd57d3faae12f8583a13bb1f":
   version "0.0.1"
-  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#163802e4ed0a123035c89a525b2a60396e1e622f"
+  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#463a0c8a10147173cd57d3faae12f8583a13bb1f"
   dependencies:
     ajv "6.5.5"
     core-js "2.5.7"
