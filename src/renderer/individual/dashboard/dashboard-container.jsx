@@ -27,9 +27,6 @@ class IndividualDashboardContainerComponent extends PureComponent {
 		const { vendors, profile, dispatch, wallet } = this.props;
 		const { identity } = profile;
 
-		if (identity.type !== 'individual') {
-			return dispatch(identityOperations.navigateToProfileOperation());
-		}
 		if (!identity.isSetupFinished) {
 			return dispatch(push('/selfkeyIdForm'));
 			// TODO: later refactor to individual profile folder
@@ -51,11 +48,7 @@ class IndividualDashboardContainerComponent extends PureComponent {
 	}
 
 	componentDidUpdate(prevProps) {
-		const { dispatch, wallet, profile, vendors } = this.props;
-		const { identity } = profile;
-		if (identity.type !== 'individual') {
-			dispatch(identityOperations.navigateToProfileOperation());
-		}
+		const { wallet, vendors } = this.props;
 
 		if (prevProps.vendors.length !== vendors.length && wallet.profile === 'local') {
 			return this.loadRelyingParties(vendors);

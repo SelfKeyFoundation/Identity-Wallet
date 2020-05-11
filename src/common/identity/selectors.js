@@ -741,6 +741,16 @@ export const selectMemberAttributeTypes = type => {
 	}
 };
 
+export const isCorporateIdentity = createSelector(
+	selectIdentity,
+	identity => !!identity && identity.type === 'corporate'
+);
+
+export const isIndividualIdentity = createSelector(
+	selectIdentity,
+	identity => !!identity && identity.type === 'individual'
+);
+
 export const selectFlattenMemberHierarchy = createSelector(
 	selectCorporateProfile,
 	profile => {

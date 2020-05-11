@@ -53,6 +53,7 @@ import ReactPiwik from 'react-piwik';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
 import { exchangesOperations } from '../../../common/exchanges';
 import { SwapCompletedContainer } from '../../transaction/swap/swap-complete-container';
+import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({
 	headerSection: {
@@ -92,8 +93,38 @@ class Main extends PureComponent {
 		this.setMatomoId();
 	}
 
+	renderIndividualRoutes() {
+		const { match } = this.props;
+		return (
+			<React.Fragment>
+				<Redirect
+					exact="1"
+					from={`${match.path}/selfkeyId`}
+					to={`${match.path}/individual/dashboard`}
+				/>
+				<Redirect
+					exact="1"
+					from={`${match.path}/selfkeyIdApplications`}
+					to={`${match.path}/individual/dashboard/applications`}
+				/>
+				<Redirect from={`${match.path}/corporate`} to={`${match.path}/individual`} />
+				<Route path={`${match.path}/individual`} component={IndividualContainer} />
+			</React.Fragment>
+		);
+	}
+
+	renderCorporateRoutes() {
+		const { match } = this.props;
+		return (
+			<React.Fragment>
+				<Redirect from={`${match.path}/individual`} to={`${match.path}/corporate`} />
+				<Route path={`${match.path}/corporate`} component={CorporateContainer} />
+			</React.Fragment>
+		);
+	}
+
 	render() {
-		const { match, classes, isExportable } = this.props;
+		const { match, classes, isExportable, isCorporate, isIndividual } = this.props;
 		return (
 			<Grid
 				container
@@ -121,16 +152,9 @@ class Main extends PureComponent {
 							component={SwapCompletedContainer}
 						/>
 						<Route path={`${match.path}/addressBook`} component={AddressBook} />
-						<Redirect
-							exact="1"
-							from={`${match.path}/selfkeyId`}
-							to={`${match.path}/individual/dashboard`}
-						/>
-						<Redirect
-							exact="1"
-							from={`${match.path}/selfkeyIdApplications`}
-							to={`${match.path}/individual/dashboard/applications`}
-						/>
+						{isIndividual && this.renderIndividualRoutes()}
+						{isCorporate && this.renderCorporateRoutes()}
+
 						<Route path={`${match.path}/enter-did`} component={AssociateDIDContainer} />
 						<Route path={`${match.path}/addressBookAdd`} component={AddressBookAdd} />
 						<Route
@@ -225,8 +249,6 @@ class Main extends PureComponent {
 							component={CreateDIDProcessingContainer}
 						/>
 
-						<Route path={`${match.path}/corporate`} component={CorporateContainer} />
-						<Route path={`${match.path}/individual`} component={IndividualContainer} />
 						{isExportable && (
 							<Route
 								path={`${match.path}/export-wallet/warning`}
@@ -266,6 +288,8 @@ class Main extends PureComponent {
 
 const mapStateToProps = (state, props) => {
 	return {
+		isCorporate: identitySelectors.isCorporateIdentity(state),
+		isIndividual: identitySelectors.isIndividualIdentity(state),
 		address: walletSelectors.getWallet(state).address,
 		walletType: appSelectors.selectWalletType(state),
 		isExportable: appSelectors.selectCanExportWallet(state)

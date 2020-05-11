@@ -38,13 +38,6 @@ class CorporateDashboardContainer extends PureComponent {
 		window.scrollTo(0, 0);
 	}
 
-	componentDidUpdate() {
-		const { identity } = this.props.profile;
-		if (identity.type !== 'corporate') {
-			this.props.dispatch(identityOperations.navigateToProfileOperation());
-		}
-	}
-
 	async loadRelyingParties(vendors) {
 		const authenticated = true;
 		const { afterAuthRoute, cancelRoute, dispatch } = this.props;

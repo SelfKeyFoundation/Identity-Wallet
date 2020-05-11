@@ -283,7 +283,14 @@ export class RelyingPartyRest {
 		});
 	}
 
-	static createKYCMemberApplication(ctx, applicationId, memberRoles, templateId, attributes) {
+	static createKYCMemberApplication(
+		ctx,
+		applicationId,
+		memberRoles,
+		templateId,
+		attributes,
+		shares = 0
+	) {
 		let url = ctx.getEndpoint(KYC_CORPORATE_MEMBERS_ENDPOINT_NAME);
 		if (!ctx.token) throw new Error('Session is not established');
 		memberRoles = (memberRoles || []).map(r => r.replace(/-/, '_'));
@@ -293,7 +300,8 @@ export class RelyingPartyRest {
 			url,
 			body: {
 				application: { attributes, templateId },
-				memberRoles
+				memberRoles,
+				shares
 			},
 			headers: {
 				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
@@ -611,7 +619,7 @@ export class RelyingPartySession {
 		return RelyingPartyRest.createKYCApplication(this.ctx, templateId, filteredAttributes);
 	}
 
-	async createKYCMemberApplication(applicationId, memberRoles, templateId, attributes) {
+	async createKYCMemberApplication(applicationId, memberRoles, templateId, attributes, shares) {
 		// ignore empty non-required attributes
 		let filteredAttributes = attributes.filter(
 			attr => attr.data || attr.documents || attr.required
@@ -643,7 +651,8 @@ export class RelyingPartySession {
 			applicationId,
 			memberRoles,
 			templateId,
-			filteredAttributes
+			filteredAttributes,
+			shares
 		);
 	}
 
