@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
 import { LargeTableHeadRow, TagTableCell, Tag } from 'selfkey-ui';
 import { ProgramPrice, FlagCountryName } from '../../common';
+import DetailsButton from '../../bank-accounts/common/details-button';
 
 const styles = theme => ({
 	table: {
@@ -124,15 +125,21 @@ const IncorporationsListTable = withStyles(styles)(
 							<TableCell className={classes.flagCell}>
 								<FlagCountryName code={inc.data.countryCode} size="small" />
 							</TableCell>
-							<TableCell>{inc.data.region}</TableCell>
+							<TableCell>
+								<Typography variant="h6">{inc.data.region}</Typography>
+							</TableCell>
 							<TableCell className={classes.regionCell}>
-								{inc.data.acronym && inc.data.acronym[0]}
+								<Typography variant="h6">
+									{inc.data.acronym && inc.data.acronym[0]}
+								</Typography>
 							</TableCell>
 							<TableCell className={classes.smallCell}>
-								{inc.data.offshoreIncomeTaxRate}
+								<Typography variant="h6">
+									{inc.data.offshoreIncomeTaxRate}
+								</Typography>
 							</TableCell>
 							<TableCell className={classes.smallCell}>
-								{inc.data.corporateTaxRate}
+								<Typography variant="h6">{inc.data.corporateTaxRate}</Typography>
 							</TableCell>
 							<TagTableCell className={classes.goodForCell}>
 								<Grid container>
@@ -144,7 +151,7 @@ const IncorporationsListTable = withStyles(styles)(
 								<ProgramPrice label="$" price={inc.price} rate={keyRate} />
 							</TableCell>
 							<TableCell className={classes.detailsCell}>
-								<span onClick={() => onDetailsClick(inc)}>Details</span>
+								<DetailsButton onClick={() => onDetailsClick(inc)} />
 							</TableCell>
 						</TableRow>
 					))}

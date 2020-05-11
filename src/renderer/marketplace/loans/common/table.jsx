@@ -13,6 +13,7 @@ import {
 	LargeTableHeadRow /* TagTableCell, Tag, KeyTooltip, InfoTooltip */
 } from 'selfkey-ui';
 import { LoansFilters } from './filters';
+import DetailsButton from '../../bank-accounts/common/details-button';
 
 const styles = theme => ({
 	table: {
@@ -170,14 +171,22 @@ class LoansTableComponent extends MarketplaceLoansComponent {
 								<TableCell className={classes.logoCell}>
 									{offer.data.logoUrl && <img src={offer.data.logoUrl} />}
 								</TableCell>
-								<TableCell>{offer.name}</TableCell>
+								<TableCell>
+									<Typography variant="h6">{offer.name}</Typography>
+								</TableCell>
 								{/*
 								<TableCell />
 								*/}
 								<TableCell>
-									{offer.data.type === 'Decentralized' ? 'P2P' : 'Centralized'}
+									<Typography variant="h6">
+										{offer.data.type === 'Decentralized'
+											? 'P2P'
+											: 'Centralized'}
+									</Typography>
 								</TableCell>
-								<TableCell>{offer.data.interestRate}</TableCell>
+								<TableCell>
+									<Typography variant="h6">{offer.data.interestRate}</Typography>
+								</TableCell>
 								<TableCell>
 									<Grid container>
 										{offer.data.assets &&
@@ -191,9 +200,11 @@ class LoansTableComponent extends MarketplaceLoansComponent {
 											))}
 									</Grid>
 								</TableCell>
-								<TableCell>{offer.data.maxLoan}</TableCell>
+								<TableCell>
+									<Typography variant="h6">{offer.data.maxLoan}</Typography>
+								</TableCell>
 								<TableCell className={classes.detailsCell}>
-									<span onClick={() => onDetailsClick(offer)}>Details</span>
+									<DetailsButton onClick={() => onDetailsClick(offer)} />
 								</TableCell>
 							</TableRow>
 						))}
