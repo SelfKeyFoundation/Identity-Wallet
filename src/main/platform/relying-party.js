@@ -26,7 +26,7 @@ const KYC_APPLICATIONS_FILE_ENDPOINT_NAME = '/files';
 const KYC_APPLICATIONS_PAYMENT_ENDPOINT_NAME = '/applications/:id/payments';
 const KYC_APPLICATIONS_STATUS_ENDPOINT_NAME = '/applications/:id/change_status';
 const KYC_APPLICATIONS_LIST_ENDPOINT_NAME =
-	'/applications?fields=id,attributes,currentStatus,payments,questions,statusLog,statusName,template&baseApplications=true&sort=-createdAt';
+	'/applications?fields=id,attributes,currentStatus,payments,questions,statusLog,statusName,template,createdAt&baseApplications=true&sort=-createdAt';
 const KYC_USERS_GET_ENDPOINT_NAME = '/kyc-users/me';
 const KYC_USERS_CREATE_ENDPOINT_NAME = '/kyc-users';
 const KYC_CORPORATE_MEMBERS_ENDPOINT_NAME = '/applications/:applicationId/members';
@@ -127,7 +127,6 @@ export class RelyingPartyRest {
 			? ctx.identity.getDidWithParams()
 			: await ctx.identity.publicKey;
 		url = urljoin(url, did);
-		log.debug('XXX challenge url %s', url);
 		return request.get({
 			url,
 			headers: { 'User-Agent': this.userAgent, Origin: ctx.getOrigin() },

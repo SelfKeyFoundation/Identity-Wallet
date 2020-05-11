@@ -35,6 +35,7 @@ export const kycTypes = {
 	KYC_RP_LOAD: 'kyx/rp/load',
 	KYC_RP_UPDATE: 'kyc/rp/update',
 	KYC_RP_CLEAR: 'kyc/rp/clear',
+	KYC_RP_LOAD_FOR_VENDORS: 'kyc/rp/vendors/load',
 	KYC_RP_APPLICATION_ADD: 'kyc/rp/application/add',
 	KYC_RP_APPLICATION_DELETE: 'kyc/rp/application/delete',
 	KYC_RP_APPLICATION_CREATE: 'kyc/rp/application/create',
@@ -644,7 +645,6 @@ const loadRelyingPartyOperation = (
 			applications = await session.listKYCApplications();
 			for (const application of applications) {
 				const template = templates.find(t => t.id === application.template);
-
 				await dispatch(
 					kycOperations.updateApplicationsOperation({
 						id: application.id,
@@ -696,6 +696,46 @@ const loadRelyingPartyOperation = (
 	}
 };
 
+const loadRelyingPartiesForVendors = (
+	vendors,
+	afterAuthRoute,
+	cancelRoute,
+	inBackground = false,
+	hasLoader = false
+) => async (dispatch, getState) => {
+	const authenticated = true;
+	const state = getState();
+	try {
+		hasLoader && (await dispatch(kycActions.setProcessingAction(true)));
+		vendors = vendors.filter(
+			v =>
+				!_.isEmpty(v.relyingPartyConfig) &&
+				kycSelectors.relyingPartyShouldUpdateSelector(state, v.vendorId)
+		);
+		await Promise.all(
+			vendors.map(async v => {
+				try {
+					await dispatch(
+						kycOperations.loadRelyingParty(
+							v.vendorId,
+							authenticated,
+							afterAuthRoute,
+							cancelRoute,
+							inBackground
+						)
+					);
+				} catch (error) {
+					log.error(error);
+				}
+			})
+		);
+	} catch (error) {
+		log.error(error);
+	} finally {
+		hasLoader && (await dispatch(kycActions.setProcessingAction(false)));
+	}
+};
+
 const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title) => async (
 	dispatch,
 	getState
@@ -723,7 +763,6 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 		let application = await rp.session.createKYCApplication(templateId, attributes);
 		application = await rp.session.getKYCApplication(application.id);
 		await dispatch(kycActions.addKYCApplication(rpName, application));
-
 		await dispatch(
 			kycOperations.updateApplicationsOperation({
 				id: application.id,
@@ -874,7 +913,6 @@ const updateRelyingPartyKYCApplication = (
 		let application = await rp.session.updateKYCApplication(updatedApplication);
 		application = await rp.session.getKYCApplication(application.id);
 		await dispatch(kycActions.addKYCApplication(rpName, application));
-
 		await dispatch(
 			kycOperations.updateApplicationsOperation({
 				id: application.id,
@@ -1147,28 +1185,36 @@ const clearRelyingPartyOperation = () => async dispatch => {
 	await dispatch(kycActions.updateRelyingParty({}));
 };
 
-const loadApplicationsOperation = () => async (dispatch, getState) => {
+const loadApplicationsOperation = (hasLoader = false) => async (dispatch, getState) => {
 	const identity = identitySelectors.selectIdentity(getState());
 	let kycApplicationService = getGlobalContext().kycApplicationService;
-	await dispatch(kycActions.setProcessingAction(true));
-	let applications = await kycApplicationService.load(identity.id);
-	let sortedApplications = applications.sort((d1, d2) => {
-		d1 = d1.createdAt ? new Date(d1.createdAt).getTime() : 0;
-		d2 = d2.createdAt ? new Date(d2.createdAt).getTime() : 0;
-		return d2 - d1; // descending order
-	});
-	await dispatch(kycActions.setProcessingAction(false));
-	await dispatch(kycActions.setApplicationsAction(sortedApplications));
+	try {
+		hasLoader && (await dispatch(kycActions.setProcessingAction(true)));
+
+		let applications = await kycApplicationService.load(identity.id);
+		let sortedApplications = applications.sort((d1, d2) => {
+			d1 = d1.createdAt ? new Date(d1.createdAt).getTime() : 0;
+			d2 = d2.createdAt ? new Date(d2.createdAt).getTime() : 0;
+			return d2 - d1; // descending order
+		});
+		await dispatch(kycActions.setApplicationsAction(sortedApplications));
+	} catch (error) {
+		log.error(error);
+	} finally {
+		hasLoader && (await dispatch(kycActions.setProcessingAction(false)));
+	}
 };
 
 const updateApplicationsOperation = application => async (dispatch, getState) => {
 	let kycApplicationService = getGlobalContext().kycApplicationService;
 	await kycApplicationService.addEntry(application);
+	await dispatch(kycOperations.loadApplicationsOperation());
 };
 
 const deleteApplicationOperation = applicationId => async (dispatch, getState) => {
 	let kycApplicationService = getGlobalContext().kycApplicationService;
 	await kycApplicationService.deleteEntryById(applicationId);
+	await dispatch(kycOperations.loadApplicationsOperation());
 };
 
 const setProcessingOperation = processing => async dispatch => {
@@ -1246,6 +1292,10 @@ export const kycOperations = {
 	refreshRelyingPartyForKycApplication: createAliasedAction(
 		kycTypes.KYC_APPLICATIONS_REFRESH,
 		refreshRelyingPartyForKycApplication
+	),
+	loadRelyingPartiesForVendors: createAliasedAction(
+		kycTypes.KYC_RP_LOAD_FOR_VENDORS,
+		loadRelyingPartiesForVendors
 	)
 };
 

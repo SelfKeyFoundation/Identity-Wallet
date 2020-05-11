@@ -32,7 +32,7 @@ export class KycApplicationService {
 	};
 
 	load = identityId => {
-		return KycApplication.findAll(identityId);
+		return KycApplication.findAll(identityId).orderBy('createdAt');
 	};
 }
 

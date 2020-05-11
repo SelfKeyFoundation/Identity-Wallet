@@ -24,7 +24,7 @@ class IndividualDashboardContainerComponent extends PureComponent {
 	};
 
 	async componentDidMount() {
-		const { vendors, profile, dispatch, wallet } = this.props;
+		const { vendors, profile, dispatch, wallet, afterAuthRoute, cancelRoute } = this.props;
 		const { identity } = profile;
 
 		if (!identity.isSetupFinished) {
@@ -36,22 +36,37 @@ class IndividualDashboardContainerComponent extends PureComponent {
 		// load marketplace store
 		dispatch(marketplaceOperations.loadMarketplaceOperation());
 
-		await dispatch(kycOperations.resetApplications());
+		// await dispatch(kycOperations.resetApplications());
 		// load existing kyc_applications data
 		await dispatch(kycOperations.loadApplicationsOperation());
 
 		// load RPs
 		if (wallet.profile === 'local') {
-			await this.loadRelyingParties(vendors);
+			await dispatch(
+				kycOperations.loadRelyingPartiesForVendors(
+					vendors,
+					afterAuthRoute,
+					cancelRoute,
+					true,
+					true
+				)
+			);
 		}
 		window.scrollTo(0, 0);
 	}
 
 	componentDidUpdate(prevProps) {
-		const { wallet, vendors } = this.props;
+		const { wallet, vendors, afterAuthRoute, cancelRoute, dispatch } = this.props;
 
 		if (prevProps.vendors.length !== vendors.length && wallet.profile === 'local') {
-			return this.loadRelyingParties(vendors);
+			return dispatch(
+				kycOperations.loadRelyingPartiesForVendors(
+					vendors,
+					afterAuthRoute,
+					cancelRoute,
+					true
+				)
+			);
 		}
 	}
 
@@ -219,6 +234,7 @@ const mapStateToProps = (state, props) => {
 		vendors: marketplaceSelectors.selectActiveVendors(state),
 		rps: kycSelectors.relyingPartiesSelector(state),
 		applications: kycSelectors.selectApplications(state),
+		applicationsProcessing: kycSelectors.selectProcessing(state),
 		afterAuthRoute:
 			walletType === 'ledger' || walletType === 'trezor'
 				? `/main/individual/dashboard/applications`

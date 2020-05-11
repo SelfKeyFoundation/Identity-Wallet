@@ -93,36 +93,6 @@ class Main extends PureComponent {
 		this.setMatomoId();
 	}
 
-	renderIndividualRoutes() {
-		const { match } = this.props;
-		return (
-			<React.Fragment>
-				<Redirect
-					exact="1"
-					from={`${match.path}/selfkeyId`}
-					to={`${match.path}/individual/dashboard`}
-				/>
-				<Redirect
-					exact="1"
-					from={`${match.path}/selfkeyIdApplications`}
-					to={`${match.path}/individual/dashboard/applications`}
-				/>
-				<Redirect from={`${match.path}/corporate`} to={`${match.path}/individual`} />
-				<Route path={`${match.path}/individual`} component={IndividualContainer} />
-			</React.Fragment>
-		);
-	}
-
-	renderCorporateRoutes() {
-		const { match } = this.props;
-		return (
-			<React.Fragment>
-				<Redirect from={`${match.path}/individual`} to={`${match.path}/corporate`} />
-				<Route path={`${match.path}/corporate`} component={CorporateContainer} />
-			</React.Fragment>
-		);
-	}
-
 	render() {
 		const { match, classes, isExportable, isCorporate, isIndividual } = this.props;
 		return (
@@ -152,8 +122,45 @@ class Main extends PureComponent {
 							component={SwapCompletedContainer}
 						/>
 						<Route path={`${match.path}/addressBook`} component={AddressBook} />
-						{isIndividual && this.renderIndividualRoutes()}
-						{isCorporate && this.renderCorporateRoutes()}
+
+						{isIndividual && (
+							<Redirect
+								exact="1"
+								from={`${match.path}/selfkeyId`}
+								to={`${match.path}/individual/dashboard`}
+							/>
+						)}
+						{isIndividual && (
+							<Redirect
+								exact="1"
+								from={`${match.path}/selfkeyIdApplications`}
+								to={`${match.path}/individual/dashboard/applications`}
+							/>
+						)}
+						{isIndividual && (
+							<Redirect
+								from={`${match.path}/corporate`}
+								to={`${match.path}/individual`}
+							/>
+						)}
+						{isIndividual && (
+							<Route
+								path={`${match.path}/individual`}
+								component={IndividualContainer}
+							/>
+						)}
+						{isCorporate && (
+							<Redirect
+								from={`${match.path}/individual`}
+								to={`${match.path}/corporate`}
+							/>
+						)}
+						{isCorporate && (
+							<Route
+								path={`${match.path}/corporate`}
+								component={CorporateContainer}
+							/>
+						)}
 
 						<Route path={`${match.path}/enter-did`} component={AssociateDIDContainer} />
 						<Route path={`${match.path}/addressBookAdd`} component={AddressBookAdd} />
