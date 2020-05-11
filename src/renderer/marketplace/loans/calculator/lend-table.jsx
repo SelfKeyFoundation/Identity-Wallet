@@ -10,6 +10,7 @@ import {
 	LargeTableHeadRow,
 	Tag /* TagTableCell, Tag, KeyTooltip, InfoTooltip */
 } from 'selfkey-ui';
+import DetailsButton from '../../bank-accounts/common/details-button';
 
 const styles = theme => ({
 	table: {
@@ -103,7 +104,7 @@ const LoansCalculatorLendTable = withStyles(styles)(({ classes, data, onDetailsC
 						})}
 					</TableCell>
 					<TableCell className={classes.detailsCell}>
-						<span onClick={() => onDetailsClick(offer)}>Details</span>
+						<DetailsButton onClick={() => onDetailsClick(offer)} />
 					</TableCell>
 				</TableRow>
 			))}

@@ -73,10 +73,22 @@ const styles = theme => ({
 	divider: {
 		backgroundColor: '#475768',
 		marginBottom: '20px'
+	},
+	hidden: {
+		display: 'none'
 	}
 });
 
+const allFeesEmpty = items => {
+	let emptyFees = true;
+	items.map(item => {
+		return item.fees ? (emptyFees = false) : null;
+	});
+	return emptyFees;
+};
+
 const getServices = (items, viewAction) => {
+	const allFees = allFeesEmpty(items);
 	return items.map(item => {
 		return (
 			<React.Fragment key={item.id || item.name}>
@@ -91,6 +103,7 @@ const getServices = (items, viewAction) => {
 					logoUrl={item.data.logo ? item.data.logo[0].url : false}
 					status={item.status}
 					viewAction={viewAction}
+					allFeesEmpty={allFees}
 				/>
 			</React.Fragment>
 		);
@@ -155,7 +168,11 @@ export const ExchangesList = withStyles(styles)(
 														Location
 													</Typography>
 												</TableCell>
-												<TableCell>
+												<TableCell
+													className={
+														allFeesEmpty(items) ? classes.hidden : null
+													}
+												>
 													<Typography variant="overline">Fees</Typography>
 												</TableCell>
 												<TableCell>
