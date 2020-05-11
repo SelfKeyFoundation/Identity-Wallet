@@ -161,61 +161,129 @@ export const kycSelectors = {
 
 		const { memberTemplates } = template;
 
+		const corporateDefaultTemplate = memberTemplates.find(
+			m => m.isDefault && m.memberType === 'corporate' && m.template !== null
+		);
+		const individualDefaultTemplate = memberTemplates.find(
+			m => m.isDefault && m.memberType === 'individual' && m.template !== null
+		);
+		const nonDefaultMemberTemplates = memberTemplates.filter(
+			m => !m.isDefault && m.template !== null
+		);
+
 		// build kyc requirements tree for all members
-		const requirements = members.reduce((acc, curr) => {
-			const { positions } = curr;
-			// match all possible member templates to current member
-			const matchedTemplates = memberTemplates.filter(t => {
-				if (!t.template || t.memberType !== curr.type) {
-					return false;
-				}
+		const requirements = members.reduce((acc, m) => {
+			const { positions, equity } = m;
+			const defaultTemplate =
+				m.type === 'corporate' ? corporateDefaultTemplate : individualDefaultTemplate;
+			const coveredPositions = positions.reduce((acc, curr) => {
+				acc[curr] = false;
+				return acc;
+			}, {});
+
+			const isTemplateMatched = (m, t, mainEntityType, coveredPositions = {}) => {
+				const { positions, type } = m;
+				const { memberType, template, legalEntityTypes = [], memberRoles = [] } = t || {};
 				if (
-					t.legalEntityTypes.length === 0 ||
-					!t.legalEntityTypes.includes(mainEntityType)
+					!t ||
+					!template ||
+					memberType !== type ||
+					!legalEntityTypes.includes(mainEntityType)
 				) {
 					return false;
 				}
 				return positions.reduce((acc, curr) => {
-					if (acc) return acc;
-
-					return t.memberRoles.includes((curr || '').replace(/-/, '_'));
+					if (coveredPositions[curr]) return acc;
+					const includes = memberRoles.includes((curr || '').replace(/-/, '_'));
+					if (includes) {
+						// track covered positions
+						coveredPositions[curr] = true;
+					}
+					return includes || acc;
 				}, false);
-			});
+			};
+			// match all possible member templates to current member
+			const matchedTemplates = nonDefaultMemberTemplates.filter(t =>
+				isTemplateMatched(m, t, mainEntityType, coveredPositions)
+			);
 
-			// fetch member requirements based on member templates
-			const memberRequirements = matchedTemplates.reduce((acc, t) => {
-				const requirements = this.selectRequirementsForTemplate(
+			// try to assign default templates for positions not covered by non default templates
+			const notCoveredPositions = positions
+				.filter(p => !coveredPositions[p])
+				.map(p => p.replace(/-/, '_'));
+			if (
+				defaultTemplate &&
+				notCoveredPositions.length &&
+				isTemplateMatched(m, defaultTemplate, mainEntityType, coveredPositions)
+			) {
+				matchedTemplates.push({ ...defaultTemplate, memberRoles: notCoveredPositions });
+			}
+
+			const seenTemplate = {};
+			const uniqueMatchedTemplates = matchedTemplates.reduce((acc, curr) => {
+				const { template, memberRoles } = curr;
+				if (seenTemplate[template]) {
+					seenTemplate[template].memberRoles = seenTemplate[template].memberRoles.concat(
+						memberRoles
+					);
+					return acc;
+				}
+				const tplCopy = { ...curr, memberRoles: [...memberRoles] };
+				seenTemplate[template] = tplCopy;
+				acc.push(tplCopy);
+				return acc;
+			}, []);
+
+			const buildMemberRequirementsForTemplate = (
+				state,
+				rpName,
+				member,
+				requirements,
+				template,
+				positions,
+				equity
+			) => {
+				const selectedRequirements = this.selectRequirementsForTemplate(
 					state,
 					rpName,
-					t.template,
-					curr.id
+					template.template,
+					member.id
 				);
 				const memberRequirements =
 					this.selectMemberRequirementsForTemplate(
 						state,
 						rpName,
-						t.template,
-						curr.id,
+						template.template,
+						member.id,
 						maxDepth - 1
 					) || [];
-				const memberTemplate = t;
+				const memberTemplate = template;
 				const requirementPositions = positions.reduce((acc, curr) => {
-					if (t.memberRoles.includes((curr || '').replace(/-/, '_'))) {
+					if (template.memberRoles.includes((curr || '').replace(/-/, '_'))) {
 						acc.push(curr);
 					}
 					return acc;
 				}, []);
-				return acc.concat([
+				return requirements.concat([
 					{
-						...curr,
-						requirements,
+						...member,
+						requirements: selectedRequirements,
 						memberTemplate,
 						positions: requirementPositions,
-						parentTemplate: templateId
+						shares: equity,
+						parentTemplate: templateId,
+						uiId: `${identity.id}_${member.id}_${templateId}`
 					},
 					...memberRequirements
 				]);
-			}, []);
+			};
+			// fetch member requirements based on member templates
+			let memberRequirements = uniqueMatchedTemplates.reduce(
+				(acc, t) =>
+					buildMemberRequirementsForTemplate(state, rpName, m, acc, t, positions, equity),
+				[]
+			);
+
 			return acc.concat(memberRequirements);
 		}, []);
 		requirements.sort((a, b) => {
@@ -234,7 +302,7 @@ export const kycSelectors = {
 		const selectedMemberRequirements = memberRequirements.map(m => ({
 			...m,
 			requirements: m.requirements.map(r => {
-				const attributeName = `${m.id}_${r.uiId}`;
+				const attributeName = m.uiId;
 				const sel =
 					!r.options || !r.options.length
 						? null
@@ -562,7 +630,6 @@ const loadRelyingPartyOperation = (
 			walletType,
 			loadInBackground
 		);
-
 		let templates = await Promise.all(
 			(await session.listKYCTemplates()).map(async tpl => {
 				const id = tpl.id || tpl.templateId;

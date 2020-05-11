@@ -25,7 +25,8 @@ const KYC_APPLICATIONS_GET_ENDPOINT_NAME = '/applications/:id';
 const KYC_APPLICATIONS_FILE_ENDPOINT_NAME = '/files';
 const KYC_APPLICATIONS_PAYMENT_ENDPOINT_NAME = '/applications/:id/payments';
 const KYC_APPLICATIONS_STATUS_ENDPOINT_NAME = '/applications/:id/change_status';
-const KYC_APPLICATIONS_LIST_ENDPOINT_NAME = '/applications';
+const KYC_APPLICATIONS_LIST_ENDPOINT_NAME =
+	'/applications?fields=id,attributes,currentStatus,payments,questions,statusLog,statusName,template&baseApplications=true&sort=-createdAt';
 const KYC_USERS_GET_ENDPOINT_NAME = '/kyc-users/me';
 const KYC_USERS_CREATE_ENDPOINT_NAME = '/kyc-users';
 const KYC_CORPORATE_MEMBERS_ENDPOINT_NAME = '/applications/:applicationId/members';
@@ -175,6 +176,7 @@ export class RelyingPartyRest {
 	}
 	static async uploadUserFile(ctx, doc) {
 		let url = ctx.getEndpoint(USERS_FILE_ENDPOINT_NAME);
+		if (!ctx.token) throw new Error('Session is not established');
 		let formData = {
 			document: {
 				value: doc.buffer,
@@ -268,6 +270,7 @@ export class RelyingPartyRest {
 	static createKYCApplication(ctx, templateId, attributes) {
 		let url = ctx.getEndpoint(KYC_APPLICATIONS_CREATE_ENDPOINT_NAME);
 		log.debug(`[createKYCApplication] POST ${url}`);
+		if (!ctx.token) throw new Error('Session is not established');
 		return request.post({
 			url,
 			body: { attributes, templateId },
@@ -282,6 +285,7 @@ export class RelyingPartyRest {
 
 	static createKYCMemberApplication(ctx, applicationId, memberRoles, templateId, attributes) {
 		let url = ctx.getEndpoint(KYC_CORPORATE_MEMBERS_ENDPOINT_NAME);
+		if (!ctx.token) throw new Error('Session is not established');
 		memberRoles = (memberRoles || []).map(r => r.replace(/-/, '_'));
 		url = url.replace(':applicationId', applicationId);
 		log.debug(`[createKYCMemberApplication] POST ${url}`);
@@ -302,6 +306,7 @@ export class RelyingPartyRest {
 
 	static updateKYCApplication(ctx, application) {
 		let url = ctx.getEndpoint(KYC_APPLICATIONS_UPDATE_ENDPOINT_NAME);
+		if (!ctx.token) throw new Error('Session is not established');
 		url = url.replace(':id', application.id);
 		log.debug(`[updateKYCApplication] PATCH ${url}`);
 		return request.patch({
@@ -319,6 +324,7 @@ export class RelyingPartyRest {
 		let url = ctx.getEndpoint(KYC_APPLICATIONS_PAYMENT_ENDPOINT_NAME);
 		url = url.replace(':id', applicationId);
 		log.debug(`[updateKYCApplicationPayment] POST ${url} : ${transactionHash}`);
+		if (!ctx.token) throw new Error('Session is not established');
 		return request.post({
 			url,
 			body: { transactionHash },
@@ -341,7 +347,7 @@ export class RelyingPartyRest {
 		if (note) {
 			body.note = note;
 		}
-
+		if (!ctx.token) throw new Error('Session is not established');
 		return request.post({
 			url,
 			body,
@@ -357,6 +363,7 @@ export class RelyingPartyRest {
 	static async listKYCApplications(ctx) {
 		let url = ctx.getEndpoint(KYC_APPLICATIONS_LIST_ENDPOINT_NAME);
 		log.debug(`[listKYCApplications] GET ${url}`);
+		if (!ctx.token) throw new Error('Session is not established');
 		try {
 			const applications = await request.get({
 				url,
@@ -378,6 +385,7 @@ export class RelyingPartyRest {
 
 	static async getKYCUser(ctx) {
 		let url = ctx.getEndpoint(KYC_USERS_GET_ENDPOINT_NAME);
+		if (!ctx.token) throw new Error('Session is not established');
 		try {
 			const user = await request.get({
 				url,
@@ -399,7 +407,7 @@ export class RelyingPartyRest {
 
 	static createKYCUser(ctx, user) {
 		let url = ctx.getEndpoint(KYC_USERS_CREATE_ENDPOINT_NAME);
-
+		if (!ctx.token) throw new Error('Session is not established');
 		return request.post({
 			url,
 			body: user,
@@ -415,6 +423,7 @@ export class RelyingPartyRest {
 	static getKYCApplication(ctx, id) {
 		let url = ctx.getEndpoint(KYC_APPLICATIONS_GET_ENDPOINT_NAME);
 		url = url.replace(':id', id);
+		if (!ctx.token) throw new Error('Session is not established');
 		return request.get({
 			url,
 			headers: {
@@ -428,6 +437,7 @@ export class RelyingPartyRest {
 
 	static uploadKYCApplicationFile(ctx, doc) {
 		let url = ctx.getEndpoint(KYC_APPLICATIONS_FILE_ENDPOINT_NAME);
+		if (!ctx.token) throw new Error('Session is not established');
 		let formData = {
 			document: {
 				value: doc.buffer,
@@ -450,6 +460,7 @@ export class RelyingPartyRest {
 	}
 	static getAccessToken(ctx) {
 		let url = ctx.getEndpoint(KYC_GET_ACCESS_TOKEN_ENDPOINT_NAME);
+		if (!ctx.token) throw new Error('Session is not established');
 		return request.get({
 			url,
 			headers: {

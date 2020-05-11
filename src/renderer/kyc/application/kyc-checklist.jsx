@@ -78,7 +78,7 @@ const styles = {
 		maxHeight: '450px'
 	},
 	checklistWrapper: {
-		padding: '20px',
+		padding: '10px',
 		maxHeight: '450px'
 	},
 	kycMembersListItem: {
@@ -109,7 +109,16 @@ const styles = {
 };
 
 export const KycChecklistItemLabel = withStyles(styles)(
-	({ item, className, classes, selectedAttributes, selectedIdentityId, onSelected, addItem }) => {
+	({
+		item,
+		className,
+		classes,
+		selectedAttributes,
+		selectedIdentityId,
+		selectedMember,
+		onSelected,
+		addItem
+	}) => {
 		const { options } = item;
 		if (!options || options.length <= 1) {
 			return (
@@ -129,7 +138,9 @@ export const KycChecklistItemLabel = withStyles(styles)(
 				</Typography>
 			);
 		}
-		const attributeName = `${selectedIdentityId || ''}_${item.uiId}`;
+		const attributeName = `${selectedMember || selectedMember || selectedIdentityId || ''}_${
+			item.uiId
+		}`;
 		const selectedAttr = selectedAttributes[attributeName] || options[0];
 		onSelected(attributeName, selectedAttr);
 
@@ -169,7 +180,16 @@ export const KycChecklistItemLabel = withStyles(styles)(
 );
 
 export const KycChecklistItem = withStyles(styles)(
-	({ item, classes, selectedAttributes, selectedIdentityId, onSelected, editItem, addItem }) => {
+	({
+		item,
+		classes,
+		selectedAttributes,
+		selectedMember,
+		selectedIdentityId,
+		onSelected,
+		editItem,
+		addItem
+	}) => {
 		const type = item.title
 			? item.title
 			: item.type && item.type.content
@@ -197,8 +217,8 @@ export const KycChecklistItem = withStyles(styles)(
 					<KycChecklistItemLabel
 						item={item}
 						className={warningClassname}
+						selectedMember={selectedMember}
 						selectedAttributes={selectedAttributes}
-						selectedIdentityId={selectedIdentityId}
 						onSelected={onSelected}
 						addItem={addItem}
 					/>
@@ -231,6 +251,7 @@ export const KycChecklistList = withStyles(styles)(
 		classes,
 		requirements,
 		selectedAttributes,
+		selectedMember,
 		selectedIdentityId,
 		onSelected,
 		editItem,
@@ -260,6 +281,7 @@ export const KycChecklistList = withStyles(styles)(
 								item={item}
 								key={indx}
 								selectedAttributes={selectedAttributes}
+								selectedMember={selectedMember}
 								selectedIdentityId={selectedIdentityId}
 								onSelected={onSelected}
 								editItem={editItem}
@@ -339,8 +361,7 @@ export const KycMembersList = withStyles(styles)(
 		requirements,
 		memberRequirements,
 		onMemberClick,
-		selectedIdentityId = null,
-		selectedTemplate = null
+		selectedMember = null
 	}) => {
 		const companies = memberRequirements.reduce((acc, curr) => {
 			if (curr.type === 'corporate') {
@@ -350,20 +371,19 @@ export const KycMembersList = withStyles(styles)(
 		}, {});
 		const members = memberRequirements.map(r => ({
 			id: r.id,
+			uiId: r.uiId,
 			template: r.memberTemplate ? r.memberTemplate.template : null,
 			name: r.userData.name,
-			parentCompany: companies[r.parentId],
+			parentCompany: companies[r.parentId] || userData.name,
 			positions: r.positions,
-			selected:
-				r.id === selectedIdentityId &&
-				(r.memberTemplate ? r.memberTemplate.template : null) === selectedTemplate,
+			selected: r.uiId === selectedMember,
 			warning: requirementsHaveWarning(r.requirements || [])
 		}));
 		members.unshift({
 			id: 'main-company',
 			name: userData.name,
 			parentCompany: 'Main Company',
-			selected: selectedIdentityId === null,
+			selected: selectedMember === null,
 			warning: requirementsHaveWarning(requirements)
 		});
 
@@ -377,7 +397,7 @@ export const KycMembersList = withStyles(styles)(
 				className={classes.membersList}
 			>
 				{members.map(m => (
-					<Grid item key={`${m.id}_${m.template}`}>
+					<Grid item key={m.uiId}>
 						<KycMembersListItem item={m} onClick={onMemberClick} />
 					</Grid>
 				))}
@@ -389,14 +409,15 @@ export const KycMembersList = withStyles(styles)(
 class KycChecklistComponent extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { selectedIdentityId: null, selectedTemplate: null };
+		this.state = { selectedMember: null, selectedIdentityId: null };
 	}
 
 	handleMemberClick = member => {
-		if (member.id === 'main-company') {
-			return this.setState({ selectedIdentityId: null, selectedTemplate: null });
+		let selectedMember = null;
+		if (member.id !== 'main-company') {
+			selectedMember = member.uiId;
 		}
-		return this.setState({ selectedIdentityId: member.id, selectedTemplate: member.template });
+		return this.setState({ selectedMember, selectedIdentityId: member.id });
 	};
 
 	render() {
@@ -411,19 +432,13 @@ class KycChecklistComponent extends React.Component {
 			addItem
 		} = this.props;
 
-		const { selectedIdentityId, selectedTemplate } = this.state;
+		const { selectedMember, selectedIdentityId } = this.state;
 
 		let displayRequirements = requirements;
 
-		if (selectedIdentityId) {
+		if (selectedMember) {
 			displayRequirements =
-				(
-					memberRequirements.find(
-						m =>
-							m.id === selectedIdentityId &&
-							m.memberTemplate.template === selectedTemplate
-					) || {}
-				).requirements || [];
+				(memberRequirements.find(m => m.uiId === selectedMember) || {}).requirements || [];
 		}
 
 		if (!memberRequirements) {
@@ -455,7 +470,7 @@ class KycChecklistComponent extends React.Component {
 							requirements={requirements}
 							memberRequirements={memberRequirements}
 							selectedIdentityId={selectedIdentityId}
-							selectedTemplate={selectedTemplate}
+							selectedMember={selectedMember}
 						/>
 					</Scrollable>
 				</Grid>
@@ -464,7 +479,7 @@ class KycChecklistComponent extends React.Component {
 						<KycChecklistList
 							requirements={displayRequirements}
 							selectedIdentityId={selectedIdentityId}
-							selectedTemplate={selectedTemplate}
+							selectedMember={selectedMember}
 							selectedAttributes={selectedAttributes}
 							onSelected={onSelected}
 							editItem={editItem}
