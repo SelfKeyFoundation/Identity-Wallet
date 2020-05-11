@@ -198,8 +198,14 @@ export const tokenSwapSelectors = {
 		let totleFee = 0;
 		let partnerFee = 0;
 		if (transaction) {
-			totleFee = transaction.summary.reduce((acc, curr) => acc + curr.totleFee.amount, 0);
-			partnerFee = transaction.summary.reduce((acc, curr) => acc + curr.partnerFee.amount, 0);
+			totleFee = transaction.summary.reduce(
+				(acc, curr) => acc + (curr.totleFee ? curr.totleFee.amount : 0),
+				0
+			);
+			partnerFee = transaction.summary.reduce(
+				(acc, curr) => acc + (curr.partnerFee ? curr.partnerFee.amount : 0),
+				0
+			);
 		}
 		const total = transaction ? +totleFee + +partnerFee : 0;
 		return transaction ? toUnit(total, 18) : false;
