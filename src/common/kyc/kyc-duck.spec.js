@@ -120,13 +120,7 @@ describe('KYC Duck', () => {
 						.stub(identitySelectors, 'selectChildrenIdentities')
 						.returns(childrenIdentities);
 					expect(
-						kycSelectors.selectMemberRequirementsForTemplate(
-							state,
-							'rest',
-							'test',
-							null,
-							2
-						)
+						kycSelectors.selectMemberRequirementsForTemplate(state, 'rest', 'test')
 					).toEqual(expectedMemberRequirements);
 				});
 			});
