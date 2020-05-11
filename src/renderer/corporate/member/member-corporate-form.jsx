@@ -1,8 +1,7 @@
 import React from 'react';
 import { Typography, Input, Select, MenuItem } from '@material-ui/core';
-import { KeyboardArrowDown } from '@material-ui/icons';
 import { withStyles } from '@material-ui/styles';
-import { KeyPicker } from 'selfkey-ui';
+import { KeyPicker, SelectDropdownIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	regularText: {
@@ -108,11 +107,13 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 						name="jurisdiction"
 						value={jurisdiction}
 						disableUnderline
-						IconComponent={KeyboardArrowDown}
-						input={<Input disableUnderline placeholder="Choose..." />}
+						IconComponent={SelectDropdownIcon}
+						input={<Input disableUnderline />}
 					>
-						<MenuItem value="">
-							<em>Choose...</em>
+						<MenuItem disabled>
+							<Typography variant="subtitle1" color="textSecondary">
+								Choose...
+							</Typography>
 						</MenuItem>
 						{jurisdictions.map(item => (
 							<MenuItem key={item} value={item.code}>
@@ -155,12 +156,14 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 						name="entitytype"
 						error={errors.entityType}
 						disableUnderline
-						IconComponent={KeyboardArrowDown}
+						IconComponent={SelectDropdownIcon}
 						input={<Input disableUnderline />}
 						disabled={isEditing}
 					>
-						<MenuItem value="">
-							<em>Choose...</em>
+						<MenuItem disabled>
+							<Typography variant="subtitle1" color="textSecondary">
+								Choose...
+							</Typography>
 						</MenuItem>
 						{entityTypes.map(item => (
 							<MenuItem key={item} value={item.code}>
