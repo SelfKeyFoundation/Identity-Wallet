@@ -18,9 +18,25 @@ import { LoansCalculatorBorrowTable } from './borrow-table';
 import { LoansCalculatorLendTable } from './lend-table';
 
 const styles = theme => ({
-	container: {},
 	gridCell: {
-		width: '400px'
+		width: '400px',
+		'& .MuiSlider-markLabel': {
+			fontSize: '12px !important',
+			marginTop: '3px'
+		},
+		'& .MuiSlider-mark': {
+			display: 'none'
+		},
+		'& .MuiSlider-markLabelActive': {
+			top: '26px'
+		}
+	},
+	selectTokens: {
+		minWidth: '11em',
+		float: 'right'
+	},
+	resultsTableContainer: {
+		marginTop: '20px'
 	},
 	sourceInput: {
 		border: '1px solid #384656',
@@ -39,12 +55,14 @@ const styles = theme => ({
 			marginLeft: '0.7em'
 		}
 	},
-	selectTokens: {
-		minWidth: '11em',
-		float: 'right'
+	loanAmount: {
+		display: 'flex',
+		alignItems: 'center'
 	},
-	resultsTableContainer: {
-		marginTop: '20px'
+	amountInput: {
+		borderTopRightRadius: '0',
+		borderBottomRightRadius: '0',
+		borderRight: '0'
 	}
 });
 
@@ -91,9 +109,9 @@ const calculateMonthlyPayment = ({ amount, apr, months }) => {
 class LoansCalculatorComponent extends MarketplaceLoansComponent {
 	state = {
 		type: 'borrowing',
-		selectedToken: '',
+		selectedToken: FIXED_TOKENS[0],
 		amount: '',
-		period: 0,
+		period: 1,
 		repayment: 'interest',
 		results: []
 	};
@@ -202,6 +220,18 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 		this.setState({ results });
 	}
 
+	generateMarks = ({ max, min, period }) => {
+		const marks = [];
+
+		marks.push({ value: max, label: `${max} MO` });
+		if (period !== max && period !== min) {
+			marks.push({ value: period, label: `${period} MO` });
+		}
+		marks.push({ value: min, label: `${min}` });
+
+		return marks;
+	};
+
 	render() {
 		const { classes } = this.props;
 		const { type, period, amount, selectedToken, repayment } = this.state;
@@ -265,22 +295,25 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 							</Grid>
 							<Grid item className={classes.gridCell}>
 								<Typography variant="overline" gutterBottom>
-									Loan Amonunt
+									Loan Amount
 								</Typography>
-								<Input
-									type="text"
-									value={amount}
-									placeholder="0.00"
-									onChange={this.onAmountChange}
-								/>
-								<Button
-									variant="outlined"
-									size="large"
-									className={classes.sourceInput}
-								>
-									USD
-									<TransferIcon />
-								</Button>
+								<div className={classes.loanAmount}>
+									<Input
+										type="text"
+										value={amount}
+										placeholder="0.00"
+										onChange={this.onAmountChange}
+										className={classes.amountInput}
+									/>
+									<Button
+										variant="outlined"
+										size="large"
+										className={classes.sourceInput}
+									>
+										USD
+										<TransferIcon />
+									</Button>
+								</div>
 							</Grid>
 						</Grid>
 					</Grid>
@@ -295,7 +328,13 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 									min={this.minPeriod()}
 									max={this.maxPeriod()}
 									onChange={this.onPeriodChange}
-									valueLabelDisplay="auto"
+									step="1"
+									marks={this.generateMarks({
+										max: this.maxPeriod(),
+										min: this.minPeriod(),
+										period
+									})}
+									valueLabelDisplay="off"
 									aria-labelledby="range-slider"
 								/>
 							</Grid>

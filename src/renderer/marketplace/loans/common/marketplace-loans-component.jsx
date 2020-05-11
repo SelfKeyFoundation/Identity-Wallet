@@ -1,8 +1,9 @@
-import { MarketplaceComponent } from '../../common/marketplace-component';
+import { PureComponent } from 'react';
 
 const MARKETPLACE_LOANS_ROOT_PATH = '/main/marketplace/loans';
 
-export default class MarketplaceLoansComponent extends MarketplaceComponent {
+export default class MarketplaceLoansComponent extends PureComponent {
+	marketplaceRootPath = () => `/main/marketplace`;
 	rootPath = () => MARKETPLACE_LOANS_ROOT_PATH;
 	listRoute = () => MARKETPLACE_LOANS_ROOT_PATH;
 	detailsRoute = vendorId => `${MARKETPLACE_LOANS_ROOT_PATH}/details/${vendorId}`;

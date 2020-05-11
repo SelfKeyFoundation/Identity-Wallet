@@ -36,7 +36,8 @@ const styles = theme => ({
 		position: 'absolute'
 	},
 	tabs: {
-		marginBottom: '15px'
+		marginBottom: '15px',
+		minHeight: '600px'
 	}
 });
 
@@ -101,7 +102,10 @@ class LoansListPageComponent extends PureComponent {
 
 							{!cardHidden && (
 								<Grid item>
-									<LoansCalculatorCard onClose={onCloseCalculatorCardClick} />
+									<LoansCalculatorCard
+										onCalculatorClick={() => this.onTabChange('calculator')}
+										onClose={onCloseCalculatorCardClick}
+									/>
 								</Grid>
 							)}
 
