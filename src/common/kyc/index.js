@@ -772,6 +772,7 @@ const createMemberKYCApplication = (
 	templateId,
 	attributes,
 	positions,
+	shares,
 	title
 ) => async (dispatch, getState) => {
 	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
@@ -792,24 +793,26 @@ const createMemberKYCApplication = (
 			applicationId,
 			positions,
 			templateId,
-			attributes
+			attributes,
+			shares
 		);
 		application = await rp.session.getKYCApplication(application.id);
-		await dispatch(kycActions.addKYCApplication(rpName, application, identity.id));
+		// TODO: track member applications
+		// await dispatch(kycActions.addKYCApplication(rpName, application, identity.id));
 
-		await dispatch(
-			kycOperations.updateApplicationsOperation({
-				id: application.id,
-				identityId: identity.id,
-				rpName: rpName,
-				currentStatus: application.currentStatus,
-				currentStatusName: application.statusName,
-				owner: application.owner,
-				scope: application.scope,
-				applicationDate: application.createdAt,
-				title: title || rpName
-			})
-		);
+		// await dispatch(
+		// 	kycOperations.updateApplicationsOperation({
+		// 		id: application.id,
+		// 		identityId: identity.id,
+		// 		rpName: rpName,
+		// 		currentStatus: application.currentStatus,
+		// 		currentStatusName: application.statusName,
+		// 		owner: application.owner,
+		// 		scope: application.scope,
+		// 		applicationDate: application.createdAt,
+		// 		title: title || rpName
+		// 	})
+		// );
 		return application;
 	} catch (error) {
 		log.error('createMemberKycApplication %s', error);
@@ -1073,6 +1076,7 @@ const _submitOneMemberApplication = async (
 			currentMember.memberTemplate.template,
 			currentMember.requirements,
 			currentMember.positions,
+			currentMember.shares,
 			title || relyingPartyName
 		)
 	);
