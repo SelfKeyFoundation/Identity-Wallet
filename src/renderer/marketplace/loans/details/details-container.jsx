@@ -7,11 +7,11 @@ import { kycSelectors, kycOperations } from 'common/kyc';
 // import { push } from 'connected-react-router';
 import { walletSelectors } from 'common/wallet';
 import { LoansDetails } from './details';
-import { MarketplaceLoansComponent } from '../common/marketplace-loans-component';
+import { MarketplaceComponent } from '../../common/marketplace-component';
 
 const styles = theme => ({});
 
-class LoansDetailsContainerComponent extends MarketplaceLoansComponent {
+class LoansDetailsContainerComponent extends MarketplaceComponent {
 	async componentDidMount() {
 		if (this.props.relyingPartyShouldUpdate) {
 			await this.props.dispatch(kycOperations.loadRelyingParty(this.props.item.name));
