@@ -1,8 +1,8 @@
 import React from 'react';
 import { Typography, Grid, Input, Select, MenuItem, Slider } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
-import { KeyboardArrowDown } from '@material-ui/icons';
 import ToggleButton from '@material-ui/lab/ToggleButton';
+import { SelectDropdownIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	container: {
@@ -118,12 +118,14 @@ const LoansFilters = withStyles(styles)(
 						value={selectedToken}
 						onChange={onTokenFilterChange}
 						disableUnderline
-						IconComponent={KeyboardArrowDown}
+						IconComponent={SelectDropdownIcon}
 						input={<Input disableUnderline />}
-						displayEmpty={true}
+						displayEmpty
 					>
-						<MenuItem key="empty" value="">
-							<em>Choose...</em>
+						<MenuItem key="empty" value="" disabled>
+							<Typography variant="subtitle1" color="textSecondary">
+								Choose...
+							</Typography>
 						</MenuItem>
 						{tokens.map(token => (
 							<MenuItem key={token} value={token}>

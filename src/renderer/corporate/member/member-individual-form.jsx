@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Input, Select, MenuItem } from '@material-ui/core';
-import { KeyboardArrowDown } from '@material-ui/icons';
 import { withStyles } from '@material-ui/styles';
+import { SelectDropdownIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	regularText: {
@@ -154,11 +154,14 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 						name="nationality"
 						error={errors.nationality}
 						disableUnderline
-						IconComponent={KeyboardArrowDown}
+						displayEmpty
+						IconComponent={SelectDropdownIcon}
 						input={<Input disableUnderline />}
 					>
-						<MenuItem value="">
-							<em>Choose...</em>
+						<MenuItem value={null} disabled>
+							<Typography variant="subtitle1" color="textSecondary">
+								Choose...
+							</Typography>
 						</MenuItem>
 						{countries.map(item => (
 							<MenuItem key={item} value={item.country}>
@@ -179,13 +182,16 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 						onChange={e => onCountryChange(e, 'country', countries, onFieldChange)}
 						value={country ? country.country : null}
 						name="country"
+						displayEmpty
 						error={errors.country}
 						disableUnderline
-						IconComponent={KeyboardArrowDown}
+						IconComponent={SelectDropdownIcon}
 						input={<Input disableUnderline />}
 					>
-						<MenuItem value="">
-							<em>Choose...</em>
+						<MenuItem value={null} disabled>
+							<Typography variant="subtitle1" color="textSecondary">
+								Choose...
+							</Typography>
 						</MenuItem>
 						{countries.map(item => (
 							<MenuItem key={item.country} value={item.country}>

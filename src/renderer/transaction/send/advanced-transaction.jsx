@@ -21,12 +21,11 @@ import {
 import { appOperations, appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
 import { debounce, over } from 'lodash';
-import { KeyboardArrowDown } from '@material-ui/icons';
 import { InputTitle } from '../../common/input-title';
 import { getWallet } from 'common/wallet/selectors';
 import ReceiveTokenTab from './containers/receive-token-tab';
 // import SendTokenTab from './containers/send-token-tab';
-import { NumberFormat, TransactionFeeBox } from 'selfkey-ui';
+import { NumberFormat, TransactionFeeBox, SelectDropdownIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	balance: {
@@ -370,10 +369,14 @@ class TransactionSendBoxContainer extends PureComponent {
 						name="cryptoCurrency"
 						disableUnderline
 						displayEmpty
-						IconComponent={KeyboardArrowDown}
-						input={<Input disableUnderline placeholder="Choose..." />}
+						IconComponent={SelectDropdownIcon}
+						input={<Input disableUnderline />}
 					>
-						<MenuItem value="custom">Choose...</MenuItem>
+						<MenuItem value="custom" disabled>
+							<Typography variant="subtitle1" color="textSecondary">
+								Choose...
+							</Typography>
+						</MenuItem>
 						{this.renderSelectTokenItems()}
 					</Select>
 				</div>

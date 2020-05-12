@@ -12,7 +12,7 @@ import {
 import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
-import { KeyboardArrowDown } from '@material-ui/icons';
+import { SelectDropdownIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	avatar: {
@@ -103,12 +103,17 @@ class ExistingAddress extends PureComponent {
 											displayEmpty
 											name="wallet"
 											disableUnderline
-											IconComponent={KeyboardArrowDown}
+											IconComponent={SelectDropdownIcon}
 											input={<Input disableUnderline fullWidth />}
 											autoWidth
 										>
-											<MenuItem value={-1} className={classes.dropdown}>
-												<em>Choose...</em>
+											<MenuItem value={-1} disabled>
+												<Typography
+													variant="subtitle1"
+													color="textSecondary"
+												>
+													Choose...
+												</Typography>
 											</MenuItem>
 											{wallets.map((wallet, index) => (
 												<MenuItem key={index} value={wallet.id}>
