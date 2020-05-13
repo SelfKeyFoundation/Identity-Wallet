@@ -58,7 +58,9 @@ class LoansTableComponent extends MarketplaceLoansComponent {
 	inventoryUniqueTokens = inventory => {
 		const tokens = inventory.reduce((acc, offer) => {
 			const { assets } = offer.data;
-			assets.forEach(t => acc.add(t));
+			if (assets) {
+				assets.forEach(t => acc.add(t));
+			}
 			return acc;
 		}, new Set());
 
