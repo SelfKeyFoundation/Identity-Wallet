@@ -23,40 +23,39 @@ class CorporateDashboardContainer extends PureComponent {
 	};
 
 	async componentDidMount() {
-		const { vendors, dispatch, wallet } = this.props;
+		const { vendors, dispatch, wallet, afterAuthRoute, cancelRoute } = this.props;
 		// load marketplace store
 		dispatch(marketplaceOperations.loadMarketplaceOperation());
 
-		await dispatch(kycOperations.resetApplications());
+		// await dispatch(kycOperations.resetApplications());
 		// load existing kyc_applications data
 		await dispatch(kycOperations.loadApplicationsOperation());
 
 		// load RPs
 		if (wallet.profile === 'local') {
-			await this.loadRelyingParties(vendors);
+			await dispatch(
+				kycOperations.loadRelyingPartiesForVendors(
+					vendors,
+					afterAuthRoute,
+					cancelRoute,
+					true,
+					true
+				)
+			);
 		}
 		window.scrollTo(0, 0);
 	}
 
-	componentDidUpdate() {
-		const { identity } = this.props.profile;
-		if (identity.type !== 'corporate') {
-			this.props.dispatch(identityOperations.navigateToProfileOperation());
-		}
-	}
+	componentDidUpdate(prevProps) {
+		const { wallet, vendors, afterAuthRoute, cancelRoute, dispatch } = this.props;
 
-	async loadRelyingParties(vendors) {
-		const authenticated = true;
-		const { afterAuthRoute, cancelRoute, dispatch } = this.props;
-		const loadInBackground = true;
-		for (const vendor of vendors) {
-			await dispatch(
-				kycOperations.loadRelyingParty(
-					vendor.vendorId,
-					authenticated,
+		if (prevProps.vendors.length !== vendors.length && wallet.profile === 'local') {
+			return dispatch(
+				kycOperations.loadRelyingPartiesForVendors(
+					vendors,
 					afterAuthRoute,
 					cancelRoute,
-					loadInBackground
+					true
 				)
 			);
 		}
@@ -236,6 +235,7 @@ const mapStateToProps = (state, props) => {
 		rps: kycSelectors.relyingPartiesSelector(state),
 		vendors: marketplaceSelectors.selectActiveVendors(state),
 		applications: kycSelectors.selectApplications(state),
+		applicationsProcessing: kycSelectors.selectProcessing(state),
 		afterAuthRoute:
 			walletType === 'ledger' || walletType === 'trezor'
 				? `/main/corporate/dashboard/applications`

@@ -202,11 +202,6 @@ const mapStateToProps = (state, props) => {
 			notAuthenticated
 		),
 		kycRequirements: kycSelectors.selectRequirementsForTemplate(state, vendorId, templateId),
-		memberKycRequirements: kycSelectors.selectMemberRequirementsForTemplate(
-			state,
-			vendorId,
-			templateId
-		),
 		identity: identitySelectors.selectIdentity(state)
 	};
 };

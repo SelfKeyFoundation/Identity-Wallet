@@ -32,7 +32,11 @@ export const IndividualDashboardTabs = withStyles(styles)(
 			</Tabs>
 			{tab === 'overview' && <IndividualOverviewTab id="overviewTab" {...tabProps} />}
 			{tab === 'applications' && (
-				<IndividualApplicationsTab id="applicationsTab" {...tabProps} />
+				<IndividualApplicationsTab
+					id="applicationsTab"
+					{...tabProps}
+					loading={tabProps.applicationProcessing}
+				/>
 			)}
 		</div>
 	)
