@@ -40,7 +40,11 @@ export const CorporateDashboardTabs = withStyles(styles)(
 				)}
 				{tab === 'members' && <CorporateMembersTab id="membersTab" {...tabProps} />}
 				{tab === 'applications' && (
-					<CorporateApplicationsTab id="applicationsTab" {...tabProps} />
+					<CorporateApplicationsTab
+						id="applicationsTab"
+						{...tabProps}
+						loading={tabProps.applicationsProcessing}
+					/>
 				)}
 				{tab === 'history' && <CorporateHistoryTab id="historyTab" {...tabProps} />}
 			</div>

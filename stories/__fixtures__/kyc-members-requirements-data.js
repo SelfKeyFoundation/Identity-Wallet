@@ -1,6 +1,7 @@
 export default [
 	{
 		id: 10,
+		uiId: 10,
 		positions: ['Director', 'Shareholder'],
 		userData: {
 			name: 'test member'
@@ -47,6 +48,7 @@ export default [
 	},
 	{
 		id: 11,
+		uiId: 11,
 		positions: ['Director', 'Shareholder'],
 		userData: {
 			name: 'test member'
@@ -93,6 +95,7 @@ export default [
 	},
 	{
 		id: 12,
+		uiId: 12,
 		positions: ['Director', 'Shareholder'],
 		userData: {
 			name: 'test member'
@@ -139,6 +142,7 @@ export default [
 	},
 	{
 		id: 13,
+		uiId: 13,
 		positions: ['Director', 'Shareholder'],
 		userData: {
 			name: 'test member'
@@ -185,6 +189,7 @@ export default [
 	},
 	{
 		id: 14,
+		uiId: 14,
 		positions: ['Director', 'Shareholder'],
 		userData: {
 			name: 'test member'
@@ -231,6 +236,7 @@ export default [
 	},
 	{
 		id: 15,
+		uiId: 15,
 		positions: ['Director', 'Shareholder'],
 		userData: {
 			name: 'test member'
@@ -277,6 +283,7 @@ export default [
 	},
 	{
 		id: 16,
+		uiId: 16,
 		positions: ['Director', 'Shareholder'],
 		userData: {
 			name: 'test member'

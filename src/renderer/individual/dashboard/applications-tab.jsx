@@ -258,7 +258,7 @@ const HeaderIcon = withStyles(styles)(({ status, classes }) => {
 
 const LoadingScreen = ({ classes }) => (
 	<Grid container justify="center" alignItems="center">
-		<CircularProgress size={50} className={this.props.classes.loading} />
+		<CircularProgress size={50} className={classes.loading} />
 	</Grid>
 );
 

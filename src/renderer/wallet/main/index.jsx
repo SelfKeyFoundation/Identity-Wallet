@@ -53,6 +53,7 @@ import ReactPiwik from 'react-piwik';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
 import { exchangesOperations } from '../../../common/exchanges';
 import { SwapCompletedContainer } from '../../transaction/swap/swap-complete-container';
+import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({
 	headerSection: {
@@ -93,7 +94,7 @@ class Main extends PureComponent {
 	}
 
 	render() {
-		const { match, classes, isExportable } = this.props;
+		const { match, classes, isExportable, isCorporate, isIndividual } = this.props;
 		return (
 			<Grid
 				container
@@ -121,16 +122,46 @@ class Main extends PureComponent {
 							component={SwapCompletedContainer}
 						/>
 						<Route path={`${match.path}/addressBook`} component={AddressBook} />
-						<Redirect
-							exact="1"
-							from={`${match.path}/selfkeyId`}
-							to={`${match.path}/individual/dashboard`}
-						/>
-						<Redirect
-							exact="1"
-							from={`${match.path}/selfkeyIdApplications`}
-							to={`${match.path}/individual/dashboard/applications`}
-						/>
+
+						{isIndividual && (
+							<Redirect
+								exact="1"
+								from={`${match.path}/selfkeyId`}
+								to={`${match.path}/individual/dashboard`}
+							/>
+						)}
+						{isIndividual && (
+							<Redirect
+								exact="1"
+								from={`${match.path}/selfkeyIdApplications`}
+								to={`${match.path}/individual/dashboard/applications`}
+							/>
+						)}
+						{isIndividual && (
+							<Redirect
+								from={`${match.path}/corporate`}
+								to={`${match.path}/individual`}
+							/>
+						)}
+						{isIndividual && (
+							<Route
+								path={`${match.path}/individual`}
+								component={IndividualContainer}
+							/>
+						)}
+						{isCorporate && (
+							<Redirect
+								from={`${match.path}/individual`}
+								to={`${match.path}/corporate`}
+							/>
+						)}
+						{isCorporate && (
+							<Route
+								path={`${match.path}/corporate`}
+								component={CorporateContainer}
+							/>
+						)}
+
 						<Route path={`${match.path}/enter-did`} component={AssociateDIDContainer} />
 						<Route path={`${match.path}/addressBookAdd`} component={AddressBookAdd} />
 						<Route
@@ -225,8 +256,6 @@ class Main extends PureComponent {
 							component={CreateDIDProcessingContainer}
 						/>
 
-						<Route path={`${match.path}/corporate`} component={CorporateContainer} />
-						<Route path={`${match.path}/individual`} component={IndividualContainer} />
 						{isExportable && (
 							<Route
 								path={`${match.path}/export-wallet/warning`}
@@ -266,6 +295,8 @@ class Main extends PureComponent {
 
 const mapStateToProps = (state, props) => {
 	return {
+		isCorporate: identitySelectors.isCorporateIdentity(state),
+		isIndividual: identitySelectors.isIndividualIdentity(state),
 		address: walletSelectors.getWallet(state).address,
 		walletType: appSelectors.selectWalletType(state),
 		isExportable: appSelectors.selectCanExportWallet(state)

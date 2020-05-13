@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { featureIsDisabled } from 'common/feature-flags';
@@ -49,7 +49,7 @@ class MarketplaceContainerComponent extends PureComponent {
 		}
 
 		return (
-			<React.Fragment>
+			<Switch>
 				<Route
 					exact="1"
 					path={`${match.path}`}
@@ -79,7 +79,7 @@ class MarketplaceContainerComponent extends PureComponent {
 				<Route path={`${match.path}/orders`} component={MarketplaceOrdersPage} />
 				<Route path={`${match.path}/notaries`} component={MarketplaceNotariesPage} />
 				<Route path={`${match.path}/loans`} component={MarketplaceLoansPage} />
-			</React.Fragment>
+			</Switch>
 		);
 	}
 }
