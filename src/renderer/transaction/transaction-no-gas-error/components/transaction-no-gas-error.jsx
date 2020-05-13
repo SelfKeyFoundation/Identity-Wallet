@@ -5,9 +5,6 @@ import { withStyles } from '@material-ui/styles';
 import { primary } from 'selfkey-ui';
 
 const styles = theme => ({
-	bodyText: {
-		textAlign: 'justify'
-	},
 	learnMoreText: {
 		paddingTop: '15px',
 		color: '#93B0C1',
@@ -33,8 +30,13 @@ export const TransactionNoGasError = withStyles(styles)(
 			openLink(gasExplanationUrl);
 		};
 		return (
-			<TransactionErrorBox address={address} closeAction={closeAction} token="ETH">
-				<div className={classes.bodyText}>
+			<TransactionErrorBox
+				address={address}
+				closeAction={closeAction}
+				token="ETH"
+				subtitle="Transaction Failed"
+			>
+				<div>
 					<Typography variant="body1">
 						You do not have enough Ethereum (ETH) to pay for the network transaction
 						fee. Please transfer some ETH to this address and try again. Your ETH
