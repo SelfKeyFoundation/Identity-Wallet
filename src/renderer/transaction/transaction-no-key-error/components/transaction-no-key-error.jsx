@@ -7,8 +7,7 @@ import { DefaultBullet } from 'selfkey-ui';
 const styles = theme => ({
 	bodyText: {
 		marginBottom: '30px',
-		paddingRight: '30px',
-		textAlign: 'justify'
+		paddingRight: '30px'
 	},
 	list: {
 		columns: 3,

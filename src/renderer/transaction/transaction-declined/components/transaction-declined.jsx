@@ -3,11 +3,7 @@ import TransactionErrorBox from '../../common/transaction-error-box';
 import { Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 
-const styles = theme => ({
-	bodyText: {
-		textAlign: 'justify'
-	}
-});
+const styles = theme => ({});
 
 export const TransactionDeclined = withStyles(styles)(
 	({ classes, address, closeAction, match }) => {
@@ -17,7 +13,7 @@ export const TransactionDeclined = withStyles(styles)(
 				closeAction={closeAction}
 				subtitle="Transaction Declined"
 			>
-				<Typography variant="body1" className={classes.bodyText}>
+				<Typography variant="body1">
 					You declined this transaction on your {match.params.device} device
 				</Typography>
 			</TransactionErrorBox>
