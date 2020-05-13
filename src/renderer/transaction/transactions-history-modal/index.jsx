@@ -35,12 +35,12 @@ import {
 	LargeTableHeadRow,
 	CopyIcon,
 	ViewIcon,
-	KeyPicker
+	KeyPicker,
+	SelectDropdownIcon
 } from 'selfkey-ui';
 import { convertExponentialToDecimal } from 'common/utils/exponential-to-decimal';
 import { push } from 'connected-react-router';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { KeyboardArrowDown } from '@material-ui/icons';
 
 const styles = theme => ({
 	iconSpacing: {
@@ -384,13 +384,15 @@ class TransactionsHistoryModal extends PureComponent {
 										displayEmpty
 										onChange={this.handleOptionSelection}
 										disableUnderline
-										IconComponent={KeyboardArrowDown}
+										IconComponent={SelectDropdownIcon}
 										input={<Input disableUnderline fullWidth />}
 										autoWidth
 										className={classes.filterInput}
 									>
-										<MenuItem value={-1} className={classes.dropdown}>
-											<em>Choose...</em>
+										<MenuItem value={-1} disabled className={classes.dropdown}>
+											<Typography variant="subtitle1" color="textSecondary">
+												Choose...
+											</Typography>
 										</MenuItem>
 										{['Send', 'Receive', 'Buy', 'Swap'].map(option => (
 											<MenuItem
