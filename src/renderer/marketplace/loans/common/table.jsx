@@ -67,6 +67,18 @@ class LoansTableComponent extends MarketplaceLoansComponent {
 		return [...tokens];
 	};
 
+	inventoryUniqueTokensByFilterType = (inventory, type) => {
+		const tokens = inventory.reduce((acc, offer) => {
+			const { assets, loanType } = offer.data;
+			if (assets && loanType && loanType.includes(type)) {
+				assets.forEach(t => acc.add(t));
+			}
+			return acc;
+		}, new Set());
+
+		return [...tokens];
+	};
+
 	inventoryRateRangeLimits = (inventory, type) => {
 		const filteredInventory = this.filterLoanType(inventory, type);
 		/*
@@ -86,7 +98,12 @@ class LoansTableComponent extends MarketplaceLoansComponent {
 
 	selectToken = selectedToken => this.setState({ selectedToken });
 
-	onTypeFilterChange = selectedType => this.setState({ selectedType });
+	onTypeFilterChange = selectedType => {
+		if (selectedType === this.state.selectedType) {
+			selectedType = '';
+		}
+		this.setState({ selectedType });
+	};
 
 	onRateRangeChange = (e, selectedRange) => this.setState({ selectedRange });
 
@@ -130,7 +147,7 @@ class LoansTableComponent extends MarketplaceLoansComponent {
 		return (
 			<React.Fragment>
 				<LoansFilters
-					tokens={this.inventoryUniqueTokens(inventory)}
+					tokens={this.inventoryUniqueTokensByFilterType(inventory, filter)}
 					selectedToken={selectedToken}
 					onTokenFilterChange={this.onTokenFilterChange}
 					onTypeFilterChange={this.onTypeFilterChange}

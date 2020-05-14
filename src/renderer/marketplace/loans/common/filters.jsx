@@ -7,9 +7,6 @@ import { SelectDropdownIcon } from 'selfkey-ui';
 const styles = theme => ({
 	container: {
 		marginBottom: '2em',
-		'& .select-tokens': {
-			minWidth: '10em'
-		},
 		'& .MuiSlider-markLabel': {
 			fontSize: '12px !important',
 			marginTop: '3px'
@@ -23,6 +20,9 @@ const styles = theme => ({
 	},
 	rangeContainer: {
 		minWidth: '300px'
+	},
+	selectTokens: {
+		minWidth: '11em'
 	}
 });
 
@@ -114,18 +114,15 @@ const LoansFilters = withStyles(styles)(
 					</Typography>
 					<Select
 						name="asset"
-						className={'select-tokens'}
+						className={classes.selectTokens}
 						value={selectedToken}
 						onChange={onTokenFilterChange}
-						disableUnderline
 						IconComponent={SelectDropdownIcon}
 						input={<Input disableUnderline />}
 						displayEmpty
 					>
-						<MenuItem key="empty" value="" disabled>
-							<Typography variant="subtitle1" color="textSecondary">
-								Choose...
-							</Typography>
+						<MenuItem key="empty" value="">
+							Choose...
 						</MenuItem>
 						{tokens.map(token => (
 							<MenuItem key={token} value={token}>
