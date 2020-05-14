@@ -20,7 +20,7 @@ export default class MarketplaceLoansComponent extends PureComponent {
 
 	filterLoanType = (inventory, type) =>
 		inventory
-			.filter(offer => offer.data.loanType.includes(type))
+			.filter(offer => offer.data.loanType && offer.data.loanType.includes(type))
 			.map(offer => {
 				offer.data.interestRate =
 					type === 'lending'

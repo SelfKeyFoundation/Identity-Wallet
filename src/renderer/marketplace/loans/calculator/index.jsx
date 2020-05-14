@@ -28,7 +28,8 @@ const styles = theme => ({
 			display: 'none'
 		},
 		'& .MuiSlider-markLabelActive': {
-			top: '26px'
+			top: '26px',
+			background: '#262f39'
 		}
 	},
 	selectTokens: {
@@ -68,10 +69,9 @@ const styles = theme => ({
 
 const FIXED_TOKENS = ['BTC', 'ETH', 'KEY'];
 
-const calculateCollateral = ({ amount, token, rates }) => {
+const calculateCollateral = ({ amount, token, rates, ltv }) => {
 	const rate = rates.find(r => r.symbol === token);
-	// FIXME: data and structure for LTV is not available on airtable yet
-	const LTV = 0.7;
+	const LTV = ltv ? parseFloat(ltv) / 100 : 1;
 	const collateral = amount / (rate.priceUSD - rate.priceUSD * LTV);
 	return `${collateral.toFixed(2)} ${rate.symbol}`;
 };
@@ -211,7 +211,8 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 				offer.collateral = calculateCollateral({
 					amount,
 					rates: this.props.rates,
-					token: selectedToken
+					token: selectedToken,
+					ltv: offer.data.ltv
 				});
 			}
 			return offer;
@@ -222,12 +223,11 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 
 	generateMarks = ({ max, min, period }) => {
 		const marks = [];
-
+		marks.push({ value: min, label: `${min}` });
 		marks.push({ value: max, label: `${max} MO` });
 		if (period !== max && period !== min) {
 			marks.push({ value: period, label: `${period} MO` });
 		}
-		marks.push({ value: min, label: `${min}` });
 
 		return marks;
 	};
@@ -279,12 +279,16 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 									className={classes.selectTokens}
 									IconComponent={KeyboardArrowDown}
 									input={<Input disableUnderline />}
-									value={selectedToken}
-									displayEmpty={true}
+									value={
+										FIXED_TOKENS.includes(selectedToken) ? '' : selectedToken
+									}
+									displayEmpty
 									onChange={e => this.onTokenChange(e.target.value)}
 								>
-									<MenuItem value="">
-										<em>Other...</em>
+									<MenuItem key="empty" value="" disabled>
+										<Typography variant="subtitle1" color="textSecondary">
+											Choose...
+										</Typography>
 									</MenuItem>
 									{this.availableTokens().map(token => (
 										<MenuItem key={token} value={token}>
