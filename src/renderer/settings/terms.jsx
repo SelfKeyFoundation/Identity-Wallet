@@ -479,7 +479,7 @@ class Terms extends PureComponent {
 						</Typography>
 						<Typography variant="body2" paragraph>
 							The SelfKey wallet may contain advertisements, sponsored content, paid
-							insertions, affiliate links or other forms of monetization.We make no
+							insertions, affiliate links or other forms of monetization. We make no
 							representations, warranties, or assurances as to the accuracy, currency
 							or completeness of the content contain on this application, our website
 							or any sites or services linked to or from the SelfKey Wallet.
