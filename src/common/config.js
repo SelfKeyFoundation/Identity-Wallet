@@ -57,6 +57,8 @@ const common = {
 	userAgent: `SelfKeyIDW/${pkg.version}`,
 	airtableBaseUrl: 'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=',
 
+	exchangeRateApiUrl: 'https://api.exchangeratesapi.io',
+
 	kyccUrlOverride: KYCC_API_OVERRIDE,
 	incorporationsPriceOverride: INCORPORATIONS_PRICE_OVERRIDE,
 	incorporationsTemplateOverride: INCORPORATIONS_TEMPLATE_OVERRIDE,

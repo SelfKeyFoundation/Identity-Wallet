@@ -1,7 +1,8 @@
 import * as types from './types';
 
 const initialState = {
-	fiatCurrency: 'USD'
+	fiatCurrency: 'USD',
+	fiatRates: []
 };
 
 const fiatCurrencyReducer = (state = initialState, action) => {
@@ -10,6 +11,11 @@ const fiatCurrencyReducer = (state = initialState, action) => {
 			return {
 				...state,
 				fiatCurrency: action.payload
+			};
+		case types.LOAD_EXCHANGE_RATES:
+			return {
+				state,
+				fiatRates: action.payload
 			};
 		default:
 			return state;

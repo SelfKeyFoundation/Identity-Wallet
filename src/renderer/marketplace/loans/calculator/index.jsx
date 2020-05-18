@@ -71,6 +71,7 @@ const styles = theme => ({
 });
 
 const FIXED_TOKENS = ['BTC', 'ETH', 'KEY'];
+const CURRENCIES = ['USD', 'EUR'];
 
 const calculateCollateral = ({ amount, token, rates, ltv }) => {
 	const rate = rates.find(r => r.symbol === token);
@@ -111,6 +112,7 @@ const calculateMonthlyPayment = ({ amount, apr, months }) => {
 
 class LoansCalculatorComponent extends MarketplaceLoansComponent {
 	state = {
+		currencyIndex: 0,
 		type: 'borrowing',
 		selectedToken: FIXED_TOKENS[0],
 		amount: '',
@@ -165,6 +167,12 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 		this.setState({ amount });
 	};
 
+	onCurrencyChange = () => {
+		const currencyIndex =
+			this.state.currencyIndex + 1 >= CURRENCIES.length ? 0 : this.state.currencyIndex + 1;
+		this.setState({ currencyIndex });
+	};
+
 	onPeriodChange = (e, period) => {
 		this.setState({ results: [], period });
 	};
@@ -174,6 +182,8 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 	calculate() {
 		const { inventory } = this.props;
 		const { amount, type, period, selectedToken, repayment } = this.state;
+
+		// TODO: convert amount to USD
 
 		// Filter correct type (Lending or Borrowing)
 		const inventoryByType = this.filterLoanType(inventory, type);
@@ -237,7 +247,8 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 
 	render() {
 		const { classes } = this.props;
-		const { type, period, amount, selectedToken, repayment } = this.state;
+		const { type, period, amount, selectedToken, repayment, currencyIndex } = this.state;
+		const currency = CURRENCIES[currencyIndex];
 
 		return (
 			<div className={classes.container}>
@@ -316,8 +327,9 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 										variant="outlined"
 										size="large"
 										className={classes.sourceInput}
+										onClick={this.onCurrencyChange}
 									>
-										USD
+										{currency}
 										<TransferIcon />
 									</Button>
 								</div>

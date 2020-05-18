@@ -15,6 +15,7 @@ const styles = theme => ({});
 
 class LoansListContainer extends MarketplaceLoansComponent {
 	componentDidMount() {
+		// TODO: load exchange rates
 		window.scrollTo(0, 0);
 	}
 
