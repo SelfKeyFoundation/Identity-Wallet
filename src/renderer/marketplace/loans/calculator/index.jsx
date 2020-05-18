@@ -287,7 +287,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 								>
 									<MenuItem key="empty" value="" disabled>
 										<Typography variant="subtitle1" color="textSecondary">
-											Choose...
+											Other...
 										</Typography>
 									</MenuItem>
 									{this.availableTokens().map(token => (
