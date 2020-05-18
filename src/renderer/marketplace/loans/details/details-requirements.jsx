@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	bodyText: {
-		marginTop: '1em',
+		margin: '15px 0',
 		textAlign: 'left'
 	}
 });
