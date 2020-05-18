@@ -6,11 +6,10 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { LargeTableHeadRow /* TagTableCell, Tag, KeyTooltip, InfoTooltip */ } from 'selfkey-ui';
+import { LargeTableHeadRow } from 'selfkey-ui';
 import DetailsButton from '../../bank-accounts/common/details-button';
 
 const styles = theme => ({
-
 	logoCell: {
 		'& img': {
 			width: '30px',
