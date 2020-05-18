@@ -23,7 +23,8 @@ const styles = theme => ({
 	},
 	logoCell: {
 		'& img': {
-			width: '36px'
+			width: '30px',
+			borderRadius: '5px'
 		}
 	},
 	tableHeaderRow: {
