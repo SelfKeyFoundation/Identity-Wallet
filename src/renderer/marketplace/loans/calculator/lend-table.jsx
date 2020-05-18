@@ -13,14 +13,7 @@ import {
 import DetailsButton from '../../bank-accounts/common/details-button';
 
 const styles = theme => ({
-	table: {
-		'& td': {
-			padding: '0 20px'
-		},
-		'& th': {
-			padding: '0 20px'
-		}
-	},
+
 	logoCell: {
 		'& img': {
 			width: '30px',
