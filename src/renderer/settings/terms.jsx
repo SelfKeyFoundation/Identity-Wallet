@@ -190,8 +190,8 @@ class Terms extends PureComponent {
 							key is acquired or copied by another person, that person may be able to
 							obtain the currency stored on the SelfKey Wallet. You acknowledge that
 							you are responsible for safeguarding the private key to your Ethereum
-							address, accessed via yourSelfKey Wallet. SelfKey will not be liable for
-							any losses due to any situation in which a private key is lost,
+							address, accessed via your SelfKey Wallet. SelfKey will not be liable
+							for any losses due to any situation in which a private key is lost,
 							divulged, destroyed or otherwise compromised
 						</Typography>
 						<Typography variant="h3" paragraph>
