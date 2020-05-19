@@ -16,17 +16,10 @@ import { LoansFilters } from './filters';
 import DetailsButton from '../../bank-accounts/common/details-button';
 
 const styles = theme => ({
-	table: {
-		'& td': {
-			padding: '5px 20px'
-		},
-		'& th': {
-			padding: '15px 20px'
-		}
-	},
 	logoCell: {
 		'& img': {
-			width: '36px'
+			width: '30px',
+			borderRadius: '5px'
 		}
 	},
 	tableHeaderRow: {
