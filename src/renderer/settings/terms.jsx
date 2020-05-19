@@ -101,7 +101,7 @@ class Terms extends PureComponent {
 							These Terms may be modified, changed, supplemented or updated by SelfKey
 							Wallet LLC (&#34;SelfKey&#34;, &#34;we&#34;, &#34;us&#34; or
 							&#34;our&#34;) in our sole discretion at any time without advance
-							notice. We suggest that you visit this pageregularly to keep up to date
+							notice. We suggest that you visit this page regularly to keep up to date
 							with any changes. Your continued use of the SelfKey Wallet will confirm
 							your acceptance of these Terms as modified, changed, supplemented or
 							updated. If you do not agree to such revised terms you must stop using
@@ -189,10 +189,10 @@ class Terms extends PureComponent {
 							private key may render the currency inaccessible. Further, if a private
 							key is acquired or copied by another person, that person may be able to
 							obtain the currency stored on the SelfKey Wallet. You acknowledge that
-							you are responsible for safeguarding the private key to your SelfKey
-							Wallet. SelfKey will not be liable for any losses due to any situation
-							in which a private key is lost, divulged, destroyed or otherwise
-							compromised.
+							you are responsible for safeguarding the private key to your Ethereum
+							address, accessed via your SelfKey Wallet. SelfKey will not be liable
+							for any losses due to any situation in which a private key is lost,
+							divulged, destroyed or otherwise compromised
 						</Typography>
 						<Typography variant="h3" paragraph>
 							4) INDEMNITY
@@ -274,9 +274,9 @@ class Terms extends PureComponent {
 							any virtual currency, data, funds or property from a SelfKey Wallet.
 						</Typography>
 						<Typography variant="subtitle1" paragraph>
-							5.6 Any and all indemnities, warranties, terms and conditions
-							(whetherexpress or implied) are hereby excluded to the fullest extent
-							permitted under the law of Nevis.
+							5.6 Any and all indemnities, warranties, terms and conditions (whether
+							express or implied) are hereby excluded to the fullest extent permitted
+							under the law of Nevis.
 						</Typography>
 						<Typography variant="subtitle1" paragraph>
 							5.7 SelfKey will not be liable, in contract, or tort (including, without
@@ -463,7 +463,7 @@ class Terms extends PureComponent {
 							otherwise permitted by law.
 						</Typography>
 						<Typography variant="h3" paragraph>
-							18) CRASH REPORT &#38; ANALYTIC
+							18) CRASH REPORT &#38; ANALYTICS
 						</Typography>
 						<FormControlLabel
 							control={
@@ -478,16 +478,15 @@ class Terms extends PureComponent {
 							19) AFFILIATE FEES
 						</Typography>
 						<Typography variant="body2" paragraph>
-							The SelfKey wallet may contain advertisements, sponsored content,
-							paidinsertions, affiliate links or other forms of monetization.We make
-							no representations, warranties, or assurances as to the
-							accuracy,currency or completeness of the content contain on this
-							application, ourwebsite or any sites or services linked to or from the
-							SelfKey wallet.
+							The SelfKey wallet may contain advertisements, sponsored content, paid
+							insertions, affiliate links or other forms of monetization. We make no
+							representations, warranties, or assurances as to the accuracy, currency
+							or completeness of the content contain on this application, our website
+							or any sites or services linked to or from the SelfKey Wallet.
 						</Typography>
 						<Typography variant="body2" paragraph>
 							You are assuming all risks, and you agree that we are not liable in any
-							wayfor any program, product or service that we may promote, market,
+							way for any program, product or service that we may promote, market,
 							share or sell on or through our Website or application.
 						</Typography>
 						<Typography variant="h3" paragraph>
@@ -497,7 +496,7 @@ class Terms extends PureComponent {
 							At times, you may be able to transfer personal data to another service,
 							for example, without limitation, signing up for a service in the
 							marketplace. This transfer of information is facilitated by sending the
-							data from the wallet, to the relying party, or 3rdparty. This transfer
+							data from the wallet, to the relying party, or 3rd party. This transfer
 							is consented by you, in the wallet, at the time of transfer. SelfKey
 							will never sell your information to another service. This concept of
 							Self Sovereign identity means you are in control at all times, and you,
