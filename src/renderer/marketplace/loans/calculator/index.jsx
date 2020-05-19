@@ -18,6 +18,9 @@ import { LoansCalculatorBorrowTable } from './borrow-table';
 import { LoansCalculatorLendTable } from './lend-table';
 
 const styles = theme => ({
+	container: {
+		padding: '30px'
+	},
 	gridCell: {
 		width: '400px',
 		'& .MuiSlider-markLabel': {
@@ -237,7 +240,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 		const { type, period, amount, selectedToken, repayment } = this.state;
 
 		return (
-			<React.Fragment>
+			<div className={classes.container}>
 				<Grid container direction="column" justify="flex-start" spacing={4}>
 					<Grid item>
 						<Typography variant="overline" gutterBottom>
@@ -287,7 +290,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 								>
 									<MenuItem key="empty" value="" disabled>
 										<Typography variant="subtitle1" color="textSecondary">
-											Choose...
+											Other...
 										</Typography>
 									</MenuItem>
 									{this.availableTokens().map(token => (
@@ -404,7 +407,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 						/>
 					)}
 				</div>
-			</React.Fragment>
+			</div>
 		);
 	}
 }
