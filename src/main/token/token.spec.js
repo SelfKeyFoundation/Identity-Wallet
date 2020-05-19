@@ -41,11 +41,13 @@ describe('Token model', () => {
 
 	it('findAll', async () => {
 		let all = await Token.findAll();
-		expect(all.length).toBe(initialTokens.length);
+		// imit KI token from results
+		const tokenLength = initialTokens.length - 1;
+		expect(all.length).toBe(tokenLength);
 		await Token.create(testItem);
 		await Token.create(testItem2);
 		all = await Token.findAll();
-		expect(all.length).toBe(initialTokens.length + 2);
+		expect(all.length).toBe(tokenLength + 2);
 	});
 
 	it('findBySymbol', async () => {
