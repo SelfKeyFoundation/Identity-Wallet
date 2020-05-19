@@ -81,7 +81,7 @@ export const registerMainServices = container => {
 		didService: asClass(DIDService).singleton(),
 		autoUpdateService: asClass(AutoUpdateService).singleton(),
 		marketplaceOrdersService: asClass(MarketplaceOrdersService).singleton(),
-		TotleSwapService: asClass(TotleSwapService).singleton(),
-		CurrencyService: asClass(CurrencyService).singleton()
+		totleSwapService: asClass(TotleSwapService).singleton(),
+		currencyService: asClass(CurrencyService).singleton()
 	});
 };

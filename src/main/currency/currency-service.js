@@ -13,7 +13,7 @@ export class CurrencyService {
 				url: `${EXCHANGE_RATE_ENDPOINT}/latest?base=USD`,
 				json: true
 			});
-			return fetched.rates ? fetched.rates : [];
+			return fetched.rates ? fetched.rates : {};
 		} catch (error) {
 			log.error(error);
 			return [];

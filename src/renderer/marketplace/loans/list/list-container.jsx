@@ -10,13 +10,14 @@ import { MarketplaceLoansComponent } from '../common/marketplace-loans-component
 import { identitySelectors } from 'common/identity';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { walletSelectors, walletOperations } from 'common/wallet';
+import { fiatCurrencyOperations, fiatCurrencySelectors } from 'common/fiatCurrency';
 
 const styles = theme => ({});
 
 class LoansListContainer extends MarketplaceLoansComponent {
 	componentDidMount() {
-		// TODO: load exchange rates
 		window.scrollTo(0, 0);
+		this.props.dispatch(fiatCurrencyOperations.loadExchangeRatesOperation());
 	}
 
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
@@ -27,8 +28,7 @@ class LoansListContainer extends MarketplaceLoansComponent {
 		this.props.dispatch(walletOperations.setLoanCardStatusOperation(true));
 
 	render() {
-		const { isLoading, rates, vendors, inventory, tokens, cardHidden } = this.props;
-
+		const { isLoading, rates, vendors, inventory, tokens, cardHidden, fiatRates } = this.props;
 		return (
 			<LoansListPage
 				vendors={vendors}
@@ -40,6 +40,7 @@ class LoansListContainer extends MarketplaceLoansComponent {
 				loading={isLoading}
 				tokens={tokens}
 				cardHidden={cardHidden}
+				fiatRates={fiatRates}
 			/>
 		);
 	}
@@ -64,7 +65,8 @@ const mapStateToProps = (state, props) => {
 		isLoading: marketplaceSelectors.isInventoryLoading(state),
 		rates: pricesSelectors.getPrices(state).prices,
 		cardHidden: walletSelectors.getLoanCalculatorCardStatus(state),
-		tokens: getTokens(state)
+		tokens: getTokens(state),
+		fiatRates: fiatCurrencySelectors.selectFiatRates(state)
 	};
 };
 

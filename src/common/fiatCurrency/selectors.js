@@ -1,5 +1,13 @@
 const getFiatCurrency = state => state.fiatCurrency;
 
-const getFiatRates = state => state.fiatRates;
+const selectFiatRates = state => getFiatCurrency(state).fiatRates;
 
-export { getFiatCurrency, getFiatRates };
+const selectExchangeRate = (state, currency) => {
+	const rates = selectFiatRates(state);
+	if (currency && rates[currency]) {
+		return rates[currency];
+	}
+	return 1;
+};
+
+export { getFiatCurrency, selectFiatRates, selectExchangeRate };

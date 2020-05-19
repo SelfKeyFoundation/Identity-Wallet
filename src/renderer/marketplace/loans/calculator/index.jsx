@@ -71,7 +71,15 @@ const styles = theme => ({
 });
 
 const FIXED_TOKENS = ['BTC', 'ETH', 'KEY'];
-const CURRENCIES = ['USD', 'EUR'];
+const CURRENCIES = ['USD', 'EUR', 'GBP'];
+
+export const convertCurrency = (amount, currency, rates) => {
+	if (currency && rates[currency]) {
+		return amount * rates[currency];
+	} else {
+		return amount;
+	}
+};
 
 const calculateCollateral = ({ amount, token, rates, ltv }) => {
 	const rate = rates.find(r => r.symbol === token);
@@ -170,7 +178,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 	onCurrencyChange = () => {
 		const currencyIndex =
 			this.state.currencyIndex + 1 >= CURRENCIES.length ? 0 : this.state.currencyIndex + 1;
-		this.setState({ currencyIndex });
+		this.setState({ currencyIndex }, () => this.calculate());
 	};
 
 	onPeriodChange = (e, period) => {
@@ -180,10 +188,12 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 	onCalculateClick = () => this.calculate();
 
 	calculate() {
-		const { inventory } = this.props;
-		const { amount, type, period, selectedToken, repayment } = this.state;
+		const { inventory, fiatRates } = this.props;
+		const { amount, type, period, selectedToken, repayment, currencyIndex } = this.state;
+		const currency = CURRENCIES[currencyIndex];
 
-		// TODO: convert amount to USD
+		// Convert to USD
+		const convertedAmount = convertCurrency(amount, currency, fiatRates);
 
 		// Filter correct type (Lending or Borrowing)
 		const inventoryByType = this.filterLoanType(inventory, type);
@@ -191,9 +201,9 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 		// Filters offers with min and max Loan
 		let results = inventoryByType.filter(offer => {
 			return (
-				(Number(offer.data.maxLoan.replace(/[^0-9.-]+/g, '')) >= +amount ||
+				(Number(offer.data.maxLoan.replace(/[^0-9.-]+/g, '')) >= +convertedAmount ||
 					offer.data.maxLoan === 'Unlimited') &&
-				Number(offer.data.minLoan.replace(/[^0-9.-]+/g, '')) <= +amount
+				Number(offer.data.minLoan.replace(/[^0-9.-]+/g, '')) <= +convertedAmount
 			);
 		});
 
@@ -209,20 +219,20 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 		results = results.map(offer => {
 			if (repayment === 'interest') {
 				offer.loanPayment = calculateSimpleInterest({
-					amount,
+					amount: convertedAmount,
 					months: period,
 					apr: Number(offer.data.interestRate.replace(/[^0-9.-]+/g, ''))
 				});
 			} else {
 				offer.loanPayment = calculateMonthlyPayment({
-					amount,
+					amount: convertedAmount,
 					months: period,
 					apr: Number(offer.data.interestRate.replace(/[^0-9.-]+/g, ''))
 				});
 			}
 			if (type === 'borrowing') {
 				offer.collateral = calculateCollateral({
-					amount,
+					amount: convertedAmount,
 					rates: this.props.rates,
 					token: selectedToken,
 					ltv: offer.data.ltv
@@ -249,7 +259,6 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 		const { classes } = this.props;
 		const { type, period, amount, selectedToken, repayment, currencyIndex } = this.state;
 		const currency = CURRENCIES[currencyIndex];
-
 		return (
 			<div className={classes.container}>
 				<Grid container direction="column" justify="flex-start" spacing={4}>
@@ -409,12 +418,14 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 					{type === 'borrowing' && (
 						<LoansCalculatorBorrowTable
 							data={this.state.results}
+							currency={currency}
 							onDetailsClick={this.props.onDetailsClick}
 						/>
 					)}
 					{type === 'lending' && (
 						<LoansCalculatorLendTable
 							data={this.state.results}
+							currency={currency}
 							onDetailsClick={this.props.onDetailsClick}
 						/>
 					)}

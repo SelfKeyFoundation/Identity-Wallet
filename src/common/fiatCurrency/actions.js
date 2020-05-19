@@ -6,7 +6,7 @@ const fiatCurrencyUpdate = fiatCurrency => ({
 });
 
 const setExchangeRates = rates => ({
-	type: types.LOAD_EXCHANGE_RATES,
+	type: types.SET_EXCHANGE_RATES,
 	payload: rates
 });
 
