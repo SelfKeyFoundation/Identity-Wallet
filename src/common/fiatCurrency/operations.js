@@ -6,7 +6,6 @@ import * as types from './types';
 const loadExchangeRates = () => async (dispatch, getState) => {
 	const ctx = getGlobalContext();
 	const rates = await ctx.currencyService.fetchRates();
-	console.log('here');
 	await dispatch(actions.setExchangeRates(rates));
 };
 
