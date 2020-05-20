@@ -28,13 +28,16 @@ const styles = theme => ({
 		padding: '20px 30px 30px'
 	},
 	ctabutton: {
+		backgroundColor: '#1E262E',
 		display: 'flex',
 		justifyContent: 'space-between',
 		maxWidth: '100%',
 		marginLeft: 'auto',
 		marginRight: '0',
 		marginBottom: '1em',
+		position: 'relative',
 		width: '100%',
+		zIndex: 1,
 		'& span': {
 			flexGrow: 1
 		},
