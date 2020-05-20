@@ -35,81 +35,83 @@ const styles = theme => ({
 	}
 });
 
-const LoansCalculatorBorrowTable = withStyles(styles)(({ classes, data, onDetailsClick }) => (
-	<Table className={classes.table}>
-		<TableHead>
-			<LargeTableHeadRow>
-				<TableCell className={classes.logoCell} />
-				<TableCell>
-					<Typography variant="overline">Name</Typography>
-				</TableCell>
-				{/*
+const LoansCalculatorBorrowTable = withStyles(styles)(
+	({ classes, data, currency, onDetailsClick }) => (
+		<Table className={classes.table}>
+			<TableHead>
+				<LargeTableHeadRow>
+					<TableCell className={classes.logoCell} />
+					<TableCell>
+						<Typography variant="overline">Name</Typography>
+					</TableCell>
+					{/*
 					<TableCell>
 						<Typography variant="overline">Trust Score</Typography>
 					</TableCell>
-				*/}
-				<TableCell>
-					<Typography variant="overline">Type</Typography>
-				</TableCell>
-				<TableCell>
-					<Typography variant="overline">Collateral Needed</Typography>
-				</TableCell>
-				<TableCell>
-					<Typography variant="overline">Interest Rate</Typography>
-				</TableCell>
-				<TableCell>
-					<Typography variant="overline">Interest Amount</Typography>
-				</TableCell>
-				<TableCell>
-					<Typography variant="overline">Monthly Payment</Typography>
-				</TableCell>
-				<TableCell>
-					<Typography variant="overline">Repayment Amount</Typography>
-				</TableCell>
-				<TableCell className={classes.detailsCell} />
-			</LargeTableHeadRow>
-		</TableHead>
-		<TableBody className={classes.tableBodyRow}>
-			{data.map(offer => (
-				<TableRow key={offer.sku}>
-					<TableCell className={classes.logoCell}>
-						{offer.data.logoUrl && <img src={offer.data.logoUrl} />}
-					</TableCell>
-					<TableCell>{offer.name}</TableCell>
-					{/*
-					<TableCell />
 					*/}
 					<TableCell>
-						{offer.data.type === 'Decentralized' ? 'P2P' : 'Centralized'}
-					</TableCell>
-					<TableCell>{offer.collateral}</TableCell>
-					<TableCell>{offer.data.interestRate}</TableCell>
-					<TableCell>
-						{offer.loanPayment.totalInterest.toLocaleString('en-US', {
-							style: 'currency',
-							currency: 'USD'
-						})}
+						<Typography variant="overline">Type</Typography>
 					</TableCell>
 					<TableCell>
-						{offer.loanPayment.monthly.toLocaleString('en-US', {
-							style: 'currency',
-							currency: 'USD'
-						})}
+						<Typography variant="overline">Collateral Needed</Typography>
 					</TableCell>
 					<TableCell>
-						{parseFloat(offer.loanPayment.total).toLocaleString('en-US', {
-							style: 'currency',
-							currency: 'USD'
-						})}
+						<Typography variant="overline">Interest Rate</Typography>
 					</TableCell>
-					<TableCell className={classes.detailsCell}>
-						<DetailsButton onClick={() => onDetailsClick(offer)} />
+					<TableCell>
+						<Typography variant="overline">Interest Amount</Typography>
 					</TableCell>
-				</TableRow>
-			))}
-		</TableBody>
-	</Table>
-));
+					<TableCell>
+						<Typography variant="overline">Monthly Payment</Typography>
+					</TableCell>
+					<TableCell>
+						<Typography variant="overline">Repayment Amount</Typography>
+					</TableCell>
+					<TableCell className={classes.detailsCell} />
+				</LargeTableHeadRow>
+			</TableHead>
+			<TableBody className={classes.tableBodyRow}>
+				{data.map(offer => (
+					<TableRow key={offer.sku}>
+						<TableCell className={classes.logoCell}>
+							{offer.data.logoUrl && <img src={offer.data.logoUrl} />}
+						</TableCell>
+						<TableCell>{offer.name}</TableCell>
+						{/*
+							<TableCell />
+						*/}
+						<TableCell>
+							{offer.data.type === 'Decentralized' ? 'P2P' : 'Centralized'}
+						</TableCell>
+						<TableCell>{offer.collateral}</TableCell>
+						<TableCell>{offer.data.interestRate}</TableCell>
+						<TableCell>
+							{offer.loanPayment.totalInterest.toLocaleString('en-US', {
+								style: 'currency',
+								currency
+							})}
+						</TableCell>
+						<TableCell>
+							{offer.loanPayment.monthly.toLocaleString('en-US', {
+								style: 'currency',
+								currency
+							})}
+						</TableCell>
+						<TableCell>
+							{parseFloat(offer.loanPayment.total).toLocaleString('en-US', {
+								style: 'currency',
+								currency
+							})}
+						</TableCell>
+						<TableCell className={classes.detailsCell}>
+							<DetailsButton onClick={() => onDetailsClick(offer)} />
+						</TableCell>
+					</TableRow>
+				))}
+			</TableBody>
+		</Table>
+	)
+);
 
 export default LoansCalculatorBorrowTable;
 export { LoansCalculatorBorrowTable };

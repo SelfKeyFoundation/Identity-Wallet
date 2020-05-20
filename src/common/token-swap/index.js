@@ -80,7 +80,7 @@ const setTargetOperation = token => async (dispatch, getState) => {
 
 const loadTokensOperation = () => async (dispatch, getState) => {
 	const ctx = getGlobalContext();
-	const tokens = await ctx.TotleSwapService.fetchTokens();
+	const tokens = await ctx.totleSwapService.fetchTokens();
 	await dispatch(tokenSwapActions.setTokens(tokens));
 };
 
@@ -97,7 +97,7 @@ const swapTokensOperation = ({ address, amount, decimal }) => async (dispatch, g
 		destinationAsset,
 		sourceAmount: toBaseUnit(amount, decimal)
 	};
-	const request = await ctx.TotleSwapService.swap(
+	const request = await ctx.totleSwapService.swap(
 		address,
 		swapRequestPayload,
 		partnerContractAddress
