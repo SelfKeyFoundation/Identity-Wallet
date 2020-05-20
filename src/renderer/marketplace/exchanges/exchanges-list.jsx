@@ -185,7 +185,9 @@ export const ExchangesList = withStyles(styles)(
 														Fiat Payments
 													</Typography>
 												</TableCell>
-												<TableCell style={{ padding: '10px' }}>
+												<TableCell
+													style={{ padding: '10px', minWidth: '200px' }}
+												>
 													<Typography variant="overline">
 														Excluded Residents
 													</Typography>
