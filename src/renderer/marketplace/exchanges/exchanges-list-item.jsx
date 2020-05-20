@@ -70,6 +70,14 @@ const styles = theme => ({
 	},
 	hidden: {
 		display: 'none'
+	},
+	excludedResidentCell: {
+		minWidth: '200px'
+	},
+	'@media screen and (min-width: 1230px)': {
+		excludedResidentCell: {
+			minWidth: '290px'
+		}
 	}
 });
 
@@ -158,8 +166,8 @@ export const ExchangesListItem = withStyles(styles)(
 				<TableCell
 					className={
 						isNotExcludedResidents || excludedResidents.length < 2
-							? ''
-							: classes.goodForCell
+							? classes.excludedResidentCell
+							: `${classes.goodForCell} ${classes.excludedResidentCell}`
 					}
 					style={{ height: 'auto', padding: '10px' }}
 				>
