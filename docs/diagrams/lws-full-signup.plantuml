@@ -1,0 +1,115 @@
+@startuml LWS flow full sign up
+!define LIGHTGREEN
+!includeurl https://raw.githubusercontent.com/sk91/RedDress-PlantUML/master/style.puml
+skinparam SequenceMessageAlignment center
+skinparam ResponseMessageBelowArrow true
+skinparam SequenceLifeLineBackgroundColor ffffff
+
+title LWS flow full sign up
+
+actor User
+participant "Web Page" as WP
+participant "Extension Connect" as Connect
+participant "Extension: Iframe" as Iframe
+participant Wallet as W
+participant "Relying Party" as RP
+
+activate WP
+WP -> Connect : wp_init with rp config
+activate Connect
+Connect -> Connect : generate webpage session
+activate Connect
+deactivate Connect
+deactivate Connect
+Connect --> WP : iframe url
+WP -> WP : Display LWS Button
+activate WP
+deactivate WP
+deactivate WP
+
+User -> WP : Click on LWS button
+activate WP
+WP -> Iframe: open iframe
+activate Iframe
+Iframe -> Connect: app_init
+activate Connect
+Connect --> Iframe : app_init with session config
+deactivate Connect
+Iframe -> W : wallets
+activate W
+W --> Iframe : wallets + list of public keys
+deactivate W
+Iframe -> Iframe: display unlock wallet screen
+
+activate Iframe
+deactivate Iframe
+
+User -> Iframe : unlock wallet
+Iframe -> W : unlock
+
+activate W
+W --> Iframe : unlock + status
+deactivate W
+
+Iframe -> W : attributes
+activate W
+W --> Iframe : attributes in wallet
+deactivate W
+
+Iframe -> Iframe : display attributes selection screen
+activate Iframe
+deactivate Iframe
+
+User -> Iframe : Select and approve attributes
+
+Iframe -> W : signup + attributes
+activate W
+
+W -> RP : Challange Request
+activate RP
+RP --> W : C-JWT
+deactivate
+
+W -> W : sign nonce with PK
+activate W
+deactivate W
+
+W -> RP : Challange Reply with C-JWT and signature
+activate RP
+RP --> W : W-JWT
+deactivate RP
+
+W -> RP : create user files
+activate RP
+RP --> W : file ids
+deactivate RP
+
+W -> RP : create user
+activate RP
+RP --> W : ok
+deactivate RP
+
+W -> RP : get user token
+activate RP
+RP --> W : token
+deactivate RP
+
+W --> Iframe : user token
+deactivate W
+
+Iframe --> WP : user token
+
+WP -> RP : login + user token
+activate RP
+RP --> WP : redirect URL
+deactivate RP
+
+WP -> WP : Redirect to success page
+activate WP
+deactivate WP
+
+WP --> User : logged in
+deactivate WP
+
+
+@enduml

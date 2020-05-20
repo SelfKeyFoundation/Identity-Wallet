@@ -1,0 +1,408 @@
+Project SelfkeyIdentityWallet {
+  database_type: 'sqlite'
+  note: 'Selfkey Identity Wallet'
+}
+
+Table wallets {
+  id int [pk, increment]
+  name string
+  address string
+  keystoreFilePath string
+  profile string [default: 'local', not null]
+  path string
+  createdAt int [not null]
+  updatedAt int
+}
+
+Table wallet_settings {
+  id int [pk, increment]
+  walletId int [not null, ref: > wallets.id]
+  sowDesktopNotifications int [default: 0, not null]
+  txHistoryLastSyncedBlock int [default: 0, not null]
+  airDropCode string
+  createdAt int [not null]
+  updatedAt int
+}
+
+Table tokens {
+  id int [pk, increment]
+  symbol string [not null]
+  decimal int [not null]
+  address string [not null, unique]
+  icon blob
+  isCustom int [default: 0, not null]
+  networkId int [default: 1]
+  type string [default: 'erc-20']
+  createdAt int [not null]
+  updatedAt int
+}
+
+Table token_prices {
+  id int [pk, increment]
+  name string [not null]
+  symbol string [not null, ref: > tokens.symbol]
+  source string
+  priceUSD decimal
+  priceBTC decimal
+  priceETH decimal
+  createdAt int [not null]
+  updatedAt int
+}
+
+Table tx_history {
+  id int [pk, increment]
+  hash string [not null, unique]
+  blockNumber int
+  timeStamp int [not null]
+  nonce int
+  blockHash string
+  contractAddress string
+  from string [not null]
+  to string [not null]
+  value int [not null]
+  tokenName string
+  tokenSymbol string
+  tokenDecimal int
+  transactionIndex int
+  gas int
+  gasPrice int [not null]
+  cumulativeGasUsed int
+  gasUsed int
+  input string
+  confirmations int
+  isError int
+  txReceiptStatus int
+  networkId int [not null]
+  createdAt int [not null]
+  updatedAt int
+}
+
+Table wallet_tokens {
+  id int [pk, increment]
+  walletId int [not null, ref: > wallets.id]
+  tokenId int [not null, ref: > tokens.id]
+  balance decimal [default: 0]
+  hidden integer [default: 0]
+  recordState integer [default: 1]
+  createdAt int [not null]
+  updatedAt int
+}
+
+Table repository {
+  id int [pk, increment]
+  evn string
+  url string
+  name string
+  eager bool [default: false]
+  content string [default: '{}']
+  expires int
+  createdAt int [not null]
+  updatedAt int
+}
+
+Table ui_schema {
+  id int [pk, increment]
+  env string
+  repositoryId int [not null, ref: > repository.id]
+  expires int
+  createdAt int [not null]
+  updatedAt int
+}
+
+
+Table id_attributes {
+  id int [pk, increment]
+  identityId int [not null, ref: > identities.id]
+  env string
+  name string
+  typeId int [not null, ref: > id_attribute_types.id]
+  data text [default: '{}', not null]
+  createdAt int [not null]
+  updatedAt int
+}
+
+Table id_attribute_types {
+  id int [pk, increment]
+  env string
+  url string [not null]
+  defaultRepositoryId int [ref: > repository.id]
+  content string [default: '{}']
+  expires int
+  createdAt integer [not null]
+  updatedAt integer
+}
+
+Table repository_attribute_types {
+  repositoryId int [not null, ref: > repository.id]
+  attributeTypeId int [not null, ref: > id_attribute_types.id]
+}
+
+// obsolete
+Table id_attribute_schemas {
+  // type string [pk, ref: > id_attribute_types.key]
+  expires int
+  jsonSchema text [default: '{}', not null]
+  uiSchema text [default: '{}', not null]
+  jsonSchemaUrl string
+  uiSchemaUrl string
+  createdAt int [not null]
+  updatedAt int
+}
+
+Table login_attempts {
+  id int [pk, increment]
+  walletId int [not null, ref: > wallets.id]
+  websiteName string
+  websiteUrl string
+  apiUrl string
+  success bool
+  errorCode string
+  errorMessage string
+  signup bool
+  createdAt int [not null]
+  updatedAt int
+}
+
+Table marketplace_transactions {
+  id int [pk, increment]
+  serviceOwner string [not null]
+  serviceId string [not null]
+  action string [not null]
+  amount float
+  gasPrice float
+  gasLimit float
+  networkId int
+  blockchainTx int
+  lastStatus int [not null]
+  updatedAt int
+}
+
+Table address_book {
+  id int [pk, increment]
+  walletId int [not null, ref: > wallets.id]
+  label string
+  address string
+  createdAt int [not null]
+  updatedAt int
+}
+
+Table guide_settings {
+  id int [pk, increment]
+  guideShown integer [default: 0]
+  icoAdsShown integer [default: 0]
+  termsAccepted integer [default: 0]
+  crashReportAgreement int [default: 0]
+  createdAt integer [not null]
+  updatedAt integer
+}
+
+Table exchange_data {
+  name string [pk]
+  env string [pk]
+  data string [not null]
+  createAt integer [not null]
+  updatedAt integer
+}
+
+Table documents {
+  id int [pk, increment]
+  string env
+  name string [not null]
+  mimeType string [not null]
+  size integer [not null]
+  buffer blob [not null]
+  attributeId int [not null, ref: > id_attributes.id]
+  createdAt integer [not null]
+  updatedAt integer
+}
+
+Table countries {
+  id int [pk, increment]
+  name string [not null, unique]
+  code string [not null, unique]
+  dialCode string [not null]
+  createdAt integer [not null]
+  updatedAt integer
+}
+
+Table app_settings {
+  id int [pk, increment]
+  dataFolderPath string [not null]
+  createdAt int [not null]
+  updatedAt int
+}
+
+Table action_logs {
+  id int [pk, increment]
+  walletId int [not null, ref: > wallets.id]
+  title string
+  content string
+  createdAt int [not null]
+  updatedAt int
+}
+
+Table kyc_applications {
+  id string
+  identityId int [ref: > identities.id]
+  walletId int [ref: > wallets.id]
+  owner string
+  scope string
+  rpName string
+  currentStatus int
+  currentStatusName string
+  applicationDate string
+  payments text [default: '{}', not null]
+  nextRoute string
+  title string
+  sub_titles string
+  createdAt int [not null]
+  updatedAt int
+}
+
+Table vendors {
+  id int [pk, increment]
+  env string
+  vendorId string [not null]
+  name string
+  description string
+  status string
+  categories string
+  entityTypes string [default: '[individual]']
+  inventorySource string [default: 'selfkey']
+  relyingPartyConfig string [default: '{}']
+  privacyPolicy string
+  termsOfService string
+  contactEmail string
+  did string
+  paymentAddress string
+  createdAt int [not null]
+  updatedAt int
+  indexes {
+    (vendorId, env)[unique]
+  }
+}
+
+Table inventory {
+  id int [pk, increment]
+  sku string [not null]
+  env string
+  vendorId string [not null, ref: > vendors.vendorId]
+  entityType string [default: 'individual']
+  name string
+  parentSku string [ref: > inventory.sku]
+  category string
+  price string
+  priceCurrency string [default: 'USD']
+  data string [default: '{}']
+  createdAt int [not null]
+  updatedAt int
+  indexes {
+    (sku, vendorId, env)[unique]
+  }
+}
+
+Table marketplace_country {
+  id int [pk, increment]
+  code string [not null]
+  env string
+  name string
+  currencyCode string
+  population int
+  fipsCode string
+  isoNumeric string
+  north string
+  south string
+  east string
+  west string
+  capital string
+  continentName string
+  continent string
+  areaInSqKm string
+  languages string [default: '[]']
+  isoAlphha3 string
+  geonameId string
+  createdAt int [not null]
+  updatedAt int
+  indexes {
+    (code, env)[unique]
+  }
+}
+
+Table tax_treaties {
+  id int [pk, increment]
+  countryCode string [not null]
+  env string
+  jurisdictionCountryCode string
+  currencyCode string
+  jurisdiction string
+  isoNumeric string
+  typeEOI string
+  dateSigned string
+  dateActive string
+  meetsStandards string
+  containsParas4and5 string
+  pdfUrl string
+  createdAt int [not null]
+  updatedAt int
+  indexes {
+    (countryCode, jurisdictionCountryCode)[unique]
+  }
+}
+
+Table marketplace_orders {
+  id int [pk, increment]
+  identityId int [ref: > identities.id]
+  vendorId string
+  amount string
+  itemId string
+  productInfo string
+  vendorName string
+  walletid int [ref: > wallets.id]
+  applicationId string
+  did string
+  vendorDID string
+  allowanceHash string
+  paymentHash string
+  status string
+  statusMessage string
+  affiliate1DID string
+  affiliate2DID string
+  env string
+  vendorWallet string
+  createdAt int [not null]
+  updatedAt int
+}
+
+Table identities {
+  id int [pk, increment]
+  walletId int [ref: > wallets.id]
+  parentId int [ref: > identities.id]
+  rootIdentity bool
+  profilePicture blob
+  type string
+  name string
+  did string
+  isSetupFinished bool [default: false]
+  positions string [not null, default: '[]']
+  equity float [not null, default: 0]
+  createdAt int [not null]
+  updatedAt int
+}
+
+Table listing_exchanges {
+  id int [pk, increment]
+  name string
+  url string
+  tradeUrl string
+  region string
+  pairs string
+  comment string
+  env string
+  createdAt int [not null]
+  updatedAt int
+}
+
+Table seed {
+  name string
+  appliedAt timestamp
+}
