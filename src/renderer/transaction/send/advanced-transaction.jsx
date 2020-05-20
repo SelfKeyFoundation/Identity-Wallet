@@ -269,11 +269,14 @@ class TransactionSendBoxContainer extends PureComponent {
 
 	handleCryptoCurrencyChange = event => {
 		const value = event.target.value;
+		const nullAmount = 0;
 		this.setState({
 			...this.state,
+			amount: nullAmount,
 			cryptoCurrency: value
 		});
 		this.props.dispatch(transactionOperations.setCryptoCurrency(value));
+		this.props.dispatch(transactionOperations.setAmount(nullAmount));
 	};
 
 	renderSelectTokenItems() {
@@ -407,7 +410,9 @@ class TransactionSendBoxContainer extends PureComponent {
 										<Input
 											type="text"
 											onChange={this.handleAmountChange}
-											value={this.state.amount}
+											value={`${this.state.amount} ${
+												cryptoCurrency !== 'custom' ? cryptoCurrency : ''
+											}`}
 											placeholder="0.00"
 											className={classes.amount}
 											fullWidth
