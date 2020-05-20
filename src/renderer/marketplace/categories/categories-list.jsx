@@ -62,7 +62,7 @@ export const MarketplaceCategoriesList = withStyles(styles)(({ classes, children
 				<Typography variant="h1">SelfKey Marketplace</Typography>
 			</Grid>
 		</Grid>
-		<Grid container xs={12}>
+		<Grid container>
 			<hr className={classes.hr} />
 		</Grid>
 		<Grid item id="body" xs={12}>

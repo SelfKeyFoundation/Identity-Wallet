@@ -58,7 +58,8 @@ class LoansListPageComponent extends PureComponent {
 			tokens,
 			rates,
 			cardHidden,
-			onCloseCalculatorCardClick
+			onCloseCalculatorCardClick,
+			fiatRates
 		} = this.props;
 		const { tab } = this.state;
 		return (
@@ -117,6 +118,7 @@ class LoansListPageComponent extends PureComponent {
 									tokens={tokens}
 									tab={tab}
 									rates={rates}
+									fiatRates={fiatRates}
 								/>
 							</Grid>
 						</Grid>

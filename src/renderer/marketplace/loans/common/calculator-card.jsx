@@ -43,13 +43,7 @@ class LoansCalculatorCardComponent extends PureComponent {
 			<Card className={classes.card}>
 				<CardContent className={classes.container}>
 					<ModalCloseIcon className={classes.closeIcon} onClick={onClose} />
-					<Grid
-						container
-						direction="column"
-						justify="center"
-						alignItems="flex-start"
-						spacing={24}
-					>
+					<Grid container direction="column" justify="center" alignItems="flex-start">
 						<div style={{ display: 'flex' }}>
 							<div className={classes.calculatorIcon}>
 								<CalculatorIcon />
@@ -62,7 +56,7 @@ class LoansCalculatorCardComponent extends PureComponent {
 									Know exactly the collateral amount needed to get a loan and the
 									total cost of it. No more unanswered questions.
 								</Typography>
-								<Grid container spacing={16} className={classes.buttons}>
+								<Grid container className={classes.buttons}>
 									<Grid item className={classes.extraSpace}>
 										<Button
 											variant="contained"

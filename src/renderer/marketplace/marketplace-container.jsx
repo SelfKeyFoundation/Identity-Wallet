@@ -51,7 +51,7 @@ class MarketplaceContainerComponent extends PureComponent {
 		return (
 			<Switch>
 				<Route
-					exact="1"
+					exact={true}
 					path={`${match.path}`}
 					component={MarketplaceCategoriesContainer}
 				/>
