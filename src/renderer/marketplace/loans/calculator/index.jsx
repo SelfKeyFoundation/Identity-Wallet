@@ -192,6 +192,11 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 		const { amount, type, period, selectedToken, repayment, currencyIndex } = this.state;
 		const currency = CURRENCIES[currencyIndex];
 
+		// Don't do anything if amount is invalid
+		if (amount <= 0) {
+			return;
+		}
+
 		// Convert to USD
 		const convertedAmount = convertCurrency(amount, currency, fiatRates);
 
