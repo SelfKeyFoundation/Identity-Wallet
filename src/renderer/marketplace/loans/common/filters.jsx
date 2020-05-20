@@ -122,8 +122,12 @@ const LoansFilters = withStyles(styles)(
 							input={<Input disableUnderline />}
 							displayEmpty
 						>
-							<MenuItem key="empty" value="" disabled>
-								<Typography variant="subtitle1" color="textSecondary">
+							<MenuItem key="empty" value="">
+								<Typography
+									className="choose"
+									variant="subtitle1"
+									color="textSecondary"
+								>
 									Choose...
 								</Typography>
 							</MenuItem>

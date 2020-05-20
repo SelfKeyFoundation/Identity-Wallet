@@ -377,8 +377,12 @@ class TransactionSendBoxContainer extends PureComponent {
 							IconComponent={SelectDropdownIcon}
 							input={<Input disableUnderline />}
 						>
-							<MenuItem value="custom" disabled>
-								<Typography variant="subtitle1" color="textSecondary">
+							<MenuItem value="custom">
+								<Typography
+									className="choose"
+									variant="subtitle1"
+									color="textSecondary"
+								>
 									Choose...
 								</Typography>
 							</MenuItem>

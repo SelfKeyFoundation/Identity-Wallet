@@ -288,8 +288,12 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 									displayEmpty
 									onChange={e => this.onTokenChange(e.target.value)}
 								>
-									<MenuItem key="empty" value="" disabled>
-										<Typography variant="subtitle1" color="textSecondary">
+									<MenuItem key="empty" value="">
+										<Typography
+											className="choose"
+											variant="subtitle1"
+											color="textSecondary"
+										>
 											Other...
 										</Typography>
 									</MenuItem>

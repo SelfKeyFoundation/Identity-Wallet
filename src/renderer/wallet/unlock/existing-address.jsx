@@ -107,8 +107,9 @@ class ExistingAddress extends PureComponent {
 											input={<Input disableUnderline fullWidth />}
 											autoWidth
 										>
-											<MenuItem value={-1} disabled>
+											<MenuItem value={-1}>
 												<Typography
+													className="choose"
 													variant="subtitle1"
 													color="textSecondary"
 												>
