@@ -23,6 +23,12 @@ const styles = theme => ({
 		borderRadius: '4px',
 		background: '#2A3540'
 	},
+	threeItems: {
+		width: '200px'
+	},
+	fourItems: {
+		width: '150px'
+	},
 	gridWithBorder: {
 		borderImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.12) 3%, ${primary} 100%)`,
 		borderImageSlice: 1,
@@ -33,9 +39,6 @@ const styles = theme => ({
 	},
 	highlightedText: {
 		color: primary
-	},
-	resumeBoxItem: {
-		width: '150px'
 	}
 });
 
@@ -82,7 +85,9 @@ export const ResumeBox = withStyles(styles)(({ classes, className, itemSets = []
 			<Grid
 				item
 				key={idx}
-				className={`${classes.resumeBoxItem} ${idx ? classes.gridWithBorder : null}`}
+				className={`${idx ? classes.gridWithBorder : null} ${
+					itemSets.length === 4 ? classes.fourItems : classes.threeItems
+				}`}
 			>
 				<ResumeTable items={set} />
 			</Grid>
