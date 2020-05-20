@@ -32,6 +32,9 @@ const styles = theme => ({
 	},
 	highlightedText: {
 		color: primary
+	},
+	resumeBoxItem: {
+		width: '150px'
 	}
 });
 
@@ -74,7 +77,11 @@ export const ResumeBox = withStyles(styles)(({ classes, className, itemSets = []
 		className={classNames(classes.resumeBox, className)}
 	>
 		{itemSets.map((set, idx) => (
-			<Grid item key={idx} className={idx ? classes.gridWithBorder : null}>
+			<Grid
+				item
+				key={idx}
+				className={`${classes.resumeBoxItem} ${idx ? classes.gridWithBorder : null}`}
+			>
 				<ResumeTable items={set} />
 			</Grid>
 		))}
