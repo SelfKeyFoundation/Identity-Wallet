@@ -87,28 +87,28 @@ const LoansDetailsHighlights = withStyles(styles)(({ classes, item }) => (
 				</div>
 				{item.data.maxLoanLending && (
 					<div>
-						<Typography variant="h5">Maximum Loan Amount (Lending):</Typography>
+						<Typography variant="h5">Max Loan Amount (Lending):</Typography>
 						<Typography variant="body2">{item.data.maxLoanLending}</Typography>
 					</div>
 				)}
 
 				{item.data.maxLoanBorrowing && (
 					<div>
-						<Typography variant="h5">Maximum Loan Amount (Borrowing):</Typography>
+						<Typography variant="h5">Max Loan Amount (Borrowing):</Typography>
 						<Typography variant="body2">{item.data.maxLoanBorrowing}</Typography>
 					</div>
 				)}
 
 				{item.data.maxLoanTermLending && (
 					<div>
-						<Typography variant="h5">Maximum Loan Term (Lending):</Typography>
+						<Typography variant="h5">Max Loan Term (Lending):</Typography>
 						<Typography variant="body2">{item.data.maxLoanTermLending}</Typography>
 					</div>
 				)}
 
 				{item.data.maxLoanTermLending && (
 					<div>
-						<Typography variant="h5">Maximum Loan Term (Borrowing):</Typography>
+						<Typography variant="h5">Max Loan Term (Borrowing):</Typography>
 						<Typography variant="body2">{item.data.maxLoanTermBorrowing}</Typography>
 					</div>
 				)}

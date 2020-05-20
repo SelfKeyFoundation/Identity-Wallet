@@ -6,24 +6,14 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import {
-	LargeTableHeadRow,
-	Tag /* TagTableCell, Tag, KeyTooltip, InfoTooltip */
-} from 'selfkey-ui';
+import { LargeTableHeadRow, Tag } from 'selfkey-ui';
 import DetailsButton from '../../bank-accounts/common/details-button';
 
 const styles = theme => ({
-	table: {
-		'& td': {
-			padding: '0 20px'
-		},
-		'& th': {
-			padding: '0 20px'
-		}
-	},
 	logoCell: {
 		'& img': {
-			width: '36px'
+			width: '30px',
+			borderRadius: '5px'
 		}
 	},
 	tableHeaderRow: {
