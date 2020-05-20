@@ -32,7 +32,8 @@ const styles = theme => ({
 		},
 		'& .MuiSlider-markLabelActive': {
 			top: '26px',
-			background: '#262f39'
+			background: '#262f39',
+			zIndex: '1'
 		}
 	},
 	selectTokens: {
@@ -197,13 +198,13 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 			return;
 		}
 
-		// Convert to USD
+		// Convert to USD (airtable data is in USD)
 		const convertedAmount = convertCurrency(amount, currency, fiatRates);
 
 		// Filter correct type (Lending or Borrowing)
 		const inventoryByType = this.filterLoanType(inventory, type);
 
-		// Filters offers with min and max Loan
+		// Filters offers outside of min and max loan values
 		let results = inventoryByType.filter(offer => {
 			return (
 				(Number(offer.data.maxLoan.replace(/[^0-9.-]+/g, '')) >= +convertedAmount ||
@@ -212,7 +213,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 			);
 		});
 
-		// Filters loan term
+		// Filter and remove offers with loan term < user selected period
 		results = results.filter(offer => {
 			return Number(offer.data.maxLoanTerm.replace(/[^0-9.-]+/g, '')) >= period;
 		});
@@ -252,11 +253,13 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 	generateMarks = ({ max, min, period }) => {
 		const marks = [];
 		marks.push({ value: min, label: `${min}` });
-		marks.push({ value: max, label: `${max} MO` });
-		if (period !== max && period !== min) {
+		if (period !== min) {
 			marks.push({ value: period, label: `${period} MO` });
 		}
-
+		// Avoid overlapping marker
+		if (max - period > 3) {
+			marks.push({ value: max, label: `${max} MO` });
+		}
 		return marks;
 	};
 
