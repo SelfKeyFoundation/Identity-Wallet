@@ -69,7 +69,7 @@ const LoansFilters = withStyles(styles)(
 			<Grid
 				id="loans-filter"
 				container
-				direction="fow"
+				direction="row"
 				justify="flex-start"
 				spacing={5}
 				className={classes.container}
