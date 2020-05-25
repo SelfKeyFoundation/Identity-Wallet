@@ -192,7 +192,7 @@ class Terms extends PureComponent {
 							you are responsible for safeguarding the private key to your Ethereum
 							address, accessed via your SelfKey Wallet. SelfKey will not be liable
 							for any losses due to any situation in which a private key is lost,
-							divulged, destroyed or otherwise compromised
+							divulged, destroyed or otherwise compromised.
 						</Typography>
 						<Typography variant="h3" paragraph>
 							4) INDEMNITY
@@ -333,7 +333,7 @@ class Terms extends PureComponent {
 							not settled by you and SelfKey within 30 days from the date that either
 							party notifies the other party in writing of the Dispute shall be
 							referred to and finally settled by arbitration in accordance with the
-							provisions of Nevis Arbitration Law, 2012.Further, the parties hereby
+							provisions of Nevis Arbitration Law, 2012. Further, the parties hereby
 							agree that:
 						</Typography>
 						<List>
@@ -342,7 +342,7 @@ class Terms extends PureComponent {
 							<ListItem>The number of arbitrators will be three;</ListItem>
 							<ListItem>
 								If the parties do not agree on the arbitrator to be appointed within
-								30 Daysof the Dispute proceeding to arbitration, the arbitrator is
+								30 Days of the Dispute proceeding to arbitration, the arbitrator is
 								to be appointed by the Grand Court of Nevis;
 							</ListItem>
 							<ListItem>
@@ -472,7 +472,7 @@ class Terms extends PureComponent {
 									onChange={this.toogleCrashReportAgreement}
 								/>
 							}
-							label="I voluntarily agree to anonymously share crash report &#38; analytics data with the SelfKey Wallet LLC. This information will be used to improve the performance of the SelfKey Identity Wallet. The sharing of crash reports and analytics data is not mandatory and users may opt-out if they choose to not share this information."
+							label="You agree to share basic data and analytics to help SelfKey improve the SelfKey wallet application. This information is non-personal identifiable information, and limited to general usage of wallet, (for example, where a user got stuck in a purchasing processs)"
 						/>
 						<Typography variant="h3" paragraph>
 							19) AFFILIATE FEES
