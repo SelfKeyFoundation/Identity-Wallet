@@ -48,6 +48,9 @@ const styles = theme => ({
 			zIndex: '1'
 		}
 	},
+	fixedTokensContainer: {
+		display: 'inline-block'
+	},
 	selectTokens: {
 		minWidth: '11em',
 		float: 'right'
@@ -312,7 +315,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 									<Typography variant="overline" gutterBottom>
 										My Crypto
 									</Typography>
-									<div>
+									<div className={classes.fixedTokensContainer}>
 										{FIXED_TOKENS.map(token => (
 											<ToggleButton
 												key={token}
