@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import { handlePassword, renderPasswordStrength } from './password-util';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import { createWalletOperations } from 'common/create-wallet';
 import { Popup } from '../../../common';
 
@@ -69,10 +70,6 @@ const styles = theme => ({
 	}
 });
 
-const createPasswordConfirmationLink = props => (
-	<Link to="/createPasswordConfirmation" {...props} />
-);
-
 const gotBackHome = props => <Link to="/home" {...props} />;
 
 class Password extends PureComponent {
@@ -85,6 +82,7 @@ class Password extends PureComponent {
 
 	handleNext = () => {
 		this.props.dispatch(createWalletOperations.setPasswordAction(this.state.password));
+		this.props.dispatch(push('/createPasswordConfirmation'));
 	};
 
 	render() {
@@ -118,6 +116,11 @@ class Password extends PureComponent {
 							value={this.state.password}
 							onChange={e => this.setState(handlePassword(e, this.state))}
 							className={classes.passwordInput}
+							onKeyUp={event => {
+								if (event.keyCode === 13) {
+									this.handleNext();
+								}
+							}}
 						/>
 						<Grid container className={classes.maskContainer}>
 							<div className={classes.maskElement} />
@@ -135,7 +138,6 @@ class Password extends PureComponent {
 						<Button
 							id="pwdNext"
 							variant="contained"
-							component={createPasswordConfirmationLink}
 							disabled={this.state.password === ''}
 							onClick={this.handleNext}
 							className={classes.next}

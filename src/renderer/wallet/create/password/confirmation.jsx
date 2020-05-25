@@ -96,6 +96,11 @@ class PasswordConfirmation extends PureComponent {
 							value={this.state.password}
 							onChange={e => this.setState(handlePassword(e, this.state))}
 							className={classes.passwordInput}
+							onKeyUp={event => {
+								if (event.keyCode === 13) {
+									this.handleNext();
+								}
+							}}
 						/>
 						{this.state.error !== '' && (
 							<Typography variant="subtitle2" color="error" gutterBottom>
