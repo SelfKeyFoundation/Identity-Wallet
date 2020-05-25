@@ -19,7 +19,19 @@ import { LoansCalculatorLendTable } from './lend-table';
 
 const styles = theme => ({
 	container: {
-		padding: '30px'
+		padding: '30px',
+		border: '1px solid #303C49',
+		'& .MuiToggleButton-root': {
+			borderRadius: '0px'
+		},
+		'& div > button.MuiToggleButton-root:first-child': {
+			borderBottomLeftRadius: '2px',
+			borderTopLeftRadius: '2px'
+		},
+		'& div > button.MuiToggleButton-root:last-child': {
+			borderBottomRightRadius: '2px',
+			borderTopRightRadius: '2px'
+		}
 	},
 	gridCell: {
 		width: '400px',
@@ -41,7 +53,9 @@ const styles = theme => ({
 		float: 'right'
 	},
 	resultsTableContainer: {
-		marginTop: '20px'
+		marginTop: '20px',
+		width: '100%',
+		overflowX: 'scroll'
 	},
 	sourceInput: {
 		border: '1px solid #384656',
@@ -268,160 +282,177 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 		const { type, period, amount, selectedToken, repayment, currencyIndex } = this.state;
 		const currency = CURRENCIES[currencyIndex];
 		return (
-			<div className={classes.container}>
-				<Grid container direction="column" justify="flex-start" spacing={4}>
-					<Grid item>
-						<Typography variant="overline" gutterBottom>
-							I want to
-						</Typography>
-						<ToggleButton
-							value="checked"
-							selected={type === 'borrowing'}
-							onChange={this.onToggleType}
-						>
-							<Typography variant="h5">Borrow</Typography>
-						</ToggleButton>
-						<ToggleButton
-							value="checked"
-							selected={type === 'lending'}
-							onChange={this.onToggleType}
-						>
-							<Typography variant="h5">Lend</Typography>
-						</ToggleButton>
-					</Grid>
-					<Grid item>
-						<Grid container direction="row" justify="flex-start" spacing={8}>
-							<Grid item className={classes.gridCell}>
-								<Typography variant="overline" gutterBottom>
-									My Crypto
-								</Typography>
-								{FIXED_TOKENS.map(token => (
-									<ToggleButton
-										key={token}
-										value="checked"
-										selected={selectedToken === token}
-										onChange={() => this.onTokenChange(token)}
-									>
-										<Typography variant="h5">{token}</Typography>
-									</ToggleButton>
-								))}
-								<Select
-									name="asset"
-									className={classes.selectTokens}
-									IconComponent={KeyboardArrowDown}
-									input={<Input disableUnderline />}
-									value={
-										FIXED_TOKENS.includes(selectedToken) ? '' : selectedToken
-									}
-									displayEmpty
-									onChange={e => this.onTokenChange(e.target.value)}
+			<React.Fragment>
+				<div className={classes.container}>
+					<Grid container direction="column" justify="flex-start" spacing={4}>
+						<Grid item>
+							<Typography variant="overline" gutterBottom>
+								I want to
+							</Typography>
+							<div>
+								<ToggleButton
+									value="checked"
+									selected={type === 'borrowing'}
+									onChange={this.onToggleType}
 								>
-									<MenuItem key="empty" value="" disabled>
-										<Typography variant="subtitle1" color="textSecondary">
-											Other...
-										</Typography>
-									</MenuItem>
-									{this.availableTokens().map(token => (
-										<MenuItem key={token} value={token}>
-											{token}
-										</MenuItem>
-									))}
-								</Select>
-							</Grid>
-							<Grid item className={classes.gridCell}>
-								<Typography variant="overline" gutterBottom>
-									Loan Amount
-								</Typography>
-								<div className={classes.loanAmount}>
-									<Input
-										type="text"
-										value={amount}
-										placeholder="0.00"
-										onChange={this.onAmountChange}
-										className={classes.amountInput}
-									/>
-									<Button
-										variant="outlined"
-										size="large"
-										className={classes.sourceInput}
-										onClick={this.onCurrencyChange}
-									>
-										{currency}
-										<TransferIcon />
-									</Button>
-								</div>
-							</Grid>
+									<Typography variant="h5">Borrow</Typography>
+								</ToggleButton>
+								<ToggleButton
+									value="checked"
+									selected={type === 'lending'}
+									onChange={this.onToggleType}
+								>
+									<Typography variant="h5">Lend</Typography>
+								</ToggleButton>
+							</div>
 						</Grid>
-					</Grid>
-					<Grid item>
-						<Grid container direction="row" justify="flex-start" spacing={8}>
-							<Grid item className={classes.gridCell}>
-								<Typography variant="overline" gutterBottom>
-									Loan Period
-								</Typography>
-								<Slider
-									value={period}
-									min={this.minPeriod()}
-									max={this.maxPeriod()}
-									onChange={this.onPeriodChange}
-									step="1"
-									marks={this.generateMarks({
-										max: this.maxPeriod(),
-										min: this.minPeriod(),
-										period
-									})}
-									valueLabelDisplay="off"
-									aria-labelledby="range-slider"
-								/>
-							</Grid>
-							<Grid item className={classes.gridCell}>
-								<div>
+						<Grid item>
+							<Grid container direction="row" justify="flex-start" spacing={8}>
+								<Grid item className={classes.gridCell}>
 									<Typography variant="overline" gutterBottom>
-										Repayment
-										<KeyTooltip
-											interactive
-											placement="top-start"
-											className={classes.tooltip}
-											title={
-												<React.Fragment>
-													<span>
-														Principal and interest loans require you to
-														pay off part of the principle loan amount as
-														well as cover the interest repayments
-													</span>
-													<TooltipArrow />
-												</React.Fragment>
-											}
-										>
-											<IconButton aria-label="Info">
-												<InfoTooltip />
-											</IconButton>
-										</KeyTooltip>
+										My Crypto
 									</Typography>
-								</div>
-								<ToggleButton
-									value="checked"
-									selected={repayment === 'interest'}
-									onChange={this.onToggleRepayment}
-								>
-									<Typography variant="h5">Interest</Typography>
-								</ToggleButton>
-								<ToggleButton
-									value="checked"
-									selected={repayment === 'interest + principle'}
-									onChange={this.onToggleRepayment}
-								>
-									<Typography variant="h5">Interest + Principle</Typography>
-								</ToggleButton>
+									<div>
+										{FIXED_TOKENS.map(token => (
+											<ToggleButton
+												key={token}
+												value="checked"
+												selected={selectedToken === token}
+												onChange={() => this.onTokenChange(token)}
+											>
+												<Typography variant="h5">{token}</Typography>
+											</ToggleButton>
+										))}
+									</div>
+									<Select
+										name="asset"
+										className={classes.selectTokens}
+										IconComponent={KeyboardArrowDown}
+										input={<Input disableUnderline />}
+										value={
+											FIXED_TOKENS.includes(selectedToken)
+												? ''
+												: selectedToken
+										}
+										displayEmpty
+										onChange={e => this.onTokenChange(e.target.value)}
+									>
+										<MenuItem key="empty" value="" disabled>
+											<Typography variant="subtitle1" color="textSecondary">
+												Other...
+											</Typography>
+										</MenuItem>
+										{this.availableTokens().map(token => (
+											<MenuItem key={token} value={token}>
+												{token}
+											</MenuItem>
+										))}
+									</Select>
+								</Grid>
+								<Grid item className={classes.gridCell}>
+									<Typography variant="overline" gutterBottom>
+										Loan Amount
+									</Typography>
+									<div className={classes.loanAmount}>
+										<Input
+											type="text"
+											value={amount}
+											placeholder="0.00"
+											onChange={this.onAmountChange}
+											className={classes.amountInput}
+										/>
+										<Button
+											variant="outlined"
+											size="large"
+											className={classes.sourceInput}
+											onClick={this.onCurrencyChange}
+										>
+											{currency}
+											<TransferIcon />
+										</Button>
+									</div>
+								</Grid>
 							</Grid>
 						</Grid>
+						<Grid item>
+							<Grid container direction="row" justify="flex-start" spacing={8}>
+								<Grid item className={classes.gridCell}>
+									<Typography variant="overline" gutterBottom>
+										Loan Period
+									</Typography>
+									<Slider
+										value={period}
+										min={this.minPeriod()}
+										max={this.maxPeriod()}
+										onChange={this.onPeriodChange}
+										step="1"
+										marks={this.generateMarks({
+											max: this.maxPeriod(),
+											min: this.minPeriod(),
+											period
+										})}
+										valueLabelDisplay="off"
+										aria-labelledby="range-slider"
+									/>
+								</Grid>
+								<Grid item className={classes.gridCell}>
+									<div>
+										<Typography variant="overline" gutterBottom>
+											Repayment
+											<KeyTooltip
+												interactive
+												placement="top-start"
+												className={classes.tooltip}
+												title={
+													<React.Fragment>
+														<span>
+															Principal and interest loans require you
+															to pay off part of the principle loan
+															amount as well as cover the interest
+															repayments
+														</span>
+														<TooltipArrow />
+													</React.Fragment>
+												}
+											>
+												<IconButton aria-label="Info">
+													<InfoTooltip />
+												</IconButton>
+											</KeyTooltip>
+										</Typography>
+									</div>
+									<div>
+										<ToggleButton
+											value="checked"
+											selected={repayment === 'interest'}
+											onChange={this.onToggleRepayment}
+										>
+											<Typography variant="h5">Interest</Typography>
+										</ToggleButton>
+										<ToggleButton
+											value="checked"
+											selected={repayment === 'interest + principle'}
+											onChange={this.onToggleRepayment}
+										>
+											<Typography variant="h5">
+												Interest + Principle
+											</Typography>
+										</ToggleButton>
+									</div>
+								</Grid>
+							</Grid>
+						</Grid>
+						<Grid item>
+							<Button
+								variant="contained"
+								size="large"
+								onClick={this.onCalculateClick}
+							>
+								Calculate
+							</Button>
+						</Grid>
 					</Grid>
-					<Grid item>
-						<Button variant="contained" size="large" onClick={this.onCalculateClick}>
-							Calculate
-						</Button>
-					</Grid>
-				</Grid>
+				</div>
 				<div className={classes.resultsTableContainer}>
 					{type === 'borrowing' && (
 						<LoansCalculatorBorrowTable
@@ -438,7 +469,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 						/>
 					)}
 				</div>
-			</div>
+			</React.Fragment>
 		);
 	}
 }
