@@ -16,7 +16,8 @@ import {
 	Grid,
 	Button,
 	Typography,
-	Divider
+	Divider,
+	FormControl
 } from '@material-ui/core';
 import { appOperations, appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
@@ -364,24 +365,30 @@ class TransactionSendBoxContainer extends PureComponent {
 		return (
 			<TransactionBox closeAction={this.handleCancelAction} title={title}>
 				<div className={classes.tokenBottomSpace}>
-					<InputTitle title="Token" />
-					<Select
-						className={classes.cryptoSelect}
-						value={this.state.cryptoCurrency}
-						onChange={e => this.handleCryptoCurrencyChange(e)}
-						name="cryptoCurrency"
-						disableUnderline
-						displayEmpty
-						IconComponent={SelectDropdownIcon}
-						input={<Input disableUnderline />}
-					>
-						<MenuItem value="custom" disabled>
-							<Typography variant="subtitle1" color="textSecondary">
-								Choose...
-							</Typography>
-						</MenuItem>
-						{this.renderSelectTokenItems()}
-					</Select>
+					<FormControl variant="filled" fullWidth>
+						<InputTitle title="Token" />
+						<Select
+							className={classes.cryptoSelect}
+							value={this.state.cryptoCurrency}
+							onChange={e => this.handleCryptoCurrencyChange(e)}
+							name="cryptoCurrency"
+							disableUnderline
+							displayEmpty
+							IconComponent={SelectDropdownIcon}
+							input={<Input disableUnderline />}
+						>
+							<MenuItem value="custom">
+								<Typography
+									className="choose"
+									variant="subtitle1"
+									color="textSecondary"
+								>
+									Choose...
+								</Typography>
+							</MenuItem>
+							{this.renderSelectTokenItems()}
+						</Select>
+					</FormControl>
 				</div>
 				{this.state.cryptoCurrency !== 'custom' ? (
 					<div className={classes.tabsWrap}>

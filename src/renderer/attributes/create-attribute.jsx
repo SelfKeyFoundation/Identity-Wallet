@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import React, { PureComponent } from 'react';
-import { Divider, Button, Grid, Select, Typography, Input } from '@material-ui/core';
+import { Divider, Button, Grid, Select, Typography, Input, FormControl } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { identityAttributes, jsonSchema } from 'common/identity/utils';
 import Form from 'react-jsonschema-form-material-theme';
 import transformErrors from './transform-errors';
 import { Popup } from '../common/popup';
-import { KeyboardArrowDown } from '@material-ui/icons';
 import { canCreate } from '../corporate/common/common-helpers';
+import { SelectDropdownIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	section1: { marginBottom: '10px' },
@@ -30,6 +30,11 @@ const styles = theme => ({
 		'& > div:first-of-type': {
 			background: 'linear-gradient(135deg, rgba(43,53,64,1) 0%, rgba(30,38,46,1) 100%)',
 			opacity: '1 !important'
+		}
+	},
+	disabledStyle: {
+		'& div': {
+			color: '#697C95 '
 		}
 	}
 });
@@ -169,27 +174,34 @@ class CreateAttributeComponent extends PureComponent {
 					<Typography variant="overline" className={classes.label}>
 						{subtitle}
 					</Typography>
-					<Select
-						native
+					<FormControl
+						variant="filled"
 						fullWidth
-						value={typeId}
-						onChange={this.handleFieldChange('typeId')}
-						displayEmpty
-						IconComponent={KeyboardArrowDown}
+						className={
+							typeId === -1 || typeId === undefined ? classes.disabledStyle : null
+						}
 					>
-						<option value={-1} className={classes.selectItem}>
-							Choose...
-						</option>
-						{types.map(option => (
-							<option
-								key={option.id}
-								value={option.id}
-								className={classes.selectItem}
-							>
-								{option.content.title}
-							</option>
-						))}
-					</Select>
+						<Select
+							native
+							value={typeId}
+							onChange={this.handleFieldChange('typeId')}
+							displayEmpty
+							disableUnderline
+							IconComponent={SelectDropdownIcon}
+							input={<Input disableUnderline />}
+						>
+							<option value={-1}>Choose...</option>
+							{types.map(option => (
+								<option
+									key={option.id}
+									value={option.id}
+									className={classes.selectItem}
+								>
+									{option.content.title}
+								</option>
+							))}
+						</Select>
+					</FormControl>
 					<Divider className={classes.divider} />
 					{this.state.typeId > -1 && (
 						<React.Fragment>

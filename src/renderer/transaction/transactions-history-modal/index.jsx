@@ -389,8 +389,12 @@ class TransactionsHistoryModal extends PureComponent {
 										autoWidth
 										className={classes.filterInput}
 									>
-										<MenuItem value={-1} disabled className={classes.dropdown}>
-											<Typography variant="subtitle1" color="textSecondary">
+										<MenuItem value={-1} className={classes.dropdown}>
+											<Typography
+												className="choose"
+												variant="subtitle1"
+												color="textSecondary"
+											>
 												Choose...
 											</Typography>
 										</MenuItem>

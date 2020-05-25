@@ -18911,9 +18911,9 @@ react-is@^16.12.0, react-is@^16.6.0, react-is@^16.7.0, react-is@^16.8.0, react-i
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#463a0c8a10147173cd57d3faae12f8583a13bb1f":
+"react-jsonschema-form-material-theme@https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#e8356d2037b527f7b0a8433f20c476b6e501d70e":
   version "0.0.1"
-  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#463a0c8a10147173cd57d3faae12f8583a13bb1f"
+  resolved "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#e8356d2037b527f7b0a8433f20c476b6e501d70e"
   dependencies:
     ajv "6.5.5"
     core-js "2.5.7"
@@ -20305,9 +20305,9 @@ select@^1.1.2:
   resolved "https://registry.yarnpkg.com/select/-/select-1.1.2.tgz#0e7350acdec80b1108528786ec1d4418d11b396d"
   integrity sha1-DnNQrN7ICxEIUoeG7B1EGNEbOW0=
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#9dce116d02ff0df17fff069e114019d80bde399e":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#0c9ed6a855cc2683f13d0306817c558f8ac523ff":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#9dce116d02ff0df17fff069e114019d80bde399e"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#0c9ed6a855cc2683f13d0306817c558f8ac523ff"
   dependencies:
     "@material-ui/core" "4.9.9"
     "@material-ui/icons" "4.9.1"
