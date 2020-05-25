@@ -1,6 +1,8 @@
 import Token from './token';
 import TestDb from '../db/test-db';
-import initialTokens from 'main/assets/data/eth-tokens.json';
+import EthTokens from 'main/assets/data/eth-tokens.json';
+
+const initialTokens = EthTokens.filter(t => t.networkId === 1);
 
 describe('Token model', () => {
 	const testItem = {
@@ -42,7 +44,7 @@ describe('Token model', () => {
 	it('findAll', async () => {
 		let all = await Token.findAll();
 		// imit KI token from results
-		const tokenLength = initialTokens.length - 1;
+		const tokenLength = initialTokens.length;
 		expect(all.length).toBe(tokenLength);
 		await Token.create(testItem);
 		await Token.create(testItem2);

@@ -7,9 +7,10 @@ import * as EthUtil from 'ethereumjs-util';
 
 const log = new Logger('wallet-service');
 export class WalletService {
-	constructor({ web3Service, config }) {
+	constructor({ web3Service, config, walletTokenService }) {
 		this.web3Service = web3Service;
 		this.config = config;
+		this.walletTokenService = walletTokenService;
 	}
 
 	getWalletKeystorePath(address, walletsPath = null) {
@@ -77,6 +78,8 @@ export class WalletService {
 			profile: 'local'
 		});
 
+		await this.walletTokenService.populateWalletWithPopularTokens(wallet);
+
 		const newWallet = {
 			...wallet,
 			privateKey: account.privateKey
@@ -130,6 +133,7 @@ export class WalletService {
 				keystoreFilePath: keystoreFileFullPath,
 				profile: 'local'
 			});
+			await this.walletTokenService.populateWalletWithPopularTokens(wallet);
 		}
 
 		const newWallet = {
@@ -155,6 +159,7 @@ export class WalletService {
 				address: account.address,
 				profile: 'local'
 			});
+			await this.walletTokenService.populateWalletWithPopularTokens(wallet);
 		}
 		const newWallet = {
 			...wallet,
@@ -174,6 +179,7 @@ export class WalletService {
 				profile,
 				path: hwPath
 			});
+			await this.walletTokenService.populateWalletWithPopularTokens(wallet);
 		}
 
 		return wallet;
