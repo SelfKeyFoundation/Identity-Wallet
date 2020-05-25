@@ -138,8 +138,12 @@ const CompanyInformation = withStyles(styles)(props => {
 										IconComponent={SelectDropdownIcon}
 										input={<Input disableUnderline />}
 									>
-										<MenuItem value="" disabled>
-											<Typography variant="subtitle1" color="textSecondary">
+										<MenuItem value="">
+											<Typography
+												className="choose"
+												variant="subtitle1"
+												color="textSecondary"
+											>
 												Choose...
 											</Typography>
 										</MenuItem>
@@ -184,11 +188,16 @@ const CompanyInformation = withStyles(styles)(props => {
 										name="entitytype"
 										error={errors.entityType}
 										disableUnderline
+										autoWidth
 										IconComponent={SelectDropdownIcon}
 										input={<Input disableUnderline />}
 									>
-										<MenuItem value="" disabled>
-											<Typography variant="subtitle1" color="textSecondary">
+										<MenuItem value="">
+											<Typography
+												className="choose"
+												variant="subtitle1"
+												color="textSecondary"
+											>
 												Choose...
 											</Typography>
 										</MenuItem>

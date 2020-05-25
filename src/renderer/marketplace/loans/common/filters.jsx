@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Grid, Input, Select, MenuItem, Slider } from '@material-ui/core';
+import { Typography, Grid, Input, Select, MenuItem, Slider, FormControl } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import { SelectDropdownIcon } from 'selfkey-ui';
@@ -112,24 +112,32 @@ const LoansFilters = withStyles(styles)(
 					<Typography variant="overline" gutterBottom>
 						Assets Accepted
 					</Typography>
-					<Select
-						name="asset"
-						className={classes.selectTokens}
-						value={selectedToken}
-						onChange={onTokenFilterChange}
-						IconComponent={SelectDropdownIcon}
-						input={<Input disableUnderline />}
-						displayEmpty
-					>
-						<MenuItem key="empty" value="">
-							Choose...
-						</MenuItem>
-						{tokens.map(token => (
-							<MenuItem key={token} value={token}>
-								{token}
+					<FormControl variant="filled">
+						<Select
+							name="asset"
+							className={classes.selectTokens}
+							value={selectedToken}
+							onChange={onTokenFilterChange}
+							IconComponent={SelectDropdownIcon}
+							input={<Input disableUnderline />}
+							displayEmpty
+						>
+							<MenuItem key="empty" value="">
+								<Typography
+									className="choose"
+									variant="subtitle1"
+									color="textSecondary"
+								>
+									Choose...
+								</Typography>
 							</MenuItem>
-						))}
-					</Select>
+							{tokens.map(token => (
+								<MenuItem key={token} value={token}>
+									{token}
+								</MenuItem>
+							))}
+						</Select>
+					</FormControl>
 				</Grid>
 			</Grid>
 		);
