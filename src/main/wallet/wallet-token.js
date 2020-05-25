@@ -1,5 +1,6 @@
 import BaseModel from '../common/base-model';
 import { Model, transaction } from 'objection';
+import CONFIG from 'common/config';
 
 const TABLE_NAME = 'wallet_tokens';
 
@@ -92,6 +93,7 @@ export class WalletToken extends BaseModel {
 			)
 			.leftJoin('tokens', 'tokenId', 'tokens.id')
 			.leftJoin('token_prices', 'tokens.symbol', 'token_prices.symbol')
+			.where('tokens.networkId', CONFIG.chainId)
 			.where(where);
 	}
 
