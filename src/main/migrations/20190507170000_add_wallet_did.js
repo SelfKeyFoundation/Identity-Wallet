@@ -11,7 +11,9 @@ exports.up = async (knex, Promise) => {
 };
 
 exports.down = async (knex, Promise) => {
-	await knex.schema.table('wallets', t => {
-		t.dropColumn('did');
-	});
+	if (await knex.schema.hasColumn('wallets', 'did')) {
+		await knex.schema.table('wallets', t => {
+			t.dropColumn('did');
+		});
+	}
 };

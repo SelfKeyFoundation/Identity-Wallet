@@ -56,6 +56,13 @@
 		"type": "erc-20"
 	},
 	{
+		"address": "0x499990db50b34687cdafb2c8dabae4e99d6f38a7",
+		"symbol": "ropADX",
+		"decimal": 4,
+		"networkId": 3,
+		"type": "erc-20"
+	},
+	{
 		"address": "0x27dce1ec4d3f72c3e457cc50354f1f975ddef488",
 		"symbol": "AIR",
 		"decimal": 8,
