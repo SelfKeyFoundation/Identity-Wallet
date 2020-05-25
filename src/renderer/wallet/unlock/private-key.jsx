@@ -127,6 +127,11 @@ class PrivateKey extends PureComponent {
 											}
 											type={this.state.inputType}
 											onChange={this.handlePrivateKeyChange}
+											onKeyUp={event => {
+												if (event.keyCode === 13) {
+													this.handleUnlockAction();
+												}
+											}}
 										/>
 										{this.state.error !== '' && (
 											<Typography
