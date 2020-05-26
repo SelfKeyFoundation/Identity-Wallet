@@ -138,12 +138,6 @@ class Main extends PureComponent {
 							/>
 						)}
 						{isIndividual && (
-							<Redirect
-								from={`${match.path}/corporate`}
-								to={`${match.path}/individual`}
-							/>
-						)}
-						{isIndividual && (
 							<Route
 								path={`${match.path}/individual`}
 								component={IndividualContainer}
@@ -155,12 +149,8 @@ class Main extends PureComponent {
 								to={`${match.path}/corporate`}
 							/>
 						)}
-						{isCorporate && (
-							<Route
-								path={`${match.path}/corporate`}
-								component={CorporateContainer}
-							/>
-						)}
+
+						<Route path={`${match.path}/corporate`} component={CorporateContainer} />
 
 						<Route path={`${match.path}/enter-did`} component={AssociateDIDContainer} />
 						<Route path={`${match.path}/addressBookAdd`} component={AddressBookAdd} />
