@@ -158,6 +158,11 @@ class ExistingAddress extends PureComponent {
 										type="password"
 										onChange={this.handlePasswordChange}
 										placeholder="Password"
+										onKeyUp={event => {
+											if (event.keyCode === 13) {
+												this.handleUnlockAction();
+											}
+										}}
 									/>
 									{this.state.error !== '' && (
 										<Typography variant="subtitle2" color="error" gutterBottom>
