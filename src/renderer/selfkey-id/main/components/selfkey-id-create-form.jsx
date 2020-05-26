@@ -12,7 +12,7 @@ import {
 	ModalBody
 } from 'selfkey-ui';
 import { connect } from 'react-redux';
-import history from 'common/store/history';
+import { push } from 'connected-react-router';
 import { identityOperations, identitySelectors } from 'common/identity';
 import { matomoGoalTracking, matomoGoals } from 'common/matomo';
 
@@ -108,7 +108,7 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 
 	handleBackClick = evt => {
 		evt && evt.preventDefault();
-		history.getHistory().goBack();
+		this.props.dispatch(push('/main/dashboard'));
 	};
 
 	getTypeId = url => {
