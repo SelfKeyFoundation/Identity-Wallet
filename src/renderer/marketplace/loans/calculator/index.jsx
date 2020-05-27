@@ -102,7 +102,7 @@ export const convertCurrency = (amount, currency, rates) => {
 const calculateCollateral = ({ amount, token, rates, ltv }) => {
 	const rate = rates.find(r => r.symbol === token);
 	const LTV = ltv ? parseFloat(ltv) / 100 : 1;
-	const collateral = amount / (rate.priceUSD - rate.priceUSD * LTV);
+	const collateral = amount / (rate.priceUSD * LTV);
 	return `${collateral.toFixed(2)} ${rate.symbol}`;
 };
 
@@ -110,9 +110,9 @@ const calculateSimpleInterest = ({ amount, months, apr }) => {
 	const principal = parseFloat(amount);
 	const interest = parseFloat(apr) / 100 / 12;
 
-	const monthly = 0;
 	const totalInterest = principal * interest * months;
 	const total = principal + totalInterest;
+	const monthly = totalInterest / months;
 
 	return { monthly, total, totalInterest };
 };
