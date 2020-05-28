@@ -31,6 +31,9 @@ const styles = theme => ({
 		},
 		'& a': {
 			color: primary
+		},
+		'& div': {
+			lineHeight: '24px'
 		}
 	}
 });
