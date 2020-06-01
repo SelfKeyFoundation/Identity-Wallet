@@ -343,7 +343,7 @@ class Terms extends PureComponent {
 							<ListItem>
 								If the parties do not agree on the arbitrator to be appointed within
 								30 Days of the Dispute proceeding to arbitration, the arbitrator is
-								to be appointed by the Grand Court of Nevis;
+								to be appointed by the Grand Court of Nevis, and
 							</ListItem>
 							<ListItem>
 								The arbitration proceedings will be conducted in English.
@@ -472,17 +472,20 @@ class Terms extends PureComponent {
 									onChange={this.toogleCrashReportAgreement}
 								/>
 							}
-							label="You agree to share basic data and analytics to help SelfKey improve the SelfKey wallet application. This information is non-personal identifiable information, and limited to general usage of wallet, (for example, where a user got stuck in a purchasing processs)"
+							label="You agree to share basic data and analytics to help SelfKey improve the SelfKey wallet application. This information is non-personal identifiable information, and limited to general usage of wallet, (for example, where a user got stuck in a purchasing process)"
 						/>
 						<Typography variant="h3" paragraph>
 							19) AFFILIATE FEES
 						</Typography>
 						<Typography variant="body2" paragraph>
 							The SelfKey wallet may contain advertisements, sponsored content, paid
-							insertions, affiliate links or other forms of monetization. We make no
-							representations, warranties, or assurances as to the accuracy, currency
-							or completeness of the content contain on this application, our website
-							or any sites or services linked to or from the SelfKey Wallet.
+							insertions, affiliate links or other forms of monetization.
+						</Typography>
+						<Typography variant="body2" paragraph>
+							We make no representations, warranties, or assurances as to the
+							accuracy, currency or completeness of the content contain on this
+							application, our website or any sites or services linked to or from the
+							SelfKey Wallet.
 						</Typography>
 						<Typography variant="body2" paragraph>
 							You are assuming all risks, and you agree that we are not liable in any
