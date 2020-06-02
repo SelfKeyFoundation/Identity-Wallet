@@ -3,6 +3,7 @@ import { Typography, Grid, List, ListItem } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { PageLoading, sanitize } from '../../common';
 import 'flag-icon-css/css/flag-icon.css';
+import { primary } from 'selfkey-ui';
 
 const styles = theme => ({
 	countryName: {
@@ -62,7 +63,7 @@ const styles = theme => ({
 			marginBottom: '0.5em'
 		},
 		'& a': {
-			color: theme.palette.secondary.main
+			color: primary
 		}
 	}
 });
