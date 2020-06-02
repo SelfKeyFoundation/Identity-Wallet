@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { KeyPicker, SelectDropdownIcon } from 'selfkey-ui';
+import { InputTitle } from '../../common';
 
 const styles = theme => ({
 	hr: {
@@ -83,23 +84,6 @@ const styles = theme => ({
 	wizardTitle: {
 		marginBottom: '45px'
 	}
-});
-
-const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => {
-	return (
-		<div>
-			<Typography variant="overline" gutterBottom>
-				{title}
-				{optional ? (
-					<Typography variant="overline" className={classes.optional}>
-						(optional)
-					</Typography>
-				) : (
-					''
-				)}
-			</Typography>
-		</div>
-	);
 });
 
 const CompanyInformation = withStyles(styles)(props => {
