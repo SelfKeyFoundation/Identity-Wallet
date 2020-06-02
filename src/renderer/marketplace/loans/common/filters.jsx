@@ -2,6 +2,7 @@ import React from 'react';
 import { Typography, Grid, Input, Select, MenuItem, Slider, FormControl } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import { SelectDropdownIcon } from 'selfkey-ui';
 
 const styles = theme => ({
@@ -78,20 +79,21 @@ const LoansFilters = withStyles(styles)(
 					<Typography variant="overline" gutterBottom>
 						Type
 					</Typography>
-					<ToggleButton
-						value="checked"
-						selected={selectedType === 'Decentralized'}
-						onChange={() => onTypeFilterChange('Decentralized')}
+					<ToggleButtonGroup
+						exclusive
+						value=""
+						onChange={() => onTypeFilterChange(selectedType)}
 					>
-						<Typography variant="h5">P2P</Typography>
-					</ToggleButton>
-					<ToggleButton
-						value="checked"
-						selected={selectedType === 'Centralized'}
-						onChange={() => onTypeFilterChange('Centralized')}
-					>
-						<Typography variant="h5">Centralized</Typography>
-					</ToggleButton>
+						<ToggleButton
+							value="Decentralized"
+							selected={selectedType === 'Decentralized'}
+						>
+							<Typography variant="h5">P2P</Typography>
+						</ToggleButton>
+						<ToggleButton value="Centralized" selected={selectedType === 'Centralized'}>
+							<Typography variant="h5">Centralized</Typography>
+						</ToggleButton>
+					</ToggleButtonGroup>
 				</Grid>
 				<Grid item className={classes.rangeContainer}>
 					<Typography variant="overline" gutterBottom>
