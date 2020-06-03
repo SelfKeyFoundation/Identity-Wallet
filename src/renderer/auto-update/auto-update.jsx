@@ -35,7 +35,7 @@ export const AutoUpdate = withStyles(styles)(
 			releaseNotesRef.current.appendChild(root);
 		}, 100);
 		return (
-			<Popup closeAction={closeAction} open text="Software Update">
+			<Popup closeAction={closeAction} open text="Updating SelfKey Wallet" displayLogo>
 				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 					<Grid item xs={2}>
 						<DownloadIcon2 className={classes.downloadIcon} />
