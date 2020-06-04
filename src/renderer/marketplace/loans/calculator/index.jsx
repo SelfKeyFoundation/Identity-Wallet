@@ -20,18 +20,7 @@ import { LoansCalculatorLendTable } from './lend-table';
 const styles = theme => ({
 	container: {
 		padding: '30px',
-		border: '1px solid #303C49',
-		'& .MuiToggleButton-root': {
-			borderRadius: '0px'
-		},
-		'& div > button.MuiToggleButton-root:first-child': {
-			borderBottomLeftRadius: '2px',
-			borderTopLeftRadius: '2px'
-		},
-		'& div > button.MuiToggleButton-root:last-child': {
-			borderBottomRightRadius: '2px',
-			borderTopRightRadius: '2px'
-		}
+		border: '1px solid #303C49'
 	},
 	gridCell: {
 		width: '470px',
