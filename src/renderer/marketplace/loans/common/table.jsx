@@ -8,10 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
 import { MarketplaceLoansComponent } from '../common/marketplace-loans-component';
-import {
-	Tag,
-	LargeTableHeadRow /* TagTableCell, Tag, KeyTooltip, InfoTooltip */
-} from 'selfkey-ui';
+import { Tag, LargeTableHeadRow } from 'selfkey-ui';
 import { LoansFilters } from './filters';
 import DetailsButton from '../../bank-accounts/common/details-button';
 
@@ -97,7 +94,9 @@ class LoansTableComponent extends MarketplaceLoansComponent {
 
 	selectToken = selectedToken => this.setState({ selectedToken });
 
-	onTypeFilterChange = selectedType => {
+	onTypeFilterChange = (e, value) => {
+		let selectedType = value;
+		// Deselect active state
 		if (selectedType === this.state.selectedType) {
 			selectedType = '';
 		}
