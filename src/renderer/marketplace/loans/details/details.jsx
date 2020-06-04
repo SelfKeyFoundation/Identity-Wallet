@@ -19,7 +19,10 @@ const styles = theme => ({
 		width: '946px',
 		height: '100%',
 		margin: '50px auto 30px',
-		borderRadius: '4px'
+		borderRadius: '4px',
+		'@media screen and (min-width: 1230px)': {
+			width: '1140px'
+		}
 	},
 
 	title: {
@@ -431,12 +434,13 @@ class LoansDetailsComponent extends PureComponent {
 							justify="flex-start"
 							style={{ width: '100%' }}
 						>
-							<Grid item id="description" xs={12}>
+							<Grid item id="description" className={classes.fullWidth}>
 								<Grid
 									container
 									direction="row"
 									justify="space-between"
 									alignItems="flex-start"
+									spacing={7}
 								>
 									<Grid item xs={8}>
 										<Typography

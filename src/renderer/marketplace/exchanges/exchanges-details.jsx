@@ -19,7 +19,10 @@ const styles = theme => ({
 		width: '946px',
 		height: '100%',
 		margin: '50px auto 30px',
-		borderRadius: '4px'
+		borderRadius: '4px',
+		'@media screen and (min-width: 1230px)': {
+			width: '1140px'
+		}
 	},
 
 	title: {
@@ -528,7 +531,7 @@ class ExchangesDetailsComponent extends PureComponent {
 									direction="row"
 									justify="space-between"
 									alignItems="flex-start"
-									spacing={4}
+									spacing={7}
 								>
 									<Grid item xs={8}>
 										<Typography
