@@ -154,13 +154,6 @@ const styles = theme => ({
 		position: 'absolute',
 		top: '120px'
 	},
-
-	providerDescription: {
-		marginBottom: '20px',
-		textAlign: 'left',
-		marginRight: '55px'
-	},
-
 	exchange: {
 		paddingTop: '3px'
 	},
@@ -250,6 +243,9 @@ const styles = theme => ({
 	},
 	affiliateMessage: {
 		textAlign: 'left'
+	},
+	descriptionBottomSpace: {
+		marginBottom: '40px'
 	}
 });
 
@@ -433,7 +429,7 @@ class LoansDetailsComponent extends PureComponent {
 							justify="flex-start"
 							style={{ width: '100%' }}
 						>
-							<Grid item id="description" className={classes.fullWidth}>
+							<Grid item id="description" className={classes.descriptionBottomSpace}>
 								<Grid
 									container
 									direction="row"
@@ -442,10 +438,7 @@ class LoansDetailsComponent extends PureComponent {
 									spacing={7}
 								>
 									<Grid item xs={8}>
-										<Typography
-											variant="body1"
-											className={classes.providerDescription}
-										>
+										<Typography variant="body1" align="left">
 											{item.description}
 										</Typography>
 									</Grid>
