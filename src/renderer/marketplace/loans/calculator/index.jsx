@@ -57,8 +57,7 @@ const styles = theme => ({
 	},
 	resultsTableContainer: {
 		marginTop: '20px',
-		width: '100%',
-		overflowX: 'scroll'
+		width: '100%'
 	},
 	sourceInput: {
 		border: '1px solid #384656',

@@ -10,10 +10,19 @@ import { LargeTableHeadRow, Tag } from 'selfkey-ui';
 import DetailsButton from '../../bank-accounts/common/details-button';
 
 const styles = theme => ({
+	nameCell: {
+		padding: '15px 15px 15px 13px',
+		maxWidth: '220px',
+		minWidth: '100px',
+		whiteSpace: 'pre-line',
+		wordWrap: 'break-word'
+	},
 	logoCell: {
+		padding: '15px 0 15px 25px',
 		'& img': {
 			width: '30px',
-			borderRadius: '5px'
+			borderRadius: '5px',
+			display: 'flex'
 		}
 	},
 	tableHeaderRow: {
@@ -28,10 +37,7 @@ const styles = theme => ({
 	},
 	detailsCell: {
 		width: '55px',
-		color: '#00C0D9',
-		'& span': {
-			cursor: 'pointer'
-		}
+		padding: '15px'
 	}
 });
 
@@ -41,7 +47,7 @@ const LoansCalculatorLendTable = withStyles(styles)(
 			<TableHead>
 				<LargeTableHeadRow>
 					<TableCell className={classes.logoCell} />
-					<TableCell>
+					<TableCell className={classes.nameCell}>
 						<Typography variant="overline">Name</Typography>
 					</TableCell>
 					{/*
@@ -70,12 +76,16 @@ const LoansCalculatorLendTable = withStyles(styles)(
 						<TableCell className={classes.logoCell}>
 							{offer.data.logoUrl && <img src={offer.data.logoUrl} />}
 						</TableCell>
-						<TableCell>{offer.name}</TableCell>
+						<TableCell className={classes.nameCell}>
+							<Typography variant="h6">{offer.name}</Typography>
+						</TableCell>
 						{/*
 					<TableCell />
 					*/}
 						<TableCell>
-							{offer.data.type === 'Decentralized' ? 'P2P' : 'Centralized'}
+							<Typography variant="h6">
+								{offer.data.type === 'Decentralized' ? 'P2P' : 'Centralized'}
+							</Typography>
 						</TableCell>
 						<TableCell>
 							<Grid container>
@@ -87,12 +97,16 @@ const LoansCalculatorLendTable = withStyles(styles)(
 									))}
 							</Grid>
 						</TableCell>
-						<TableCell>{offer.data.interestRate}</TableCell>
 						<TableCell>
-							{offer.loanPayment.totalInterest.toLocaleString('en-US', {
-								style: 'currency',
-								currency
-							})}
+							<Typography variant="h6">{offer.data.interestRate}</Typography>
+						</TableCell>
+						<TableCell>
+							<Typography variant="h6">
+								{offer.loanPayment.totalInterest.toLocaleString('en-US', {
+									style: 'currency',
+									currency
+								})}
+							</Typography>
 						</TableCell>
 						<TableCell className={classes.detailsCell}>
 							<DetailsButton onClick={() => onDetailsClick(offer)} />

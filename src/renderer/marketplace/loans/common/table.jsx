@@ -16,10 +16,19 @@ import { LoansFilters } from './filters';
 import DetailsButton from '../../bank-accounts/common/details-button';
 
 const styles = theme => ({
+	nameCell: {
+		padding: '15px 15px 15px 13px',
+		maxWidth: '220px',
+		minWidth: '100px',
+		whiteSpace: 'pre-line',
+		wordWrap: 'break-word'
+	},
 	logoCell: {
+		padding: '15px 0 15px 25px',
 		'& img': {
 			width: '30px',
-			borderRadius: '5px'
+			borderRadius: '5px',
+			display: 'flex'
 		}
 	},
 	tableHeaderRow: {
@@ -34,10 +43,7 @@ const styles = theme => ({
 	},
 	detailsCell: {
 		width: '55px',
-		color: '#00C0D9',
-		'& span': {
-			cursor: 'pointer'
-		}
+		padding: '15px'
 	}
 });
 
@@ -153,7 +159,7 @@ class LoansTableComponent extends MarketplaceLoansComponent {
 					<TableHead>
 						<LargeTableHeadRow>
 							<TableCell className={classes.logoCell} />
-							<TableCell>
+							<TableCell className={classes.nameCell}>
 								<Typography variant="overline">Name</Typography>
 							</TableCell>
 							{/*
@@ -182,7 +188,7 @@ class LoansTableComponent extends MarketplaceLoansComponent {
 								<TableCell className={classes.logoCell}>
 									{offer.data.logoUrl && <img src={offer.data.logoUrl} />}
 								</TableCell>
-								<TableCell>
+								<TableCell className={classes.nameCell}>
 									<Typography variant="h6">{offer.name}</Typography>
 								</TableCell>
 								{/*
