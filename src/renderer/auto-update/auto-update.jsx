@@ -19,6 +19,14 @@ const styles = theme => ({
 		marginTop: '30px',
 		paddingTop: '30px',
 		borderTop: '1px solid #475768'
+	},
+	changes: {
+		fontSize: '18px',
+		lineHeight: '30px',
+		marginTop: '-10px'
+	},
+	title: {
+		marginBottom: '5px'
 	}
 });
 
@@ -35,7 +43,7 @@ export const AutoUpdate = withStyles(styles)(
 			releaseNotesRef.current.appendChild(root);
 		}, 100);
 		return (
-			<Popup closeAction={closeAction} open text="Updating SelfKey Wallet" displayLogo>
+			<Popup closeAction={closeAction} open text="Software Update" displayLogo>
 				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 					<Grid item xs={2}>
 						<DownloadIcon2 className={classes.downloadIcon} />
@@ -53,16 +61,40 @@ export const AutoUpdate = withStyles(styles)(
 								</Typography>
 							</Grid>
 							<Grid item>
-								<Typography variant="body1" gutterBottom>
+								<Typography variant="body1">
 									Selfkey Wallet {info && info.releaseName} is available now for
 									download. For security reasons please update to latest version!
 								</Typography>
 							</Grid>
 							<Grid item classes={{ item: classes.footer }}>
-								<Typography variant="h1" color="secondary" gutterBottom>
+								<Typography
+									variant="body1"
+									color="secondary"
+									className={classes.title}
+								>
 									Release Notes:
 								</Typography>
-								<div ref={releaseNotesRef} />
+								<Typography variant="body1" gutterBottom>
+									{info && info.releaseName}
+								</Typography>
+								<Typography
+									variant="body1"
+									color="secondary"
+									className={classes.title}
+								>
+									Release Date:
+								</Typography>
+								<Typography variant="body1" gutterBottom>
+									{info && info.releaseDate}
+								</Typography>
+								<Typography
+									variant="body1"
+									color="secondary"
+									className={classes.title}
+								>
+									Changes:
+								</Typography>
+								<div ref={releaseNotesRef} className={classes.changes} />
 								<div className={classes.actions}>
 									<Button
 										variant="contained"
