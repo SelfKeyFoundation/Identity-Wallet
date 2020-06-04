@@ -148,8 +148,10 @@ const styles = theme => ({
 		top: '120px'
 	},
 
-	bottomSpace: {
-		marginBottom: '20px'
+	providerDescription: {
+		marginBottom: '20px',
+		textAlign: 'left',
+		marginRight: '55px'
 	},
 
 	exchange: {
@@ -214,9 +216,7 @@ const styles = theme => ({
 			marginTop: 0
 		}
 	},
-	leftAlign: {
-		textAlign: 'left'
-	},
+
 	icon: {
 		alignItems: 'center',
 		display: 'flex',
@@ -533,9 +533,7 @@ class ExchangesDetailsComponent extends PureComponent {
 									<Grid item xs={8}>
 										<Typography
 											variant="body1"
-											className={`${classes.bottomSpace} ${
-												classes.leftAlign
-											}`}
+											className={classes.providerDescription}
 										>
 											{item.description}
 										</Typography>
