@@ -153,8 +153,7 @@ const styles = theme => ({
 
 	providerDescription: {
 		marginBottom: '20px',
-		textAlign: 'left',
-		marginRight: '55px'
+		textAlign: 'left'
 	},
 
 	exchange: {
