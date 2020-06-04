@@ -239,7 +239,10 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 
 		// Filter and remove offers with loan term < user selected period
 		results = results.filter(offer => {
-			return Number(offer.data.maxLoanTerm.replace(/[^0-9.-]+/g, '')) >= period;
+			return (
+				Number(offer.data.maxLoanTerm.replace(/[^0-9.-]+/g, '')) >= period ||
+				offer.data.maxLoanTerm === 'Unlimited'
+			);
 		});
 
 		// Filters by asset
