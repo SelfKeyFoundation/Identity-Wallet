@@ -57,8 +57,7 @@ const styles = theme => ({
 	},
 	resultsTableContainer: {
 		marginTop: '20px',
-		width: '100%',
-		overflowX: 'scroll'
+		width: '100%'
 	},
 	sourceInput: {
 		border: '1px solid #384656',
@@ -91,7 +90,15 @@ const styles = theme => ({
 const FIXED_TOKENS = ['BTC', 'ETH', 'KEY'];
 const CURRENCIES = ['USD', 'EUR', 'GBP'];
 
-export const convertCurrency = (amount, currency, rates) => {
+export const convertToUSD = (amount, currency, rates) => {
+	if (currency && rates[currency]) {
+		return amount / rates[currency];
+	} else {
+		return amount;
+	}
+};
+
+const convertToCurrency = (amount, currency, rates) => {
 	if (currency && rates[currency]) {
 		return amount * rates[currency];
 	} else {
@@ -216,7 +223,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 		}
 
 		// Convert to USD (airtable data is in USD)
-		const convertedAmount = convertCurrency(amount, currency, fiatRates);
+		const convertedAmount = convertToUSD(amount, currency, fiatRates);
 
 		// Filter correct type (Lending or Borrowing)
 		const inventoryByType = this.filterLoanType(inventory, type);
@@ -261,6 +268,24 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 					ltv: offer.data.ltv
 				});
 			}
+
+			// Exchange back to original currency
+			offer.loanPayment.monthly = convertToCurrency(
+				offer.loanPayment.monthly,
+				currency,
+				fiatRates
+			);
+			offer.loanPayment.total = convertToCurrency(
+				offer.loanPayment.total,
+				currency,
+				fiatRates
+			);
+			offer.loanPayment.totalInterest = convertToCurrency(
+				offer.loanPayment.totalInterest,
+				currency,
+				fiatRates
+			);
+
 			return offer;
 		});
 
