@@ -152,8 +152,10 @@ const styles = theme => ({
 		top: '120px'
 	},
 
-	bottomSpace: {
-		marginBottom: '20px'
+	providerDescription: {
+		marginBottom: '20px',
+		textAlign: 'left',
+		marginRight: '55px'
 	},
 
 	exchange: {
@@ -217,9 +219,6 @@ const styles = theme => ({
 		'& div:first-child': {
 			marginTop: 0
 		}
-	},
-	leftAlign: {
-		textAlign: 'left'
 	},
 	icon: {
 		alignItems: 'center',
@@ -285,7 +284,7 @@ const LoanApplyButton = withStyles(styles)(({ classes, application, onClick }) =
 	<React.Fragment>
 		<Button
 			disabled={
-				// Disabled as we don't have any Exchange integrated yet!
+				// Disabled as we don't have any Providers integrated yet
 				true ||
 				(application &&
 					[APPLICATION_REJECTED, APPLICATION_CANCELLED].includes(
@@ -441,9 +440,7 @@ class LoansDetailsComponent extends PureComponent {
 									<Grid item xs={8}>
 										<Typography
 											variant="body1"
-											className={`${classes.bottomSpace} ${
-												classes.leftAlign
-											}`}
+											className={classes.providerDescription}
 										>
 											{item.description}
 										</Typography>
