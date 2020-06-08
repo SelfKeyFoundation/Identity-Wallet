@@ -217,6 +217,10 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 		// Convert to USD (airtable data is in USD)
 		const convertedAmount = convertToUSD(amount, currency, fiatRates);
 
+		if (convertedAmount <= 0) {
+			return;
+		}
+
 		// Filter correct type (Lending or Borrowing)
 		const inventoryByType = this.filterLoanType(inventory, type);
 
