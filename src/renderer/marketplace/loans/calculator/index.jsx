@@ -99,7 +99,7 @@ const convertToCurrency = (amount, currency, rates) => {
 const calculateCollateral = ({ amount, token, rates, ltv }) => {
 	const rate = rates.find(r => r.symbol === token);
 	const LTV = ltv ? parseFloat(ltv) / 100 : 1;
-	const collateral = amount / (rate.priceUSD * LTV);
+	const collateral = (rate.priceUSD * LTV) / amount;
 	return `${collateral.toFixed(2)} ${rate.symbol}`;
 };
 
