@@ -62,6 +62,9 @@ const styles = theme => ({
 			marginLeft: '0.7em'
 		}
 	},
+	fixedHeight: {
+		minHeight: '150px'
+	},
 	loanAmount: {
 		display: 'flex',
 		alignItems: 'center'
@@ -98,8 +101,9 @@ const convertToCurrency = (amount, currency, rates) => {
 
 const calculateCollateral = ({ amount, token, rates, ltv }) => {
 	const rate = rates.find(r => r.symbol === token);
-	const LTV = ltv ? parseFloat(ltv) / 100 : 1;
-	const collateral = (rate.priceUSD * LTV) / amount;
+	let LTV = ltv ? parseFloat(ltv) / 100 : 1;
+	LTV = LTV <= 0 ? 1 : LTV;
+	const collateral = amount / (rate.priceUSD * LTV);
 	return `${collateral.toFixed(2)} ${rate.symbol}`;
 };
 
@@ -381,7 +385,13 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 							</Grid>
 						</Grid>
 						<Grid item>
-							<Grid container direction="row" justify="flex-start" spacing={8}>
+							<Grid
+								container
+								direction="row"
+								justify="flex-start"
+								spacing={8}
+								className={classes.fixedHeight}
+							>
 								<Grid item className={classes.gridCell}>
 									<Typography variant="overline" gutterBottom>
 										Loan Period
@@ -404,42 +414,47 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 								</Grid>
 
 								<Grid item className={classes.gridCell}>
-									<Typography variant="overline" gutterBottom>
-										Repayment
-										<KeyTooltip
-											interactive
-											placement="top-start"
-											className={classes.tooltip}
-											title={
-												<React.Fragment>
-													<span>
-														Principal and interest loans require you to
-														pay off part of the principle loan amount as
-														well as cover the interest repayments
-													</span>
-													<TooltipArrow />
-												</React.Fragment>
-											}
-										>
-											<IconButton aria-label="Info">
-												<InfoTooltip />
-											</IconButton>
-										</KeyTooltip>
-									</Typography>
-									<ToggleButtonGroup
-										onChange={this.onToggleRepayment}
-										exclusive
-										value={repayment}
-									>
-										<ToggleButton value="interest">
-											<Typography variant="h5">Interest</Typography>
-										</ToggleButton>
-										<ToggleButton value="interest + principle">
-											<Typography variant="h5">
-												Interest + Principle
+									{type === 'borrowing' && (
+										<React.Fragment>
+											<Typography variant="overline" gutterBottom>
+												Repayment
+												<KeyTooltip
+													interactive
+													placement="top-start"
+													className={classes.tooltip}
+													title={
+														<React.Fragment>
+															<span>
+																Principal and interest loans require
+																you to pay off part of the principle
+																loan amount as well as cover the
+																interest repayments
+															</span>
+															<TooltipArrow />
+														</React.Fragment>
+													}
+												>
+													<IconButton aria-label="Info">
+														<InfoTooltip />
+													</IconButton>
+												</KeyTooltip>
 											</Typography>
-										</ToggleButton>
-									</ToggleButtonGroup>
+											<ToggleButtonGroup
+												onChange={this.onToggleRepayment}
+												exclusive
+												value={repayment}
+											>
+												<ToggleButton value="interest">
+													<Typography variant="h5">Interest</Typography>
+												</ToggleButton>
+												<ToggleButton value="interest + principle">
+													<Typography variant="h5">
+														Interest + Principle
+													</Typography>
+												</ToggleButton>
+											</ToggleButtonGroup>
+										</React.Fragment>
+									)}
 								</Grid>
 							</Grid>
 						</Grid>
