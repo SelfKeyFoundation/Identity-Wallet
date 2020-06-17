@@ -19,7 +19,10 @@ const styles = theme => ({
 		width: '946px',
 		height: '100%',
 		margin: '50px auto 30px',
-		borderRadius: '4px'
+		borderRadius: '4px',
+		'@media screen and (min-width: 1230px)': {
+			width: '1140px'
+		}
 	},
 
 	title: {
@@ -151,11 +154,6 @@ const styles = theme => ({
 		position: 'absolute',
 		top: '120px'
 	},
-
-	bottomSpace: {
-		marginBottom: '20px'
-	},
-
 	exchange: {
 		paddingTop: '3px'
 	},
@@ -218,9 +216,6 @@ const styles = theme => ({
 			marginTop: 0
 		}
 	},
-	leftAlign: {
-		textAlign: 'left'
-	},
 	icon: {
 		alignItems: 'center',
 		display: 'flex',
@@ -248,6 +243,9 @@ const styles = theme => ({
 	},
 	affiliateMessage: {
 		textAlign: 'left'
+	},
+	descriptionBottomSpace: {
+		marginBottom: '40px'
 	}
 });
 
@@ -285,7 +283,7 @@ const LoanApplyButton = withStyles(styles)(({ classes, application, onClick }) =
 	<React.Fragment>
 		<Button
 			disabled={
-				// Disabled as we don't have any Exchange integrated yet!
+				// Disabled as we don't have any Providers integrated yet
 				true ||
 				(application &&
 					[APPLICATION_REJECTED, APPLICATION_CANCELLED].includes(
@@ -431,20 +429,16 @@ class LoansDetailsComponent extends PureComponent {
 							justify="flex-start"
 							style={{ width: '100%' }}
 						>
-							<Grid item id="description" xs={12}>
+							<Grid item id="description" className={classes.descriptionBottomSpace}>
 								<Grid
 									container
 									direction="row"
 									justify="space-between"
 									alignItems="flex-start"
+									spacing={7}
 								>
 									<Grid item xs={8}>
-										<Typography
-											variant="body1"
-											className={`${classes.bottomSpace} ${
-												classes.leftAlign
-											}`}
-										>
+										<Typography variant="body1" align="left">
 											{item.description}
 										</Typography>
 									</Grid>

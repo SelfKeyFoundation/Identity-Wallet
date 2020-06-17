@@ -106,7 +106,7 @@ const LoansDetailsHighlights = withStyles(styles)(({ classes, item }) => (
 					</div>
 				)}
 
-				{item.data.maxLoanTermLending && (
+				{item.data.maxLoanTermBorrowing && (
 					<div>
 						<Typography variant="h5">Max Loan Term (Borrowing):</Typography>
 						<Typography variant="body2">{item.data.maxLoanTermBorrowing}</Typography>

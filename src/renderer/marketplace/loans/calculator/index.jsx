@@ -9,7 +9,7 @@ import {
 	Button,
 	IconButton
 } from '@material-ui/core';
-import ToggleButton from '@material-ui/lab/ToggleButton';
+import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { withStyles } from '@material-ui/styles';
 import { KeyboardArrowDown } from '@material-ui/icons';
 import { TransferIcon, InfoTooltip, KeyTooltip, TooltipArrow } from 'selfkey-ui';
@@ -20,21 +20,10 @@ import { LoansCalculatorLendTable } from './lend-table';
 const styles = theme => ({
 	container: {
 		padding: '30px',
-		border: '1px solid #303C49',
-		'& .MuiToggleButton-root': {
-			borderRadius: '0px'
-		},
-		'& div > button.MuiToggleButton-root:first-child': {
-			borderBottomLeftRadius: '2px',
-			borderTopLeftRadius: '2px'
-		},
-		'& div > button.MuiToggleButton-root:last-child': {
-			borderBottomRightRadius: '2px',
-			borderTopRightRadius: '2px'
-		}
+		border: '1px solid #303C49'
 	},
 	gridCell: {
-		width: '400px',
+		width: '470px',
 		'& .MuiSlider-markLabel': {
 			fontSize: '12px !important',
 			marginTop: '3px'
@@ -48,17 +37,13 @@ const styles = theme => ({
 			zIndex: '1'
 		}
 	},
-	fixedTokensContainer: {
-		display: 'inline-block'
-	},
 	selectTokens: {
 		minWidth: '11em',
 		float: 'right'
 	},
 	resultsTableContainer: {
 		marginTop: '20px',
-		width: '100%',
-		overflowX: 'scroll'
+		width: '100%'
 	},
 	sourceInput: {
 		border: '1px solid #384656',
@@ -77,6 +62,9 @@ const styles = theme => ({
 			marginLeft: '0.7em'
 		}
 	},
+	fixedHeight: {
+		minHeight: '150px'
+	},
 	loanAmount: {
 		display: 'flex',
 		alignItems: 'center'
@@ -85,13 +73,25 @@ const styles = theme => ({
 		borderTopRightRadius: '0',
 		borderBottomRightRadius: '0',
 		borderRight: '0'
+	},
+	slider: {
+		marginLeft: '5px',
+		width: 'calc(100% - 10px)'
 	}
 });
 
 const FIXED_TOKENS = ['BTC', 'ETH', 'KEY'];
 const CURRENCIES = ['USD', 'EUR', 'GBP'];
 
-export const convertCurrency = (amount, currency, rates) => {
+export const convertToUSD = (amount, currency, rates) => {
+	if (currency && rates[currency]) {
+		return amount / rates[currency];
+	} else {
+		return amount;
+	}
+};
+
+const convertToCurrency = (amount, currency, rates) => {
 	if (currency && rates[currency]) {
 		return amount * rates[currency];
 	} else {
@@ -101,7 +101,8 @@ export const convertCurrency = (amount, currency, rates) => {
 
 const calculateCollateral = ({ amount, token, rates, ltv }) => {
 	const rate = rates.find(r => r.symbol === token);
-	const LTV = ltv ? parseFloat(ltv) / 100 : 1;
+	let LTV = ltv ? parseFloat(ltv) / 100 : 1;
+	LTV = LTV <= 0 ? 1 : LTV;
 	const collateral = amount / (rate.priceUSD * LTV);
 	return `${collateral.toFixed(2)} ${rate.symbol}`;
 };
@@ -170,20 +171,13 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 		return this.inventoryUniqueTokens(data).filter(t => FIXED_TOKENS.indexOf(t) === -1);
 	};
 
-	onToggleType = () => {
-		this.setState({
-			results: [],
-			type: this.state.type === 'borrowing' ? 'lending' : 'borrowing'
-		});
-	};
+	onTypeChange = (e, type) => this.setState({ type, results: [] });
 
-	onToggleRepayment = () =>
-		this.setState({
-			results: [],
-			repayment: this.state.repayment === 'interest' ? 'interest + principle' : 'interest'
-		});
+	onToggleRepayment = (e, repayment) => this.setState({ repayment, results: [] });
 
-	onTokenChange = selectedToken => this.setState({ selectedToken, results: [] });
+	onTokenChange = (e, selectedToken) => this.setState({ selectedToken, results: [] });
+
+	onPeriodChange = (e, period) => this.setState({ period, results: [] });
 
 	onAmountChange = event => {
 		let amount = event.target.value;
@@ -199,8 +193,17 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 		this.setState({ currencyIndex }, () => this.calculate());
 	};
 
-	onPeriodChange = (e, period) => {
-		this.setState({ results: [], period });
+	generateMarks = ({ max, min, period }) => {
+		const marks = [];
+		marks.push({ value: min, label: `${min}` });
+		if (period !== min) {
+			marks.push({ value: period, label: `${period} MO` });
+		}
+		// Avoid overlapping marker
+		if (max - period > 3) {
+			marks.push({ value: max, label: `${max} MO` });
+		}
+		return marks;
 	};
 
 	onCalculateClick = () => this.calculate();
@@ -216,7 +219,11 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 		}
 
 		// Convert to USD (airtable data is in USD)
-		const convertedAmount = convertCurrency(amount, currency, fiatRates);
+		const convertedAmount = convertToUSD(amount, currency, fiatRates);
+
+		if (convertedAmount <= 0) {
+			return;
+		}
 
 		// Filter correct type (Lending or Borrowing)
 		const inventoryByType = this.filterLoanType(inventory, type);
@@ -232,7 +239,10 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 
 		// Filter and remove offers with loan term < user selected period
 		results = results.filter(offer => {
-			return Number(offer.data.maxLoanTerm.replace(/[^0-9.-]+/g, '')) >= period;
+			return (
+				Number(offer.data.maxLoanTerm.replace(/[^0-9.-]+/g, '')) >= period ||
+				offer.data.maxLoanTerm === 'Unlimited'
+			);
 		});
 
 		// Filters by asset
@@ -261,24 +271,29 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 					ltv: offer.data.ltv
 				});
 			}
+
+			// Exchange back to original currency
+			offer.loanPayment.monthly = convertToCurrency(
+				offer.loanPayment.monthly,
+				currency,
+				fiatRates
+			);
+			offer.loanPayment.total = convertToCurrency(
+				offer.loanPayment.total,
+				currency,
+				fiatRates
+			);
+			offer.loanPayment.totalInterest = convertToCurrency(
+				offer.loanPayment.totalInterest,
+				currency,
+				fiatRates
+			);
+
 			return offer;
 		});
 
 		this.setState({ results });
 	}
-
-	generateMarks = ({ max, min, period }) => {
-		const marks = [];
-		marks.push({ value: min, label: `${min}` });
-		if (period !== min) {
-			marks.push({ value: period, label: `${period} MO` });
-		}
-		// Avoid overlapping marker
-		if (max - period > 3) {
-			marks.push({ value: max, label: `${max} MO` });
-		}
-		return marks;
-	};
 
 	render() {
 		const { classes } = this.props;
@@ -292,41 +307,33 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 							<Typography variant="overline" gutterBottom>
 								I want to
 							</Typography>
-							<div>
-								<ToggleButton
-									value="checked"
-									selected={type === 'borrowing'}
-									onChange={this.onToggleType}
-								>
+							<ToggleButtonGroup onChange={this.onTypeChange} exclusive value={type}>
+								<ToggleButton value="borrowing">
 									<Typography variant="h5">Borrow</Typography>
 								</ToggleButton>
-								<ToggleButton
-									value="checked"
-									selected={type === 'lending'}
-									onChange={this.onToggleType}
-								>
+								<ToggleButton value="lending">
 									<Typography variant="h5">Lend</Typography>
 								</ToggleButton>
-							</div>
+							</ToggleButtonGroup>
 						</Grid>
+
 						<Grid item>
 							<Grid container direction="row" justify="flex-start" spacing={8}>
 								<Grid item className={classes.gridCell}>
 									<Typography variant="overline" gutterBottom>
 										My Crypto
 									</Typography>
-									<div className={classes.fixedTokensContainer}>
+									<ToggleButtonGroup
+										onChange={this.onTokenChange}
+										exclusive
+										value={selectedToken}
+									>
 										{FIXED_TOKENS.map(token => (
-											<ToggleButton
-												key={token}
-												value="checked"
-												selected={selectedToken === token}
-												onChange={() => this.onTokenChange(token)}
-											>
+											<ToggleButton key={token} value={token}>
 												<Typography variant="h5">{token}</Typography>
 											</ToggleButton>
 										))}
-									</div>
+									</ToggleButtonGroup>
 									<Select
 										name="asset"
 										className={classes.selectTokens}
@@ -338,7 +345,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 												: selectedToken
 										}
 										displayEmpty
-										onChange={e => this.onTokenChange(e.target.value)}
+										onChange={e => this.onTokenChange(e, e.target.value)}
 									>
 										<MenuItem key="empty" value="" disabled>
 											<Typography variant="subtitle1" color="textSecondary">
@@ -378,7 +385,13 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 							</Grid>
 						</Grid>
 						<Grid item>
-							<Grid container direction="row" justify="flex-start" spacing={8}>
+							<Grid
+								container
+								direction="row"
+								justify="flex-start"
+								spacing={8}
+								className={classes.fixedHeight}
+							>
 								<Grid item className={classes.gridCell}>
 									<Typography variant="overline" gutterBottom>
 										Loan Period
@@ -396,52 +409,52 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 										})}
 										valueLabelDisplay="off"
 										aria-labelledby="range-slider"
+										className={classes.slider}
 									/>
 								</Grid>
+
 								<Grid item className={classes.gridCell}>
-									<div>
-										<Typography variant="overline" gutterBottom>
-											Repayment
-											<KeyTooltip
-												interactive
-												placement="top-start"
-												className={classes.tooltip}
-												title={
-													<React.Fragment>
-														<span>
-															Principal and interest loans require you
-															to pay off part of the principle loan
-															amount as well as cover the interest
-															repayments
-														</span>
-														<TooltipArrow />
-													</React.Fragment>
-												}
-											>
-												<IconButton aria-label="Info">
-													<InfoTooltip />
-												</IconButton>
-											</KeyTooltip>
-										</Typography>
-									</div>
-									<div>
-										<ToggleButton
-											value="checked"
-											selected={repayment === 'interest'}
-											onChange={this.onToggleRepayment}
-										>
-											<Typography variant="h5">Interest</Typography>
-										</ToggleButton>
-										<ToggleButton
-											value="checked"
-											selected={repayment === 'interest + principle'}
-											onChange={this.onToggleRepayment}
-										>
-											<Typography variant="h5">
-												Interest + Principle
+									{type === 'borrowing' && (
+										<React.Fragment>
+											<Typography variant="overline" gutterBottom>
+												Repayment
+												<KeyTooltip
+													interactive
+													placement="top-start"
+													className={classes.tooltip}
+													title={
+														<React.Fragment>
+															<span>
+																Principal and interest loans require
+																you to pay off part of the principle
+																loan amount as well as cover the
+																interest repayments
+															</span>
+															<TooltipArrow />
+														</React.Fragment>
+													}
+												>
+													<IconButton aria-label="Info">
+														<InfoTooltip />
+													</IconButton>
+												</KeyTooltip>
 											</Typography>
-										</ToggleButton>
-									</div>
+											<ToggleButtonGroup
+												onChange={this.onToggleRepayment}
+												exclusive
+												value={repayment}
+											>
+												<ToggleButton value="interest">
+													<Typography variant="h5">Interest</Typography>
+												</ToggleButton>
+												<ToggleButton value="interest + principle">
+													<Typography variant="h5">
+														Interest + Principle
+													</Typography>
+												</ToggleButton>
+											</ToggleButtonGroup>
+										</React.Fragment>
+									)}
 								</Grid>
 							</Grid>
 						</Grid>
