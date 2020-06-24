@@ -197,7 +197,7 @@ const prod = {
 		kyccUsersEndpoint: false,
 		walletExport: true,
 		transactionsListFilter: false,
-		loansMarketplace: false,
+		loansMarketplace: true,
 		swapTokens: false
 	},
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'

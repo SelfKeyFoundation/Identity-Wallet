@@ -2,6 +2,7 @@ import React from 'react';
 import { Typography, Input, Select, MenuItem, FormControl } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { SelectDropdownIcon } from 'selfkey-ui';
+import { InputTitle } from '../../common';
 
 const styles = theme => ({
 	regularText: {
@@ -69,23 +70,6 @@ const styles = theme => ({
 		flexDirection: 'column',
 		width: '100%'
 	}
-});
-
-const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => {
-	return (
-		<div>
-			<Typography variant="overline" gutterBottom>
-				{title}
-				{optional ? (
-					<Typography variant="overline" className={classes.optional}>
-						(optional)
-					</Typography>
-				) : (
-					'*'
-				)}
-			</Typography>
-		</div>
-	);
 });
 
 const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
