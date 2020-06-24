@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import {
-	withStyles,
 	List,
 	ListItem,
 	Drawer,
@@ -13,6 +12,7 @@ import {
 	// IconButton
 	Divider
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import {
 	DashboardMenuIcon,
@@ -224,7 +224,7 @@ class Sidebar extends PureComponent {
 				justify="flex-start"
 				alignItems="flex-start"
 				className={`${classes.list} sidebarContainer`}
-				spacing={40}
+				spacing={5}
 			>
 				<Grid item style={{ padding: '21px 0', flexGrow: 0 }}>
 					<Grid
@@ -325,7 +325,6 @@ class Sidebar extends PureComponent {
 						<Divider className={`divider`} />
 					</List>
 				</Grid>
-				<Divider />
 				<Grid item style={{ padding: '50px 0 20px' }}>
 					{/* <Grid item className={classes.network}>
 						<Typography variant="overline" gutterBottom>
@@ -335,6 +334,7 @@ class Sidebar extends PureComponent {
 								placement="top-start"
 								className={classes.tooltip}
 								classes={{ tooltip: classes.customWidth }}
+								TransitionProps={{ timeout: 0 }}
 								title={
 									<React.Fragment>
 										<span>

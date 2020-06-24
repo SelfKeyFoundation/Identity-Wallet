@@ -1,5 +1,6 @@
 import React from 'react';
-import { Typography, Grid, withStyles } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { CorporateComponent } from '../common/corporate-component';
 import { CorporateDashboardTabs } from './dashboard-tabs';
 
@@ -18,7 +19,7 @@ class CorporateDashboardPage extends CorporateComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
-			tab: props.match.params.tab || 'overview'
+			tab: props.tab || 'overview'
 		};
 	}
 

@@ -18,7 +18,7 @@ export class TotleSwapService {
 		}
 	}
 
-	async swap(address, transaction) {
+	async swap(address, transaction, partnerContractAddress) {
 		const payload = {
 			apiKey: TOTLE_API_KEY,
 			address,
@@ -34,6 +34,10 @@ export class TotleSwapService {
 				maxExecutionSlippagePercent: 3
 			}
 		};
+
+		if (partnerContractAddress) {
+			payload.partnerContract = partnerContractAddress;
+		}
 
 		log.debug(payload);
 

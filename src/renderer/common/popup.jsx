@@ -1,5 +1,6 @@
 import React from 'react';
-import { Modal, Typography, withStyles, Grid, Paper } from '@material-ui/core';
+import { Modal, Typography, Grid, Paper } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import {
 	ModalWrap,
 	ModalCloseButton,
@@ -11,10 +12,10 @@ import {
 
 const styles = theme => ({
 	modal: {
-		overflow: 'auto'
-	},
-	closeButton: {
-		top: '20px'
+		overflow: 'auto',
+		'& > div:nth-of-type(1)': {
+			background: `linear-gradient(135deg, rgba(43, 53, 64, 0.9) 0%, rgba(30, 38, 46, 0.9) 100%)`
+		}
 	},
 	header: {
 		alignItems: 'center',
@@ -28,7 +29,10 @@ const styles = theme => ({
 	modalWrap: {
 		border: 'none',
 		backgroundColor: 'transparent',
-		boxShadow: 'none'
+		boxShadow: 'none',
+		left: 0,
+		right: 0,
+		margin: '0 auto 80px'
 	},
 	paper: {
 		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
@@ -54,7 +58,11 @@ const PopupWrap = props => {
 		popupClass = ''
 	} = props;
 	return (
-		<Modal open={open} className={`${classes.modal} ${props.className}`}>
+		<Modal
+			open={open}
+			className={`${classes.modal} ${props.className}`}
+			disableEnforceFocus={!!process.env.STORYBOOK}
+		>
 			<ModalWrap className={`${classes.modalWrap} ${popupClass}`}>
 				{displayLogo && (
 					<Grid
@@ -62,7 +70,7 @@ const PopupWrap = props => {
 						direction="column"
 						justify="flex-start"
 						alignItems="center"
-						spacing={8}
+						spacing={1}
 						className={classes.logoSection}
 					>
 						<Grid item>

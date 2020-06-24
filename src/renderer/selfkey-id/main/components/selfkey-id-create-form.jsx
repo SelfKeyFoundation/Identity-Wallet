@@ -1,13 +1,6 @@
 import React, { PureComponent } from 'react';
-import {
-	Grid,
-	Button,
-	Typography,
-	withStyles,
-	Divider,
-	Input,
-	IconButton
-} from '@material-ui/core';
+import { Grid, Button, Typography, Divider, Input, IconButton } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import {
 	IdCardIcon,
 	ModalWrap,
@@ -19,7 +12,7 @@ import {
 	ModalBody
 } from 'selfkey-ui';
 import { connect } from 'react-redux';
-import history from 'common/store/history';
+import { push } from 'connected-react-router';
 import { identityOperations, identitySelectors } from 'common/identity';
 import { matomoGoalTracking, matomoGoals } from 'common/matomo';
 
@@ -115,7 +108,7 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 
 	handleBackClick = evt => {
 		evt && evt.preventDefault();
-		history.getHistory().goBack();
+		this.props.dispatch(push('/main/dashboard'));
 	};
 
 	getTypeId = url => {
@@ -185,7 +178,7 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 					direction="column"
 					justify="flex-start"
 					alignItems="center"
-					spacing={32}
+					spacing={4}
 					className={classes.wrap}
 				>
 					<BackButton onclick={this.handleBackClick} className={classes.bb} />
@@ -211,13 +204,13 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 									direction="column"
 									justify="center"
 									alignItems="center"
-									spacing={32}
+									spacing={4}
 								>
 									<Grid item>
 										<Grid
 											container
 											direction="column"
-											spacing={40}
+											spacing={5}
 											justify="flex-start"
 											alignItems="flex-start"
 										>
@@ -247,6 +240,9 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 																		interactive
 																		placement="top-start"
 																		className={classes.tooltip}
+																		TransitionProps={{
+																			timeout: 0
+																		}}
 																		title={
 																			<React.Fragment>
 																				<span>
@@ -295,7 +291,7 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 												<Grid
 													container
 													direction="column"
-													spacing={32}
+													spacing={4}
 													justify="flex-start"
 													alignItems="flex-start"
 												>

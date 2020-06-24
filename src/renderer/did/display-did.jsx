@@ -1,6 +1,7 @@
 import React from 'react';
 import { DIDIcon } from 'selfkey-ui';
-import { Grid, withStyles, Typography, Card, CardHeader, CardContent } from '@material-ui/core';
+import { Grid, Typography, Card, CardHeader, CardContent } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	hr: {
@@ -35,7 +36,7 @@ export const DisplayDid = withStyles(styles)(({ classes, did }) => (
 		<CardHeader title="Decentralised ID" className={classes.regularText} />
 		<hr className={classes.hr} />
 		<CardContent>
-			<Grid container spacing={16} direction="row" justify="flex-start" alignItems="center">
+			<Grid container spacing={2} direction="row" justify="flex-start" alignItems="center">
 				<Grid item>
 					<DIDIcon />
 				</Grid>

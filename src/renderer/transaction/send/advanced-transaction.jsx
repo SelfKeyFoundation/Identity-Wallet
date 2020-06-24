@@ -6,7 +6,7 @@ import { transactionOperations, transactionSelectors } from 'common/transaction'
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import {
 	MenuItem,
 	Select,
@@ -16,17 +16,17 @@ import {
 	Grid,
 	Button,
 	Typography,
-	Divider
+	Divider,
+	FormControl
 } from '@material-ui/core';
 import { appOperations, appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
 import { debounce, over } from 'lodash';
-import { KeyboardArrowDown } from '@material-ui/icons';
 import { InputTitle } from '../../common/input-title';
 import { getWallet } from 'common/wallet/selectors';
 import ReceiveTokenTab from './containers/receive-token-tab';
 // import SendTokenTab from './containers/send-token-tab';
-import { NumberFormat, TransactionFeeBox } from 'selfkey-ui';
+import { NumberFormat, TransactionFeeBox, SelectDropdownIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	balance: {
@@ -159,7 +159,7 @@ const styles = theme => ({
 		}
 	},
 	bottomSpace: {
-		marginBottom: '13px'
+		marginBottom: '23px'
 	},
 	tokenMax: {
 		display: 'flex',
@@ -270,11 +270,14 @@ class TransactionSendBoxContainer extends PureComponent {
 
 	handleCryptoCurrencyChange = event => {
 		const value = event.target.value;
+		const nullAmount = 0;
 		this.setState({
 			...this.state,
+			amount: nullAmount,
 			cryptoCurrency: value
 		});
 		this.props.dispatch(transactionOperations.setCryptoCurrency(value));
+		this.props.dispatch(transactionOperations.setAmount(nullAmount));
 	};
 
 	renderSelectTokenItems() {
@@ -308,7 +311,7 @@ class TransactionSendBoxContainer extends PureComponent {
 					justify="center"
 					alignItems="center"
 					className={classes.actionButtonsContainer}
-					spacing={24}
+					spacing={3}
 				>
 					<Grid item>
 						<Button variant="contained" size="large" onClick={this.handleConfirm}>
@@ -362,20 +365,30 @@ class TransactionSendBoxContainer extends PureComponent {
 		return (
 			<TransactionBox closeAction={this.handleCancelAction} title={title}>
 				<div className={classes.tokenBottomSpace}>
-					<InputTitle title="Token" />
-					<Select
-						className={classes.cryptoSelect}
-						value={this.state.cryptoCurrency}
-						onChange={e => this.handleCryptoCurrencyChange(e)}
-						name="cryptoCurrency"
-						disableUnderline
-						displayEmpty
-						IconComponent={KeyboardArrowDown}
-						input={<Input disableUnderline placeholder="Choose..." />}
-					>
-						<MenuItem value="custom">Choose...</MenuItem>
-						{this.renderSelectTokenItems()}
-					</Select>
+					<FormControl variant="filled" fullWidth>
+						<InputTitle title="Token" />
+						<Select
+							className={classes.cryptoSelect}
+							value={this.state.cryptoCurrency}
+							onChange={e => this.handleCryptoCurrencyChange(e)}
+							name="cryptoCurrency"
+							disableUnderline
+							displayEmpty
+							IconComponent={SelectDropdownIcon}
+							input={<Input disableUnderline />}
+						>
+							<MenuItem value="custom">
+								<Typography
+									className="choose"
+									variant="subtitle1"
+									color="textSecondary"
+								>
+									Choose...
+								</Typography>
+							</MenuItem>
+							{this.renderSelectTokenItems()}
+						</Select>
+					</FormControl>
 				</div>
 				{this.state.cryptoCurrency !== 'custom' ? (
 					<div className={classes.tabsWrap}>
@@ -404,7 +417,9 @@ class TransactionSendBoxContainer extends PureComponent {
 										<Input
 											type="text"
 											onChange={this.handleAmountChange}
-											value={this.state.amount}
+											value={`${this.state.amount} ${
+												cryptoCurrency !== 'custom' ? cryptoCurrency : ''
+											}`}
 											placeholder="0.00"
 											className={classes.amount}
 											fullWidth

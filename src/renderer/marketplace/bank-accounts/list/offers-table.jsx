@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { Typography, IconButton, Grid } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,14 +9,15 @@ import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
 import { LargeTableHeadRow, TagTableCell, Tag, KeyTooltip, InfoTooltip } from 'selfkey-ui';
 import { ProgramPrice, FlagCountryName } from '../../common';
+import DetailsButton from '../common/details-button';
 
 const styles = theme => ({
 	table: {
 		'& td': {
-			padding: '0 20px'
+			padding: '5px 20px'
 		},
 		'& th': {
-			padding: '0 20px'
+			padding: '15px 20px'
 		}
 	},
 	tableHeaderRow: {
@@ -154,9 +155,7 @@ const BankingOffersRow = withStyles(styles)(({ classes, bank, onDetails, keyRate
 				<ProgramPrice label="$" price={bank.price} rate={keyRate} />
 			</TableCell>
 			<TableCell className={classes.detailsCell}>
-				<span id={`details${data.countryCode}`} onClick={() => onDetails(bank)}>
-					Details
-				</span>
+				<DetailsButton onClick={() => onDetails(bank)} id={`details${data.countryCode}`} />
 			</TableCell>
 		</TableRow>
 	);
@@ -188,6 +187,7 @@ const BankingOffersTable = withStyles(styles)(
 									interactive
 									placement="top-start"
 									className={classes.tooltip}
+									TransitionProps={{ timeout: 0 }}
 									title={
 										<React.Fragment>
 											<span>

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { ListItem, List, withStyles } from '@material-ui/core';
+import { ListItem, List } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { KycRequirements } from './requirements/container';
 import { kycSelectors, kycOperations } from '../../common/kyc';
 

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { withStyles, Button } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { UnlockIcon, ReturnIcon, HourGlassSmallIcon, CalendarIcon } from 'selfkey-ui';
 import { marketplacesSelectors, marketplacesOperations } from 'common/marketplaces';

@@ -1,14 +1,6 @@
 import React, { PureComponent } from 'react';
-import {
-	Typography,
-	Button,
-	Grid,
-	Table,
-	TableHead,
-	Radio,
-	TableBody,
-	withStyles
-} from '@material-ui/core';
+import { Typography, Button, Grid, Table, TableHead, Radio, TableBody } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import {
 	ViewIcon,
 	SmallTableRow,
@@ -149,7 +141,7 @@ class SelectAddress extends PureComponent {
 				direction="column"
 				justify="flex-start"
 				alignItems="flex-start"
-				spacing={40}
+				spacing={5}
 			>
 				<Grid item className={this.props.classes.topSpace}>
 					<Typography variant="h4" className={this.props.classes.h4}>
@@ -229,7 +221,7 @@ class SelectAddress extends PureComponent {
 						direction="row"
 						justify="flex-end"
 						alignItems="flex-end"
-						spacing={8}
+						spacing={1}
 					>
 						<Grid item className={this.props.classes.pagination}>
 							<KeyIconButton
@@ -259,7 +251,7 @@ class SelectAddress extends PureComponent {
 						direction="row"
 						justify="flex-start"
 						alignItems="center"
-						spacing={24}
+						spacing={3}
 					>
 						<Grid item>
 							<Button

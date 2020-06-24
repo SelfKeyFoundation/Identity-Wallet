@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getExchangeLinks } from 'common/exchanges/selectors';
-import { Grid, List, ListItem, withStyles, Typography } from '@material-ui/core';
+import { Grid, List, ListItem, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { WarningShieldIcon } from 'selfkey-ui';
 import { Popup } from '../../common/popup';
 
@@ -70,7 +71,7 @@ export const WithoutBalanceContent = withStyles(styles)(({ classes, children, ex
 						direction="column"
 						justify="flex-start"
 						alignItems="flex-start"
-						spacing={16}
+						spacing={2}
 					>
 						<Grid item>
 							<Typography variant="body1" className={classes.bottomSpace}>

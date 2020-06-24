@@ -14,3 +14,7 @@ export const getWallet = state => {
 	wallet.isHardwareWallet = wallet.profile === 'ledger' || wallet.profile === 'trezor';
 	return wallet;
 };
+
+export const getLoanCalculatorCardStatus = state => {
+	return state.wallet.loanCardStatus;
+};

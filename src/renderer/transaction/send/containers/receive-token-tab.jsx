@@ -44,12 +44,15 @@ const styles = {
 		}
 	},
 	mailIcon: {
-		height: '27px',
-		width: '35px'
+		height: '27px !important',
+		marginBottom: '11px',
+		marginTop: '5px',
+		width: '35px !important'
 	},
 	printIcon: {
-		height: '36px',
-		width: '34px'
+		height: '36px !important',
+		marginBottom: '7px',
+		width: '34px !important'
 	},
 	iconWrap: {
 		alignItems: 'center',
@@ -73,12 +76,6 @@ const styles = {
 				fill: '#FFFFFF'
 			}
 		}
-	},
-	emailMargin: {
-		marginTop: '11px'
-	},
-	printMargin: {
-		marginTop: '7px'
 	}
 };
 
@@ -96,9 +93,11 @@ const ReceiveTokenTabComponent = props => {
 			<div className={classes.qrCode}>
 				<QRCode value={sendingAddress} />
 			</div>
-			<Typography variant="h1" color="secondary" className={classes.bottomSpace}>
-				Your Ethereum address to receive {cryptoCurrency}
-			</Typography>
+			<div className={classes.bottomSpace}>
+				<Typography variant="h1" color="secondary">
+					Your Ethereum address to receive {cryptoCurrency}
+				</Typography>
+			</div>
 			<div className={classes.tokenPublicKey}>
 				<Typography variant="body2" className={classes.publicKey} id="printableArea">
 					{sendingAddress}
@@ -109,12 +108,8 @@ const ReceiveTokenTabComponent = props => {
 					<CopyWithIcon text={sendingAddress} />
 				</div>
 				<a href={link} className={`${classes.space} ${classes.padding} ${classes.icon}`}>
-					<MailIcon className={classes.mailIcon} style={{ marginTop: '5px' }} />
-					<Typography
-						variant="subtitle2"
-						color="secondary"
-						className={classes.emailMargin}
-					>
+					<MailIcon className={classes.mailIcon} />
+					<Typography variant="subtitle2" color="secondary">
 						E-mail
 					</Typography>
 				</a>
@@ -123,11 +118,7 @@ const ReceiveTokenTabComponent = props => {
 					onClick={printDiv}
 				>
 					<PrintSmallIcon className={classes.printIcon} />
-					<Typography
-						variant="subtitle2"
-						color="secondary"
-						className={classes.printMargin}
-					>
+					<Typography variant="subtitle2" color="secondary">
 						Print
 					</Typography>
 				</div>

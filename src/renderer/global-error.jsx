@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, withStyles, Typography } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Popup } from './common';
 import { error } from 'selfkey-ui';
 

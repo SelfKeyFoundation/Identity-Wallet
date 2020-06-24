@@ -1,7 +1,8 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { sanitize } from '../../common';
 import { IncorporationsDataPanel } from '../common/incorporations-data-panel';
+import { primary } from 'selfkey-ui';
 
 const styles = theme => ({
 	tabContainer: {
@@ -17,7 +18,6 @@ const styles = theme => ({
 			color: theme.palette.secondary.main,
 			display: 'block',
 			padding: '0',
-			borderBottom: '1px solid #435160',
 			marginBottom: '0.5em',
 			marginTop: '0em'
 		},
@@ -32,7 +32,7 @@ const styles = theme => ({
 			marginBottom: '0.5em'
 		},
 		'& a': {
-			color: theme.palette.secondary.main
+			color: primary
 		}
 	}
 });

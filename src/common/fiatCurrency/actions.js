@@ -5,4 +5,9 @@ const fiatCurrencyUpdate = fiatCurrency => ({
 	payload: fiatCurrency
 });
 
-export { fiatCurrencyUpdate };
+const setExchangeRates = rates => ({
+	type: types.SET_EXCHANGE_RATES,
+	payload: rates
+});
+
+export { fiatCurrencyUpdate, setExchangeRates };

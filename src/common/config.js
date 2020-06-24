@@ -40,6 +40,7 @@ const COUNTRY_INFO_URL = process.env.COUNTRY_INFO_URL;
 const ALL_COUNTRIES_INFO_URL = process.env.ALL_COUNTRIES_INFO_URL;
 const MATOMO_SITE = process.env.MATOMO_SITE;
 const DEPOSIT_PRICE_OVERRIDE = process.env.DEPOSIT_PRICE_OVERRIDE;
+const SWAP_MAX_VALUE = +process.env.SWAP_MAX_VALUE;
 
 // development or production
 const ATTRIBUTE_TYPE_SOURCE_OVERRIDE = process.env.ATTRIBUTE_TYPE_SOURCE_OVERRIDE;
@@ -55,6 +56,8 @@ const common = {
 	forceUpdateAttributes: process.env.FORCE_UPDATE_ATTRIBUTES === 'true' && !isTestMode(),
 	userAgent: `SelfKeyIDW/${pkg.version}`,
 	airtableBaseUrl: 'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=',
+
+	exchangeRateApiUrl: 'https://api.exchangeratesapi.io',
 
 	kyccUrlOverride: KYCC_API_OVERRIDE,
 	incorporationsPriceOverride: INCORPORATIONS_PRICE_OVERRIDE,
@@ -78,6 +81,8 @@ const common = {
 
 	totleApiUrl: 'https://api.totle.com',
 	totleApiKey: '3c5645ed-a34e-409d-b179-19a998bd509b',
+	totleMaxSwap: SWAP_MAX_VALUE || 1000, // Max allowed totle Swap in USD
+	totlePartnerContract: '0x48100908d674ed1361da558d987995e60581b649',
 
 	constants: {
 		initialIdAttributes: {
@@ -192,7 +197,7 @@ const prod = {
 		kyccUsersEndpoint: false,
 		walletExport: true,
 		transactionsListFilter: false,
-		loansMarketplace: false,
+		loansMarketplace: true,
 		swapTokens: false
 	},
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'

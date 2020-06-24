@@ -1,5 +1,6 @@
 import React from 'react';
-import { Typography, Button, Divider, withStyles, IconButton } from '@material-ui/core';
+import { Typography, Button, Divider, IconButton } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { CloseButtonIcon, KeyTooltip, TooltipArrow, InfoTooltip } from 'selfkey-ui';
 
 const styles = theme => ({
@@ -149,6 +150,7 @@ export const SimpleServiceCost = withStyles(serviceCostStyle)(({ classes }) => (
 								<KeyTooltip
 									interactive
 									placement="top-start"
+									TransitionProps={{ timeout: 0 }}
 									title={
 										<React.Fragment>
 											<span>...</span>
