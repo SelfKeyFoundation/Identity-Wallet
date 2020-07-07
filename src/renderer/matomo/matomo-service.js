@@ -135,8 +135,9 @@ export class MatomoService {
 	connectToHistory(history) {
 		this.connectedHistory = history;
 		if (this.hasConcent()) {
-			this.m.connectToHistory();
+			return this.m.connectToHistory(history);
 		}
+		return history;
 	}
 
 	disconnectFromHistory() {

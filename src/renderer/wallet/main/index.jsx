@@ -9,6 +9,7 @@ import { walletTokensOperations } from 'common/wallet-tokens';
 import { marketplaceOperations } from 'common/marketplace';
 import { walletSelectors } from 'common/wallet';
 import { appSelectors } from 'common/app';
+import { getGlobalContext } from 'common/context';
 
 import { MarketplaceContainer } from '../../marketplace';
 import { CorporateContainer } from '../../corporate';
@@ -49,7 +50,6 @@ import { WalletExportWarning } from './export-warning';
 import { WalletExportQRCode } from './export-qr-code';
 
 import md5 from 'md5';
-import ReactPiwik from 'react-piwik';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
 import { exchangesOperations } from '../../../common/exchanges';
 import { SwapCompletedContainer } from '../../transaction/swap/swap-complete-container';
@@ -81,10 +81,10 @@ const contentWrapperStyle = {
 
 class Main extends PureComponent {
 	setMatomoId = () => {
-		ReactPiwik.push(['setUserId', md5(this.props.address)]);
-		ReactPiwik.push(['setCustomVariable', 1, 'machineId', window.machineId, 'visit']);
-		ReactPiwik.push(['setCustomVariable', 2, 'walletType', this.props.walletType, 'visit']);
-		ReactPiwik.push(['setCustomVariable', 3, 'walletVersion', window.appVersion, 'visit']);
+		getGlobalContext().matomoService.setWalletContext(
+			this.props.address,
+			this.props.walletType
+		);
 	};
 	async componentDidMount() {
 		await this.props.dispatch(walletTokensOperations.loadWalletTokens());
