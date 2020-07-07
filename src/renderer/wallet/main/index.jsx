@@ -48,8 +48,6 @@ import { CurrentApplication, ApplicationInProgress } from '../../kyc';
 import WalletExportContainer from './export-container';
 import { WalletExportWarning } from './export-warning';
 import { WalletExportQRCode } from './export-qr-code';
-
-import md5 from 'md5';
 import HardwareWalletTransactionTimer from '../../transaction/send/timer';
 import { exchangesOperations } from '../../../common/exchanges';
 import { SwapCompletedContainer } from '../../transaction/swap/swap-complete-container';

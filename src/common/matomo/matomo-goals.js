@@ -1,4 +1,4 @@
-import config from './config';
+import config from 'common/config';
 
 export const matomoGoals = {
 	CreateSelfKeyId: config.matomoSite === 1 ? 1 : 5,

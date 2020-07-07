@@ -1,5 +1,5 @@
 import ReactPiwik from 'react-piwik';
-import config from './config';
+import config from 'common/config';
 import { ipcRenderer } from 'electron';
 import md5 from 'md5';
 import { Logger } from 'common/logger';
@@ -28,17 +28,18 @@ export class MatomoService {
 			siteId: config.matomoSite,
 			trackErrors: true
 		});
-		this.m.push(['setUserId', window.machineId]);
-		this.m.push(['setCustomVariable', 3, 'walletVersion', window.appVersion, 'visit']);
+		ReactPiwik.push(['setUserId', window.machineId]);
+		ReactPiwik.push(['setCustomVariable', 3, 'walletVersion', window.appVersion, 'visit']);
 
-		this.rawPush = this.m.push.bind(this.m);
+		this.rawPush = ReactPiwik.push;
 
-		this.m.push = (args, bypass) => {
+		ReactPiwik.push = (args, bypass) => {
 			if (isTestMode()) {
 				return;
 			}
-			if (this.hasConcent || bypass) {
-				return this.rawPush(args);
+			log.info('pushing event with concent %s: %j', this.hasConcent(), args);
+			if (this.hasConcent() || bypass) {
+				return this.rawPush.call(ReactPiwik, args);
 			}
 		};
 		log.info('init complete');
@@ -47,7 +48,7 @@ export class MatomoService {
 	destroy() {
 		this.disconnectFromHistory();
 		this.stateUnsubscribe();
-		this.m.push = this.rawPush;
+		ReactPiwik.push = this.rawPush;
 		this.m = null;
 	}
 
@@ -102,7 +103,7 @@ export class MatomoService {
 	}
 
 	push(args, bypass) {
-		return this.m.push(args, bypass);
+		return ReactPiwik.push(args, bypass);
 	}
 
 	track(loc) {
@@ -124,9 +125,9 @@ export class MatomoService {
 			this.disconnectFromHistory();
 			return;
 		}
-		ReactPiwik.push(['trackPageView']);
-		ReactPiwik.push(['enableHeartBeatTimer']);
-		ReactPiwik.push(['trackAllContentImpressions']);
+		this.push(['trackPageView']);
+		this.push(['enableHeartBeatTimer']);
+		this.push(['trackAllContentImpressions']);
 		if (this.walletContext) {
 			this._applyWalletContext();
 		}
