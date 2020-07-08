@@ -56,7 +56,7 @@ const initReact = App => {
 	const ctx = getGlobalContext();
 	render(
 		<Provider store={ctx.store}>
-			<App history={ctx.history} />
+			<App history={ctx.matomoService.connectToHistory(ctx.history.getHistory())} />
 		</Provider>,
 		document.getElementById('app')
 	);

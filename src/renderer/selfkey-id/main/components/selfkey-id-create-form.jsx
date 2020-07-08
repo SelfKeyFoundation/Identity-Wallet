@@ -14,7 +14,7 @@ import {
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { identityOperations, identitySelectors } from 'common/identity';
-import { matomoGoalTracking, matomoGoals } from 'common/matomo';
+import { getGlobalContext } from 'common/context';
 
 const styles = theme => ({
 	wrap: {
@@ -161,7 +161,8 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 	};
 
 	sendMatomoGoal = () => {
-		matomoGoalTracking(matomoGoals.CreateSelfKeyId);
+		const matomoService = getGlobalContext().matomoService;
+		matomoService.trackGoal(matomoService.goals.CreateSelfKeyId);
 	};
 
 	isValidEmail = email => {
