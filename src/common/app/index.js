@@ -311,7 +311,6 @@ const loading = () => async dispatch => {
 	const guideSettingsService = getGlobalContext().guideSettingsService;
 	const settings = await guideSettingsService.getSettings();
 	await dispatch(appActions.setSettingsAction(settings));
-
 	if (!settings.termsAccepted) {
 		await dispatch(push('/terms'));
 	} else {
