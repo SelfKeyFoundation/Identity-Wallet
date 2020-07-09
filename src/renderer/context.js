@@ -5,7 +5,7 @@ import { MatomoService } from 'renderer/matomo/matomo-service';
 export const registerRendererServices = (container, options = {}) => {
 	container.register({
 		history: asValue(history),
-		matomoService: asClass(MatomoService)
+		matomoService: asClass(MatomoService).singleton()
 	});
 	container.resolve('matomoService');
 	return container;
