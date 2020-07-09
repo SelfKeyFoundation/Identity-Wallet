@@ -336,6 +336,8 @@ const createCorporateProfileOperation = (data, onComplete) => async (dispatch, g
 
 		await dispatch(identityOperations.updateIdentitySetupOperation(true, identity.id));
 		await dispatch(identityOperations.unlockIdentityOperation(identity.id));
+		const { matomoService } = getGlobalContext();
+		matomoService.trackGoal(matomoService.goals.CreateCorporateProfile);
 		if (onComplete) {
 			await dispatch(push(onComplete));
 		}
@@ -537,7 +539,8 @@ const createIndividualProfile = (identityId, data) => async (dispatch, getState)
 	);
 
 	await dispatch(identityOperations.updateIdentitySetupOperation(true, identityId));
-
+	const { matomoService } = getGlobalContext();
+	matomoService.trackGoal(matomoService.goals.CreateIndividualProfile);
 	return dispatch(push('/main/individual'));
 };
 
