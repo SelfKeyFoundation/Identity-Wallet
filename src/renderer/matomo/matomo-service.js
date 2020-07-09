@@ -76,7 +76,14 @@ export class MatomoService {
 			return;
 		}
 
-		const allowedActions = ['push', 'track', 'trackGoal', 'setWalletContext', 'grantConcent'];
+		const allowedActions = [
+			'push',
+			'track',
+			'trackGoal',
+			'trackEvent',
+			'setWalletContext',
+			'grantConcent'
+		];
 
 		ipcRenderer.on('matomo-action', (event, payload) => {
 			const [action, ...args] = payload;
@@ -108,6 +115,10 @@ export class MatomoService {
 
 	track(loc) {
 		return this.m.track(loc);
+	}
+
+	trackEvent(category, action, name, value, bypass) {
+		this.push(['trackEvent', category, action, name, value], bypass);
 	}
 
 	trackGoal(goal) {

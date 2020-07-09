@@ -148,12 +148,18 @@ const loadWallets = () => async dispatch => {
 };
 
 const unlockWalletOperation = (wallet, type) => async dispatch => {
-	await dispatch(setEncryptedPrivateKey());
-	await dispatch(walletOperations.updateWalletWithBalance(wallet));
-	await dispatch(identityOperations.loadIdentitiesOperation(wallet.id));
-	await dispatch(identityOperations.unlockIdentityOperation());
-	if (type) {
-		await dispatch(appActions.setWalletType(type));
+	try {
+		await dispatch(setEncryptedPrivateKey());
+		await dispatch(walletOperations.updateWalletWithBalance(wallet));
+		await dispatch(identityOperations.loadIdentitiesOperation(wallet.id));
+		await dispatch(identityOperations.unlockIdentityOperation());
+		if (type) {
+			await dispatch(appActions.setWalletType(type));
+		}
+		this.matomoService.trackEvent('wallet_login', 'success', type, undefined, true);
+	} catch (error) {
+		this.matomoService.trackEvent('wallet_login', 'failure', type, undefined, true);
+		throw error;
 	}
 };
 
@@ -308,9 +314,10 @@ const enterTrezorPassphrase = (error, passphrase) => async () => {
 };
 
 const loading = () => async dispatch => {
-	const guideSettingsService = getGlobalContext().guideSettingsService;
+	const { guideSettingsService, matomoService } = getGlobalContext();
 	const settings = await guideSettingsService.getSettings();
 	await dispatch(appActions.setSettingsAction(settings));
+	matomoService.trackEvent('app', 'loaded', undefined, Date.now() - window.startTS, true);
 	if (!settings.termsAccepted) {
 		await dispatch(push('/terms'));
 	} else {

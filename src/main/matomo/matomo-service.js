@@ -27,6 +27,10 @@ export class MatomoService {
 		this._sendToRenderer(['track', loc]);
 	}
 
+	trackEvent(category, action, name, value, bypass) {
+		this._sendToRenderer(['trackEvent', category, action, name, value, bypass]);
+	}
+
 	trackGoal(goal) {
 		this._sendToRenderer(['trackGoal', goal]);
 	}

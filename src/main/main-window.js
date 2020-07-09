@@ -6,6 +6,7 @@ import { isDevMode, isDebugMode } from 'common/utils/common';
 import { Logger } from '../common/logger';
 import createMenuTemplate from './menu';
 import { initSplashScreen } from '@trodi/electron-splashscreen';
+import { getGlobalContext } from 'common/context';
 
 const log = new Logger('main-window');
 
@@ -81,7 +82,9 @@ export const createMainWindow = async () => {
 		mainWindow.show();
 	});
 
-	mainWindow.on('close', event => {});
+	mainWindow.on('close', event => {
+		getGlobalContext().matomoService.trackEvent('app', 'close', undefined, undefined, true);
+	});
 
 	mainWindow.on('closed', () => {
 		mainWindow = null;
