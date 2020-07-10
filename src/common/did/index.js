@@ -65,6 +65,7 @@ const createDIDOperation = () => async (dispatch, getState) => {
 				await dispatch(push('/main/transaction-timeout'));
 			}, hardwalletConfirmationTime);
 		}
+
 		await dispatch(didActions.setDidPending(identity.id, true));
 		const gasLimit = await didService.getGasLimit(walletFromStore.address);
 		const transaction = didService.createDID(walletFromStore.address, gasLimit);
