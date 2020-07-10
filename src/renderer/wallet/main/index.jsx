@@ -148,6 +148,14 @@ class Main extends PureComponent {
 							/>
 						)}
 
+						{isCorporate && (
+							<Redirect
+								exact="1"
+								from={`${match.path}/selfkeyIdApplications`}
+								to={`${match.path}/corporate/dashboard/applications`}
+							/>
+						)}
+
 						<Route path={`${match.path}/corporate`} component={CorporateContainer} />
 
 						<Route path={`${match.path}/enter-did`} component={AssociateDIDContainer} />
