@@ -52,9 +52,11 @@ export const didSelectors = {
 const createDIDOperation = () => async (dispatch, getState) => {
 	const walletFromStore = walletSelectors.getWallet(getState());
 	let identity = identitySelectors.selectIdentity(getState());
+	const { didService, matomoService } = getGlobalContext();
 	const didOriginUrl = didSelectors.selectOriginUrl(getState());
 	try {
 		let hardwalletConfirmationTimeout = null;
+		matomoService.trackEvent(`${identity.type}_did`, 'create', 'started');
 		const walletType = appSelectors.selectWalletType(getState());
 		if (walletType === 'ledger' || walletType === 'trezor') {
 			await dispatch(push('/main/hd-transaction-timer'));
@@ -63,8 +65,6 @@ const createDIDOperation = () => async (dispatch, getState) => {
 				await dispatch(push('/main/transaction-timeout'));
 			}, hardwalletConfirmationTime);
 		}
-
-		const { didService, matomoService } = getGlobalContext();
 		await dispatch(didActions.setDidPending(identity.id, true));
 		const gasLimit = await didService.getGasLimit(walletFromStore.address);
 		const transaction = didService.createDID(walletFromStore.address, gasLimit);
@@ -81,15 +81,18 @@ const createDIDOperation = () => async (dispatch, getState) => {
 					? matomoService.goals.CreateCorporateDID
 					: matomoService.goals.CreateIndividualDID;
 			matomoService.trackGoal(goal);
+			matomoService.trackEvent(`${identity.type}_did`, 'create', 'success');
 			await dispatch(push(didOriginUrl));
 		});
 		transaction.on('transactionHash', async hash => {
 			clearTimeout(hardwalletConfirmationTimeout);
+			matomoService.trackEvent(`${identity.type}_did`, 'create', 'processing');
 			await dispatch(push('/main/create-did-processing'));
 		});
 		transaction.on('error', async error => {
 			clearTimeout(hardwalletConfirmationTimeout);
 			const message = error.toString().toLowerCase();
+			matomoService.trackEvent(`${identity.type}_did`, 'create', 'failed');
 			if (message.indexOf('insufficient funds') !== -1) {
 				await dispatch(push('/main/transaction-no-gas-error'));
 			} else if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {

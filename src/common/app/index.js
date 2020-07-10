@@ -156,9 +156,21 @@ const unlockWalletOperation = (wallet, type) => async dispatch => {
 		if (type) {
 			await dispatch(appActions.setWalletType(type));
 		}
-		this.matomoService.trackEvent('wallet_login', 'success', type, undefined, true);
+		getGlobalContext().matomoService.trackEvent(
+			'wallet_login',
+			'success',
+			type,
+			undefined,
+			true
+		);
 	} catch (error) {
-		this.matomoService.trackEvent('wallet_login', 'failure', type, undefined, true);
+		getGlobalContext().matomoService.trackEvent(
+			'wallet_login',
+			'failure',
+			type,
+			undefined,
+			true
+		);
 		throw error;
 	}
 };
@@ -172,6 +184,13 @@ const unlockWalletWithPassword = (walletId, password) => async dispatch => {
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
+		getGlobalContext().matomoService.trackEvent(
+			'wallet_login',
+			'failure',
+			'with-password',
+			undefined,
+			true
+		);
 		log.error(error);
 		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
@@ -186,6 +205,13 @@ const unlockWalletWithNewFile = (filePath, password) => async dispatch => {
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
+		getGlobalContext().matomoService.trackEvent(
+			'wallet_login',
+			'failure',
+			'with-new-file',
+			undefined,
+			true
+		);
 		log.error(error);
 		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
@@ -199,6 +225,13 @@ const unlockWalletWithPrivateKey = privateKey => async dispatch => {
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
+		getGlobalContext().matomoService.trackEvent(
+			'wallet_login',
+			'failure',
+			'with-private-key',
+			undefined,
+			true
+		);
 		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
 };
@@ -227,6 +260,13 @@ const unlockWalletWithPublicKey = (address, path) => async (dispatch, getState) 
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
+		getGlobalContext().matomoService.trackEvent(
+			'wallet_login',
+			'failure',
+			'with-public-key',
+			undefined,
+			true
+		);
 		log.error(error);
 		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
@@ -314,10 +354,9 @@ const enterTrezorPassphrase = (error, passphrase) => async () => {
 };
 
 const loading = () => async dispatch => {
-	const { guideSettingsService, matomoService } = getGlobalContext();
+	const { guideSettingsService } = getGlobalContext();
 	const settings = await guideSettingsService.getSettings();
 	await dispatch(appActions.setSettingsAction(settings));
-	matomoService.trackEvent('app', 'loaded', undefined, Date.now() - window.startTS, true);
 	if (!settings.termsAccepted) {
 		await dispatch(push('/terms'));
 	} else {

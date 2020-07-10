@@ -8,17 +8,12 @@ const config = require('../common/config');
 const defaultWindowOpen = window.open;
 const electron = require('electron');
 const PDFWindow = require('electron-pdf-window');
-window.startTS = Date.now();
-window._paq = window._paq || [];
+window.startTS = config.startTime;
 window.electron = electron;
 window.appName = appPackage.productName;
 window.appVersion = appPackage.version;
 window.isTestMode = common.isTestMode();
 window.machineId = nodeMachineId.machineIdSync();
-window._paq.push(['setSiteId', config.matomoSite]);
-window._paq.push(['setUserId', window.machineId]);
-window._paq.push(['setCustomVariable', 3, 'walletVersion', window.appVersion, 'visit']);
-window._paq.push(['trackEvent', 'app', 'open']);
 
 window.open = function(url, ...args) {
 	for (let i in config.common.allowedUrls) {

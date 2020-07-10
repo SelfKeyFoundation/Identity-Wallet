@@ -96,6 +96,12 @@ export const selectIdAttributeTypeByUrl = createSelector(
 	(attributeTypes, { attributeTypeUrl }) => attributeTypes.find(t => t.url === attributeTypeUrl)
 );
 
+export const selectIdAttributeTypeById = createSelector(
+	selectRoot('idAtrributeTypesById'),
+	selectProps('attributeTypeId'),
+	({ idAtrributeTypesById }, { attributeTypeId }) => idAtrributeTypesById[attributeTypeId]
+);
+
 export const selectBasicCorporateAttributeTypes = createSelector(
 	state => selectAttributeTypesFiltered(state, { entityType: 'corporate' }),
 	corporateTypes =>
