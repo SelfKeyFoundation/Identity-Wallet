@@ -147,7 +147,13 @@ class Main extends PureComponent {
 								to={`${match.path}/corporate`}
 							/>
 						)}
-
+						{isCorporate && (
+							<Redirect
+								exact="1"
+								from={`${match.path}/selfkeyId`}
+								to={`${match.path}/corporate/dashboard`}
+							/>
+						)}
 						{isCorporate && (
 							<Redirect
 								exact="1"
