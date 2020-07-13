@@ -7,6 +7,7 @@ import { walletSelectors } from 'common/wallet';
 import { createWalletSelectors, createWalletOperations } from 'common/create-wallet';
 import { Link } from 'react-router-dom';
 import { Popup } from '../../common';
+import { getGlobalContext } from 'common/context';
 
 const styles = theme => ({
 	bottomSpace: {
@@ -36,6 +37,13 @@ class BackupAddress extends PureComponent {
 	};
 
 	handleDownload = async event => {
+		getGlobalContext().matomoService.trackEvent(
+			'wallet_setup',
+			'keystore_download',
+			undefined,
+			undefined,
+			true
+		);
 		const directoryPath = await window.openDirectorySelectDialog(event);
 		if (directoryPath) {
 			this.props.dispatch(createWalletOperations.downloadFileOperation(directoryPath));

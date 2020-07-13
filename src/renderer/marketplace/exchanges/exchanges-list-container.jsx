@@ -17,6 +17,7 @@ class ExchangesListContainer extends MarketplaceExchangesComponent {
 			'MarketplaceVisitIndividualExchange',
 			'MarketplaceVisitCorporateExchange'
 		);
+		this.trackMarketplaceVisit('exchanges');
 	}
 
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));

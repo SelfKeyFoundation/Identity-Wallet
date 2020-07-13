@@ -8,7 +8,7 @@ const config = require('../common/config');
 const defaultWindowOpen = window.open;
 const electron = require('electron');
 const PDFWindow = require('electron-pdf-window');
-
+window.startTS = config.startTime;
 window.electron = electron;
 window.appName = appPackage.productName;
 window.appVersion = appPackage.version;

@@ -52,6 +52,7 @@ userDataDirectoryPath = getUserDataPath();
 walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
 
 const common = {
+	startTS: Date.now(),
 	defaultLanguage: 'en',
 	forceUpdateAttributes: process.env.FORCE_UPDATE_ATTRIBUTES === 'true' && !isTestMode(),
 	userAgent: `SelfKeyIDW/${pkg.version}`,

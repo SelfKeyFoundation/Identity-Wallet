@@ -17,6 +17,7 @@ class IncorporationsListContainer extends MarketplaceIncorporationsComponent {
 			'MarketplaceVisitIndividualIncorporations',
 			'MarketplaceVisitCorporateIncorporations'
 		);
+		this.trackMarketplaceVisit('incorporations');
 	}
 
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));

@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { appOperations } from 'common/app';
+import { getGlobalContext } from 'common/context';
 
 const styles = theme => ({
 	container: {
@@ -67,6 +68,15 @@ class Home extends PureComponent {
 		this.props.dispatch(appOperations.loadWalletsOperation());
 		this.props.dispatch(tokensOperations.loadTokensOperation());
 	}
+	createWalletClicked = () => {
+		getGlobalContext().matomoService.trackEvent(
+			'wallet_setup',
+			'wallet_create_click',
+			undefined,
+			undefined,
+			true
+		);
+	};
 	render() {
 		const { classes } = this.props;
 		return (
@@ -118,6 +128,7 @@ class Home extends PureComponent {
 								<Button
 									id="createWallet"
 									variant="contained"
+									onClick={this.createWalletClicked}
 									component={createWalletLink}
 									size="large"
 								>
