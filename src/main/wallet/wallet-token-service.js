@@ -17,19 +17,18 @@ export class WalletTokenService {
 
 	async populateWalletWithPopularTokens(wallet) {
 		const popularList = require('../assets/data/popular-tokens.json');
-		const allTokens = await Token.findAll().whereIn('address', popularList);
-
+		const allTokens = await Token.findAll();
 		const popular = await Promise.all(
 			popularList.map(async addr => {
-				const token = allTokens.find(t => t.address === addr);
+				const token = allTokens.find(t => t.address.toLowerCase() === addr.toLowerCase());
 				if (!token) {
 					return null;
 				}
-				let balance = 0;
+				let balance = '0';
 				try {
 					balance = await this.getTokenBalance(addr, wallet.address);
 				} catch (error) {
-					log.warn(error);
+					log.error(`Token creation error %s %s %s`, token.symbol, token.address, error);
 				}
 
 				return {

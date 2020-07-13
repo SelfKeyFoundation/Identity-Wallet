@@ -1825,5 +1825,124 @@
 		"decimal": 8,
 		"networkId": 1,
 		"type": "erc-20"
+	},
+	{
+		"address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+		"symbol": "USDT",
+		"networkId": 1,
+		"type": "erc-20",
+		"decimal": 6
+	},
+	{
+		"address": "0xB8c77482e45F1F44dE1745F52C74426C631bDD52",
+		"symbol": "BNB",
+		"networkId": 1,
+		"type": "erc-20",
+		"decimal": 18
+	},
+	{
+		"address": "0x2af5d2ad76741191d15dfe7bf6ac92d4bd912ca3",
+		"symbol": "LEO",
+		"networkId": 1,
+		"type": "erc-20",
+		"decimal": 18
+	},
+	{
+		"address": "0x6f259637dcd74c767781e37bc6133cd6a68aa161",
+		"symbol": "HT",
+		"networkId": 1,
+		"type": "erc-20",
+		"decimal": 18
+	},
+	{
+		"address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+		"symbol": "USDC",
+		"networkId": 1,
+		"type": "erc-20",
+		"decimal": 6
+	},
+	{
+		"address": "0xf1290473e210b2108a85237fbcd7b6eb42cc654f",
+		"symbol": "HEDG",
+		"networkId": 1,
+		"type": "erc-20",
+		"decimal": 18
+	},
+	{
+		"address": "0xa0b73e1ff0b80914ab6fe0444e65848c4c34450b",
+		"symbol": "CRO",
+		"networkId": 1,
+		"type": "erc-20",
+		"decimal": 8
+	},
+	{
+		"address": "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2",
+		"symbol": "MKR",
+		"networkId": 1,
+		"type": "erc-20",
+		"decimal": 18
+	},
+	{
+		"address": "0xc9859fccc876e6b4b3c749c5d29ea04f48acb74f",
+		"symbol": "INO",
+		"networkId": 1,
+		"type": "erc-20",
+		"decimal": 0
+	},
+	{
+		"address": "0x75231f58b43240c9718dd58b4967c5114342a86c",
+		"symbol": "OKB",
+		"networkId": 1,
+		"type": "erc-20",
+		"decimal": 18
+	},
+	{
+		"address": "0x8e870d67f660d95d5be530380d0ec0bd388289e1",
+		"symbol": "PAX",
+		"networkId": 1,
+		"type": "erc-20",
+		"decimal": 18
+	},
+	{
+		"address": "0x4fabb145d64652a948d72533023f6e7a623c7c53",
+		"symbol": "BUSD",
+		"networkId": 1,
+		"type": "erc-20",
+		"decimal": 18
+	},
+	{
+		"address": "0xdf574c24545e5ffecb9a659c229253d4111d87e1",
+		"symbol": "HUSD",
+		"networkId": 1,
+		"type": "erc-20",
+		"decimal": 8
+	},
+	{
+		"address": "0x0000000000085d4780B73119b644AE5ecd22b376",
+		"symbol": "TUSD",
+		"networkId": 1,
+		"type": "erc-20",
+		"decimal": 18
+	},
+	{
+		"address": "0xc011a72400e58ecd99ee497cf89e3775d4bd732f",
+		"symbol": "SNX",
+		"networkId": 1,
+		"type": "erc-20",
+		"decimal": 18
+	},
+	{
+		"address": "0xb5a5f22694352c15b00323844ad545abb2b11028",
+		"symbol": "ICX",
+		"networkId": 1,
+		"type": "erc-20",
+		"decimal": 18
+	},
+	{
+		"address": "0x17aa18a4b64a55abed7fa543f2ba4e91f2dce482",
+		"symbol": "INB",
+		"networkId": 1,
+		"type": "erc-20",
+		"decimal": 18
 	}
 ]

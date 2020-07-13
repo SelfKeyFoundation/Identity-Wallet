@@ -485,7 +485,7 @@ const sortedItemsFromEnum = (value = 'code', name = 'name', propertyName) => idT
 	}
 
 	let items = idType.content.enum;
-	let names = idType.content.entityName;
+	let names = idType.content.enumNames;
 
 	if (propertyName && idType.content.properties && idType.content.properties[propertyName]) {
 		items = idType.content.properties[propertyName].enum;
