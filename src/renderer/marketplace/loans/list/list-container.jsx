@@ -20,6 +20,7 @@ class LoansListContainer extends MarketplaceLoansComponent {
 		this.props.dispatch(fiatCurrencyOperations.loadExchangeRatesOperation());
 
 		this.trackMatomoGoal('MarketplaceVisitIndividualLoans', 'MarketplaceVisitCorporateLoans');
+		this.trackMarketplaceVisit('loans');
 	}
 
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));

@@ -17,6 +17,7 @@ class BankAccountsTableContainer extends MarketplaceBankAccountsComponent {
 	};
 
 	componentDidMount() {
+		this.trackMarketplaceVisit('bank_accounts');
 		this.trackMatomoGoal(
 			'MarketplaceVisitIndividualBankAccounts',
 			'MarketplaceVisitCorporateBankAccounts'
