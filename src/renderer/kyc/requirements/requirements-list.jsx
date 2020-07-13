@@ -21,7 +21,8 @@ const styles = theme => ({
 		}
 	},
 	documentType: {
-		display: 'flex'
+		display: 'flex',
+		marginTop: '-14px'
 	},
 	documentIcon: {
 		marginLeft: '10px'
