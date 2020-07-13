@@ -2,6 +2,7 @@ import { asClass, asValue, asFunction, createContainer, InjectionMode } from 'aw
 import EthGasStationService from '../main/blockchain/eth-gas-station-service';
 import configureStore from './store/configure-store';
 import config from './config';
+import { matomoGoals } from './matomo/matomo-goals';
 
 let globalContext = null;
 
@@ -20,7 +21,8 @@ export const registerCommonServices = (container, thread, options) => {
 					configureStore(initialState, threadName)
 			  ).singleton(),
 		ethGasStationService: asClass(EthGasStationService).singleton(),
-		config: asValue(config)
+		config: asValue(config),
+		matomoGoals: asValue(matomoGoals)
 	});
 	return container;
 };

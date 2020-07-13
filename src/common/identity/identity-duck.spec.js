@@ -38,7 +38,10 @@ describe('Identity Duck', () => {
 	beforeEach(() => {
 		sinon.restore();
 		state = { identity: _.cloneDeep(initialState) };
-		setGlobalContext({ identityService: identityService });
+		setGlobalContext({
+			identityService: identityService,
+			matomoService: { trackEvent: () => {}, trackGoal: () => {} }
+		});
 	});
 	describe('Identity', () => {
 		describe('Operations', () => {
@@ -282,6 +285,13 @@ describe('Identity Duck', () => {
 				expect(identitySelectors.selectExpiredIdAttributeTypes(state)).toEqual(
 					expiredIdAttributeTypes
 				);
+			});
+			it('selectIdAttributeTypeById', () => {
+				expect(
+					identitySelectors.selectIdAttributeTypeById(state, {
+						attributeTypeId: testIdAttributeTypes[0].id
+					})
+				).toEqual(testIdAttributeTypes[0]);
 			});
 		});
 	});
@@ -678,6 +688,7 @@ describe('Identity Duck', () => {
 					.stub(testExports.operations, 'loadDocumentsForAttributeOperation')
 					.returns(() => {});
 				sinon.stub(identitySelectors, 'selectIdentity').returns({ id: 1 });
+				sinon.stub(identitySelectors, 'selectIdAttributeTypeById').returns('test');
 
 				await testExports.operations.createIdAttributeOperation(testAttribute)(
 					store.dispatch,

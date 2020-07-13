@@ -6,9 +6,8 @@ import backgroundImage from '../../../static/assets/images/bgs/background.jpg';
 import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { appOperations, appSelectors } from 'common/app';
-import { isTestMode } from 'common/utils/common';
-import ReactPiwik from 'react-piwik';
+import { appOperations } from 'common/app';
+import { getGlobalContext } from 'common/context';
 
 const styles = theme => ({
 	container: {
@@ -65,18 +64,19 @@ const styles = theme => ({
 const createWalletLink = (props = {}) => <Link to="/createWallet" {...props} />;
 const unlockWalletLink = (props = {}) => <Link to="/unlockWallet" {...props} />;
 class Home extends PureComponent {
-	includeTracking = () => {
-		return this.props.hasAcceptedTracking && !isTestMode();
-	};
-
 	componentDidMount() {
 		this.props.dispatch(appOperations.loadWalletsOperation());
 		this.props.dispatch(tokensOperations.loadTokensOperation());
-
-		if (this.includeTracking()) {
-			ReactPiwik.push(['setConsentGiven']);
-		}
 	}
+	createWalletClicked = () => {
+		getGlobalContext().matomoService.trackEvent(
+			'wallet_setup',
+			'wallet_create_click',
+			undefined,
+			undefined,
+			true
+		);
+	};
 	render() {
 		const { classes } = this.props;
 		return (
@@ -128,6 +128,7 @@ class Home extends PureComponent {
 								<Button
 									id="createWallet"
 									variant="contained"
+									onClick={this.createWalletClicked}
 									component={createWalletLink}
 									size="large"
 								>
@@ -209,10 +210,6 @@ class Home extends PureComponent {
 	}
 }
 
-const mapStateToProps = (state, props) => {
-	return {
-		hasAcceptedTracking: appSelectors.hasAcceptedTracking(state)
-	};
-};
+const mapStateToProps = (state, props) => ({});
 
 export default connect(mapStateToProps)(withStyles(styles)(Home));

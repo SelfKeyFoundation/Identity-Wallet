@@ -96,6 +96,12 @@ export const selectIdAttributeTypeByUrl = createSelector(
 	(attributeTypes, { attributeTypeUrl }) => attributeTypes.find(t => t.url === attributeTypeUrl)
 );
 
+export const selectIdAttributeTypeById = createSelector(
+	selectRoot('idAtrributeTypesById'),
+	selectProps('attributeTypeId'),
+	({ idAtrributeTypesById }, { attributeTypeId }) => idAtrributeTypesById[attributeTypeId]
+);
+
 export const selectBasicCorporateAttributeTypes = createSelector(
 	state => selectAttributeTypesFiltered(state, { entityType: 'corporate' }),
 	corporateTypes =>
@@ -479,7 +485,7 @@ const sortedItemsFromEnum = (value = 'code', name = 'name', propertyName) => idT
 	}
 
 	let items = idType.content.enum;
-	let names = idType.content.entityName;
+	let names = idType.content.enumNames;
 
 	if (propertyName && idType.content.properties && idType.content.properties[propertyName]) {
 		items = idType.content.properties[propertyName].enum;
