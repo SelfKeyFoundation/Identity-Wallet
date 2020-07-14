@@ -2,14 +2,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/styles';
 import { CheckMaIcon, DeniedIcon, HourGlassIcon } from 'selfkey-ui';
 
-const styles = theme => ({
-	modal: {
-		overflow: 'auto'
-	},
-	closeButton: {
-		top: '20px'
-	}
-});
+const styles = () => ({});
 
 const HeaderIcon = withStyles(styles)(({ status, classes }) => {
 	let icon = null;
@@ -31,10 +24,16 @@ const HeaderIcon = withStyles(styles)(({ status, classes }) => {
 	 */
 	switch (status) {
 		case 2:
-			icon = <CheckMaIcon className={classes.headerIcon} />;
+			icon = <CheckMaIcon />;
+			break;
+		case 3:
+			icon = <DeniedIcon />;
+			break;
+		case 7:
+			icon = <DeniedIcon />;
 			break;
 		case 8:
-			icon = <DeniedIcon className={classes.headerIcon} />;
+			icon = <DeniedIcon />;
 			break;
 		default:
 			icon = <HourGlassIcon />;
