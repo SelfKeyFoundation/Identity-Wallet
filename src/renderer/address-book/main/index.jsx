@@ -44,7 +44,6 @@ class AddressBookContainer extends PureComponent {
 	};
 
 	componentDidMount() {
-		console.log(this.props);
 		this.props.dispatch(addressBookOperations.loadAddressBook());
 	}
 
