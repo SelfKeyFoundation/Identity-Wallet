@@ -44,6 +44,7 @@ class AddressBookContainer extends PureComponent {
 	};
 
 	componentDidMount() {
+		console.log(this.props);
 		this.props.dispatch(addressBookOperations.loadAddressBook());
 	}
 
@@ -57,11 +58,11 @@ class AddressBookContainer extends PureComponent {
 	}
 
 	handleAdd = () => {
-		this.props.dispatch(push('addressBookAdd'));
+		this.props.dispatch(push('/main/addressBookAdd'));
 	};
 
 	handleEdit = id => {
-		this.props.dispatch(push(`addressBookEdit/${id}`));
+		this.props.dispatch(push(`/main/addressBookEdit/${id}`));
 	};
 
 	handleDelete = id => {
