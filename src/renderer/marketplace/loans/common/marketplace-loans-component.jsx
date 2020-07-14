@@ -45,6 +45,13 @@ export default class MarketplaceLoansComponent extends PureComponent {
 		if (!matomoService.goals[goal]) return;
 		matomoService.trackGoal(matomoService.goals[goal]);
 	};
+
+	trackMarketplaceVisit = marketplaceName => {
+		if (!this.props.identity) return;
+		let prefix = this.props.identity.type;
+		const { matomoService } = getGlobalContext();
+		matomoService.trackEvent('marketplace', 'visit', `${prefix}_${marketplaceName}`);
+	};
 }
 
 export { MarketplaceLoansComponent };

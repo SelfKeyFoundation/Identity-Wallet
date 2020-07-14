@@ -23,6 +23,7 @@ class NotarizationDetailsContainer extends MarketplaceNotariesComponent {
 			'MarketplaceVisitIndividualNotaries',
 			'MarketplaceVisitCorporateNotaries'
 		);
+		this.trackMarketplaceVisit('notarization');
 	}
 
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));

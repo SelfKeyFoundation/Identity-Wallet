@@ -37,12 +37,12 @@ export class MatomoService {
 			if (isTestMode()) {
 				return;
 			}
-			log.info('pushing event with concent %s: %j', this.hasConcent(), args);
+			log.debug('pushing event with concent %s: %j', this.hasConcent(), args);
 			if (this.hasConcent() || bypass) {
 				return this.rawPush.call(ReactPiwik, args);
 			}
 		};
-		log.info('init complete');
+		log.debug('init complete');
 	}
 
 	destroy() {
@@ -61,14 +61,14 @@ export class MatomoService {
 			if (hasAcceptedTracking === this.hasConcent()) return;
 			this.grantConcent(hasAcceptedTracking);
 		});
-		log.info('listen to state');
+		log.debug('listen to state');
 	}
 	stateUnsubscribe() {
 		if (this._unsubscribe) {
 			this._unsubscribe();
 		}
 		this._unsubscribe = false;
-		log.info('not listening to state');
+		log.debug('not listening to state');
 	}
 
 	listenToMain() {
@@ -76,7 +76,14 @@ export class MatomoService {
 			return;
 		}
 
-		const allowedActions = ['push', 'track', 'trackGoal', 'setWalletContext', 'grantConcent'];
+		const allowedActions = [
+			'push',
+			'track',
+			'trackGoal',
+			'trackEvent',
+			'setWalletContext',
+			'grantConcent'
+		];
 
 		ipcRenderer.on('matomo-action', (event, payload) => {
 			const [action, ...args] = payload;
@@ -108,6 +115,10 @@ export class MatomoService {
 
 	track(loc) {
 		return this.m.track(loc);
+	}
+
+	trackEvent(category, action, name, value, bypass) {
+		this.push(['trackEvent', category, action, name, value], bypass);
 	}
 
 	trackGoal(goal) {

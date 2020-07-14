@@ -7,8 +7,9 @@ import * as EthUtil from 'ethereumjs-util';
 
 const log = new Logger('wallet-service');
 export class WalletService {
-	constructor({ web3Service, config, walletTokenService }) {
+	constructor({ web3Service, config, walletTokenService, matomoService }) {
 		this.web3Service = web3Service;
+		this.matomoService = matomoService;
 		this.config = config;
 		this.walletTokenService = walletTokenService;
 	}
@@ -68,11 +69,25 @@ export class WalletService {
 		}
 	}
 
+	async createWallet(opts) {
+		const wallet = await Wallet.create(opts);
+		await this.walletTokenService.populateWalletWithPopularTokens(wallet);
+		this.matomoService.trackEvent(
+			'wallet_setup',
+			'wallet_created',
+			opts.profile || 'local',
+			undefined,
+			true
+		);
+		return wallet;
+	}
+
 	async createWalletWithPassword(password) {
 		const account = this.web3Service.createAccount(password);
 		this.web3Service.setDefaultAccount(account);
 		const keystoreFileFullPath = await this.saveAccountToKeystore(account, password);
-		const wallet = await Wallet.create({
+
+		const wallet = await this.createWallet({
 			address: account.address,
 			keystoreFilePath: keystoreFileFullPath,
 			profile: 'local'
@@ -128,12 +143,11 @@ export class WalletService {
 		let wallet = await Wallet.findByPublicKey(account.address);
 
 		if (!wallet) {
-			wallet = await Wallet.create({
+			wallet = await this.createWallet({
 				address: account.address,
 				keystoreFilePath: keystoreFileFullPath,
 				profile: 'local'
 			});
-			await this.walletTokenService.populateWalletWithPopularTokens(wallet);
 		}
 
 		const newWallet = {
@@ -155,11 +169,10 @@ export class WalletService {
 		let wallet = await Wallet.findByPublicKey(account.address);
 
 		if (!wallet) {
-			wallet = await Wallet.create({
+			wallet = await this.createWallet({
 				address: account.address,
 				profile: 'local'
 			});
-			await this.walletTokenService.populateWalletWithPopularTokens(wallet);
 		}
 		const newWallet = {
 			...wallet,
@@ -174,12 +187,11 @@ export class WalletService {
 		this.web3Service.setDefaultAddress(address);
 
 		if (!wallet) {
-			wallet = await Wallet.create({
+			wallet = await this.createWallet({
 				address,
 				profile,
 				path: hwPath
 			});
-			await this.walletTokenService.populateWalletWithPopularTokens(wallet);
 		}
 
 		return wallet;
@@ -252,61 +264,3 @@ export class WalletService {
 }
 
 export default WalletService;
-
-// async function testPaymentContract(wallet) {
-// 	const ctx = getGlobalContext();
-// 	console.log('XXX', wallet);
-// 	let res = await ctx.selfkeyService.getAllowance(
-// 		wallet.address,
-// 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5'
-// 	);
-// 	const amount = 20000000000000;
-// 	let gas = await ctx.selfkeyService.estimateApproveGasLimit(
-// 		wallet.address,
-// 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5',
-// 		amount
-// 	);
-
-// 	console.log('XXX pre allow', res.toString());
-// 	res = await ctx.selfkeyService.approve(
-// 		wallet.address,
-// 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5',
-// 		amount,
-// 		gas
-// 	);
-// 	console.log('XXX approve res', res.events.Approval.returnValues);
-// 	res = await ctx.selfkeyService.getAllowance(
-// 		wallet.address,
-// 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5'
-// 	);
-// 	console.log('XXX post approve', res.toString());
-// 	const did = wallet.did;
-// 	// gas = await ctx.paymentService.getGasLimit(
-// 	// 	wallet.address,
-// 	// 	did,
-// 	// 	did,
-// 	// 	10000,
-// 	// 	ctx.web3Service.ensureStrHex('test'),
-// 	// 	0,
-// 	// 	0
-// 	// );
-// 	// console.log('XXX payment gas', gas);
-
-// 	res = await ctx.paymentService.makePayment(
-// 		wallet.address,
-// 		did,
-// 		did,
-// 		10000,
-// 		ctx.web3Service.ensureStrHex('test'),
-// 		0,
-// 		0,
-// 		4500000
-// 	);
-// 	console.log('XXX payment res', res);
-
-// 	res = await ctx.selfkeyService.getAllowance(
-// 		wallet.address,
-// 		'0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5'
-// 	);
-// 	console.log('XXX post payment', res.toString());
-// }

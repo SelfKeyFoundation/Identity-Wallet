@@ -150,6 +150,13 @@ class MarketplaceComponent extends PureComponent {
 		matomoService.trackGoal(matomoService.goals[goal]);
 	};
 
+	trackMarketplaceVisit = marketplaceName => {
+		if (!this.props.identity) return;
+		let prefix = this.props.identity.type;
+		const { matomoService } = getGlobalContext();
+		matomoService.trackEvent('marketplace', 'visit', `${prefix}_${marketplaceName}`);
+	};
+
 	clearRelyingParty = async () => {
 		await this.props.dispatch(kycOperations.clearRelyingPartyOperation());
 	};
