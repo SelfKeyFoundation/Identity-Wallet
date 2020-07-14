@@ -64,7 +64,7 @@ const createDIDOperation = () => async (dispatch, getState) => {
 			}, hardwalletConfirmationTime);
 		}
 
-		const didService = getGlobalContext().didService;
+		const { didService, matomoService } = getGlobalContext();
 		await dispatch(didActions.setDidPending(identity.id, true));
 		const gasLimit = await didService.getGasLimit(walletFromStore.address);
 		const transaction = didService.createDID(walletFromStore.address, gasLimit);
@@ -76,6 +76,11 @@ const createDIDOperation = () => async (dispatch, getState) => {
 			await dispatch(didActions.setDidPending(identity.id, false));
 
 			await dispatch(identityOperations.updateIdentity(identity));
+			const goal =
+				identity.type === 'corporate'
+					? matomoService.goals.CreateCorporateDID
+					: matomoService.goals.CreateIndividualDID;
+			matomoService.trackGoal(goal);
 			await dispatch(push(didOriginUrl));
 		});
 		transaction.on('transactionHash', async hash => {

@@ -6,7 +6,7 @@ import {
 	APPLICATION_ANSWER_REQUIRED
 } from 'common/kyc/status_codes';
 import { kycOperations } from 'common/kyc';
-import ReactPiwik from 'react-piwik';
+import { getGlobalContext } from 'common/context';
 
 class MarketplaceComponent extends PureComponent {
 	marketplaceRootPath = () => `/main/marketplace`;
@@ -136,8 +136,18 @@ class MarketplaceComponent extends PureComponent {
 		price,
 		quantity = 1
 	}) => {
-		ReactPiwik.push(['addEcommerceItem', code, jurisdiction, rpName, price, quantity]);
-		ReactPiwik.push(['trackEcommerceOrder', transactionHash, price]);
+		const matomoService = getGlobalContext().matomoService;
+		matomoService.push(['addEcommerceItem', code, jurisdiction, rpName, price, quantity]);
+		matomoService.push(['trackEcommerceOrder', transactionHash, price]);
+	};
+
+	trackMatomoGoal = (individualGoalName, corporateGoalName) => {
+		if (!this.props.identity) return;
+		let goal =
+			this.props.identity.type === 'corporate' ? corporateGoalName : individualGoalName;
+		const { matomoService } = getGlobalContext();
+		if (!matomoService.goals[goal]) return;
+		matomoService.trackGoal(matomoService.goals[goal]);
 	};
 
 	clearRelyingParty = async () => {

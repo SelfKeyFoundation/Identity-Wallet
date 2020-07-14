@@ -322,7 +322,12 @@ export const kycSelectors = {
 	},
 	selectRequirementsForTemplate(state, rpName, templateId, identityId) {
 		const template = this.oneTemplateSelector(state, rpName, templateId);
-		if (!template) return null;
+		if (!template) {
+			log.error(
+				`Unable to select template ${templateId} for ${rpName}, check if instance contains this template ID`
+			);
+			return null;
+		}
 		const templateAttributes = template.attributes || [];
 		const attributesBySchema = templateAttributes.reduce((acc, curr) => {
 			if (typeof curr === 'string') {

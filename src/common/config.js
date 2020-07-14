@@ -129,6 +129,9 @@ const common = {
 		'https://selfkey.org/wp-content/uploads/2017/11/selfkey-whitepaper-en.pdf',
 		'https://t.me/selfkeyfoundation'
 	],
+	matomoSite: 1,
+	matomoUrl: 'https://analytics.selfkey.org',
+
 	features: {
 		paymentContract: false,
 		scheduler: true,

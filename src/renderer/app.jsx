@@ -3,11 +3,9 @@ import { Logger } from 'common/logger';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter, push } from 'connected-react-router';
-import ReactPiwik from 'react-piwik';
 import { SelfkeyDarkTheme } from 'selfkey-ui';
 import { appOperations } from 'common/app';
 import { schedulerOperations } from 'common/scheduler';
-import config from 'common/config';
 
 import { GlobalError } from './global-error';
 // Pages
@@ -33,16 +31,6 @@ import AutoUpdate from './auto-update/auto-update-contatiner';
 import AutoUpdateProgress from './auto-update/auto-update-progress-contatiner';
 
 const log = new Logger('AppComponent');
-
-const piwik = new ReactPiwik({
-	url: 'https://analytics.selfkey.org',
-	siteId: config.matomoSite || 1,
-	trackErrors: true
-});
-ReactPiwik.push(['requireConsent']);
-ReactPiwik.push(['trackPageView']);
-ReactPiwik.push(['enableHeartBeatTimer']);
-ReactPiwik.push(['trackAllContentImpressions']);
 
 class AppContainerComponent extends PureComponent {
 	state = { hasError: false };
@@ -102,7 +90,7 @@ const AppContainer = connect()(AppContainerComponent);
 
 const App = ({ store, history }) => (
 	<SelfkeyDarkTheme>
-		<AppContainer history={piwik.connectToHistory(history.getHistory())} />
+		<AppContainer history={history} />
 	</SelfkeyDarkTheme>
 );
 
