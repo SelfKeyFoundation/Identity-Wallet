@@ -304,6 +304,20 @@ export class CryptoChartBoxComponent extends React.Component {
 		}
 	};
 
+	// ETH and KEY have hardcoded colors
+	getChartColors = tokens => {
+		let colors = [];
+		tokens.forEach(token => {
+			if (token.symbol === 'ETH') {
+				colors.push('#9418DC');
+			}
+			if (token.symbol === 'KEY' || token.symbol === 'KI') {
+				colors.push('#2DA1F8');
+			}
+		});
+		return [...colors, ...this.getColors()];
+	};
+
 	getColors = () => ['#46dfba', '#05538E', '#006CBE', '#006CBE', '#00C0D9'];
 
 	getChartEvents = () => {
@@ -464,7 +478,7 @@ export class CryptoChartBoxComponent extends React.Component {
 									events={this.getChartEvents()}
 									tokens={tokens}
 									hasBalance={this.hasBalance()}
-									colors={this.getColors()}
+									colors={this.getChartColors(tokens)}
 								/>
 								<div className={classes.chartCenterContainer}>
 									<Typography variant="h1">
