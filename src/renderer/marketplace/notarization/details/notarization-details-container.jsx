@@ -19,6 +19,11 @@ class NotarizationDetailsContainer extends MarketplaceNotariesComponent {
 
 	componentDidMount() {
 		window.scrollTo(0, 0);
+		this.trackMatomoGoal(
+			'MarketplaceVisitIndividualNotaries',
+			'MarketplaceVisitCorporateNotaries'
+		);
+		this.trackMarketplaceVisit('notarization');
 	}
 
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));

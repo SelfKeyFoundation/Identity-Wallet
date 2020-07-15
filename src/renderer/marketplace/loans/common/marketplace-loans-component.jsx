@@ -1,4 +1,5 @@
 import { PureComponent } from 'react';
+import { getGlobalContext } from 'common/context';
 
 const MARKETPLACE_LOANS_ROOT_PATH = '/main/marketplace/loans';
 
@@ -36,6 +37,21 @@ export default class MarketplaceLoansComponent extends PureComponent {
 						: offer.data.maxLoanTermBorrowing;
 				return offer;
 			});
+	trackMatomoGoal = (individualGoalName, corporateGoalName) => {
+		if (!this.props.identity) return;
+		let goal =
+			this.props.identity.type === 'corporate' ? corporateGoalName : individualGoalName;
+		const { matomoService } = getGlobalContext();
+		if (!matomoService.goals[goal]) return;
+		matomoService.trackGoal(matomoService.goals[goal]);
+	};
+
+	trackMarketplaceVisit = marketplaceName => {
+		if (!this.props.identity) return;
+		let prefix = this.props.identity.type;
+		const { matomoService } = getGlobalContext();
+		matomoService.trackEvent('marketplace', 'visit', `${prefix}_${marketplaceName}`);
+	};
 }
 
 export { MarketplaceLoansComponent };

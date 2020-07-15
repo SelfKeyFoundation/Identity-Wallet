@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { UnlockIcon, ReturnIcon, HourGlassSmallIcon, CalendarIcon } from 'selfkey-ui';
 import { marketplacesSelectors, marketplacesOperations } from 'common/marketplaces';
 import { getServiceDetails, hasBalance } from 'common/exchanges/selectors';
-import ReactPiwik from 'react-piwik';
 
 import {
 	MarketplaceReturnDepositPopup,
@@ -89,7 +88,6 @@ class DepositMangerComponent extends PureComponent {
 		if (!hasBalance) {
 			return dispatch(marketplacesOperations.showMarketplacePopupAction('noBalance'));
 		}
-		ReactPiwik.push(['trackEvent', 'Staking', 'Action', 'Unlock']);
 
 		return dispatch(
 			marketplacesOperations.startStakeTransaction(
@@ -117,7 +115,6 @@ class DepositMangerComponent extends PureComponent {
 
 	returnAction = () => {
 		const { item, dispatch } = this.props;
-		ReactPiwik.push(['trackEvent', 'Staking', 'Action', 'Lock']);
 
 		return dispatch(
 			marketplacesOperations.startWithdrawTransaction(

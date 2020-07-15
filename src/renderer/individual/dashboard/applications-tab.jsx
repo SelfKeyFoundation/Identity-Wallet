@@ -90,6 +90,9 @@ const styles = theme => ({
 	},
 	loading: {
 		marginTop: '5em'
+	},
+	statusName: {
+		marginLeft: '8px'
 	}
 });
 
@@ -312,7 +315,11 @@ class IndividualApplicationsTabComponent extends PureComponent {
 									className={classes.noRightPadding}
 								>
 									<HeaderIcon status={item.currentStatus} />
-									<Typography variant="subtitle2" color="secondary">
+									<Typography
+										variant="subtitle2"
+										color="secondary"
+										className={classes.statusName}
+									>
 										{item.currentStatusName}
 									</Typography>
 								</Grid>
