@@ -1,15 +1,9 @@
 import React from 'react';
 import { Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
-import { CloseButtonIcon } from 'selfkey-ui';
 import { Popup } from '../../../common';
 
 const styles = theme => ({
-	closeIcon: {
-		position: 'absolute',
-		right: '-20px',
-		top: '-20px'
-	},
 	contentContainer: {
 		borderRadius: '4px'
 	},
@@ -37,10 +31,10 @@ export const TOCDisagreementPopup = withStyles(styles)(props => {
 		<Popup
 			className={classes.popup}
 			xtraClass={classes.popupPadding}
+			closeAction={onBackClick}
 			text="Need to Accept Terms"
 		>
 			<div>
-				<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
 				<div className={classes.contentContainer}>
 					<div className={classes.text}>
 						<Typography variant="body2">
