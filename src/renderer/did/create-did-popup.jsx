@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Grid, withStyles, Typography, Button, IconButton, Divider } from '@material-ui/core';
+import { Grid, Typography, Button, IconButton, Divider } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Popup } from '../common/popup';
 import { KeyTooltip, TooltipArrow, PaymentIcon, InfoTooltip } from 'selfkey-ui';
 
@@ -109,6 +110,7 @@ class CreateDIDPopupComponent extends PureComponent {
 											<KeyTooltip
 												interactive
 												placement="top-start"
+												TransitionProps={{ timeout: 0 }}
 												title={
 													<React.Fragment>
 														<span>{tooltipNetworkFee}</span>

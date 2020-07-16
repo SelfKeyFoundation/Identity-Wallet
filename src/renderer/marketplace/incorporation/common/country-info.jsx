@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { Grid, Typography, List, ListItem } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { incorporationsSelectors, incorporationsOperations } from 'common/incorporations';

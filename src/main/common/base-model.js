@@ -54,6 +54,7 @@ export class BaseModel extends Model {
 	}
 
 	static insertMany(records, tx) {
+		records = records.filter(r => !!r);
 		const insertFn = (record, tx) => this.query(tx).insertAndFetch(record);
 		return this.queryMany(records, insertFn, tx);
 	}

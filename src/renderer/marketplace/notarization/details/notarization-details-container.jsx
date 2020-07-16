@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { pricesSelectors } from 'common/prices';
 import { identitySelectors } from 'common/identity';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { marketplaceSelectors } from 'common/marketplace';
 import { MarketplaceNotariesComponent } from '../common/marketplace-notaries-component';
 import NotarizationDetailsPage from './notarization-details-page';
@@ -19,6 +19,11 @@ class NotarizationDetailsContainer extends MarketplaceNotariesComponent {
 
 	componentDidMount() {
 		window.scrollTo(0, 0);
+		this.trackMatomoGoal(
+			'MarketplaceVisitIndividualNotaries',
+			'MarketplaceVisitCorporateNotaries'
+		);
+		this.trackMarketplaceVisit('notarization');
 	}
 
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));

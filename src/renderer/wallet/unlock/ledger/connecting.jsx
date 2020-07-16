@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Typography, Button, Grid } from '@material-ui/core';
 import { HourGlassLargeIcon, WarningShieldIcon } from 'selfkey-ui';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import HelpStepsSection from './help-steps-section';
 import { appOperations, appSelectors } from 'common/app';
 import HelpStepsErrorSection from './help-steps-error-section';
@@ -41,7 +41,7 @@ class ConnectingLedger extends PureComponent {
 					direction="row"
 					justify="flex-start"
 					alignItems="flex-start"
-					spacing={40}
+					spacing={5}
 				>
 					<Grid item xs={2}>
 						<WarningShieldIcon />
@@ -52,7 +52,7 @@ class ConnectingLedger extends PureComponent {
 							direction="column"
 							justify="flex-start"
 							alignItems="flex-start"
-							spacing={40}
+							spacing={5}
 						>
 							<Grid item>
 								<Typography variant="h1">
@@ -73,7 +73,7 @@ class ConnectingLedger extends PureComponent {
 									direction="row"
 									justify="flex-start"
 									alignItems="center"
-									spacing={24}
+									spacing={3}
 								>
 									<Grid item>
 										<Button
@@ -106,7 +106,7 @@ class ConnectingLedger extends PureComponent {
 					direction="row"
 					justify="flex-start"
 					alignItems="flex-start"
-					spacing={40}
+					spacing={5}
 				>
 					<Grid item xs={2}>
 						<HourGlassLargeIcon />
@@ -117,7 +117,7 @@ class ConnectingLedger extends PureComponent {
 							direction="column"
 							justify="flex-start"
 							alignItems="flex-start"
-							spacing={40}
+							spacing={5}
 						>
 							<Grid item>
 								<Typography variant="h1">Connecting To Ledger</Typography>

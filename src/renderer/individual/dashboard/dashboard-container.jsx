@@ -24,12 +24,9 @@ class IndividualDashboardContainerComponent extends PureComponent {
 	};
 
 	async componentDidMount() {
-		const { vendors, profile, dispatch, wallet } = this.props;
+		const { vendors, profile, dispatch, wallet, afterAuthRoute, cancelRoute } = this.props;
 		const { identity } = profile;
 
-		if (identity.type !== 'individual') {
-			return dispatch(identityOperations.navigateToProfileOperation());
-		}
 		if (!identity.isSetupFinished) {
 			return dispatch(push('/selfkeyIdForm'));
 			// TODO: later refactor to individual profile folder
@@ -39,40 +36,52 @@ class IndividualDashboardContainerComponent extends PureComponent {
 		// load marketplace store
 		dispatch(marketplaceOperations.loadMarketplaceOperation());
 
-		await dispatch(kycOperations.resetApplications());
+		// await dispatch(kycOperations.resetApplications());
 		// load existing kyc_applications data
 		await dispatch(kycOperations.loadApplicationsOperation());
 
 		// load RPs
 		if (wallet.profile === 'local') {
-			await this.loadRelyingParties(vendors);
+			await dispatch(
+				kycOperations.loadRelyingPartiesForVendors(
+					vendors,
+					afterAuthRoute,
+					cancelRoute,
+					true,
+					true
+				)
+			);
 		}
 		window.scrollTo(0, 0);
 	}
 
 	componentDidUpdate(prevProps) {
-		const { dispatch, wallet, profile, vendors } = this.props;
-		const { identity } = profile;
-		if (identity.type !== 'individual') {
-			dispatch(identityOperations.navigateToProfileOperation());
-		}
+		const { wallet, vendors, afterAuthRoute, cancelRoute, dispatch } = this.props;
 
 		if (prevProps.vendors.length !== vendors.length && wallet.profile === 'local') {
-			return this.loadRelyingParties(vendors);
+			return dispatch(
+				kycOperations.loadRelyingPartiesForVendors(
+					vendors,
+					afterAuthRoute,
+					cancelRoute,
+					true
+				)
+			);
 		}
 	}
 
 	async loadRelyingParties(vendors) {
 		const authenticated = true;
 		const { afterAuthRoute, cancelRoute, dispatch } = this.props;
-
+		const loadInBackground = true;
 		for (const vendor of vendors) {
 			await dispatch(
 				kycOperations.loadRelyingParty(
 					vendor.vendorId,
 					authenticated,
 					afterAuthRoute,
-					cancelRoute
+					cancelRoute,
+					loadInBackground
 				)
 			);
 		}
@@ -225,6 +234,7 @@ const mapStateToProps = (state, props) => {
 		vendors: marketplaceSelectors.selectActiveVendors(state),
 		rps: kycSelectors.relyingPartiesSelector(state),
 		applications: kycSelectors.selectApplications(state),
+		applicationsProcessing: kycSelectors.selectProcessing(state),
 		afterAuthRoute:
 			walletType === 'ledger' || walletType === 'trezor'
 				? `/main/individual/dashboard/applications`

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { Grid, Typography, Button, List, ListItem } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { identityOperations } from 'common/identity';
 import { IdCardIcon, AttributeAlertIcon, CheckMaIcon, HourGlassIcon } from 'selfkey-ui';
 import { identitySelectors } from '../../common/identity';

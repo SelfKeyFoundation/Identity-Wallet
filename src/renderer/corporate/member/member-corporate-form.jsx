@@ -1,8 +1,8 @@
 import React from 'react';
-import { Typography, Input, Select, MenuItem } from '@material-ui/core';
-import { KeyboardArrowDown } from '@material-ui/icons';
-import { withStyles } from '@material-ui/core/styles';
-import { KeyPicker } from 'selfkey-ui';
+import { Typography, Input, Select, MenuItem, FormControl } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { KeyPicker, SelectDropdownIcon } from 'selfkey-ui';
+import { InputTitle } from '../../common';
 
 const styles = theme => ({
 	regularText: {
@@ -61,23 +61,6 @@ const styles = theme => ({
 	}
 });
 
-const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => {
-	return (
-		<div>
-			<Typography variant="overline" gutterBottom>
-				{title}
-				{optional ? (
-					<Typography variant="overline" className={classes.optional}>
-						(optional)
-					</Typography>
-				) : (
-					'*'
-				)}
-			</Typography>
-		</div>
-	);
-});
-
 const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 	const {
 		classes,
@@ -100,31 +83,39 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 			<div className={classes.inputWrap}>
 				<div className={`${classes.inputBox} ${classes.flexColumn}`}>
 					<InputTitle title="Legal Jurisdiction" />
-					<Select
-						className={classes.select}
-						onChange={onFieldChange('jurisdiction')}
-						displayEmpty
-						error={errors.jurisdiction}
-						name="jurisdiction"
-						value={jurisdiction}
-						disableUnderline
-						IconComponent={KeyboardArrowDown}
-						input={<Input disableUnderline placeholder="Choose..." />}
-					>
-						<MenuItem value="">
-							<em>Choose...</em>
-						</MenuItem>
-						{jurisdictions.map(item => (
-							<MenuItem key={item} value={item.code}>
-								{item.name}
+					<FormControl variant="filled">
+						<Select
+							className={classes.select}
+							onChange={onFieldChange('jurisdiction')}
+							displayEmpty
+							error={errors.jurisdiction}
+							name="jurisdiction"
+							value={jurisdiction}
+							disableUnderline
+							IconComponent={SelectDropdownIcon}
+							input={<Input disableUnderline />}
+						>
+							<MenuItem>
+								<Typography
+									className="choose"
+									variant="subtitle1"
+									color="textSecondary"
+								>
+									Choose...
+								</Typography>
 							</MenuItem>
-						))}
-					</Select>
-					{errors.jurisdiction && (
-						<Typography variant="subtitle2" color="error" gutterBottom>
-							{errors.jurisdiction}
-						</Typography>
-					)}
+							{jurisdictions.map(item => (
+								<MenuItem key={item} value={item.code}>
+									{item.name}
+								</MenuItem>
+							))}
+						</Select>
+						{errors.jurisdiction && (
+							<Typography variant="subtitle2" color="error" gutterBottom>
+								{errors.jurisdiction}
+							</Typography>
+						)}
+					</FormControl>
 				</div>
 				<div className={`${classes.inputBox} ${classes.flexColumn}`}>
 					<InputTitle title="Legal Entity Name" />
@@ -147,32 +138,40 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 			<div className={classes.inputWrap}>
 				<div className={`${classes.inputBox} ${classes.flexColumn}`}>
 					<InputTitle title="Legal Entity Type" />
-					<Select
-						className={classes.select}
-						onChange={onFieldChange('entityType')}
-						displayEmpty
-						value={entityType}
-						name="entitytype"
-						error={errors.entityType}
-						disableUnderline
-						IconComponent={KeyboardArrowDown}
-						input={<Input disableUnderline />}
-						disabled={isEditing}
-					>
-						<MenuItem value="">
-							<em>Choose...</em>
-						</MenuItem>
-						{entityTypes.map(item => (
-							<MenuItem key={item} value={item.code}>
-								{item.name}
+					<FormControl variant="filled">
+						<Select
+							className={classes.select}
+							onChange={onFieldChange('entityType')}
+							displayEmpty
+							value={entityType}
+							name="entitytype"
+							error={errors.entityType}
+							disableUnderline
+							IconComponent={SelectDropdownIcon}
+							input={<Input disableUnderline />}
+							disabled={isEditing}
+						>
+							<MenuItem>
+								<Typography
+									className="choose"
+									variant="subtitle1"
+									color="textSecondary"
+								>
+									Choose...
+								</Typography>
 							</MenuItem>
-						))}
-					</Select>
-					{errors.entityType && (
-						<Typography variant="subtitle2" color="error" gutterBottom>
-							{errors.entityType}
-						</Typography>
-					)}
+							{entityTypes.map(item => (
+								<MenuItem key={item} value={item.code}>
+									{item.name}
+								</MenuItem>
+							))}
+						</Select>
+						{errors.entityType && (
+							<Typography variant="subtitle2" color="error" gutterBottom>
+								{errors.entityType}
+							</Typography>
+						)}
+					</FormControl>
 				</div>
 				<div className={`${classes.inputBox} ${classes.flexColumn}`}>
 					<InputTitle title="Incorporation Date" />

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Grid, Button, Typography, withStyles, List } from '@material-ui/core';
+import { Grid, Button, Typography, List } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import CryptoPriceTableContainer from './crypto-price-table-container';
 import { push } from 'connected-react-router';
@@ -107,7 +108,7 @@ class CryptoManagerContainerComponent extends PureComponent {
 				<Grid
 					container
 					className={classes.root}
-					spacing={32}
+					spacing={4}
 					direction="column"
 					justify="flex-start"
 					alignItems="stretch"
@@ -156,7 +157,7 @@ class CryptoManagerContainerComponent extends PureComponent {
 						</Grid>
 					</List>
 					<Grid item>
-						<Grid container spacing={24}>
+						<Grid container spacing={3}>
 							<Grid item>
 								<Button
 									variant="outlined"
@@ -186,7 +187,7 @@ class CryptoManagerContainerComponent extends PureComponent {
 				<Grid
 					container
 					className={classes.root}
-					spacing={32}
+					spacing={4}
 					direction="column"
 					justify="flex-start"
 					alignItems="stretch"
@@ -198,7 +199,7 @@ class CryptoManagerContainerComponent extends PureComponent {
 						</Typography>
 					</Grid>
 					<Grid item>
-						<Grid container spacing={24}>
+						<Grid container spacing={3}>
 							<Grid item>
 								<Button
 									variant="outlined"
@@ -225,7 +226,7 @@ class CryptoManagerContainerComponent extends PureComponent {
 				direction="column"
 				justify="flex-start"
 				alignItems="center"
-				spacing={32}
+				spacing={4}
 				className={classes.wrap}
 			>
 				<BackButton onclick={this.handleBackClick} />

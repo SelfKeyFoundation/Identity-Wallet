@@ -1,3 +1,4 @@
+import config from 'common/config';
 import { getGlobalContext } from 'common/context';
 import { createAliasedAction } from 'electron-redux';
 import BN from 'bignumber.js';
@@ -79,7 +80,7 @@ const setTargetOperation = token => async (dispatch, getState) => {
 
 const loadTokensOperation = () => async (dispatch, getState) => {
 	const ctx = getGlobalContext();
-	const tokens = await ctx.TotleSwapService.fetchTokens();
+	const tokens = await ctx.totleSwapService.fetchTokens();
 	await dispatch(tokenSwapActions.setTokens(tokens));
 };
 
@@ -88,6 +89,7 @@ const swapTokensOperation = ({ address, amount, decimal }) => async (dispatch, g
 
 	const sourceAsset = tokenSwapSelectors.selectSource(getState());
 	const destinationAsset = tokenSwapSelectors.selectTarget(getState());
+	const partnerContractAddress = config.totlePartnerContract;
 
 	const ctx = getGlobalContext();
 	const swapRequestPayload = {
@@ -95,7 +97,11 @@ const swapTokensOperation = ({ address, amount, decimal }) => async (dispatch, g
 		destinationAsset,
 		sourceAmount: toBaseUnit(amount, decimal)
 	};
-	const request = await ctx.TotleSwapService.swap(address, swapRequestPayload);
+	const request = await ctx.totleSwapService.swap(
+		address,
+		swapRequestPayload,
+		partnerContractAddress
+	);
 
 	if (!request.success) {
 		await dispatch(tokenSwapActions.setError(request.response.message));
@@ -189,14 +195,31 @@ export const tokenSwapSelectors = {
 	selectTransaction: state => tokenSwapSelectors.selectRoot(state).transaction,
 	selectFee: state => {
 		const transaction = tokenSwapSelectors.selectTransaction(state);
-		const total = transaction
-			? +transaction.summary[0].partnerFee.amount + +transaction.summary[0].totleFee.amount
-			: 0;
+		let totleFee = 0;
+		let partnerFee = 0;
+		if (transaction) {
+			totleFee = transaction.summary.reduce(
+				(acc, curr) => acc + (curr.totleFee ? curr.totleFee.amount : 0),
+				0
+			);
+			partnerFee = transaction.summary.reduce(
+				(acc, curr) => acc + (curr.partnerFee ? curr.partnerFee.amount : 0),
+				0
+			);
+		}
+		const total = transaction ? +totleFee + +partnerFee : 0;
 		return transaction ? toUnit(total, 18) : false;
 	},
 	selectGas: state => {
 		const transaction = tokenSwapSelectors.selectTransaction(state);
-		return transaction ? toUnit(transaction.transactions[0].tx.gasPrice, 18) : false;
+		let gas = 0;
+		if (transaction) {
+			gas = transaction.transactions.reduce(
+				(acc, curr) => acc + curr.tx.gas * curr.tx.gasPrice,
+				0
+			);
+		}
+		return transaction ? toUnit(gas, 18) : false;
 	},
 	selectRate: state => {
 		const transaction = tokenSwapSelectors.selectTransaction(state);

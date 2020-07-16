@@ -1,5 +1,6 @@
 import React from 'react';
-import { Grid, withStyles, Typography } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { MarketplaceIcon, HourGlassLargeIcon } from 'selfkey-ui';
 
 const styles = theme => ({

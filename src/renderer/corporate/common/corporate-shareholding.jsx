@@ -1,5 +1,6 @@
 import React from 'react';
-import { Grid, CardHeader, Card, CardContent, withStyles } from '@material-ui/core';
+import { Grid, CardHeader, Card, CardContent } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Chart } from 'react-google-charts';
 import { getProfileName, getMemberEquity } from './common-helpers.jsx';
 

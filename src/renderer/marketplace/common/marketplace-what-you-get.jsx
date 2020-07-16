@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Typography, Grid } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { sanitize } from '../common';
 
 const styles = theme => ({
@@ -26,7 +27,6 @@ const styles = theme => ({
 			color: theme.palette.secondary.main,
 			display: 'block',
 			padding: '0',
-			borderBottom: '1px solid #435160',
 			marginBottom: '0.5em',
 			marginTop: '0em'
 		},
@@ -56,7 +56,7 @@ const styles = theme => ({
 	}
 });
 
-const WhatYouGet = withStyles(styles)(({ classes, description, timeToForm }) => {
+const WhatYouGet = withStyles(styles)(({ classes, description, timeToForm, whatYouGet }) => {
 	return (
 		<div className={classes.whatYouGet}>
 			<Typography variant="h2" gutterBottom>
@@ -71,12 +71,7 @@ const WhatYouGet = withStyles(styles)(({ classes, description, timeToForm }) => 
 				/>
 				<div className={classes.descriptionHelp}>
 					<p>Time to form: {timeToForm} week(s).</p>
-					<p>
-						All our incorporation services include a yearly consulting session, a
-						dedicated account manager and access to our global network of trusted
-						business services, including introductions to accountants, financial, tax
-						and legal advisors at no cost.
-					</p>
+					<p>{whatYouGet}</p>
 				</div>
 			</Grid>
 		</div>

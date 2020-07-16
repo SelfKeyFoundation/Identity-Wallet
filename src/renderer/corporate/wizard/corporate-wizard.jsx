@@ -8,10 +8,12 @@ import {
 	Input,
 	MenuItem,
 	Select,
-	withStyles
+	Grid,
+	FormControl
 } from '@material-ui/core';
-import { KeyboardArrowDown } from '@material-ui/icons';
-import { KeyPicker } from 'selfkey-ui';
+import { withStyles } from '@material-ui/styles';
+import { KeyPicker, SelectDropdownIcon } from 'selfkey-ui';
+import { InputTitle } from '../../common';
 
 const styles = theme => ({
 	hr: {
@@ -86,23 +88,6 @@ const styles = theme => ({
 	}
 });
 
-const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => {
-	return (
-		<div>
-			<Typography variant="overline" gutterBottom>
-				{title}
-				{optional ? (
-					<Typography variant="overline" className={classes.optional}>
-						(optional)
-					</Typography>
-				) : (
-					''
-				)}
-			</Typography>
-		</div>
-	);
-});
-
 const CompanyInformation = withStyles(styles)(props => {
 	const {
 		classes,
@@ -127,32 +112,48 @@ const CompanyInformation = withStyles(styles)(props => {
 						<div className={`${classes.flexColumn} ${classes.inputContainer}`}>
 							<div className={classes.inputWrap}>
 								<div className={`${classes.inputBox} ${classes.flexColumn}`}>
-									<InputTitle title="Legal Jurisdiction" />
-									<Select
-										className={classes.select}
-										onChange={onFieldChange('jurisdiction')}
-										displayEmpty
-										error={errors.jurisdiction}
-										name="jurisdiction"
-										value={jurisdiction}
-										disableUnderline
-										IconComponent={KeyboardArrowDown}
-										input={<Input disableUnderline placeholder="Choose..." />}
-									>
-										<MenuItem value="">
-											<em>Choose...</em>
-										</MenuItem>
-										{jurisdictions.map(item => (
-											<MenuItem key={item} value={item.code}>
-												{item.name}
-											</MenuItem>
-										))}
-									</Select>
-									{errors.jurisdiction && (
-										<Typography variant="subtitle2" color="error" gutterBottom>
-											{errors.jurisdiction}
-										</Typography>
-									)}
+									<Grid item>
+										<InputTitle title="Legal Jurisdiction" />
+									</Grid>
+									<Grid item className={classes.selectInput}>
+										<FormControl variant="filled" fullWidth>
+											<Select
+												className={classes.select}
+												onChange={onFieldChange('jurisdiction')}
+												displayEmpty
+												error={errors.jurisdiction}
+												name="jurisdiction"
+												value={jurisdiction}
+												disableUnderline
+												IconComponent={SelectDropdownIcon}
+												input={<Input disableUnderline />}
+											>
+												<MenuItem value="">
+													<Typography
+														className="choose"
+														variant="subtitle1"
+														color="textSecondary"
+													>
+														Choose...
+													</Typography>
+												</MenuItem>
+												{jurisdictions.map(item => (
+													<MenuItem key={item.code} value={item.code}>
+														{item.name}
+													</MenuItem>
+												))}
+											</Select>
+											{errors.jurisdiction && (
+												<Typography
+													variant="subtitle2"
+													color="error"
+													gutterBottom
+												>
+													{errors.jurisdiction}
+												</Typography>
+											)}
+										</FormControl>
+									</Grid>
 								</div>
 								<div className={`${classes.inputBox} ${classes.flexColumn}`}>
 									<InputTitle title="Legal Entity Name" />
@@ -174,32 +175,49 @@ const CompanyInformation = withStyles(styles)(props => {
 							</div>
 							<div className={classes.inputWrap}>
 								<div className={`${classes.inputBox} ${classes.flexColumn}`}>
-									<InputTitle title="Legal Entity Type" />
-									<Select
-										className={classes.select}
-										onChange={onFieldChange('entityType')}
-										displayEmpty
-										value={entityType}
-										name="entitytype"
-										error={errors.entityType}
-										disableUnderline
-										IconComponent={KeyboardArrowDown}
-										input={<Input disableUnderline />}
-									>
-										<MenuItem value="">
-											<em>Choose...</em>
-										</MenuItem>
-										{entityTypes.map(item => (
-											<MenuItem key={item} value={item.code}>
-												{item.name}
-											</MenuItem>
-										))}
-									</Select>
-									{errors.entityType && (
-										<Typography variant="subtitle2" color="error" gutterBottom>
-											{errors.entityType}
-										</Typography>
-									)}
+									<Grid item>
+										<InputTitle title="Legal Entity Type" />
+									</Grid>
+									<Grid item className={classes.selectInput}>
+										<FormControl variant="filled" fullWidth>
+											<Select
+												className={classes.select}
+												onChange={onFieldChange('entityType')}
+												displayEmpty
+												value={entityType}
+												name="entitytype"
+												error={errors.entityType}
+												disableUnderline
+												autoWidth
+												IconComponent={SelectDropdownIcon}
+												input={<Input disableUnderline />}
+											>
+												<MenuItem value="">
+													<Typography
+														className="choose"
+														variant="subtitle1"
+														color="textSecondary"
+													>
+														Choose...
+													</Typography>
+												</MenuItem>
+												{entityTypes.map(item => (
+													<MenuItem key={item.code} value={item.code}>
+														{item.name}
+													</MenuItem>
+												))}
+											</Select>
+											{errors.entityType && (
+												<Typography
+													variant="subtitle2"
+													color="error"
+													gutterBottom
+												>
+													{errors.entityType}
+												</Typography>
+											)}
+										</FormControl>
+									</Grid>
 								</div>
 								<div className={`${classes.inputBox} ${classes.flexColumn}`}>
 									<InputTitle title="Incorporation Date" />
@@ -271,7 +289,7 @@ const CompanyInformation = withStyles(styles)(props => {
 // const MembersList = withStyles(styles)(props => {
 // 	const { classes, members } = props;
 // 	return (
-// 		<Grid container direction="column" spacing={32}>
+// 		<Grid container direction="column" spacing={4}>
 // 			<Grid item>
 // 				<Card>
 // 					<CardHeader title="Step 2. Company Members" className={classes.regularText} />
@@ -282,7 +300,7 @@ const CompanyInformation = withStyles(styles)(props => {
 // 							direction="column"
 // 							justify="center"
 // 							alignItems="center"
-// 							spacing={24}
+// 							spacing={3}
 // 						>
 // 							<Grid container item spacing={0} justify="center">
 // 								<Grid item xs={12}>

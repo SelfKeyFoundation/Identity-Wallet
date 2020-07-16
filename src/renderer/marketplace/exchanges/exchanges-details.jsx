@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { UserPlusIcon, primary, CalendarDepositIcon, typography } from 'selfkey-ui';
 import { MarketplaceDisclaimer } from '../common/disclaimer';
 import { Grid, Divider, FormGroup, FormControl, Button, Typography } from '@material-ui/core';
@@ -19,11 +19,14 @@ const styles = theme => ({
 		width: '946px',
 		height: '100%',
 		margin: '50px auto 30px',
-		borderRadius: '4px'
+		borderRadius: '4px',
+		'@media screen and (min-width: 1230px)': {
+			width: '1140px'
+		}
 	},
 
 	title: {
-		margin: '20px 20px 20px 12px'
+		margin: '20px 20px 20px 7px'
 	},
 
 	header: {
@@ -43,13 +46,14 @@ const styles = theme => ({
 		fontWeight: 400,
 		lineHeight: 1.67,
 		margin: 0,
-		padding: '44px 16px 16px',
+		padding: '44px 30px 16px',
 		textAlign: 'justify',
 		width: '100%'
 	},
 
 	formControl: {
-		marginRight: '100px'
+		marginRight: '100px',
+		maxWidth: '45%'
 	},
 
 	divider: {
@@ -146,15 +150,6 @@ const styles = theme => ({
 		position: 'absolute',
 		top: '120px'
 	},
-
-	descriptionContainer: {
-		width: '100%'
-	},
-
-	bottomSpace: {
-		marginBottom: '20px'
-	},
-
 	exchange: {
 		paddingTop: '3px'
 	},
@@ -217,14 +212,12 @@ const styles = theme => ({
 			marginTop: 0
 		}
 	},
-	leftAlign: {
-		textAlign: 'left'
-	},
+
 	icon: {
 		alignItems: 'center',
 		display: 'flex',
 		height: '44px',
-		marginLeft: '12px'
+		marginLeft: '22px'
 	},
 	defaultIcon: {
 		alignItems: 'center',
@@ -247,6 +240,9 @@ const styles = theme => ({
 	},
 	affiliateMessage: {
 		textAlign: 'left'
+	},
+	descriptionBottomSpace: {
+		marginBottom: '10px'
 	}
 });
 
@@ -523,28 +519,18 @@ class ExchangesDetailsComponent extends PureComponent {
 							direction="column"
 							justify="flex-start"
 							alignItems="flex-start"
-							spacing={32}
+							spacing={4}
 						>
-							<Grid
-								item
-								id="description"
-								xs={12}
-								className={classes.descriptionContainer}
-							>
+							<Grid item id="description" className={classes.descriptionBottomSpace}>
 								<Grid
 									container
 									direction="row"
-									justify="center"
+									justify="space-between"
 									alignItems="flex-start"
-									spacing={40}
+									spacing={7}
 								>
 									<Grid item xs={8}>
-										<Typography
-											variant="body1"
-											className={`${classes.bottomSpace} ${
-												classes.leftAlign
-											}`}
-										>
+										<Typography variant="body1" align="left">
 											{item.description}
 										</Typography>
 									</Grid>
@@ -567,7 +553,7 @@ class ExchangesDetailsComponent extends PureComponent {
 									direction="column"
 									justify="flex-start"
 									alignItems="flex-start"
-									spacing={16}
+									spacing={2}
 								>
 									<Grid item>
 										<Typography variant="h2">Exchange Highlights</Typography>
@@ -691,7 +677,7 @@ class ExchangesDetailsComponent extends PureComponent {
 										direction="column"
 										justify="flex-start"
 										alignItems="flex-start"
-										spacing={16}
+										spacing={2}
 									>
 										<Grid
 											item

@@ -6,14 +6,13 @@ import {
 	Card,
 	CardContent,
 	CardHeader,
-	withStyles,
 	Divider,
 	List,
 	ListItem,
-	createStyles,
 	Button,
 	Grid
 } from '@material-ui/core';
+import { createStyles, withStyles } from '@material-ui/styles';
 import {
 	success,
 	warning,

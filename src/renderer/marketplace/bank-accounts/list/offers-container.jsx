@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { pricesSelectors } from 'common/prices';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { BankingOffersPage } from './offers-page';
 import { marketplaceSelectors } from 'common/marketplace';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';
@@ -15,6 +15,14 @@ class BankAccountsTableContainer extends MarketplaceBankAccountsComponent {
 	state = {
 		accountType: 'personal'
 	};
+
+	componentDidMount() {
+		this.trackMarketplaceVisit('bank_accounts');
+		this.trackMatomoGoal(
+			'MarketplaceVisitIndividualBankAccounts',
+			'MarketplaceVisitCorporateBankAccounts'
+		);
+	}
 
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
 

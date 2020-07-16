@@ -6,3 +6,4 @@ export * from './header-icon';
 export * from './transaction-error-popup';
 export * from './transaction-processing-popup';
 export * from './input-title';
+export * from './scrollable';

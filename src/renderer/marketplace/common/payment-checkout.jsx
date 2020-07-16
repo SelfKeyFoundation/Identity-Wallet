@@ -1,6 +1,5 @@
 import React from 'react';
-
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { FlagCountryName } from '.';
 import { WhatYouGet } from './marketplace-what-you-get';
@@ -21,7 +20,8 @@ const styles = theme => ({
 		}
 	},
 	modalWrap: {
-		left: 'calc(50% - 452px)',
+		left: 'calc(50% - 480px)',
+		right: 'initial',
 		width: '960px'
 	},
 	payButton: {
@@ -85,6 +85,7 @@ const PaymentCheckout = withStyles(styles)(
 		initialDocsText,
 		kycProcessText,
 		getFinalDocsText,
+		whatYouGet,
 		onBackClick,
 		onStartClick,
 		startButtonText
@@ -117,6 +118,7 @@ const PaymentCheckout = withStyles(styles)(
 						initialDocsText={initialDocsText}
 						kycProcessText={kycProcessText}
 						getFinalDocsText={getFinalDocsText}
+						whatYouGet={whatYouGet}
 					/>
 
 					<HowServiceWorks

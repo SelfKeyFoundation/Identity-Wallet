@@ -1,17 +1,19 @@
 import React, { PureComponent } from 'react';
 import BN from 'bignumber.js';
+import config from 'common/config';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import { getLocale } from 'common/locale/selectors';
 import { getWallet } from 'common/wallet/selectors';
 import { pricesSelectors } from 'common/prices';
 import { Popup, InputTitle } from '../../common';
+import { tokensSelectors } from 'common/tokens';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { tokenSwapOperations, tokenSwapSelectors } from 'common/token-swap';
-import { convertExponentialToDecimal } from 'common/utils/exponential-to-decimal';
 import { transactionOperations } from 'common/transaction';
 import { MenuItem, Grid, Select, Input, Typography, Button, Divider } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { KeyboardArrowDown } from '@material-ui/icons';
 import { NumberFormat, TransferIcon } from 'selfkey-ui';
 
@@ -21,10 +23,10 @@ const styles = theme => ({
 		fontFamily: 'Proxima Nova',
 		fontSize: '18px',
 		lineHeight: '30px',
-		width: '100%',
-		'& > div': {
-			marginBottom: '30px'
-		}
+		width: '100%'
+	},
+	formField: {
+		marginBottom: '30px'
 	},
 	cryptoSelect: {
 		width: '100%'
@@ -34,27 +36,39 @@ const styles = theme => ({
 		backgroundColor: '#1E262E',
 		color: '#FFFFFF'
 	},
+	tokenMaxContainer: {
+		display: 'flex'
+	},
 	tokenMax: {
 		display: 'flex',
-		flexWrap: 'nowrap',
+		flexWrap: 'wrap',
+		width: '100%',
 		'& svg': {
 			height: '0.7em !important',
-			width: '0.7em !important',
-			marginRight: '0.5em'
+			width: '0.7em !important'
 		}
+	},
+	tokenMaxSubsection: {
+		flexBasis: '100%',
+		display: 'flex',
+		justifyContent: 'space-between',
+		marginTop: '0.25em'
 	},
 	amountInput: {
 		borderTopRightRadius: '0',
-		borderBottomRightRadius: '0'
+		borderBottomRightRadius: '0',
+		width: '420px'
 	},
 	maxSourceInput: {
 		border: '1px solid #384656',
-		marginRight: '45px',
+		marginRight: '20px',
 		fontWeight: 'normal',
 		color: '#93B0C1',
 		background: '#1E262E',
 		borderTopLeftRadius: '0',
-		borderBottomLeftRadius: '0'
+		borderBottomLeftRadius: '0',
+		display: 'flex',
+		justifyContent: 'space-around'
 	},
 	divider: {
 		margin: '40px 0'
@@ -70,40 +84,131 @@ const styles = theme => ({
 			fontWeight: 'bold'
 		}
 	},
-	separator: {
-		marginRight: '1em'
-	},
 	errorText: {
 		color: theme.palette.error.main,
 		fontFamily: 'Lato',
 		textAlign: 'center'
 	},
 	actionButtonsContainer: {
+		width: '100%',
+		paddingTop: '50px'
+	},
+	feesContainer: {
 		width: '100%'
 	},
 	fees: {
-		display: 'inline-flex',
-		color: '#FFF',
-		marginLeft: '0.5em',
-		'& > div': {
-			margin: '0 0.25em'
+		width: '100%',
+		display: 'flex',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		marginBottom: '20px'
+	},
+	feesValues: {
+		textAlign: 'right',
+		'& p': {
+			fontWeight: 'bold'
 		}
 	},
+	smallFeesValues: {
+		textAlign: 'right',
+		marginTop: '0.5em',
+		'& p': {
+			fontWeight: 'bold',
+			fontSize: '0.7em',
+			lineHeight: '1',
+			marginTop: '1em'
+		},
+		'& h6': {
+			fontSize: '0.6em'
+		}
+	},
+	fiatFee: {
+		fontWeight: 'bold',
+		'& div': {
+			display: 'inline-block',
+			textAlign: 'right'
+		}
+	},
+	ethFee: {
+		textAlign: 'right'
+	},
 	rate: {
-		fontSize: '0.7em'
+		fontSize: '0.7em',
+		'& div': {
+			display: 'inline-block',
+			marginRight: '.5em'
+		}
+	},
+	valueDisplay: {
+		'& div': {
+			display: 'inline-block',
+			marginRight: '.5em'
+		}
+	},
+	maxSwapDisplay: {
+		marginRight: '30px'
+	},
+	separator: {
+		marginRight: '.5em'
+	},
+	buttonRightSpace: {
+		marginRight: '20px'
 	}
 });
 
-const formatValue = value => {
-	if (!value) {
-		return '';
-	}
-	const v = value.toLocaleString('en-US', {
-		minimumFractionDigits: 0,
-		maximumFractionDigits: 4
-	});
-	return `${convertExponentialToDecimal(v)}`;
-};
+const TokenValue = withStyles(styles)(
+	({
+		classes,
+		prefix,
+		value = 0,
+		locale,
+		token,
+		separator = false,
+		variant = 'subtitle2',
+		color = 'secondary',
+		fractionDigits = 8
+	}) => (
+		<Typography variant={variant} color={color} className={classes.valueDisplay}>
+			{separator && <span className={classes.separator}>|</span>}
+			{prefix && <span>{prefix}</span>}
+			<NumberFormat
+				locale={locale}
+				priceStyle="decimal"
+				currency={token}
+				value={value}
+				fractionDigits={fractionDigits}
+				className="token-value"
+			/>
+			{token}
+		</Typography>
+	)
+);
+
+const FiatValue = withStyles(styles)(
+	({
+		classes,
+		value,
+		currency,
+		separator = false,
+		locale,
+		variant = 'subtitle2',
+		color = 'secondary',
+		fractionDigits = 2
+	}) => (
+		<Typography variant={variant} color={color} className={classes.valueDisplay}>
+			{separator && <span className={classes.separator}>|</span>}
+			<NumberFormat
+				locale={locale}
+				priceStyle="currency"
+				currency={currency}
+				value={value}
+				fractionDigits={fractionDigits}
+				className="fiat-value"
+			/>
+			{currency}
+		</Typography>
+	)
+);
 
 export class TokenSwapComponent extends PureComponent {
 	state = {
@@ -116,8 +221,13 @@ export class TokenSwapComponent extends PureComponent {
 	}
 
 	async componentDidMount() {
-		const defaultSource = this.props.tokens ? this.props.tokens[0].symbol : '';
-		const defaultTarget = 'KEY';
+		const { tokens, walletTokens } = this.props;
+		const defaultToken =
+			walletTokens && tokens ? tokens.find(t => t.symbol === walletTokens[0].symbol) : false;
+		const keyToken = walletTokens && tokens ? tokens.find(t => t.symbol === 'KEY') : false;
+
+		const defaultSource = defaultToken ? defaultToken.address : 'ETH';
+		const defaultTarget = keyToken ? keyToken.address : '';
 
 		this.props.dispatch(tokenSwapOperations.setSourceOperation(defaultSource));
 		this.props.dispatch(tokenSwapOperations.setTargetOperation(defaultTarget));
@@ -126,41 +236,65 @@ export class TokenSwapComponent extends PureComponent {
 
 	isValid = () => this.state.amount && this.props.sourceToken && this.props.targetToken;
 
+	findTokenSymbol = tokenString => {
+		const token = this.props.tokens.find(t => t.address === tokenString);
+		return token && token.symbol ? token.symbol : tokenString;
+	};
+
 	getTokenFiatBalance = token => {
-		const t = this.props.tokens.find(t => t.symbol === token);
-		return t ? BN(t.balanceInFiat).toFixed(18) : false;
+		const symb = this.findTokenSymbol(token);
+		const t = this.props.walletTokens.find(t => t.symbol === symb);
+		return t ? BN(t.balanceInFiat).toFixed(18) : 0;
 	};
 
 	getTokenBalance = token => {
-		const t = this.props.tokens.find(t => t.symbol === token);
-		return t ? BN(t.balance).toFixed(18) : false;
+		const symb = this.findTokenSymbol(token);
+		const t = this.props.walletTokens.find(t => t.symbol === symb);
+		return t ? BN(t.balance).toFixed(18) : 0;
 	};
 
 	getFiatValue = (amount, token) => {
-		const t = this.props.tokens.find(t => t.symbol === token);
-		return t ? BN(amount * t.price).toFixed(18) : 0;
+		const symb = this.findTokenSymbol(token);
+		const t = this.props.walletTokens.find(t => t.symbol === symb);
+		return t && t.price > 0 ? BN(amount * t.price).toFixed(18) : 0;
 	};
 
 	getCryptoValue = (amount, token) => {
-		const t = this.props.tokens.find(t => t.symbol === token);
-		return t ? BN(amount / t.price).toFixed(18) : 0;
+		const symb = this.findTokenSymbol(token);
+		const t = this.props.walletTokens.find(t => t.symbol === symb);
+		return t && t.price > 0 ? BN(amount / t.price).toFixed(18) : 0;
 	};
 
 	getAmount = () => {
 		const { sourceCurrency, amount } = this.state;
 		const { fiatCurrency, sourceToken } = this.props;
-
-		return sourceCurrency === fiatCurrency ? this.getCryptoValue(amount, sourceToken) : amount;
+		let filteredAmount = amount;
+		if (sourceCurrency === fiatCurrency) {
+			filteredAmount = Math.min(filteredAmount, config.totleMaxSwap);
+			filteredAmount = this.getCryptoValue(filteredAmount, sourceToken);
+		} else {
+			filteredAmount = Math.min(
+				amount,
+				this.getCryptoValue(config.totleMaxSwap, sourceToken)
+			);
+		}
+		return filteredAmount;
 	};
 
 	setSourceToken = sourceToken => {
 		this.setState({ amount: 0 });
-		this.props.dispatch(tokenSwapOperations.setSourceOperation(sourceToken));
+		// Use token address if we have it
+		const token = this.props.tokens.find(t => t.symbol === sourceToken);
+		const source = token && token.address ? token.address : sourceToken;
+		this.props.dispatch(tokenSwapOperations.setSourceOperation(source));
 	};
 
 	setTargetToken = targetToken => {
 		this.setState({ amount: 0 });
-		this.props.dispatch(tokenSwapOperations.setTargetOperation(targetToken));
+		// Use token address if we have it
+		const token = this.props.tokens.find(t => t.symbol === targetToken);
+		const target = token && token.address ? token.address : targetToken;
+		this.props.dispatch(tokenSwapOperations.setTargetOperation(target));
 	};
 
 	handleSourceTokenChange = event => this.setSourceToken(event.target.value);
@@ -168,12 +302,18 @@ export class TokenSwapComponent extends PureComponent {
 	handleTargetTokenChange = event => this.setTargetToken(event.target.value);
 
 	handleAmountChange = event => {
+		const { fiatCurrency, sourceToken } = this.props;
 		let value = event.target.value;
 		let maxAmount = 0;
-		if (this.state.sourceCurrency === this.props.fiatCurrency) {
-			maxAmount = this.getTokenFiatBalance(this.props.sourceToken);
+		if (this.state.sourceCurrency === fiatCurrency) {
+			maxAmount = this.getTokenFiatBalance(sourceToken);
+			maxAmount = Math.min(maxAmount, config.totleMaxSwap);
 		} else {
-			maxAmount = this.getTokenBalance(this.props.sourceToken);
+			maxAmount = this.getTokenBalance(sourceToken);
+			maxAmount = Math.min(maxAmount, this.getCryptoValue(config.totleMaxSwap, sourceToken));
+		}
+		if (isNaN(Number(maxAmount))) {
+			maxAmount = 0;
 		}
 		if (isNaN(Number(value))) {
 			value = 0;
@@ -183,6 +323,7 @@ export class TokenSwapComponent extends PureComponent {
 			value = String(maxAmount);
 		}
 		this.setState({ amount: value });
+		this.props.dispatch(tokenSwapOperations.clearOperation());
 	};
 
 	handleAllAmountClick = () => {
@@ -190,11 +331,14 @@ export class TokenSwapComponent extends PureComponent {
 		let maxAmount = 0;
 		if (this.state.sourceCurrency === fiatCurrency) {
 			maxAmount = this.getTokenFiatBalance(sourceToken);
+			maxAmount = Math.min(maxAmount, config.totleMaxSwap);
 			this.setState({ amount: maxAmount });
 		} else {
 			maxAmount = this.getTokenBalance(sourceToken);
+			maxAmount = Math.min(maxAmount, this.getCryptoValue(config.totleMaxSwap, sourceToken));
 			this.setState({ amount: maxAmount });
 		}
+		this.props.dispatch(tokenSwapOperations.clearOperation());
 	};
 
 	handleSourceCurrencyClick = () => {
@@ -212,11 +356,15 @@ export class TokenSwapComponent extends PureComponent {
 	};
 
 	renderSelectSourceTokenItems = () => {
-		const { tokens, classes } = this.props;
-		const activeTokens = tokens.filter(token => token.recordState === 1);
+		const { walletTokens, classes } = this.props;
+		const activeTokens = walletTokens.filter(token => token.recordState === 1);
 
 		return activeTokens.map(token => (
-			<MenuItem key={token.symbol} value={token.symbol} className={classes.selectItem}>
+			<MenuItem
+				key={`${token.symbol}-${token.createdAt}`}
+				value={token.symbol}
+				className={classes.selectItem}
+			>
 				{`${token.symbol} - ${token.name}`}
 			</MenuItem>
 		));
@@ -229,21 +377,24 @@ export class TokenSwapComponent extends PureComponent {
 		// Show only active tokens and hide source token
 		const activeTokens = swapTokens
 			.filter(t => t.tradable)
-			.filter(t => t.symbol !== sourceToken);
+			.filter(t => t.symbol !== sourceToken || t.address !== sourceToken);
 
 		return activeTokens.map(token => (
-			<MenuItem key={token.symbol} value={token.symbol} className={classes.selectItem}>
+			<MenuItem
+				key={`${token.symbol}-${token.name}`}
+				value={token.symbol}
+				className={classes.selectItem}
+			>
 				{`${token.symbol} - ${token.name}`}
 			</MenuItem>
 		));
 	};
 
 	handleCalculateFees = async () => {
-		const { sourceToken, wallet, tokens } = this.props;
-
-		const token = tokens.find(t => t.symbol === sourceToken);
+		const { sourceToken, wallet, walletTokens } = this.props;
+		const symb = this.findTokenSymbol(sourceToken);
+		const token = walletTokens.find(t => t.symbol === symb);
 		const amount = this.getAmount();
-
 		await this.props.dispatch(
 			tokenSwapOperations.swapTokensOperation({
 				address: wallet.address,
@@ -254,22 +405,36 @@ export class TokenSwapComponent extends PureComponent {
 	};
 
 	handleSwap = async () => {
-		const transaction = this.props.transaction.transactions[0].tx;
-		await this.props.dispatch(transactionOperations.sendCustomTransaction({ transaction }));
+		const { dispatch, sourceToken, targetToken, trezorAccountIndex } = this.props;
+		const transactions = this.props.transaction.transactions;
+		for (const t of transactions) {
+			const transaction = t.tx;
+			await dispatch(transactionOperations.init({ trezorAccountIndex, sourceToken }));
+			await dispatch(transactionOperations.setAddress(transaction.to));
+			await dispatch(
+				transactionOperations.sendSwapTransaction({
+					transaction,
+					token: targetToken
+				})
+			);
+		}
+		this.props.dispatch(push('/main/dashboard'));
 	};
 
 	render() {
-		const { classes, closeAction } = this.props;
-
+		const { classes, closeAction, sourceToken, targetToken, fiatCurrency, locale } = this.props;
+		const { amount } = this.state;
+		const gas = +this.props.gas;
+		const fee = +this.props.fee;
 		return (
 			<Popup closeAction={closeAction} text="Swap your tokens">
 				<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 					<Grid item id="body" className={classes.body}>
-						<div>
+						<div className={classes.formField}>
 							<InputTitle title="Token" />
 							<Select
 								className={classes.cryptoSelect}
-								value={this.props.sourceToken}
+								value={this.findTokenSymbol(sourceToken)}
 								onChange={e => this.handleSourceTokenChange(e)}
 								name="sourceToken"
 								disableUnderline
@@ -279,11 +444,11 @@ export class TokenSwapComponent extends PureComponent {
 								{this.renderSelectSourceTokenItems()}
 							</Select>
 						</div>
-						<div>
+						<div className={classes.formField}>
 							<InputTitle title="Change to" />
 							<Select
 								className={classes.cryptoSelect}
-								value={this.props.targetToken}
+								value={this.findTokenSymbol(targetToken)}
 								onChange={e => this.handleTargetTokenChange(e)}
 								name="targetToken"
 								disableUnderline
@@ -293,14 +458,13 @@ export class TokenSwapComponent extends PureComponent {
 								{this.renderSelectTargetTokenItems()}
 							</Select>
 						</div>
-						<div>
+						<div className={classes.formField}>
 							<Grid
 								container
 								direction="row"
 								justify="flex-start"
 								alignItems="center"
-								className={classes.actionButtonsContainer}
-								spacing={8}
+								spacing={1}
 							>
 								<Grid item>
 									<Typography variant="body2" color="secondary">
@@ -308,50 +472,79 @@ export class TokenSwapComponent extends PureComponent {
 									</Typography>
 								</Grid>
 								<Grid item className={classes.availableAmountUsd}>
-									<Typography variant="body2" color="secondary">
-										<NumberFormat
-											locale={this.props.locale}
-											priceStyle="currency"
-											currency={this.props.fiatCurrency}
-											value={this.getTokenFiatBalance(this.props.sourceToken)}
-											fractionDigits={15}
-										/>
-										{this.props.fiatCurrency}
-									</Typography>
+									<FiatValue
+										variant="body2"
+										locale={locale}
+										currency={fiatCurrency}
+										value={this.getTokenFiatBalance(sourceToken)}
+									/>
 								</Grid>
-								<Grid item style={{}}>
-									<Typography variant="subtitle2" color="secondary">
-										<span className={classes.separator}>|</span>
-										{formatValue(
-											this.getTokenBalance(this.props.sourceToken)
-										)}{' '}
-										{this.props.sourceToken}
-									</Typography>
+								<Grid item>
+									<TokenValue
+										value={this.getTokenBalance(sourceToken)}
+										separator={true}
+										locale={locale}
+										token={this.findTokenSymbol(sourceToken)}
+									/>
 								</Grid>
 							</Grid>
 						</div>
 						<div>
 							<InputTitle title="Amount" />
-							<div className={classes.tokenMax}>
-								<Input
-									type="text"
-									onChange={this.handleAmountChange}
-									value={this.state.amount.toString()}
-									placeholder="0.00"
-									className={classes.amountInput}
-									fullWidth
-								/>
-								<Button
-									onClick={this.handleSourceCurrencyClick}
-									variant="outlined"
-									size="large"
-									className={classes.maxSourceInput}
-								>
-									<TransferIcon />
-									{this.state.sourceCurrency === this.props.sourceToken
-										? this.props.sourceToken
-										: this.props.fiatCurrency}
-								</Button>
+							<div className={classes.tokenMaxContainer}>
+								<div className={classes.tokenMax}>
+									<Input
+										type="text"
+										onChange={this.handleAmountChange}
+										value={amount.toString()}
+										placeholder="0.00"
+										className={classes.amountInput}
+									/>
+									<Button
+										onClick={this.handleSourceCurrencyClick}
+										variant="outlined"
+										size="large"
+										className={classes.maxSourceInput}
+									>
+										{this.state.sourceCurrency === sourceToken
+											? this.findTokenSymbol(sourceToken)
+											: fiatCurrency}
+										<TransferIcon />
+									</Button>
+									<div className={classes.tokenMaxSubsection}>
+										<div>
+											{this.state.sourceCurrency === sourceToken &&
+												amount > 0 && (
+													<FiatValue
+														value={this.getFiatValue(
+															amount,
+															sourceToken
+														)}
+														currency={fiatCurrency}
+														locale={locale}
+													/>
+												)}
+											{this.state.sourceCurrency !== sourceToken &&
+												amount > 0 && (
+													<TokenValue
+														locale={locale}
+														value={this.getCryptoValue(
+															amount,
+															sourceToken
+														)}
+														token={this.findTokenSymbol(sourceToken)}
+													/>
+												)}
+										</div>
+										<Typography
+											variant="subtitle2"
+											color="secondary"
+											className={classes.maxSwapDisplay}
+										>
+											Max ${config.totleMaxSwap}/Swap
+										</Typography>
+									</div>
+								</div>
 								<Button
 									onClick={this.handleAllAmountClick}
 									variant="outlined"
@@ -361,13 +554,14 @@ export class TokenSwapComponent extends PureComponent {
 								</Button>
 							</div>
 						</div>
+
 						<Divider className={classes.divider} />
 						<Grid
 							container
 							direction="column"
 							justify="center"
 							alignItems="center"
-							spacing={24}
+							spacing={3}
 						>
 							{this.props.error && (
 								<Grid item>
@@ -375,89 +569,151 @@ export class TokenSwapComponent extends PureComponent {
 								</Grid>
 							)}
 
-							{!this.props.transaction && (
-								<Grid item>
-									{this.props.loading && (
-										<Button variant="contained" size="large" disabled="1">
-											Loading ...
-										</Button>
+							<Grid item className={classes.feesContainer}>
+								<div className={classes.fees}>
+									<Typography variant="body2" color="secondary">
+										Swap Fee
+									</Typography>
+									{this.props.transaction && (
+										<div className={classes.feesValues}>
+											<FiatValue
+												locale={locale}
+												currency={fiatCurrency}
+												value={fee * this.props.ethRate}
+												variant="body2"
+												color="primary"
+											/>
+											<div>
+												<TokenValue
+													locale={locale}
+													token="ETH"
+													value={fee}
+												/>
+											</div>
+										</div>
 									)}
-									{!this.props.loading && (
+								</div>
+								<div className={classes.fees}>
+									<Typography variant="body2" color="secondary">
+										Network Transaction Fee
+									</Typography>
+									{this.props.transaction && (
+										<div className={classes.feesValues}>
+											<FiatValue
+												locale={locale}
+												currency={fiatCurrency}
+												value={gas * this.props.ethRate}
+												variant="body2"
+												color="primary"
+											/>
+											<div>
+												<TokenValue
+													locale={locale}
+													token="ETH"
+													value={gas}
+													fractionDigits={18}
+												/>
+											</div>
+										</div>
+									)}
+								</div>
+								<div className={classes.fees}>
+									<Typography variant="body1">Amount Total</Typography>
+									{this.props.transaction && (
+										<div>
+											<div className={classes.feesValues}>
+												<FiatValue
+													locale={locale}
+													currency={fiatCurrency}
+													value={this.getFiatValue(
+														this.getAmount(),
+														sourceToken
+													)}
+													variant="body2"
+													color="primary"
+												/>
+												<div>
+													<TokenValue
+														locale={locale}
+														token={this.findTokenSymbol(sourceToken)}
+														value={this.getAmount()}
+													/>
+												</div>
+											</div>
+
+											<div className={classes.smallFeesValues}>
+												<FiatValue
+													locale={locale}
+													currency={fiatCurrency}
+													value={(gas + fee) * this.props.ethRate}
+													variant="body2"
+													color="primary"
+												/>
+												<div>
+													<TokenValue
+														locale={locale}
+														token="ETH"
+														value={gas + fee}
+													/>
+												</div>
+											</div>
+										</div>
+									)}
+								</div>
+
+								<Grid
+									container
+									direction="row"
+									justify="center"
+									alignItems="center"
+									className={classes.actionButtonsContainer}
+									spacing={2}
+								>
+									<Grid item>
+										{this.props.loading && (
+											<Button variant="outlined" size="large" disabled="1">
+												Loading ...
+											</Button>
+										)}
+										{!this.props.loading && (
+											<Button
+												variant="outlined"
+												size="large"
+												onClick={this.handleCalculateFees}
+												disabled={!this.isValid()}
+												className={classes.buttonRightSpace}
+											>
+												Calculate Fees
+											</Button>
+										)}
+									</Grid>
+									<Grid item>
 										<Button
 											variant="contained"
 											size="large"
-											onClick={this.handleCalculateFees}
-											disabled={!this.isValid()}
+											onClick={this.handleSwap}
+											disabled={!this.props.transaction}
 										>
-											Calculate Fees
+											Exchange
 										</Button>
-									)}
-								</Grid>
-							)}
-
-							{this.props.transaction && (
-								<Grid item style={{ width: '100%' }}>
-									<div style={{ width: '100%', paddingBottom: '20px' }}>
-										<Typography variant="body2" color="secondary">
-											Network Transaction Fee:
-											<div className={classes.fees}>
-												{this.props.gas} ETH{' / '}
-												<NumberFormat
-													locale={this.props.locale}
-													priceStyle="currency"
-													currency={this.props.fiatCurrency}
-													value={this.props.gas * this.props.ethRate}
-													fractionDigits={15}
-												/>{' '}
-												{this.props.fiatCurrency}
-											</div>
-										</Typography>
-										<Typography variant="body2" color="secondary">
-											Swap Fee:
-											<div className={classes.fees}>
-												{this.props.fee} ETH{' / '}
-												<NumberFormat
-													locale={this.props.locale}
-													priceStyle="currency"
-													currency={this.props.fiatCurrency}
-													value={this.props.fee * this.props.ethRate}
-													fractionDigits={15}
-												/>{' '}
-												{this.props.fiatCurrency}
-											</div>
-										</Typography>
-									</div>
-									<Grid
-										container
-										direction="column"
-										justify="center"
-										alignItems="center"
-										className={classes.actionButtonsContainer}
-										spacing={24}
-									>
-										<Grid item>
-											<Button
-												variant="contained"
-												size="large"
-												onClick={this.handleSwap}
-											>
-												Swap
-											</Button>
-										</Grid>
-
-										<Grid item>
-											<Typography
-												variant="body2"
-												color="secondary"
-												className={classes.rate}
-											>
-												Exchange Rate: 1 {this.props.sourceToken} ={' '}
-												{formatValue(parseFloat(this.props.rate))}{' '}
-												{this.props.targetToken}
-											</Typography>
-										</Grid>
 									</Grid>
 								</Grid>
+							</Grid>
+							{this.props.rate && (
+								<Typography
+									variant="body2"
+									color="secondary"
+									className={classes.rate}
+								>
+									<TokenValue
+										prefix={`Exchange Rate: 1 ${this.findTokenSymbol(
+											sourceToken
+										)} = `}
+										locale={locale}
+										value={this.props.rate}
+										token={this.findTokenSymbol(targetToken)}
+									/>
+								</Typography>
 							)}
 						</Grid>
 					</Grid>
@@ -474,7 +730,8 @@ const mapStateToProps = state => {
 		...getLocale(state),
 		wallet: getWallet(state),
 		fiatCurrency: currency.fiatCurrency,
-		tokens: getTokens(state),
+		tokens: tokensSelectors.allTokens(state),
+		walletTokens: getTokens(state),
 		swapTokens: tokenSwapSelectors.selectTokens(state),
 		error: tokenSwapSelectors.selectError(state),
 		sourceToken: tokenSwapSelectors.selectSource(state),

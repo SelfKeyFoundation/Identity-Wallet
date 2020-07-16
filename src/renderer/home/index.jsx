@@ -3,12 +3,11 @@ import { Grid, Typography, Paper, Button } from '@material-ui/core';
 import { primary, HelpIcon, QuitIcon, SelfkeyLogoTemp } from 'selfkey-ui';
 import { tokensOperations } from 'common/tokens';
 import backgroundImage from '../../../static/assets/images/bgs/background.jpg';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { appOperations, appSelectors } from 'common/app';
-import { isTestMode } from 'common/utils/common';
-import ReactPiwik from 'react-piwik';
+import { appOperations } from 'common/app';
+import { getGlobalContext } from 'common/context';
 
 const styles = theme => ({
 	container: {
@@ -65,18 +64,19 @@ const styles = theme => ({
 const createWalletLink = (props = {}) => <Link to="/createWallet" {...props} />;
 const unlockWalletLink = (props = {}) => <Link to="/unlockWallet" {...props} />;
 class Home extends PureComponent {
-	includeTracking = () => {
-		return this.props.hasAcceptedTracking && !isTestMode();
-	};
-
 	componentDidMount() {
 		this.props.dispatch(appOperations.loadWalletsOperation());
 		this.props.dispatch(tokensOperations.loadTokensOperation());
-
-		if (this.includeTracking()) {
-			ReactPiwik.push(['setConsentGiven']);
-		}
 	}
+	createWalletClicked = () => {
+		getGlobalContext().matomoService.trackEvent(
+			'wallet_setup',
+			'wallet_create_click',
+			undefined,
+			undefined,
+			true
+		);
+	};
 	render() {
 		const { classes } = this.props;
 		return (
@@ -86,7 +86,7 @@ class Home extends PureComponent {
 					direction="column"
 					justify="space-between"
 					alignItems="center"
-					spacing={40}
+					spacing={5}
 					className={classes.parentGrid}
 				>
 					<Grid
@@ -95,7 +95,7 @@ class Home extends PureComponent {
 						direction="column"
 						justify="center"
 						alignItems="center"
-						spacing={40}
+						spacing={5}
 						className={classes.insideGrid}
 					>
 						<Grid
@@ -104,7 +104,7 @@ class Home extends PureComponent {
 							direction="column"
 							justify="flex-start"
 							alignItems="center"
-							spacing={8}
+							spacing={1}
 							className={classes.scrollFix}
 						>
 							<Grid item>
@@ -122,12 +122,13 @@ class Home extends PureComponent {
 							direction="column"
 							justify="flex-end"
 							alignItems="center"
-							spacing={32}
+							spacing={4}
 						>
 							<Grid item>
 								<Button
 									id="createWallet"
 									variant="contained"
+									onClick={this.createWalletClicked}
 									component={createWalletLink}
 									size="large"
 								>
@@ -152,7 +153,7 @@ class Home extends PureComponent {
 						direction="row"
 						justify="center"
 						alignItems="flex-end"
-						spacing={24}
+						spacing={3}
 						className={classes.scrollFix}
 					>
 						<Grid item>
@@ -209,10 +210,6 @@ class Home extends PureComponent {
 	}
 }
 
-const mapStateToProps = (state, props) => {
-	return {
-		hasAcceptedTracking: appSelectors.hasAcceptedTracking(state)
-	};
-};
+const mapStateToProps = (state, props) => ({});
 
 export default connect(mapStateToProps)(withStyles(styles)(Home));

@@ -1,7 +1,9 @@
 import React, { PureComponent } from 'react';
-import { withStyles, Typography, Grid, List, ListItem } from '@material-ui/core';
+import { Typography, Grid, List, ListItem } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { PageLoading, sanitize } from '../../common';
 import 'flag-icon-css/css/flag-icon.css';
+import { primary } from 'selfkey-ui';
 
 const styles = theme => ({
 	countryName: {
@@ -47,7 +49,6 @@ const styles = theme => ({
 			color: theme.palette.secondary.main,
 			display: 'block',
 			padding: '0',
-			borderBottom: '1px solid #435160',
 			marginBottom: '0.5em',
 			marginTop: '0em'
 		},
@@ -62,7 +63,7 @@ const styles = theme => ({
 			marginBottom: '0.5em'
 		},
 		'& a': {
-			color: theme.palette.secondary.main
+			color: primary
 		}
 	}
 });

@@ -48,7 +48,7 @@ aliases:
 jobs:
     'unit-test':
         docker: &DOCKERIMAGE
-            - image: circleci/node:10.12.0-stretch-browsers
+            - image: circleci/node:10.13.0-stretch-browsers
         environment:
             CACHE_VERSION: *cache_version
             JEST_JUNIT_OUTPUT_DIR: dist/junit
@@ -74,11 +74,48 @@ jobs:
             - run:
                   name: Coveralls
                   command: yarn coveralls
+            # - run:
+            #       name: Build Storybook
+            #       command: yarn build-storybook
+            - persist_to_workspace:
+                  root: .
+                  paths:
+                      - dist
             - store_test_results:
                   path: dist/junit
             - store_artifacts:
                   path: dist
             - *step_save_cache
+    'publish-storybook':
+        docker: *DOCKERIMAGE
+        environment:
+            CACHE_VERSION: *cache_version
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: /tmp/linux
+            - *step_prepare_cache_buster
+            - *step_restore_cache
+            - run:
+                  name: Install OS Dependecies
+                  command: |
+                      sudo apt-get update
+                      sudo apt-get install build-essential
+                      sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
+            - run:
+                  name: Install Node Packages
+                  command: yarn install
+            - run:
+                  name: Get storybook from attach_workspace
+                  command: |
+                      mkdir -p dist
+                      cp -r /tmp/linux/dist/storybook dist/storybook
+
+            - run:
+                  name: Story book
+                  command: yarn deploy-storybook-ci
+            - *step_save_cache
+
     'build-mac':
         macos:
             xcode: '11.1.0'
@@ -109,7 +146,7 @@ jobs:
             - run:
                   name: Build App
                   command: yarn dist --publish=never
-                  no_output_timeout: 40m
+                  no_output_timeout: 80m
             - persist_to_workspace:
                   root: .
                   paths:
@@ -340,6 +377,13 @@ workflows:
                               - nightly
                               - release
                               - /staging.*/
+            - 'publish-storybook':
+                  requires:
+                      - unit-test
+                  filters:
+                      branches:
+                          only:
+                              - dev
             - 'publish-mac':
                   requires:
                       - build-mac

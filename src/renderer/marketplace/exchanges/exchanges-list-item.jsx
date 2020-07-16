@@ -1,6 +1,8 @@
 import React from 'react';
-import { Button, TableRow, TableCell, Typography, Grid, withStyles } from '@material-ui/core';
+import { TableRow, TableCell, Typography, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Tag } from 'selfkey-ui';
+import DetailsButton from '../bank-accounts/common/details-button';
 
 const styles = theme => ({
 	defaultIcon: {
@@ -14,25 +16,13 @@ const styles = theme => ({
 		height: '30px'
 	},
 	noRightPadding: {
-		padding: '0 0 0 20px'
+		padding: '0 0 0 20px !important'
 	},
 	link: {
 		cursor: 'pointer'
 	},
 	footer: {
 		margin: '20px'
-	},
-	button: {
-		fontSize: '14px',
-		fontWeight: 400,
-		letterSpacing: 0,
-		minWidth: '70px',
-		padding: '6px 8px',
-		textAlign: 'left',
-		textTransform: 'capitalize',
-		whiteSpace: 'normal',
-		wordBreak: 'break-word',
-		wordWrap: 'normal'
 	},
 	inline: {
 		display: 'flex',
@@ -57,9 +47,8 @@ const styles = theme => ({
 		flexWrap: 'wrap',
 		height: 'initial',
 		justifyContent: 'flex-start',
-		maxWidth: '143px',
-		padding: '10px',
-		width: '143px'
+		maxWidth: '300px',
+		padding: '10px'
 	},
 	fee: {
 		overflow: 'hidden',
@@ -71,18 +60,23 @@ const styles = theme => ({
 		maxWidth: '90px'
 	},
 	resident: {
-		marginBottom: '3px',
 		marginRight: '5px',
-		marginTop: '3px'
+		whiteSpace: 'initial'
 	},
 	exchangeName: {
 		maxWidth: '120px',
 		paddingLeft: '15px',
 		whiteSpace: 'pre-line'
 	},
-	tableRow: {
-		'& td': {
-			padding: '0 15px'
+	hidden: {
+		display: 'none'
+	},
+	excludedResidentCell: {
+		minWidth: '200px'
+	},
+	'@media screen and (min-width: 1230px)': {
+		excludedResidentCell: {
+			minWidth: '290px'
 		}
 	}
 });
@@ -98,6 +92,7 @@ export const ExchangesListItem = withStyles(styles)(
 		fiatSupported,
 		fiatPayments,
 		excludedResidents,
+		allFeesEmpty,
 		logoUrl,
 		status,
 		viewAction
@@ -138,7 +133,7 @@ export const ExchangesListItem = withStyles(styles)(
 			fiatPayments[0] !== 'Not Available';
 
 		return (
-			<TableRow key={name} className={classes.tableRow}>
+			<TableRow key={name}>
 				<TableCell className={classes.noRightPadding}>{icon}</TableCell>
 				<TableCell className={classes.exchangeName}>
 					<Typography variant="h6">{name}</Typography>
@@ -146,7 +141,7 @@ export const ExchangesListItem = withStyles(styles)(
 				<TableCell>
 					<Typography variant="h6">{location}</Typography>
 				</TableCell>
-				<TableCell className={classes.feeWrap}>
+				<TableCell className={allFeesEmpty ? classes.hidden : classes.feeWrap}>
 					<Typography variant="h6" className={classes.fee} title={fees}>
 						{fees === 'N.A.' ? '-' : fees}
 					</Typography>
@@ -171,8 +166,8 @@ export const ExchangesListItem = withStyles(styles)(
 				<TableCell
 					className={
 						isNotExcludedResidents || excludedResidents.length < 2
-							? ''
-							: classes.goodForCell
+							? classes.excludedResidentCell
+							: `${classes.goodForCell} ${classes.excludedResidentCell}`
 					}
 					style={{ height: 'auto', padding: '10px' }}
 				>
@@ -180,26 +175,33 @@ export const ExchangesListItem = withStyles(styles)(
 						? '-'
 						: excludedResidents.map((excluded, index) =>
 								excludedResidents.length - 1 > index ? (
-									<p key={index} className={classes.resident}>
+									<Typography
+										variant="h6"
+										key={index}
+										className={classes.resident}
+									>
 										{excluded},
-									</p>
+									</Typography>
 								) : (
-									excluded
+									<Typography
+										variant="h6"
+										key={index}
+										className={classes.resident}
+									>
+										{excluded}
+									</Typography>
 								)
 						  )}
 				</TableCell>
 				<TableCell
 					style={status === 'Inactive' ? { padding: '0 20px' } : { padding: '0 15px' }}
 				>
-					<Button
-						disabled={status === 'Inactive'}
-						variant="text"
-						color={status === 'Inactive' ? 'secondary' : 'primary'}
-						className={classes.button}
+					<DetailsButton
+						text={getButtonText(status)}
 						onClick={() => (viewAction ? viewAction(id) : '')}
-					>
-						{getButtonText(status)}
-					</Button>
+						disabled={status === 'Inactive'}
+						color={status === 'Inactive' ? 'secondary' : 'primary'}
+					/>
 				</TableCell>
 			</TableRow>
 		);

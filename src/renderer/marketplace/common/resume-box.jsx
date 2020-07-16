@@ -1,25 +1,33 @@
 import React from 'react';
-import { withStyles, Typography, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { Typography, Grid } from '@material-ui/core';
 import classNames from 'classnames';
 import { primary } from 'selfkey-ui';
 const styles = theme => ({
 	resumeTable: {},
+	topPadding: {
+		padding: '10px 15px'
+	},
+	bottomPadding: {
+		padding: '10px 15px 15px'
+	},
 	resumeEntry: {
 		maxWidth: '200px',
-		padding: '10px 15px',
-		'& label': {
-			fontSize: '13px',
-			color: '#93B0C1'
-		},
 		'& h4': {
-			marginTop: '0.25em',
-			minHeight: '30px'
+			fontSize: '20px',
+			lineHeight: '24px'
 		}
 	},
 	resumeBox: {
 		border: '1px solid #303C49',
 		borderRadius: '4px',
 		background: '#2A3540'
+	},
+	threeItems: {
+		width: '200px'
+	},
+	fourItems: {
+		width: '150px'
 	},
 	gridWithBorder: {
 		borderImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.12) 3%, ${primary} 100%)`,
@@ -34,20 +42,21 @@ const styles = theme => ({
 	}
 });
 
-export const ResumeTableEntry = withStyles(styles)(({ classes, name, value = [], highlighted }) => {
+export const ResumeTableEntry = withStyles(styles)(({ classes, name, idx, value = [] }) => {
 	if (!Array.isArray(value)) {
 		value = [value];
 	}
+	const itemClassName = idx === 0 ? classes.topPadding : classes.bottomPadding;
 	return (
-		<div className={classes.resumeEntry}>
-			<label>{name}</label>
+		<div className={`${classes.resumeEntry} ${itemClassName}`}>
+			<Typography variant="subtitle2" color="secondary">
+				{name}
+			</Typography>
 			{value.map((v, idx) => (
 				<Typography
 					key={idx}
 					variant="h4"
-					color="secondary"
-					className={highlighted ? classes.highlightedText : classes.normalText}
-					gutterBottom
+					className={v === '0%' ? classes.normalText : classes.highlightedText}
 				>
 					{v || '--'}
 				</Typography>
@@ -59,7 +68,7 @@ export const ResumeTableEntry = withStyles(styles)(({ classes, name, value = [],
 export const ResumeTable = withStyles(styles)(({ classes, items = [] }) => (
 	<div className={classes.resumeTable}>
 		{items.map((item, idx) => (
-			<ResumeTableEntry {...item} key={idx} />
+			<ResumeTableEntry {...item} key={idx} idx={idx} />
 		))}
 	</div>
 ));
@@ -73,7 +82,13 @@ export const ResumeBox = withStyles(styles)(({ classes, className, itemSets = []
 		className={classNames(classes.resumeBox, className)}
 	>
 		{itemSets.map((set, idx) => (
-			<Grid item key={idx} className={idx ? classes.gridWithBorder : null}>
+			<Grid
+				item
+				key={idx}
+				className={`${idx ? classes.gridWithBorder : null} ${
+					itemSets.length === 4 ? classes.fourItems : classes.threeItems
+				}`}
+			>
 				<ResumeTable items={set} />
 			</Grid>
 		))}

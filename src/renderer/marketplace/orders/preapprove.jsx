@@ -1,6 +1,6 @@
 import React from 'react';
-
-import { withStyles, Grid, Typography, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { Grid, Typography, Button } from '@material-ui/core';
 import { Popup } from '../../common';
 import { PaymentIcon } from 'selfkey-ui';
 const styles = theme => ({

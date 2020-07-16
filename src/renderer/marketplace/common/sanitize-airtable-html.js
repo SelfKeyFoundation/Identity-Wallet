@@ -8,7 +8,7 @@ export const sanitize = html => {
 	return sanitizeHtml(html, {
 		allowedTags: ['b', 'i', 'em', 'strong', 'a', 'div', 'ul', 'li', 'ol', 'p', 'hr', 'br'],
 		allowedAttributes: {
-			a: ['href']
+			a: ['href', 'target']
 		}
 	});
 };

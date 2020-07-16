@@ -12,18 +12,14 @@ import {
 	Divider,
 	ExpansionPanelDetails,
 	List,
-	ListItem,
-	createStyles,
-	withStyles
+	ListItem
 } from '@material-ui/core';
+import { createStyles, withStyles } from '@material-ui/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import {
 	KeyTooltip,
 	TooltipArrow,
-	CheckMaIcon,
-	DeniedIcon,
-	HourGlassIcon,
 	SimpleCheckIcon,
 	SimpleDeniedIcon,
 	SimpleHourglassIcon,
@@ -35,6 +31,7 @@ import {
 	typography,
 	error
 } from 'selfkey-ui';
+import HeaderIcon from '../../common/header-icon';
 
 const styles = theme => ({
 	statusIcon: {
@@ -93,6 +90,9 @@ const styles = theme => ({
 	},
 	loading: {
 		marginTop: '5em'
+	},
+	statusName: {
+		marginLeft: '8px'
 	}
 });
 
@@ -199,6 +199,7 @@ const StatusInfo = withStyles(statusInfoStyle)(
 								<KeyTooltip
 									interactive
 									placement="top-start"
+									TransitionProps={{ timeout: 0 }}
 									title={
 										<React.Fragment>
 											<span>{tooltip}</span>
@@ -223,42 +224,9 @@ const StatusInfo = withStyles(statusInfoStyle)(
 	}
 );
 
-const HeaderIcon = withStyles(styles)(({ status, classes }) => {
-	let icon = null;
-	/* Check KYC Status here: https://confluence.kyc-chain.com/display/DEV/KYC+Process+Statuses
-	 *	 1 In progress: HourGlassIcon
-	 *	 2 Approved: CheckMaIcon
-	 *	 3 Rejected: DeniedIcon
-	 *	 4 Uploaded: HourGlassIcon
-	 *	 5 Invited: HourGlassIcon
-	 *	 6 User processing: HourGlassIcon
-	 *	 7 User declined: DeniedIcon
-	 *	 8 Cancelled: DeniedIcon
-	 *	 9 Additional requested: HourGlassIcon
-	 *	10 Corporate details: HourGlassIcon
-	 *	11 User processing requirement: HourGlassIcon
-	 *	12 Partially approved: HourGlassIcon
-	 *	13 Send tokens: HourGlassIcon
-	 *	14 Manager assigned: HourGlassIcon
-	 */
-	switch (status) {
-		case 2:
-			icon = <CheckMaIcon className={classes.headerIcon} />;
-			break;
-		case 3:
-		case 7:
-		case 8:
-			icon = <DeniedIcon className={classes.headerIcon} />;
-			break;
-		default:
-			icon = <HourGlassIcon />;
-	}
-	return icon;
-});
-
 const LoadingScreen = ({ classes }) => (
 	<Grid container justify="center" alignItems="center">
-		<CircularProgress size={50} className={this.props.classes.loading} />
+		<CircularProgress size={50} className={classes.loading} />
 	</Grid>
 );
 
@@ -279,7 +247,7 @@ class IndividualApplicationsTabComponent extends PureComponent {
 
 		if (!loading && applications && applications.length === 0) {
 			return (
-				<Grid container spacing={32}>
+				<Grid container spacing={4}>
 					<Grid item xs={12}>
 						<Card>
 							<Grid container direction="row" className={classes.cardHeader}>
@@ -347,7 +315,11 @@ class IndividualApplicationsTabComponent extends PureComponent {
 									className={classes.noRightPadding}
 								>
 									<HeaderIcon status={item.currentStatus} />
-									<Typography variant="subtitle2" color="secondary">
+									<Typography
+										variant="subtitle2"
+										color="secondary"
+										className={classes.statusName}
+									>
 										{item.currentStatusName}
 									</Typography>
 								</Grid>
@@ -371,7 +343,7 @@ class IndividualApplicationsTabComponent extends PureComponent {
 								/>
 							</Grid>
 							<ExpansionPanelDetails>
-								<Grid container spacing={32}>
+								<Grid container spacing={4}>
 									<Grid item xs>
 										<Card>
 											<Typography variant="h2" className={classes.title}>

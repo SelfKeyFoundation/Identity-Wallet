@@ -1,6 +1,7 @@
 /* global FileReader */
 import React, { PureComponent } from 'react';
-import { ButtonBase, withStyles, Button, Grid } from '@material-ui/core';
+import { ButtonBase, Button, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { HexagonAvatar } from './hexagon-avatar';
 const styles = theme => ({});
 
@@ -32,7 +33,7 @@ class EditAvatarComponent extends PureComponent {
 		const { avatar } = this.state;
 
 		return (
-			<Grid container direction="column" spacing={32}>
+			<Grid container direction="column" spacing={4}>
 				<Grid item container justify="center">
 					<ButtonBase component="label">
 						<HexagonAvatar src={avatar} />
@@ -40,7 +41,7 @@ class EditAvatarComponent extends PureComponent {
 					</ButtonBase>
 				</Grid>
 				<Grid item>
-					<Grid container spacing={24}>
+					<Grid container spacing={3}>
 						<Grid item>
 							<Button variant="contained" size="large" onClick={this.handleSave}>
 								Save

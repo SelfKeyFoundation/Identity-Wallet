@@ -6,7 +6,7 @@ import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorp
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { identitySelectors } from 'common/identity';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { marketplaceSelectors } from 'common/marketplace';
 import { IncorporationsDetailsPage } from './incorporations-details-page';
 
@@ -140,7 +140,6 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 		const description = program.data.walletDescription
 			? program.data.walletDescription
 			: program.data.servicesDescription;
-
 		return (
 			<IncorporationsDetailsPage
 				applicationStatus={this.getApplicationStatus()}
@@ -163,9 +162,10 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 				onStatusAction={this.onStatusActionClick}
 				description={description}
 				timeToForm={program.data.timeToFormWeeks}
+				whatYouGet={program.whatYouGet}
 				initialDocsText={`You will be required to provide a few basic information about yourself like full name and email. This will be done through SelfKey ID Wallet.`}
 				kycProcessText={`You will undergo a standard KYC process and our team will get in touch with you to make sure we have all the information needed.`}
-				getFinalDocsText={`Once the account opening process is done you will receive all the relevant documents, access codes in persion/via courier or on your email.`}
+				getFinalDocsText={`Once the Incorporation process is done you will receive all the relevant documents, for your new company, on your email.`}
 			/>
 		);
 	}

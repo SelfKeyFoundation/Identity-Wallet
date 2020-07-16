@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Grid, Typography, Button } from '@material-ui/core';
+import { Grid, Typography, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Popup } from '../../common/popup';
 
 const styles = theme => ({});
@@ -9,7 +10,7 @@ export const NotifyPopup = withStyles(styles)(({ classes, title, text, onClose }
 		<Grid
 			container
 			className={classes.root}
-			spacing={32}
+			spacing={4}
 			direction="column"
 			justify="flex-start"
 			alignItems="stretch"
@@ -18,7 +19,7 @@ export const NotifyPopup = withStyles(styles)(({ classes, title, text, onClose }
 				<Typography variant="overline">{text}</Typography>
 			</Grid>
 			<Grid item>
-				<Grid container spacing={24}>
+				<Grid container spacing={3}>
 					<Grid item>
 						<Button variant="outlined" size="large" onClick={onClose}>
 							Close

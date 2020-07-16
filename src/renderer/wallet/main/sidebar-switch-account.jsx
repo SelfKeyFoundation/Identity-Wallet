@@ -1,14 +1,6 @@
 import React, { PureComponent } from 'react';
-import {
-	withStyles,
-	Button,
-	Drawer,
-	Grid,
-	List,
-	ListItem,
-	Typography,
-	Divider
-} from '@material-ui/core';
+import { Button, Drawer, Grid, List, ListItem, Typography, Divider } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import Close from '@material-ui/icons/Close';
 import { SelfkeyLogo } from 'selfkey-ui';
 import PersonIcon from 'selfkey-ui/build/lib/icons/person';
@@ -164,7 +156,7 @@ class SidebarSwitchAccount extends PureComponent {
 				justify="flex-start"
 				alignItems="flex-start"
 				className={classes.list}
-				spacing={40}
+				spacing={5}
 			>
 				<Grid item className={classes.closeSection}>
 					<Grid container direction="row" justify="flex-end" alignItems="flex-start">
@@ -179,7 +171,7 @@ class SidebarSwitchAccount extends PureComponent {
 						direction="row"
 						justify="flex-start"
 						alignItems="center"
-						spacing={16}
+						spacing={2}
 						className={classes.logoSection}
 					>
 						<Grid item>

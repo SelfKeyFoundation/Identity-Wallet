@@ -1,7 +1,8 @@
 import React from 'react';
-import { Typography, Input, Select, MenuItem } from '@material-ui/core';
-import { KeyboardArrowDown } from '@material-ui/icons';
-import { withStyles } from '@material-ui/core/styles';
+import { Typography, Input, Select, MenuItem, FormControl } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { SelectDropdownIcon } from 'selfkey-ui';
+import { InputTitle } from '../../common';
 
 const styles = theme => ({
 	regularText: {
@@ -71,23 +72,6 @@ const styles = theme => ({
 	}
 });
 
-const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => {
-	return (
-		<div>
-			<Typography variant="overline" gutterBottom>
-				{title}
-				{optional ? (
-					<Typography variant="overline" className={classes.optional}>
-						(optional)
-					</Typography>
-				) : (
-					'*'
-				)}
-			</Typography>
-		</div>
-	);
-});
-
 const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 	const {
 		classes,
@@ -106,27 +90,29 @@ const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 				{showParentCompany && (
 					<div className={`${classes.parentCompany} ${classes.flexColumn}`}>
 						<InputTitle title="Parent Company" optional={true} />
-						<Select
-							className={classes.select}
-							onChange={onFieldChange('parentId')}
-							value={parentId}
-							name="parentId"
-							error={errors.parentId}
-							disableUnderline
-							IconComponent={KeyboardArrowDown}
-							input={<Input disableUnderline />}
-						>
-							{companies.map(item => (
-								<MenuItem key={item.identity.id} value={item.identity.id}>
-									{item.entityName}
-								</MenuItem>
-							))}
-						</Select>
-						{errors.parentId && (
-							<Typography variant="subtitle2" color="error" gutterBottom>
-								{errors.parentId}
-							</Typography>
-						)}
+						<FormControl variant="filled">
+							<Select
+								className={classes.select}
+								onChange={onFieldChange('parentId')}
+								value={parentId}
+								name="parentId"
+								error={errors.parentId}
+								disableUnderline
+								IconComponent={SelectDropdownIcon}
+								input={<Input disableUnderline />}
+							>
+								{companies.map(item => (
+									<MenuItem key={item.identity.id} value={item.identity.id}>
+										{item.entityName}
+									</MenuItem>
+								))}
+							</Select>
+							{errors.parentId && (
+								<Typography variant="subtitle2" color="error" gutterBottom>
+									{errors.parentId}
+								</Typography>
+							)}
+						</FormControl>
 					</div>
 				)}
 				<div className={`${classes.inputBox} ${classes.flexColumn}`}>
