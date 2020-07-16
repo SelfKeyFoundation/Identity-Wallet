@@ -27,7 +27,7 @@ export const AutoUpdate = withStyles(styles)(
 		let releaseNotesRef = React.createRef();
 		const root = document.createElement('div');
 		const shadow = root.createShadowRoot
-			? root.createShadow()
+			? root.createShadowRoot()
 			: root.attachShadow({ mode: 'open' });
 		shadow.innerHTML = info.releaseNotes;
 
