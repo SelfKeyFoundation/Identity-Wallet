@@ -83,6 +83,9 @@ export const incorporationsSelectors = {
 				c.data.checkoutOptions = parseOptions(c);
 				c.walletAddress = selectVendorWalletAddress(c);
 				c.didAddress = selectVendorDidAddress(c);
+				// TODO: in the future should be provided by the API
+				c.whatYouGet =
+					'All our incorporation services include a yearly consulting session, a dedicated account manager and access to our global network of trusted business services, including introductions to accountants, financial, tax and legal advisors at no cost.';
 				return c;
 			}),
 	selectIncorporationByFilter: (state, filter, entityType) =>

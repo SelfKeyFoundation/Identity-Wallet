@@ -20,18 +20,6 @@ class CorporateWizardContainerComponent extends PureComponent {
 		creationDate: null
 	};
 
-	componentDidMount() {
-		if (this.props.identity && this.props.identity.type !== 'corporate') {
-			this.props.dispatch(identityOperations.navigateToProfileOperation());
-		}
-	}
-
-	componentDidUpdate() {
-		if (this.props.identity && this.props.identity.type !== 'corporate') {
-			this.props.dispatch(identityOperations.navigateToProfileOperation());
-		}
-	}
-
 	handleFieldChange = name => evt => {
 		let value = evt;
 

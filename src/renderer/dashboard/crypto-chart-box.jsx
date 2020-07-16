@@ -9,7 +9,7 @@ import { getViewAll } from 'common/view-all-tokens/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getVisibleTokens, getTopTokenListSize } from 'common/wallet-tokens/selectors';
 import { viewAllOperations } from 'common/view-all-tokens';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { ExpandMore, ExpandLess } from '@material-ui/icons';
 
 const styles = () => ({
@@ -85,7 +85,7 @@ const styles = () => ({
 		textAlign: 'right'
 	},
 	smallText: {
-		marginTop: '0 !important',
+		marginTop: '-2px !important',
 		'& >div': {
 			fontSize: '14px'
 		}
@@ -133,7 +133,7 @@ const styles = () => ({
 		flexWrap: 'wrap',
 		justifyContent: 'space-between',
 		marginBottom: '30px',
-		maxHeight: '240px',
+		maxHeight: '250px',
 		overflowX: 'hidden',
 		overflowY: 'auto'
 	},
@@ -141,7 +141,7 @@ const styles = () => ({
 		marginRight: '10px'
 	},
 	tokenActionButtons: {
-		marginBottom: '40px',
+		marginBottom: '30px',
 		marginTop: '20px'
 	},
 	flex: {
@@ -304,6 +304,20 @@ export class CryptoChartBoxComponent extends React.Component {
 		}
 	};
 
+	// ETH and KEY have hardcoded colors
+	getChartColors = tokens => {
+		let colors = [];
+		tokens.forEach(token => {
+			if (token.symbol === 'ETH') {
+				colors.push('#9418DC');
+			}
+			if (token.symbol === 'KEY' || token.symbol === 'KI') {
+				colors.push('#2DA1F8');
+			}
+		});
+		return [...colors, ...this.getColors()];
+	};
+
 	getColors = () => ['#46dfba', '#05538E', '#006CBE', '#006CBE', '#00C0D9'];
 
 	getChartEvents = () => {
@@ -453,7 +467,7 @@ export class CryptoChartBoxComponent extends React.Component {
 
 		return (
 			<Paper className={classes.paper}>
-				<Grid container alignItems="center" spacing={16}>
+				<Grid container alignItems="center" spacing={2}>
 					<Typography variant="h1" className={classes.title}>
 						My Tokens
 					</Typography>
@@ -464,7 +478,7 @@ export class CryptoChartBoxComponent extends React.Component {
 									events={this.getChartEvents()}
 									tokens={tokens}
 									hasBalance={this.hasBalance()}
-									colors={this.getColors()}
+									colors={this.getChartColors(tokens)}
 								/>
 								<div className={classes.chartCenterContainer}>
 									<Typography variant="h1">
@@ -510,7 +524,7 @@ export class CryptoChartBoxComponent extends React.Component {
 					</Grid>
 					<Grid
 						container
-						spacing={16}
+						spacing={2}
 						justify="space-between"
 						className={classes.tokenContainer}
 					>

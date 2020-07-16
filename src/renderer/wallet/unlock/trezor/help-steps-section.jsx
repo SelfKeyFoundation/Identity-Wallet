@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Grid, Avatar, Typography } from '@material-ui/core';
+import { Grid, Avatar, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	avatar: {
@@ -15,7 +16,7 @@ const HelpStepsSection = ({ classes }) => {
 			direction="column"
 			justify="flex-start"
 			alignItems="flex-start"
-			spacing={16}
+			spacing={2}
 		>
 			<Grid item>
 				<Grid
@@ -23,7 +24,7 @@ const HelpStepsSection = ({ classes }) => {
 					direction="row"
 					justify="flex-start"
 					alignItems="center"
-					spacing={16}
+					spacing={2}
 				>
 					<Grid item>
 						<Avatar className={classes.avatar}>
@@ -52,7 +53,7 @@ const HelpStepsSection = ({ classes }) => {
 					direction="row"
 					justify="flex-start"
 					alignItems="center"
-					spacing={16}
+					spacing={2}
 				>
 					<Grid item>
 						<Avatar className={classes.avatar}>
@@ -81,7 +82,7 @@ const HelpStepsSection = ({ classes }) => {
 					direction="row"
 					justify="flex-start"
 					alignItems="center"
-					spacing={16}
+					spacing={2}
 				>
 					<Grid item>
 						<Avatar className={classes.avatar}>

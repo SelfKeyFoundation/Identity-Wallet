@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Grid, Typography, Button } from '@material-ui/core';
+import { Grid, Typography, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { success, warning, AttributeAlertIcon } from 'selfkey-ui';
 import { CheckOutlined } from '@material-ui/icons';
 

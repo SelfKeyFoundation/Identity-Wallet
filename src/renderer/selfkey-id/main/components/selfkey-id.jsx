@@ -4,7 +4,7 @@ import { Grid, Typography, Tabs, Tab } from '@material-ui/core';
 class SelfkeyIdComponent extends PureComponent {
 	render() {
 		return (
-			<Grid container direction="column" spacing={32}>
+			<Grid container direction="column" spacing={4}>
 				<Grid item>
 					<Typography variant="h1">SelfKey Profile</Typography>
 				</Grid>

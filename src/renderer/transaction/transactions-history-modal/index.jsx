@@ -25,7 +25,7 @@ import {
 	Input,
 	FormControl
 } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import {
 	HourGlassIcon,
 	FailedIcon,
@@ -35,12 +35,12 @@ import {
 	LargeTableHeadRow,
 	CopyIcon,
 	ViewIcon,
-	KeyPicker
+	KeyPicker,
+	SelectDropdownIcon
 } from 'selfkey-ui';
 import { convertExponentialToDecimal } from 'common/utils/exponential-to-decimal';
 import { push } from 'connected-react-router';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { KeyboardArrowDown } from '@material-ui/icons';
 
 const styles = theme => ({
 	iconSpacing: {
@@ -363,7 +363,7 @@ class TransactionsHistoryModal extends PureComponent {
 							justify="flex-start"
 							alignItems="stretch"
 							wrap="nowrap"
-							spacing={40}
+							spacing={5}
 							className={classes.content}
 						>
 							<Grid
@@ -384,13 +384,19 @@ class TransactionsHistoryModal extends PureComponent {
 										displayEmpty
 										onChange={this.handleOptionSelection}
 										disableUnderline
-										IconComponent={KeyboardArrowDown}
+										IconComponent={SelectDropdownIcon}
 										input={<Input disableUnderline fullWidth />}
 										autoWidth
 										className={classes.filterInput}
 									>
 										<MenuItem value={-1} className={classes.dropdown}>
-											<em>Choose...</em>
+											<Typography
+												className="choose"
+												variant="subtitle1"
+												color="textSecondary"
+											>
+												Choose...
+											</Typography>
 										</MenuItem>
 										{['Send', 'Receive', 'Buy', 'Swap'].map(option => (
 											<MenuItem
@@ -425,7 +431,7 @@ class TransactionsHistoryModal extends PureComponent {
 						justify="flex-start"
 						wrap="nowrap"
 						alignItems="stretch"
-						spacing={40}
+						spacing={5}
 						className={classes.content}
 					>
 						{processing ? (

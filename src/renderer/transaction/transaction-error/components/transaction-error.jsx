@@ -1,12 +1,9 @@
 import * as React from 'react';
 import TransactionErrorBox from '../../common/transaction-error-box';
-import { Typography, withStyles } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
-const styles = theme => ({
-	bodyText: {
-		textAlign: 'justify'
-	}
-});
+const styles = theme => ({});
 
 export const TransactionError = withStyles(styles)(({ classes, message, address, closeAction }) => {
 	return (
@@ -15,9 +12,7 @@ export const TransactionError = withStyles(styles)(({ classes, message, address,
 			closeAction={closeAction}
 			subtitle="Transaction Failed"
 		>
-			<Typography variant="body1" className={classes.bodyText}>
-				{message}
-			</Typography>
+			<Typography variant="body1">{message}</Typography>
 		</TransactionErrorBox>
 	);
 });

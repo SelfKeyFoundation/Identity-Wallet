@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { identitySelectors } from 'common/identity';
 import {
 	CorporateDashboardContainer,
 	CorporateWizardContainer,
@@ -9,10 +10,21 @@ import {
 
 class CorporateContainerComponent extends PureComponent {
 	render() {
-		const { match } = this.props;
+		const { match, isIndividual } = this.props;
 
 		return (
-			<React.Fragment>
+			<Switch>
+				<Route
+					exact="1"
+					path={`${match.path}/create-corporate-profile`}
+					render={props => <CorporateWizardContainer {...props} />}
+				/>
+				<Route
+					exact="1"
+					path={`${match.path}/add-member`}
+					render={props => <CorporateMemberContainer {...props} />}
+				/>
+				{isIndividual && <Redirect to={`/main/individual`} />}
 				<Route
 					exact="1"
 					path={`${match.path}`}
@@ -28,27 +40,25 @@ class CorporateContainerComponent extends PureComponent {
 					render={props => <CorporateDashboardContainer {...props} />}
 				/>
 				<Route
-					path={`${match.path}/create-corporate-profile`}
-					render={props => <CorporateWizardContainer {...props} />}
-				/>
-				<Route
 					path={`${match.path}/setup-corporate-profile/:identityId`}
 					render={props => <CorporateWizardContainer {...props} />}
 				/>
 				<Route
-					path={`${match.path}/add-member/:parentId?`}
+					path={`${match.path}/add-member/:parentId`}
 					render={props => <CorporateMemberContainer {...props} />}
 				/>
 				<Route
 					path={`${match.path}/edit-member/:parentId/:identityId`}
 					render={props => <CorporateMemberContainer {...props} />}
 				/>
-			</React.Fragment>
+			</Switch>
 		);
 	}
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+	isIndividual: identitySelectors.isIndividualIdentity(state)
+});
 
 const connectedComponent = connect(mapStateToProps)(CorporateContainerComponent);
 export { connectedComponent as CorporateContainer };

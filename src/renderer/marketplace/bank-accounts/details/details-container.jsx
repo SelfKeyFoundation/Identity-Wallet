@@ -6,7 +6,7 @@ import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-acc
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { identitySelectors } from 'common/identity';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { BankingDetailsPage } from './details-page';
 import { marketplaceSelectors } from 'common/marketplace';
 
@@ -170,6 +170,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 				canOpenBankAccount={this.canApply(price)}
 				startApplication={this.onApplyClick}
 				kycRequirements={kycRequirements}
+				whatYouGet={jurisdiction.whatYouGet}
 				templateId={templateId}
 				onBack={this.onBackClick}
 				onStatusAction={this.onStatusActionClick}
@@ -177,7 +178,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 				timeToForm={timeToOpen}
 				initialDocsText={`You will be required to provide a few basic information about yourself like full name and email. This will be done through SelfKey ID Wallet.`}
 				kycProcessText={`You will undergo a standard KYC process and our team will get in touch with you to make sure we have all the information needed.`}
-				getFinalDocsText={`Once the account opening process is done you will receive all the relevant documents, access codes in persion/via courier or on your email.`}
+				getFinalDocsText={`Once the account opening process is done you will receive all the relevant documents, access codes in person/via courier or on your email.`}
 			/>
 		);
 	}

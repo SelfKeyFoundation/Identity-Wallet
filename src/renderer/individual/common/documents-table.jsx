@@ -3,12 +3,13 @@ import moment from 'moment';
 import {
 	Table,
 	TableBody,
+	TableCell,
 	TableRow,
 	IconButton,
 	TableHead,
-	Typography,
-	withStyles
+	Typography
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import {
 	FilePdfIcon,
 	FileImageIcon,
@@ -18,8 +19,7 @@ import {
 	FileLinkWithModal,
 	EditTransparentIcon,
 	DeleteIcon,
-	SmallTableHeadRow,
-	SmallTableCell
+	SmallTableHeadRow
 } from 'selfkey-ui';
 
 const styles = theme => ({
@@ -110,46 +110,46 @@ export const DocumentsTable = withStyles(styles)(
 		<Table>
 			<TableHead>
 				<SmallTableHeadRow>
-					<SmallTableCell>
+					<TableCell>
 						<Typography variant="overline">Type</Typography>
-					</SmallTableCell>
-					<SmallTableCell>
+					</TableCell>
+					<TableCell>
 						<Typography variant="overline">Label</Typography>
-					</SmallTableCell>
-					<SmallTableCell>
+					</TableCell>
+					<TableCell>
 						<Typography variant="overline">Expiry Date</Typography>
-					</SmallTableCell>
-					<SmallTableCell>
+					</TableCell>
+					<TableCell>
 						<Typography variant="overline">Last Edited</Typography>
-					</SmallTableCell>
-					<SmallTableCell align="right">
+					</TableCell>
+					<TableCell align="right">
 						<Typography variant="overline">Actions</Typography>
-					</SmallTableCell>
+					</TableCell>
 				</SmallTableHeadRow>
 			</TableHead>
 			<TableBody>
 				{documents.map(entry => (
 					<TableRow key={entry.id}>
-						<SmallTableCell>
+						<TableCell>
 							<Typography variant="h6">{entry.type.content.title}</Typography>
-						</SmallTableCell>
-						<SmallTableCell className={classes.labelCell}>
+						</TableCell>
+						<TableCell className={classes.labelCell}>
 							<DocumentName entry={entry} classes={classes} />
-						</SmallTableCell>
-						<SmallTableCell>
+						</TableCell>
+						<TableCell>
 							<DocumentExpiryDate doc={entry} />
-						</SmallTableCell>
-						<SmallTableCell>
+						</TableCell>
+						<TableCell>
 							<Typography variant="h6">{lastUpdateDate(entry)}</Typography>
-						</SmallTableCell>
-						<SmallTableCell align="right">
+						</TableCell>
+						<TableCell align="right">
 							<IconButton onClick={() => onEditAttribute(entry)}>
 								<EditTransparentIcon />
 							</IconButton>
 							<IconButton onClick={() => onDeleteAttribute(entry)}>
 								<DeleteIcon />
 							</IconButton>
-						</SmallTableCell>
+						</TableCell>
 					</TableRow>
 				))}
 			</TableBody>

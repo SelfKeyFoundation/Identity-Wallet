@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
-import { Typography, withStyles } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import {
 	FileImageIcon,
 	FileDefaultIcon,

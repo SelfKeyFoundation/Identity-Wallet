@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import avatarPlaceholder from '../../../../static/assets/images/icons/icon-add-image.svg';
 
 const styles = theme => ({

@@ -1,10 +1,13 @@
 import React, { PureComponent } from 'react';
 import { Avatar, Input, Button, Grid, Typography } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
 
 const styles = theme => ({
+	avatar: {
+		marginRight: '16px'
+	},
 	passwordInput: {
 		width: '500px'
 	},
@@ -23,6 +26,13 @@ const styles = theme => ({
 	},
 	bottomSpace: {
 		marginBottom: '1em'
+	},
+	passwordSpace: {
+		marginBottom: '2em',
+		marginTop: '2em'
+	},
+	keystore: {
+		marginTop: '0.5em'
 	}
 });
 
@@ -63,28 +73,19 @@ class NewAddress extends PureComponent {
 		const fileSelected = filePath !== '';
 
 		return (
-			<Grid container direction="column" justify="center" alignItems="center" spacing={24}>
-				<Grid
-					container
-					item
-					direction="column"
-					justify="flex-start"
-					alignItems="flex-start"
-					spacing={24}
-				>
+			<Grid container direction="column" justify="center" alignItems="center">
+				<Grid container direction="column" justify="flex-start" alignItems="flex-start">
 					<Grid item>
 						<Grid
 							container
 							direction="row"
 							justify="flex-start"
-							alignItems="center"
-							spacing={16}
+							alignItems="flex-start"
+							wrap="nowrap"
 						>
-							<Grid item>
-								<Avatar>
-									<Typography variant="overline">1</Typography>
-								</Avatar>
-							</Grid>
+							<Avatar className={classes.avatar}>
+								<Typography variant="overline">1</Typography>
+							</Avatar>
 							<Grid item>
 								<Grid
 									container
@@ -116,25 +117,23 @@ class NewAddress extends PureComponent {
 						</Grid>
 					</Grid>
 					{fileSelected && (
-						<Grid item>
+						<Grid item className={classes.keystore}>
 							<Typography variant="caption" className={classes.filePath}>
 								{filePath}
 							</Typography>
 						</Grid>
 					)}
-					<Grid item>
+					<Grid item className={classes.passwordSpace}>
 						<Grid
 							container
 							direction="row"
 							justify="flex-start"
-							alignItems="center"
-							spacing={16}
+							alignItems="flex-start"
+							wrap="nowrap"
 						>
-							<Grid item>
-								<Avatar>
-									<Typography variant="overline">2</Typography>
-								</Avatar>
-							</Grid>
+							<Avatar className={classes.avatar}>
+								<Typography variant="overline">2</Typography>
+							</Avatar>
 							<Grid item>
 								<Grid
 									container
@@ -157,6 +156,11 @@ class NewAddress extends PureComponent {
 											type="password"
 											onChange={this.handlePasswordChange}
 											placeholder="Password"
+											onKeyUp={event => {
+												if (event.keyCode === 13) {
+													this.handleUnlockAction();
+												}
+											}}
 										/>
 										{this.state.error !== '' && (
 											<Typography

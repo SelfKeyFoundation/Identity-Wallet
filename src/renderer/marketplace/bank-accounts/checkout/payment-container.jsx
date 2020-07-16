@@ -1,7 +1,7 @@
 import BN from 'bignumber.js';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { featureIsEnabled } from 'common/feature-flags';
 import { getWallet } from 'common/wallet/selectors';
 import { kycSelectors } from 'common/kyc';

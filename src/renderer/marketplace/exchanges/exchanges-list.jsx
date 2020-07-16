@@ -1,7 +1,6 @@
 import React from 'react';
 import {
 	Grid,
-	withStyles,
 	Typography,
 	Divider,
 	Table,
@@ -9,6 +8,7 @@ import {
 	TableBody,
 	TableCell
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { LargeTableHeadRow, BackButton } from 'selfkey-ui';
 import { ExchangesListItem } from './exchanges-list-item';
 import { MarketplaceDisclaimer } from '../common/disclaimer';
@@ -16,7 +16,7 @@ import { PageLoading } from '../common';
 
 const styles = theme => ({
 	wrapper: {
-		width: '1080px'
+		width: '1074px'
 	},
 	'@media screen and (min-width: 1230px)': {
 		wrapper: {
@@ -40,10 +40,7 @@ const styles = theme => ({
 	content: {
 		marginTop: '30px',
 		margin: 0,
-		width: '100%',
-		'& th': {
-			padding: '0 15px'
-		}
+		width: '100%'
 	},
 	button: {
 		color: '#93b0c1',
@@ -76,10 +73,22 @@ const styles = theme => ({
 	divider: {
 		backgroundColor: '#475768',
 		marginBottom: '20px'
+	},
+	hidden: {
+		display: 'none'
 	}
 });
 
+const allFeesEmpty = items => {
+	let emptyFees = true;
+	items.map(item => {
+		return item.fees ? (emptyFees = false) : null;
+	});
+	return emptyFees;
+};
+
 const getServices = (items, viewAction) => {
+	const allFees = allFeesEmpty(items);
 	return items.map(item => {
 		return (
 			<React.Fragment key={item.id || item.name}>
@@ -94,6 +103,7 @@ const getServices = (items, viewAction) => {
 					logoUrl={item.data.logo ? item.data.logo[0].url : false}
 					status={item.status}
 					viewAction={viewAction}
+					allFeesEmpty={allFees}
 				/>
 			</React.Fragment>
 		);
@@ -136,7 +146,7 @@ export const ExchangesList = withStyles(styles)(
 							direction="row"
 							justify="start"
 							alignItems="center"
-							spacing={24}
+							spacing={3}
 							className={classes.content}
 						>
 							{isLoading && <PageLoading />}
@@ -148,7 +158,7 @@ export const ExchangesList = withStyles(styles)(
 												<TableCell className={classes.icon}>
 													&nbsp;
 												</TableCell>
-												<TableCell>
+												<TableCell style={{ paddingLeft: '15px' }}>
 													<Typography variant="overline">
 														Exchange
 													</Typography>
@@ -158,7 +168,11 @@ export const ExchangesList = withStyles(styles)(
 														Location
 													</Typography>
 												</TableCell>
-												<TableCell>
+												<TableCell
+													className={
+														allFeesEmpty(items) ? classes.hidden : null
+													}
+												>
 													<Typography variant="overline">Fees</Typography>
 												</TableCell>
 												<TableCell>
@@ -171,7 +185,9 @@ export const ExchangesList = withStyles(styles)(
 														Fiat Payments
 													</Typography>
 												</TableCell>
-												<TableCell style={{ padding: '10px' }}>
+												<TableCell
+													style={{ padding: '10px', minWidth: '200px' }}
+												>
 													<Typography variant="overline">
 														Excluded Residents
 													</Typography>

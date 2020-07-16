@@ -1,5 +1,6 @@
 import React from 'react';
-import { Grid, withStyles } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { CorporateDetails } from '../common/corporate-details';
 import { CorporateApplicationsSummary } from '../common/corporate-applications';
 import { CorporateCapTable } from '../common/corporate-cap-table';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { marketplaceSelectors } from 'common/marketplace';
@@ -13,6 +13,11 @@ const styles = theme => ({});
 class ExchangesListContainer extends MarketplaceExchangesComponent {
 	componentDidMount() {
 		window.scrollTo(0, 0);
+		this.trackMatomoGoal(
+			'MarketplaceVisitIndividualExchange',
+			'MarketplaceVisitCorporateExchange'
+		);
+		this.trackMarketplaceVisit('exchanges');
 	}
 
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
@@ -34,6 +39,7 @@ const mapStateToProps = (state, props) => {
 	const identity = identitySelectors.selectIdentity(state);
 	return {
 		isLoading: marketplaceSelectors.isInventoryLoading(state),
+		identity,
 		items: marketplaceSelectors.selectInventoryForCategory(
 			state,
 			'exchanges',

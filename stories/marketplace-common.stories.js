@@ -36,7 +36,9 @@ const paymentCheckoutData = {
 	kycProcessText:
 		'You will undergo a standard KYC process and our team will get in touch with you to make sure we have all the information needed.',
 	getFinalDocsText:
-		'Once the incorporations process is done you will receive all the relevant documents, for your new company, on your email.'
+		'Once the incorporations process is done you will receive all the relevant documents, for your new company, on your email.',
+	whatYouGet:
+		'Bank Account opening requirements are subject to change at the discretion of the bank. There might be additional fees charged by the bank itself. Bank account opening is not guaranteed and is subject to the bank policies and compliance department. There might be restrictions on UBO nationalities, business activities and/or jurisdictions. A refund is guaranteed if the account is not successfully opened, but a 15% administrative fee applies.'
 };
 
 storiesOf('Marketplace Common', module)

@@ -8,8 +8,10 @@ import {
 	AlertIcon,
 	AttributesTable,
 	TransactionErrorPopup,
-	TransactionProcessingPopup
+	TransactionProcessingPopup,
+	Scrollable
 } from '../src/renderer/common';
+import { text, boolean, object, select } from '@storybook/addon-knobs';
 
 const data = {
 	basic: {
@@ -46,52 +48,95 @@ const data = {
 	}
 };
 
+storiesOf('Common/Scrollable', module).add('default', () => (
+	<div style={{ width: '1140px' }}>
+		<Scrollable
+			style={object('styles', {
+				maxHeight: '100px',
+				width: '100px',
+				color: 'white'
+			})}
+		>
+			{text(
+				'text',
+				'Bank Specific KYC Requirements might apply. If this is the case you will be asked for additional documents tp fill, after the basic KYC information and documents have been validated.'
+			)}
+		</Scrollable>
+	</div>
+));
+
 storiesOf('Common/Accordion', module).add('Option', () => (
 	<div style={{ width: '1140px' }}>
-		<Accordion data={data} open={true} />
+		<Accordion data={object('accordion-data', data)} open={boolean('is open', true)} />
 	</div>
 ));
 
 storiesOf('Common/Popup', module).add('default', () => (
-	<Popup closeAction={action('popup close action click')} open text="Test Popup">
-		Storybook popup content
+	<Popup
+		closeAction={action(text('close action text', 'popup close action click'))}
+		open={boolean('is popup open', true)}
+		text={text('Title Text', 'Test Popup')}
+	>
+		{text('Popup content', 'Storybook popup content')}
 	</Popup>
 ));
 
+const alertSelects = [undefined, 'success', 'warning', 'danger', 'info'];
+
 storiesOf('Common/AlertIcon', module)
-	.add('default', () => <AlertIcon />)
-	.add('success', () => <AlertIcon type="success" />)
-	.add('warning', () => <AlertIcon type="warning" />)
-	.add('danger', () => <AlertIcon type="danger" />)
-	.add('info', () => <AlertIcon type="info" />);
+	.add('default', () => <AlertIcon type={select('Alert Selects', alertSelects, undefined)} />)
+	.add('success', () => <AlertIcon type={select('Alert Selects', alertSelects, 'success')} />)
+	.add('warning', () => <AlertIcon type={select('Alert Selects', alertSelects, 'warning')} />)
+	.add('danger', () => <AlertIcon type={select('Alert Selects', alertSelects, 'danger')} />)
+	.add('info', () => <AlertIcon type={select('Alert Selects', alertSelects, 'info')} />);
 
 storiesOf('Common/Alert', module)
-	.add('default', () => <Alert>Hello</Alert>)
-	.add('success', () => <Alert type="success">Hello</Alert>)
-	.add('warning', () => (
-		<Alert type="warning">
-			Please make sure you understand the bank requirements and that you are able/willing to
-			fulfill them before placing your order.
+	.add('default', () => (
+		<Alert type={select('Alert Selects', alertSelects, undefined)}>
+			{text('Alert text', 'default')}
 		</Alert>
 	))
-	.add('danger', () => <Alert type="danger">Hello</Alert>)
-	.add('info', () => <Alert type="info">Hello</Alert>);
+	.add('success', () => (
+		<Alert type={select('Alert Selects', alertSelects, 'success')}>
+			{text('Alert text', 'Success')}
+		</Alert>
+	))
+	.add('warning', () => (
+		<Alert type={select('Alert Selects', alertSelects, 'warning')}>
+			{text(
+				'Alert text',
+				'Please make sure you understand the bank requirements and that you are able/willing to fulfill them before placing your order.'
+			)}
+		</Alert>
+	))
+	.add('danger', () => (
+		<Alert type={select('Alert Selects', alertSelects, 'danger')}>
+			{text('Alert text', 'Danger !')}
+		</Alert>
+	))
+	.add('info', () => (
+		<Alert type={select('Alert Selects', alertSelects, 'info')}>
+			{text('Alert text', 'Info !')}
+		</Alert>
+	));
 
 storiesOf('Common', module)
 	.add('AttributesTable', () => (
 		<div style={{ width: '450px', height: '450px' }}>
 			<AttributesTable
-				title="Test Table"
-				attributes={[
+				title={text('Title', 'Test Table')}
+				attributes={object('Attributes', [
 					{ name: 'Test Attribute 1', value: 'Test value 1' },
 					{ name: 'Test Attribute 2', value: 'Test value 2' },
 					{ name: 'Test Attribute 3', value: 'Test value 3' },
 					{ name: 'Test Attribute 4', value: 'Test value 4' },
 					{ name: 'Test Attribute 5', value: 'Test value 5' },
 					{ name: 'Test Attribute 6', value: 'Test value 6' }
-				]}
+				])}
 			/>
 		</div>
 	))
-	.add('TransactionProcessingPopup', () => <TransactionProcessingPopup title="Processing" />)
-	.add('TransactionErrorPopup', () => <TransactionErrorPopup title="Error" />);
+	.add('TransactionProcessingPopup', () => (
+		<TransactionProcessingPopup title={text('Title', 'Processing')} />
+	))
+	.add('TransactionErrorPopup', () => <TransactionErrorPopup title={text('Title', 'Error')} />);

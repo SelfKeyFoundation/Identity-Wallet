@@ -1,5 +1,6 @@
 import React from 'react';
-import { withStyles, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { CorporateInformation } from '../common/corporate-information';
 import { CorporateDocuments } from '../common/corporate-documents';
 
@@ -18,7 +19,7 @@ const CorporateInformationTab = withStyles(styles)(
 		onEditDocument,
 		onDeleteDocument
 	}) => (
-		<Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={16}>
+		<Grid container direction="column" justify="flex-start" alignItems="stretch" spacing={2}>
 			<Grid item>
 				<CorporateInformation
 					attributes={attributes}

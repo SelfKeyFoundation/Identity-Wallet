@@ -11,7 +11,7 @@ import {
 	PrintSmallIcon
 } from 'selfkey-ui';
 import { Link } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import QRCode from 'qrcode.react';
 import { Popup } from '../../common';
 

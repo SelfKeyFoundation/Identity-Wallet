@@ -1,5 +1,5 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { WhatYouGet } from './marketplace-what-you-get';
 import { HowServiceWorks } from './marketplace-how-service-works';
 
@@ -17,7 +17,6 @@ const styles = theme => ({
 			color: theme.palette.secondary.main,
 			display: 'block',
 			padding: '0',
-			borderBottom: '1px solid #435160',
 			marginBottom: '0.5em',
 			marginTop: '0em'
 		},
@@ -38,7 +37,15 @@ const styles = theme => ({
 });
 
 const WhatYouGetTab = withStyles(styles)(
-	({ classes, initialDocsText, kycProcessText, getFinalDocsText, description, timeToForm }) => (
+	({
+		classes,
+		initialDocsText,
+		kycProcessText,
+		getFinalDocsText,
+		description,
+		timeToForm,
+		whatYouGet
+	}) => (
 		<div className={classes.tabContainer}>
 			<WhatYouGet
 				classes={classes}
@@ -47,6 +54,7 @@ const WhatYouGetTab = withStyles(styles)(
 				initialDocsText={initialDocsText}
 				kycProcessText={kycProcessText}
 				getFinalDocsText={getFinalDocsText}
+				whatYouGet={whatYouGet}
 			/>
 
 			<HowServiceWorks

@@ -9,7 +9,7 @@ import {
 	Checkbox,
 	FormControlLabel
 } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { appOperations } from 'common/app';
 import { push } from 'connected-react-router';
@@ -82,31 +82,30 @@ class Terms extends PureComponent {
 					justify="flex-start"
 					alignItems="flex-start"
 					className={classes.flexSection}
-					spacing={40}
+					spacing={5}
 				>
 					<Grid id="terms" item className={classes.flexColScroll}>
 						<Typography variant="h3" paragraph>
 							1) ACCEPTANCE OF TERMS
 						</Typography>
 						<Typography variant="body2" paragraph>
-							SelfKey Foundation
-						</Typography>
-						<Typography variant="body2" paragraph>
 							By downloading, using or accessing the SelfKey Identity Wallet (the
-							“SelfKey Wallet”) you agree to the following terms and conditions of use
-							(collectively, these “Terms”). Please read these Terms carefully. If you
-							do not agree to all of these Terms, please do not use the SelfKey
-							Wallet. Your use of the SelfKey Wallet constitutes your acceptance of
-							and agreement to abide by each of these Terms.
+							&#34;SelfKey Wallet&#34;) you agree to the following terms and
+							conditions of use (collectively, these &#34;Terms&#34;). Please read
+							these Terms carefully. If you do not agree to all of these Terms, please
+							do not use the SelfKey Wallet. Your use of the SelfKey Wallet
+							constitutes your acceptance of and agreement to abide by each of these
+							Terms.
 						</Typography>
 						<Typography variant="body2" paragraph>
-							These Terms may be modified, changed, supplemented or updated by the
-							SelfKey Foundation (“SelfKey”, “we”, “us” or “our”) in our sole
-							discretion at any time without advance notice. We suggest that you visit
-							this page regularly to keep up to date with any changes. Your continued
-							use of the SelfKey Wallet will confirm your acceptance of these Terms as
-							modified, changed, supplemented or updated. If you do not agree to such
-							revised terms you must stop using the SelfKey Wallet.
+							These Terms may be modified, changed, supplemented or updated by SelfKey
+							Wallet LLC (&#34;SelfKey&#34;, &#34;we&#34;, &#34;us&#34; or
+							&#34;our&#34;) in our sole discretion at any time without advance
+							notice. We suggest that you visit this page regularly to keep up to date
+							with any changes. Your continued use of the SelfKey Wallet will confirm
+							your acceptance of these Terms as modified, changed, supplemented or
+							updated. If you do not agree to such revised terms you must stop using
+							the SelfKey Wallet.
 						</Typography>
 						<Typography variant="h3" paragraph>
 							2) REPRESENTATIONS AND WARRANTIES
@@ -190,10 +189,10 @@ class Terms extends PureComponent {
 							private key may render the currency inaccessible. Further, if a private
 							key is acquired or copied by another person, that person may be able to
 							obtain the currency stored on the SelfKey Wallet. You acknowledge that
-							you are responsible for safeguarding the private key to your SelfKey
-							Wallet. SelfKey will not be liable for any losses due to any situation
-							in which a private key is lost, divulged, destroyed or otherwise
-							compromised.
+							you are responsible for safeguarding the private key to your Ethereum
+							address, accessed via your SelfKey Wallet. SelfKey will not be liable
+							for any losses due to any situation in which a private key is lost,
+							divulged, destroyed or otherwise compromised.
 						</Typography>
 						<Typography variant="h3" paragraph>
 							4) INDEMNITY
@@ -220,9 +219,9 @@ class Terms extends PureComponent {
 							5) DISCLAIMER
 						</Typography>
 						<Typography variant="subtitle1" paragraph>
-							5.1 The SelfKey Wallet is provided on an “as-is” basis without any
-							representations, warranties, promises or guarantees whatsoever of any
-							kind including, without limitation, any representations, warranties,
+							5.1 The SelfKey Wallet is provided on an &#34;as-is&#34; basis without
+							any representations, warranties, promises or guarantees whatsoever of
+							any kind including, without limitation, any representations, warranties,
 							promises or guarantees regarding the adequacy, suitability or operation
 							of the SelfKey Wallet.
 						</Typography>
@@ -277,7 +276,7 @@ class Terms extends PureComponent {
 						<Typography variant="subtitle1" paragraph>
 							5.6 Any and all indemnities, warranties, terms and conditions (whether
 							express or implied) are hereby excluded to the fullest extent permitted
-							under the law of the Cayman Islands.
+							under the law of Nevis.
 						</Typography>
 						<Typography variant="subtitle1" paragraph>
 							5.7 SelfKey will not be liable, in contract, or tort (including, without
@@ -313,18 +312,17 @@ class Terms extends PureComponent {
 							8) GOVERNING LAW AND JURISDICTION
 						</Typography>
 						<Typography variant="body2" paragraph>
-							These Terms are governed by the laws of the Cayman Islands. Any present
-							or future law which operates to vary the obligations of SelfKey in
-							connection with these Terms with the result that SelfKey’s rights,
-							powers or remedies are adversely affected (including by way of delay or
-							postponement) is excluded except to the extent that its exclusion is
-							prohibited or rendered ineffective by law.
+							These Terms are governed by the laws of Nevis. Any present or future law
+							which operates to vary the obligations of SelfKey in connection with
+							these Terms with the result that SelfKey’s rights, powers or remedies
+							are adversely affected (including by way of delay or postponement) is
+							excluded except to the extent that its exclusion is prohibited or
+							rendered ineffective by law.
 						</Typography>
 						<Typography variant="body2" paragraph>
 							You agree to submit any Dispute (as defined below) to arbitration. To
 							the extent that the agreement to arbitrate is ineffective or void, you
-							agree to submit to the exclusive jurisdiction of the courts of the
-							Cayman Islands.
+							agree to submit to the exclusive jurisdiction of the courts of Nevis.
 						</Typography>
 						<Typography variant="h3" paragraph>
 							9) SUBMISSION TO ARBITRATION
@@ -335,17 +333,17 @@ class Terms extends PureComponent {
 							not settled by you and SelfKey within 30 days from the date that either
 							party notifies the other party in writing of the Dispute shall be
 							referred to and finally settled by arbitration in accordance with the
-							provisions of the Cayman Islands Arbitration Law, 2012. Further, the
-							parties hereby agree that:
+							provisions of Nevis Arbitration Law, 2012. Further, the parties hereby
+							agree that:
 						</Typography>
 						<List>
-							<ListItem>The law of this section is Cayman Islands law;</ListItem>
-							<ListItem>The seat of arbitration will be the Cayman Islands;</ListItem>
+							<ListItem>The law of this section is Nevis law;</ListItem>
+							<ListItem>The seat of arbitration will be Nevis;</ListItem>
 							<ListItem>The number of arbitrators will be three;</ListItem>
 							<ListItem>
 								If the parties do not agree on the arbitrator to be appointed within
 								30 Days of the Dispute proceeding to arbitration, the arbitrator is
-								to be appointed by the Grand Court of the Cayman Islands; and
+								to be appointed by the Grand Court of Nevis, and
 							</ListItem>
 							<ListItem>
 								The arbitration proceedings will be conducted in English.
@@ -438,10 +436,9 @@ class Terms extends PureComponent {
 							17) GENERAL
 						</Typography>
 						<Typography variant="body2" paragraph>
-							These Terms are governed by the laws of the Cayman Islands. All claims
-							arising out of or relating to these Terms will be litigated exclusively
-							in the courts of the Cayman Islands and you consent to personal
-							jurisdiction in those courts.
+							These Terms are governed by the laws of Nevis. All claims arising out of
+							or relating to these Terms will be litigated exclusively in the courts
+							of Nevis and you consent to personal jurisdiction in those courts.
 						</Typography>
 						<Typography variant="body2" paragraph>
 							These Terms control the relationship between us and you. They do not
@@ -466,7 +463,7 @@ class Terms extends PureComponent {
 							otherwise permitted by law.
 						</Typography>
 						<Typography variant="h3" paragraph>
-							18) CRASH REPORT &#38; ANALYTIC
+							18) CRASH REPORT &#38; ANALYTICS
 						</Typography>
 						<FormControlLabel
 							control={
@@ -475,13 +472,40 @@ class Terms extends PureComponent {
 									onChange={this.toogleCrashReportAgreement}
 								/>
 							}
-							label="[Default opt-in] I voluntarily agree to anonymously share
-										crash report &#38; analytics data with the SelfKey
-										Foundation. This information will be used to improve the
-										performance of the SelfKey Identity Wallet. The sharing of
-										crash reports and analytics data is not mandatory and users
-										may opt-out if they choose to not share this information."
+							label="You agree to share basic data and analytics to help SelfKey improve the SelfKey wallet application. This information is non-personal identifiable information, and limited to general usage of wallet, (for example, where a user got stuck in a purchasing process)"
 						/>
+						<Typography variant="h3" paragraph>
+							19) AFFILIATE FEES
+						</Typography>
+						<Typography variant="body2" paragraph>
+							The SelfKey wallet may contain advertisements, sponsored content, paid
+							insertions, affiliate links or other forms of monetization.
+						</Typography>
+						<Typography variant="body2" paragraph>
+							We make no representations, warranties, or assurances as to the
+							accuracy, currency or completeness of the content contain on this
+							application, our website or any sites or services linked to or from the
+							SelfKey Wallet.
+						</Typography>
+						<Typography variant="body2" paragraph>
+							You are assuming all risks, and you agree that we are not liable in any
+							way for any program, product or service that we may promote, market,
+							share or sell on or through our Website or application.
+						</Typography>
+						<Typography variant="h3" paragraph>
+							20) TRANSFER OF INFORMATION
+						</Typography>
+						<Typography variant="body2" paragraph>
+							At times, you may be able to transfer personal data to another service,
+							for example, without limitation, signing up for a service in the
+							marketplace. This transfer of information is facilitated by sending the
+							data from the wallet, to the relying party, or 3rd party. This transfer
+							is consented by you, in the wallet, at the time of transfer. SelfKey
+							will never sell your information to another service. This concept of
+							Self Sovereign identity means you are in control at all times, and you,
+							as the user, are choosing to send this data, as and when you choose, if
+							at all.
+						</Typography>
 					</Grid>
 					<Grid item>
 						<Grid
@@ -489,7 +513,7 @@ class Terms extends PureComponent {
 							direction="row"
 							justify="flex-start"
 							alignItems="center"
-							spacing={24}
+							spacing={3}
 						>
 							<Grid item>
 								<Button

@@ -8,7 +8,7 @@ import {
 import { Grid, Typography, Divider, Button } from '@material-ui/core';
 import { SelfkeyIcon, EthereumIcon, CustomIcon, SentIcon, Copy } from 'selfkey-ui';
 import { Link } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import TokenPrice from '../../common/token-price';
 import { push } from 'connected-react-router';
 import TransactionsHistory from '../transactions-history';
@@ -107,7 +107,7 @@ export class Transfer extends React.Component {
 					direction="row"
 					justify="flex-start"
 					alignItems="flex-start"
-					spacing={16}
+					spacing={2}
 				>
 					<div className={classes.cryptoIcon}>{getIconForToken(cryptoCurrency)}</div>
 					<div>

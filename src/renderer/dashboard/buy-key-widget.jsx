@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { featureIsEnabled } from 'common/feature-flags';
 import { Grid, Typography, Button } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { CustomIcon, CoinsIcon, ExchangeSmallIcon } from 'selfkey-ui';
 import BuyKeyPopup from './buy-key-popup-container';
 import TokenSwap from '../transaction/swap';
@@ -28,13 +28,16 @@ const styles = theme => ({
 		padding: '20px 30px 30px'
 	},
 	ctabutton: {
+		backgroundColor: '#1E262E',
 		display: 'flex',
 		justifyContent: 'space-between',
 		maxWidth: '100%',
 		marginLeft: 'auto',
 		marginRight: '0',
 		marginBottom: '1em',
+		position: 'relative',
 		width: '100%',
+		zIndex: 1,
 		'& span': {
 			flexGrow: 1
 		},

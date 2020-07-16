@@ -6,6 +6,7 @@ import { isDevMode, isDebugMode } from 'common/utils/common';
 import { Logger } from '../common/logger';
 import createMenuTemplate from './menu';
 import { initSplashScreen } from '@trodi/electron-splashscreen';
+import { getGlobalContext } from 'common/context';
 
 const log = new Logger('main-window');
 
@@ -16,7 +17,7 @@ export const createMainWindow = async () => {
 		width: +process.env.WINDOW_WIDTH || 1170,
 		height: +process.env.WINDOW_HEIGHT || 800,
 		minWidth: +process.env.WINDOW_MIN_WIDTH || 1170,
-		minHeight: +process.env.WINDOW_MIN_HEIGHT || 800,
+		minHeight: +process.env.WINDOW_MIN_HEIGHT || 600,
 		kiosk: !!process.env.WINDOW_KIOSK_MODE || false,
 		webPreferences: {
 			nodeIntegration: true,
@@ -81,7 +82,27 @@ export const createMainWindow = async () => {
 		mainWindow.show();
 	});
 
-	mainWindow.on('close', event => {});
+	mainWindow.webContents.on('did-finish-load', () => {
+		const { matomoService, config } = getGlobalContext();
+		if (!config.loaded) {
+			const loadTime = Date.now() - config.startTS;
+			matomoService.trackEvent('app', 'open', undefined, undefined, true);
+			matomoService.trackEvent('app', 'loaded', 'load-time', loadTime, true);
+			if (loadTime > 30000 && loadTime < 60000) {
+				matomoService.trackEvent('app', 'loaded', 'slow-load', undefined, true);
+				log.warn('slow loading time %n seconds', loadTime);
+			}
+			if (loadTime > 60000) {
+				matomoService.trackEvent('app', 'very-slow-load', undefined, true);
+				log.warn('very slow loading time %n seconds', loadTime / 1000);
+			}
+			config.loaded = true;
+		}
+	});
+
+	mainWindow.on('close', event => {
+		getGlobalContext().matomoService.trackEvent('app', 'close', undefined, undefined, true);
+	});
 
 	mainWindow.on('closed', () => {
 		mainWindow = null;

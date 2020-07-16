@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Typography, Button, Grid, withStyles } from '@material-ui/core';
+import { Typography, Button, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import Popup from '../../../common/popup';
 import { HourGlassLargeIcon } from 'selfkey-ui';
@@ -24,7 +25,7 @@ class HardwareWalletError extends PureComponent {
 					direction="row"
 					justify="flex-start"
 					alignItems="flex-start"
-					spacing={40}
+					spacing={5}
 				>
 					<Grid item xs={2}>
 						<HourGlassLargeIcon />
@@ -35,7 +36,7 @@ class HardwareWalletError extends PureComponent {
 							direction="column"
 							justify="flex-start"
 							alignItems="flex-start"
-							spacing={40}
+							spacing={5}
 						>
 							<Grid item>
 								<Typography variant="h2">

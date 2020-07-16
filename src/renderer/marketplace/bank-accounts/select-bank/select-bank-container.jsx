@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { getWallet } from 'common/wallet/selectors';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { marketplaceSelectors } from 'common/marketplace';

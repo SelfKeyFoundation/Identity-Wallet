@@ -1,5 +1,6 @@
 import React from 'react';
-import { CardHeader, Card, CardContent, Typography, withStyles, Grid } from '@material-ui/core';
+import { CardHeader, Card, CardContent, Typography, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { CheckMaIcon, AttributeAlertIcon, EditTransparentIcon } from 'selfkey-ui';
 
 const styles = theme => ({
@@ -20,7 +21,8 @@ const styles = theme => ({
 		justifyContent: 'center'
 	},
 	cardAction: {
-		padding: '1em 1em 0'
+		marginRight: 0,
+		marginTop: '4px'
 	},
 	regularText: {
 		'& span': {
@@ -33,6 +35,7 @@ const styles = theme => ({
 		flexWrap: 'nowrap',
 		'& .label': {
 			display: 'inline-block',
+			lineHeight: '20px',
 			minWidth: '12em'
 		},
 		'& h5': {
@@ -107,25 +110,25 @@ const CorporateDetails = withStyles(styles)(props => {
 			<CardContent className={classes.cardContentBox}>
 				<div className={classes.cardContent}>
 					<div className={classes.attr}>
-						<Typography className="label" color="secondary">
+						<Typography variant="body2" className="label" color="secondary">
 							Jurisdiction
 						</Typography>
 						<DetailsAttribute attr={profile.jurisdictionName} />
 					</div>
 					<div className={classes.attr}>
-						<Typography className="label" color="secondary">
+						<Typography variant="body2" className="label" color="secondary">
 							Entity Type
 						</Typography>
 						<DetailsAttribute attr={profile.entityTypeName} />
 					</div>
 					<div className={classes.attr}>
-						<Typography className="label" color="secondary">
+						<Typography variant="body2" className="label" color="secondary">
 							Incorporation Date
 						</Typography>
 						<DetailsAttribute attr={profile.creationDate} />
 					</div>
 					<div className={classes.attr}>
-						<Typography className="label" color="secondary">
+						<Typography variant="body2" className="label" color="secondary">
 							Address
 						</Typography>
 						<AddressDetailsAttribute profile={profile} />
