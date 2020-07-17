@@ -10,7 +10,7 @@ const styles = theme => ({
 		border: `1px solid ${typography}`,
 		minHeight: '50px',
 		width: '100%',
-		borderRadius: 0,
+		borderRadius: '4px',
 		padding: '15px',
 		boxSizing: 'border-box',
 		color: typography,
