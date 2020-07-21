@@ -16,6 +16,14 @@ class BankAccountsTableContainer extends MarketplaceBankAccountsComponent {
 		accountType: 'personal'
 	};
 
+	componentDidMount() {
+		this.trackMarketplaceVisit('bank_accounts');
+		this.trackMatomoGoal(
+			'MarketplaceVisitIndividualBankAccounts',
+			'MarketplaceVisitCorporateBankAccounts'
+		);
+	}
+
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
 
 	onAccountTypeChange = accountType => this.setState({ accountType });

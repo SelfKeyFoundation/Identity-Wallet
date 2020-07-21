@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	howItWorksBox: {
-		width: '26%',
+		width: '30%',
 		padding: '2em 3%',
 		margin: '2em 0',
 		color: '#FFF',

@@ -59,7 +59,7 @@ export class TokenService {
 		const MAX_GAS = 4500000;
 		const amountWithDecimals = new BigNumber(amount)
 			.times(new BigNumber(10).pow(decimal))
-			.toString();
+			.toFixed();
 		const estimate = await tokenContract.methods
 			.transfer(address, amountWithDecimals)
 			.estimateGas({ from: fromAddress });

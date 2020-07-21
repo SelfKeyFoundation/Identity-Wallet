@@ -197,7 +197,10 @@ describe('address book operations', () => {
 			}
 		];
 
-		setGlobalContext({ addressBookService });
+		setGlobalContext({
+			addressBookService,
+			matomoService: { trackEvent: () => {}, trackGoal: () => {} }
+		});
 
 		it('validateAddress happy path', async () => {
 			const address = '0xgdsgdsgds555';

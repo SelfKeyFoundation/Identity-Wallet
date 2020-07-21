@@ -52,6 +52,7 @@ userDataDirectoryPath = getUserDataPath();
 walletsDirectoryPath = path.resolve(userDataDirectoryPath, 'wallets');
 
 const common = {
+	startTS: Date.now(),
 	defaultLanguage: 'en',
 	forceUpdateAttributes: process.env.FORCE_UPDATE_ATTRIBUTES === 'true' && !isTestMode(),
 	userAgent: `SelfKeyIDW/${pkg.version}`,
@@ -129,6 +130,9 @@ const common = {
 		'https://selfkey.org/wp-content/uploads/2017/11/selfkey-whitepaper-en.pdf',
 		'https://t.me/selfkeyfoundation'
 	],
+	matomoSite: 1,
+	matomoUrl: 'https://analytics.selfkey.org',
+
 	features: {
 		paymentContract: false,
 		scheduler: true,
@@ -197,7 +201,7 @@ const prod = {
 		kyccUsersEndpoint: false,
 		walletExport: true,
 		transactionsListFilter: false,
-		loansMarketplace: false,
+		loansMarketplace: true,
 		swapTokens: false
 	},
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'

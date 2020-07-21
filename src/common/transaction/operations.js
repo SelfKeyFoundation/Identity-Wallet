@@ -209,7 +209,7 @@ const generateContractData = (toAddress, value, decimal) => {
 };
 
 const confirmSend = () => async (dispatch, getState) => {
-	const walletService = getGlobalContext().walletService;
+	const { walletService, matomoService } = getGlobalContext();
 	const state = getState();
 	const transaction = getTransaction(state);
 	const { cryptoCurrency } = transaction;
@@ -236,6 +236,8 @@ const confirmSend = () => async (dispatch, getState) => {
 
 	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
 
+	matomoService.trackEvent(`transaction`, 'send', cryptoCurrency);
+
 	let hardwalletConfirmationTimeout = null;
 	const walletType = appSelectors.selectWalletType(state);
 	if (walletType === 'ledger' || walletType === 'trezor') {
@@ -256,16 +258,19 @@ const confirmSend = () => async (dispatch, getState) => {
 				transactionHash: hash
 			})
 		);
+		matomoService.trackEvent(`transaction`, 'in-progress', cryptoCurrency);
 		await dispatch(push('/main/transaction-progress'));
 		dispatch(createTxHistry(hash));
 	});
 
 	transactionEventEmitter.on('receipt', async receipt => {
 		await dispatch(updateBalances());
+		matomoService.trackEvent(`transaction`, 'success', cryptoCurrency);
 	});
 
 	transactionEventEmitter.on('error', async error => {
 		clearTimeout(hardwalletConfirmationTimeout);
+		matomoService.trackEvent(`transaction`, 'error', cryptoCurrency);
 		log.error('transactionEventEmitter ERROR: %j', error);
 		const message = error.toString().toLowerCase();
 		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
@@ -296,7 +301,7 @@ const marketplaceSend = ({ onReceipt, onTransactionHash, onTransactionError }) =
 	dispatch,
 	getState
 ) => {
-	const walletService = getGlobalContext().walletService;
+	const { walletService, matomoService } = getGlobalContext();
 	const state = getState();
 	const transaction = getTransaction(state);
 	const { cryptoCurrency } = transaction;
@@ -322,17 +327,21 @@ const marketplaceSend = ({ onReceipt, onTransactionHash, onTransactionError }) =
 	}
 
 	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
+	matomoService.trackEvent(`marketplace_transaction`, 'send', cryptoCurrency);
 
 	transactionEventEmitter.on('receipt', async receipt => {
 		dispatch(updateBalances());
+		matomoService.trackEvent(`marketplace_transaction`, 'success', cryptoCurrency);
 		onReceipt(receipt);
 	});
 	transactionEventEmitter.on('transactionHash', async transactionHash => {
 		await dispatch(actions.updateTransaction({ status: 'Pending', transactionHash }));
+		matomoService.trackEvent(`marketplace_transaction`, 'in-progress', cryptoCurrency);
 		dispatch(createTxHistry(transactionHash));
 		onTransactionHash(transactionHash);
 	});
 	transactionEventEmitter.on('error', async error => {
+		matomoService.trackEvent(`marketplace_transaction`, 'error', cryptoCurrency);
 		onTransactionError(error);
 	});
 
@@ -340,7 +349,7 @@ const marketplaceSend = ({ onReceipt, onTransactionHash, onTransactionError }) =
 };
 
 const incorporationSend = (companyCode, countryCode) => async (dispatch, getState) => {
-	const walletService = getGlobalContext().walletService;
+	const { walletService, matomoService } = getGlobalContext();
 	const state = getState();
 	const transaction = getTransaction(state);
 	const { cryptoCurrency } = transaction;
@@ -366,6 +375,7 @@ const incorporationSend = (companyCode, countryCode) => async (dispatch, getStat
 	}
 
 	const transactionEventEmitter = walletService.sendTransaction(transactionObject);
+	matomoService.trackEvent(`incorporations_transaction`, 'sent', cryptoCurrency);
 
 	let hardwalletConfirmationTimeout = null;
 	if (appSelectors.selectWalletType(state) !== '') {
@@ -380,6 +390,7 @@ const incorporationSend = (companyCode, countryCode) => async (dispatch, getStat
 
 	transactionEventEmitter.on('transactionHash', async hash => {
 		clearTimeout(hardwalletConfirmationTimeout);
+		matomoService.trackEvent(`incorporations_transaction`, 'in-progress', cryptoCurrency);
 		await dispatch(
 			actions.updateTransaction({
 				status: 'Pending',
@@ -392,6 +403,7 @@ const incorporationSend = (companyCode, countryCode) => async (dispatch, getStat
 
 	transactionEventEmitter.on('receipt', async receipt => {
 		await dispatch(updateBalances());
+		matomoService.trackEvent(`incorporations_transaction`, 'success', cryptoCurrency);
 		await dispatch(
 			push(`/main/marketplace/incorporation/process-started/${companyCode}/${countryCode}`)
 		);
@@ -399,6 +411,7 @@ const incorporationSend = (companyCode, countryCode) => async (dispatch, getStat
 
 	transactionEventEmitter.on('error', async error => {
 		clearTimeout(hardwalletConfirmationTimeout);
+		matomoService.trackEvent(`incorporations_transaction`, 'error', cryptoCurrency);
 		log.error('transactionEventEmitter ERROR: %j', error);
 		const message = error.toString().toLowerCase();
 		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
@@ -426,10 +439,11 @@ const incorporationSend = (companyCode, countryCode) => async (dispatch, getStat
 };
 
 const sendSwapTransaction = ({ transaction, token }) => async (dispatch, getState) => {
-	const walletService = getGlobalContext().walletService;
+	const { walletService, matomoService } = getGlobalContext();
 	const state = getState();
 
 	const transactionEventEmitter = walletService.sendTransaction(transaction);
+	matomoService.trackEvent(`swap_transaction`, 'sent', transaction.cryptoCurrency);
 
 	let hardwalletConfirmationTimeout = null;
 	const walletType = appSelectors.selectWalletType(state);
@@ -446,6 +460,7 @@ const sendSwapTransaction = ({ transaction, token }) => async (dispatch, getStat
 
 	transactionEventEmitter.on('transactionHash', async hash => {
 		clearTimeout(hardwalletConfirmationTimeout);
+		matomoService.trackEvent(`swap_transaction`, 'in-progress', transaction.cryptoCurrency);
 		await dispatch(
 			actions.updateTransaction({
 				status: 'Pending',
@@ -458,11 +473,13 @@ const sendSwapTransaction = ({ transaction, token }) => async (dispatch, getStat
 
 	transactionEventEmitter.on('receipt', async receipt => {
 		await dispatch(updateBalances());
+		matomoService.trackEvent(`swap_transaction`, 'success', transaction.cryptoCurrency);
 		await dispatch(push(`/main/swap-completed/${token}`));
 	});
 
 	transactionEventEmitter.on('error', async error => {
 		clearTimeout(hardwalletConfirmationTimeout);
+		matomoService.trackEvent(`swap_transaction`, 'error', transaction.cryptoCurrency);
 		log.error('transactionEventEmitter ERROR: %j', error);
 		const message = error.toString().toLowerCase();
 		if (message.indexOf('insufficient funds') !== -1 || message.indexOf('underpriced') !== -1) {
