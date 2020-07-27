@@ -2,7 +2,7 @@ import React from 'react';
 import { TableRow, TableCell, Typography, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { Tag } from 'selfkey-ui';
-import DetailsButton from '../bank-accounts/common/details-button';
+import { DetailsIconButton } from '../common';
 
 const styles = theme => ({
 	defaultIcon: {
@@ -74,6 +74,19 @@ const styles = theme => ({
 	excludedResidentCell: {
 		minWidth: '200px'
 	},
+	detailsCell: {
+		color: '#00C0D9',
+		padding: '15px 20px',
+		'& span': {
+			cursor: 'pointer'
+		},
+		'& button': {
+			maxWidth: '15px',
+			minWidth: '15px',
+			padding: 0,
+			width: '15px'
+		}
+	},
 	'@media screen and (min-width: 1230px)': {
 		excludedResidentCell: {
 			minWidth: '290px'
@@ -97,10 +110,6 @@ export const ExchangesListItem = withStyles(styles)(
 		status,
 		viewAction
 	}) => {
-		const getButtonText = status => {
-			return status === 'Inactive' ? 'Coming Soon' : 'Details';
-		};
-
 		const getColors = () => ['#46dfba', '#46b7df', '#238db4', '#25a788', '#0e4b61'];
 		let random = Math.floor(Math.random() * 4);
 
@@ -193,14 +202,10 @@ export const ExchangesListItem = withStyles(styles)(
 								)
 						  )}
 				</TableCell>
-				<TableCell
-					style={status === 'Inactive' ? { padding: '0 20px' } : { padding: '0 15px' }}
-				>
-					<DetailsButton
-						text={getButtonText(status)}
+				<TableCell className={classes.detailsCell}>
+					<DetailsIconButton
 						onClick={() => (viewAction ? viewAction(id) : '')}
 						disabled={status === 'Inactive'}
-						color={status === 'Inactive' ? 'secondary' : 'primary'}
 					/>
 				</TableCell>
 			</TableRow>
