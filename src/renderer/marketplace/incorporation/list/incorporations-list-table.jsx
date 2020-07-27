@@ -61,10 +61,16 @@ const styles = theme => ({
 		padding: '0'
 	},
 	detailsCell: {
-		width: '55px',
 		color: '#00C0D9',
+		padding: '15px 20px',
 		'& span': {
 			cursor: 'pointer'
+		},
+		'& button': {
+			maxWidth: '15px',
+			minWidth: '15px',
+			padding: 0,
+			width: '15px'
 		}
 	},
 	goodForCell: {
