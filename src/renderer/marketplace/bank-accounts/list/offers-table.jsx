@@ -80,10 +80,15 @@ const styles = theme => ({
 		padding: '0 20px'
 	},
 	detailsCell: {
-		width: '55px',
 		color: '#00C0D9',
 		'& span': {
 			cursor: 'pointer'
+		},
+		'& button': {
+			maxWidth: '15px',
+			minWidth: '15px',
+			padding: 0,
+			width: '15px'
 		}
 	},
 	goodForCell: {
