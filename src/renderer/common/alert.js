@@ -64,12 +64,14 @@ const styles = theme => ({
 		marginRight: '15px'
 	},
 	iconWrap: {
-		paddingTop: '3px'
-	},
-	alertWrap: {
 		alignItems: 'center',
 		display: 'flex',
-		justify: 'flex-start'
+		maxHeight: '34px',
+		minHeight: '34px'
+	},
+	alertWrap: {
+		display: 'flex',
+		minHeight: '36px'
 	}
 });
 
@@ -81,13 +83,13 @@ export const AlertIcon = withStyles(styles)(({ classes, type = 'success' }) => (
 ));
 
 export const Alert = withStyles(styles)(
-	({ classes, type = 'success', children, icon, className }) => (
+	({ classes, type = 'success', children, icon, className, xtraClass }) => (
 		<div className={classNames(classes.alert, classes[type], className)}>
 			<div className={classes.alertWrap}>
 				<Grid item className={classes.iconWrap}>
 					{icon || <AlertIcon type={type} />}
 				</Grid>
-				<Grid item xs>
+				<Grid item xs className={xtraClass}>
 					{children}
 				</Grid>
 			</div>
