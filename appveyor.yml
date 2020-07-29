@@ -18,7 +18,7 @@ environment:
     secure: QfAI68E/qnE7UZMvjqIQIkiMASDooWknt2psZWeawGTa8iu4cuNWd5P+ronxVphBXYAPuwEywIadwnxAj4WmIkL6rfGd/OQo1hlsNfEwYCo=
   SENTRY_DSN:
     secure: z2HN+AfLblFuqEDtdIOzj9ngBI0H+JWU2A7EdUX70iUfTU/dQYoDkCQAnLG87K90TYcsQF7eXzQ0dhZvfuRWFmD2iQfXJnTc2fnbe4trtd0=
-  nodejs_version: 10.11.0
+  nodejs_version: 10.13.0
 platform:
   - x64
 init:
@@ -36,7 +36,7 @@ install:
   - ps: Install-Product node $env:nodejs_version x64
   - npm config set msvs_version 2015 --global
   - set PATH=C:\Ruby22\bin;%PATH%
-  - gem install sass compass
+  #- gem install sass compass
   - npm i -g yarn
   - yarn install-all
 build_script:

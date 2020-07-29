@@ -1,5 +1,6 @@
 import React from 'react';
-import { Grid, withStyles, Typography, Button } from '@material-ui/core';
+import { Grid, Typography, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { MarketplaceIcon, WarningShieldIcon } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import { vendorOperations } from '../../common/marketplace/vendors';

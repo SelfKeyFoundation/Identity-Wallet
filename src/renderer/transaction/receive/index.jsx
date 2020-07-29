@@ -1,58 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getWallet } from 'common/wallet/selectors';
-import { Grid, Typography, Paper, Modal } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
 import {
 	SelfkeyIcon,
 	EthereumIcon,
 	CustomIcon,
-	ModalWrap,
-	ModalCloseButton,
-	ModalCloseIcon,
-	ModalHeader,
-	ModalBody,
 	MailIcon,
 	CopyWithIcon,
 	PrintSmallIcon
 } from 'selfkey-ui';
 import { Link } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import QRCode from 'qrcode.react';
+import { Popup } from '../../common';
 
 const styles = theme => ({
-	modalHeader: {
-		padding: '10px 30px',
-		'@media print': {
-			display: 'none'
-		},
-		'& svg': {
-			width: '44px !important',
-			height: '44px !important',
-			position: 'relative',
-			marginRight: '0.5em'
-		}
-	},
-	cryptoIcon: {
-		marginRight: '20px'
-	},
-	cryptoSymbol: {
-		fontSize: '14px',
-		fontWeight: 'normal'
-	},
-	modalWrap: {
-		border: 'none',
-		backgroundColor: 'transparent'
-	},
-	modalContentWrapper: {
-		boxShadow: 'none',
-		marginBottom: '20px'
-	},
-	closeIcon: {
-		'& svg': {
-			position: 'relative',
-			top: '20px'
-		}
-	},
 	tokenPublicKey: {
 		alignItems: 'center',
 		display: 'flex',
@@ -120,23 +83,6 @@ const styles = theme => ({
 	},
 	emailMargin: {
 		marginTop: '11px'
-	},
-	printMargin: {
-		marginTop: '7px'
-	},
-	modalBody: {
-		'@media print': {
-			border: 0,
-			boxShadow: 'none'
-		}
-	},
-	modal: {
-		'& > div:first-of-type': {
-			opacity: '1 !important'
-		},
-		'@media print': {
-			border: '0'
-		}
 	}
 });
 
@@ -169,90 +115,71 @@ export class ReceiveTransfer extends React.Component {
 		// Redirect to dashboard with error if not
 
 		return (
-			<Modal open={true} className={classes.modal}>
-				<ModalWrap className={classes.modalWrap}>
-					<Paper className={classes.modalContentWrapper}>
-						<ModalCloseButton className={classes.closeIcon} component={goBackDashboard}>
-							<ModalCloseIcon />
-						</ModalCloseButton>
-
-						<ModalHeader className={classes.modalHeader}>
-							<Grid
-								container
-								direction="row"
-								justify="flex-start"
-								alignItems="center"
-								spacing={0}
+			<Popup
+				closeComponent={goBackDashboard}
+				open
+				text={
+					<Grid
+						container
+						direction="row"
+						justify="flex-start"
+						alignItems="center"
+						spacing={0}
+					>
+						{getIconForToken(cryptoCurrency)}
+						<Typography variant="body2">Receive {cryptoCurrency}</Typography>
+					</Grid>
+				}
+			>
+				<div className={classes.tokenAddress}>
+					<div className={classes.qrCode}>
+						<QRCode value={address} />
+					</div>
+					<Typography variant="h1" color="secondary" className={classes.bottomSpace}>
+						Your Ethereum address to receive {cryptoCurrency}
+					</Typography>
+					<div className={classes.tokenPublicKey}>
+						<Typography
+							variant="body2"
+							className={classes.publicKey}
+							id="printableArea"
+						>
+							{address}
+						</Typography>
+					</div>
+					<div className={classes.iconWrap}>
+						<div className={classes.space}>
+							<CopyWithIcon text={address} />
+						</div>
+						<a
+							href={link}
+							className={`${classes.space} ${classes.padding} ${classes.icon}`}
+						>
+							<MailIcon className={classes.mailIcon} style={{ marginTop: '5px' }} />
+							<Typography
+								variant="subtitle2"
+								color="secondary"
+								className={classes.emailMargin}
 							>
-								{getIconForToken(cryptoCurrency)}
-								<Typography variant="body2">Receive {cryptoCurrency}</Typography>
-							</Grid>
-						</ModalHeader>
-
-						<ModalBody className={classes.modalBody}>
-							<div className={classes.tokenAddress}>
-								<div className={classes.qrCode}>
-									<QRCode value={address} />
-								</div>
-								<Typography
-									variant="h1"
-									color="secondary"
-									className={classes.bottomSpace}
-								>
-									Your Ethereum address to receive {cryptoCurrency}
-								</Typography>
-								<div className={classes.tokenPublicKey}>
-									<Typography
-										variant="body2"
-										className={classes.publicKey}
-										id="printableArea"
-									>
-										{address}
-									</Typography>
-								</div>
-								<div className={classes.iconWrap}>
-									<div className={classes.space}>
-										<CopyWithIcon text={address} />
-									</div>
-									<a
-										href={link}
-										className={`${classes.space} ${classes.padding} ${
-											classes.icon
-										}`}
-									>
-										<MailIcon
-											className={classes.mailIcon}
-											style={{ marginTop: '5px' }}
-										/>
-										<Typography
-											variant="subtitle2"
-											color="secondary"
-											className={classes.emailMargin}
-										>
-											E-mail
-										</Typography>
-									</a>
-									<div
-										className={`${classes.space} ${classes.padding} ${
-											classes.icon
-										}`}
-										onClick={printDiv}
-									>
-										<PrintSmallIcon className={classes.printIcon} />
-										<Typography
-											variant="subtitle2"
-											color="secondary"
-											className={classes.printMargin}
-										>
-											Print
-										</Typography>
-									</div>
-								</div>
-							</div>
-						</ModalBody>
-					</Paper>
-				</ModalWrap>
-			</Modal>
+								E-mail
+							</Typography>
+						</a>
+						<div
+							className={`${classes.space} ${classes.padding} ${classes.icon}`}
+							onClick={printDiv}
+						>
+							<PrintSmallIcon className={classes.printIcon} />
+							<Typography
+								variant="subtitle2"
+								color="secondary"
+								className={classes.printMargin}
+							>
+								Print
+							</Typography>
+						</div>
+					</div>
+				</div>
+			</Popup>
 		);
 	}
 }

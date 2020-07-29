@@ -1,19 +1,11 @@
 import React, { PureComponent } from 'react';
-import { Modal, Typography, Grid, Button, Input, InputAdornment } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-
-import {
-	ModalWrap,
-	ModalCloseButton,
-	ModalHeader,
-	ModalBody,
-	ModalCloseIcon,
-	VisibilityOffIcon,
-	VisibilityOnIcon
-} from 'selfkey-ui';
+import { Typography, Grid, Button, Input, InputAdornment } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { VisibilityOffIcon, VisibilityOnIcon } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
+import { Popup } from '../../../common';
 
 const styles = theme => ({
 	pointer: {
@@ -101,7 +93,7 @@ class EnterPassphrase extends PureComponent {
 	renderModalBody = () => {
 		const { classes } = this.props;
 		return (
-			<Grid container direction="column" justify="center" alignItems="center" spacing={40}>
+			<Grid container direction="column" justify="center" alignItems="center" spacing={5}>
 				<Grid
 					container
 					direction="column"
@@ -122,7 +114,7 @@ class EnterPassphrase extends PureComponent {
 						direction="column"
 						justify="flex-start"
 						alignItems="flex-start"
-						spacing={8}
+						spacing={1}
 					>
 						<Grid item>
 							<Typography variant="overline" gutterBottom>
@@ -153,7 +145,7 @@ class EnterPassphrase extends PureComponent {
 						direction="column"
 						justify="flex-start"
 						alignItems="flex-start"
-						spacing={8}
+						spacing={1}
 					>
 						<Grid item>
 							<Typography variant="overline" gutterBottom>
@@ -191,7 +183,7 @@ class EnterPassphrase extends PureComponent {
 						direction="row"
 						justify="flex-start"
 						alignItems="center"
-						spacing={24}
+						spacing={3}
 					>
 						<Grid item>
 							<Button variant="contained" size="large" onClick={this.handleEnter}>
@@ -211,28 +203,9 @@ class EnterPassphrase extends PureComponent {
 
 	render() {
 		return (
-			<div>
-				<Modal open={true}>
-					<ModalWrap>
-						<ModalCloseButton onClick={this.handleCancel}>
-							<ModalCloseIcon style={{ marginTop: '20px' }} />
-						</ModalCloseButton>
-						<ModalHeader>
-							<Grid
-								container
-								direction="row"
-								justify="space-between"
-								alignItems="center"
-							>
-								<Grid item>
-									<Typography variant="body1">Trezor PASSPHRASE</Typography>
-								</Grid>
-							</Grid>
-						</ModalHeader>
-						<ModalBody>{this.renderModalBody()}</ModalBody>
-					</ModalWrap>
-				</Modal>
-			</div>
+			<Popup closeAction={this.handleCancel} open text="Trezor PASSPHRASE">
+				{this.renderModalBody()}
+			</Popup>
 		);
 	}
 }

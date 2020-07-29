@@ -1,11 +1,10 @@
 import * as React from 'react';
 import TransactionErrorBox from '../../common/transaction-error-box';
-import { withStyles, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { primary } from 'selfkey-ui';
 
 const styles = theme => ({
-	bodyText: {
-		textAlign: 'justify'
-	},
 	learnMoreText: {
 		paddingTop: '15px',
 		color: '#93B0C1',
@@ -14,6 +13,7 @@ const styles = theme => ({
 		lineHeight: '19px'
 	},
 	learnMoreLink: {
+		color: primary,
 		textDecoration: 'none'
 	}
 });
@@ -30,21 +30,26 @@ export const TransactionNoGasError = withStyles(styles)(
 			openLink(gasExplanationUrl);
 		};
 		return (
-			<TransactionErrorBox address={address} closeAction={closeAction}>
-				<div className={classes.bodyText}>
+			<TransactionErrorBox
+				address={address}
+				closeAction={closeAction}
+				token="ETH"
+				subtitle="Transaction Failed"
+			>
+				<div>
 					<Typography variant="body1">
 						You do not have enough Ethereum (ETH) to pay for the network transaction
 						fee. Please transfer some ETH to this address and try again. Your ETH
 						address of this wallet is listed below.
 					</Typography>
 					<div className={classes.learnMoreText}>
-						To learn more about transaction fees, click{' '}
+						To learn more about transaction fees,{' '}
 						<a
 							className={`${classes.learnMoreText}  ${classes.learnMoreLink}`}
 							href={gasExplanationUrl}
 							onClick={handleLinkClick}
 						>
-							here.
+							click here.
 						</a>
 					</div>
 				</div>

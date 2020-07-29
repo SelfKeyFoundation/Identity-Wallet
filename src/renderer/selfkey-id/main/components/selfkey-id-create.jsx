@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Grid, Modal, Button, Typography, Card, CardContent, withStyles } from '@material-ui/core';
+import { Grid, Modal, Button, Typography, Card, CardContent } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { IdCardIcon, SKIDIcon, ModalWrap } from 'selfkey-ui';
 import { Link } from 'react-router-dom';
 
@@ -56,7 +57,7 @@ class SelfKeyIdCreateComponent extends PureComponent {
 							direction="column"
 							justify="flex-start"
 							alignItems="center"
-							spacing={32}
+							spacing={4}
 						>
 							<Grid item>
 								<IdCardIcon />
@@ -77,7 +78,7 @@ class SelfKeyIdCreateComponent extends PureComponent {
 											direction="column"
 											justify="center"
 											alignItems="center"
-											spacing={32}
+											spacing={4}
 										>
 											<Grid
 												container
@@ -91,7 +92,7 @@ class SelfKeyIdCreateComponent extends PureComponent {
 													alignItems="center"
 													direction="column"
 													wrap="nowrap"
-													spacing={32}
+													spacing={4}
 													className={classes.info}
 												>
 													<Grid item>

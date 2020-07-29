@@ -96,6 +96,12 @@ export const selectIdAttributeTypeByUrl = createSelector(
 	(attributeTypes, { attributeTypeUrl }) => attributeTypes.find(t => t.url === attributeTypeUrl)
 );
 
+export const selectIdAttributeTypeById = createSelector(
+	selectRoot('idAtrributeTypesById'),
+	selectProps('attributeTypeId'),
+	({ idAtrributeTypesById }, { attributeTypeId }) => idAtrributeTypesById[attributeTypeId]
+);
+
 export const selectBasicCorporateAttributeTypes = createSelector(
 	state => selectAttributeTypesFiltered(state, { entityType: 'corporate' }),
 	corporateTypes =>
@@ -473,26 +479,59 @@ export const selectAttributeValue = createSelector(
 
 // Jurisdictions
 
+const sortedItemsFromEnum = (value = 'code', name = 'name', propertyName) => idType => {
+	if (!idType) {
+		return [];
+	}
+
+	let items = idType.content.enum;
+	let names = idType.content.enumNames;
+
+	if (propertyName && idType.content.properties && idType.content.properties[propertyName]) {
+		items = idType.content.properties[propertyName].enum;
+		names = idType.content.properties[propertyName].enumNames;
+	}
+
+	if (!items) {
+		return [];
+	}
+
+	items = items.map((code, index) => ({
+		[value]: code,
+		[name]: !names ? items[index] : names[index]
+	}));
+
+	items.sort((a, b) => {
+		var nameA = a[name].toUpperCase();
+		var nameB = b[name].toUpperCase();
+		if (nameA < nameB) {
+			return -1;
+		}
+		if (nameA > nameB) {
+			return 1;
+		}
+		return 0;
+	});
+	return items;
+};
+
 export const selectCorporateJurisdictions = createSelector(
 	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: JURISDICTION_ATTRIBUTE }),
-	idType => (idType ? idType.content.enum : [])
+	sortedItemsFromEnum()
 );
 
 // Entity Types
 
 export const selectCorporateLegalEntityTypes = createSelector(
 	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: ENTITY_TYPE_ATTRIBUTE }),
-	idType => (idType ? idType.content.enum : [])
+	sortedItemsFromEnum()
 );
 
 // Countries
 
 export const selectCountries = createSelector(
 	state => selectIdAttributeTypeByUrl(state, { attributeTypeUrl: COUNTRY_ATTRIBUTE }),
-	idType => {
-		const { enum: codes, enumNames: names } = idType.content.properties.country;
-		return codes.map((country, index) => ({ country, name: names[index] }));
-	}
+	sortedItemsFromEnum('country', undefined, 'country')
 );
 
 // Profile
@@ -589,6 +628,7 @@ export const selectChildrenProfilesByType = createSelector(
 );
 
 export const selectCorporateProfile = createSelector(
+	state => state,
 	selectProfile,
 	selectChildrenProfiles,
 	selectBasicAttributeInfo(EMAIL_ATTRIBUTE),
@@ -598,6 +638,7 @@ export const selectCorporateProfile = createSelector(
 	selectBasicAttributeInfo(CREATION_DATE_ATTRIBUTE),
 	selectBasicAttributeInfo(JURISDICTION_ATTRIBUTE),
 	(
+		state,
 		{
 			identity,
 			wallet,
@@ -645,8 +686,10 @@ export const selectCorporateProfile = createSelector(
 		taxId,
 		entityName,
 		entityType,
+		entityTypeName: selectCompanyTypeName(state, { companyType: entityType }),
 		creationDate,
 		jurisdiction,
+		jurisdictionName: selectJurisdictionName(state, { jurisdiction }),
 		members
 	})
 );
@@ -658,6 +701,29 @@ export const selectPositionsForCompanyType = createSelector(
 		return new CorporateStructureSchema(attrType.content).getPositionsForCompanyType(
 			props.companyType
 		);
+	}
+);
+
+export const selectCompanyTypeName = createSelector(
+	state => selectAttributeTypeByUrl(state, { attributeTypeUrl: CORPORATE_STRUCTURE_ATTRIBUTE }),
+	selectProps('companyType'),
+	(attrType, props) => {
+		return new CorporateStructureSchema(attrType.content).getCompanyTypeNameByCode(
+			props.companyType
+		);
+	}
+);
+
+export const selectJurisdictionName = createSelector(
+	state => selectAttributeTypeByUrl(state, { attributeTypeUrl: JURISDICTION_ATTRIBUTE }),
+	selectProps('jurisdiction'),
+	(attrType, props) => {
+		const codes = attrType.content.enum;
+		const index = codes.findIndex(j => props.jurisdiction === j);
+		if (index === -1) return null;
+		return !attrType.content.enumNames
+			? attrType.content.enum[index]
+			: attrType.content.enumNames[index];
 	}
 );
 
@@ -680,6 +746,16 @@ export const selectMemberAttributeTypes = type => {
 		throw new Error(`Invalid type ${type}, expecting 'corporate' or 'individual'`);
 	}
 };
+
+export const isCorporateIdentity = createSelector(
+	selectIdentity,
+	identity => !!identity && identity.type === 'corporate'
+);
+
+export const isIndividualIdentity = createSelector(
+	selectIdentity,
+	identity => !!identity && identity.type === 'individual'
+);
 
 export const selectFlattenMemberHierarchy = createSelector(
 	selectCorporateProfile,

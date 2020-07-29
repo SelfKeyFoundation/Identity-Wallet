@@ -1,22 +1,7 @@
 import React, { PureComponent } from 'react';
+import { Typography, Button, Grid, Table, TableHead, Radio, TableBody } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import {
-	Modal,
-	Typography,
-	Button,
-	Grid,
-	Table,
-	TableHead,
-	Radio,
-	TableBody,
-	CircularProgress,
-	withStyles
-} from '@material-ui/core';
-import {
-	ModalWrap,
-	ModalCloseButton,
-	ModalHeader,
-	ModalBody,
-	ModalCloseIcon,
 	ViewIcon,
 	SmallTableRow,
 	SmallTableCell,
@@ -28,6 +13,7 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
+import { Popup } from '../../common';
 
 const styles = theme => ({
 	modalWrap: {
@@ -86,6 +72,13 @@ const styles = theme => ({
 	},
 	topSpace: {
 		paddingBottom: '0 !important'
+	},
+	popupClass: {
+		left: 'calc(50% - 480px)',
+		width: '960px'
+	},
+	closeBtn: {
+		marginLeft: '180px'
 	}
 });
 
@@ -148,7 +141,7 @@ class SelectAddress extends PureComponent {
 				direction="column"
 				justify="flex-start"
 				alignItems="flex-start"
-				spacing={40}
+				spacing={5}
 			>
 				<Grid item className={this.props.classes.topSpace}>
 					<Typography variant="h4" className={this.props.classes.h4}>
@@ -228,7 +221,7 @@ class SelectAddress extends PureComponent {
 						direction="row"
 						justify="flex-end"
 						alignItems="flex-end"
-						spacing={8}
+						spacing={1}
 					>
 						<Grid item className={this.props.classes.pagination}>
 							<KeyIconButton
@@ -258,7 +251,7 @@ class SelectAddress extends PureComponent {
 						direction="row"
 						justify="flex-start"
 						alignItems="center"
-						spacing={24}
+						spacing={3}
 					>
 						<Grid item>
 							<Button
@@ -281,35 +274,18 @@ class SelectAddress extends PureComponent {
 	};
 
 	render() {
+		const { classes } = this.props;
 		return (
-			<div>
-				<Modal open={true}>
-					<ModalWrap className={this.props.classes.modalWrap}>
-						<ModalCloseButton
-							onClick={this.handleClose}
-							className={this.props.classes.closeButton}
-						>
-							<ModalCloseIcon />
-						</ModalCloseButton>
-						<ModalHeader>
-							<Grid
-								container
-								direction="row"
-								justify="space-between"
-								alignItems="center"
-							>
-								<Grid item>
-									<Typography variant="body1">
-										Choose An Ethereum Address
-									</Typography>
-								</Grid>
-								<Grid item>{this.state.loading && <CircularProgress />}</Grid>
-							</Grid>
-						</ModalHeader>
-						<ModalBody>{this.renderModalBody()}</ModalBody>
-					</ModalWrap>
-				</Modal>
-			</div>
+			<Popup
+				closeAction={this.handleClose}
+				open
+				text="Choose An Ethereum Address"
+				loading={this.state.loading}
+				popupClass={classes.popupClass}
+				closeButtonClass={classes.closeBtn}
+			>
+				{this.renderModalBody()}
+			</Popup>
 		);
 	}
 }

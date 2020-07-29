@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
 import {
-	withStyles,
 	Typography,
 	ExpansionPanel,
 	ExpansionPanelDetails,
 	ExpansionPanelSummary,
 	Divider
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import supportedDocumentTypes from './supported-document-types.json';
 

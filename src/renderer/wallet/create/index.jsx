@@ -1,80 +1,56 @@
 import React from 'react';
-import { Modal, Typography, Grid, Button, withStyles } from '@material-ui/core';
-import history from 'common/store/history';
+import { Typography, Grid, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
-import {
-	ModalWrap,
-	ModalCloseButton,
-	ModalCloseIcon,
-	ModalHeader,
-	ModalBody,
-	WarningShieldIcon,
-	warning
-} from 'selfkey-ui';
+import { WarningShieldIcon } from 'selfkey-ui';
+import { Popup } from '../../common';
 
 const createPasswordLink = props => <Link to="/createPassword" {...props} />;
+const backHome = props => <Link to="/home" {...props} />;
 
 const styles = theme => ({
-	orange: {
-		border: `1px solid ${warning}`,
-		background: 'transparent',
-		color: warning,
-		'&:hover': {
-			border: `1px solid ${warning}`
-		}
+	bottomSpace: {
+		marginBottom: '50px'
 	},
-	closeIcon: {
-		marginTop: '20px'
+	icon: {
+		marginRight: '45px'
 	}
 });
 
 export const CreateWallet = props => {
 	const { classes } = props;
 	return (
-		<Modal open={true}>
-			<ModalWrap>
-				<ModalCloseButton onClick={history.getHistory().goBack}>
-					<ModalCloseIcon className={classes.closeIcon} />
-				</ModalCloseButton>
-				<ModalHeader>
-					<Typography variant="body1" id="modal-title">
-						Protect Your Wallet
+		<Popup closeComponent={backHome} open text="Protect Your Wallet">
+			<Grid
+				container
+				direction="row"
+				justify="flex-start"
+				alignItems="flex-start"
+				wrap="nowrap"
+			>
+				<Grid item className={classes.icon}>
+					<WarningShieldIcon />
+				</Grid>
+				<Grid item>
+					<Typography variant="body1" className={classes.bottomSpace}>
+						The SelfKey Identity Wallet protects your wallet and Ethereum address with a
+						password. You must remember this password to unlock the wallet. It cannot be
+						restored or reset. As the wallet is stored locally in your device, SelfKey
+						does not have access and cannot help you if the password is lost.
 					</Typography>
-				</ModalHeader>
-
-				<ModalBody>
-					<Grid container direction="row" justify="flex-start" alignItems="flex-start">
-						<Grid item xs={2}>
-							<WarningShieldIcon />
-						</Grid>
-						<Grid item xs={10}>
-							<Typography variant="body1" gutterBottom>
-								The SelfKey Identity Wallet protects your wallet and Ethereum
-								address with a password. You must remember this password to unlock
-								the wallet. It cannot be restored or reset. As the wallet is stored
-								locally in your device, SelfKey does not have access and cannot help
-								you if the password is lost.
-							</Typography>
-							<br />
-							<br />
-							<Grid container spacing={24}>
-								<Grid item>
-									<Button
-										id="protectWallet"
-										variant="outlined"
-										component={createPasswordLink}
-										size="large"
-										className={classes.orange}
-									>
-										I UNDERSTAND, THERE IS NO WAY TO RECOVER THIS PASSWORD
-									</Button>
-								</Grid>
-							</Grid>
-						</Grid>
-					</Grid>
-				</ModalBody>
-			</ModalWrap>
-		</Modal>
+					<Button
+						id="protectWallet"
+						variant="outlined"
+						component={createPasswordLink}
+						size="large"
+						color="secondary"
+						fullWidth
+					>
+						I UNDERSTAND, THERE IS NO WAY TO RECOVER THIS PASSWORD
+					</Button>
+				</Grid>
+			</Grid>
+		</Popup>
 	);
 };
 

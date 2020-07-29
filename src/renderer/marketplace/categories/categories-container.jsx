@@ -9,21 +9,15 @@ import { identitySelectors } from 'common/identity';
 class MarketplaceCategoriesContainer extends PureComponent {
 	componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
+		window.scrollTo(0, 0);
 	}
 
 	actions = {
-		exchanges: () => {
-			this.props.dispatch(push('/main/marketplace/exchanges'));
-		},
-		incorporation: () => {
-			this.props.dispatch(push('/main/marketplace/incorporation'));
-		},
-		bank_accounts: () => {
-			this.props.dispatch(push('/main/marketplace/bank-accounts'));
-		},
-		notaries: () => {
-			this.props.dispatch(push('/main/marketplace/notaries'));
-		}
+		exchanges: () => this.props.dispatch(push('/main/marketplace/exchanges')),
+		incorporation: () => this.props.dispatch(push('/main/marketplace/incorporation')),
+		bank_accounts: () => this.props.dispatch(push('/main/marketplace/bank-accounts')),
+		notaries: () => this.props.dispatch(push('/main/marketplace/notaries')),
+		loans: () => this.props.dispatch(push('/main/marketplace/loans'))
 	};
 
 	render() {

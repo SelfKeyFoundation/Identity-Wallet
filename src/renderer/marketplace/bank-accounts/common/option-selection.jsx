@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { CloseButtonIcon } from 'selfkey-ui';
 import { FlagCountryName } from '../../common';
@@ -7,6 +7,7 @@ import BankingAccountOption from './account-option';
 
 const styles = theme => ({
 	container: {
+		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)',
 		position: 'relative',
 		width: '100%',
 		margin: '0 auto',
@@ -84,7 +85,7 @@ class OptionSelectionComponent extends PureComponent {
 						justify="flex-start"
 						alignItems="flex-start"
 						direction="column"
-						spacing={32}
+						spacing={4}
 					>
 						<Grid item>
 							<Typography variant="body2" gutterBottom>
@@ -100,7 +101,7 @@ class OptionSelectionComponent extends PureComponent {
 								direction="column"
 								justify="flex-start"
 								alignItems="stretch"
-								spacing={40}
+								spacing={5}
 							>
 								{Object.keys(banks).map((opt, idx) => (
 									<Grid item key={idx}>
@@ -118,7 +119,7 @@ class OptionSelectionComponent extends PureComponent {
 						</Grid>
 
 						<Grid item>
-							<Grid container direction="row" spacing={24}>
+							<Grid container direction="row" spacing={3}>
 								<Grid item>
 									<Button
 										variant="contained"

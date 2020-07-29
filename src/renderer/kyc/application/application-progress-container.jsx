@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { kycOperations } from 'common/kyc';
 import { push } from 'connected-react-router';
 import { CloseButtonIcon, HourGlassLargeIcon } from 'selfkey-ui';
-import { Grid, Typography, Button, withStyles } from '@material-ui/core';
+import { Grid, Typography, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	container: {

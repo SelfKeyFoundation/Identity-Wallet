@@ -2,7 +2,7 @@ import * as types from './types';
 
 const initialState = {
 	tokens: [],
-	topTokenListSize: 5
+	topTokenListSize: 5000
 };
 
 const updateTokens = (oldTokens, newTokens) => {

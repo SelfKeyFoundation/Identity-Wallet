@@ -106,6 +106,7 @@ describe('operations', () => {
 				'KEY',
 				address,
 				amount,
+				18,
 				walletAddress,
 				nonce,
 				tokenContract
@@ -114,11 +115,19 @@ describe('operations', () => {
 			expect(result).toEqual(gasLimitMock);
 		});
 
-		it('should return default eth gas limit', async () => {
+		it('should return eth gas limit', async () => {
+			setGlobalContext({
+				walletService: {
+					estimateGas() {
+						return DEFAULT_ETH_GAS_LIMIT;
+					}
+				}
+			});
 			const result = await getGasLimit(
 				'ETH',
 				address,
 				amount,
+				18,
 				walletAddress,
 				nonce,
 				tokenContract

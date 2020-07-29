@@ -5,7 +5,7 @@ import { push } from 'connected-react-router';
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { identitySelectors } from 'common/identity';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { marketplaceSelectors } from 'common/marketplace';
 import { MarketplaceNotariesComponent } from '../common/marketplace-notaries-component';
 import NotarizationDetailsPage from './notarization-details-page';
@@ -21,8 +21,12 @@ class NotarizationDetailsContainerComponent extends MarketplaceNotariesComponent
 	};
 
 	componentDidMount() {
-		const { vendorId } = this.props;
-		this.loadRelyingParty({ rp: vendorId, authenticated: false });
+		window.scrollTo(0, 0);
+		this.trackMatomoGoal(
+			'MarketplaceVisitIndividualNotaries',
+			'MarketplaceVisitCorporateNotaries'
+		);
+		this.trackMarketplaceVisit('notarization');
 	}
 
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));

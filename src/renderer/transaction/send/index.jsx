@@ -5,23 +5,14 @@ import {
 	transactionHistoryOperations,
 	transactionHistorySelectors
 } from 'common/transaction-history';
-import { Grid, Typography, Paper, Modal, Divider, Button } from '@material-ui/core';
-import {
-	SelfkeyIcon,
-	EthereumIcon,
-	CustomIcon,
-	SentIcon,
-	ModalWrap,
-	ModalCloseButton,
-	ModalCloseIcon,
-	ModalBody,
-	Copy
-} from 'selfkey-ui';
+import { Grid, Typography, Divider, Button } from '@material-ui/core';
+import { SelfkeyIcon, EthereumIcon, CustomIcon, SentIcon, Copy } from 'selfkey-ui';
 import { Link } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import TokenPrice from '../../common/token-price';
 import { push } from 'connected-react-router';
 import TransactionsHistory from '../transactions-history';
+import { Popup } from '../../common';
 
 const styles = theme => ({
 	cryptoIcon: {
@@ -30,27 +21,6 @@ const styles = theme => ({
 	cryptoSymbol: {
 		fontSize: '14px',
 		fontWeight: 'normal'
-	},
-	modal: {
-		height: '100%',
-		overflow: 'auto'
-	},
-	modalWrap: {
-		border: 'none',
-		backgroundColor: 'transparent',
-		width: '850px',
-		left: 'calc(50% - 425px)'
-	},
-	modalContentWrapper: {
-		boxShadow: 'none',
-		marginBottom: '20px'
-	},
-	closeIcon: {
-		'& svg': {
-			position: 'relative',
-			top: '20px',
-			left: '70px'
-		}
 	},
 	tokenPrice: {
 		padding: '20px 0'
@@ -79,31 +49,6 @@ const styles = theme => ({
 		'& > button': {
 			display: 'inline'
 		}
-	},
-	transactionEntry: {
-		display: 'flex',
-		padding: '20px 0',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		'& svg path': {
-			fill: 'transparent',
-			stroke: '#93B0C1'
-		}
-	},
-	transactionEntryDate: {
-		width: '50px',
-		textAlign: 'center'
-	},
-	transactionEntryIcon: {
-		width: '100px',
-		textAlign: 'center'
-	},
-	transactionEntryStatus: {
-		width: 'calc(100% - 200px)'
-	},
-	transactionEntryAmount: {
-		width: '100px',
-		textAlign: 'right'
 	}
 });
 
@@ -156,79 +101,57 @@ export class Transfer extends React.Component {
 		const { classes, cryptoCurrency, address } = this.props;
 
 		return (
-			<Modal open={true} className={classes.modal}>
-				<ModalWrap className={classes.modalWrap}>
-					<Paper className={classes.modalContentWrapper}>
-						<ModalCloseButton className={classes.closeIcon} component={goBackDashboard}>
-							<ModalCloseIcon />
-						</ModalCloseButton>
+			<Popup closeComponent={goBackDashboard} open>
+				<Grid
+					container
+					direction="row"
+					justify="flex-start"
+					alignItems="flex-start"
+					spacing={2}
+				>
+					<div className={classes.cryptoIcon}>{getIconForToken(cryptoCurrency)}</div>
+					<div>
+						<Typography variant="h5">{getNameForToken(cryptoCurrency)}</Typography>
+						<Typography variant="h2" className={classes.cryptoSymbol}>
+							{cryptoCurrency}
+						</Typography>
+					</div>
+				</Grid>
+				<div className={classes.tokenPrice}>
+					<TokenPrice cryptoCurrency={cryptoCurrency} />
+				</div>
+				<Divider />
+				<div className={classes.tokenAddress}>
+					<Typography variant="body2" gutterBottom>
+						Your Address
+					</Typography>
+					<div className={classes.tokenPublicKey}>
+						<Typography variant="body2" color="secondary" gutterBottom>
+							{address}
+						</Typography>
+						<Copy text={address} />
+					</div>
+				</div>
+				<Divider />
+				<div className={classes.actionButtons}>
+					<Grid
+						container
+						direction="row"
+						justify="flex-start"
+						alignItems="flex-start"
+						spacing={0}
+					>
+						<Button variant="outlined" size="large" onClick={this.handleReceive}>
+							<CustomIcon /> Receive
+						</Button>
+						<Button variant="outlined" size="large" onClick={this.handleSend}>
+							<SentIcon /> Send
+						</Button>
+					</Grid>
+				</div>
 
-						<ModalBody style={{ boxShadow: 'none' }}>
-							<Grid
-								container
-								direction="row"
-								justify="flex-start"
-								alignItems="flex-start"
-								spacing={16}
-							>
-								<div className={classes.cryptoIcon}>
-									{getIconForToken(cryptoCurrency)}
-								</div>
-								<div>
-									<Typography variant="h5">
-										{getNameForToken(cryptoCurrency)}
-									</Typography>
-									<Typography variant="h2" className={classes.cryptoSymbol}>
-										{cryptoCurrency}
-									</Typography>
-								</div>
-							</Grid>
-							<div className={classes.tokenPrice}>
-								<TokenPrice cryptoCurrency={cryptoCurrency} />
-							</div>
-							<Divider />
-							<div className={classes.tokenAddress}>
-								<Typography variant="body2" gutterBottom>
-									Your Address
-								</Typography>
-								<div className={classes.tokenPublicKey}>
-									<Typography variant="body2" color="secondary" gutterBottom>
-										{address}
-									</Typography>
-									<Copy text={address} />
-								</div>
-							</div>
-							<Divider />
-							<div className={classes.actionButtons}>
-								<Grid
-									container
-									direction="row"
-									justify="flex-start"
-									alignItems="flex-start"
-									spacing={0}
-								>
-									<Button
-										variant="outlined"
-										size="large"
-										onClick={this.handleReceive}
-									>
-										<CustomIcon /> Receive
-									</Button>
-									<Button
-										variant="outlined"
-										size="large"
-										onClick={this.handleSend}
-									>
-										<SentIcon /> Send
-									</Button>
-								</Grid>
-							</div>
-						</ModalBody>
-					</Paper>
-
-					<TransactionsHistory cryptoCurrency={cryptoCurrency} />
-				</ModalWrap>
-			</Modal>
+				<TransactionsHistory cryptoCurrency={cryptoCurrency} />
+			</Popup>
 		);
 	}
 }

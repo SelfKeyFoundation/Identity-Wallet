@@ -5,7 +5,7 @@ module.exports = {
 			{
 				test: /\.(jsx?|tsx?|vue)$/,
 				enforce: 'pre',
-				include: [/src/],
+				include: [path.resolve(__dirname, '../src')],
 				loader: 'eslint-loader',
 				options: {
 					fix: true,
@@ -16,10 +16,7 @@ module.exports = {
 			{
 				test: /\.jsx?$/,
 				loader: 'babel-loader',
-				include: [
-					path.resolve(__dirname, '../src'),
-					path.resolve(__dirname, '../node_modules/selfkey-ui/')
-				],
+				include: [path.resolve(__dirname, '../src')],
 				options: {
 					presets: ['@babel/react']
 				}
@@ -43,10 +40,7 @@ module.exports = {
 		]
 	},
 	resolve: {
-		modules: [
-			path.resolve(__dirname, '..', 'src'),
-			path.resolve(__dirname, '..', 'node_modules')
-		],
-		extensions: ['.js', '.jsx', '.css', '.svg']
+		modules: [path.resolve(__dirname, '..', 'src'), 'node_modules'],
+		extensions: ['.js', '.jsx', '.css', '.svg', '.json']
 	}
 };

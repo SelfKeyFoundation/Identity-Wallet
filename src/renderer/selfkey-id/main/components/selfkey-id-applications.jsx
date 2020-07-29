@@ -11,18 +11,14 @@ import {
 	Divider,
 	ExpansionPanelDetails,
 	List,
-	ListItem,
-	createStyles,
-	withStyles
+	ListItem
 } from '@material-ui/core';
+import { createStyles, withStyles } from '@material-ui/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import {
 	KeyTooltip,
 	TooltipArrow,
-	CheckMaIcon,
-	DeniedIcon,
-	HourGlassIcon,
 	SimpleCheckIcon,
 	SimpleDeniedIcon,
 	SimpleHourglassIcon,
@@ -37,6 +33,7 @@ import {
 import moment from 'moment';
 import { Popup } from '../../../common/popup';
 import MessageContainer from './message-container';
+import HeaderIcon from '../../../common/header-icon';
 
 const styles = theme => ({
 	statusIcon: {
@@ -200,6 +197,7 @@ const StatusInfo = withStyles(statusInfoStyle)(
 								<KeyTooltip
 									interactive
 									placement="top-start"
+									TransitionProps={{ timeout: 0 }}
 									title={
 										<React.Fragment>
 											<span>{tooltip}</span>
@@ -224,39 +222,6 @@ const StatusInfo = withStyles(statusInfoStyle)(
 	}
 );
 
-const HeaderIcon = withStyles(styles)(({ status, classes }) => {
-	let icon = null;
-	/* Check KYC Status here: https://confluence.kyc-chain.com/display/DEV/KYC+Process+Statuses
-	 *	 1 In progress: HourGlassIcon
-	 *	 2 Approved: CheckMaIcon
-	 *	 3 Rejected: DeniedIcon
-	 *	 4 Uploaded: HourGlassIcon
-	 *	 5 Invited: HourGlassIcon
-	 *	 6 User processing: HourGlassIcon
-	 *	 7 User declined: DeniedIcon
-	 *	 8 Cancelled: DeniedIcon
-	 *	 9 Additional requested: HourGlassIcon
-	 *	10 Corporate details: HourGlassIcon
-	 *	11 User processing requirement: HourGlassIcon
-	 *	12 Partially approved: HourGlassIcon
-	 *	13 Send tokens: HourGlassIcon
-	 *	14 Manager assigned: HourGlassIcon
-	 */
-	switch (status) {
-		case 2:
-			icon = <CheckMaIcon className={classes.headerIcon} />;
-			break;
-		case 3:
-		case 7:
-		case 8:
-			icon = <DeniedIcon className={classes.headerIcon} />;
-			break;
-		default:
-			icon = <HourGlassIcon />;
-	}
-	return icon;
-});
-
 class SelfkeyIdApplicationsComponent extends PureComponent {
 	renderLoadingScreen = () => (
 		<Grid container justify="center" alignItems="center">
@@ -273,7 +238,7 @@ class SelfkeyIdApplicationsComponent extends PureComponent {
 			<Grid
 				container
 				className={this.props.classes.root}
-				spacing={32}
+				spacing={4}
 				direction="column"
 				justify="flex-start"
 				alignItems="stretch"
@@ -284,7 +249,7 @@ class SelfkeyIdApplicationsComponent extends PureComponent {
 					</Typography>
 				</Grid>
 				<Grid item>
-					<Grid container spacing={24}>
+					<Grid container spacing={3}>
 						<Grid item>
 							<Button
 								variant="outlined"
@@ -320,7 +285,7 @@ class SelfkeyIdApplicationsComponent extends PureComponent {
 
 		if (!loading && applications && applications.length === 0) {
 			return (
-				<Grid container spacing={32}>
+				<Grid container spacing={4}>
 					<Grid item xs={12}>
 						<Card>
 							<Grid container direction="row" className={classes.cardHeader}>
@@ -415,7 +380,7 @@ class SelfkeyIdApplicationsComponent extends PureComponent {
 									/>
 								</Grid>
 								<ExpansionPanelDetails>
-									<Grid container spacing={32}>
+									<Grid container spacing={4}>
 										<Grid item xs>
 											<Card>
 												<Typography variant="h2" className={classes.title}>

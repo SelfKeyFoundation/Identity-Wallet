@@ -15,7 +15,7 @@ const TokenList = props => {
 			justify="space-between"
 			alignItems="flex-start"
 			wrap="nowrap"
-			spacing={16}
+			spacing={2}
 		>
 			<Grid item>
 				<TokenBox

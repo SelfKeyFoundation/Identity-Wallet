@@ -1,44 +1,26 @@
 import React from 'react';
-import { Typography, Button, withStyles } from '@material-ui/core';
-import { CloseButtonIcon } from 'selfkey-ui';
+import { Typography, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { Popup } from '../../../common';
 
 const styles = theme => ({
-	container: {
-		margin: '0 auto',
-		maxWidth: '500px',
-		position: 'relative',
-		width: '100%'
-	},
-	containerHeader: {
-		alignItems: 'flex-start',
-		background: '#2A3540',
-		display: 'flex',
-		justifyContent: 'flex-start',
-		padding: '20px 30px',
-		'& div': {
-			display: 'inline-block',
-			color: '#FFF'
-		}
-	},
-	closeIcon: {
-		position: 'absolute',
-		right: '-20px',
-		top: '-20px'
-	},
 	contentContainer: {
-		border: '1px solid #303C49',
-		borderRadius: '4px',
-		boxShadow: '0 50px 70px -50px black',
-		padding: '30px'
+		borderRadius: '4px'
 	},
 	text: {
-		marginBottom: '40px'
+		marginBottom: '60px'
 	},
 	buttons: {
-		marginBottom: '20px'
+		display: 'flex',
+		justifyContent: 'space-between'
 	},
-	requestBtn: {
-		marginRight: '20px'
+	popup: {
+		'& > div:nth-child(3)': {
+			maxWidth: '500px'
+		}
+	},
+	popupPadding: {
+		padding: '30px 30px 60px'
 	}
 });
 
@@ -46,36 +28,37 @@ export const TOCDisagreementPopup = withStyles(styles)(props => {
 	const { classes, onBackClick, onReturnClick } = props;
 
 	return (
-		<div className={classes.container}>
-			<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
-			<div className={classes.containerHeader}>
-				<Typography variant="h2" className="region">
-					Need to Accept Terms
-				</Typography>
-			</div>
-			<div className={classes.contentContainer}>
-				<div className={classes.text}>
-					<Typography variant="body2">
-						You will need to accept the Terms of Service in order to access notarization
-						services or you will be unable to proceed. Return to the TOS agreement below
-						or cancel the application.
-					</Typography>
+		<Popup
+			className={classes.popup}
+			xtraClass={classes.popupPadding}
+			closeAction={onBackClick}
+			text="Need to Accept Terms"
+		>
+			<div>
+				<div className={classes.contentContainer}>
+					<div className={classes.text}>
+						<Typography variant="body2">
+							You will need to accept the Terms of Service in order to access the
+							notarization services or you will be unable to proceed. Return to the
+							TOS agreement below or cancel the application.
+						</Typography>
+					</div>
+					<div className={classes.buttons}>
+						<Button variant="contained" size="large" onClick={onReturnClick}>
+							Return to TOS
+						</Button>
+						<Button
+							variant="outlined"
+							color="secondary"
+							size="large"
+							onClick={onBackClick}
+						>
+							Cancel Application
+						</Button>
+					</div>
 				</div>
-				<div className={classes.buttons}>
-					<Button
-						className={classes.requestBtn}
-						variant="contained"
-						size="large"
-						onClick={onReturnClick}
-					>
-						Return to TOS
-					</Button>
-					<Button variant="outlined" size="large" onClick={onBackClick}>
-						Cancel Application
-					</Button>
-				</div>
 			</div>
-		</div>
+		</Popup>
 	);
 });
 

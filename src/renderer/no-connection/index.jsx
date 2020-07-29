@@ -1,7 +1,9 @@
 import React from 'react';
-import { Modal, Typography, Grid, withStyles, Button } from '@material-ui/core';
-import { ModalWrap, ModalBody, WarningShieldIcon } from 'selfkey-ui';
+import { Typography, Grid, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { WarningShieldIcon } from 'selfkey-ui';
 import { connect } from 'react-redux';
+import { Popup } from '../common';
 
 const styles = theme => ({
 	closeModal: {
@@ -32,38 +34,34 @@ export const NoConnection = withStyles(styles)(props => {
 		window.quit();
 	};
 	return (
-		<Modal open={true}>
-			<ModalWrap className={classes.closeModal}>
-				<ModalBody className={classes.spacing}>
-					<Grid
-						container
-						spacing={24}
-						direction="column"
-						justify="center"
-						alignItems="center"
-						className={classes.bottomSpace}
+		<Popup open popupClass={classes.closeModal} isHeaderVisible={false}>
+			<Grid
+				container
+				spacing={3}
+				direction="column"
+				justify="center"
+				alignItems="center"
+				className={classes.bottomSpace}
+			>
+				<Grid item>
+					<WarningShieldIcon className={classes.logo} />
+				</Grid>
+				<Grid item>
+					<Typography variant="body2" className={classes.marginBottom}>
+						An internet connection is required to use the SelfKey Vault. Please check
+						your connection and reopen the application.
+					</Typography>
+					<Button
+						variant="outlined"
+						size="large"
+						color="secondary"
+						onClick={onBackClick || handleClose}
 					>
-						<Grid item>
-							<WarningShieldIcon className={classes.logo} />
-						</Grid>
-						<Grid item>
-							<Typography variant="body2" className={classes.marginBottom}>
-								An internet connection is required to use the SelfKey Vault. Please
-								check your connection and reopen the application.
-							</Typography>
-							<Button
-								variant="outlined"
-								size="large"
-								color="secondary"
-								onClick={onBackClick || handleClose}
-							>
-								OK
-							</Button>
-						</Grid>
-					</Grid>
-				</ModalBody>
-			</ModalWrap>
-		</Modal>
+						OK
+					</Button>
+				</Grid>
+			</Grid>
+		</Popup>
 	);
 });
 

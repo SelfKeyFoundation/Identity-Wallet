@@ -3,11 +3,9 @@ import { Logger } from 'common/logger';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter, push } from 'connected-react-router';
-import ReactPiwik from 'react-piwik';
 import { SelfkeyDarkTheme } from 'selfkey-ui';
 import { appOperations } from 'common/app';
 import { schedulerOperations } from 'common/scheduler';
-import config from 'common/config';
 
 import { GlobalError } from './global-error';
 // Pages
@@ -28,24 +26,11 @@ import Terms from './settings/terms';
 import TermsWarning from './settings/terms-warning';
 import Loading from './home/loading';
 import ConnectingToLedger from './wallet/unlock/ledger/connecting';
-import { SelfKeyIdCreate } from './selfkey-id/main/components/selfkey-id-create';
-import { SelfKeyIdCreateAbout } from './selfkey-id/main/components/selfkey-id-create-about';
-import { SelfKeyIdCreateDisclaimer } from './selfkey-id/main/components/selfkey-id-create-disclaimer';
 import { SelfKeyIdCreateForm } from './selfkey-id/main/components/selfkey-id-create-form';
 import AutoUpdate from './auto-update/auto-update-contatiner';
 import AutoUpdateProgress from './auto-update/auto-update-progress-contatiner';
 
 const log = new Logger('AppComponent');
-
-const piwik = new ReactPiwik({
-	url: 'https://analytics.selfkey.org',
-	siteId: config.matomoSite || 1,
-	trackErrors: true
-});
-ReactPiwik.push(['requireConsent']);
-ReactPiwik.push(['trackPageView']);
-ReactPiwik.push(['enableHeartBeatTimer']);
-ReactPiwik.push(['trackAllContentImpressions']);
 
 class AppContainerComponent extends PureComponent {
 	state = { hasError: false };
@@ -92,12 +77,6 @@ class AppContainerComponent extends PureComponent {
 					<Route path="/connectingToTrezor" component={ConnectingToTrezor} />
 					<Route path="/terms" component={Terms} />
 					<Route path="/termsWarning" component={TermsWarning} />
-					<Route path="/selfkeyIdCreateAbout" component={SelfKeyIdCreateAbout} />
-					<Route
-						path="/selfkeyIdCreateDisclaimer"
-						component={SelfKeyIdCreateDisclaimer}
-					/>
-					<Route path="/selfKeyIdCreate" component={SelfKeyIdCreate} />
 					<Route path="/selfkeyIdForm" component={SelfKeyIdCreateForm} />
 					<Route path="/auto-update" component={AutoUpdate} />
 					<Route path="/auto-update-progress" component={AutoUpdateProgress} />
@@ -111,7 +90,7 @@ const AppContainer = connect()(AppContainerComponent);
 
 const App = ({ store, history }) => (
 	<SelfkeyDarkTheme>
-		<AppContainer history={piwik.connectToHistory(history.getHistory())} />
+		<AppContainer history={history} />
 	</SelfkeyDarkTheme>
 );
 

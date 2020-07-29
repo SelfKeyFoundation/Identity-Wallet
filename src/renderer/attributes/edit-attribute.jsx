@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { PureComponent } from 'react';
-import { Input, withStyles, Typography, Divider, Button, Grid } from '@material-ui/core';
+import { Input, Typography, Divider, Button, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Popup } from '../common/popup';
 import { identityAttributes, jsonSchema } from 'common/identity/utils';
 import Form from 'react-jsonschema-form-material-theme';
@@ -181,7 +182,7 @@ class EditAttributeComponent extends PureComponent {
 									{this.state.documentError}
 								</Typography>
 							)}
-							<Grid container spacing={24} className={classes.buttonContainer}>
+							<Grid container spacing={3} className={classes.buttonContainer}>
 								<Grid item>
 									<Button
 										variant="contained"

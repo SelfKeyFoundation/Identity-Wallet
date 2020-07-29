@@ -2,3 +2,4 @@ node_modules/
 dist/
 static/
 app.templates.js
+selfkey-ui/

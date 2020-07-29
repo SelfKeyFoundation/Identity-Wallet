@@ -2,13 +2,13 @@ import React from 'react';
 import {
 	Typography,
 	Button,
-	withStyles,
 	Card,
 	CardHeader,
 	Divider,
 	CardContent,
 	Input
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { RoundCompany, RoundPerson, baseDark, grey } from 'selfkey-ui';
 import moment from 'moment';
 

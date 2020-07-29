@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { pricesSelectors } from 'common/prices';
@@ -12,6 +12,14 @@ import { identitySelectors } from 'common/identity';
 const styles = theme => ({});
 
 class IncorporationsListContainer extends MarketplaceIncorporationsComponent {
+	componentDidMount() {
+		this.trackMatomoGoal(
+			'MarketplaceVisitIndividualIncorporations',
+			'MarketplaceVisitCorporateIncorporations'
+		);
+		this.trackMarketplaceVisit('incorporations');
+	}
+
 	onBackClick = () => this.props.dispatch(push(this.marketplaceRootPath()));
 
 	onDetailsClick = jurisdiction => {
@@ -48,6 +56,7 @@ IncorporationsListContainer.propTypes = {
 const mapStateToProps = (state, props) => {
 	const identity = identitySelectors.selectIdentity(state);
 	return {
+		identity,
 		incorporations: marketplaceSelectors.selectIncorporations(state, identity.type),
 		isLoading: marketplaceSelectors.isInventoryLoading(state),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD')

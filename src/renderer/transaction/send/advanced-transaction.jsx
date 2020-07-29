@@ -1,44 +1,38 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { TransactionFeeBox } from 'renderer/transaction/send/containers/transaction-fee-box';
-import { NumberFormat } from 'selfkey-ui';
 import { TransactionBox } from '../common/transaction-box';
 import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/eth-gas-station';
 import { transactionOperations, transactionSelectors } from 'common/transaction';
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
-import { withStyles } from '@material-ui/core/styles';
-import { Grid, Divider } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import {
+	MenuItem,
+	Select,
+	Input,
+	Tabs,
+	Tab,
+	Grid,
+	Button,
+	Typography,
+	Divider,
+	FormControl
+} from '@material-ui/core';
 import { appOperations, appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
 import { debounce, over } from 'lodash';
+import { InputTitle } from '../../common/input-title';
+import { getWallet } from 'common/wallet/selectors';
+import ReceiveTokenTab from './containers/receive-token-tab';
+// import SendTokenTab from './containers/send-token-tab';
+import { NumberFormat, TransactionFeeBox, SelectDropdownIcon } from 'selfkey-ui';
 
 const styles = theme => ({
-	container: {
-		fontFamily: 'Lato, arial, sans-serif'
+	balance: {
+		color: '#fff',
+		fontWeight: 'bold'
 	},
-
-	button: {
-		boxSizing: 'border-box',
-		height: '45px',
-		width: '201px',
-		border: '1px solid #0FB8D0',
-		borderRadius: '4px',
-		background: 'linear-gradient(0deg, #09A8BA 0%, #0ABBD0 100%)',
-		color: '#FFFFFF',
-		fontSize: '16px',
-		fontWeight: 600,
-		letterSpacing: '0.67px',
-		lineHeight: '20px',
-		textAlign: 'center',
-		cursor: 'pointer',
-		'&:disabled': {
-			cursor: 'default',
-			opacity: 0.7
-		}
-	},
-
 	selectAllAmountBtn: {
 		cursor: 'pointer',
 		fontSize: '13px',
@@ -55,23 +49,11 @@ const styles = theme => ({
 	actionButtonsContainer: {
 		paddingTop: '50px'
 	},
-	input: {
-		outlineWidth: 0,
-		backgroundColor: '#262f39',
-		paddingBottom: '20px',
-		marginBottom: '20px',
-		width: '100%',
-		border: 'none',
-		borderBottom: '2px solid #93b0c1',
-		fontSize: '20px',
-		color: '#a9c5d6',
-		'&::-webkit-input-placeholder': {
-			fontSize: '20px',
-			color: '#a9c5d6'
-		}
-	},
-	inputError: {
-		borderBottom: '2px solid #FE4B61 !important'
+	errorColor: {
+		backgroundColor: 'rgba(255,46,99,0.09) !important',
+		border: '2px solid #FE4B61 !important',
+		boxShadow: 'none !important',
+		color: '#FE4B61 !important'
 	},
 	amountContainer: {
 		paddingTop: '25px',
@@ -104,7 +86,6 @@ const styles = theme => ({
 		margin: '0px',
 		padding: '0px'
 	},
-
 	addressErrorText: {
 		height: '19px',
 		width: '242px',
@@ -113,36 +94,82 @@ const styles = theme => ({
 		fontSize: '13px',
 		lineHeight: '19px'
 	},
-
 	addressErrorColor: {
 		color: '#FE4B61',
 		borderBottom: '2px solid #FE4B61'
 	},
-
 	divider: {
-		backgroundColor: 'transparent',
-		borderBottom: '2px solid #93b0c1',
-		paddingTop: '10px'
+		margin: '40px 0'
 	},
-
 	cryptoSelect: {
-		height: '40px',
-		width: '300px',
-		color: '#FFFFFF',
-		fontFamily: 'Lato',
-		fontSize: '20px',
-		lineHeight: '36px',
-		backgroundColor: '#1E262E',
-		border: '1px solid #384656',
-		borderRadius: '30px',
-		paddingLeft: '10px',
-		paddingBottom: '10px'
+		width: '100%'
 	},
-
 	selectItem: {
 		border: 0,
 		backgroundColor: '#1E262E',
 		color: '#FFFFFF'
+	},
+	amountBottomSpace: {
+		marginBottom: '36px'
+	},
+	tokenBottomSpace: {
+		marginBottom: '20px'
+	},
+	flexColumn: {
+		flexDirection: 'column'
+	},
+	fiatPrice: {
+		display: 'flex',
+		marginTop: '5px'
+	},
+	amount: {
+		marginRight: '20px'
+	},
+	errorText: {
+		height: '19px',
+		width: '242px',
+		color: '#FE4B61',
+		fontFamily: 'Lato',
+		fontSize: '13px',
+		lineHeight: '19px'
+	},
+	tabs: {
+		marginBottom: '50px'
+	},
+
+	cryptoIcon: {
+		marginRight: '20px'
+	},
+	cryptoSymbol: {
+		fontSize: '14px',
+		fontWeight: 'normal'
+	},
+	modalWrap: {
+		border: 'none',
+		backgroundColor: 'transparent'
+	},
+	modalContentWrapper: {
+		boxShadow: 'none',
+		marginBottom: '20px'
+	},
+	closeIcon: {
+		'& svg': {
+			position: 'relative',
+			top: '20px'
+		}
+	},
+	bottomSpace: {
+		marginBottom: '23px'
+	},
+	tokenMax: {
+		display: 'flex',
+		flexWrap: 'nowrap'
+	},
+	tabsWrap: {
+		'& .feeTitle': {
+			display: 'table',
+			marginBottom: '5px'
+		}
 	}
 });
 
@@ -152,9 +179,10 @@ class TransactionSendBoxContainer extends PureComponent {
 	state = {
 		amount: '',
 		address: '',
-		isCustomView: this.props.match.params.cryptoCurrency === 'custom',
 		cryptoCurrency: this.props.match.params.cryptoCurrency,
-		sending: false
+		sending: false,
+		sendingAddress: this.props.match.params.sendingAddress,
+		tab: 'send'
 	};
 
 	componentDidMount() {
@@ -167,6 +195,8 @@ class TransactionSendBoxContainer extends PureComponent {
 	loadData = () => {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 	};
+
+	onTabChange = tab => this.setState({ tab });
 
 	handleSend = async () => {
 		this.setState({ sending: true });
@@ -204,36 +234,25 @@ class TransactionSendBoxContainer extends PureComponent {
 	};
 
 	// TransactionSendBox - Start
-	renderFeeBox() {
-		return (
-			<TransactionFeeBox
-				{...this.props}
-				changeGasLimitAction={this.withLock(this.handleGasLimitChange)}
-				changeGasPriceAction={this.withLock(this.handleGasPriceChange)}
-				reloadEthGasStationInfoAction={this.loadData}
-			/>
-		);
-	}
-
-	handleAllAmountClick() {
+	handleAllAmountClick = () => {
 		const value = String(this.props.balance);
 		this.setState({
 			...this.state,
 			amount: value
 		});
 		this.props.dispatch(transactionOperations.setAmount(value));
-	}
+	};
 
-	handleAddressChange(event) {
+	handleAddressChange = event => {
 		const value = event.target.value;
 		this.setState({
 			...this.state,
 			address: value
 		});
 		this.props.dispatch(transactionOperations.setAddress(value));
-	}
+	};
 
-	handleAmountChange(event) {
+	handleAmountChange = event => {
 		let value = event.target.value;
 		if (isNaN(Number(value))) {
 			value = '';
@@ -247,16 +266,19 @@ class TransactionSendBoxContainer extends PureComponent {
 			amount: value
 		});
 		this.props.dispatch(transactionOperations.setAmount(value));
-	}
+	};
 
-	handleCryptoCurrencyChange(event) {
+	handleCryptoCurrencyChange = event => {
 		const value = event.target.value;
+		const nullAmount = 0;
 		this.setState({
 			...this.state,
+			amount: nullAmount,
 			cryptoCurrency: value
 		});
 		this.props.dispatch(transactionOperations.setCryptoCurrency(value));
-	}
+		this.props.dispatch(transactionOperations.setAmount(nullAmount));
+	};
 
 	renderSelectTokenItems() {
 		const { tokens, classes } = this.props;
@@ -267,19 +289,21 @@ class TransactionSendBoxContainer extends PureComponent {
 
 		return activeTokens.map(token => {
 			return (
-				<option key={token.symbol} value={token.symbol} className={classes.selectItem}>{`${
-					token.name
-				} - ${token.balance} ${token.symbol}`}</option>
+				<MenuItem
+					key={token.symbol}
+					value={token.symbol}
+					className={classes.selectItem}
+				>{`${token.symbol} - ${token.name}`}</MenuItem>
 			);
 		});
 	}
 
 	renderButtons() {
-		const { classes, addressError, ethFee, locked } = this.props;
-		const sendBtnIsEnabled =
-			this.state.address && +this.state.amount && !addressError && ethFee && !locked;
+		const { classes, addressError, address, ethFee, locked } = this.props;
+		const { sending, amount } = this.state;
+		const sendBtnIsEnabled = address && +amount && !addressError && ethFee && !locked;
 
-		if (this.state.sending) {
+		if (sending) {
 			return (
 				<Grid
 					container
@@ -287,17 +311,17 @@ class TransactionSendBoxContainer extends PureComponent {
 					justify="center"
 					alignItems="center"
 					className={classes.actionButtonsContainer}
-					spacing={24}
+					spacing={3}
 				>
 					<Grid item>
-						<button className={classes.button} onClick={this.handleConfirm}>
+						<Button variant="contained" size="large" onClick={this.handleConfirm}>
 							CONFIRM
-						</button>
+						</Button>
 					</Grid>
 					<Grid item>
-						<button className={classes.button} onClick={this.handleCancel}>
+						<Button variant="outlined" size="large" onClick={this.handleCancel}>
 							CANCEL
-						</button>
+						</Button>
 					</Grid>
 				</Grid>
 			);
@@ -311,124 +335,166 @@ class TransactionSendBoxContainer extends PureComponent {
 					className={classes.actionButtonsContainer}
 				>
 					<Grid item>
-						<button
+						<Button
 							disabled={!sendBtnIsEnabled}
 							className={classes.button}
 							onClick={this.handleSend}
+							variant="contained"
+							size="large"
 						>
 							SEND
-						</button>
+						</Button>
 					</Grid>
 				</Grid>
 			);
 		}
 	}
-	// TransactionSendBox - End
-
-	getTitle = cryptoCurrency => {
-		return cryptoCurrency !== 'custom' ? `Send ${cryptoCurrency}` : 'Send Custom Token';
-	};
 
 	render() {
-		const { classes, addressError, amountUsd, locale, fiatCurrency } = this.props;
+		const {
+			classes,
+			sendingAddress,
+			locale,
+			fiatCurrency,
+			amountUsd,
+			addressError
+		} = this.props;
 		let { cryptoCurrency } = this.state;
-		let sendAmountClass = `${classes.input} ${classes.amountInput}`;
-		let addressInputClass = `${classes.input} ${addressError ? classes.addressErrorColor : ''}`;
-		const title = this.getTitle(cryptoCurrency);
+		const title = 'Send/Receive ERC-20 Tokens';
+		const labelInputClass = `${addressError ? classes.errorColor : ''}`;
 		return (
-			<TransactionBox
-				cryptoCurrency={cryptoCurrency}
-				closeAction={this.handleCancelAction}
-				title={title}
-			>
-				<input
-					type="text"
-					onChange={e => this.handleAddressChange(e)}
-					value={this.state.address}
-					className={addressInputClass}
-					placeholder="Send to Address"
-				/>
-				{addressError && (
-					<span className={classes.addressErrorText}>
-						Invalid address. Please check and try again.
-					</span>
-				)}
-				<Grid
-					container
-					direction="row"
-					className={classes.amountContainer}
-					alignItems="center"
-					justify="space-between"
-				>
-					<Grid item xs>
-						<Grid
-							container
-							direction="row"
-							justify="flex-start"
-							alignItems="center"
-							spacing={16}
+			<TransactionBox closeAction={this.handleCancelAction} title={title}>
+				<div className={classes.tokenBottomSpace}>
+					<FormControl variant="filled" fullWidth>
+						<InputTitle title="Token" />
+						<Select
+							className={classes.cryptoSelect}
+							value={this.state.cryptoCurrency}
+							onChange={e => this.handleCryptoCurrencyChange(e)}
+							name="cryptoCurrency"
+							disableUnderline
+							displayEmpty
+							IconComponent={SelectDropdownIcon}
+							input={<Input disableUnderline />}
 						>
-							<Grid item>
-								<button
-									onClick={() => this.handleAllAmountClick()}
-									className={classes.selectAllAmountBtn}
+							<MenuItem value="custom">
+								<Typography
+									className="choose"
+									variant="subtitle1"
+									color="textSecondary"
 								>
-									ALL
-								</button>
-							</Grid>
-							<Grid item xs>
-								<input
-									type="text"
-									onChange={e => this.handleAmountChange(e)}
-									value={this.state.amount}
-									className={sendAmountClass}
-									placeholder="0.00"
+									Choose...
+								</Typography>
+							</MenuItem>
+							{this.renderSelectTokenItems()}
+						</Select>
+					</FormControl>
+				</div>
+				{this.state.cryptoCurrency !== 'custom' ? (
+					<div className={classes.tabsWrap}>
+						<Tabs
+							value={this.state.tab}
+							onChange={(evt, value) => this.onTabChange(value)}
+							className={classes.tabs}
+						>
+							<Tab id="send" value="send" label="Send" />
+							<Tab id="receive" value="receive" label="Receive" />
+						</Tabs>
+						{this.state.tab === 'send' && (
+							<React.Fragment>
+								<div className={classes.bottomSpace}>
+									<Typography variant="body2" color="secondary">
+										Available:{' '}
+										<span className={classes.balance}>
+											{this.props.balance}{' '}
+											{cryptoCurrency !== 'custom' ? cryptoCurrency : ''}
+										</span>
+									</Typography>
+								</div>
+								<div className={classes.amountBottomSpace}>
+									<InputTitle
+										title={`Amount${
+											cryptoCurrency !== 'custom'
+												? ` (${cryptoCurrency})`
+												: ''
+										}`}
+									/>
+									<div className={classes.tokenMax}>
+										<Input
+											type="text"
+											onChange={this.handleAmountChange}
+											value={`${this.state.amount}`}
+											placeholder="0.00"
+											className={classes.amount}
+											fullWidth
+										/>
+										<Button
+											onClick={this.handleAllAmountClick}
+											variant="outlined"
+											size="large"
+										>
+											Max
+										</Button>
+									</div>
+									<div className={classes.fiatPrice}>
+										<Typography
+											variant="subtitle2"
+											color="secondary"
+											style={{ marginRight: '3px' }}
+										>
+											<NumberFormat
+												locale={locale}
+												priceStyle="currency"
+												currency={fiatCurrency}
+												value={amountUsd}
+												fractionDigits={15}
+											/>
+										</Typography>
+										<Typography variant="subtitle2" color="secondary">
+											USD
+										</Typography>
+									</div>
+								</div>
+
+								<div>
+									<InputTitle title="Send to" />
+									<div className={`${classes.tokenMax} ${classes.flexColumn}`}>
+										<Input
+											type="text"
+											onChange={this.handleAddressChange}
+											value={this.state.address}
+											placeholder="0x"
+											className={labelInputClass}
+											fullWidth
+										/>
+									</div>
+								</div>
+								{addressError && (
+									<span id="labelError" className={classes.errorText}>
+										Invalid address. Please check and try again.
+									</span>
+								)}
+								<Divider className={classes.divider} />
+
+								<TransactionFeeBox
+									changeGasLimitAction={this.withLock(this.handleGasLimitChange)}
+									changeGasPriceAction={this.withLock(this.handleGasPriceChange)}
+									reloadEthGasStationInfoAction={this.loadData}
+									{...this.props}
 								/>
-							</Grid>
-						</Grid>
-					</Grid>
-					<Grid item>
-						{this.state.isCustomView && (
-							<select
-								value={this.state.cryptoCurrency}
-								onChange={e => this.handleCryptoCurrencyChange(e)}
-								name="cryptoCurrency"
-								className={classes.cryptoSelect}
-							>
-								<option
-									value="custom"
-									disabled
-									selected
-									className={classes.selectItem}
-								>
-									Custom Token
-								</option>
-								{this.renderSelectTokenItems()}
-							</select>
+								{this.renderButtons()}
+							</React.Fragment>
 						)}
-					</Grid>
-				</Grid>
-				<Divider className={classes.divider} />
-				<Grid
-					container
-					direction="row"
-					justify="space-between"
-					alignItems="center"
-					className={classes.usdAmoutContainer}
-				>
-					<span>
-						<NumberFormat
-							locale={locale}
-							style="currency"
-							currency={fiatCurrency}
-							value={amountUsd}
-							fractionDigits={15}
-						/>
-					</span>
-					<span> USD </span>
-				</Grid>
-				{this.renderFeeBox()}
-				{this.renderButtons()}
+						{this.state.tab === 'receive' && (
+							<ReceiveTokenTab
+								sendingAddress={sendingAddress}
+								cryptoCurrency={cryptoCurrency}
+							/>
+						)}
+					</div>
+				) : (
+					''
+				)}
 			</TransactionBox>
 		);
 	}
@@ -440,7 +506,8 @@ const mapStateToProps = (state, props) => {
 		...getFiatCurrency(state),
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
 		...transactionSelectors.getTransaction(state),
-		tokens: getTokens(state).splice(1), // remove ETH
+		sendingAddress: getWallet(state).address,
+		tokens: getTokens(state),
 		cryptoCurrency: props.match.params.cryptoCurrency,
 		confirmation: props.match.params.confirmation,
 		walletType: appSelectors.selectWalletType(state)

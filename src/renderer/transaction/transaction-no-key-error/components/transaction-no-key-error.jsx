@@ -1,13 +1,13 @@
 import * as React from 'react';
 import TransactionErrorBox from '../../common/transaction-error-box';
-import { withStyles, Typography, List, ListItem } from '@material-ui/core';
+import { Typography, List, ListItem } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { DefaultBullet } from 'selfkey-ui';
 
 const styles = theme => ({
 	bodyText: {
 		marginBottom: '30px',
-		paddingRight: '30px',
-		textAlign: 'justify'
+		paddingRight: '30px'
 	},
 	list: {
 		columns: 3,

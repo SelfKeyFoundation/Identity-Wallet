@@ -4,7 +4,8 @@ import TxHistoryService, {
 	API_ENDPOINT,
 	TOKEN_TX_ACTION,
 	TX_LIST_ACTION,
-	TX_RECEIPT_ACTION
+	TX_RECEIPT_ACTION,
+	API_KEY
 } from './tx-history-service';
 import config from 'common/config';
 import request from 'request';
@@ -53,7 +54,10 @@ describe('TxHistoryService', () => {
 		t('getMostResentBlock', {
 			request: 'getMostResentBlock',
 			args: [],
-			expected: ['get', `${API_ENDPOINT}?module=proxy&action=eth_blockNumber`]
+			expected: [
+				'get',
+				`${API_ENDPOINT}?module=proxy&action=eth_blockNumber&apikey=${API_KEY}`
+			]
 		});
 	});
 	describe('makeRequest', () => {

@@ -4,7 +4,12 @@ import { storiesOf } from '@storybook/react';
 // import BecomeCertifierPage fro../src/renderer/certifiers/_become-certifier-pageage';
 import DashboardPageTabs from '../src/renderer/certifiers/dashboard/dashboard-tabs';
 import IndividualRequestPage from '../src/renderer/certifiers/individual-request-page';
-import { dashboardDocuments, individualDocuments, history, item } from './certifiers-data';
+import {
+	dashboardDocuments,
+	individualDocuments,
+	history,
+	item
+} from './__fixtures__/certifiers-data';
 
 storiesOf('Certifiers/Dashboard', module)
 	.add('overview', () => (

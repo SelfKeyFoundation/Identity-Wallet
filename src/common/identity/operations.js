@@ -109,7 +109,7 @@ const loadIdAttributesOperation = identityId => async (dispatch, getState) => {
 };
 
 const createIdAttributeOperation = (attribute, identityId) => async (dispatch, getState) => {
-	let identityService = getGlobalContext().identityService;
+	let { identityService, matomoService } = getGlobalContext();
 	let identity = null;
 
 	if (identityId) {
@@ -124,8 +124,13 @@ const createIdAttributeOperation = (attribute, identityId) => async (dispatch, g
 
 	attribute = { ...attribute, identityId };
 	attribute = await identityService.createIdAttribute(attribute);
+
 	await dispatch(operations.loadDocumentsForAttributeOperation(attribute.id));
 	await dispatch(identityActions.addIdAttributeAction(attribute));
+	const type = identitySelectors.selectIdAttributeTypeById(getState(), {
+		attributeTypeId: attribute.typeId
+	});
+	matomoService.trackEvent(`${identity.type}_profile`, 'attribute-created', type.url);
 };
 
 const removeIdAttributeOperation = attributeId => async (dispatch, getState) => {
@@ -148,6 +153,7 @@ const updateProfilePictureOperation = (picture, identityId) => async (dispatch, 
 	let identityService = getGlobalContext().identityService;
 	let identity = await identityService.updateIdentityProfilePicture(picture, identityId);
 	await dispatch(identityActions.updateIdentity(identity));
+	getGlobalContext().matomoService.trackEvent(`${identity.type}_profile`, 'picture', 'update');
 };
 
 const lockIdentityOperation = identityId => async (dispatch, getState) => {
@@ -336,6 +342,9 @@ const createCorporateProfileOperation = (data, onComplete) => async (dispatch, g
 
 		await dispatch(identityOperations.updateIdentitySetupOperation(true, identity.id));
 		await dispatch(identityOperations.unlockIdentityOperation(identity.id));
+		const { matomoService } = getGlobalContext();
+		matomoService.trackGoal(matomoService.goals.CreateCorporateProfile);
+		matomoService.trackEvent('corporate_profile', 'create', 'success');
 		if (onComplete) {
 			await dispatch(push(onComplete));
 		}
@@ -537,8 +546,10 @@ const createIndividualProfile = (identityId, data) => async (dispatch, getState)
 	);
 
 	await dispatch(identityOperations.updateIdentitySetupOperation(true, identityId));
-
-	await dispatch(push('/selfkeyIdCreateAbout'));
+	const { matomoService } = getGlobalContext();
+	matomoService.trackGoal(matomoService.goals.CreateIndividualProfile);
+	matomoService.trackEvent('individual_profile', 'create', 'success');
+	return dispatch(push('/main/individual'));
 };
 
 const switchProfileOperation = identity => async (dispatch, getState) => {
@@ -549,8 +560,9 @@ const navigateToProfileOperation = () => async (dispatch, getState) => {
 	const identity = identitySelectors.selectIdentity(getState());
 
 	if (identity.type === 'individual' && !identity.isSetupFinished) {
-		// return dispatch(push('/selfkeyIdCreate'));
-		return dispatch(push('/main/individual/setup-individual-profile'));
+		return dispatch(push('/selfkeyIdForm'));
+		// TODO: later refactor to individual profile folder
+		// return dispatch(push('/main/individual/setup-individual-profile'));
 	}
 
 	if (identity.type === 'individual') {

@@ -1,13 +1,8 @@
 import React from 'react';
 import moment from 'moment';
-import { Table, TableBody, IconButton, TableHead, Typography, withStyles } from '@material-ui/core';
-import {
-	EditTransparentIcon,
-	DeleteIcon,
-	SmallTableHeadRow,
-	SmallTableRow,
-	SmallTableCell
-} from 'selfkey-ui';
+import { Table, TableBody, TableCell, IconButton, TableHead, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { EditTransparentIcon, DeleteIcon, SmallTableHeadRow, SmallTableRow } from 'selfkey-ui';
 
 const styles = theme => ({
 	labelCell: {
@@ -28,40 +23,40 @@ export const AttributesTable = withStyles(styles)(
 		<Table>
 			<TableHead>
 				<SmallTableHeadRow>
-					<SmallTableCell variant="head">
+					<TableCell variant="head">
 						<Typography variant="overline">Type</Typography>
-					</SmallTableCell>
-					<SmallTableCell variant="head">
+					</TableCell>
+					<TableCell variant="head">
 						<Typography variant="overline">Label</Typography>
-					</SmallTableCell>
-					<SmallTableCell variant="head">
+					</TableCell>
+					<TableCell variant="head">
 						<Typography variant="overline">Last edited</Typography>
-					</SmallTableCell>
-					<SmallTableCell variant="head" align="right">
+					</TableCell>
+					<TableCell variant="head" align="right">
 						<Typography variant="overline">Actions</Typography>
-					</SmallTableCell>
+					</TableCell>
 				</SmallTableHeadRow>
 			</TableHead>
 			<TableBody>
 				{attributes.map(entry => (
 					<SmallTableRow key={entry.id}>
-						<SmallTableCell className={classes.labelCell}>
+						<TableCell className={classes.labelCell}>
 							<Typography variant="subtitle1">{entry.type.content.title}</Typography>
-						</SmallTableCell>
-						<SmallTableCell className={classes.labelCell}>
+						</TableCell>
+						<TableCell className={classes.labelCell}>
 							<Typography variant="subtitle1">{attributeName(entry)}</Typography>
-						</SmallTableCell>
-						<SmallTableCell>
+						</TableCell>
+						<TableCell>
 							<Typography variant="subtitle1">{lastUpdateDate(entry)}</Typography>
-						</SmallTableCell>
-						<SmallTableCell align="right">
+						</TableCell>
+						<TableCell align="right">
 							<IconButton onClick={() => onEditAttribute(entry)}>
 								<EditTransparentIcon />
 							</IconButton>
 							<IconButton onClick={() => onDeleteAttribute(entry)}>
 								<DeleteIcon />
 							</IconButton>
-						</SmallTableCell>
+						</TableCell>
 					</SmallTableRow>
 				))}
 			</TableBody>

@@ -1,17 +1,12 @@
 import React, { PureComponent } from 'react';
-import { Modal, Typography, Button, Grid, withStyles } from '@material-ui/core';
-import {
-	ModalWrap,
-	ModalCloseButton,
-	ModalHeader,
-	ModalBody,
-	ModalCloseIcon,
-	UnlockLargeIcon
-} from 'selfkey-ui';
+import { Typography, Button, Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { UnlockLargeIcon } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import history from 'common/store/history';
 import { appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
+import { Popup } from '../../common';
 
 const styles = theme => ({
 	unlockIcon: {
@@ -39,7 +34,7 @@ class TransactionUnlock extends PureComponent {
 				direction="row"
 				justify="flex-start"
 				alignItems="flex-start"
-				spacing={40}
+				spacing={5}
 			>
 				<Grid item xs={2}>
 					<UnlockLargeIcon className={this.props.classes.unlockIcon} />
@@ -50,7 +45,7 @@ class TransactionUnlock extends PureComponent {
 						direction="column"
 						justify="flex-start"
 						alignItems="flex-start"
-						spacing={40}
+						spacing={5}
 					>
 						<Grid item>
 							<Typography variant="h1">Please Unlock Your Ledger</Typography>
@@ -67,7 +62,7 @@ class TransactionUnlock extends PureComponent {
 								direction="row"
 								justify="flex-start"
 								alignItems="center"
-								spacing={24}
+								spacing={3}
 							>
 								<Grid item>
 									<Button
@@ -88,19 +83,9 @@ class TransactionUnlock extends PureComponent {
 
 	render() {
 		return (
-			<div>
-				<Modal open={true}>
-					<ModalWrap>
-						<ModalCloseButton onClick={this.handleClose}>
-							<ModalCloseIcon />
-						</ModalCloseButton>
-						<ModalHeader>
-							<Typography variant="body1">Unlock Device</Typography>
-						</ModalHeader>
-						<ModalBody>{this.renderModalBody()}</ModalBody>
-					</ModalWrap>
-				</Modal>
-			</div>
+			<Popup closeAction={this.handleClose} open text="Unlock Device">
+				{this.renderModalBody()}
+			</Popup>
 		);
 	}
 }

@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import {
-	withStyles,
 	List,
 	ListItem,
 	Drawer,
@@ -13,6 +12,7 @@ import {
 	// IconButton
 	Divider
 } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import {
 	DashboardMenuIcon,
@@ -26,7 +26,7 @@ import {
 	// KeyTooltip,
 	// TooltipArrow,
 	// MenuAffiliateIcon,
-	// MenuExportIcon
+	MenuExportIcon,
 	// InfoTooltip,
 	primary
 } from 'selfkey-ui';
@@ -91,6 +91,9 @@ const styles = theme => ({
 				fill: '#ffffff',
 				stroke: '#ffffff'
 			}
+		},
+		'&:focus': {
+			outline: 0
 		}
 	},
 	secondaryButtons: {
@@ -187,6 +190,7 @@ const dashboard = props => <Link to="/main/dashboard" {...props} />;
 const marketplace = props => <Link to="/main/marketplace" {...props} />;
 const addressBook = props => <Link to="/main/addressBook" {...props} />;
 const switchAccount = props => <Link to="/home" {...props} />;
+const exportAccount = props => <Link to="/main/export-wallet/warning" {...props} />;
 
 class Sidebar extends PureComponent {
 	state = {
@@ -211,7 +215,7 @@ class Sidebar extends PureComponent {
 	};
 
 	render() {
-		const { classes, onProfileNavigate } = this.props;
+		const { classes, onProfileNavigate, isExportableAccount } = this.props;
 
 		const sideList = (
 			<Grid
@@ -220,7 +224,7 @@ class Sidebar extends PureComponent {
 				justify="flex-start"
 				alignItems="flex-start"
 				className={`${classes.list} sidebarContainer`}
-				spacing={40}
+				spacing={5}
 			>
 				<Grid item style={{ padding: '21px 0', flexGrow: 0 }}>
 					<Grid
@@ -321,7 +325,6 @@ class Sidebar extends PureComponent {
 						<Divider className={`divider`} />
 					</List>
 				</Grid>
-				<Divider />
 				<Grid item style={{ padding: '50px 0 20px' }}>
 					{/* <Grid item className={classes.network}>
 						<Typography variant="overline" gutterBottom>
@@ -331,6 +334,7 @@ class Sidebar extends PureComponent {
 								placement="top-start"
 								className={classes.tooltip}
 								classes={{ tooltip: classes.customWidth }}
+								TransitionProps={{ timeout: 0 }}
 								title={
 									<React.Fragment>
 										<span>
@@ -388,18 +392,23 @@ class Sidebar extends PureComponent {
 								Help & Support
 							</Typography>
 						</ListItem>
-						{/* <ListItem
-							className={classes.listItem}
-							component={switchAccount}
-							key="switchAccount"
-						>
-							<ListItemIcon className={classes.listItemIcon}>
-								<MenuExportIcon />
-							</ListItemIcon>
-							<Typography variant="body2" color="secondary">
-								Export Wallet
-							</Typography>
-						</ListItem> */}
+
+						{isExportableAccount && (
+							<ListItem
+								className={classes.listItem}
+								component={exportAccount}
+								key="exportAccount"
+								title="Export Wallet"
+							>
+								<ListItemIcon className={classes.listItemIcon}>
+									<MenuExportIcon />
+								</ListItemIcon>
+								<Typography variant="body2" color="secondary">
+									Export Wallet
+								</Typography>
+							</ListItem>
+						)}
+
 						<ListItem
 							className={classes.listItem}
 							component={switchAccount}

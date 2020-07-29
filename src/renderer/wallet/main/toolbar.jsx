@@ -1,12 +1,6 @@
 import React, { PureComponent } from 'react';
-import {
-	createStyles,
-	withStyles,
-	Button,
-	Grid,
-	Typography,
-	ClickAwayListener
-} from '@material-ui/core';
+import { Button, Grid, Typography, ClickAwayListener } from '@material-ui/core';
+import { createStyles, withStyles } from '@material-ui/styles';
 import {
 	MenuNewIcon,
 	DropdownIcon,
@@ -24,9 +18,10 @@ const styles = theme => ({
 		backgroundColor: '#27333D',
 		boxShadow:
 			'inset 0 -1px 0 0 #475768, 1px 0 0 0 rgba(118,128,147,0.2), 2px 0 2px 0 rgba(0,0,0,0.2)',
+		height: '78px',
 		padding: '0 2%',
 		position: 'fixed',
-		zIndex: 1
+		zIndex: 2
 	},
 	logo: {
 		width: '38px',
@@ -356,7 +351,8 @@ class Toolbar extends PureComponent {
 			wallet,
 			onCreateCorporateProfileClick,
 			primaryToken,
-			showCorporate
+			showCorporate,
+			isExportableAccount
 		} = this.props;
 		return (
 			<div>
@@ -364,6 +360,7 @@ class Toolbar extends PureComponent {
 					isOpen={isSidebarOpen}
 					onClose={onToggleMenu}
 					onProfileNavigate={onProfileNavigate}
+					isExportableAccount={isExportableAccount}
 				/>
 				<Grid
 					container
@@ -380,12 +377,12 @@ class Toolbar extends PureComponent {
 					/>
 					<Grid item xs={9} className={classes.priceBox}>
 						<Grid container direction="row" justify="flex-end" alignItems="center">
-							<Grid item>
+							<div>
 								<PriceBox cryptoCurrency={primaryToken} />
-							</Grid>
-							<Grid item>
+							</div>
+							<div>
 								<PriceBox cryptoCurrency="ETH" />
-							</Grid>
+							</div>
 						</Grid>
 					</Grid>
 					<Grid item xs={2} className={classes.maxWidth}>

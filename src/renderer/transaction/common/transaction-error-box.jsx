@@ -1,29 +1,40 @@
 import * as React from 'react';
-import { Grid, withStyles, Typography, Divider } from '@material-ui/core';
+import { Grid, Typography, Divider } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import { WarningShieldIcon, Copy } from 'selfkey-ui';
 import Popup from '../../common/popup';
 
-const styles = theme => ({});
+const styles = theme => ({
+	divider: {
+		margin: '30px 0 20px'
+	}
+});
 
 export const TransactionErrorBox = withStyles(styles)(
-	({ children, address, closeAction, open = true, subtitle }) => (
-		<Popup open={open} closeAction={closeAction} text="Transaction Notice">
+	({ classes, children, address, closeAction, open = true, subtitle, token = 'KEY' }) => (
+		<Popup open={open} closeAction={closeAction} text="Transaction Confirmation">
 			<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 				<Grid item xs={2}>
 					<WarningShieldIcon />
 				</Grid>
 				<Grid item xs={10}>
 					<Grid container direction="column" justify="flex-start" alignItems="flex-start">
-						<Typography variant="h2">{subtitle} </Typography>
+						{subtitle && (
+							<Typography variant="h1" gutterBottom>
+								{subtitle}
+							</Typography>
+						)}
 						{children}
 						{address && (
 							<>
-								<Divider />
-								<Typography variant="body1" color="secondary">
-									Your Address to receive KEY:
+								<Divider className={classes.divider} />
+								<Typography variant="body2">
+									Your Address to receive {token}:
 								</Typography>
 								<Grid container alignItems="center">
-									<Typography variant="body1">{address}</Typography>
+									<Typography variant="subtitle1" color="secondary">
+										{address}
+									</Typography>
 									<Copy text={address} />
 								</Grid>
 							</>

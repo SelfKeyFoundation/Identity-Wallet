@@ -1,18 +1,12 @@
 import React, { PureComponent } from 'react';
-import { Modal, Typography, Grid, Paper, Button, Input, InputAdornment } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
+import { Typography, Grid, Paper, Button, Input, InputAdornment } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 
-import {
-	ModalWrap,
-	ModalCloseButton,
-	ModalHeader,
-	ModalBody,
-	ModalCloseIcon,
-	ClearIcon
-} from 'selfkey-ui';
+import { ClearIcon } from 'selfkey-ui';
 import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
+import { Popup } from '../../../common';
 
 const boxComponentStyles = theme => ({
 	square: {
@@ -95,7 +89,7 @@ class EnterPIN extends PureComponent {
 	renderModalBody = () => {
 		const { classes } = this.props;
 		return (
-			<Grid container direction="column" justify="center" alignItems="center" spacing={40}>
+			<Grid container direction="column" justify="center" alignItems="center" spacing={5}>
 				<Grid
 					container
 					direction="column"
@@ -116,7 +110,7 @@ class EnterPIN extends PureComponent {
 						direction="column"
 						justify="center"
 						alignItems="center"
-						spacing={24}
+						spacing={3}
 					>
 						<Grid item>
 							<Grid
@@ -124,7 +118,7 @@ class EnterPIN extends PureComponent {
 								direction="row"
 								justify="center"
 								alignItems="center"
-								spacing={24}
+								spacing={3}
 							>
 								<Grid item>
 									<Button
@@ -152,7 +146,7 @@ class EnterPIN extends PureComponent {
 								direction="row"
 								justify="center"
 								alignItems="center"
-								spacing={24}
+								spacing={3}
 							>
 								<Grid item>
 									<Button
@@ -180,7 +174,7 @@ class EnterPIN extends PureComponent {
 								direction="row"
 								justify="center"
 								alignItems="center"
-								spacing={24}
+								spacing={3}
 							>
 								<Grid item>
 									<Button
@@ -231,7 +225,7 @@ class EnterPIN extends PureComponent {
 						direction="row"
 						justify="flex-start"
 						alignItems="center"
-						spacing={24}
+						spacing={3}
 					>
 						<Grid item>
 							<Button variant="contained" size="large" onClick={this.handleEnter}>
@@ -251,28 +245,9 @@ class EnterPIN extends PureComponent {
 
 	render() {
 		return (
-			<div>
-				<Modal open={true}>
-					<ModalWrap>
-						<ModalCloseButton onClick={this.handleCancel}>
-							<ModalCloseIcon style={{ marginTop: '20px' }} />
-						</ModalCloseButton>
-						<ModalHeader>
-							<Grid
-								container
-								direction="row"
-								justify="space-between"
-								alignItems="center"
-							>
-								<Grid item>
-									<Typography variant="body1">Trezor PIN</Typography>
-								</Grid>
-							</Grid>
-						</ModalHeader>
-						<ModalBody>{this.renderModalBody()}</ModalBody>
-					</ModalWrap>
-				</Modal>
-			</div>
+			<Popup closeAction={this.handleCancel} open text="Trezor PIN">
+				{this.renderModalBody()}
+			</Popup>
 		);
 	}
 }

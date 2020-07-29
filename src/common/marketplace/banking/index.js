@@ -82,6 +82,9 @@ export const bankingSelectors = {
 				b.accountType = b.data.type ? b.data.type.toLowerCase() : null;
 				b.walletAddress = selectVendorWalletAddress(b);
 				b.didAddress = selectVendorDidAddress(b);
+				// TODO: in the future should be provided by the API
+				b.whatYouGet =
+					'Bank Account opening requirements are subject to change at the discretion of the bank. There might be additional fees charged by the bank itself. Bank account opening is not guaranteed and is subject to the bank policies and compliance department. There might be restrictions on UBO nationalities, business activities and/or jurisdictions. A refund is guaranteed if the account is not successfully opened, but a 15% administrative fee applies.';
 				return b;
 			}),
 	selectBankTypeByFilter: (state, filter, entityType) =>

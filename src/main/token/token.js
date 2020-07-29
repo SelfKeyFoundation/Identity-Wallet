@@ -1,4 +1,5 @@
 import BaseModel from '../common/base-model';
+import CONFIG from 'common/config';
 
 const TABLE_NAME = 'tokens';
 
@@ -19,6 +20,8 @@ export class Token extends BaseModel {
 				id: { type: 'integer' },
 				symbol: { type: 'string' },
 				decimal: { type: 'integer' },
+				networkId: { type: 'integer' },
+				type: { type: 'string', default: 'erc-20' },
 				address: { type: 'string' },
 				icon: { type: 'binary' },
 				isCustom: { type: 'integer' }
@@ -27,7 +30,7 @@ export class Token extends BaseModel {
 	}
 
 	static create(itm) {
-		return this.query().insertAndFetch(itm);
+		return this.query().insertAndFetch({ ...itm, networkId: CONFIG.chainId });
 	}
 
 	static update(itm) {
@@ -35,19 +38,25 @@ export class Token extends BaseModel {
 	}
 
 	static findAll() {
-		return this.query();
+		return this.query().where({ networkId: CONFIG.chainId });
 	}
 
 	static findByAddress(address) {
-		return this.query().where({ address });
+		return this.query().where({ address, networkId: CONFIG.chainId });
 	}
 
 	static findBySymbol(symbol) {
-		return this.query().where({ symbol: (symbol || '').toUpperCase() });
+		return this.query().where({
+			symbol: (symbol || '').toUpperCase(),
+			networkId: CONFIG.chainId
+		});
 	}
 
 	static findOneBySymbol(symbol) {
-		return this.query().findOne({ symbol: (symbol || '').toUpperCase() });
+		return this.query().findOne({
+			symbol: (symbol || '').toUpperCase(),
+			networkId: CONFIG.chainId
+		});
 	}
 }
 

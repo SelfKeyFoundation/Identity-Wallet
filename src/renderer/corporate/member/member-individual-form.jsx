@@ -1,7 +1,8 @@
 import React from 'react';
-import { Typography, Input, Select, MenuItem } from '@material-ui/core';
-import { KeyboardArrowDown } from '@material-ui/icons';
-import { withStyles } from '@material-ui/core/styles';
+import { Typography, Input, Select, MenuItem, FormControl } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { SelectDropdownIcon } from 'selfkey-ui';
+import { InputTitle } from '../../common';
 
 const styles = theme => ({
 	regularText: {
@@ -62,23 +63,6 @@ const styles = theme => ({
 		justifyContent: 'space-between',
 		width: '100%'
 	}
-});
-
-const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => {
-	return (
-		<div>
-			<Typography variant="overline" gutterBottom>
-				{title}
-				{optional ? (
-					<Typography variant="overline" className={classes.optional}>
-						(optional)
-					</Typography>
-				) : (
-					'*'
-				)}
-			</Typography>
-		</div>
-	);
 });
 
 const onCountryChange = (evt, field, countries, onFieldChange) => {
@@ -147,57 +131,77 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 			<div className={classes.inputWrap}>
 				<div className={`${classes.inputBox} ${classes.flexColumn}`}>
 					<InputTitle title="Citizenship" />
-					<Select
-						className={classes.select}
-						onChange={e => onCountryChange(e, 'nationality', countries, onFieldChange)}
-						value={nationality ? nationality.country : null}
-						name="nationality"
-						error={errors.nationality}
-						disableUnderline
-						IconComponent={KeyboardArrowDown}
-						input={<Input disableUnderline />}
-					>
-						<MenuItem value="">
-							<em>Choose...</em>
-						</MenuItem>
-						{countries.map(item => (
-							<MenuItem key={item} value={item.country}>
-								{item.name}
+					<FormControl variant="filled">
+						<Select
+							className={classes.select}
+							onChange={e =>
+								onCountryChange(e, 'nationality', countries, onFieldChange)
+							}
+							value={nationality ? nationality.country : null}
+							name="nationality"
+							error={errors.nationality}
+							disableUnderline
+							displayEmpty
+							IconComponent={SelectDropdownIcon}
+							input={<Input disableUnderline />}
+						>
+							<MenuItem value={null}>
+								<Typography
+									className="choose"
+									variant="subtitle1"
+									color="textSecondary"
+								>
+									Choose...
+								</Typography>
 							</MenuItem>
-						))}
-					</Select>
-					{errors.nationality && (
-						<Typography variant="subtitle2" color="error" gutterBottom>
-							{errors.nationality}
-						</Typography>
-					)}
+							{countries.map(item => (
+								<MenuItem key={item} value={item.country}>
+									{item.name}
+								</MenuItem>
+							))}
+						</Select>
+						{errors.nationality && (
+							<Typography variant="subtitle2" color="error" gutterBottom>
+								{errors.nationality}
+							</Typography>
+						)}
+					</FormControl>
 				</div>
 				<div className={`${classes.inputBox} ${classes.flexColumn}`}>
 					<InputTitle title="Residency" />
-					<Select
-						className={classes.select}
-						onChange={e => onCountryChange(e, 'country', countries, onFieldChange)}
-						value={country ? country.country : null}
-						name="country"
-						error={errors.country}
-						disableUnderline
-						IconComponent={KeyboardArrowDown}
-						input={<Input disableUnderline />}
-					>
-						<MenuItem value="">
-							<em>Choose...</em>
-						</MenuItem>
-						{countries.map(item => (
-							<MenuItem key={item.country} value={item.country}>
-								{item.name}
+					<FormControl variant="filled">
+						<Select
+							className={classes.select}
+							onChange={e => onCountryChange(e, 'country', countries, onFieldChange)}
+							value={country ? country.country : null}
+							name="country"
+							displayEmpty
+							error={errors.country}
+							disableUnderline
+							IconComponent={SelectDropdownIcon}
+							input={<Input disableUnderline />}
+						>
+							<MenuItem value={null}>
+								<Typography
+									className="choose"
+									variant="subtitle1"
+									color="textSecondary"
+								>
+									Choose...
+								</Typography>
 							</MenuItem>
-						))}
-					</Select>
-					{errors.country && (
-						<Typography variant="subtitle2" color="error" gutterBottom>
-							{errors.country}
-						</Typography>
-					)}
+							{countries.map(item => (
+								<MenuItem key={item.country} value={item.country}>
+									{item.name}
+								</MenuItem>
+							))}
+						</Select>
+						{errors.country && (
+							<Typography variant="subtitle2" color="error" gutterBottom>
+								{errors.country}
+							</Typography>
+						)}
+					</FormControl>
 				</div>
 			</div>
 

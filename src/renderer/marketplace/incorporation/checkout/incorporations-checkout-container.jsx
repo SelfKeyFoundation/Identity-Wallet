@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import { BigNumber } from 'bignumber.js';
 import config from 'common/config';
 import EthUnits from 'common/utils/eth-units';
@@ -115,6 +115,7 @@ class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent
 				initialDocsText={`You will be required to provide a few basic information about yourself like full name and email. This will be done through SelfKey ID Wallet.`}
 				kycProcessText={`You will undergo a standard KYC process and our team will get in touch with you to make sure we have all the information needed.`}
 				getFinalDocsText={`Once the Incorporation process is done you will receive all the relevant documents, for your new company, on your email.`}
+				whatYouGet={program.whatYouGet}
 			/>
 		);
 	}

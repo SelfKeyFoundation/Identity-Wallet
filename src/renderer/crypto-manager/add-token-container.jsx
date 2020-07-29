@@ -1,19 +1,12 @@
 import React, { PureComponent } from 'react';
-import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { tokensOperations, tokensSelectors } from 'common/tokens';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { walletTokensOperations } from 'common/wallet-tokens';
-import {
-	Grid,
-	Button,
-	Typography,
-	withStyles,
-	Input,
-	IconButton,
-	CircularProgress
-} from '@material-ui/core';
+import history from 'common/store/history';
+import { Grid, Button, Typography, Input, IconButton, CircularProgress } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import {
 	MyCryptoLargeIcon,
 	ModalWrap,
@@ -25,6 +18,10 @@ import {
 } from 'selfkey-ui';
 
 const styles = theme => ({
+	wrap: {
+		margin: 0,
+		width: '100%'
+	},
 	back: {
 		position: 'absolute',
 		top: '100px',
@@ -110,6 +107,7 @@ class AddTokenContainerComponent extends PureComponent {
 	componentDidMount() {
 		this.props.dispatch(tokensOperations.loadTokensOperation());
 		this.resetErrors();
+		window.scrollTo(0, 0);
 	}
 
 	componentDidUpdate(prevProps) {
@@ -137,7 +135,7 @@ class AddTokenContainerComponent extends PureComponent {
 
 	handleBackClick = evt => {
 		evt && evt.preventDefault();
-		this.props.dispatch(push('/main/crypto-manager'));
+		history.getHistory().goBack();
 	};
 
 	handleFieldChange = async event => {
@@ -233,7 +231,8 @@ class AddTokenContainerComponent extends PureComponent {
 				direction="column"
 				justify="flex-start"
 				alignItems="center"
-				spacing={32}
+				spacing={4}
+				className={classes.wrap}
 			>
 				<BackButton onclick={this.handleBackClick} />
 				<Grid item className={classes.topSpace}>
@@ -268,7 +267,7 @@ class AddTokenContainerComponent extends PureComponent {
 							direction="column"
 							justify="center"
 							alignItems="stretch"
-							spacing={32}
+							spacing={4}
 						>
 							<Grid item>
 								<Typography variant="overline" gutterBottom>
@@ -277,6 +276,7 @@ class AddTokenContainerComponent extends PureComponent {
 										interactive
 										placement="top-start"
 										className={classes.tooltip}
+										TransitionProps={{ timeout: 0 }}
 										title={
 											<React.Fragment>
 												<span>
@@ -361,7 +361,7 @@ class AddTokenContainerComponent extends PureComponent {
 								/>
 							</Grid>
 							<Grid item>
-								<Grid container spacing={24}>
+								<Grid container spacing={3}>
 									<Grid item>
 										<Button
 											variant="contained"

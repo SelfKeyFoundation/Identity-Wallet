@@ -10,7 +10,7 @@ import {
 	AddressBookIcon,
 	SmallTableHeadRow
 } from 'selfkey-ui';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/styles';
 import {
 	Grid,
 	Typography,
@@ -57,11 +57,11 @@ class AddressBookContainer extends PureComponent {
 	}
 
 	handleAdd = () => {
-		this.props.dispatch(push('addressBookAdd'));
+		this.props.dispatch(push('/main/addressBookAdd'));
 	};
 
 	handleEdit = id => {
-		this.props.dispatch(push(`addressBookEdit/${id}`));
+		this.props.dispatch(push(`/main/addressBookEdit/${id}`));
 	};
 
 	handleDelete = id => {
@@ -78,7 +78,7 @@ class AddressBookContainer extends PureComponent {
 				direction="column"
 				justify="flex-start"
 				alignItems="center"
-				spacing={32}
+				spacing={4}
 			>
 				<Grid item>
 					<AddressBookIcon />

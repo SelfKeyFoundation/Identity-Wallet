@@ -1,20 +1,21 @@
 import React from 'react';
-import { withStyles, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
 import classNames from 'classnames';
 import { CheckOutlined } from '@material-ui/icons';
-import { primary, success, secondary, warning, error, AttributeAlertIcon } from 'selfkey-ui';
+import { primary, success, typography, warning, error, AttributeAlertIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	alert: {
-		border: `1px solid ${secondary}`,
+		border: `1px solid ${typography}`,
 		minHeight: '50px',
 		width: '100%',
-		borderRadius: 0,
+		borderRadius: '4px',
 		padding: '15px',
 		boxSizing: 'border-box',
-		color: secondary,
+		color: typography,
 		'& svg': {
-			fill: secondary
+			fill: typography
 		}
 	},
 	success: {
