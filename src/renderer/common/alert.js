@@ -19,6 +19,7 @@ const styles = theme => ({
 		}
 	},
 	success: {
+		backgroundColor: '#313D49',
 		border: `1px solid ${success}`,
 		color: success,
 		'& svg': {
@@ -69,6 +70,11 @@ const styles = theme => ({
 		maxHeight: '34px',
 		minHeight: '34px'
 	},
+	children: {
+		alignItems: 'center',
+		display: 'flex',
+		minHeight: '34px'
+	},
 	alertWrap: {
 		display: 'flex',
 		minHeight: '36px'
@@ -89,7 +95,7 @@ export const Alert = withStyles(styles)(
 				<Grid item className={classes.iconWrap}>
 					{icon || <AlertIcon type={type} />}
 				</Grid>
-				<Grid item xs className={xtraClass}>
+				<Grid item xs className={`${classes.children} ${xtraClass}`}>
 					{children}
 				</Grid>
 			</div>
