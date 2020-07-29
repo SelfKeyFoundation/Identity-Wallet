@@ -25,16 +25,16 @@ class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 	};
 
 	async createOrder() {
-		const { program, companyCode } = this.props;
+		const { product, vendor, vendorId, productId } = this.props;
+		// const { program, companyCode } = this.props;
 		// const companyCode = 'companyCode';
 		const application = this.getLastApplication();
-		const price = this.priceInKEY(program.price);
+		const price = this.priceInKEY(product.price);
 		// const price = 2017;
-		const walletAddress = program.walletAddress;
 		// const walletAddress = '0x24233C848BdA9AD4559772763aC869d6305D177e';
-		const vendorId = 'selfkey_certifier';
-		const vendorDID = program.didAddress;
-		// const vendorDID = '0x96a101c36b1ac67098d85e4fac750ac538ed9800942ac5def9272c19accced9e';
+		// const vendorId = 'selfkey_certifier';
+		// const vendorDID = program.didAddress;
+		const vendorDID = '0x96a101c36b1ac67098d85e4fac750ac538ed9800942ac5def9272c19accced9e';
 		const vendorName = VENDOR_NAME;
 		/*
 		const { product, vendor, vendorId, productId } = this.props;
@@ -55,7 +55,7 @@ class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 				vendorName,
 				backUrl: this.cancelRoute(),
 				completeUrl: this.paymentCompleteRoute(),
-				vendorWallet: featureIsEnabled('paymentContract') ? '' : vendor.paymentAddres
+				vendorWallet: featureIsEnabled('paymentContract') ? '' : vendor.paymentAddress
 			})
 		);
 	}

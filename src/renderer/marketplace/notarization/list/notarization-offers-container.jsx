@@ -34,10 +34,13 @@ const mapStateToProps = (state, props) => {
 	const authenticated = true;
 	const templateId = '5dd3acee96884e657768eac4';
 	const vendorId = 'selfkey_certifier';
+	let productId = false;
 
 	const identity = identitySelectors.selectIdentity(state);
 	const profile = identitySelectors.selectIndividualProfile(state);
 	const notaries = marketplaceSelectors.selectNotaries(state, identity.type);
+
+	console.log({ identity, profile, notaries });
 
 	// Find country from identitiy attributes
 	// Select US or international product
@@ -47,7 +50,10 @@ const mapStateToProps = (state, props) => {
 			'http://platform.selfkey.org/schema/attribute/nationality.json'
 	);
 	const nationality = countryAttribute ? countryAttribute.data.value.country : '';
-	const productId = nationality === 'US' ? notaries[0].sku : notaries[1].sku;
+
+	if (notaries.length) {
+		productId = nationality === 'US' ? notaries[0].sku : notaries[1].sku;
+	}
 
 	return {
 		templateId,

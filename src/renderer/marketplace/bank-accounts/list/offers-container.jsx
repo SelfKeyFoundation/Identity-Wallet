@@ -5,7 +5,6 @@ import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
 import { pricesSelectors } from 'common/prices';
 import { identitySelectors } from 'common/identity';
-import { BankingOffersPage } from './offers-page';
 import { marketplaceSelectors } from 'common/marketplace';
 import { BankingOffersPage } from './offers-page';
 import { MarketplaceBankAccountsComponent } from '../common/marketplace-bank-accounts-component';

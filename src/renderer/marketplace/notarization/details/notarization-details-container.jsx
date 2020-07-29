@@ -34,12 +34,6 @@ class NotarizationDetailsContainerComponent extends MarketplaceNotariesComponent
 	onTabChange = tab => this.setState({ tab });
 
 	onApplyClick = () => {
-		const { rp, identity, vendorId } = this.props;
-		const selfkeyIdRequiredRoute = '/main/marketplace/selfkey-id-required';
-		const selfkeyDIDRequiredRoute = '/main/marketplace/selfkey-did-required';
-		const requestNotarizationRoute = '/main/marketplace/notaries/process';
-		const authenticated = true;
-
 		const { rp, identity, vendorId, dispatch } = this.props;
 		const authenticated = true;
 

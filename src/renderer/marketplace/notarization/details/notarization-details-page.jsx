@@ -6,31 +6,10 @@ import { MarketplaceNotariesIcon, NotarizeDocumentIcon } from 'selfkey-ui';
 import { Alert } from '../../../common';
 import NotarizationDetailsPageTabs from './notarization-details-tabs';
 import KycRequirementsList from '../../../kyc/requirements/requirements-list';
-import request from 'request';
-
-const notaryTable = () => {
-	return new Promise(async (resolve, reject) => {
-		try {
-			await request(
-				'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=InventoryDev',
-				(e, r, b) => {
-					let ray = JSON.parse(b).entities;
-					console.log(ray[1]);
-					// let result = ray.filter(data => data.category === 'notaries');
-					let result = ray[1].data.price;
-					console.log(result);
-					resolve(result);
-				}
-			);
-		} catch (e) {
-			reject(e);
-		}
-	});
-};
-
-// import request from 'request';
 
 /*
+import request from 'request';
+
 const notaryTable = () => {
 	return new Promise(async (resolve, reject) => {
 		try {
@@ -199,7 +178,8 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 		onBackClick,
 		loading,
 		kycRequirements,
-		keyRate
+		keyRate,
+		product
 	} = props;
 	return (
 		<div>
@@ -217,7 +197,34 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 				</Button>
 			</div>
 			{loading && <PageLoading />}
-			{!loading && (
+			{!loading && !product && (
+				<div>
+					<div id="notarizeDocuments" className={classes.pageContent}>
+						<div id="header" className={classes.header}>
+							<MarketplaceNotariesIcon className={classes.icon} />
+							<Typography variant="h1" className={classes.headerTitle}>
+								Notaries
+							</Typography>
+						</div>
+					</div>
+					<div className={classes.container}>
+						<div id="notarizeDocumentsDetails" className={classes.title}>
+							<Typography variant="body2" className="region">
+								Get Your Documents Notarized!
+							</Typography>
+						</div>
+						<div className={classes.alert}>
+							<Alert type="warning">
+								<Typography variant="subtitle2" color="secondary">
+									{`Unfortunately, we don't have any notaries available on your
+									jurisdiction, check again later.`}
+								</Typography>
+							</Alert>
+						</div>
+					</div>
+				</div>
+			)}
+			{!loading && product && (
 				<div>
 					<div id="notarizeDocuments" className={classes.pageContent}>
 						<div id="header" className={classes.header}>
