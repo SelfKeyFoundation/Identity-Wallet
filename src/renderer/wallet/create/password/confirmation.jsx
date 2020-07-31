@@ -41,7 +41,9 @@ const styles = theme => ({
 	}
 });
 
-const goBackCreatePassword = props => <Link to="/createPassword" {...props} />;
+const goBackCreatePassword = React.forwardRef((props, ref) => (
+	<Link to="/createPassword" {...props} ref={ref} />
+));
 
 class PasswordConfirmation extends PureComponent {
 	state = {

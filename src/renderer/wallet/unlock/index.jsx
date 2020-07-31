@@ -33,7 +33,7 @@ const styles = theme => ({
 	}
 });
 
-const gotBackHome = props => <Link to="/home" {...props} />;
+const gotBackHome = React.forwardRef((props, ref) => <Link to="/home" {...props} ref={ref} />);
 
 const unlockOptionStyle = theme => ({
 	box: {
