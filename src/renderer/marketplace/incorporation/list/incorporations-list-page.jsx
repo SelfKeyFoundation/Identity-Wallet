@@ -17,7 +17,7 @@ const styles = theme => ({
 		justifyContent: 'flex-start',
 		paddingBottom: '30px',
 		marginBottom: '40px',
-		marginTop: '50px'
+		marginTop: '70px'
 	},
 	headerTitle: {
 		paddingLeft: '21px'
@@ -28,6 +28,10 @@ const styles = theme => ({
 	},
 	tabs: {
 		marginBottom: '15px'
+	},
+	backButtonContainer: {
+		left: '75px',
+		position: 'absolute'
 	},
 	'@media screen and (min-width: 1230px)': {
 		pageContent: {
@@ -40,7 +44,7 @@ const IncorporationsListPage = withStyles(styles)(
 	({ classes, loading, data, keyRate, onDetailsClick, onBackClick }) => {
 		return (
 			<Grid container>
-				<Grid item>
+				<Grid item className={classes.backButtonContainer}>
 					<BackButton onclick={onBackClick} />
 				</Grid>
 				{loading && <PageLoading />}
