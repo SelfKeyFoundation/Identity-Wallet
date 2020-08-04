@@ -114,7 +114,9 @@ class DepositContentComponent extends PureComponent {
 										onChange={this.handleUnderstoodChange}
 										control={
 											<Checkbox
-												color={error && !understood ? 'primary' : ''}
+												color={
+													error && !understood ? 'primary' : 'secondary'
+												}
 												style={{
 													color: 'transparent',
 													border:
