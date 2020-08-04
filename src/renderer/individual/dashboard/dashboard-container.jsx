@@ -162,6 +162,20 @@ class IndividualDashboardContainerComponent extends PureComponent {
 		return dispatch(kycOperations.loadRelyingParty(application.rpName, true));
 	};
 
+	handlePostMessage = async ({ application, message }) => {
+		console.log(application);
+		if (message) {
+			await this.props.dispatch(
+				kycOperations.postKYCApplicationChat({
+					rpName: application.rpName,
+					application,
+					message
+				})
+			);
+			return this.props.dispatch(kycOperations.loadRelyingParty(application.rpName, true));
+		}
+	};
+
 	render() {
 		const { profile } = this.props;
 		const { popup } = this.state;
@@ -214,6 +228,7 @@ class IndividualDashboardContainerComponent extends PureComponent {
 					onEditDocument={this.handleEditAttribute}
 					onDeleteDocument={this.handleDeleteAttribute}
 					onAvatarClick={this.handleEditAvatar}
+					onSendMessage={this.handlePostMessage}
 					didComponent={<RegisterDidCardContainer returnPath={'/main/individual'} />}
 					onApplicationAdditionalRequirements={
 						this.handleApplicationAdditionalRequirements

@@ -15,14 +15,14 @@ export default class MarketplaceNotariesComponent extends MarketplaceComponent {
 	requestNotarizationRoute = () => this.processPath();
 	checkoutRoute = () => this.processPath();
 
-	payRoute = () => {
+	payRoute = documentList => {
 		const { templateId, vendorId, productId } = this.props;
-		return `${MARKETPLACE_NOTARIES_ROOT_PATH}/pay/${templateId}/${vendorId}/${productId}`;
+		return `${MARKETPLACE_NOTARIES_ROOT_PATH}/pay/${templateId}/${vendorId}/${productId}/${documentList}`;
 	};
 	cancelRoute = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}`;
 	paymentCompleteRoute = () => {
 		const { templateId, vendorId, productId } = this.props;
-		return `${MARKETPLACE_NOTARIES_ROOT_PATH}/paymentComplete/${templateId}/${vendorId}/${productId}`;
+		return `${MARKETPLACE_NOTARIES_ROOT_PATH}/payment-complete/${templateId}/${vendorId}/${productId}`;
 	};
 	tocPath = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}/toc`;
 	tocDisagreementPath = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}/tocDisagreement`;

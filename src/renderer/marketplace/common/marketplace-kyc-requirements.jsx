@@ -2,7 +2,7 @@ import React from 'react';
 import { KycRequirementsList } from '../../kyc/requirements/requirements-list';
 
 const MarketplaceKycRequirements = props => {
-	const { requirements, templateId } = props;
+	const { requirements, templateId, title = 'KYC Requirements and Form' } = props;
 
 	// No kyc-chain templateId is associated with this program
 	// Hide the kyc requirements block
@@ -13,13 +13,7 @@ const MarketplaceKycRequirements = props => {
 	// Loading is done upstream and props are updated when loaded
 	const loading = !requirements;
 
-	return (
-		<KycRequirementsList
-			requirements={requirements}
-			loading={loading}
-			title="KYC Requirements and Forms"
-		/>
-	);
+	return <KycRequirementsList requirements={requirements} loading={loading} title={title} />;
 };
 
 export { MarketplaceKycRequirements };

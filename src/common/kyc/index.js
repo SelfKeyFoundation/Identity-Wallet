@@ -48,8 +48,6 @@ export const kycTypes = {
 	KYC_APPLICATION_CURRENT_CLEAR: 'kyc/application/current/clear',
 	KYC_APPLICATION_CURRENT_CANCEL: 'kyc/application/current/cancel',
 	KYC_APPLICATION_CURRENT_SUBMIT: 'kyc/application/current/submit',
-	KYC_APPLICATION_CHAT_LOAD: 'kyc/application/chat/load',
-	KYC_APPLICATION_CHAT_CREATE: 'kyc/application/chat/create',
 	KYC_APPLICATION_CURRENT_MEMBERS_SUBMIT: 'kyc/application/current/members/submit',
 	KYC_RP_MEMBER_APPLICATION_CREATE: 'kyc/applications/current/members/create',
 	KYC_APPLICATIONS_LOAD: 'kyc/applications/load',
@@ -59,7 +57,11 @@ export const kycTypes = {
 	KYC_APPLICATIONS_PROCESSING: 'kyc/applications/processing',
 	KYC_APPLICATIONS_PROCESSING_SET: 'kyc/applications/set/processing',
 	KYC_APPLICATIONS_RESET: 'kyc/applications/reset',
-	KYC_APPLICATIONS_REFRESH: 'kyc/applications/refresh'
+	KYC_APPLICATIONS_REFRESH: 'kyc/applications/refresh',
+	KYC_ADD_ADDITIONAL_REQUIREMENTS: 'kyc/applications/requirements/add',
+	KYC_APPLICATION_MESSAGE_SET: 'kyc/application/messages/set',
+	KYC_APPLICATION_MESSAGE_CLEAR: 'kyc/application/messages/clear',
+	KYC_POST_CHAT_MESSAGE: 'kyc/application/chat/post'
 };
 
 const devRPDetails = {
@@ -329,6 +331,8 @@ export const kycSelectors = {
 				`Unable to select template ${templateId} for ${rpName}, check if instance contains this template ID`
 			);
 			return null;
+		} else {
+			log.info(`Selected ${templateId} for ${rpName}`);
 		}
 		const templateAttributes = template.attributes || [];
 		const attributesBySchema = templateAttributes.reduce((acc, curr) => {
@@ -465,6 +469,9 @@ export const kycSelectors = {
 	},
 	selectProcessing(state) {
 		return this.kycSelector(state).processing;
+	},
+	selectMessages(state) {
+		return this.kycSelector(state).messages;
 	}
 };
 
@@ -541,6 +548,17 @@ export const kycActions = {
 		return {
 			type: kycTypes.KYC_APPLICATIONS_PROCESSING,
 			payload: processing
+		};
+	},
+	setMessages(message) {
+		return {
+			type: kycTypes.KYC_APPLICATION_MESSAGE_SET,
+			payload: message
+		};
+	},
+	clearMessages() {
+		return {
+			type: kycTypes.KYC_APPLICATION_MESSAGE_CLEAR
 		};
 	}
 };
@@ -651,9 +669,10 @@ const loadRelyingPartyOperation = (
 		if (authenticate) {
 			applications = await session.listKYCApplications();
 			for (const application of applications) {
-				// application.messages = await session.getKYCApplicationChat(application.id);
+				application.messages = await session.getKYCApplicationChat(application.id);
+				// console.log(application.messages);
 				// application.messages = [];
-				// const formattedMessages = messageFilter(application.messages);
+				const formattedMessages = messageFilter(application.messages);
 				const template = templates.find(t => t.id === application.template);
 				await dispatch(
 					kycOperations.updateApplicationsOperation({
@@ -665,8 +684,8 @@ const loadRelyingPartyOperation = (
 						owner: application.owner,
 						scope: application.scope,
 						applicationDate: application.createdAt,
-						title: template ? template.name : rpName
-						// messages: formattedMessages
+						title: template ? template.name : rpName,
+						messages: formattedMessages
 					})
 				);
 			}
@@ -745,6 +764,55 @@ const loadRelyingPartiesForVendors = (
 	} finally {
 		hasLoader && (await dispatch(kycActions.setProcessingAction(false)));
 	}
+};
+
+const postChatMessage = ({ rpName, application, message }) => async (dispatch, getState) => {
+	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
+	if (!rp || !rp.session) throw new Error(`relying party ${rpName} does not exist`);
+
+	if (!application || !application.id) {
+		throw new Error('application does not exist');
+	}
+	/*
+	if (!rp.templates.find(tpl => tpl.id === templateId)) {
+		throw new Error('template does not exist');
+	}
+	*/
+	const identity = identitySelectors.selectIdentity(getState());
+	if (!identity) {
+		return;
+	}
+
+	if (!rp.session.isActive()) {
+		await rp.session.establish();
+	}
+
+	await rp.session.postKYCApplicationChat(application.id, message);
+};
+
+const addAdditionalTemplateRequirements = ({ rpName, application, attributes }) => async (
+	dispatch,
+	getState
+) => {
+	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
+	if (!rp || !rp.session) throw new Error('relying party does not exist');
+
+	if (!application || !application.id) {
+		throw new Error('application does not exist');
+	}
+	/*
+	if (!rp.templates.find(tpl => tpl.id === templateId)) {
+		throw new Error('template does not exist');
+	}
+	*/
+	const identity = identitySelectors.selectIdentity(getState());
+	if (!identity) return;
+
+	if (!rp.session.isActive()) {
+		await rp.session.establish();
+	}
+
+	await rp.session.addAdditionalTemplateRequirements(application.id, attributes);
 };
 
 const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title) => async (
@@ -977,7 +1045,8 @@ const startCurrentApplicationOperation = (
 	agreement,
 	vendor,
 	privacyPolicy,
-	termsOfService
+	termsOfService,
+	userMessage
 ) => async (dispatch, getState) => {
 	await dispatch(
 		kycActions.setCurrentApplication(
@@ -993,6 +1062,9 @@ const startCurrentApplicationOperation = (
 			termsOfService
 		)
 	);
+	if (userMessage) {
+		await dispatch(kycActions.setMessages(userMessage));
+	}
 	await dispatch(push(`/main/kyc/current-application/${rpName}`));
 };
 
@@ -1315,7 +1387,12 @@ export const kycOperations = {
 	loadRelyingPartiesForVendors: createAliasedAction(
 		kycTypes.KYC_RP_LOAD_FOR_VENDORS,
 		loadRelyingPartiesForVendors
-	)
+	),
+	addAdditionalTemplateRequirements: createAliasedAction(
+		kycTypes.KYC_ADD_ADDITIONAL_REQUIREMENTS,
+		addAdditionalTemplateRequirements
+	),
+	postKYCApplicationChat: createAliasedAction(kycTypes.KYC_POST_CHAT_MESSAGE, postChatMessage)
 };
 
 export const operations = {
@@ -1360,6 +1437,15 @@ export const clearCurrentApplicationReducer = state => {
 	return { ...state, currentApplication: null };
 };
 
+export const setMessagesReducer = (state, { payload }) => {
+	let messages = payload;
+	return { ...state, messages };
+};
+
+export const clearMessagesReducer = state => {
+	return { ...state, messages: null };
+};
+
 export const setCancelRoute = (state, { payload }) => {
 	return { ...state, cancelRoute: payload };
 };
@@ -1384,6 +1470,8 @@ export const reducers = {
 	deleteKYCApplicationReducer,
 	setCurrentApplicationReducer,
 	clearCurrentApplicationReducer,
+	setMessagesReducer,
+	clearMessagesReducer,
 	setCancelRoute,
 	setApplicationsReducer,
 	setProcessingReducer
@@ -1407,6 +1495,10 @@ export const reducer = (state = initialState, action) => {
 			return reducers.setApplicationsReducer(state, action);
 		case kycTypes.KYC_APPLICATIONS_PROCESSING:
 			return reducers.setProcessingReducer(state, action);
+		case kycTypes.KYC_APPLICATION_MESSAGE_SET:
+			return reducers.setMessagesReducer(state, action);
+		case kycTypes.KYC_APPLICATION_MESSAGE_CLEAR:
+			return reducers.createMessagesReducer(state, action);
 	}
 	return state;
 };

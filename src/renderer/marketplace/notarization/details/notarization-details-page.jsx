@@ -1,11 +1,9 @@
 import React from 'react';
-import { Typography, Button } from '@material-ui/core';
-import { withStyles } from '@material-ui/styles';
-import { PageLoading, ProgramPrice } from '../../common';
+import { Typography, Button, withStyles } from '@material-ui/core';
+import { PageLoading, ProgramPrice, MarketplaceKycRequirements } from '../../common';
 import { MarketplaceNotariesIcon, NotarizeDocumentIcon } from 'selfkey-ui';
 import { Alert } from '../../../common';
 import NotarizationDetailsPageTabs from './notarization-details-tabs';
-import KycRequirementsList from '../../../kyc/requirements/requirements-list';
 
 /*
 import request from 'request';
@@ -168,10 +166,7 @@ export const NotarizeApplicationButton = withStyles(styles)(
 );
 
 export const NotarizationDetailsPage = withStyles(styles)(props => {
-	// let price = await notaryTable();
-	let price = 0;
 	const {
-		classes,
 		tab,
 		onTabChange,
 		startNotarize,
@@ -179,8 +174,11 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 		loading,
 		kycRequirements,
 		keyRate,
-		product
+		product,
+		templateId
 	} = props;
+	const { classes, ...passedProps } = props;
+	const price = product.price ? product.price : 0;
 	return (
 		<div>
 			<div className={classes.backButtonContainer}>
@@ -196,7 +194,17 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 					</Typography>
 				</Button>
 			</div>
-			{loading && <PageLoading />}
+			{loading && (
+				<div className={classes.pageContent}>
+					<div id="header" className={classes.header}>
+						<MarketplaceNotariesIcon className={classes.icon} />
+						<Typography variant="h1" className={classes.headerTitle}>
+							Notaries
+						</Typography>
+					</div>
+					<PageLoading />
+				</div>
+			)}
 			{!loading && !product && (
 				<div>
 					<div id="notarizeDocuments" className={classes.pageContent}>
@@ -281,14 +289,15 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 							</div>
 							<div className={classes.tabs}>
 								<NotarizationDetailsPageTabs
-									{...props}
+									{...passedProps}
 									tab={tab}
 									onTabChange={onTabChange}
 								/>
 							</div>
-							<div className={classes.kyc}>
-								<KycRequirementsList
+							<div>
+								<MarketplaceKycRequirements
 									requirements={kycRequirements}
+									templateId={templateId}
 									title="KYC Requirements and Forms"
 								/>
 							</div>

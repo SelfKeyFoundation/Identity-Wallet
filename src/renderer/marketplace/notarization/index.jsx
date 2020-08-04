@@ -31,7 +31,7 @@ class MarketplaceNotariesComponent extends PureComponent {
 					component={RequestNotarizationContainer}
 				/>
 				<Route
-					path={`${path}/pay/:templateId/:vendorId/:productId`}
+					path={`${path}/pay/:templateId/:vendorId/:productId/:documentList`}
 					component={NotarizationPaymentContainer}
 				/>
 

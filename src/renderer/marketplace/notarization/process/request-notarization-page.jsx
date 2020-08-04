@@ -1,8 +1,9 @@
 import React from 'react';
 import { withStyles } from '@material-ui/styles';
-import { Button, Typography, IconButton, Divider } from '@material-ui/core';
-import { KeyTooltip, TooltipArrow, InfoTooltip, baseDark, grey, CloseButtonIcon } from 'selfkey-ui';
-import RequestDocumentsList from './request-documents-list-container';
+import { Button, Typography, Divider } from '@material-ui/core';
+import { baseDark, grey, CloseButtonIcon } from 'selfkey-ui';
+import { RequestDocumentsList } from './request-documents-list-container';
+import { NotariesServiceCost } from '../common/notaries-service-cost';
 
 const styles = theme => ({
 	container: {
@@ -90,139 +91,19 @@ const styles = theme => ({
 	}
 });
 
-const serviceCostStyle = theme => ({
-	serviceCost: {
-		marginBottom: '20px',
-		paddingBottom: '30px',
-		width: '100%'
-	},
-	priceTable: {
-		background: '#313D49',
-		margin: '20px 0 0',
-		padding: '20px'
-	},
-	priceRow: {
-		alignItems: 'center',
-		display: 'flex',
-		flexDirection: 'row',
-		justifyContent: 'flex-start',
-		padding: '10px 0',
-		'& div.rowItem': {
-			color: '#FFF',
-			width: '33%'
-		},
-		'& div.price': {
-			color: '#00C0D9',
-			fontWeight: 'bold',
-			textAlign: 'right',
-			'& .time': {
-				marginTop: '5px'
-			}
-		},
-		'& div.time': {
-			fontSize: '13px'
-		},
-		'& div.rowItem.transactionFee': {
-			color: theme.palette.secondary.main
-		}
-	},
-	bold: {
-		fontWeight: 600
-	}
-});
-
-export const ServiceCost = withStyles(serviceCostStyle)(({ classes }) => (
-	<div className={classes.serviceCost}>
-		<Typography variant="h2">Service Costs</Typography>
-		<div className={classes.priceTable}>
-			<div className={classes.priceRow}>
-				<div className="rowItem">
-					<Typography variant="h2">Cost</Typography>
-				</div>
-				<div className="rowItem price">
-					<Typography className={classes.bold} variant="body2" color="primary">
-						$25
-					</Typography>
-					<Typography variant="subtitle2" color="secondary">
-						2 x 211.831.319,192 KEY
-						<KeyTooltip
-							interactive
-							placement="top-start"
-							TransitionProps={{ timeout: 0 }}
-							title={
-								<React.Fragment>
-									<span>...</span>
-									<TooltipArrow />
-								</React.Fragment>
-							}
-						>
-							<IconButton aria-label="Info">
-								<InfoTooltip />
-							</IconButton>
-						</KeyTooltip>
-					</Typography>
-				</div>
-				<div className="rowItem price">
-					<Typography className={classes.bold} variant="body2" color="primary">
-						Total: $50
-					</Typography>
-					<Typography variant="subtitle2" color="secondary">
-						423.662.638,384 KEY
-						<KeyTooltip
-							interactive
-							placement="top-start"
-							TransitionProps={{ timeout: 0 }}
-							title={
-								<React.Fragment>
-									<span>...</span>
-									<TooltipArrow />
-								</React.Fragment>
-							}
-						>
-							<IconButton aria-label="Info">
-								<InfoTooltip />
-							</IconButton>
-						</KeyTooltip>
-					</Typography>
-				</div>
-			</div>
-			<div className={classes.priceRow}>
-				<div className="rowItem">
-					<Typography variant="body2" color="secondary">
-						Network Transaction Fee
-					</Typography>
-				</div>
-				<div className="rowItem time" />
-				<div className="rowItem price">
-					<Typography className={classes.bold} variant="body2" color="primary">
-						$0,01
-					</Typography>
-					<Typography variant="subtitle2" color="secondary">
-						0,3237484 ETH
-						<KeyTooltip
-							interactive
-							placement="top-start"
-							TransitionProps={{ timeout: 0 }}
-							title={
-								<React.Fragment>
-									<span>...</span>
-									<TooltipArrow />
-								</React.Fragment>
-							}
-						>
-							<IconButton aria-label="Info">
-								<InfoTooltip />
-							</IconButton>
-						</KeyTooltip>
-					</Typography>
-				</div>
-			</div>
-		</div>
-	</div>
-));
-
 export const RequestNotarizationPage = withStyles(styles)(props => {
-	const { classes, documents, onBackClick, handleAddDocument, onStartClick } = props;
+	const { documents, selectedDocuments, product, keyRate, gasEthFee, gasUsdFee } = props;
+	const {
+		classes,
+		onBackClick,
+		handleAddDocument,
+		onStartClick,
+		handleSelectDocument,
+		handleMessage,
+		message,
+		...passedProps
+	} = props;
+	const price = product && product.price ? product.price : 0;
 
 	return (
 		<div className={classes.container}>
@@ -289,7 +170,8 @@ export const RequestNotarizationPage = withStyles(styles)(props => {
 					<RequestDocumentsList
 						documents={documents}
 						onAddDocument={handleAddDocument}
-						{...props}
+						onSelectDocument={handleSelectDocument}
+						{...passedProps}
 					/>
 				</div>
 				<div>
@@ -299,17 +181,26 @@ export const RequestNotarizationPage = withStyles(styles)(props => {
 					<textarea
 						className={classes.textArea}
 						rows="5"
+						onChange={handleMessage}
+						value={message}
 						placeholder="Please describe the work that needs to be done…."
 					/>
 				</div>
 				<Divider className={classes.divider} />
-				<ServiceCost />
+				<NotariesServiceCost
+					selectedDocuments={selectedDocuments}
+					price={price}
+					keyRate={keyRate}
+					gasEthFee={gasEthFee}
+					gasUsdFee={gasUsdFee}
+				/>
 				<div>
 					<Button
 						className={classes.requestBtn}
 						variant="contained"
 						size="large"
 						onClick={onStartClick}
+						disabled={!selectedDocuments.length}
 					>
 						Request Notarization
 					</Button>

@@ -33,6 +33,7 @@ const KYC_USERS_GET_ENDPOINT_NAME = '/kyc-users/me';
 const KYC_USERS_CREATE_ENDPOINT_NAME = '/kyc-users';
 const KYC_CORPORATE_MEMBERS_ENDPOINT_NAME = '/applications/:applicationId/members';
 const KYC_GET_ACCESS_TOKEN_ENDPOINT_NAME = '/auth/token';
+const KYC_APPLICATIONS_ADD_ATTRIBUTES_ENDPOINT_NAME = '/applications/:id/attributes';
 
 export class RelyingPartyError extends Error {
 	constructor(conf) {
@@ -268,6 +269,30 @@ export class RelyingPartyRest {
 		});
 	}
 
+	static addAdditionalTemplateRequirements(ctx, applicationId, attributesArray) {
+		let url = ctx.getEndpoint(KYC_APPLICATIONS_ADD_ATTRIBUTES_ENDPOINT_NAME);
+		url = url.replace(':id', applicationId);
+
+		const attributes = attributesArray.map(attr => {
+			return { schema: attr, label: 'Document to notarize' };
+		});
+
+		log.debug(`[addAdditionalTemplateRequirements] POST ${url}`);
+		if (!ctx.token) {
+			throw new Error('Session is not established');
+		}
+		return request.patch({
+			url,
+			body: { attributes },
+			headers: {
+				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+				'User-Agent': this.userAgent,
+				Origin: ctx.getOrigin()
+			},
+			json: true
+		});
+	}
+
 	static createKYCApplication(ctx, templateId, attributes) {
 		let url = ctx.getEndpoint(KYC_APPLICATIONS_CREATE_ENDPOINT_NAME);
 		log.debug(`[createKYCApplication] POST ${url}`);
@@ -350,7 +375,6 @@ export class RelyingPartyRest {
 		let url = ctx.getEndpoint(KYC_APPLICATIONS_CHAT_ENDPOINT_NAME);
 		url = url.replace(':id', applicationId);
 		log.debug(`[getKYCApplicationChat] GET ${url}`);
-		log.info(url);
 		const chatResponse = await request.get({
 			url,
 			headers: {
@@ -360,7 +384,6 @@ export class RelyingPartyRest {
 			},
 			json: true
 		});
-		log.info(chatResponse);
 		return chatResponse;
 	}
 
@@ -736,6 +759,14 @@ export class RelyingPartySession {
 
 	getAccessToken() {
 		return RelyingPartyRest.getAccessToken(this.ctx);
+	}
+
+	addAdditionalTemplateRequirements(applicationId, attributes) {
+		return RelyingPartyRest.addAdditionalTemplateRequirements(
+			this.ctx,
+			applicationId,
+			attributes
+		);
 	}
 }
 

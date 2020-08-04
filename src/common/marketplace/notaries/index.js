@@ -4,7 +4,7 @@ import { inventorySelectors } from '../inventory';
 export const notariesSelectors = {
 	selectNotaries: state =>
 		inventorySelectors.selectInventoryForCategory(state, 'notaries').map(b => {
-			console.log(b);
+			// console.log(b);
 			return b;
 		}),
 	selectNotaryTypeByFilter: (state, filter) =>

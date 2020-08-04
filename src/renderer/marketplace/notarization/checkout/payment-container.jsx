@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/styles';
 import { featureIsEnabled } from 'common/feature-flags';
 import { getWallet } from 'common/wallet/selectors';
-import { kycSelectors } from 'common/kyc';
+import { kycSelectors, kycOperations } from 'common/kyc';
 import { marketplaceSelectors } from 'common/marketplace';
 import { identitySelectors } from 'common/identity';
 import { pricesSelectors } from 'common/prices';
@@ -11,7 +11,6 @@ import { ordersOperations } from 'common/marketplace/orders';
 import { MarketplaceNotariesComponent } from '../common/marketplace-notaries-component';
 
 const styles = theme => ({});
-const VENDOR_NAME = 'SelfKey Certifier';
 
 class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 	async componentDidMount() {
@@ -25,24 +24,48 @@ class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 	};
 
 	async createOrder() {
-		const { product, vendor, vendorId, productId } = this.props;
-		// const { program, companyCode } = this.props;
-		// const companyCode = 'companyCode';
+		const { product, vendor, vendorId, productId, documentList, message } = this.props;
 		const application = this.getLastApplication();
-		const price = this.priceInKEY(product.price);
-		// const price = 2017;
-		// const walletAddress = '0x24233C848BdA9AD4559772763aC869d6305D177e';
-		// const vendorId = 'selfkey_certifier';
-		// const vendorDID = program.didAddress;
-		const vendorDID = '0x96a101c36b1ac67098d85e4fac750ac538ed9800942ac5def9272c19accced9e';
-		const vendorName = VENDOR_NAME;
-		/*
-		const { product, vendor, vendorId, productId } = this.props;
-		const application = this.getLastApplication();
-		const price = this.priceInKEY(product.price);
-		const vendorDID = vendor.paymentAddress;
+		const documents = documentList.split(',');
+		// const priceUSD = product.price * documents.length;
+		const priceUSD = 0.2;
+		const price = this.priceInKEY(priceUSD);
 		const vendorName = vendor.name;
-		*/
+		const vendorDID = vendor.paymentAddress;
+
+		const attributes = documents.map(documentId => {
+			const document = this.props.documents.find(d => d.id === +documentId);
+			return document.type.url;
+		});
+		const docs = documents.map(documentId => {
+			const document = this.props.documents.find(d => d.id === +documentId);
+			return document;
+		});
+
+		console.log(this.props.documents);
+		console.log(attributes);
+		console.log(docs);
+		console.log(product);
+
+		// Send user message
+		if (message) {
+			await this.props.dispatch(
+				kycOperations.postKYCApplicationChat({
+					rpName: vendorId,
+					application,
+					message
+				})
+			);
+		}
+
+		await this.props.dispatch(
+			kycOperations.addAdditionalTemplateRequirements({
+				rpName: vendorId,
+				application,
+				attributes
+			})
+		);
+		// await dispatch(kycOperations.uploadAdditionalFiles({ application, docs }))
 
 		this.props.dispatch(
 			ordersOperations.startOrderOperation({
@@ -64,7 +87,7 @@ class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 }
 
 const mapStateToProps = (state, props) => {
-	const { templateId, vendorId, productId } = props.match.params;
+	const { templateId, vendorId, productId, documentList } = props.match.params;
 	const authenticated = true;
 	const identity = identitySelectors.selectIdentity(state);
 
@@ -72,12 +95,15 @@ const mapStateToProps = (state, props) => {
 		templateId,
 		vendorId,
 		productId,
+		documentList,
+		message: kycSelectors.selectMessages(state),
 		product: marketplaceSelectors.selectInventoryItemByFilter(
 			state,
 			'notaries',
 			p => p.sku === productId,
 			identity.type
 		),
+		...identitySelectors.selectIndividualProfile(state),
 		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
 		address: getWallet(state).address,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),

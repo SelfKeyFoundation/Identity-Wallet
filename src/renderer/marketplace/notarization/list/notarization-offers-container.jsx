@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/core/styles';
+import { pricesSelectors } from 'common/prices';
 import { kycSelectors } from 'common/kyc';
 import { marketplaceSelectors } from 'common/marketplace';
 import { identitySelectors } from 'common/identity';
@@ -32,17 +33,16 @@ NotarizationOffersContainerComponent.propTypes = {
 
 const mapStateToProps = (state, props) => {
 	const authenticated = true;
-	const templateId = '5dd3acee96884e657768eac4';
-	const vendorId = 'selfkey_certifier';
-	let productId = false;
+	let templateId = null;
+	let vendorId = null;
+	let productId = null;
 
 	const identity = identitySelectors.selectIdentity(state);
 	const profile = identitySelectors.selectIndividualProfile(state);
 	const notaries = marketplaceSelectors.selectNotaries(state, identity.type);
+	// const vendors = marketplaceSelectors.selectVendorsForCategory(state, 'notaries');
 
-	console.log({ identity, profile, notaries });
-
-	// Find country from identitiy attributes
+	// Find country from identity attributes
 	// Select US or international product
 	const countryAttribute = profile.allAttributes.find(
 		attr =>
@@ -50,15 +50,23 @@ const mapStateToProps = (state, props) => {
 			'http://platform.selfkey.org/schema/attribute/nationality.json'
 	);
 	const nationality = countryAttribute ? countryAttribute.data.value.country : '';
+	const product =
+		nationality === 'US'
+			? notaries.find(n => n.data.jurisdiction === 'US')
+			: notaries.find(n => n.data.jurisdiction === 'INT');
 
-	if (notaries.length) {
-		productId = nationality === 'US' ? notaries[0].sku : notaries[1].sku;
+	if (product) {
+		templateId = product.data.templateId;
+		vendorId = product.vendorId;
+		productId = product.sku;
 	}
 
 	return {
+		identity,
 		templateId,
 		vendorId,
 		productId,
+		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,
 			vendorId,

@@ -32,6 +32,7 @@ import {
 	error
 } from 'selfkey-ui';
 import HeaderIcon from '../../common/header-icon';
+import { ApplicationMessages } from './applications-messages';
 
 const styles = theme => ({
 	statusIcon: {
@@ -232,7 +233,7 @@ const LoadingScreen = ({ classes }) => (
 
 class IndividualApplicationsTabComponent extends PureComponent {
 	render() {
-		const { classes, loading, applications = [], vendors } = this.props;
+		const { classes, loading, applications = [], vendors, onSendMessage } = this.props;
 
 		const getRpInfo = (rpName, field) => {
 			const vendor = vendors.find(v => v.vendorId === rpName);
@@ -418,6 +419,22 @@ class IndividualApplicationsTabComponent extends PureComponent {
 											</CardContent>
 										</Card>
 									</Grid>
+									{item.rpName === 'selfkey_certifier' && item.messages && (
+										<Grid item xs>
+											<Card>
+												<Typography variant="h2" className={classes.title}>
+													Messages
+												</Typography>
+												<Divider variant="middle" />
+												<CardContent>
+													<ApplicationMessages
+														application={item}
+														onSendMessage={onSendMessage}
+													/>
+												</CardContent>
+											</Card>
+										</Grid>
+									)}
 									{item.payments && Object.keys(item.payments).length > 0 && (
 										<Grid item xs>
 											<Card>
