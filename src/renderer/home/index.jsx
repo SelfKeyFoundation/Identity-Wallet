@@ -61,8 +61,12 @@ const styles = theme => ({
 	}
 });
 
-const createWalletLink = (props = {}) => <Link to="/createWallet" {...props} />;
-const unlockWalletLink = (props = {}) => <Link to="/unlockWallet" {...props} />;
+const createWalletLink = React.forwardRef((props, ref) => (
+	<Link to="/createWallet" {...props} ref={ref} />
+));
+const unlockWalletLink = React.forwardRef((props, ref) => (
+	<Link to="/unlockWallet" {...props} ref={ref} />
+));
 class Home extends PureComponent {
 	componentDidMount() {
 		this.props.dispatch(appOperations.loadWalletsOperation());
