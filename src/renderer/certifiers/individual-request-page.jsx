@@ -18,6 +18,7 @@ import {
 	warning,
 	typography,
 	error,
+	BackButton,
 	SimpleCheckIcon,
 	SimpleDeniedIcon,
 	SimpleHourglassIcon,
@@ -99,6 +100,10 @@ const styles = theme => ({
 		'& svg': {
 			marginRight: '5px !important'
 		}
+	},
+	backButtonContainer: {
+		left: '75px',
+		position: 'absolute'
 	}
 });
 
@@ -292,18 +297,8 @@ export const IndividualRequestPage = withStyles(styles)(props => {
 	const { classes, item, documents, did, firstName, lastName, handleBackClick } = props;
 	return (
 		<div>
-			<div className={classes.backButtonContainer}>
-				<Button
-					id="backToMarketplace"
-					variant="outlined"
-					color="secondary"
-					size="small"
-					onClick={handleBackClick}
-				>
-					<Typography variant="subtitle2" color="secondary" className={classes.bold}>
-						‹ Back
-					</Typography>
-				</Button>
+			<div item className={classes.backButtonContainer}>
+				<BackButton onclick={handleBackClick} />
 			</div>
 			<div className={classes.container}>
 				<div className={classes.containerHeader}>

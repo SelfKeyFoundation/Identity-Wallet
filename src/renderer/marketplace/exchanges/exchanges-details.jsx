@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { withStyles } from '@material-ui/styles';
-import { UserPlusIcon, primary, CalendarDepositIcon, typography } from 'selfkey-ui';
+import { BackButton, UserPlusIcon, primary, CalendarDepositIcon, typography } from 'selfkey-ui';
 import { MarketplaceDisclaimer } from '../common/disclaimer';
 import { Grid, Divider, FormGroup, FormControl, Button, Typography } from '@material-ui/core';
 import { KycRequirements } from '../../kyc';
@@ -18,7 +18,7 @@ const styles = theme => ({
 	root: {
 		width: '946px',
 		height: '100%',
-		margin: '50px auto 30px',
+		margin: '70px auto 30px',
 		borderRadius: '4px',
 		'@media screen and (min-width: 1230px)': {
 			width: '1140px'
@@ -147,8 +147,7 @@ const styles = theme => ({
 
 	backButtonContainer: {
 		left: '75px',
-		position: 'absolute',
-		top: '120px'
+		position: 'absolute'
 	},
 	exchange: {
 		paddingTop: '3px'
@@ -471,20 +470,7 @@ class ExchangesDetailsComponent extends PureComponent {
 			<Grid container>
 				<Grid item>
 					<div className={classes.backButtonContainer}>
-						<Button
-							variant="outlined"
-							color="secondary"
-							size="small"
-							onClick={backAction}
-						>
-							<Typography
-								variant="subtitle2"
-								color="secondary"
-								className={classes.bold}
-							>
-								‹ Back
-							</Typography>
-						</Button>
+						<BackButton onclick={backAction} />
 					</div>
 				</Grid>
 				<Grid container className={classes.root}>
