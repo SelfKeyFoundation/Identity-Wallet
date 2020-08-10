@@ -29,7 +29,9 @@ const styles = theme => ({
 	}
 });
 
-const backupPrivateKey = props => <Link to="/backupPrivateKey" {...props} />;
+const backupPrivateKey = React.forwardRef((props, ref) => (
+	<Link to="/backupPrivateKey" {...props} ref={ref} />
+));
 
 class BackupAddress extends PureComponent {
 	state = {
