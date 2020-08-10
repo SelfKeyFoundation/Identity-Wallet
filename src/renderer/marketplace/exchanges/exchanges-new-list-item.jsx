@@ -51,6 +51,9 @@ const styles = theme => ({
 		whiteSpace: 'normal',
 		width: '100px',
 		wordBreak: 'break-word'
+	},
+	rightSpace: {
+		marginRight: '3px'
 	}
 });
 
@@ -130,10 +133,11 @@ export const ExchangesNewListItem = withStyles(styles)(
 				</div>
 				<div className={classes.body}>
 					<Typography variant="subtitle2" gutterBottom>
-						Location: <b>{location}</b>
+						<span className={classes.rightSpace}>Location: </span>
+						<b>{location}</b>
 					</Typography>
 					<Typography variant="subtitle2" gutterBottom>
-						Fiat Payments:{' '}
+						<span className={classes.rightSpace}>Fiat Payments:</span>
 						{isFiatPayments
 							? fiatPayments.map((payment, index) => (
 									<b key={index} className={classes.excluded}>
@@ -144,14 +148,16 @@ export const ExchangesNewListItem = withStyles(styles)(
 							: '-'}
 					</Typography>
 					<Typography variant="subtitle2" gutterBottom>
-						Fiat Supported:
+						<span className={classes.rightSpace}>Fiat Supported:</span>
 						{isFiatSupported
 							? fiatSupported.length > 3
 								? fourOrMoreFiats(fiatSupported)
 								: supportedFiats(fiatSupported)
 							: '-'}
 					</Typography>
-					<Typography variant="subtitle2">Partnership: -</Typography>
+					<Typography variant="subtitle2">
+						<span className={classes.rightSpace}>Partnership:</span> -
+					</Typography>
 				</div>
 			</div>
 		);
