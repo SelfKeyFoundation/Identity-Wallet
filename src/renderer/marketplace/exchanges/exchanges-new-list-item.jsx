@@ -46,69 +46,11 @@ const styles = theme => ({
 	generatedIcon: {
 		height: '30px'
 	},
-	noRightPadding: {
-		padding: '0 0 0 20px !important'
-	},
-	link: {
-		cursor: 'pointer'
-	},
-	footer: {
-		margin: '20px'
-	},
-	inline: {
-		display: 'flex',
-		flexWrap: 'wrap'
-	},
-	smallCell: {
-		padding: '0 10px',
-		whiteSpace: 'normal',
-		width: '100px',
-		wordBreak: 'break-word'
-	},
 	excluded: {
 		padding: '10px 10px 10px 0',
 		whiteSpace: 'normal',
 		width: '100px',
 		wordBreak: 'break-word'
-	},
-	goodForCell: {
-		alignItems: 'center',
-		display: 'flex',
-		flexDirection: 'row',
-		flexWrap: 'wrap',
-		height: 'initial',
-		justifyContent: 'flex-start',
-		maxWidth: '300px',
-		padding: '10px'
-	},
-	fee: {
-		overflow: 'hidden',
-		textOverflow: 'ellipsis'
-	},
-	feeWrap: {
-		textOverflow: 'ellipsis',
-		overflow: 'hidden',
-		maxWidth: '90px'
-	},
-	resident: {
-		marginRight: '5px',
-		whiteSpace: 'initial'
-	},
-	exchangeName: {
-		maxWidth: '120px',
-		paddingLeft: '15px',
-		whiteSpace: 'pre-line'
-	},
-	hidden: {
-		display: 'none'
-	},
-	excludedResidentCell: {
-		minWidth: '200px'
-	},
-	'@media screen and (min-width: 1230px)': {
-		excludedResidentCell: {
-			minWidth: '290px'
-		}
 	}
 });
 
