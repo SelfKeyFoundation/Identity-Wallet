@@ -44,10 +44,6 @@ const styles = theme => ({
 		marginBottom: '30px',
 		marginTop: '-30px'
 	},
-	logo: {
-		width: '30px',
-		height: '34px'
-	},
 	logoText: {
 		fontFamily: 'Orbitron, arial, sans-serif',
 		fontSize: '16px',
@@ -235,7 +231,7 @@ class Sidebar extends PureComponent {
 						style={{ paddingLeft: '13px' }}
 					>
 						<Link to="/main/dashboard" className={classes.link}>
-							<SelfkeyLogo className={classes.logo} />
+							<SelfkeyLogo width="30px" height="34px" />
 							<Typography variant="h1" className={classes.logoText}>
 								SELFKEY
 							</Typography>
