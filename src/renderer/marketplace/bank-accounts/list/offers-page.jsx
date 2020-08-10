@@ -2,9 +2,9 @@ import React from 'react';
 import { BankingOffersTable } from './offers-table';
 import { BankingAccountTypeTabs } from './account-type-tabs';
 import { PageLoading } from '../../common';
-import { Button, Typography, Grid } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
-import { BankIcon } from 'selfkey-ui';
+import { BackButton, BankIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	pageContent: {
@@ -23,7 +23,7 @@ const styles = theme => ({
 		justifyContent: 'flex-start',
 		paddingBottom: '30px',
 		marginBottom: '40px',
-		marginTop: '50px'
+		marginTop: '70px'
 	},
 	headerTitle: {
 		paddingLeft: '21px'
@@ -56,21 +56,7 @@ const BankingOffersPage = withStyles(styles)(
 			<Grid container>
 				<Grid item>
 					<div className={classes.backButtonContainer}>
-						<Button
-							id="backToMarketplace"
-							variant="outlined"
-							color="secondary"
-							size="small"
-							onClick={onBackClick}
-						>
-							<Typography
-								variant="subtitle2"
-								color="secondary"
-								className={classes.bold}
-							>
-								‹ Back
-							</Typography>
-						</Button>
+						<BackButton onclick={onBackClick} />
 					</div>
 				</Grid>
 				{loading && <PageLoading />}
