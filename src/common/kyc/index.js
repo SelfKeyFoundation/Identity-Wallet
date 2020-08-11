@@ -968,8 +968,9 @@ const updateRelyingPartyKYCApplication = (
 		let application = await rp.session.updateKYCApplication(updatedApplication);
 		application = await rp.session.getKYCApplication(application.id);
 		await dispatch(kycActions.addKYCApplication(rpName, application));
-		// application.messages = await rp.session.getKYCApplicationChat(application.id);
-		application.messages = [];
+
+		application.messages = await rp.session.getKYCApplicationChat(application.id);
+		const formattedMessages = messageFilter(application.messages);
 
 		await dispatch(
 			kycOperations.updateApplicationsOperation({
@@ -981,7 +982,7 @@ const updateRelyingPartyKYCApplication = (
 				owner: application.owner,
 				scope: application.scope,
 				applicationDate: application.createdAt,
-				messages: messageFilter(application.messages)
+				messages: formattedMessages
 			})
 		);
 	} catch (error) {
