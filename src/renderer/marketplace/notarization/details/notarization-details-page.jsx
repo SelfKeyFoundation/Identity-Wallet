@@ -1,7 +1,8 @@
 import React from 'react';
-import { Typography, Button, withStyles } from '@material-ui/core';
 import { PageLoading, ProgramPrice, MarketplaceKycRequirements } from '../../common';
-import { MarketplaceNotariesIcon, NotarizeDocumentIcon } from 'selfkey-ui';
+import { Typography, Button } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { BackButton, MarketplaceNotariesIcon, NotarizeDocumentIcon } from 'selfkey-ui';
 import { Alert } from '../../../common';
 import NotarizationDetailsPageTabs from './notarization-details-tabs';
 
