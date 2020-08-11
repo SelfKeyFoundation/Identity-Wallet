@@ -10,7 +10,8 @@ const styles = theme => ({});
 class NotarizationTOCdisagreementComponent extends MarketplaceNotariesComponent {
 	state = {};
 
-	onBackClick = () => this.props.dispatch(push(this.processPath()));
+	onBackClick = () => this.props.dispatch(push(this.rootPath()));
+
 	onReturnClick = () => this.props.dispatch(push(this.tocPath()));
 
 	render() {

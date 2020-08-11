@@ -45,32 +45,17 @@ class NotarizationDetailsContainerComponent extends MarketplaceNotariesComponent
 				return dispatch(push(this.selfkeyDIDRequiredRoute()));
 			}
 
-			// TODO: When terms are available
-			// await this.props.dispatch(push(this.tocRoute()));
-
 			if (!rp || !rp.authenticated) {
 				await dispatch(
 					kycOperations.loadRelyingParty(
 						vendorId,
 						authenticated,
-						this.checkoutRoute(),
+						this.tocRoute(),
 						this.cancelRoute()
 					)
 				);
 			} else {
-				await dispatch(push(this.checkoutRoute()));
-			}
-			if (!rp || !rp.authenticated) {
-				await this.props.dispatch(
-					kycOperations.loadRelyingParty(
-						vendorId,
-						authenticated,
-						this.checkoutRoute(),
-						this.cancelRoute()
-					)
-				);
-			} else {
-				await this.props.dispatch(push(this.checkoutRoute()));
+				await dispatch(push(this.tocRoute()));
 			}
 		});
 	};

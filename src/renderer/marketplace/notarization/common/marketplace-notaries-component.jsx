@@ -25,7 +25,7 @@ export default class MarketplaceNotariesComponent extends MarketplaceComponent {
 		return `${MARKETPLACE_NOTARIES_ROOT_PATH}/payment-complete/${templateId}/${vendorId}/${productId}`;
 	};
 	tocRoute = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}/toc`;
-	tocDisagreementRoute = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}/tocDisagreement`;
+	tocDisagreementRoute = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}/toc-disagreement`;
 
 	getApplicationStatus = () => {
 		if (this.props.rp && this.props.rp.authenticated && this.userHasApplied()) {
