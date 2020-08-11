@@ -7,8 +7,8 @@ import {
 	Divider
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import supportedDocumentTypes from './supported-document-types.json';
+import { DropdownIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	tabContainer: {
@@ -109,7 +109,7 @@ class NotarizationTypesTabComponent extends PureComponent {
 								onChange={(e, expanded) => this.toggleOption(expanded)}
 								className={classes.expansionPanel}
 							>
-								<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
+								<ExpansionPanelSummary expandIcon={<DropdownIcon />}>
 									<div className={classes.panelTextWrap}>
 										<div className={classes.panelText}>
 											<Typography variant="h2">

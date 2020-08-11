@@ -26,7 +26,7 @@ const styles = theme => ({
 		justifyContent: 'flex-start',
 		paddingBottom: '30px',
 		marginBottom: '40px',
-		marginTop: '50px'
+		marginTop: '70px'
 	},
 	headerTitle: {
 		paddingLeft: '21px'
@@ -157,18 +157,8 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 	const price = product.price ? product.price : 0;
 	return (
 		<div>
-			<div className={classes.backButtonContainer}>
-				<Button
-					id="backToMarketplace"
-					variant="outlined"
-					color="secondary"
-					size="small"
-					onClick={onBackClick}
-				>
-					<Typography variant="subtitle2" color="secondary" className={classes.bold}>
-						‹ Back
-					</Typography>
-				</Button>
+			<div item className={classes.backButtonContainer}>
+				<BackButton onclick={onBackClick} />
 			</div>
 			{loading && (
 				<div className={classes.pageContent}>

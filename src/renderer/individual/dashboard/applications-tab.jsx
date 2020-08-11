@@ -16,7 +16,6 @@ import {
 } from '@material-ui/core';
 import { createStyles, withStyles } from '@material-ui/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import {
 	KeyTooltip,
 	TooltipArrow,
@@ -26,6 +25,7 @@ import {
 	AttributeAlertLargeIcon,
 	NewRefreshIcon,
 	MarketplaceIcon,
+	DropdownIcon,
 	success,
 	warning,
 	typography,
@@ -294,7 +294,7 @@ class IndividualApplicationsTabComponent extends PureComponent {
 				{this.props.applications.map((item, index) => (
 					<React.Fragment key={item.id}>
 						<ExpansionPanel defaultExpanded={index === 0}>
-							<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
+							<ExpansionPanelSummary expandIcon={<DropdownIcon />}>
 								<Grid
 									container
 									direction="row"

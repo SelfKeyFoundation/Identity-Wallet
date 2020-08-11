@@ -13,8 +13,7 @@ import {
 	ListItem
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
-import { typography } from 'selfkey-ui';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import { typography, DropdownIcon } from 'selfkey-ui';
 import { Alert } from './alert';
 
 const styles = theme => ({
@@ -314,7 +313,7 @@ const Eligibility = withStyles(styles)(({ classes, data }) => (
 
 export const Accordion = withStyles(styles)(({ classes, data, open, extraKYCRequirements }) => (
 	<ExpansionPanel defaultExpanded={open}>
-		<ExpansionPanelSummary expandIcon={<ExpandLessIcon />} className={classes.panelSummary}>
+		<ExpansionPanelSummary expandIcon={<DropdownIcon />} className={classes.panelSummary}>
 			<Grid
 				container
 				direction="row"
