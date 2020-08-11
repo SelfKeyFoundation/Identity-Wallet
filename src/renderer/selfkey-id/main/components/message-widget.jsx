@@ -160,8 +160,6 @@ export const DirectMessage = withStyles(messageStyles)(({ classes, data, index }
 
 export const MessageWidget = withStyles(styles)(props => {
 	const { classes, onBackClick, messages } = props;
-	console.log('INSIDE');
-	console.log(messages);
 	return (
 		<Card className={classes.container}>
 			<CardHeader title="Direct Messages" />

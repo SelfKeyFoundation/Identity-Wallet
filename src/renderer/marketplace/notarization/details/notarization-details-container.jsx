@@ -45,6 +45,9 @@ class NotarizationDetailsContainerComponent extends MarketplaceNotariesComponent
 				return dispatch(push(this.selfkeyDIDRequiredRoute()));
 			}
 
+			// TODO: When terms are available
+			// await this.props.dispatch(push(this.tocRoute()));
+
 			if (!rp || !rp.authenticated) {
 				await dispatch(
 					kycOperations.loadRelyingParty(

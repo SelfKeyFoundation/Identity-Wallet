@@ -59,6 +59,7 @@ export const kycTypes = {
 	KYC_APPLICATIONS_RESET: 'kyc/applications/reset',
 	KYC_APPLICATIONS_REFRESH: 'kyc/applications/refresh',
 	KYC_ADD_ADDITIONAL_REQUIREMENTS: 'kyc/applications/requirements/add',
+	KYC_UPLOAD_ADDITIONAL_FILES: 'kyc/applications/upload/files',
 	KYC_APPLICATION_MESSAGE_SET: 'kyc/application/messages/set',
 	KYC_APPLICATION_MESSAGE_CLEAR: 'kyc/application/messages/clear',
 	KYC_POST_CHAT_MESSAGE: 'kyc/application/chat/post'
@@ -327,12 +328,10 @@ export const kycSelectors = {
 	selectRequirementsForTemplate(state, rpName, templateId, identityId) {
 		const template = this.oneTemplateSelector(state, rpName, templateId);
 		if (!template) {
-			log.error(
-				`Unable to select template ${templateId} for ${rpName}, check if instance contains this template ID`
+			log.warn(
+				`Unable to select template ${templateId} for ${rpName}, it's either loading or this template ID is not available in the instance`
 			);
 			return null;
-		} else {
-			log.info(`Selected ${templateId} for ${rpName}`);
 		}
 		const templateAttributes = template.attributes || [];
 		const attributesBySchema = templateAttributes.reduce((acc, curr) => {
@@ -670,8 +669,6 @@ const loadRelyingPartyOperation = (
 			applications = await session.listKYCApplications();
 			for (const application of applications) {
 				application.messages = await session.getKYCApplicationChat(application.id);
-				// console.log(application.messages);
-				// application.messages = [];
 				const formattedMessages = messageFilter(application.messages);
 				const template = templates.find(t => t.id === application.template);
 				await dispatch(
@@ -788,31 +785,6 @@ const postChatMessage = ({ rpName, application, message }) => async (dispatch, g
 	}
 
 	await rp.session.postKYCApplicationChat(application.id, message);
-};
-
-const addAdditionalTemplateRequirements = ({ rpName, application, attributes }) => async (
-	dispatch,
-	getState
-) => {
-	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
-	if (!rp || !rp.session) throw new Error('relying party does not exist');
-
-	if (!application || !application.id) {
-		throw new Error('application does not exist');
-	}
-	/*
-	if (!rp.templates.find(tpl => tpl.id === templateId)) {
-		throw new Error('template does not exist');
-	}
-	*/
-	const identity = identitySelectors.selectIdentity(getState());
-	if (!identity) return;
-
-	if (!rp.session.isActive()) {
-		await rp.session.establish();
-	}
-
-	await rp.session.addAdditionalTemplateRequirements(application.id, attributes);
 };
 
 const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title) => async (
@@ -1033,6 +1005,45 @@ const updateRelyingPartyKYCApplicationPayment = (rpName, applicationId, transact
 
 	rp.applications = await rp.session.listKYCApplications();
 	await dispatch(kycActions.updateRelyingParty(rp));
+};
+
+const addAdditionalTemplateRequirements = ({ rpName, application, attributes }) => async (
+	dispatch,
+	getState
+) => {
+	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
+	if (!rp || !rp.session) throw new Error('relying party does not exist');
+
+	if (!application || !application.id) {
+		throw new Error('application does not exist');
+	}
+
+	const identity = identitySelectors.selectIdentity(getState());
+	if (!identity) return;
+
+	if (!rp.session.isActive()) {
+		await rp.session.establish();
+	}
+
+	await rp.session.addAdditionalTemplateRequirements(application.id, attributes);
+};
+
+const uploadAdditionalFiles = ({ rpName, application, files }) => async (dispatch, getState) => {
+	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
+	if (!rp || !rp.session) throw new Error('relying party does not exist');
+
+	if (!application || !application.id) {
+		throw new Error('application does not exist');
+	}
+
+	const identity = identitySelectors.selectIdentity(getState());
+	if (!identity) return;
+
+	if (!rp.session.isActive()) {
+		await rp.session.establish();
+	}
+
+	await rp.session.uploadAdditionalFiles(application.id, files);
 };
 
 const startCurrentApplicationOperation = (
@@ -1391,6 +1402,10 @@ export const kycOperations = {
 	addAdditionalTemplateRequirements: createAliasedAction(
 		kycTypes.KYC_ADD_ADDITIONAL_REQUIREMENTS,
 		addAdditionalTemplateRequirements
+	),
+	uploadAdditionalFiles: createAliasedAction(
+		kycTypes.KYC_UPLOAD_ADDITIONAL_FILES,
+		uploadAdditionalFiles
 	),
 	postKYCApplicationChat: createAliasedAction(kycTypes.KYC_POST_CHAT_MESSAGE, postChatMessage)
 };

@@ -274,23 +274,30 @@ export class RelyingPartyRest {
 		url = url.replace(':id', applicationId);
 
 		const attributes = attributesArray.map(attr => {
-			return { schema: attr, label: 'Document to notarize' };
+			return {
+				jsonSchema: {
+					title: 'Document to notarize'
+				},
+				schemaId: attr
+			};
 		});
 
-		log.debug(`[addAdditionalTemplateRequirements] POST ${url}`);
 		if (!ctx.token) {
 			throw new Error('Session is not established');
 		}
-		return request.patch({
-			url,
-			body: { attributes },
-			headers: {
-				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
-				'User-Agent': this.userAgent,
-				Origin: ctx.getOrigin()
-			},
-			json: true
-		});
+
+		attributes.forEach(attr =>
+			request.post({
+				url,
+				body: attr,
+				headers: {
+					Authorization: this.getAuthorizationHeader(ctx.token.toString()),
+					'User-Agent': this.userAgent,
+					Origin: ctx.getOrigin()
+				},
+				json: true
+			})
+		);
 	}
 
 	static createKYCApplication(ctx, templateId, attributes) {
@@ -338,14 +345,15 @@ export class RelyingPartyRest {
 		});
 	}
 
-	static updateKYCApplication(ctx, application) {
+	static updateKYCApplication(ctx, data, applicationId = null) {
 		let url = ctx.getEndpoint(KYC_APPLICATIONS_UPDATE_ENDPOINT_NAME);
 		if (!ctx.token) throw new Error('Session is not established');
-		url = url.replace(':id', application.id);
+		applicationId = applicationId || data.id;
+		url = url.replace(':id', applicationId);
 		log.debug(`[updateKYCApplication] PATCH ${url}`);
 		return request.patch({
 			url,
-			body: application,
+			body: data,
 			headers: {
 				Authorization: this.getAuthorizationHeader(ctx.token.toString()),
 				'User-Agent': this.userAgent,
@@ -374,7 +382,6 @@ export class RelyingPartyRest {
 	static async getKYCApplicationChat(ctx, applicationId) {
 		let url = ctx.getEndpoint(KYC_APPLICATIONS_CHAT_ENDPOINT_NAME);
 		url = url.replace(':id', applicationId);
-		log.debug(`[getKYCApplicationChat] GET ${url}`);
 		const chatResponse = await request.get({
 			url,
 			headers: {
@@ -766,6 +773,62 @@ export class RelyingPartySession {
 			this.ctx,
 			applicationId,
 			attributes
+		);
+	}
+
+	async uploadAdditionalFiles(applicationId, files) {
+		// Prepare additional documents to upload
+		const attributes = await Promise.all(
+			files.map(async attr => {
+				const attrDocs = await Promise.all(
+					attr.documents.map(async doc => {
+						if (doc.content) {
+							doc.buffer = bufferFromDataUrl(doc.content);
+						}
+						const res = await RelyingPartyRest.uploadKYCApplicationFile(this.ctx, doc);
+						let newDoc = { ...doc };
+						delete newDoc.buffer;
+						newDoc.content = res.id;
+						return newDoc;
+					})
+				);
+				attr.schema = attr.type.content;
+				console.log(attrDocs);
+
+				const { value } = identityAttributes.denormalizeDocumentsSchema(
+					attr.schema,
+					(attr.data || {}).value,
+					attrDocs
+				);
+
+				return { ...attr, data: value, documents: undefined };
+			})
+		);
+
+		// Refresh application object to get the new file requirements
+		const application = await RelyingPartyRest.getKYCApplication(this.ctx, applicationId);
+		const applicationAttributes = { ...application.attributes };
+
+		// Prepare schema for upload
+		const schema = attributes.map(attr => {
+			const id = Object.keys(applicationAttributes).find(key => {
+				const a = applicationAttributes[key];
+				return a.isAdditional && a.schemaId === attr.type.content.$id;
+			});
+			attr.id = id;
+			attr.schemaId = applicationAttributes[id].schemaId;
+			// Clean up object
+			delete applicationAttributes[id];
+			delete attr['type'];
+			delete attr['defaultRepository'];
+			delete attr['defaultUiSchema'];
+			return attr;
+		});
+
+		return RelyingPartyRest.updateKYCApplication(
+			this.ctx,
+			{ attributes: schema },
+			applicationId
 		);
 	}
 }

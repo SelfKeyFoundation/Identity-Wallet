@@ -5,30 +5,6 @@ import { MarketplaceNotariesIcon, NotarizeDocumentIcon } from 'selfkey-ui';
 import { Alert } from '../../../common';
 import NotarizationDetailsPageTabs from './notarization-details-tabs';
 
-/*
-import request from 'request';
-
-const notaryTable = () => {
-	return new Promise(async (resolve, reject) => {
-		try {
-			await request(
-				'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=InventoryDev',
-				(e, r, b) => {
-					let ray = JSON.parse(b).entities;
-					console.log(ray[1]);
-					// let result = ray.filter(data => data.category === 'notaries');
-					let result = ray[1].data.price;
-					console.log(result);
-					resolve(result);
-				}
-			);
-		} catch (e) {
-			reject(e);
-		}
-	});
-};
-*/
-
 const styles = theme => ({
 	pageContent: {
 		alignItems: 'stretch',

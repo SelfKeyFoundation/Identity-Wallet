@@ -46,9 +46,6 @@ const onClick = (textArea, application, onSendMessage) => {
 
 const ApplicationMessages = withStyles(styles)(({ classes, application, onSendMessage }) => {
 	let textAreaEl = null;
-	if (application.messages.length) {
-		console.log(application.messages);
-	}
 	return (
 		<React.Fragment>
 			<div>

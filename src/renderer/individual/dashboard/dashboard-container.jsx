@@ -163,7 +163,6 @@ class IndividualDashboardContainerComponent extends PureComponent {
 	};
 
 	handlePostMessage = async ({ application, message }) => {
-		console.log(application);
 		if (message) {
 			await this.props.dispatch(
 				kycOperations.postKYCApplicationChat({

@@ -24,11 +24,11 @@ class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 	};
 
 	async createOrder() {
-		const { product, vendor, vendorId, productId, documentList, message } = this.props;
+		const { vendor, vendorId, productId, product, documentList, message } = this.props;
+
 		const application = this.getLastApplication();
 		const documents = documentList.split(',');
-		// const priceUSD = product.price * documents.length;
-		const priceUSD = 0.2;
+		const priceUSD = product.price * documents.length;
 		const price = this.priceInKEY(priceUSD);
 		const vendorName = vendor.name;
 		const vendorDID = vendor.paymentAddress;
@@ -37,17 +37,12 @@ class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 			const document = this.props.documents.find(d => d.id === +documentId);
 			return document.type.url;
 		});
-		const docs = documents.map(documentId => {
+		const files = documents.map(documentId => {
 			const document = this.props.documents.find(d => d.id === +documentId);
 			return document;
 		});
 
-		console.log(this.props.documents);
-		console.log(attributes);
-		console.log(docs);
-		console.log(product);
-
-		// Send user message
+		// Send message if available
 		if (message) {
 			await this.props.dispatch(
 				kycOperations.postKYCApplicationChat({
@@ -58,6 +53,7 @@ class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 			);
 		}
 
+		// Add additional requirements to this application
 		await this.props.dispatch(
 			kycOperations.addAdditionalTemplateRequirements({
 				rpName: vendorId,
@@ -65,7 +61,11 @@ class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 				attributes
 			})
 		);
-		// await dispatch(kycOperations.uploadAdditionalFiles({ application, docs }))
+
+		// Upload the addtional files
+		await this.props.dispatch(
+			kycOperations.uploadAdditionalFiles({ rpName: vendorId, application, files })
+		);
 
 		this.props.dispatch(
 			ordersOperations.startOrderOperation({
