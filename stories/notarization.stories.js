@@ -5,10 +5,7 @@ import NotarizationDetailsPage from '../src/renderer/marketplace/notarization/de
 import RequestNotarizationPage from '../src/renderer/marketplace/notarization/process/request-notarization-page';
 import TOCPopup from '../src/renderer/marketplace/notarization/common/toc-popup';
 import TOCDisagreementPopup from '../src/renderer/marketplace/notarization/common/toc-disagreement-popup';
-import RequirePayment from '../src/renderer/certifiers/common/require-payment-popup';
 import KYCRequirementData from './__fixtures__/kyc-requirements-data';
-import NotarizationProcess from '../src/renderer/certifiers/common/notarization-process-popup';
-import { summary } from './__fixtures__/notarization-data';
 
 const documents = [
 	{
@@ -86,34 +83,12 @@ storiesOf('Notarization/Popups', module)
 			onBackClick={linkTo('Notarization', 'Request Notarization')}
 			onReturnClick={linkTo('Notarization/Popups', 'toc')}
 		/>
-	))
-	.add('require payment', () => (
-		<RequirePayment name={'John Doe'} address={'0x4ac0d9ebd28118cab68a64ad8eb8c07c0120ebf8'} />
 	));
 
-storiesOf('Notarization', module)
-	.add('Request Notarization', () => (
-		<RequestNotarizationPage
-			documents={documents}
-			onBackClick={linkTo('Notarization/Tabs', 'types')}
-			onStartClick={linkTo('Notarization/Popups', 'toc')}
-		/>
-	))
-	.add('Require Payment', () => (
-		<NotarizationProcess
-			status={2}
-			summary={summary}
-			payments={false}
-			onBackClick={linkTo('Notarization/Tabs', 'types')}
-			onStartClick={linkTo('Notarization/Popups', 'toc')}
-		/>
-	))
-	.add('Notarization Complete', () => (
-		<NotarizationProcess
-			status={1}
-			summary={summary}
-			payments={false}
-			onBackClick={linkTo('Notarization/Tabs', 'types')}
-			onStartClick={linkTo('Notarization/Popups', 'toc')}
-		/>
-	));
+storiesOf('Notarization', module).add('Request Notarization', () => (
+	<RequestNotarizationPage
+		documents={documents}
+		onBackClick={linkTo('Notarization/Tabs', 'types')}
+		onStartClick={linkTo('Notarization/Popups', 'toc')}
+	/>
+));

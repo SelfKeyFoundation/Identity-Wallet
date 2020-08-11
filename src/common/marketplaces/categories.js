@@ -48,7 +48,7 @@ export default [
 		description:
 			'Verify and attest the authenticity of your legal or personal documents so that they have official credibility under law.',
 		entityType: 'individual',
-		active: featureIsEnabled('certifiers'),
+		active: featureIsEnabled('notaries'),
 		svgIcon: 'https://dl.airtable.com/cQcRdsGeQSeM3ekJFo3E_icon-exchange-notaries.svg.png'
 	},
 	{

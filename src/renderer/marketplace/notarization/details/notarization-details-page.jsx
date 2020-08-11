@@ -230,7 +230,7 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 									<Typography variant="body1">
 										Notarization doesn’t have to be a hassle anymore. Step into
 										the 21st century and conduct your business from the comfort
-										of your own home. The SelfKey Certifiers platform provides
+										of your own home. The SelfKey Notarization platform provides
 										access to US-based notaries that are recognized worldwide.
 										All you have to do is to upload the documents you want
 										notarised and have the availability to take a short video

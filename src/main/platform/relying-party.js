@@ -793,7 +793,6 @@ export class RelyingPartySession {
 					})
 				);
 				attr.schema = attr.type.content;
-				console.log(attrDocs);
 
 				const { value } = identityAttributes.denormalizeDocumentsSchema(
 					attr.schema,
