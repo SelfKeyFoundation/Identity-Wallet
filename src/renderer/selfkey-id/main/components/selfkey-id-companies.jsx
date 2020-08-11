@@ -15,7 +15,7 @@ import {
 	ListItem,
 	Button
 } from '@material-ui/core';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import { DropdownIcon } from 'selfkey-ui';
 
 const SelfkeyIdCompanies = () => (
 	<React.Fragment>
@@ -23,7 +23,7 @@ const SelfkeyIdCompanies = () => (
 			Pending Corporate Association
 		</Typography>
 		<ExpansionPanel defaultExpanded={true}>
-			<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
+			<ExpansionPanelSummary expandIcon={<DropdownIcon />}>
 				<Grid container direction="row" justify="flex-start" alignItems="baseline">
 					<Typography variant="h2">Trust Fund Ltd.</Typography>
 				</Grid>
@@ -95,7 +95,7 @@ const SelfkeyIdCompanies = () => (
 			Your Companies
 		</Typography>
 		<ExpansionPanel>
-			<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
+			<ExpansionPanelSummary expandIcon={<DropdownIcon />}>
 				<Grid container direction="row" justify="flex-start" alignItems="baseline">
 					<Typography variant="h2">Trust Fund Ltd.</Typography>
 				</Grid>
