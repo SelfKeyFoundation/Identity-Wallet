@@ -1,9 +1,9 @@
 import React from 'react';
 import { IncorporationsListTable } from './incorporations-list-table';
 import { PageLoading } from '../../common';
-import { Button, Typography, Grid } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
-import { IncorporationsIcon } from 'selfkey-ui';
+import { BackButton, IncorporationsIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	pageContent: {
@@ -17,7 +17,7 @@ const styles = theme => ({
 		justifyContent: 'flex-start',
 		paddingBottom: '30px',
 		marginBottom: '40px',
-		marginTop: '50px'
+		marginTop: '70px'
 	},
 	headerTitle: {
 		paddingLeft: '21px'
@@ -26,12 +26,12 @@ const styles = theme => ({
 		height: '36px',
 		width: '36px'
 	},
+	tabs: {
+		marginBottom: '15px'
+	},
 	backButtonContainer: {
 		left: '75px',
 		position: 'absolute'
-	},
-	tabs: {
-		marginBottom: '15px'
 	},
 	'@media screen and (min-width: 1230px)': {
 		pageContent: {
@@ -44,24 +44,8 @@ const IncorporationsListPage = withStyles(styles)(
 	({ classes, loading, data, keyRate, onDetailsClick, onBackClick }) => {
 		return (
 			<Grid container>
-				<Grid item>
-					<div className={classes.backButtonContainer}>
-						<Button
-							id="backToMarketplace"
-							variant="outlined"
-							color="secondary"
-							size="small"
-							onClick={onBackClick}
-						>
-							<Typography
-								variant="subtitle2"
-								color="secondary"
-								className={classes.bold}
-							>
-								‹ Back
-							</Typography>
-						</Button>
-					</div>
+				<Grid item className={classes.backButtonContainer}>
+					<BackButton onclick={onBackClick} />
 				</Grid>
 				{loading && <PageLoading />}
 				{!loading && (

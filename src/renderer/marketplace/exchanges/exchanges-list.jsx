@@ -32,7 +32,7 @@ const styles = theme => ({
 		height: '120px'
 	},
 	headerContent: {
-		marginTop: '50px',
+		marginTop: '70px',
 		display: 'flex',
 		flexDirection: 'row',
 		flexWrap: 'nowrap'
@@ -50,7 +50,8 @@ const styles = theme => ({
 		}
 	},
 	backButtonContainer: {
-		top: '120px'
+		left: '75px',
+		position: 'absolute'
 	},
 	listContent: {
 		margin: 0,
@@ -126,7 +127,7 @@ const getServices = (items, viewAction) => {
 export const ExchangesList = withStyles(styles)(
 	({ classes, children, category, items, backAction, viewAction, isLoading }) => (
 		<Grid container>
-			<Grid item>
+			<Grid item className={classes.backButtonContainer}>
 				<BackButton onclick={backAction} />
 			</Grid>
 			<Grid item>
