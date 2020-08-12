@@ -80,6 +80,20 @@ class RequestNotarizationContainer extends MarketplaceNotariesComponent {
 		this.setState({ message: event.target.value });
 	};
 
+	handleStatusActionClick = event => {
+		const { rp } = this.props;
+		if (rp && rp.authenticated && this.userHasApplied()) {
+			if (this.applicationCompleted() || this.applicationWasRejected()) {
+				this.props.dispatch(push(this.manageApplicationsRoute()));
+			} else if (this.applicationRequiresAdditionalDocuments()) {
+				this.redirectToKYCC(rp);
+			} else if (!this.userHasPaid()) {
+				this.props.dispatch(push(this.payRoute()));
+			}
+		}
+		return null;
+	};
+
 	getPaymentParameters() {
 		const { ethRate, ethGasStationInfo } = this.props;
 		const gasPrice = ethGasStationInfo.fast;
@@ -107,6 +121,7 @@ class RequestNotarizationContainer extends MarketplaceNotariesComponent {
 					/>
 				)}
 				<RequestNotarizationPage
+					loading={this.props.isLoading}
 					documents={documents}
 					product={product}
 					keyRate={keyRate}
@@ -121,6 +136,8 @@ class RequestNotarizationContainer extends MarketplaceNotariesComponent {
 					handlePopupClose={this.handlePopupClose}
 					handleSelectDocument={this.handleSelectDocument}
 					handleMessage={this.handleMessage}
+					applicationStatus={this.getApplicationStatus()}
+					onStatusAction={this.handleStatusActionClick}
 				/>
 			</React.Fragment>
 		);
