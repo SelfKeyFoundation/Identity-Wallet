@@ -121,7 +121,7 @@ class RequestNotarizationContainer extends MarketplaceNotariesComponent {
 					/>
 				)}
 				<RequestNotarizationPage
-					loading={this.props.isLoading}
+					loading={this.props.loading}
 					documents={documents}
 					product={product}
 					keyRate={keyRate}

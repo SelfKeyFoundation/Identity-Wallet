@@ -96,7 +96,7 @@ const styles = theme => ({
 });
 
 export const RequestNotarizationPage = withStyles(styles)(props => {
-	const { documents, selectedDocuments, product, keyRate, gasEthFee, gasUsdFee } = props;
+	const { documents, selectedDocuments, product, keyRate, gasEthFee, gasUsdFee, loading } = props;
 	const {
 		classes,
 		onBackClick,
@@ -122,7 +122,7 @@ export const RequestNotarizationPage = withStyles(styles)(props => {
 				<ApplicationStatusBar
 					status={applicationStatus}
 					statusAction={onStatusAction}
-					loading={this.props.loading}
+					loading={loading}
 					barStyle={classes.barStyle}
 				/>
 				<Typography variant="h2" gutterBottom>

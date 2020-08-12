@@ -8,8 +8,6 @@ import TOCDisagreementPopup from './toc-disagreement-popup';
 const styles = theme => ({});
 
 class NotarizationTOCdisagreementComponent extends MarketplaceNotariesComponent {
-	state = {};
-
 	onBackClick = () => this.props.dispatch(push(this.rootPath()));
 
 	onReturnClick = () => this.props.dispatch(push(this.tocPath()));
@@ -24,7 +22,9 @@ class NotarizationTOCdisagreementComponent extends MarketplaceNotariesComponent 
 	}
 }
 
-const mapStateToProps = () => {};
+const mapStateToProps = () => {
+	return {};
+};
 
 const styledComponent = withStyles(styles)(NotarizationTOCdisagreementComponent);
 export const NotarizationTOCdisagreement = connect(mapStateToProps)(styledComponent);
