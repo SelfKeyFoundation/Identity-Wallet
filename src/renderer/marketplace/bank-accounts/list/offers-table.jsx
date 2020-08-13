@@ -8,8 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
 import { LargeTableHeadRow, TagTableCell, Tag, KeyTooltip, InfoTooltip } from 'selfkey-ui';
-import { ProgramPrice, FlagCountryName } from '../../common';
-import DetailsButton from '../common/details-button';
+import { DetailsIconButton, ProgramPrice, FlagCountryName } from '../../common';
 
 const styles = theme => ({
 	table: {
@@ -81,10 +80,15 @@ const styles = theme => ({
 		padding: '0 20px'
 	},
 	detailsCell: {
-		width: '55px',
 		color: '#00C0D9',
 		'& span': {
 			cursor: 'pointer'
+		},
+		'& button': {
+			maxWidth: '15px',
+			minWidth: '15px',
+			padding: 0,
+			width: '15px'
 		}
 	},
 	goodForCell: {
@@ -155,7 +159,10 @@ const BankingOffersRow = withStyles(styles)(({ classes, bank, onDetails, keyRate
 				<ProgramPrice label="$" price={bank.price} rate={keyRate} />
 			</TableCell>
 			<TableCell className={classes.detailsCell}>
-				<DetailsButton onClick={() => onDetails(bank)} id={`details${data.countryCode}`} />
+				<DetailsIconButton
+					onClick={() => onDetails(bank)}
+					id={`details${data.countryCode}`}
+				/>
 			</TableCell>
 		</TableRow>
 	);
