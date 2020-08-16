@@ -6,6 +6,7 @@ import { BackButton, GridIcon, LargeTableHeadRow, List2Icon, primaryTint } from 
 import { ExchangesListItem } from './exchanges-list-item';
 import { ExchangesNewListItem } from './exchanges-new-list-item';
 import { PageLoading } from '../common';
+import { featureIsEnabled } from '../../../common/feature-flags';
 
 const styles = theme => ({
 	wrapper: {
@@ -208,26 +209,28 @@ export const ExchangesList = withStyles(styles)(
 								</Grid>
 							</Grid>
 
-							<Grid container justify="flex-end">
-								<Grid item>
-									<ToggleButtonGroup
-										exclusive
-										value={value}
-										onChange={akarmiChange}
-									>
-										<ToggleButton value="Grid">
-											<GridIcon
-												fill={value === 'Grid' ? primaryTint : null}
-											/>
-										</ToggleButton>
-										<ToggleButton value="List">
-											<List2Icon
-												fill={value === 'List' ? primaryTint : null}
-											/>
-										</ToggleButton>
-									</ToggleButtonGroup>
+							{featureIsEnabled('exchangesMarketplace') ? (
+								<Grid container justify="flex-end">
+									<Grid item>
+										<ToggleButtonGroup
+											exclusive
+											value={value}
+											onChange={akarmiChange}
+										>
+											<ToggleButton value="Grid">
+												<GridIcon
+													fill={value === 'Grid' ? primaryTint : null}
+												/>
+											</ToggleButton>
+											<ToggleButton value="List">
+												<List2Icon
+													fill={value === 'List' ? primaryTint : null}
+												/>
+											</ToggleButton>
+										</ToggleButtonGroup>
+									</Grid>
 								</Grid>
-							</Grid>
+							) : null}
 						</Grid>
 					</Grid>
 					<Grid item className={classes.listContent} xs={12}>
@@ -240,9 +243,11 @@ export const ExchangesList = withStyles(styles)(
 							className={classes.content}
 						>
 							{isLoading && <PageLoading />}
-							{!isLoading && value === 'List'
-								? listView(classes, items, viewAction)
-								: gridView(classes, items, viewAction)}
+							{featureIsEnabled('exchangesMarketplace') && !isLoading
+								? value === 'List'
+									? listView(classes, items, viewAction)
+									: gridView(classes, items, viewAction)
+								: listView(classes, items, viewAction)}
 						</Grid>
 					</Grid>
 				</Grid>
