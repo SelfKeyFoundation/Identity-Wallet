@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/styles';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { pricesSelectors } from 'common/prices';
 import { identitySelectors } from 'common/identity';
-import { kycOperations } from 'common/kyc';
+import { kycSelectors, kycOperations } from 'common/kyc';
 import { marketplaceSelectors } from 'common/marketplace';
 import MarketplaceNotariesComponent from '../common/marketplace-notaries-component';
 import RequestNotarizationPage from './request-notarization-page';
@@ -159,6 +159,7 @@ const mapStateToProps = (state, props) => {
 			identity.type
 		),
 		isLoading: marketplaceSelectors.isInventoryLoading(state),
+		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		ethRate: pricesSelectors.getRate(state, 'ETH', 'USD'),
 		vendor: marketplaceSelectors.selectVendorById(state, vendorId),

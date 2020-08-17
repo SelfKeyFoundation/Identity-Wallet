@@ -35,7 +35,10 @@ class MarketplaceNotariesComponent extends PureComponent {
 					component={NotarizationPaymentContainer}
 				/>
 
-				<Route path={`${path}/toc`} component={NotarizationTOC} />
+				<Route
+					path={`${path}/toc/:templateId/:vendorId/:productId`}
+					component={NotarizationTOC}
+				/>
 				<Route path={`${path}/toc-disagreement`} component={NotarizationTOCdisagreement} />
 
 				<Route

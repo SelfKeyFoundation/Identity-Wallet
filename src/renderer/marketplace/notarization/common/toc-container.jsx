@@ -27,8 +27,13 @@ class NotarizationTOCComponent extends MarketplaceNotariesComponent {
 	}
 }
 
-const mapStateToProps = () => {
-	return {};
+const mapStateToProps = (state, props) => {
+	const { templateId, vendorId, productId } = props.match.params;
+	return {
+		templateId,
+		vendorId,
+		productId
+	};
 };
 
 const styledComponent = withStyles(styles)(NotarizationTOCComponent);

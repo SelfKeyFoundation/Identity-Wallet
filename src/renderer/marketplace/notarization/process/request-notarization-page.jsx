@@ -91,7 +91,8 @@ const styles = theme => ({
 		marginRight: '20px'
 	},
 	barStyle: {
-		padding: '25px 30px 0'
+		padding: '0',
+		marginBottom: '25px'
 	}
 });
 
@@ -202,8 +203,8 @@ export const RequestNotarizationPage = withStyles(styles)(props => {
 					selectedDocuments={selectedDocuments}
 					price={price}
 					keyRate={keyRate}
-					gasEthFee={gasEthFee}
-					gasUsdFee={gasUsdFee}
+					gasEthFee={selectedDocuments.length !== 0 ? gasEthFee : 0}
+					gasUsdFee={selectedDocuments.length !== 0 ? gasUsdFee : 0}
 				/>
 				<div>
 					<Button
