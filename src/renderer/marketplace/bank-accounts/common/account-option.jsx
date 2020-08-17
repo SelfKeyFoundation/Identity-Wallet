@@ -10,8 +10,7 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { AttributesTable, Alert } from '../../../common';
-import { typography } from 'selfkey-ui';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import { typography, DropdownIcon } from 'selfkey-ui';
 import { sanitize } from '../../common';
 
 const styles = theme => ({
@@ -189,7 +188,7 @@ export const BankingAccountOption = withStyles(styles)(
 						onChange={(e, expanded) => toggleOpen && toggleOpen(expanded)}
 						style={{ borderRadius: '0 4px 4px 0' }}
 					>
-						<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
+						<ExpansionPanelSummary expandIcon={<DropdownIcon />}>
 							<Grid container direction="column" spacing={1}>
 								<Grid item>
 									<Grid

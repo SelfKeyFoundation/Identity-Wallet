@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { PageLoading, ProgramPrice } from '../../common';
-import { MarketplaceNotariesIcon, NotarizeDocumentIcon } from 'selfkey-ui';
+import { BackButton, MarketplaceNotariesIcon, NotarizeDocumentIcon } from 'selfkey-ui';
 import { Alert } from '../../../common';
 import NotarizationDetailsPageTabs from './notarization-details-tabs';
 import KycRequirementsList from '../../../kyc/requirements/requirements-list';
@@ -28,7 +28,7 @@ const styles = theme => ({
 		justifyContent: 'flex-start',
 		paddingBottom: '30px',
 		marginBottom: '40px',
-		marginTop: '50px'
+		marginTop: '70px'
 	},
 	headerTitle: {
 		paddingLeft: '21px'
@@ -156,18 +156,8 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 	} = props;
 	return (
 		<div>
-			<div className={classes.backButtonContainer}>
-				<Button
-					id="backToMarketplace"
-					variant="outlined"
-					color="secondary"
-					size="small"
-					onClick={onBackClick}
-				>
-					<Typography variant="subtitle2" color="secondary" className={classes.bold}>
-						‹ Back
-					</Typography>
-				</Button>
+			<div item className={classes.backButtonContainer}>
+				<BackButton onclick={onBackClick} />
 			</div>
 			{loading && <PageLoading />}
 			{!loading && (

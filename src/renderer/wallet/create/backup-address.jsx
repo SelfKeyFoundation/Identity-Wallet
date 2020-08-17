@@ -29,7 +29,9 @@ const styles = theme => ({
 	}
 });
 
-const backupPrivateKey = props => <Link to="/backupPrivateKey" {...props} />;
+const backupPrivateKey = React.forwardRef((props, ref) => (
+	<Link to="/backupPrivateKey" {...props} ref={ref} />
+));
 
 class BackupAddress extends PureComponent {
 	state = {
@@ -66,7 +68,7 @@ class BackupAddress extends PureComponent {
 				closeAction={this.handleBackAction}
 				open
 				displayLogo
-				text="Step 3: Backup Your Ethereum AddressPassword"
+				text="Step 3: Backup Your Ethereum Address"
 			>
 				<Grid
 					container

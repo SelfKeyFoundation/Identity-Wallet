@@ -32,7 +32,7 @@ const styles = theme => ({
 		height: '120px'
 	},
 	headerContent: {
-		marginTop: '50px',
+		marginTop: '70px',
 		display: 'flex',
 		flexDirection: 'row',
 		flexWrap: 'nowrap'
@@ -50,7 +50,8 @@ const styles = theme => ({
 		}
 	},
 	backButtonContainer: {
-		top: '120px'
+		left: '75px',
+		position: 'absolute'
 	},
 	listContent: {
 		margin: 0,
@@ -76,6 +77,19 @@ const styles = theme => ({
 	},
 	hidden: {
 		display: 'none'
+	},
+	detailsCell: {
+		color: '#00C0D9',
+		padding: '15px 20px',
+		'& span': {
+			cursor: 'pointer'
+		},
+		'& button': {
+			maxWidth: '15px',
+			minWidth: '15px',
+			padding: 0,
+			width: '15px'
+		}
 	}
 });
 
@@ -113,7 +127,7 @@ const getServices = (items, viewAction) => {
 export const ExchangesList = withStyles(styles)(
 	({ classes, children, category, items, backAction, viewAction, isLoading }) => (
 		<Grid container>
-			<Grid item>
+			<Grid item className={classes.backButtonContainer}>
 				<BackButton onclick={backAction} />
 			</Grid>
 			<Grid item>
@@ -192,7 +206,9 @@ export const ExchangesList = withStyles(styles)(
 														Excluded Residents
 													</Typography>
 												</TableCell>
-												<TableCell>&nbsp;</TableCell>
+												<TableCell className={classes.detailsCell}>
+													&nbsp;
+												</TableCell>
 											</LargeTableHeadRow>
 										</TableHead>
 

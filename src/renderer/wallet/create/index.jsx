@@ -5,8 +5,10 @@ import { Link } from 'react-router-dom';
 import { WarningShieldIcon } from 'selfkey-ui';
 import { Popup } from '../../common';
 
-const createPasswordLink = props => <Link to="/createPassword" {...props} />;
-const backHome = props => <Link to="/home" {...props} />;
+const createPasswordLink = React.forwardRef((props, ref) => (
+	<Link to="/createPassword" {...props} ref={ref} />
+));
+const backHome = React.forwardRef((props, ref) => <Link to="/home" {...props} ref={ref} />);
 
 const styles = theme => ({
 	bottomSpace: {
