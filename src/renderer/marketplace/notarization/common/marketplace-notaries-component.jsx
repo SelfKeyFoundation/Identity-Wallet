@@ -4,12 +4,28 @@ const MARKETPLACE_NOTARIES_ROOT_PATH = `/main/marketplace/notaries`;
 
 export default class MarketplaceNotariesComponent extends MarketplaceComponent {
 	rootPath = () => MARKETPLACE_NOTARIES_ROOT_PATH;
-	processPath = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}/process`;
-	tocPath = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}/toc`;
-	tocDisagreementPath = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}/tocDisagreement`;
-	paymentPath = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}/pay`;
-	cancelRoute = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}/process`;
-	paymentCompleteRoute = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}/paymentComplete`;
+	productRoute = () => {
+		const { templateId, vendorId, productId } = this.props;
+		return `${MARKETPLACE_NOTARIES_ROOT_PATH}/detail/${templateId}/${vendorId}/${productId}`;
+	};
+	processPath = () => {
+		const { templateId, vendorId, productId } = this.props;
+		return `${MARKETPLACE_NOTARIES_ROOT_PATH}/process/${templateId}/${vendorId}/${productId}`;
+	};
+	requestNotarizationRoute = () => this.processPath();
+	checkoutRoute = () => this.processPath();
+
+	payRoute = documentList => {
+		const { templateId, vendorId, productId } = this.props;
+		return `${MARKETPLACE_NOTARIES_ROOT_PATH}/pay/${templateId}/${vendorId}/${productId}/${documentList}`;
+	};
+	cancelRoute = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}`;
+	paymentCompleteRoute = () => {
+		const { templateId, vendorId, productId } = this.props;
+		return `${MARKETPLACE_NOTARIES_ROOT_PATH}/payment-complete/${templateId}/${vendorId}/${productId}`;
+	};
+	tocRoute = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}/toc`;
+	tocDisagreementRoute = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}/toc-disagreement`;
 
 	getApplicationStatus = () => {
 		if (this.props.rp && this.props.rp.authenticated && this.userHasApplied()) {

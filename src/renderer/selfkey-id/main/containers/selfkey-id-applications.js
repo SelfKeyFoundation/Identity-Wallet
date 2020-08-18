@@ -121,7 +121,6 @@ class SelfkeyIdApplicationsContainerComponent extends PureComponent {
 		if (wallet.profile === 'local') {
 			loading = Object.keys(rps).length === 0 || vendors.length === 0;
 		}
-
 		return (
 			<SelfkeyIdApplications
 				{...this.props}
@@ -137,7 +136,6 @@ class SelfkeyIdApplicationsContainerComponent extends PureComponent {
 
 const mapStateToProps = (state, props) => {
 	const walletType = appSelectors.selectApp(state).walletType;
-
 	return {
 		wallet: walletSelectors.getWallet(state),
 		orders: marketplaceSelectors.getAllOrders(state),

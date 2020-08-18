@@ -32,6 +32,7 @@ import {
 } from 'selfkey-ui';
 import moment from 'moment';
 import { Popup } from '../../../common/popup';
+import MessageContainer from './message-container';
 import HeaderIcon from '../../../common/header-icon';
 
 const styles = theme => ({
@@ -421,6 +422,21 @@ class SelfkeyIdApplicationsComponent extends PureComponent {
 															</Typography>
 														</ListItem>
 														<ListItem
+															key="chatr"
+															className={classes.listItem}
+														>
+															<Typography
+																variant="body2"
+																color="secondary"
+																className={classes.label}
+															>
+																Chats
+															</Typography>
+															<Typography variant="body2">
+																{item.messages}
+															</Typography>
+														</ListItem>
+														<ListItem
 															key="providerContact"
 															className={classes.listItem}
 														>
@@ -454,6 +470,7 @@ class SelfkeyIdApplicationsComponent extends PureComponent {
 															</Typography>
 														</ListItem>
 													</List>
+													<MessageContainer messages={item.messages} />
 												</CardContent>
 											</Card>
 										</Grid>

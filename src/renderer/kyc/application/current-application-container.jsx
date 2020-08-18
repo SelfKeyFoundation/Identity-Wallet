@@ -19,17 +19,17 @@ class CurrentApplicationComponent extends PureComponent {
 		isDocument: false
 	};
 	componentDidMount() {
-		if (!this.props.currentApplication) return;
+		const { currentApplication, rpShouldUpdate, dispatch } = this.props;
+		if (!currentApplication) return;
 
-		const authenticated = true;
-		if (this.props.rpShouldUpdate) {
-			this.props.dispatch(
+		if (rpShouldUpdate) {
+			const authenticated = true;
+
+			dispatch(
 				kycOperations.loadRelyingParty(
-					this.props.currentApplication.relyingPartyName,
+					currentApplication.relyingPartyName,
 					authenticated,
-					`/main/kyc/current-application/${
-						this.props.currentApplication.relyingPartyName
-					}`
+					`/main/kyc/current-application/${currentApplication.relyingPartyName}`
 				)
 			);
 		}
