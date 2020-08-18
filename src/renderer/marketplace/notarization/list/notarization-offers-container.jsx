@@ -7,7 +7,7 @@ import { pricesSelectors } from 'common/prices';
 import { kycSelectors } from 'common/kyc';
 import { marketplaceSelectors } from 'common/marketplace';
 import { identitySelectors } from 'common/identity';
-
+import { RESIDENCY_ATTRIBUTE } from 'common/identity/constants';
 import { MarketplaceNotariesComponent } from '../common/marketplace-notaries-component';
 
 const styles = theme => ({});
@@ -38,22 +38,15 @@ const mapStateToProps = (state, props) => {
 	let productId = null;
 
 	const identity = identitySelectors.selectIdentity(state);
-	const profile = identitySelectors.selectIndividualProfile(state);
 	const notaries = marketplaceSelectors.selectNotaries(state, identity.type);
-	// const vendors = marketplaceSelectors.selectVendorsForCategory(state, 'notaries');
 
-	// Find country from identity attributes
 	// Select US or international product
-	const countryAttribute = profile.allAttributes.find(
-		attr =>
-			attr.type.content.$id ===
-			'http://platform.selfkey.org/schema/attribute/nationality.json'
-	);
-	const nationality = countryAttribute ? countryAttribute.data.value.country : '';
-	const product =
-		nationality === 'US'
-			? notaries.find(n => n.data.jurisdiction === 'US')
-			: notaries.find(n => n.data.jurisdiction === 'INT');
+	const residencyAttribute = identitySelectors.selectAttributeValue(state, {
+		identityId: identity.id,
+		attributeTypeUrl: RESIDENCY_ATTRIBUTE
+	});
+	const residency = residencyAttribute && residencyAttribute.country === 'US' ? 'US' : 'INT';
+	const product = notaries.find(n => n.data.jurisdiction === residency);
 
 	if (product) {
 		templateId = product.data.templateId;
