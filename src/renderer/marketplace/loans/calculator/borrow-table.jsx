@@ -7,7 +7,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { LargeTableHeadRow } from 'selfkey-ui';
-import DetailsButton from '../../bank-accounts/common/details-button';
+import { DetailsIconButton } from '../../common';
 
 const styles = theme => ({
 	nameCell: {
@@ -28,8 +28,17 @@ const styles = theme => ({
 		}
 	},
 	detailsCell: {
-		width: '55px',
-		padding: '15px'
+		color: '#00C0D9',
+		padding: '15px 20px',
+		'& span': {
+			cursor: 'pointer'
+		},
+		'& button': {
+			maxWidth: '15px',
+			minWidth: '15px',
+			padding: 0,
+			width: '15px'
+		}
 	},
 	logoCell: {
 		padding: '15px 0 15px 25px',
@@ -124,7 +133,7 @@ const LoansCalculatorBorrowTable = withStyles(styles)(
 							</Typography>
 						</TableCell>
 						<TableCell className={classes.detailsCell}>
-							<DetailsButton onClick={() => onDetailsClick(offer)} />
+							<DetailsIconButton onClick={() => onDetailsClick(offer)} />
 						</TableCell>
 					</TableRow>
 				))}

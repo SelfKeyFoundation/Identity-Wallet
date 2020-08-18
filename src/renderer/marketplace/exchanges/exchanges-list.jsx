@@ -77,6 +77,19 @@ const styles = theme => ({
 	},
 	hidden: {
 		display: 'none'
+	},
+	detailsCell: {
+		color: '#00C0D9',
+		padding: '15px 20px',
+		'& span': {
+			cursor: 'pointer'
+		},
+		'& button': {
+			maxWidth: '15px',
+			minWidth: '15px',
+			padding: 0,
+			width: '15px'
+		}
 	}
 });
 
@@ -193,7 +206,9 @@ export const ExchangesList = withStyles(styles)(
 														Excluded Residents
 													</Typography>
 												</TableCell>
-												<TableCell>&nbsp;</TableCell>
+												<TableCell className={classes.detailsCell}>
+													&nbsp;
+												</TableCell>
 											</LargeTableHeadRow>
 										</TableHead>
 

@@ -328,9 +328,11 @@ export const kycSelectors = {
 	selectRequirementsForTemplate(state, rpName, templateId, identityId) {
 		const template = this.oneTemplateSelector(state, rpName, templateId);
 		if (!template) {
-			log.warn(
-				`Unable to select template ${templateId} for ${rpName}, it's either loading or this template ID is not available in the instance`
-			);
+			if (config.dev) {
+				log.warn(
+					`Unable to select template ${templateId} for ${rpName}, it's either loading or this template ID is not available in the instance`
+				);
+			}
 			return null;
 		}
 		const templateAttributes = template.attributes || [];

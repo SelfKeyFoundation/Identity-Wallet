@@ -68,7 +68,7 @@ class BackupAddress extends PureComponent {
 				closeAction={this.handleBackAction}
 				open
 				displayLogo
-				text="Step 3: Backup Your Ethereum AddressPassword"
+				text="Step 3: Backup Your Ethereum Address"
 			>
 				<Grid
 					container

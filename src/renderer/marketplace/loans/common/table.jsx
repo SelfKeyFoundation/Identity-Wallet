@@ -10,7 +10,7 @@ import classNames from 'classnames';
 import { MarketplaceLoansComponent } from '../common/marketplace-loans-component';
 import { Tag, LargeTableHeadRow } from 'selfkey-ui';
 import { LoansFilters } from './filters';
-import DetailsButton from '../../bank-accounts/common/details-button';
+import { DetailsIconButton } from '../../common';
 
 const styles = theme => ({
 	nameCell: {
@@ -39,8 +39,17 @@ const styles = theme => ({
 		}
 	},
 	detailsCell: {
-		width: '55px',
-		padding: '15px'
+		color: '#00C0D9',
+		padding: '15px 20px',
+		'& span': {
+			cursor: 'pointer'
+		},
+		'& button': {
+			maxWidth: '15px',
+			minWidth: '15px',
+			padding: 0,
+			width: '15px'
+		}
 	}
 });
 
@@ -220,7 +229,7 @@ class LoansTableComponent extends MarketplaceLoansComponent {
 									<Typography variant="h6">{offer.data.maxLoan}</Typography>
 								</TableCell>
 								<TableCell className={classes.detailsCell}>
-									<DetailsButton onClick={() => onDetailsClick(offer)} />
+									<DetailsIconButton onClick={() => onDetailsClick(offer)} />
 								</TableCell>
 							</TableRow>
 						))}
