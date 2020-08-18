@@ -75,6 +75,9 @@ const styles = theme => ({
 		marginBottom: '17px',
 		marginTop: '5px'
 	},
+	iconMargin: {
+		marginRight: '8px'
+	},
 	'@media screen and (min-width: 1230px)': {
 		bgIcon: {
 			right: '-559px'
@@ -171,8 +174,10 @@ const ApplicationsList = ({ classes, route, applications }) => (
 							</div>
 						</div>
 						<div className={classes.applicationStatus}>
-							<HeaderIcon status={application.currentStatus} />
-							<Typography>{application.currentStatusName}</Typography>
+							<div className={classes.iconMargin}>
+								<HeaderIcon status={application.currentStatus} />
+							</div>
+							<Typography variant="h6">{application.currentStatusName}</Typography>
 						</div>
 					</div>
 				);
