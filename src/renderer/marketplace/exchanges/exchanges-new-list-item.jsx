@@ -71,7 +71,8 @@ export const ExchangesNewListItem = withStyles(styles)(
 		allFeesEmpty,
 		logoUrl,
 		status,
-		viewAction
+		viewAction,
+		partnershipVisibility = true
 	}) => {
 		const getColors = () => ['#46dfba', '#46b7df', '#238db4', '#25a788', '#0e4b61'];
 		let random = Math.floor(Math.random() * 4);
@@ -155,9 +156,11 @@ export const ExchangesNewListItem = withStyles(styles)(
 								: supportedFiats(fiatSupported)
 							: '-'}
 					</Typography>
-					<Typography variant="subtitle2">
-						<span className={classes.rightSpace}>Partnership:</span> -
-					</Typography>
+					{partnershipVisibility && (
+						<Typography variant="subtitle2">
+							<span className={classes.rightSpace}>Partnership:</span> -
+						</Typography>
+					)}
 				</div>
 			</div>
 		);
