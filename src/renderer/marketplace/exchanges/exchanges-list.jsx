@@ -18,7 +18,7 @@ const styles = theme => ({
 		}
 	},
 	header: {
-		borderBottom: 'solid 1px #475768',
+		marginBottom: '30px',
 		'& h1': {
 			marginLeft: '20px'
 		},
@@ -32,7 +32,7 @@ const styles = theme => ({
 		flexWrap: 'nowrap'
 	},
 	content: {
-		marginTop: '30px',
+		marginTop: '50px',
 		margin: 0,
 		width: '100%'
 	},
@@ -48,6 +48,7 @@ const styles = theme => ({
 		position: 'absolute'
 	},
 	listContent: {
+		borderTop: 'solid 1px #475768',
 		margin: 0,
 		width: '100%'
 	},
@@ -202,7 +203,7 @@ export const ExchangesList = withStyles(styles)(
 							alignItems="center"
 							className={classes.headerContent}
 						>
-							<Grid container>
+							<Grid container alignItems="center">
 								<Grid item>{category.icon}</Grid>
 								<Grid item>
 									<Typography variant="h1">{category.title}</Typography>
