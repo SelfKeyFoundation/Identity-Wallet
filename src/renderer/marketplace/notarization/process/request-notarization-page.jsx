@@ -4,6 +4,7 @@ import { Button, Typography, Divider } from '@material-ui/core';
 import { baseDark, grey, CloseButtonIcon } from 'selfkey-ui';
 import { RequestDocumentsList } from './request-documents-list-container';
 import { NotariesServiceCost } from '../common/notaries-service-cost';
+import { ApplicationStatusBar } from '../../../kyc/application/application-status';
 
 const styles = theme => ({
 	container: {
@@ -88,11 +89,15 @@ const styles = theme => ({
 	},
 	requestBtn: {
 		marginRight: '20px'
+	},
+	barStyle: {
+		padding: '0',
+		marginBottom: '25px'
 	}
 });
 
 export const RequestNotarizationPage = withStyles(styles)(props => {
-	const { documents, selectedDocuments, product, keyRate, gasEthFee, gasUsdFee } = props;
+	const { documents, selectedDocuments, product, keyRate, gasEthFee, gasUsdFee, loading } = props;
 	const {
 		classes,
 		onBackClick,
@@ -100,11 +105,12 @@ export const RequestNotarizationPage = withStyles(styles)(props => {
 		onStartClick,
 		handleSelectDocument,
 		handleMessage,
-		message,
+		message = '',
+		applicationStatus,
+		onStatusAction,
 		...passedProps
 	} = props;
 	const price = product && product.price ? product.price : 0;
-
 	return (
 		<div className={classes.container}>
 			<CloseButtonIcon onClick={onBackClick} className={classes.closeIcon} />
@@ -114,6 +120,12 @@ export const RequestNotarizationPage = withStyles(styles)(props => {
 				</Typography>
 			</div>
 			<div className={classes.contentContainer}>
+				<ApplicationStatusBar
+					status={applicationStatus}
+					statusAction={onStatusAction}
+					loading={loading}
+					barStyle={classes.barStyle}
+				/>
 				<Typography variant="h2" gutterBottom>
 					How the process works
 				</Typography>
@@ -191,8 +203,8 @@ export const RequestNotarizationPage = withStyles(styles)(props => {
 					selectedDocuments={selectedDocuments}
 					price={price}
 					keyRate={keyRate}
-					gasEthFee={gasEthFee}
-					gasUsdFee={gasUsdFee}
+					gasEthFee={selectedDocuments.length !== 0 ? gasEthFee : 0}
+					gasUsdFee={selectedDocuments.length !== 0 ? gasUsdFee : 0}
 				/>
 				<div>
 					<Button

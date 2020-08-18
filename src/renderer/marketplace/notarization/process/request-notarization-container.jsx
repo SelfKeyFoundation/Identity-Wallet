@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/styles';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { pricesSelectors } from 'common/prices';
 import { identitySelectors } from 'common/identity';
-import { kycOperations } from 'common/kyc';
+import { kycSelectors, kycOperations } from 'common/kyc';
 import { marketplaceSelectors } from 'common/marketplace';
 import MarketplaceNotariesComponent from '../common/marketplace-notaries-component';
 import RequestNotarizationPage from './request-notarization-page';
@@ -80,6 +80,20 @@ class RequestNotarizationContainer extends MarketplaceNotariesComponent {
 		this.setState({ message: event.target.value });
 	};
 
+	handleStatusActionClick = event => {
+		const { rp } = this.props;
+		if (rp && rp.authenticated && this.userHasApplied()) {
+			if (this.applicationCompleted() || this.applicationWasRejected()) {
+				this.props.dispatch(push(this.manageApplicationsRoute()));
+			} else if (this.applicationRequiresAdditionalDocuments()) {
+				this.redirectToKYCC(rp);
+			} else if (!this.userHasPaid()) {
+				this.props.dispatch(push(this.payRoute()));
+			}
+		}
+		return null;
+	};
+
 	getPaymentParameters() {
 		const { ethRate, ethGasStationInfo } = this.props;
 		const gasPrice = ethGasStationInfo.fast;
@@ -107,6 +121,7 @@ class RequestNotarizationContainer extends MarketplaceNotariesComponent {
 					/>
 				)}
 				<RequestNotarizationPage
+					loading={this.props.loading}
 					documents={documents}
 					product={product}
 					keyRate={keyRate}
@@ -121,6 +136,8 @@ class RequestNotarizationContainer extends MarketplaceNotariesComponent {
 					handlePopupClose={this.handlePopupClose}
 					handleSelectDocument={this.handleSelectDocument}
 					handleMessage={this.handleMessage}
+					applicationStatus={this.getApplicationStatus()}
+					onStatusAction={this.handleStatusActionClick}
 				/>
 			</React.Fragment>
 		);
@@ -142,6 +159,7 @@ const mapStateToProps = (state, props) => {
 			identity.type
 		),
 		isLoading: marketplaceSelectors.isInventoryLoading(state),
+		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		ethRate: pricesSelectors.getRate(state, 'ETH', 'USD'),
 		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
