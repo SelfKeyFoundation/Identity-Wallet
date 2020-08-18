@@ -24,24 +24,16 @@ class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 	};
 
 	async createOrder() {
-		const { vendor, vendorId, productId, product, documentList, message } = this.props;
+		const { vendor, vendorId, productId, product, documents, message } = this.props;
 
 		const application = this.getLastApplication();
-		const documents = documentList.split(',');
 		const priceUSD = product.price * documents.length;
 		const price = this.priceInKEY(priceUSD);
 		const vendorName = vendor.name;
 		const vendorDID = vendor.paymentAddress;
 
-		if (documents[0] !== 'undefined') {
-			const attributes = documents.map(documentId => {
-				const document = this.props.documents.find(d => d.id === +documentId);
-				return document.type.url;
-			});
-			const files = documents.map(documentId => {
-				const document = this.props.documents.find(d => d.id === +documentId);
-				return document;
-			});
+		if (documents.length > 0) {
+			const attributes = documents.map(document => document.type.url);
 
 			// Send user message to notary via KYCC messages API
 			if (message) {
@@ -65,7 +57,11 @@ class NotarizationPaymentContainer extends MarketplaceNotariesComponent {
 
 			// Upload the addtional files to KYCC
 			await this.props.dispatch(
-				kycOperations.uploadAdditionalFiles({ rpName: vendorId, application, files })
+				kycOperations.uploadAdditionalFiles({
+					rpName: vendorId,
+					application,
+					files: documents
+				})
 			);
 		}
 
@@ -92,12 +88,18 @@ const mapStateToProps = (state, props) => {
 	const { templateId, vendorId, productId, documentList } = props.match.params;
 	const authenticated = true;
 	const identity = identitySelectors.selectIdentity(state);
+	const profile = identitySelectors.selectIndividualProfile(state);
+	const documents = documentList
+		? documentList
+				.split(',')
+				.map(documentId => profile.documents.find(d => d.id === +documentId))
+		: [];
 
 	return {
 		templateId,
 		vendorId,
 		productId,
-		documentList,
+		documents,
 		message: kycSelectors.selectMessages(state),
 		product: marketplaceSelectors.selectInventoryItemByFilter(
 			state,
@@ -105,7 +107,6 @@ const mapStateToProps = (state, props) => {
 			p => p.sku === productId,
 			identity.type
 		),
-		...identitySelectors.selectIndividualProfile(state),
 		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
 		address: getWallet(state).address,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),

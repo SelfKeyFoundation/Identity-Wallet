@@ -105,7 +105,7 @@ export const RequestNotarizationPage = withStyles(styles)(props => {
 		onStartClick,
 		handleSelectDocument,
 		handleMessage,
-		message,
+		message = '',
 		applicationStatus,
 		onStatusAction,
 		...passedProps

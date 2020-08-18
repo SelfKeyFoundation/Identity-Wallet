@@ -79,7 +79,7 @@ export const NotariesServiceCost = withStyles(style)(
 					<div className="rowItem time" />
 					<div className="rowItem price">
 						<Typography className={classes.bold} variant="body2" color="primary">
-							$ {gasUsdFee.toLocaleString()}
+							$ {gasUsdFee.toLocaleString(undefined, { maximumFractionDigits: 2 })}
 						</Typography>
 						<Typography variant="subtitle2" color="secondary">
 							{gasEthFee} ETH

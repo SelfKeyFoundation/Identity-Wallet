@@ -15,9 +15,10 @@ export default class MarketplaceNotariesComponent extends MarketplaceComponent {
 	requestNotarizationRoute = () => this.processPath();
 	checkoutRoute = () => this.processPath();
 
-	payRoute = documentList => {
+	payRoute = (documentList = false) => {
 		const { templateId, vendorId, productId } = this.props;
-		return `${MARKETPLACE_NOTARIES_ROOT_PATH}/pay/${templateId}/${vendorId}/${productId}/${documentList}`;
+		const path = `${MARKETPLACE_NOTARIES_ROOT_PATH}/pay/${templateId}/${vendorId}/${productId}`;
+		return documentList ? `${path}/${documentList}` : path;
 	};
 	cancelRoute = () => `${MARKETPLACE_NOTARIES_ROOT_PATH}`;
 	paymentCompleteRoute = () => {
