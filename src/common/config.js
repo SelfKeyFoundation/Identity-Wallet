@@ -77,6 +77,11 @@ const common = {
 			name: 'Far Horizon Capital Inc',
 			email: 'support@flagtheory.com',
 			address: '10 Anson Road International Plaza #27-15 Singapore 079903'
+		},
+		selfkey_certifier: {
+			name: 'SelfKey Certifier',
+			email: 'certifier@selfkey.org',
+			address: 'N/A'
 		}
 	},
 
@@ -138,6 +143,7 @@ const common = {
 		scheduler: true,
 		corporate: false,
 		certifiers: false,
+		notaries: false,
 		corporateMarketplace: false,
 		kyccUsersEndpoint: false,
 		walletExport: true,
@@ -166,7 +172,8 @@ const dev = {
 		paymentContract: false,
 		scheduler: true,
 		corporate: true,
-		certifiers: true,
+		certifiers: false,
+		notaries: true,
 		corporateMarketplace: false,
 		kyccUsersEndpoint: true,
 		walletExport: true,
@@ -199,6 +206,7 @@ const prod = {
 		scheduler: true,
 		corporate: true,
 		certifiers: false,
+		notaries: false,
 		corporateMarketplace: false,
 		kyccUsersEndpoint: false,
 		walletExport: true,
