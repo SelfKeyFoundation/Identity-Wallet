@@ -6,34 +6,29 @@ const styles = theme => ({
 	root: {
 		width: '340px',
 		height: '326px',
-		marginTop: '30px',
-		marginBottom: '30px',
+		marginTop: '16px',
+		marginBottom: '16px',
 		border: 'solid 1px #303c49',
 		borderRadius: '4px',
 		fontFamily: 'Lato, arial, sans-serif',
 		backgroundColor: '#262F39'
 	},
-
 	title: {
 		margin: '20px'
 	},
-
 	icon: {
 		marginLeft: '20px'
 	},
-
 	header: {
 		backgroundColor: '#2a3540',
 		borderRadius: '3px 3px 0 0',
 		height: '76px',
 		width: '338px'
 	},
-
 	svgIcon: {
 		height: '44px',
 		color: '#23E6FE'
 	},
-
 	body: {
 		width: '300px',
 		textAlign: 'left',
@@ -45,19 +40,16 @@ const styles = theme => ({
 		lineHeight: 1.5,
 		height: '130px'
 	},
-
 	footer: {
 		margin: '20px',
 		'& button': {
 			fontSize: '10px'
 		}
 	},
-
 	'@media screen and (min-width: 1230px)': {
 		root: {
 			width: '360px'
 		},
-
 		header: {
 			width: '358px'
 		}
@@ -99,6 +91,62 @@ export const MarketplaceCategory = withStyles(styles)(
 			</Grid>
 		</Grid>
 	)
+);
+
+const newStyles = theme => ({
+	rootRightMargin: {
+		marginRight: 'calc((100% - (267px * 4))/3)'
+	},
+	root: {
+		backgroundColor: '#293743',
+		border: '1px solid #1D505F',
+		borderRadius: '4px',
+		boxSizing: 'border-box',
+		cursor: 'pointer',
+		height: '243px',
+		padding: '32px 20px 40px 20px',
+		marginBottom: '16px',
+		marginTop: '16px',
+		textAlign: 'center',
+		width: '340px',
+		'&:hover': {
+			border: '2px solid #1CA9BA',
+			padding: '31px 19px 39px 19px'
+		}
+	},
+	icon: {
+		marginBottom: '16px'
+	},
+	svgIcon: {
+		height: '44px'
+	},
+	'@media screen and (min-width: 1230px)': {
+		root: {
+			width: '267px'
+		}
+	}
+});
+
+export const NewMarketplaceCategory = withStyles(newStyles)(
+	({ classes, children, title, description, active, svgIcon, learnMoreAction, index }) => {
+		const isThe4thElement = (index + 1) % 4 !== 0;
+		const containerClass = `${classes.root} ${isThe4thElement ? classes.rootRightMargin : ''}`;
+		return (
+			<Grid container className={containerClass} onClick={learnMoreAction} id={index}>
+				<Grid container justify="center" className={classes.icon} id={index}>
+					{svgIcon && <img src={svgIcon} className={classes.svgIcon} />}
+				</Grid>
+				<Grid container justify="center">
+					<Typography variant="h2" style={{ fontWeight: 'bold', marginBottom: '8px' }}>
+						{title}
+					</Typography>
+				</Grid>
+				<Grid item>
+					<Typography variant="subtitle2">{description}</Typography>
+				</Grid>
+			</Grid>
+		);
+	}
 );
 
 export default MarketplaceCategory;
