@@ -181,8 +181,8 @@ export const ExchangesList = withStyles(styles)(
 		backAction,
 		viewAction,
 		isLoading,
-		akarmiChange,
-		value = 'Grid'
+		exchangesListLayoutChange,
+		selectedType = 'Grid'
 	}) => (
 		<Grid container>
 			<Grid item className={classes.backButtonContainer}>
@@ -216,17 +216,21 @@ export const ExchangesList = withStyles(styles)(
 									<Grid item>
 										<ToggleButtonGroup
 											exclusive
-											value={value}
-											onChange={akarmiChange}
+											onChange={exchangesListLayoutChange}
+											value={selectedType}
 										>
 											<ToggleButton value="Grid">
 												<GridIcon
-													fill={value === 'Grid' ? primaryTint : null}
+													fill={
+														selectedType === 'Grid' ? primaryTint : null
+													}
 												/>
 											</ToggleButton>
 											<ToggleButton value="List">
 												<List2Icon
-													fill={value === 'List' ? primaryTint : null}
+													fill={
+														selectedType === 'List' ? primaryTint : null
+													}
 												/>
 											</ToggleButton>
 										</ToggleButtonGroup>
@@ -246,7 +250,7 @@ export const ExchangesList = withStyles(styles)(
 						>
 							{isLoading && <PageLoading />}
 							{featureIsEnabled('exchangesMarketplace') && !isLoading
-								? value === 'List'
+								? selectedType === 'List'
 									? listView(classes, items, viewAction)
 									: gridView(classes, items, viewAction)
 								: listView(classes, items, viewAction)}
