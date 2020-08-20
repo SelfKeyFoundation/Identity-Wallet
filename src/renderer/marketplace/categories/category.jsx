@@ -95,7 +95,7 @@ export const MarketplaceCategory = withStyles(styles)(
 
 const newStyles = theme => ({
 	rootRightMargin: {
-		marginRight: 'calc((100% - (267px * 4))/3)'
+		marginRight: 'calc((100% - (257px * 4))/3)'
 	},
 	root: {
 		backgroundColor: '#293743',
@@ -108,8 +108,11 @@ const newStyles = theme => ({
 		marginBottom: '16px',
 		marginTop: '16px',
 		textAlign: 'center',
-		width: '340px',
+		transition: 'all 0.2s',
+		// width: '340px',
+		width: '257px',
 		'&:hover': {
+			backgroundColor: '#293743a1',
 			border: '2px solid #1CA9BA',
 			padding: '31px 19px 39px 19px'
 		}
@@ -122,7 +125,7 @@ const newStyles = theme => ({
 	},
 	'@media screen and (min-width: 1230px)': {
 		root: {
-			width: '267px'
+			width: '257px'
 		}
 	}
 });
