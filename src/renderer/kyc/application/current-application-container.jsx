@@ -34,6 +34,28 @@ class CurrentApplicationComponent extends PureComponent {
 			);
 		}
 	}
+	isApplicationFilled() {
+		const { requirements, memberRequirements } = this.props;
+		let filled = requirements.reduce((acc, curr) => {
+			if (!acc) return acc;
+
+			return !(curr.required && (!curr.options || !curr.options.length));
+		}, true);
+
+		if (filled && memberRequirements && memberRequirements.length) {
+			filled = memberRequirements.reduce((acc, curr) => {
+				if (!acc) return acc;
+
+				return curr.requirements.reduce((acc, curr) => {
+					if (!acc) return acc;
+
+					return !(curr.required && (!curr.options || !curr.options.length));
+				}, true);
+			}, true);
+		}
+
+		return filled;
+	}
 	handleAgreementChange = agreementValue => {
 		this.setState({ agreementValue });
 	};
@@ -122,6 +144,7 @@ class CurrentApplicationComponent extends PureComponent {
 					onAgreementChange={this.handleAgreementChange}
 					error={this.state.error}
 					relyingParty={relyingParty}
+					filled={this.isApplicationFilled()}
 					requirements={requirements}
 					memberRequirements={memberRequirements}
 					onClose={this.handleClose}
@@ -169,16 +192,18 @@ const mapStateToProps = (state, props) => {
 			authenticated
 		),
 		currentApplication,
-		requirements: kycSelectors.selectRequirementsForTemplate(
-			state,
-			relyingPartyName,
-			currentApplication.templateId
-		),
-		memberRequirements: kycSelectors.selectMemberRequirementsForTemplate(
-			state,
-			relyingPartyName,
-			currentApplication.templateId
-		),
+		requirements:
+			kycSelectors.selectRequirementsForTemplate(
+				state,
+				relyingPartyName,
+				currentApplication.templateId
+			) || [],
+		memberRequirements:
+			kycSelectors.selectMemberRequirementsForTemplate(
+				state,
+				relyingPartyName,
+				currentApplication.templateId
+			) || [],
 		existingApplicationId
 	};
 };

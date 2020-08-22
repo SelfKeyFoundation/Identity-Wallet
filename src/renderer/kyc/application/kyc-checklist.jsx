@@ -420,6 +420,15 @@ class KycChecklistComponent extends React.Component {
 		return this.setState({ selectedMember, selectedIdentityId: member.id });
 	};
 
+	handleAdd = (item, identityId) => {
+		const { addItem } = this.props;
+		if (isNaN(+identityId)) {
+			identityId = null;
+		}
+
+		addItem(item, identityId);
+	};
+
 	render() {
 		const {
 			classes,
@@ -428,8 +437,7 @@ class KycChecklistComponent extends React.Component {
 			memberRequirements,
 			selectedAttributes,
 			onSelected,
-			editItem,
-			addItem
+			editItem
 		} = this.props;
 
 		const { selectedMember, selectedIdentityId } = this.state;
@@ -441,7 +449,7 @@ class KycChecklistComponent extends React.Component {
 				(memberRequirements.find(m => m.uiId === selectedMember) || {}).requirements || [];
 		}
 
-		if (!memberRequirements) {
+		if (!memberRequirements || !memberRequirements.length) {
 			return (
 				<Scrollable>
 					<KycChecklistList
@@ -449,7 +457,7 @@ class KycChecklistComponent extends React.Component {
 						selectedAttributes={selectedAttributes}
 						onSelected={onSelected}
 						editItem={editItem}
-						addItem={addItem}
+						addItem={this.handleAdd}
 					/>
 				</Scrollable>
 			);
@@ -483,7 +491,7 @@ class KycChecklistComponent extends React.Component {
 							selectedAttributes={selectedAttributes}
 							onSelected={onSelected}
 							editItem={editItem}
-							addItem={addItem}
+							addItem={this.handleAdd}
 						/>
 					</Scrollable>
 				</Grid>
