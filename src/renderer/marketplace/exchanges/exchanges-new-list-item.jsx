@@ -44,7 +44,8 @@ const styles = theme => ({
 		maxWidth: '30px'
 	},
 	generatedIcon: {
-		height: '30px'
+		height: '30px',
+		width: '30px'
 	},
 	excluded: {
 		padding: '10px 10px 10px 0',
