@@ -13,7 +13,8 @@ const styles = theme => ({
 		maxWidth: '30px'
 	},
 	generatedIcon: {
-		height: '30px'
+		height: '30px',
+		width: '30px'
 	},
 	noRightPadding: {
 		padding: '0 0 0 20px !important'
