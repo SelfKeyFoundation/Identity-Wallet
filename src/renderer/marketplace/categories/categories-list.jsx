@@ -30,7 +30,7 @@ const styles = theme => ({
 		width: '100%'
 	},
 	body: {
-		marginTop: '50px'
+		marginTop: '20px'
 	}
 });
 
