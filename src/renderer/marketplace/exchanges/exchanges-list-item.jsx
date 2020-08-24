@@ -6,35 +6,8 @@ import { DetailsIconButton } from '../common';
 import GetExchangeIcon from './common/marketplace-exchanges-icon';
 
 const styles = theme => ({
-	defaultIcon: {
-		alignItems: 'center',
-		borderRadius: '5px',
-		display: 'flex',
-		justifyContent: 'center',
-		maxWidth: '30px'
-	},
-	generatedIcon: {
-		height: '30px',
-		width: '30px'
-	},
 	noRightPadding: {
 		padding: '0 0 0 20px !important'
-	},
-	link: {
-		cursor: 'pointer'
-	},
-	footer: {
-		margin: '20px'
-	},
-	inline: {
-		display: 'flex',
-		flexWrap: 'wrap'
-	},
-	smallCell: {
-		padding: '0 10px',
-		whiteSpace: 'normal',
-		width: '100px',
-		wordBreak: 'break-word'
 	},
 	excluded: {
 		padding: '10px 10px 10px 0',
