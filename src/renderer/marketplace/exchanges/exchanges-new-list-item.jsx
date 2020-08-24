@@ -2,6 +2,7 @@ import React from 'react';
 import { Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { Tag, DropdownIcon } from 'selfkey-ui';
+import GetExchangeIcon from './common/marketplace-exchanges-icon';
 
 const styles = theme => ({
 	item: {
@@ -36,17 +37,6 @@ const styles = theme => ({
 		cursor: 'pointer',
 		transform: 'rotate(-90deg)'
 	},
-	defaultIcon: {
-		alignItems: 'center',
-		borderRadius: '5px',
-		display: 'flex',
-		justifyContent: 'center',
-		maxWidth: '30px'
-	},
-	generatedIcon: {
-		height: '30px',
-		width: '30px'
-	},
 	excluded: {
 		padding: '10px 10px 10px 0',
 		whiteSpace: 'normal',
@@ -75,22 +65,6 @@ export const ExchangesNewListItem = withStyles(styles)(
 		viewAction,
 		partnershipVisibility = true
 	}) => {
-		const getColors = () => ['#46dfba', '#46b7df', '#238db4', '#25a788', '#0e4b61'];
-		let random = Math.floor(Math.random() * 4);
-
-		const icon = logoUrl ? (
-			<img src={logoUrl} className={classes.defaultIcon} />
-		) : (
-			<div
-				className={`${classes.defaultIcon} ${classes.generatedIcon}`}
-				style={{
-					backgroundColor: getColors()[random]
-				}}
-			>
-				{name.charAt(0)}
-			</div>
-		);
-
 		const isFiatSupported =
 			fiatSupported !== '-' &&
 			fiatSupported.length !== 0 &&
@@ -126,7 +100,9 @@ export const ExchangesNewListItem = withStyles(styles)(
 			<div key={name} className={classes.item}>
 				<div className={classes.header}>
 					<div className={classes.iconAndName}>
-						<div className={classes.icon}>{icon}</div>
+						<div className={classes.icon}>
+							<GetExchangeIcon logoUrl={logoUrl} name={name} />
+						</div>
 						<div>{name}</div>
 					</div>
 					<div className={classes.dropdownIcon}>

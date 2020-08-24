@@ -3,6 +3,7 @@ import { TableRow, TableCell, Typography, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { Tag } from 'selfkey-ui';
 import { DetailsIconButton } from '../common';
+import GetExchangeIcon from './common/marketplace-exchanges-icon';
 
 const styles = theme => ({
 	defaultIcon: {
@@ -111,22 +112,6 @@ export const ExchangesListItem = withStyles(styles)(
 		status,
 		viewAction
 	}) => {
-		const getColors = () => ['#46dfba', '#46b7df', '#238db4', '#25a788', '#0e4b61'];
-		let random = Math.floor(Math.random() * 4);
-
-		const icon = logoUrl ? (
-			<img src={logoUrl} className={classes.defaultIcon} />
-		) : (
-			<div
-				className={`${classes.defaultIcon} ${classes.generatedIcon}`}
-				style={{
-					backgroundColor: getColors()[random]
-				}}
-			>
-				{name.charAt(0)}
-			</div>
-		);
-
 		const isNotExcludedResidents =
 			excludedResidents === '-' ||
 			excludedResidents.length === 0 ||
@@ -144,7 +129,9 @@ export const ExchangesListItem = withStyles(styles)(
 
 		return (
 			<TableRow key={name}>
-				<TableCell className={classes.noRightPadding}>{icon}</TableCell>
+				<TableCell className={classes.noRightPadding}>
+					<GetExchangeIcon logoUrl={logoUrl} name={name} />
+				</TableCell>
 				<TableCell className={classes.exchangeName}>
 					<Typography variant="h6">{name}</Typography>
 				</TableCell>
