@@ -128,7 +128,7 @@ const getServicesInGrid = (items, viewAction) => {
 				status={item.status}
 				viewAction={viewAction}
 				allFeesEmpty={allFees}
-				partnershipVisibility={true}
+				partnershipVisibility={false}
 			/>
 		);
 	});
