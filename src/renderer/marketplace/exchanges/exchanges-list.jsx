@@ -243,7 +243,7 @@ export const ExchangesList = withStyles(styles)(
 						<Grid
 							container
 							direction="row"
-							justify="start"
+							justify="flex-start"
 							alignItems="center"
 							spacing={3}
 							className={classes.content}
