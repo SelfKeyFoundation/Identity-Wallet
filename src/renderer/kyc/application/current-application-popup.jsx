@@ -42,6 +42,7 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		onAgreementChange,
 		agreementValue,
 		error,
+		filled,
 		onSelected,
 		editItem,
 		addItem,
@@ -77,7 +78,7 @@ export const CurrentApplicationPopup = withStyles(styles)(
 			agreementText = <KycAgreementText vendor="Far Horizon Capital Inc" purpose={rpName} />;
 		}
 
-		const submitDisabled = (agreement && agreementError && !agreementValue) || error;
+		const submitDisabled = (agreement && agreementError && !agreementValue) || error || !filled;
 
 		return (
 			<Popup
