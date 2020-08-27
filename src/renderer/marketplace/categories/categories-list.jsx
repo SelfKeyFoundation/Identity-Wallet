@@ -34,7 +34,7 @@ const styles = theme => ({
 
 const getItems = items => {
 	return items.map((item, index) => {
-		return featureIsEnabled('newExchangesLayout') ? (
+		return featureIsEnabled('newMarketplaceLayout') ? (
 			<NewMarketplaceCategory
 				key={index}
 				title={item.title}
@@ -80,7 +80,7 @@ export const MarketplaceCategoriesList = withStyles(styles)(({ classes, children
 			<Grid
 				container
 				direction="row"
-				justify={featureIsEnabled('newExchangesLayout') ? '' : 'space-between'}
+				justify={featureIsEnabled('newMarketplaceLayout') ? '' : 'space-between'}
 				alignItems="flex-start"
 			>
 				{getItems(items)}
