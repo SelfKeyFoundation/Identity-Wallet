@@ -11,6 +11,10 @@ import { identitySelectors } from 'common/identity';
 const styles = theme => ({});
 
 class ExchangesListContainer extends MarketplaceExchangesComponent {
+	state = {
+		type: 'List'
+	};
+
 	componentDidMount() {
 		window.scrollTo(0, 0);
 		this.trackMatomoGoal(
@@ -24,11 +28,19 @@ class ExchangesListContainer extends MarketplaceExchangesComponent {
 
 	onDetailsClick = id => this.props.dispatch(push(this.detailsRoute(id)));
 
+	exchangesListLayoutChange = (e, value) => {
+		let selectedType = value;
+		this.setState({ selectedType });
+	};
+
 	render() {
+		const { selectedType } = this.state;
 		return (
 			<ExchangesList
 				backAction={this.onBackClick}
 				viewAction={this.onDetailsClick}
+				exchangesListLayoutChange={this.exchangesListLayoutChange}
+				selectedType={selectedType}
 				{...this.props}
 			/>
 		);

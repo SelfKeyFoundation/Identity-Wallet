@@ -14,7 +14,7 @@ const styles = theme => ({
 		},
 		width: '100%',
 		height: '40px',
-		marginBottom: '20px'
+		marginBottom: '30px'
 	},
 	headerIcon: {
 		marginLeft: '30px'
@@ -28,6 +28,9 @@ const styles = theme => ({
 		height: '1px',
 		margin: 0,
 		width: '100%'
+	},
+	body: {
+		marginTop: '20px'
 	}
 });
 
@@ -65,7 +68,7 @@ export const MarketplaceCategoriesList = withStyles(styles)(({ classes, children
 		<Grid container>
 			<hr className={classes.hr} />
 		</Grid>
-		<Grid item id="body" xs={12}>
+		<Grid item id="body" xs={12} className={classes.body}>
 			<Grid container direction="row" justify="space-between" alignItems="flex-start">
 				{getItems(items)}
 			</Grid>
