@@ -11,6 +11,7 @@ import { Logger } from '../common/logger';
 import db from './db/db';
 import { identityOperations } from '../common/identity';
 import { pricesOperations } from '../common/prices';
+import { transactionHistoryOperations } from 'common/transaction-history';
 import { getUserDataPath, isDevMode, isTestMode, getWalletsDir } from 'common/utils/common';
 import config from 'common/config';
 import { configureContext, setGlobalContext, getGlobalContext } from '../common/context';
@@ -18,6 +19,8 @@ import { handleSquirrelEvent } from './squirrelevent';
 import { createMainWindow } from './main-window';
 import { asValue } from 'awilix';
 import { featureIsEnabled } from 'common/feature-flags';
+import { walletOperations } from 'common/wallet';
+import { walletTokensOperations } from 'common/wallet-tokens';
 
 const log = new Logger('main');
 
@@ -92,6 +95,11 @@ function onReady() {
 		ctx.lwsService.startServer();
 		ctx.priceService.on('pricesUpdated', newPrices => {
 			ctx.store.dispatch(pricesOperations.updatePrices(newPrices));
+		});
+		ctx.txHistoryService.on('new-transactions', () => {
+			ctx.store.dispatch(transactionHistoryOperations.loadTransactionsOperation());
+			ctx.store.dispatch(walletOperations.refreshWalletBalance());
+			ctx.store.dispatch(walletTokensOperations.refreshWalletTokensBalance());
 		});
 		// ctx.stakingService.acquireContract();
 
