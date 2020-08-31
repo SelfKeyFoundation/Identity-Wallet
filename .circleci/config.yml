@@ -146,7 +146,7 @@ jobs:
             - run:
                   name: Build App
                   command: yarn dist --publish=never
-                  no_output_timeout: 40m
+                  no_output_timeout: 80m
             - persist_to_workspace:
                   root: .
                   paths:

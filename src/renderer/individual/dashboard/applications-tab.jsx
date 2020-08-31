@@ -16,7 +16,6 @@ import {
 } from '@material-ui/core';
 import { createStyles, withStyles } from '@material-ui/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import {
 	KeyTooltip,
 	TooltipArrow,
@@ -26,12 +25,14 @@ import {
 	AttributeAlertLargeIcon,
 	NewRefreshIcon,
 	MarketplaceIcon,
+	DropdownIcon,
 	success,
 	warning,
 	typography,
 	error
 } from 'selfkey-ui';
 import HeaderIcon from '../../common/header-icon';
+import { ApplicationMessages } from './applications-messages';
 
 const styles = theme => ({
 	statusIcon: {
@@ -90,6 +91,9 @@ const styles = theme => ({
 	},
 	loading: {
 		marginTop: '5em'
+	},
+	statusName: {
+		marginLeft: '8px'
 	}
 });
 
@@ -229,7 +233,7 @@ const LoadingScreen = ({ classes }) => (
 
 class IndividualApplicationsTabComponent extends PureComponent {
 	render() {
-		const { classes, loading, applications = [], vendors } = this.props;
+		const { classes, loading, applications = [], vendors, onSendMessage } = this.props;
 
 		const getRpInfo = (rpName, field) => {
 			const vendor = vendors.find(v => v.vendorId === rpName);
@@ -290,7 +294,7 @@ class IndividualApplicationsTabComponent extends PureComponent {
 				{this.props.applications.map((item, index) => (
 					<React.Fragment key={item.id}>
 						<ExpansionPanel defaultExpanded={index === 0}>
-							<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
+							<ExpansionPanelSummary expandIcon={<DropdownIcon />}>
 								<Grid
 									container
 									direction="row"
@@ -312,7 +316,11 @@ class IndividualApplicationsTabComponent extends PureComponent {
 									className={classes.noRightPadding}
 								>
 									<HeaderIcon status={item.currentStatus} />
-									<Typography variant="subtitle2" color="secondary">
+									<Typography
+										variant="subtitle2"
+										color="secondary"
+										className={classes.statusName}
+									>
 										{item.currentStatusName}
 									</Typography>
 								</Grid>
@@ -411,6 +419,22 @@ class IndividualApplicationsTabComponent extends PureComponent {
 											</CardContent>
 										</Card>
 									</Grid>
+									{item.rpName === 'selfkey_certifier' && item.messages && (
+										<Grid item xs>
+											<Card>
+												<Typography variant="h2" className={classes.title}>
+													Messages
+												</Typography>
+												<Divider variant="middle" />
+												<CardContent>
+													<ApplicationMessages
+														application={item}
+														onSendMessage={onSendMessage}
+													/>
+												</CardContent>
+											</Card>
+										</Grid>
+									)}
 									{item.payments && Object.keys(item.payments).length > 0 && (
 										<Grid item xs>
 											<Card>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
-import injectSheet from 'react-jss';
+import { withStyles } from '@material-ui/styles';
 import { CopyWithIcon, MailIcon, PrintSmallIcon } from 'selfkey-ui';
 import QRCode from 'qrcode.react';
 
@@ -127,6 +127,6 @@ const ReceiveTokenTabComponent = props => {
 	);
 };
 
-export const ReceiveTokenTab = injectSheet(styles)(ReceiveTokenTabComponent);
+export const ReceiveTokenTab = withStyles(styles)(ReceiveTokenTabComponent);
 
 export default ReceiveTokenTab;

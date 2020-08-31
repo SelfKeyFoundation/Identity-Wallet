@@ -50,6 +50,16 @@ const styles = theme => ({
 		maxHeight: '400px',
 		overflow: 'auto',
 		padding: '0 20px !important'
+	},
+	'@media screen and (max-height: 800px)': {
+		flexColScroll: {
+			maxHeight: '280px'
+		}
+	},
+	'@media screen and (min-height: 801px) and (max-height: 900px)': {
+		flexColScroll: {
+			maxHeight: '300px'
+		}
 	}
 });
 

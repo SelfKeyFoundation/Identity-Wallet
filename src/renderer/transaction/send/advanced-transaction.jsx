@@ -412,14 +412,18 @@ class TransactionSendBoxContainer extends PureComponent {
 									</Typography>
 								</div>
 								<div className={classes.amountBottomSpace}>
-									<InputTitle title="Amount" />
+									<InputTitle
+										title={`Amount${
+											cryptoCurrency !== 'custom'
+												? ` (${cryptoCurrency})`
+												: ''
+										}`}
+									/>
 									<div className={classes.tokenMax}>
 										<Input
 											type="text"
 											onChange={this.handleAmountChange}
-											value={`${this.state.amount} ${
-												cryptoCurrency !== 'custom' ? cryptoCurrency : ''
-											}`}
+											value={`${this.state.amount}`}
 											placeholder="0.00"
 											className={classes.amount}
 											fullWidth

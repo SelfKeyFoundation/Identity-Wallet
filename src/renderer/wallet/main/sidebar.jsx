@@ -44,10 +44,6 @@ const styles = theme => ({
 		marginBottom: '30px',
 		marginTop: '-30px'
 	},
-	logo: {
-		width: '30px',
-		height: '34px'
-	},
 	logoText: {
 		fontFamily: 'Orbitron, arial, sans-serif',
 		fontSize: '16px',
@@ -186,11 +182,19 @@ const styles = theme => ({
 	}
 });
 
-const dashboard = props => <Link to="/main/dashboard" {...props} />;
-const marketplace = props => <Link to="/main/marketplace" {...props} />;
-const addressBook = props => <Link to="/main/addressBook" {...props} />;
-const switchAccount = props => <Link to="/home" {...props} />;
-const exportAccount = props => <Link to="/main/export-wallet/warning" {...props} />;
+const dashboard = React.forwardRef((props, ref) => (
+	<Link to="/main/dashboard" {...props} ref={ref} />
+));
+const marketplace = React.forwardRef((props, ref) => (
+	<Link to="/main/marketplace" {...props} ref={ref} />
+));
+const addressBook = React.forwardRef((props, ref) => (
+	<Link to="/main/addressBook" {...props} ref={ref} />
+));
+const switchAccount = React.forwardRef((props, ref) => <Link to="/home" {...props} ref={ref} />);
+const exportAccount = React.forwardRef((props, ref) => (
+	<Link to="/main/export-wallet/warning" {...props} ref={ref} />
+));
 
 class Sidebar extends PureComponent {
 	state = {
@@ -235,7 +239,7 @@ class Sidebar extends PureComponent {
 						style={{ paddingLeft: '13px' }}
 					>
 						<Link to="/main/dashboard" className={classes.link}>
-							<SelfkeyLogo className={classes.logo} />
+							<SelfkeyLogo width="30px" height="34px" />
 							<Typography variant="h1" className={classes.logoText}>
 								SELFKEY
 							</Typography>

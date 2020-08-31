@@ -13,9 +13,11 @@ const styles = theme => ({
 	}
 });
 
-const selfkeyIdCreateDisclaimer = props => <Link to="/selfkeyIdCreateDisclaimer" {...props} />;
+const selfkeyIdCreateDisclaimer = React.forwardRef((props, ref) => (
+	<Link to="/selfkeyIdCreateDisclaimer" {...props} ref={ref} />
+));
 
-const main = props => <Link to="/main/dashboard" {...props} />;
+const main = React.forwardRef((props, ref) => <Link to="/main/dashboard" {...props} ref={ref} />);
 
 class SelfKeyIdCreateAboutComponent extends PureComponent {
 	handleBackClick = evt => {

@@ -2,37 +2,12 @@ import React from 'react';
 import { TableRow, TableCell, Typography, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { Tag } from 'selfkey-ui';
-import DetailsButton from '../bank-accounts/common/details-button';
+import { DetailsIconButton } from '../common';
+import GetExchangeIcon from './common/marketplace-exchanges-icon';
 
 const styles = theme => ({
-	defaultIcon: {
-		alignItems: 'center',
-		borderRadius: '5px',
-		display: 'flex',
-		justifyContent: 'center',
-		maxWidth: '30px'
-	},
-	generatedIcon: {
-		height: '30px'
-	},
 	noRightPadding: {
 		padding: '0 0 0 20px !important'
-	},
-	link: {
-		cursor: 'pointer'
-	},
-	footer: {
-		margin: '20px'
-	},
-	inline: {
-		display: 'flex',
-		flexWrap: 'wrap'
-	},
-	smallCell: {
-		padding: '0 10px',
-		whiteSpace: 'normal',
-		width: '100px',
-		wordBreak: 'break-word'
 	},
 	excluded: {
 		padding: '10px 10px 10px 0',
@@ -74,6 +49,19 @@ const styles = theme => ({
 	excludedResidentCell: {
 		minWidth: '200px'
 	},
+	detailsCell: {
+		color: '#00C0D9',
+		padding: '15px 20px',
+		'& span': {
+			cursor: 'pointer'
+		},
+		'& button': {
+			maxWidth: '15px',
+			minWidth: '15px',
+			padding: 0,
+			width: '15px'
+		}
+	},
 	'@media screen and (min-width: 1230px)': {
 		excludedResidentCell: {
 			minWidth: '290px'
@@ -97,26 +85,6 @@ export const ExchangesListItem = withStyles(styles)(
 		status,
 		viewAction
 	}) => {
-		const getButtonText = status => {
-			return status === 'Inactive' ? 'Coming Soon' : 'Details';
-		};
-
-		const getColors = () => ['#46dfba', '#46b7df', '#238db4', '#25a788', '#0e4b61'];
-		let random = Math.floor(Math.random() * 4);
-
-		const icon = logoUrl ? (
-			<img src={logoUrl} className={classes.defaultIcon} />
-		) : (
-			<div
-				className={`${classes.defaultIcon} ${classes.generatedIcon}`}
-				style={{
-					backgroundColor: getColors()[random]
-				}}
-			>
-				{name.charAt(0)}
-			</div>
-		);
-
 		const isNotExcludedResidents =
 			excludedResidents === '-' ||
 			excludedResidents.length === 0 ||
@@ -134,7 +102,9 @@ export const ExchangesListItem = withStyles(styles)(
 
 		return (
 			<TableRow key={name}>
-				<TableCell className={classes.noRightPadding}>{icon}</TableCell>
+				<TableCell className={classes.noRightPadding}>
+					<GetExchangeIcon logoUrl={logoUrl} name={name} />
+				</TableCell>
 				<TableCell className={classes.exchangeName}>
 					<Typography variant="h6">{name}</Typography>
 				</TableCell>
@@ -193,14 +163,10 @@ export const ExchangesListItem = withStyles(styles)(
 								)
 						  )}
 				</TableCell>
-				<TableCell
-					style={status === 'Inactive' ? { padding: '0 20px' } : { padding: '0 15px' }}
-				>
-					<DetailsButton
-						text={getButtonText(status)}
+				<TableCell className={classes.detailsCell}>
+					<DetailsIconButton
 						onClick={() => (viewAction ? viewAction(id) : '')}
 						disabled={status === 'Inactive'}
-						color={status === 'Inactive' ? 'secondary' : 'primary'}
 					/>
 				</TableCell>
 			</TableRow>

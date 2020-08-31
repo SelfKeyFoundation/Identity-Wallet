@@ -39,7 +39,7 @@ export const KeyInformationListItem = withStyles(listItemStyles)(({ classes, lab
 	</ListItem>
 ));
 
-export const KeyInformationList = withStyles(listItemStyles)(({ classes }) => (
+export const KeyInformationList = withStyles(listItemStyles)(({ classes, product }) => (
 	<div>
 		<List className={classes.list}>
 			<KeyInformationListItem
@@ -49,7 +49,10 @@ export const KeyInformationList = withStyles(listItemStyles)(({ classes }) => (
 			<KeyInformationListItem label="Available For:" data="US, Canada, Europe" />
 			<KeyInformationListItem label="ID Verification Required:" data="Yes" />
 			<KeyInformationListItem label="Video Call Required:" data="Yes" />
-			<KeyInformationListItem label="Standard Notarized Document Price:" data="$ 25 USD" />
+			<KeyInformationListItem
+				label="Standard Notarized Document Price:"
+				data={`$${product.price} USD`}
+			/>
 		</List>
 	</div>
 ));
@@ -62,7 +65,7 @@ class NotarizationKeyTabComponent extends PureComponent {
 				<div className={classes.gridPadding}>
 					<Typography variant="h2">Key Information</Typography>
 				</div>
-				<KeyInformationList />
+				<KeyInformationList product={this.props.product} />
 			</div>
 		);
 	}

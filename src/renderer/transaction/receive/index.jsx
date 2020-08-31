@@ -86,7 +86,9 @@ const styles = theme => ({
 	}
 });
 
-const goBackDashboard = props => <Link to="/main/dashboard" {...props} />;
+const goBackDashboard = React.forwardRef((props, ref) => (
+	<Link to="/main/dashboard" {...props} ref={ref} />
+));
 
 const getIconForToken = token => {
 	let icon = null;

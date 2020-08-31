@@ -114,7 +114,6 @@ class RequestDocumentsListContainer extends PureComponent {
 				documents={documents}
 				renderDocumentName={this.renderDocumentName}
 				renderExpiryDate={this.renderExpiryDate}
-				onAddDocument={this.onAddDocument}
 				{...this.props}
 			/>
 		);

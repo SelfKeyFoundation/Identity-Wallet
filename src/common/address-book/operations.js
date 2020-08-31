@@ -24,6 +24,7 @@ const addAddressBookEntry = entry => async (dispatch, getState) => {
 			walletId: walletSelectors.getWallet(getState()).id
 		})
 	);
+	getGlobalContext().matomoService.trackEvent('address_book', 'contact-created');
 };
 
 const editAddressBookEntry = entry => async dispatch => {

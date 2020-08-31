@@ -8,8 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import classNames from 'classnames';
 import { LargeTableHeadRow, TagTableCell, Tag } from 'selfkey-ui';
-import { ProgramPrice, FlagCountryName } from '../../common';
-import DetailsButton from '../../bank-accounts/common/details-button';
+import { ProgramPrice, FlagCountryName, DetailsIconButton } from '../../common';
 
 const styles = theme => ({
 	table: {
@@ -62,10 +61,16 @@ const styles = theme => ({
 		padding: '0'
 	},
 	detailsCell: {
-		width: '55px',
 		color: '#00C0D9',
+		padding: '15px 20px',
 		'& span': {
 			cursor: 'pointer'
+		},
+		'& button': {
+			maxWidth: '15px',
+			minWidth: '15px',
+			padding: 0,
+			width: '15px'
 		}
 	},
 	goodForCell: {
@@ -151,7 +156,7 @@ const IncorporationsListTable = withStyles(styles)(
 								<ProgramPrice label="$" price={inc.price} rate={keyRate} />
 							</TableCell>
 							<TableCell className={classes.detailsCell}>
-								<DetailsButton onClick={() => onDetailsClick(inc)} />
+								<DetailsIconButton onClick={() => onDetailsClick(inc)} />
 							</TableCell>
 						</TableRow>
 					))}

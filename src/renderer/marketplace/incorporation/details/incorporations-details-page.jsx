@@ -65,6 +65,9 @@ const styles = theme => ({
 	},
 	contentHeader: {
 		marginBottom: '40px'
+	},
+	barStyle: {
+		padding: '25px 30px 0'
 	}
 });
 
@@ -133,6 +136,7 @@ export const IncorporationsDetailsPage = withStyles(styles)(props => {
 						contact={contact}
 						statusAction={onStatusAction}
 						loading={loading}
+						barStyle={classes.barStyle}
 					/>
 					<Grid
 						container

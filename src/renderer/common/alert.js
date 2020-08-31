@@ -3,22 +3,23 @@ import { Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import classNames from 'classnames';
 import { CheckOutlined } from '@material-ui/icons';
-import { primary, success, secondary, warning, error, AttributeAlertIcon } from 'selfkey-ui';
+import { primary, success, typography, warning, error, AttributeAlertIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	alert: {
-		border: `1px solid ${secondary}`,
+		border: `1px solid ${typography}`,
 		minHeight: '50px',
 		width: '100%',
-		borderRadius: 0,
+		borderRadius: '4px',
 		padding: '15px',
 		boxSizing: 'border-box',
-		color: secondary,
+		color: typography,
 		'& svg': {
-			fill: secondary
+			fill: typography
 		}
 	},
 	success: {
+		backgroundColor: '#313D49',
 		border: `1px solid ${success}`,
 		color: success,
 		'& svg': {
@@ -64,12 +65,19 @@ const styles = theme => ({
 		marginRight: '15px'
 	},
 	iconWrap: {
-		paddingTop: '3px'
-	},
-	alertWrap: {
 		alignItems: 'center',
 		display: 'flex',
-		justify: 'flex-start'
+		maxHeight: '34px',
+		minHeight: '34px'
+	},
+	children: {
+		alignItems: 'center',
+		display: 'flex',
+		minHeight: '34px'
+	},
+	alertWrap: {
+		display: 'flex',
+		minHeight: '36px'
 	}
 });
 
@@ -81,13 +89,13 @@ export const AlertIcon = withStyles(styles)(({ classes, type = 'success' }) => (
 ));
 
 export const Alert = withStyles(styles)(
-	({ classes, type = 'success', children, icon, className }) => (
+	({ classes, type = 'success', children, icon, className, xtraClass }) => (
 		<div className={classNames(classes.alert, classes[type], className)}>
 			<div className={classes.alertWrap}>
 				<Grid item className={classes.iconWrap}>
 					{icon || <AlertIcon type={type} />}
 				</Grid>
-				<Grid item xs>
+				<Grid item xs className={`${classes.children} ${xtraClass}`}>
 					{children}
 				</Grid>
 			</div>

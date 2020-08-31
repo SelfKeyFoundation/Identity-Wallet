@@ -8,6 +8,7 @@ import { createWalletSelectors, createWalletOperations } from 'common/create-wal
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { Popup } from '../../../common';
+import { getGlobalContext } from 'common/context';
 
 const styles = theme => ({
 	icon: {
@@ -40,7 +41,9 @@ const styles = theme => ({
 	}
 });
 
-const goBackCreatePassword = props => <Link to="/createPassword" {...props} />;
+const goBackCreatePassword = React.forwardRef((props, ref) => (
+	<Link to="/createPassword" {...props} ref={ref} />
+));
 
 class PasswordConfirmation extends PureComponent {
 	state = {
@@ -52,6 +55,13 @@ class PasswordConfirmation extends PureComponent {
 
 	handleNext = async () => {
 		if (this.props.firstPassword === this.state.password) {
+			getGlobalContext().matomoService.trackEvent(
+				'wallet_setup',
+				'password_create',
+				undefined,
+				undefined,
+				true
+			);
 			await this.props.dispatch(createWalletOperations.createWalletOperation());
 			await this.props.dispatch(push('/backupAddress'));
 		} else {

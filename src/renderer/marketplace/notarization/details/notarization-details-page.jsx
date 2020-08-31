@@ -1,11 +1,10 @@
 import React from 'react';
+import { PageLoading, ProgramPrice, MarketplaceKycRequirements } from '../../common';
 import { Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
-import { PageLoading, ProgramPrice } from '../../common';
-import { MarketplaceNotariesIcon, NotarizeDocumentIcon } from 'selfkey-ui';
+import { BackButton, MarketplaceNotariesIcon, NotarizeDocumentIcon } from 'selfkey-ui';
 import { Alert } from '../../../common';
 import NotarizationDetailsPageTabs from './notarization-details-tabs';
-import KycRequirementsList from '../../../kyc/requirements/requirements-list';
 
 const styles = theme => ({
 	pageContent: {
@@ -28,7 +27,7 @@ const styles = theme => ({
 		justifyContent: 'flex-start',
 		paddingBottom: '30px',
 		marginBottom: '40px',
-		marginTop: '50px'
+		marginTop: '70px'
 	},
 	headerTitle: {
 		paddingLeft: '21px'
@@ -145,32 +144,35 @@ export const NotarizeApplicationButton = withStyles(styles)(
 
 export const NotarizationDetailsPage = withStyles(styles)(props => {
 	const {
-		classes,
 		tab,
 		onTabChange,
 		startNotarize,
 		onBackClick,
 		loading,
 		kycRequirements,
-		keyRate = 1500000
+		keyRate,
+		product,
+		templateId
 	} = props;
+	const { classes, ...passedProps } = props;
+	const price = product.price ? product.price : 0;
 	return (
 		<div>
-			<div className={classes.backButtonContainer}>
-				<Button
-					id="backToMarketplace"
-					variant="outlined"
-					color="secondary"
-					size="small"
-					onClick={onBackClick}
-				>
-					<Typography variant="subtitle2" color="secondary" className={classes.bold}>
-						‹ Back
-					</Typography>
-				</Button>
+			<div item className={classes.backButtonContainer}>
+				<BackButton onclick={onBackClick} />
 			</div>
-			{loading && <PageLoading />}
-			{!loading && (
+			{loading && (
+				<div className={classes.pageContent}>
+					<div id="header" className={classes.header}>
+						<MarketplaceNotariesIcon className={classes.icon} />
+						<Typography variant="h1" className={classes.headerTitle}>
+							Notaries
+						</Typography>
+					</div>
+					<PageLoading />
+				</div>
+			)}
+			{!loading && !product && (
 				<div>
 					<div id="notarizeDocuments" className={classes.pageContent}>
 						<div id="header" className={classes.header}>
@@ -183,21 +185,49 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 					<div className={classes.container}>
 						<div id="notarizeDocumentsDetails" className={classes.title}>
 							<Typography variant="body2" className="region">
-								Get your documents notarized!
+								Get Your Documents Notarized!
+							</Typography>
+						</div>
+						<div className={classes.alert}>
+							<Alert type="warning">
+								<Typography variant="subtitle2" color="secondary">
+									{`Unfortunately, we don't have any notaries available on your
+									jurisdiction, check again later.`}
+								</Typography>
+							</Alert>
+						</div>
+					</div>
+				</div>
+			)}
+			{!loading && product && (
+				<div>
+					<div id="notarizeDocuments" className={classes.pageContent}>
+						<div id="header" className={classes.header}>
+							<MarketplaceNotariesIcon className={classes.icon} />
+							<Typography variant="h1" className={classes.headerTitle}>
+								Notaries
+							</Typography>
+						</div>
+					</div>
+					<div className={classes.container}>
+						<div id="notarizeDocumentsDetails" className={classes.title}>
+							<Typography variant="body2" className="region">
+								Get Your Documents Notarized!
 							</Typography>
 						</div>
 						<div className={classes.content}>
 							<div className={classes.paragraph}>
 								<div className={classes.headerDescription}>
 									<Typography variant="body1">
-										Notarization doesn’t have to be a hassle anymore. Step in
-										the 21st centry, and conduct your business for the comfort
-										of your own home. The US base notaries services are
-										recognized world wide. All you have to do is to upload the
-										documents you want notarised, and have the availability to
-										take a short video call with a notary. Check the list
-										bellow, with supported document types, to see what we
-										currently support for the online notarization service.
+										Notarization doesn’t have to be a hassle anymore. Step into
+										the 21st century and conduct your business from the comfort
+										of your own home. The SelfKey Notarization platform provides
+										access to US-based notaries that are recognized worldwide.
+										All you have to do is to upload the documents you want
+										notarised and have the availability to take a short video
+										call with a notary. Check the list below with document types
+										to see which online notarization services are currently
+										supported.
 									</Typography>
 								</div>
 								<div className={classes.applyButton}>
@@ -208,7 +238,7 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 									/>
 									<ProgramPrice
 										id="fees"
-										price="25"
+										price={price}
 										rate={keyRate}
 										label="From $"
 										extraLabel="/ Document"
@@ -219,21 +249,22 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 								<Alert type="warning">
 									<Typography variant="subtitle2" color="secondary">
 										Please make sure that your intended recipient accepts
-										documents notarized online and electronically signed, before
+										documents notarized online and electronically signed before
 										placing your order.
 									</Typography>
 								</Alert>
 							</div>
 							<div className={classes.tabs}>
 								<NotarizationDetailsPageTabs
-									{...props}
+									{...passedProps}
 									tab={tab}
 									onTabChange={onTabChange}
 								/>
 							</div>
-							<div className={classes.kyc}>
-								<KycRequirementsList
+							<div>
+								<MarketplaceKycRequirements
 									requirements={kycRequirements}
+									templateId={templateId}
 									title="KYC Requirements and Forms"
 								/>
 							</div>

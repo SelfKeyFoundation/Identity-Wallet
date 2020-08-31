@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { walletSelectors } from 'common/wallet';
 import { Link } from 'react-router-dom';
 import { Popup } from '../../common';
+import { getGlobalContext } from 'common/context';
 
 const styles = theme => ({
 	bottomSpace: {
@@ -50,7 +51,7 @@ const styles = theme => ({
 	}
 });
 
-const main = props => <Link to="/main/dashboard" {...props} />;
+const main = React.forwardRef((props, ref) => <Link to="/main/dashboard" {...props} ref={ref} />);
 
 class BackupPK extends PureComponent {
 	state = {
@@ -72,6 +73,17 @@ class BackupPK extends PureComponent {
 				visibilityComponent: <VisibilityOffIcon />
 			});
 		}
+	};
+
+	handlePrintClick = event => {
+		window.print();
+		getGlobalContext().matomoService.trackEvent(
+			'wallet_setup',
+			'print_private_key',
+			undefined,
+			undefined,
+			true
+		);
 	};
 
 	render() {
@@ -124,7 +136,7 @@ class BackupPK extends PureComponent {
 							variant="contained"
 							size="large"
 							fullWidth
-							onClick={e => window.print()}
+							onClick={e => this.handlePrintClick()}
 							className={classes.buttonBottomSpace}
 						>
 							PRINT MY PRIVATE KEY

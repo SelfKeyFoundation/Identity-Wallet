@@ -7,6 +7,7 @@ import { walletSelectors } from 'common/wallet';
 import { createWalletSelectors, createWalletOperations } from 'common/create-wallet';
 import { Link } from 'react-router-dom';
 import { Popup } from '../../common';
+import { getGlobalContext } from 'common/context';
 
 const styles = theme => ({
 	bottomSpace: {
@@ -28,7 +29,9 @@ const styles = theme => ({
 	}
 });
 
-const backupPrivateKey = props => <Link to="/backupPrivateKey" {...props} />;
+const backupPrivateKey = React.forwardRef((props, ref) => (
+	<Link to="/backupPrivateKey" {...props} ref={ref} />
+));
 
 class BackupAddress extends PureComponent {
 	state = {
@@ -36,6 +39,13 @@ class BackupAddress extends PureComponent {
 	};
 
 	handleDownload = async event => {
+		getGlobalContext().matomoService.trackEvent(
+			'wallet_setup',
+			'keystore_download',
+			undefined,
+			undefined,
+			true
+		);
 		const directoryPath = await window.openDirectorySelectDialog(event);
 		if (directoryPath) {
 			this.props.dispatch(createWalletOperations.downloadFileOperation(directoryPath));
@@ -58,7 +68,7 @@ class BackupAddress extends PureComponent {
 				closeAction={this.handleBackAction}
 				open
 				displayLogo
-				text="Step 3: Backup Your Ethereum AddressPassword"
+				text="Step 3: Backup Your Ethereum Address"
 			>
 				<Grid
 					container

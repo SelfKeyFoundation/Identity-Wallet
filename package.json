@@ -1,7 +1,7 @@
 {
 	"name": "selfkey-identity-wallet",
 	"productName": "SelfKey Identity Wallet",
-	"version": "1.5.0",
+	"version": "1.6.4",
 	"description": "The Official SelfKey Identity Wallet for Desktop",
 	"browser": [
 		"chrome"
@@ -128,7 +128,7 @@
 		"reselect": "4.0.0",
 		"sanitize-html": "1.20.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#2fe8aaa07fbf2c8ddb74e82bc25602ab4a95bfdb",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#a6a494948c9d90892e9c927c0dd4c0042fa1d6a2",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"snyk": "1.235.0",
@@ -142,7 +142,7 @@
 		"trezor-wallet-provider": "https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#fa3f49406bf469402f611cc752f8f3f45867e3cb",
 		"trezor.js": "8.1.0",
 		"url-join": "4.0.0",
-		"web3": "1.2.4",
+		"web3": "1.2.11",
 		"web3-provider-engine": "15.0.4",
 		"ws": "7.0.0",
 		"zxcvbn": "4.4.2"
@@ -151,7 +151,7 @@
 		"@babel/core": "7.1.6",
 		"@babel/plugin-proposal-class-properties": "7.1.0",
 		"@babel/plugin-syntax-dynamic-import": "7.2.0",
-		"@babel/plugin-transform-runtime": "7.6.2",
+		"@babel/plugin-transform-runtime": "^7.10.4",
 		"@babel/preset-env": "7.1.6",
 		"@babel/preset-react": "7.0.0",
 		"@commitlint/cli": "7.2.1",
@@ -251,7 +251,7 @@
 		"react": "16.13.1",
 		"react-dom": "16.13.1",
 		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#e8356d2037b527f7b0a8433f20c476b6e501d70e",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#2fe8aaa07fbf2c8ddb74e82bc25602ab4a95bfdb",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#a6a494948c9d90892e9c927c0dd4c0042fa1d6a2",
 		"@material-ui/styles": "4.9.6"
 	},
 	"migrations": {

@@ -1,18 +1,12 @@
 import React from 'react';
-import {
-	Grid,
-	Typography,
-	Divider,
-	Table,
-	TableHead,
-	TableBody,
-	TableCell
-} from '@material-ui/core';
+import { Grid, Typography, Table, TableHead, TableBody, TableCell } from '@material-ui/core';
+import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import { withStyles } from '@material-ui/styles';
-import { LargeTableHeadRow, BackButton } from 'selfkey-ui';
+import { BackButton, GridIcon, LargeTableHeadRow, List2Icon, primaryTint } from 'selfkey-ui';
 import { ExchangesListItem } from './exchanges-list-item';
-import { MarketplaceDisclaimer } from '../common/disclaimer';
+import { ExchangesNewListItem } from './exchanges-new-list-item';
 import { PageLoading } from '../common';
+import { featureIsEnabled } from '../../../common/feature-flags';
 
 const styles = theme => ({
 	wrapper: {
@@ -24,7 +18,7 @@ const styles = theme => ({
 		}
 	},
 	header: {
-		borderBottom: 'solid 1px #475768',
+		marginBottom: '30px',
 		'& h1': {
 			marginLeft: '20px'
 		},
@@ -32,13 +26,13 @@ const styles = theme => ({
 		height: '120px'
 	},
 	headerContent: {
-		marginTop: '50px',
+		marginTop: '70px',
 		display: 'flex',
 		flexDirection: 'row',
 		flexWrap: 'nowrap'
 	},
 	content: {
-		marginTop: '30px',
+		marginTop: '50px',
 		margin: 0,
 		width: '100%'
 	},
@@ -50,9 +44,11 @@ const styles = theme => ({
 		}
 	},
 	backButtonContainer: {
-		top: '120px'
+		left: '75px',
+		position: 'absolute'
 	},
 	listContent: {
+		borderTop: 'solid 1px #475768',
 		margin: 0,
 		width: '100%'
 	},
@@ -76,6 +72,11 @@ const styles = theme => ({
 	},
 	hidden: {
 		display: 'none'
+	},
+	items: {
+		display: 'flex',
+		flexWrap: 'wrap',
+		justifyContent: 'space-between'
 	}
 });
 
@@ -87,7 +88,7 @@ const allFeesEmpty = items => {
 	return emptyFees;
 };
 
-const getServices = (items, viewAction) => {
+const getServicesInList = (items, viewAction) => {
 	const allFees = allFeesEmpty(items);
 	return items.map(item => {
 		return (
@@ -110,10 +111,81 @@ const getServices = (items, viewAction) => {
 	});
 };
 
+const getServicesInGrid = (items, viewAction) => {
+	const allFees = allFeesEmpty(items);
+	return items.map(item => {
+		return (
+			<ExchangesNewListItem
+				key={item.id || item.name}
+				id={item.id || item.name}
+				name={item.name}
+				location={item.data.location || '-'}
+				fees={item.fees || '-'}
+				fiatSupported={item.data.fiatSupported || '-'}
+				fiatPayments={item.data.fiatPayments || '-'}
+				excludedResidents={item.data.excludedResidents || '-'}
+				logoUrl={item.data.logo ? item.data.logo[0].url : false}
+				status={item.status}
+				viewAction={viewAction}
+				allFeesEmpty={allFees}
+				partnershipVisibility={false}
+			/>
+		);
+	});
+};
+
+const listView = (classes, items, viewAction) => {
+	return (
+		<React.Fragment>
+			<Table>
+				<TableHead>
+					<LargeTableHeadRow>
+						<TableCell className={classes.icon}>&nbsp;</TableCell>
+						<TableCell style={{ paddingLeft: '15px' }}>
+							<Typography variant="overline">Exchange</Typography>
+						</TableCell>
+						<TableCell>
+							<Typography variant="overline">Location</Typography>
+						</TableCell>
+						<TableCell className={allFeesEmpty(items) ? classes.hidden : null}>
+							<Typography variant="overline">Fees</Typography>
+						</TableCell>
+						<TableCell>
+							<Typography variant="overline">Fiat Supported</Typography>
+						</TableCell>
+						<TableCell>
+							<Typography variant="overline">Fiat Payments</Typography>
+						</TableCell>
+						<TableCell style={{ padding: '10px', minWidth: '200px' }}>
+							<Typography variant="overline">Excluded Residents</Typography>
+						</TableCell>
+						<TableCell>&nbsp;</TableCell>
+					</LargeTableHeadRow>
+				</TableHead>
+				<TableBody>{getServicesInList(items, viewAction)}</TableBody>
+			</Table>
+		</React.Fragment>
+	);
+};
+
+const gridView = (classes, items, viewAction) => {
+	return <div className={classes.items}>{getServicesInGrid(items, viewAction)}</div>;
+};
+
 export const ExchangesList = withStyles(styles)(
-	({ classes, children, category, items, backAction, viewAction, isLoading }) => (
+	({
+		classes,
+		children,
+		category,
+		items,
+		backAction,
+		viewAction,
+		isLoading,
+		exchangesListLayoutChange,
+		selectedType = 'Grid'
+	}) => (
 		<Grid container>
-			<Grid item>
+			<Grid item className={classes.backButtonContainer}>
 				<BackButton onclick={backAction} />
 			</Grid>
 			<Grid item>
@@ -132,78 +204,56 @@ export const ExchangesList = withStyles(styles)(
 							alignItems="center"
 							className={classes.headerContent}
 						>
-							<Grid container>
+							<Grid container alignItems="center">
 								<Grid item>{category.icon}</Grid>
 								<Grid item>
 									<Typography variant="h1">{category.title}</Typography>
 								</Grid>
 							</Grid>
+
+							{featureIsEnabled('exchangesMarketplace') ? (
+								<Grid container justify="flex-end">
+									<Grid item>
+										<ToggleButtonGroup
+											exclusive
+											onChange={exchangesListLayoutChange}
+											value={selectedType}
+										>
+											<ToggleButton value="Grid">
+												<GridIcon
+													fill={
+														selectedType === 'Grid' ? primaryTint : null
+													}
+												/>
+											</ToggleButton>
+											<ToggleButton value="List">
+												<List2Icon
+													fill={
+														selectedType === 'List' ? primaryTint : null
+													}
+												/>
+											</ToggleButton>
+										</ToggleButtonGroup>
+									</Grid>
+								</Grid>
+							) : null}
 						</Grid>
 					</Grid>
 					<Grid item className={classes.listContent} xs={12}>
 						<Grid
 							container
 							direction="row"
-							justify="start"
+							justify="flex-start"
 							alignItems="center"
 							spacing={3}
 							className={classes.content}
 						>
 							{isLoading && <PageLoading />}
-							{!isLoading && (
-								<React.Fragment>
-									<Table>
-										<TableHead>
-											<LargeTableHeadRow>
-												<TableCell className={classes.icon}>
-													&nbsp;
-												</TableCell>
-												<TableCell style={{ paddingLeft: '15px' }}>
-													<Typography variant="overline">
-														Exchange
-													</Typography>
-												</TableCell>
-												<TableCell>
-													<Typography variant="overline">
-														Location
-													</Typography>
-												</TableCell>
-												<TableCell
-													className={
-														allFeesEmpty(items) ? classes.hidden : null
-													}
-												>
-													<Typography variant="overline">Fees</Typography>
-												</TableCell>
-												<TableCell>
-													<Typography variant="overline">
-														Fiat Supported
-													</Typography>
-												</TableCell>
-												<TableCell>
-													<Typography variant="overline">
-														Fiat Payments
-													</Typography>
-												</TableCell>
-												<TableCell
-													style={{ padding: '10px', minWidth: '200px' }}
-												>
-													<Typography variant="overline">
-														Excluded Residents
-													</Typography>
-												</TableCell>
-												<TableCell>&nbsp;</TableCell>
-											</LargeTableHeadRow>
-										</TableHead>
-
-										<TableBody>{getServices(items, viewAction)}</TableBody>
-									</Table>
-									<div className={classes.disclaimer}>
-										<Divider className={classes.divider} />
-										<MarketplaceDisclaimer />
-									</div>
-								</React.Fragment>
-							)}
+							{featureIsEnabled('exchangesMarketplace') && !isLoading
+								? selectedType === 'List'
+									? listView(classes, items, viewAction)
+									: gridView(classes, items, viewAction)
+								: listView(classes, items, viewAction)}
 						</Grid>
 					</Grid>
 				</Grid>
