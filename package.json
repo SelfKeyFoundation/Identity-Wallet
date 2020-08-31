@@ -142,7 +142,7 @@
 		"trezor-wallet-provider": "https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#fa3f49406bf469402f611cc752f8f3f45867e3cb",
 		"trezor.js": "8.1.0",
 		"url-join": "4.0.0",
-		"web3": "1.2.4",
+		"web3": "1.2.11",
 		"web3-provider-engine": "15.0.4",
 		"ws": "7.0.0",
 		"zxcvbn": "4.4.2"
