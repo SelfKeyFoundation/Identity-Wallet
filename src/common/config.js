@@ -77,6 +77,11 @@ const common = {
 			name: 'Far Horizon Capital Inc',
 			email: 'support@flagtheory.com',
 			address: '10 Anson Road International Plaza #27-15 Singapore 079903'
+		},
+		selfkey_certifier: {
+			name: 'SelfKey Certifier',
+			email: 'certifier@selfkey.org',
+			address: 'N/A'
 		}
 	},
 
@@ -138,12 +143,14 @@ const common = {
 		scheduler: true,
 		corporate: false,
 		certifiers: false,
+		notaries: false,
 		corporateMarketplace: false,
 		kyccUsersEndpoint: false,
 		walletExport: true,
 		transactionsListFilter: false,
 		loansMarketplace: false,
-		swapTokens: false
+		swapTokens: false,
+		exchangesMarketplace: false
 	}
 };
 
@@ -165,13 +172,15 @@ const dev = {
 		paymentContract: false,
 		scheduler: true,
 		corporate: true,
-		certifiers: true,
+		certifiers: false,
+		notaries: true,
 		corporateMarketplace: false,
 		kyccUsersEndpoint: true,
 		walletExport: true,
 		transactionsListFilter: true,
 		loansMarketplace: true,
-		swapTokens: true
+		swapTokens: true,
+		exchangesMarketplace: false
 	},
 	testWalletAddress: '0x23d233933c86f93b74705cf0d236b39f474249f8',
 	testDidAddress: '0xee10a3335f48e10b444e299cf017d57879109c1e32cec3e31103ceca7718d0ec',
@@ -197,12 +206,14 @@ const prod = {
 		scheduler: true,
 		corporate: true,
 		certifiers: false,
+		notaries: false,
 		corporateMarketplace: false,
 		kyccUsersEndpoint: false,
 		walletExport: true,
 		transactionsListFilter: false,
 		loansMarketplace: true,
-		swapTokens: false
+		swapTokens: false,
+		exchangesMarketplace: false
 	},
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'
 };

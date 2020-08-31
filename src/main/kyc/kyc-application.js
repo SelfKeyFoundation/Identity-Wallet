@@ -27,7 +27,8 @@ export class KycApplication extends BaseModel {
 				applicationDate: { type: 'string' },
 				payments: { type: 'object' },
 				nextRoute: { type: 'string' },
-				identityId: { type: 'integer' }
+				identityId: { type: 'integer' },
+				messages: { type: 'array', default: [] }
 			}
 		};
 	}

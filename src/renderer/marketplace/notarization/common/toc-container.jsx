@@ -10,9 +10,11 @@ const styles = theme => ({});
 class NotarizationTOCComponent extends MarketplaceNotariesComponent {
 	state = {};
 
-	onBackClick = () => this.props.dispatch(push(this.processPath()));
-	onDisagreeClick = () => this.props.dispatch(push(this.tocDisagreementPath()));
-	onAgreeClick = () => this.props.dispatch(push(this.paymentPath()));
+	onBackClick = () => this.props.dispatch(push(this.rootPath()));
+
+	onDisagreeClick = () => this.props.dispatch(push(this.tocDisagreementRoute()));
+
+	onAgreeClick = () => this.props.dispatch(push(this.checkoutRoute()));
 
 	render() {
 		return (
@@ -25,7 +27,14 @@ class NotarizationTOCComponent extends MarketplaceNotariesComponent {
 	}
 }
 
-const mapStateToProps = () => {};
+const mapStateToProps = (state, props) => {
+	const { templateId, vendorId, productId } = props.match.params;
+	return {
+		templateId,
+		vendorId,
+		productId
+	};
+};
 
 const styledComponent = withStyles(styles)(NotarizationTOCComponent);
 export const NotarizationTOC = connect(mapStateToProps)(styledComponent);

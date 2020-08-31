@@ -8,7 +8,6 @@ exports.seed = async function(knex) {
 		return;
 	}
 	const tokens = await knex('tokens');
-	console.log();
 	const tokensMap = tokens.reduce((acc, curr) => {
 		acc[curr.address.toLowerCase()] = curr;
 		return acc;

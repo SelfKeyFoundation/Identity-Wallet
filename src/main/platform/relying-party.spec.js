@@ -568,6 +568,44 @@ describe('RelyingPartyRest', () => {
 			]);
 		});
 	});
+	describe('applicationAdditionalRequirements', () => {
+		it('Should add a requirement to an existing application', async () => {
+			const applicationId = 5;
+			const testEndpoint = 'http://test/:id';
+			const attributesArray = ['http://platform.selfkey.org/schema/attribute/passport.json'];
+			const resultData = {
+				jsonSchema: {
+					title: 'Document to notarize'
+				},
+				schemaId: 'http://platform.selfkey.org/schema/attribute/passport.json'
+			};
+
+			ctx.token = {
+				toString() {
+					return 'test';
+				}
+			};
+			sinon.stub(request, 'post').resolves('ok');
+			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
+			await RelyingPartyRest.addAdditionalTemplateRequirements(
+				ctx,
+				applicationId,
+				attributesArray
+			);
+			expect(request.post.getCall(0).args).toEqual([
+				{
+					url: `${testEndpoint.replace(':id', applicationId)}`,
+					body: resultData,
+					headers: {
+						Authorization: 'Bearer test',
+						'User-Agent': RelyingPartyRest.userAgent,
+						Origin: 'test'
+					},
+					json: true
+				}
+			]);
+		});
+	});
 });
 
 describe('Relying Party session', () => {
@@ -931,7 +969,176 @@ describe('Relying Party session', () => {
 			expect(res).toEqual('ok');
 		});
 	});
-	xdescribe('updateKYCApplication', () => {});
+	describe('updateKYCApplication', () => {
+		it('Should upload an additional requirement', async () => {
+			sinon.stub(RelyingPartyRest, 'getKYCApplication').resolves({
+				id: '5',
+				attributes: {
+					asd: {
+						isAdditional: true,
+						schemaId:
+							'http://platform.selfkey.org/schema/attribute/external-document.json'
+					}
+				}
+			});
+			sinon
+				.stub(RelyingPartyRest, 'uploadKYCApplicationFile')
+				.resolves({ id: 'af566dkahf8skksd' });
+			sinon.stub(RelyingPartyRest, 'updateKYCApplication').resolves('af566dkahf8skksd');
+
+			const attributes = [
+				{
+					createdAt: 1596039633098,
+					data: { value: ['$document-1'] },
+					defaultRepository: {
+						content: {},
+						createdAt: 1596014666292,
+						eager: true,
+						env: 'development',
+						expires: 1597168688276
+					},
+					defaultUiSchema: {
+						attributeTypeId: 29,
+						createdAt: 1596014674684,
+						env: 'development',
+						expires: 1597168695271
+					},
+					documents: [
+						{
+							attributeId: 4,
+							content:
+								'data:application/pdf;base64,JVBERi0xLjMKJcTl8uXrp/Og0MTGCjQgMCBvYmoKPDwgL0xlbmd0aCA1IDAgUiAvRmlsK',
+							createdAt: 1596039633239,
+							env: 'development',
+							id: 1,
+							identityId: 1,
+							mimeType: 'application/pdf',
+							name: 'test.pdf',
+							size: 696396,
+							updatedAt: 1596039633428
+						}
+					],
+					id: 4,
+					identityId: 1,
+					isValid: true,
+					name: 'Document',
+					type: {
+						content: {
+							$id:
+								'http://platform.selfkey.org/schema/attribute/external-document.json',
+							$schema: 'http://platform.selfkey.org/schema/identity-attribute.json',
+							description: 'Please provide any external documents requested.',
+							entityType: ['corporate', 'individual'],
+							identityAttribute: true,
+							identityAttributeRepository:
+								'http://platform.selfkey.org/repository.json',
+							items: {
+								$id: 'http://platform.selfkey.org/schema/file/image.json',
+								$schema: 'http://json-schema.org/draft-07/schema',
+								format: 'file',
+								properties: {
+									content: {
+										type: 'string'
+									},
+									mimeType: {
+										enum: ['image/jpeg', 'image/png', 'application/pdf'],
+										type: 'string'
+									},
+									size: {
+										maximum: 50000000,
+										type: 'integer'
+									}
+								},
+								required: ['mimeType', 'size', 'content'],
+								title: 'Image'
+							},
+							minItems: 1,
+							noFill: true,
+							title: 'External Document',
+							type: 'array'
+						},
+						createdAt: 1596014674680,
+						defaultRepositoryId: 2,
+						env: 'development',
+						expires: 1597168691485
+					},
+					typeId: 29,
+					updatedAt: 1596039633428
+				}
+			];
+
+			await session.uploadAdditionalFiles(5, attributes);
+			expect(RelyingPartyRest.updateKYCApplication.getCall(0).args).toEqual([
+				session.ctx,
+				{
+					attributes: [
+						{
+							createdAt: 1596039633098,
+							data: [
+								{
+									attributeId: 4,
+									content: 'af566dkahf8skksd',
+									createdAt: 1596039633239,
+									env: 'development',
+									id: 1,
+									identityId: 1,
+									mimeType: 'application/pdf',
+									name: 'test.pdf',
+									size: 696396,
+									updatedAt: 1596039633428
+								}
+							],
+							documents: undefined,
+							id: 'asd',
+							identityId: 1,
+							isValid: true,
+							name: 'Document',
+							schema: {
+								$id:
+									'http://platform.selfkey.org/schema/attribute/external-document.json',
+								$schema:
+									'http://platform.selfkey.org/schema/identity-attribute.json',
+								description: 'Please provide any external documents requested.',
+								entityType: ['corporate', 'individual'],
+								identityAttribute: true,
+								identityAttributeRepository:
+									'http://platform.selfkey.org/repository.json',
+								items: {
+									$id: 'http://platform.selfkey.org/schema/file/image.json',
+									$schema: 'http://json-schema.org/draft-07/schema',
+									format: 'file',
+									properties: {
+										content: {
+											type: 'string'
+										},
+										mimeType: {
+											enum: ['image/jpeg', 'image/png', 'application/pdf'],
+											type: 'string'
+										},
+										size: {
+											maximum: 50000000,
+											type: 'integer'
+										}
+									},
+									required: ['mimeType', 'size', 'content'],
+									title: 'Image'
+								},
+								minItems: 1,
+								noFill: true,
+								title: 'External Document',
+								type: 'array'
+							},
+							schemaId:
+								'http://platform.selfkey.org/schema/attribute/external-document.json',
+							typeId: 29,
+							updatedAt: 1596039633428
+						}
+					]
+				},
+				5
+			]);
+		});
+	});
 	xdescribe('listKYCApplications', () => {});
 	xdescribe('getKYCApplication', () => {});
 });
