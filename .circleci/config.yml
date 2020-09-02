@@ -303,7 +303,7 @@ jobs:
                   command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
             - run:
                   name: Publish App to Github
-                  command: yarn publish-build
+                  command: yarn publish
                   no_output_timeout: 1h
 
     'publish-linux':
@@ -332,7 +332,7 @@ jobs:
                   command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
             - run:
                   name: Publish App to Github
-                  command: yarn publish-build
+                  command: yarn publish
 
 workflows:
     version: 2
