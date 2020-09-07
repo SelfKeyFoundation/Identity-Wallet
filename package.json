@@ -59,7 +59,8 @@
 		"build-dev-dll": "BUILD_DLL_PRODUCTION=false yarn build-dll",
 		"storybook": "start-storybook -p 6007",
 		"build-storybook": "build-storybook -o dist/storybook",
-		"deploy-storybook-ci": "storybook-to-ghpages -ci --existing-output-dir=dist/storybook"
+		"deploy-storybook-ci": "storybook-to-ghpages -ci --existing-output-dir=dist/storybook",
+		"auto-update-version": "cross-var yarn version  --no-git-tag-version --no-commit-hooks --new-version $npm_package_version-auto-update-test"
 	},
 	"lint-staged": {
 		"*.js": [
@@ -186,6 +187,7 @@
 		"commitizen": "3.0.5",
 		"copy-webpack-plugin": "4.6.0",
 		"coveralls": "3.0.2",
+		"cross-var": "^1.1.0",
 		"cz-conventional-changelog": "2.1.0",
 		"delay": "4.1.0",
 		"electron": "10.1.0",
