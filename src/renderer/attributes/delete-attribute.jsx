@@ -6,9 +6,6 @@ import { Popup } from '../common/popup';
 
 const styles = theme => ({
 	text: {
-		fontFamily: 'Lato, arial, sans-serif',
-		fontSize: '14px',
-		color: '#93b0c1',
 		marginBottom: '10px'
 	},
 	label: {
@@ -44,7 +41,7 @@ class DeleteAttributeComponent extends PureComponent {
 			>
 				<Grid container direction="column" spacing={1}>
 					<Grid item>
-						<Typography variant="outlined" className={classes.text}>
+						<Typography variant="subtitle2" color="secondary" className={classes.text}>
 							You are deleting this information and all related history. Once deleted,
 							you can not recover the history.
 						</Typography>
