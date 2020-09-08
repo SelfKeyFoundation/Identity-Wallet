@@ -12,9 +12,6 @@ const styles = theme => ({
 	},
 	header: {
 		borderBottom: 'solid 1px #475768',
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'flex-start',
 		paddingBottom: '30px',
 		marginBottom: '40px',
 		marginTop: '70px'
@@ -51,20 +48,27 @@ const IncorporationsListPage = withStyles(styles)(
 				{!loading && (
 					<Grid item>
 						<Grid
-							id="incorporations"
 							container
+							id="incorporations"
 							direction="column"
 							justify="flex-start"
 							alignItems="stretch"
 							className={classes.pageContent}
 						>
-							<Grid item id="header" className={classes.header}>
+							<Grid
+								container
+								item
+								id="header"
+								alignItems="center"
+								justify="flex-start"
+								className={classes.header}
+							>
 								<IncorporationsIcon className={classes.icon} />
 								<Typography variant="h1" className={classes.headerTitle}>
 									Incorporation Marketplace
 								</Typography>
 							</Grid>
-							<Grid item direction="row" justify="space-evenly" alignItems="center">
+							<Grid container item>
 								<IncorporationsListTable
 									keyRate={keyRate}
 									data={data}
