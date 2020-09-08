@@ -236,6 +236,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 										<Grid container item spacing={0} justify="space-between">
 											<Grid
 												container
+												item
 												xs={3}
 												justify="end"
 												alignItems="center"
@@ -358,6 +359,7 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 										<Grid container item spacing={0} justify="space-between">
 											<Grid
 												container
+												item
 												xs={3}
 												justify="end"
 												alignItems="center"
