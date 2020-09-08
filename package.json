@@ -267,7 +267,7 @@
 		"buildDependenciesFromSource": true,
 		"generateUpdatesFilesForAllChannels": true,
 		"afterSign": "scripts/notarize.js",
-		"asar": false,
+		"asar": true,
 		"files": [
 			"dist/main",
 			"dist/common",
