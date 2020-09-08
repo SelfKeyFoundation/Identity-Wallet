@@ -26,7 +26,7 @@ const styles = theme => ({
 		marginTop: '-10px'
 	},
 	title: {
-		marginBottom: '5px'
+		marginBottom: '12px'
 	}
 });
 
@@ -37,7 +37,8 @@ export const AutoUpdate = withStyles(styles)(
 		const shadow = root.createShadowRoot
 			? root.createShadowRoot()
 			: root.attachShadow({ mode: 'open' });
-		shadow.innerHTML = `<style>h4 { color:red; }</style>${info.releaseNotes}`;
+		shadow.innerHTML = `<style>h4 { color:#93B0C1; font-size: 18px; font-weight: 400; margin: 0; } 
+		p, ul { margin-top: 0; }</style>${info.releaseNotes}`;
 		setTimeout(() => {
 			releaseNotesRef.current.appendChild(root);
 		}, 100);
