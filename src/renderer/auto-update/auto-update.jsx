@@ -20,7 +20,7 @@ const styles = theme => ({
 		paddingTop: '30px',
 		borderTop: '1px solid #475768'
 	},
-	changes: {
+	releaseNotes: {
 		fontSize: '18px',
 		lineHeight: '30px',
 		marginTop: '-10px'
@@ -37,8 +37,7 @@ export const AutoUpdate = withStyles(styles)(
 		const shadow = root.createShadowRoot
 			? root.createShadowRoot()
 			: root.attachShadow({ mode: 'open' });
-		shadow.innerHTML = info.releaseNotes;
-
+		shadow.innerHTML = `<style>h4 { color:red; }</style>${info.releaseNotes}`;
 		setTimeout(() => {
 			releaseNotesRef.current.appendChild(root);
 		}, 100);
@@ -74,27 +73,7 @@ export const AutoUpdate = withStyles(styles)(
 								>
 									Release Notes:
 								</Typography>
-								<Typography variant="body1" gutterBottom>
-									{info && info.releaseName}
-								</Typography>
-								<Typography
-									variant="body1"
-									color="secondary"
-									className={classes.title}
-								>
-									Release Date:
-								</Typography>
-								<Typography variant="body1" gutterBottom>
-									{info && info.releaseDate}
-								</Typography>
-								<Typography
-									variant="body1"
-									color="secondary"
-									className={classes.title}
-								>
-									Changes:
-								</Typography>
-								<div ref={releaseNotesRef} className={classes.changes} />
+								<div ref={releaseNotesRef} className={classes.releaseNotes} />
 								<div className={classes.actions}>
 									<Button
 										variant="contained"
