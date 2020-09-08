@@ -150,7 +150,7 @@ const common = {
 		transactionsListFilter: false,
 		loansMarketplace: false,
 		swapTokens: false,
-		newMarketplaceLayout: false
+		exchangesMarketplace: false
 	}
 };
 
@@ -180,7 +180,7 @@ const dev = {
 		transactionsListFilter: true,
 		loansMarketplace: true,
 		swapTokens: true,
-		newMarketplaceLayout: true
+		exchangesMarketplace: false
 	},
 	testWalletAddress: '0x23d233933c86f93b74705cf0d236b39f474249f8',
 	testDidAddress: '0xee10a3335f48e10b444e299cf017d57879109c1e32cec3e31103ceca7718d0ec',
@@ -213,7 +213,7 @@ const prod = {
 		transactionsListFilter: false,
 		loansMarketplace: true,
 		swapTokens: false,
-		newMarketplaceLayout: false
+		exchangesMarketplace: false
 	},
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'
 };
