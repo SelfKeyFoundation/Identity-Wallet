@@ -50,10 +50,17 @@ const KycRequirementListItem = withStyles(styles)(({ requirement, classes, index
 });
 
 const KycRequirementsListComponent = props => {
-	const { classes, requirements, title = 'KYC Requirements:', subtitle, loading } = props;
+	const {
+		classes,
+		requirements,
+		title = 'KYC Requirements:',
+		subtitle,
+		loading,
+		noUnderline = false
+	} = props;
 
 	return (
-		<div className={classes.kyc}>
+		<div className={noUnderline ? '' : classes.kyc}>
 			<Typography variant="h2" gutterBottom>
 				KYC checklist for {title}
 			</Typography>

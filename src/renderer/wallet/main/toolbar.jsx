@@ -352,12 +352,14 @@ class Toolbar extends PureComponent {
 			onCreateCorporateProfileClick,
 			primaryToken,
 			showCorporate,
-			isExportableAccount
+			isExportableAccount,
+			showStaking
 		} = this.props;
 		return (
 			<div>
 				<Sidebar
 					isOpen={isSidebarOpen}
+					showStaking={showStaking}
 					onClose={onToggleMenu}
 					onProfileNavigate={onProfileNavigate}
 					isExportableAccount={isExportableAccount}

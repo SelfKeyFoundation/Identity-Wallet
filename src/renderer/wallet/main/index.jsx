@@ -52,6 +52,7 @@ import HardwareWalletTransactionTimer from '../../transaction/send/timer';
 import { exchangesOperations } from '../../../common/exchanges';
 import { SwapCompletedContainer } from '../../transaction/swap/swap-complete-container';
 import { identitySelectors } from 'common/identity';
+import { StakingDashboardContainer } from '../../staking/';
 
 const styles = theme => ({
 	headerSection: {
@@ -110,6 +111,10 @@ class Main extends PureComponent {
 				<Grid item xs={12} className={classes.bodySection} style={contentWrapperStyle}>
 					<Switch>
 						<Route path={`${match.path}/dashboard`} component={Dashboard} />
+						<Route
+							path={`${match.path}/staking`}
+							component={StakingDashboardContainer}
+						/>
 						<Route
 							path={`${match.path}/crypto-manager`}
 							component={CryptoMangerContainer}

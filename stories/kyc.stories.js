@@ -18,6 +18,7 @@ import {
 	KycChecklistItem,
 	KycMembersListItem
 } from '../src/renderer/kyc/application/kyc-checklist';
+import KycRequiredCard from '../src/renderer/kyc/kyc-required-card';
 
 storiesOf('KYC/Requirements List', module)
 	.add('Loading', () => (
@@ -35,6 +36,14 @@ storiesOf('KYC/Requirements List', module)
 			subtitle={text('Subtitle', 'simple description')}
 		/>
 	));
+
+storiesOf('KYC/KycCard', module).add('KycRequiredCard', () => (
+	<KycRequiredCard
+		title={text('Title', 'KYC Required')}
+		subtitle={text('Subtitle', 'Prove your identity')}
+		requirements={object('Requirements', KYCRequirementData)}
+	/>
+));
 
 const kycStatuses = ['completed', 'progress', 'unpaid', 'additionalRequirements', 'rejected'];
 
