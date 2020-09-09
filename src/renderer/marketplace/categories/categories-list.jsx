@@ -80,7 +80,7 @@ export const MarketplaceCategoriesList = withStyles(styles)(({ classes, children
 			<Grid
 				container
 				direction="row"
-				justify={featureIsEnabled('newMarketplaceLayout') ? '' : 'space-between'}
+				justify={featureIsEnabled('newMarketplaceLayout') ? 'flex-start' : 'space-between'}
 				alignItems="flex-start"
 			>
 				{getItems(items)}
