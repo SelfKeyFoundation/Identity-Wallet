@@ -42,6 +42,7 @@ install:
 build_script:
   - echo {"dsn":"%SENTRY_DSN%"} > src\assets\data\sentry.json
   - set DEBUG=electron-builder
+  - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[auto-update-test] yarn auto-update-version
   - yarn dist --publish=never
 test_script:
   - yarn test:unit:ci
@@ -58,6 +59,7 @@ deploy_script:
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[dev] set _tempvar=1
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[release] set _tempvar=1
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[nightly] set _tempvar=1
+    - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[auto-update-test] set _tempvar=1
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if NOT [%APPVEYOR_REPO_BRANCH%]==[%APPVEYOR_REPO_BRANCH:staging=%] set _tempvar=1
 
     - if defined _tempvar for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /format:list') do set datetime=%%I

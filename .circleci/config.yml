@@ -334,14 +334,127 @@ jobs:
                   name: Publish App to Github
                   command: yarn publish-build
 
+    'mac-prepare-auto-update-test':
+        macos:
+            xcode: '11.1.0'
+        environment:
+            CACHE_VERSION: *cache_version
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: /tmp/mac
+            - *step_prepare_cache_buster
+            - *step_restore_cache_mac
+            - *step_setup_nvm
+            - *step_yarn_upgrade
+            - run:
+                  name: Add Read Access to yarn config
+                  command: |
+                      sudo mkdir -p ~/.config
+                      sudo chown -R $USER:$GROUP ~/.config
+
+            - run:
+                  name: Install Node Packages
+                  command: yarn install-all
+                  no_output_timeout: 30m
+
+            - run:
+                  name: Set Sentry
+                  command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
+            - run:
+                  name: Bump auto update version
+                  command: yarn auto-update-version
+            - run:
+                  name: Build App
+                  command: NOTARIZE=1 yarn dist --publish=never
+                  no_output_timeout: 80m
+            - persist_to_workspace:
+                  root: .
+                  paths:
+                      - dist
+            - store_artifacts:
+                  path: dist/{latest,SelfKey Identity,selfkey-identity}*
+            - *step_save_cache_mac
+    'linux-prepare-auto-update-test':
+        docker: *DOCKERIMAGE
+        environment:
+            CACHE_VERSION: *cache_version
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: /tmp/linux
+            - *step_prepare_cache_buster
+            - *step_restore_cache
+            - run:
+                  name: Install OS Dependecies
+                  command: |
+                      sudo apt-get update
+                      sudo apt-get install libudev-dev
+                      sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
+                      sudo apt-get install libc6-dev-armhf-cross linux-libc-dev-armhf-cross g++-arm-linux-gnueabihf
+            - run:
+                  name: Install Node Packages
+                  command: yarn install-all
+            - run:
+                  name: Set Sentry
+                  command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
+            - run:
+                  name: Bump auto update version
+                  command: yarn auto-update-version
+            - run:
+                  name: Build App
+                  command: yarn dist --publish=never
+            - persist_to_workspace:
+                  root: .
+                  paths:
+                      - dist
+            - store_artifacts:
+                  path: dist/{latest,SelfKey Identity,selfkey-identity}*
+            - *step_save_cache
+
 workflows:
     version: 2
-    workflow1:
+    auto-update-test:
         jobs:
-            - 'unit-test'
+            - 'mac-prepare-auto-update-test':
+                  filters:
+                      branches:
+                          only:
+                              - auto-update-test
+            - 'stage-mac':
+                  requires:
+                      - mac-prepare-auto-update-test
+                  filters:
+                      branches:
+                          only:
+                              - auto-update-test
+            - 'linux-prepare-auto-update-test':
+                  filters:
+                      branches:
+                          only:
+                              - auto-update-test
+            - 'stage-linux':
+                  requires:
+                      - linux-prepare-auto-update-test
+                  filters:
+                      branches:
+                          only:
+                              - auto-update-test
+
+    main:
+        jobs:
+            - 'unit-test':
+                  filters:
+                      branches:
+                          ignore:
+                              - auto-update-test
             - 'build-linux':
                   requires:
                       - unit-test
+                  filters:
+                      branches:
+                          ignore:
+                              - auto-update-test
             # - 'build-linux-arm':
             #       requires:
             #           - unit-test
@@ -363,6 +476,10 @@ workflows:
             - 'build-mac':
                   requires:
                       - unit-test
+                  filters:
+                      branches:
+                          ignore:
+                              - auto-update-test
             # - 'e2e-mac':
             #       requires:
             #           - build-mac

@@ -59,7 +59,8 @@
 		"build-dev-dll": "BUILD_DLL_PRODUCTION=false yarn build-dll",
 		"storybook": "start-storybook -p 6007",
 		"build-storybook": "build-storybook -o dist/storybook",
-		"deploy-storybook-ci": "storybook-to-ghpages -ci --existing-output-dir=dist/storybook"
+		"deploy-storybook-ci": "storybook-to-ghpages -ci --existing-output-dir=dist/storybook",
+		"auto-update-version": "cross-var yarn version  --no-git-tag-version --no-commit-hooks --new-version $npm_package_version-auto-update-test"
 	},
 	"lint-staged": {
 		"*.js": [
@@ -128,7 +129,7 @@
 		"reselect": "4.0.0",
 		"sanitize-html": "1.20.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#6f4df6d0866dc965a424f1a671c2fd2dbef5ed36",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#a6a494948c9d90892e9c927c0dd4c0042fa1d6a2",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"snyk": "1.235.0",
@@ -142,7 +143,7 @@
 		"trezor-wallet-provider": "https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#fa3f49406bf469402f611cc752f8f3f45867e3cb",
 		"trezor.js": "8.1.0",
 		"url-join": "4.0.0",
-		"web3": "1.2.4",
+		"web3": "1.2.11",
 		"web3-provider-engine": "15.0.4",
 		"ws": "7.0.0",
 		"zxcvbn": "4.4.2"
@@ -186,6 +187,7 @@
 		"commitizen": "3.0.5",
 		"copy-webpack-plugin": "4.6.0",
 		"coveralls": "3.0.2",
+		"cross-var": "^1.1.0",
 		"cz-conventional-changelog": "2.1.0",
 		"delay": "4.1.0",
 		"electron": "3.1.6",
@@ -251,7 +253,7 @@
 		"react": "16.13.1",
 		"react-dom": "16.13.1",
 		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#e8356d2037b527f7b0a8433f20c476b6e501d70e",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#6f4df6d0866dc965a424f1a671c2fd2dbef5ed36",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#a6a494948c9d90892e9c927c0dd4c0042fa1d6a2",
 		"@material-ui/styles": "4.9.6"
 	},
 	"migrations": {
@@ -265,7 +267,7 @@
 		"buildDependenciesFromSource": true,
 		"generateUpdatesFilesForAllChannels": true,
 		"afterSign": "scripts/notarize.js",
-		"asar": false,
+		"asar": true,
 		"files": [
 			"dist/main",
 			"dist/common",
