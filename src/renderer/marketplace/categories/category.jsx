@@ -98,24 +98,30 @@ const newStyles = theme => ({
 		marginRight: 'calc((100% - (257px * 4))/3)'
 	},
 	root: {
-		backgroundColor: '#293743',
-		border: '1px solid #1D505F',
 		borderRadius: '4px',
 		boxSizing: 'border-box',
-		cursor: 'pointer',
 		height: '243px',
 		padding: '32px 20px 40px 20px',
 		marginBottom: '16px',
 		marginTop: '16px',
 		textAlign: 'center',
 		transition: 'all 0.2s',
-		// width: '340px',
-		width: '257px',
+		width: '257px'
+	},
+	active: {
+		backgroundColor: '#293743',
+		border: '1px solid #1D505F',
+		cursor: 'pointer',
 		'&:hover': {
 			backgroundColor: '#293743a1',
 			border: '2px solid #1CA9BA',
 			padding: '31px 19px 39px 19px'
 		}
+	},
+	inactive: {
+		backgroundColor: '#293743',
+		border: '1px solid #1D505F',
+		opacity: 0.5
 	},
 	icon: {
 		marginBottom: '16px'
@@ -133,7 +139,9 @@ const newStyles = theme => ({
 export const NewMarketplaceCategory = withStyles(newStyles)(
 	({ classes, children, title, description, active, svgIcon, learnMoreAction, index }) => {
 		const isThe4thElement = (index + 1) % 4 !== 0;
-		const containerClass = `${classes.root} ${isThe4thElement ? classes.rootRightMargin : ''}`;
+		const containerClass = `${classes.root} ${active ? classes.active : classes.inactive} ${
+			isThe4thElement ? classes.rootRightMargin : ''
+		}`;
 		return (
 			<Grid container className={containerClass} onClick={learnMoreAction} id={index}>
 				<Grid container justify="center" className={classes.icon} id={index}>
