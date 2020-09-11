@@ -28,6 +28,7 @@ export class Inventory extends BaseModel {
 				category: { type: 'string' },
 				price: { type: ['string', null], default: null },
 				priceCurrency: { type: ['string', null], default: null },
+				relyingPartyConfig: { type: 'object', default: {} },
 				data: { type: 'object', default: {} }
 			}
 		};

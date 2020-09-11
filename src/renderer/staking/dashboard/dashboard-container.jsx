@@ -2,16 +2,30 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { identitySelectors } from 'common/identity';
 import { StakingDashboardPage } from './dashboard-page';
-import { RegisterDidCardContainer } from '../../did';
-import KycCardContainer from '../../kyc/kyc-card-container';
+import { RegisterDidCardContainer, DisplayDid } from '../../did';
+import KycCardContainer from '../../kyc/kyc-card/kyc-card-container';
 
 class StakingDashboardContainerComponent extends PureComponent {
 	render() {
+		const { identity } = this.props;
 		return (
 			<StakingDashboardPage
 				{...this.props}
-				didComponent={<RegisterDidCardContainer returnPath={'/main/staking'} />}
-				kycComponent={<KycCardContainer returnPath={'/main/staking'} />}
+				didComponent={
+					identity.did ? (
+						<DisplayDid did={identity.did} />
+					) : (
+						<RegisterDidCardContainer returnPath={'/main/staking'} />
+					)
+				}
+				kycComponent={
+					<KycCardContainer
+						cancelRoute={'/main/staking'}
+						nextRoute={'/main/staking'}
+						vendorId="selfkey"
+						sku="staking_kyc"
+					/>
+				}
 			/>
 		);
 	}

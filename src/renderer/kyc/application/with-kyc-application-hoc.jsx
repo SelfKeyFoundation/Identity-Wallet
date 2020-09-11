@@ -2,27 +2,27 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { inventorySelectors } from '../../../common/marketplace/inventory/index';
 import { marketplaceSelectors } from '../../../common/marketplace';
-import { kycSelectors } from '../../../common/kyc';
+import { kycSelectors, kycOperations } from '../../../common/kyc';
 import {
 	APPLICATION_REJECTED,
 	APPLICATION_CANCELLED,
 	APPLICATION_APPROVED,
 	APPLICATION_ANSWER_REQUIRED
 } from 'common/kyc/status_codes';
+import { identitySelectors } from '../../../common/identity';
 
 export function withKycApplication(WrappedComponent, config) {
 	class WithKycApplication extends Component {
 		async componentDidMount() {
-			await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: false });
+			if (this.props.rpShouldUpdate) {
+				await this.props.dispatch(
+					kycOperations.loadRelyingParty(this.props.vendorId, false)
+				);
+			}
 		}
 
 		get applicationStatus() {
-			const { rp } = this.props;
-			if (!rp || !rp.authenticated) {
-				return null;
-			}
-
-			const application = this.lastApplication;
+			const application = this.props.lastApplication;
 
 			if (!application) return null;
 
@@ -36,46 +36,21 @@ export function withKycApplication(WrappedComponent, config) {
 					return 'additionalRequirements';
 			}
 
-			if (application.payments?.length) {
+			if (application.payments && application.payments.length) {
 				return 'unpaid';
 			}
 
 			return 'progress';
 		}
 
-		get canApply() {
-			const { rp, templateId } = this.props;
-			if (!rp || !rp.authenticated) {
-				const applicationStatus = this.applicationStatus;
-				return templateId && (!applicationStatus || applicationStatus === 'rejected');
-			}
-
-			return !!templateId;
-		}
-
-		get lastApplication() {
-			const { rp, templateId } = this.props;
-
-			if (!rp || !rp.authenticated) return false;
-			const { applications } = this.props.rp;
-			if (!applications || applications.length === 0) return false;
-
-			applications.sort((a, b) => {
-				const aDate = new Date(a.createdAt);
-				const bDate = new Date(b.createdAt);
-				return aDate > bDate ? 1 : -1;
-			});
-
-			let application;
-			let index = applications.length - 1;
-			for (; index >= 0; index--) {
-				if (applications[index].template === templateId) {
-					application = applications[index];
-					break;
-				}
-			}
-
-			return application;
+		refreshApplication() {
+			this.props.dispatch(
+				kycOperations.refreshRelyingPartyForKycApplication(
+					this.props.lastApplication,
+					'/main/staking',
+					'/main/staking'
+				)
+			);
 		}
 
 		render() {
@@ -84,7 +59,6 @@ export function withKycApplication(WrappedComponent, config) {
 				<WrappedComponent
 					{...passThroughProps}
 					applicationStatus={this.applicationStatus}
-					canApply={this.canApply}
 				/>
 			);
 		}
@@ -104,22 +78,27 @@ function mapStateToProps(state, props) {
 	let { templateId } = props;
 	let inventoryItem = null;
 	let kycRequirements = null;
-
+	const identity = identitySelectors.selectIdentity(state);
 	const rp = kycSelectors.relyingPartySelector(state, vendorId);
 
 	if (itemId) {
 		inventoryItem = inventorySelectors.selectInventoryItemById(state, itemId);
 	} else {
 		if (vendorId && sku) {
-			inventoryItem = inventorySelectors.selectInventoryItemById(state, vendorId, sku);
+			inventoryItem = inventorySelectors.selectInventoryItemByVendorSku(
+				state,
+				vendorId,
+				sku,
+				identity.type
+			);
 		}
 	}
 
 	if (!templateId && inventoryItem) {
 		templateId =
-			inventoryItem.relyingPartyConfig?.templateId ||
-			inventoryItem.data?.templateId ||
-			rp.relyingPartyConfig?.templateId ||
+			(inventoryItem.relyingPartyConfig && inventoryItem.relyingPartyConfig.templateId) ||
+			(inventoryItem.data && inventoryItem.data.templateId) ||
+			(rp && rp.relyingPartyConfig && rp.relyingPartyConfig.templateId) ||
 			null;
 	}
 
@@ -129,6 +108,13 @@ function mapStateToProps(state, props) {
 
 	return {
 		rp,
+		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
+		lastApplication: kycSelectors.selectLastApplication(
+			state,
+			vendorId,
+			templateId,
+			identity.id
+		),
 		inventoryItem,
 		isLoading: marketplaceSelectors.isInventoryLoading(state),
 		templateId,

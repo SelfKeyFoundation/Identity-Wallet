@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { CardContent, Card, CardHeader, Grid, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { IDIcon } from 'selfkey-ui';
-import KycRequirementsList from './requirements/requirements-list';
+import { ApplicationStatusBar } from '../application';
 
 const styles = theme => ({
 	hr: {
@@ -25,17 +25,19 @@ const styles = theme => ({
 	},
 	extraSpace: {
 		marginRight: '4px'
+	},
+	alert: {
+		marginBottom: 10
 	}
 });
 
-class KycRequiredCardComponent extends PureComponent {
+class KycAdditionalRequirementsCardComponent extends PureComponent {
 	render() {
 		const {
 			classes,
-			title = 'KYC Required',
+			title = 'Identity Verification',
 			subtitle = 'Prove your identity',
-			loading = false,
-			requirements = []
+			applicationStatus
 		} = this.props;
 		return (
 			<Card>
@@ -72,10 +74,9 @@ class KycRequiredCardComponent extends PureComponent {
 							</Grid>
 
 							<Grid item xs={9}>
-								<KycRequirementsList
-									requirements={requirements}
-									loading={loading}
-									noUnderline
+								<ApplicationStatusBar
+									status={applicationStatus}
+									barStyle={classes.alert}
 								/>
 								<Grid
 									container
@@ -88,10 +89,10 @@ class KycRequiredCardComponent extends PureComponent {
 									<Grid item className={classes.extraSpace}>
 										<Button
 											variant="contained"
-											onClick={this.props.onStartKycClick}
+											onClick={this.props.onApplicationRefresh}
 											size="large"
 										>
-											Start
+											Refresh
 										</Button>
 									</Grid>
 								</Grid>
@@ -104,6 +105,8 @@ class KycRequiredCardComponent extends PureComponent {
 	}
 }
 
-export const KycRequiredCard = withStyles(styles)(KycRequiredCardComponent);
+export const KycAdditionalRequirementsCard = withStyles(styles)(
+	KycAdditionalRequirementsCardComponent
+);
 
-export default KycRequiredCard;
+export default KycAdditionalRequirementsCard;

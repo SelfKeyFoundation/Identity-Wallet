@@ -219,7 +219,6 @@ class IndividualDashboardContainerComponent extends PureComponent {
 
 				<IndividualDashboardPage
 					{...this.props}
-					tab={this.props.match.params.tab || 'overview'}
 					onMarketplaceClick={this.handleMarketplaceClick}
 					onAddAttribute={this.handleAddAttribute}
 					onEditAttribute={this.handleEditAttribute}

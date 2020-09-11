@@ -15,7 +15,7 @@ const styles = theme => ({
 });
 class StakingDashboardPage extends PureComponent {
 	render() {
-		const { classes, didComponent, kycComponent } = this.props;
+		const { classes, didComponent, kycComponent, identity } = this.props;
 		return (
 			<Grid
 				id="individualWalletDashboard"
@@ -32,6 +32,9 @@ class StakingDashboardPage extends PureComponent {
 				</Grid>
 				<Grid item className={classes.contentContainer}>
 					<Grid container direction="column" spacing={4}>
+						{!identity.isSetupFinished ? (
+							<Grid item>Please complete your profile</Grid>
+						) : null}
 						{didComponent ? <Grid item>{didComponent}</Grid> : null}
 						{kycComponent ? <Grid item>{kycComponent}</Grid> : null}
 					</Grid>

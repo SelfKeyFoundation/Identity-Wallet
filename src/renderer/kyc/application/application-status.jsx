@@ -31,11 +31,13 @@ export const ApplicationStatusCompleted = withStyles(styles)(({ classes, statusA
 					Your application was successful
 				</Typography>
 			</Grid>
-			<Grid item xs={3} className={classes.payment}>
-				<Button variant="contained" onClick={statusAction}>
-					Manage Applications
-				</Button>
-			</Grid>
+			{statusAction ? (
+				<Grid item xs={3} className={classes.payment}>
+					<Button variant="contained" onClick={statusAction}>
+						Manage Applications
+					</Button>
+				</Grid>
+			) : null}
 		</Alert>
 	</React.Fragment>
 ));
@@ -48,11 +50,13 @@ export const ApplicationStatusRejected = withStyles(styles)(({ classes, statusAc
 					Your previous application was rejected
 				</Typography>
 			</Grid>
-			<Grid item xs={3} className={classes.payment}>
-				<Button variant="contained" onClick={statusAction}>
-					Manage Applications
-				</Button>
-			</Grid>
+			{statusAction ? (
+				<Grid item xs={3} className={classes.payment}>
+					<Button variant="contained" onClick={statusAction}>
+						Manage Applications
+					</Button>
+				</Grid>
+			) : null}
 		</Alert>
 	</React.Fragment>
 ));
@@ -64,11 +68,13 @@ export const ApplicationStatusUnpaid = withStyles(styles)(({ classes, statusActi
 				You have an existing <strong>unpaid</strong> application
 			</Typography>
 		</Grid>
-		<Grid item xs={3} className={classes.payment}>
-			<Button variant="contained" onClick={statusAction}>
-				Pay
-			</Button>
-		</Grid>
+		{statusAction ? (
+			<Grid item xs={3} className={classes.payment}>
+				<Button variant="contained" onClick={statusAction}>
+					Pay
+				</Button>
+			</Grid>
+		) : null}
 	</Alert>
 ));
 
@@ -80,11 +86,13 @@ export const ApplicationStatusAdditionalRequirements = withStyles(styles)(
 					Your existing application requires additional information
 				</Typography>
 			</Grid>
-			<Grid item xs={3} className={classes.payment}>
-				<Button variant="contained" onClick={statusAction}>
-					Complete Application
-				</Button>
-			</Grid>
+			{statusAction ? (
+				<Grid item xs={3} className={classes.payment}>
+					<Button variant="contained" onClick={statusAction}>
+						Complete Application
+					</Button>
+				</Grid>
+			) : null}
 		</Alert>
 	)
 );

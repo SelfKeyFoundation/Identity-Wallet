@@ -468,6 +468,32 @@ export const kycSelectors = {
 			id => this.kycSelector(state).applicationsById[id]
 		);
 	},
+	selectApplicationsForTemplate(state, rpName, templateId, identityId) {
+		return this.selectApplications(state).filter(app => {
+			if (identityId && identityId !== +app.identityId) {
+				return false;
+			}
+
+			if (!templateId) {
+				return rpName === app.rpName;
+			}
+
+			return templateId === app.templateId;
+		});
+	},
+	selectLastApplication(state, rpName, templateId, identityId) {
+		const applications = this.selectApplicationsForTemplate(
+			state,
+			rpName,
+			templateId,
+			identityId
+		).sort((a, b) => {
+			const aDate = new Date(a.createdAt);
+			const bDate = new Date(b.createdAt);
+			return aDate > bDate ? -1 : 1;
+		});
+		return applications[0] || null;
+	},
 	selectProcessing(state) {
 		return this.kycSelector(state).processing;
 	},
@@ -684,6 +710,7 @@ const loadRelyingPartyOperation = (
 						scope: application.scope,
 						applicationDate: application.createdAt,
 						title: template ? template.name : rpName,
+						templateId: template.id,
 						messages: formattedMessages
 					})
 				);
@@ -815,7 +842,7 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 		}
 		let application = await rp.session.createKYCApplication(templateId, attributes);
 		application = await rp.session.getKYCApplication(application.id);
-		await dispatch(kycActions.addKYCApplication(rpName, application));
+		await dispatch(kycActions.addKYCApplication(rpName, { ...application, templateId }));
 		// application.messages = await rp.session.getKYCApplicationChat(application.id);
 		application.messages = [];
 		const formattedMessages = messageFilter(application.messages);

@@ -18,7 +18,10 @@ import {
 	KycChecklistItem,
 	KycMembersListItem
 } from '../src/renderer/kyc/application/kyc-checklist';
-import KycRequiredCard from '../src/renderer/kyc/kyc-required-card';
+import KycRequiredCard from '../src/renderer/kyc/kyc-card/kyc-required-card';
+import KycInProgressCard from '../src/renderer/kyc/kyc-card/kyc-in-progress-card';
+import KycApprovedCard from '../src/renderer/kyc/kyc-card/kyc-approved-card';
+import KycAdditionalRequirementsCard from '../src/renderer/kyc/kyc-card/kyc-additional-requirements-card';
 
 storiesOf('KYC/Requirements List', module)
 	.add('Loading', () => (
@@ -37,13 +40,32 @@ storiesOf('KYC/Requirements List', module)
 		/>
 	));
 
-storiesOf('KYC/KycCard', module).add('KycRequiredCard', () => (
-	<KycRequiredCard
-		title={text('Title', 'KYC Required')}
-		subtitle={text('Subtitle', 'Prove your identity')}
-		requirements={object('Requirements', KYCRequirementData)}
-	/>
-));
+storiesOf('KYC/KycCard', module)
+	.add('KycRequiredCard', () => (
+		<KycRequiredCard
+			title={text('Title', 'KYC Required')}
+			subtitle={text('Subtitle', 'Prove your identity')}
+			requirements={object('Requirements', KYCRequirementData)}
+		/>
+	))
+	.add('KycInProgressCard', () => (
+		<KycInProgressCard
+			title={text('Title', 'KYC Required')}
+			subtitle={text('Subtitle', 'Prove your identity')}
+		/>
+	))
+	.add('KycApprovedCard', () => (
+		<KycApprovedCard
+			title={text('Title', 'KYC Required')}
+			subtitle={text('Subtitle', 'Prove your identity')}
+		/>
+	))
+	.add('KycAdditionalRequirementsCard', () => (
+		<KycAdditionalRequirementsCard
+			title={text('Title', 'KYC Required')}
+			subtitle={text('Subtitle', 'Prove your identity')}
+		/>
+	));
 
 const kycStatuses = ['completed', 'progress', 'unpaid', 'additionalRequirements', 'rejected'];
 
