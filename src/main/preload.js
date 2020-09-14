@@ -29,56 +29,49 @@ window.quit = event => {
 	electron.remote.app.quit();
 };
 
-window.openDirectorySelectDialog = event => {
-	return new Promise((resolve, reject) => {
-		try {
-			const dialogConfig = {
-				title: 'Choose where to save documents',
-				message: 'Choose where to save documents',
-				properties: ['openDirectory']
-			};
-			electron.remote.dialog.showOpenDialog(
-				electron.remote.app.win,
-				dialogConfig,
-				filePaths => {
-					if (filePaths) {
-						resolve(filePaths[0]);
-					} else {
-						reject(new Error('Directory not Selected'));
-					}
-				}
-			);
-		} catch (e) {
-			console.log(e);
-			reject(e);
+window.openDirectorySelectDialog = async event => {
+	try {
+		const dialogConfig = {
+			title: 'Choose where to save documents',
+			message: 'Choose where to save documents',
+			properties: ['openDirectory']
+		};
+
+		const { filePaths, canceled } = await electron.remote.dialog.showOpenDialog(
+			electron.remote.app.win,
+			dialogConfig
+		);
+		if (canceled || !filePaths || !filePaths.length) {
+			throw new Error('Directory not Selected');
 		}
-	});
+		return filePaths[0];
+	} catch (e) {
+		console.log(e);
+		throw e;
+	}
 };
 
-window.openFileSelectDialog = event => {
-	return new Promise((resolve, reject) => {
-		try {
-			const dialogConfig = {
-				title: 'Choose keystore file (UTC/JSON)',
-				message: 'Choose keystore file (UTC/JSON)',
-				properties: ['openFile']
-			};
-			electron.remote.dialog.showOpenDialog(
-				electron.remote.app.win,
-				dialogConfig,
-				filePaths => {
-					if (filePaths) {
-						resolve(filePaths[0]);
-					} else {
-						reject(new Error('File not Selected'));
-					}
-				}
-			);
-		} catch (e) {
-			console.log(e);
-			reject(e);
+window.openFileSelectDialog = async event => {
+	try {
+		const dialogConfig = {
+			title: 'Choose keystore file (UTC/JSON)',
+			message: 'Choose keystore file (UTC/JSON)',
+			properties: ['openFile']
+		};
+		const { filePaths, canceled } = await electron.remote.dialog.showOpenDialog(
+			electron.remote.app.win,
+			dialogConfig
+		);
+
+		if (canceled || !filePaths || !filePaths.length) {
+			throw new Error('File not Selected');
 		}
-	});
+
+		return filePaths[0];
+	} catch (e) {
+		console.log(e);
+		throw e;
+	}
 };
 
 window.openPDF = href => {
