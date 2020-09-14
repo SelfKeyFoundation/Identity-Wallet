@@ -445,7 +445,7 @@ class LoansDetailsComponent extends PureComponent {
 							</Grid>
 						</Grid>
 					</Grid>
-					<Grid item xs={12} alignItems="center">
+					<Grid item xs={12}>
 						<div className={classes.disclaimer}>
 							<MarketplaceDisclaimer />
 						</div>

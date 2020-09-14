@@ -90,6 +90,7 @@ class SelfKeyIdCreateComponent extends PureComponent {
 											>
 												<Grid
 													container
+													item
 													xs={2}
 													alignItems="center"
 													direction="column"

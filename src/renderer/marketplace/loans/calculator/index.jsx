@@ -401,7 +401,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 										min={this.minPeriod()}
 										max={this.maxPeriod()}
 										onChange={this.onPeriodChange}
-										step="1"
+										step={1}
 										marks={this.generateMarks({
 											max: this.maxPeriod(),
 											min: this.minPeriod(),
