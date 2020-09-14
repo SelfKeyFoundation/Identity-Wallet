@@ -120,8 +120,9 @@ const IndividualOverviewTab = withStyles(styles)(
 									<Grid container item spacing={0} justify="space-between">
 										<Grid
 											container
+											item
 											xs={3}
-											justify="end"
+											justify="flex-end"
 											alignItems="center"
 											direction="column"
 											wrap="nowrap"
@@ -167,8 +168,9 @@ const IndividualOverviewTab = withStyles(styles)(
 									<Grid container item spacing={0} justify="space-between">
 										<Grid
 											container
+											item
 											xs={3}
-											justify="end"
+											justify="flex-end"
 											alignItems="center"
 											direction="column"
 											wrap="nowrap"

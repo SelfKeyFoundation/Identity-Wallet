@@ -108,7 +108,6 @@ class CorporateMemberFormComponent extends PureComponent {
 						justify="center"
 						alignItems="center"
 						spacing={0}
-						xs={12}
 					>
 						<CorporateMemberSelectRole
 							positions={positions}
