@@ -74,9 +74,9 @@ jobs:
             - run:
                   name: Coveralls
                   command: yarn coveralls
-            # - run:
-            #       name: Build Storybook
-            #       command: yarn build-storybook
+            - run:
+                  name: Build Storybook
+                  command: yarn build-storybook
             - persist_to_workspace:
                   root: .
                   paths:
@@ -501,6 +501,7 @@ workflows:
                       branches:
                           only:
                               - dev
+                              - test-storybook-publish
             - 'publish-mac':
                   requires:
                       - build-mac
