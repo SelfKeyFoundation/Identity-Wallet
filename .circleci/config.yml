@@ -17,27 +17,24 @@ aliases:
       restore_cache:
           name: Restore Yarn Package Cache
           keys:
-              - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
-              - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}
-              - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}}-master
-              - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}-
+              - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}-{{ checksum "yarn.lock" }}
+              - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}}-
     - &step_save_cache_mac
       save_cache:
           name: Save Yarn Package Cache
-          key: yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}-{{ checksum "yarn.lock" }}
           paths:
               - node_modules/
     - &step_restore_cache
       restore_cache:
           name: Restore Yarn Package Cache
           keys:
-              - yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}
-              - yarn-packages-{{ checksum "/tmp/cache_buster" }}}-master
+              - yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ checksum "yarn.lock" }}
               - yarn-packages-{{ checksum "/tmp/cache_buster" }}-
     - &step_save_cache
       save_cache:
           name: Save Yarn Package Cache
-          key: yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ checksum "yarn.lock" }}
           paths:
               - node_modules/
     - &step_yarn_upgrade
@@ -74,10 +71,6 @@ jobs:
             - run:
                   name: Coveralls
                   command: yarn coveralls
-            - persist_to_workspace:
-                  root: .
-                  paths:
-                      - dist
             - store_test_results:
                   path: dist/junit
             - store_artifacts:
@@ -101,7 +94,6 @@ jobs:
                   root: .
                   paths:
                       - dist
-            - *step_save_cache
     'publish-storybook':
         docker: *DOCKERIMAGE
         environment:
@@ -113,24 +105,13 @@ jobs:
             - *step_prepare_cache_buster
             - *step_restore_cache
             - run:
-                  name: Install OS Dependecies
-                  command: |
-                      sudo apt-get update
-                      sudo apt-get install build-essential
-                      sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
-            - run:
-                  name: Install Node Packages
-                  command: yarn install
-            - run:
                   name: Get storybook from attach_workspace
                   command: |
                       mkdir -p dist
                       cp -r /tmp/linux/dist/storybook dist/storybook
-
             - run:
                   name: Story book
                   command: yarn deploy-storybook-ci
-            - *step_save_cache
 
     'build-mac':
         macos:
@@ -170,40 +151,6 @@ jobs:
             - store_artifacts:
                   path: dist/{latest,SelfKey Identity,selfkey-identity}*
             - *step_save_cache_mac
-    'build-linux-arm':
-        docker:
-            - image: sk91/circle-ci-node:latest
-        environment:
-            CACHE_VERSION: *cache_version
-        steps:
-            - checkout
-            - attach_workspace:
-                  at: /tmp/linux
-            - *step_prepare_cache_buster
-            - *step_restore_cache
-            - run:
-                  name: Install OS Dependecies
-                  command: |
-                      sudo apt-get update
-                      sudo apt-get install libudev-dev
-                      sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
-                      sudo apt-get install libc6-dev-armhf-cross linux-libc-dev-armhf-cross g++-arm-linux-gnueabihf
-            - run:
-                  name: Install Node Packages
-                  command: yarn install-all
-            - run:
-                  name: Set Sentry
-                  command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
-            - run:
-                  name: Build App
-                  command: yarn dist --publish=never -l --armv7l
-            - persist_to_workspace:
-                  root: .
-                  paths:
-                      - dist
-            - store_artifacts:
-                  path: dist/{latest,SelfKey Identity,selfkey-identity}*
-            - *step_save_cache
     'build-linux':
         docker: *DOCKERIMAGE
         environment:
@@ -471,9 +418,6 @@ workflows:
                       branches:
                           ignore:
                               - auto-update-test
-            # - 'build-linux-arm':
-            #       requires:
-            #           - unit-test
             # - 'e2e-linux':
             #       requires:
             #           - build-linux
