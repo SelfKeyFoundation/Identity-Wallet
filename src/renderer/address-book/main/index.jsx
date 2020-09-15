@@ -103,7 +103,7 @@ class AddressBookContainer extends PureComponent {
 						ADD ADDRESS
 					</Button>
 				</Grid>
-				<Grid container xs={9}>
+				<Grid container item xs={9}>
 					<Table>
 						<TableHead>
 							<SmallTableHeadRow>
