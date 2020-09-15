@@ -461,7 +461,6 @@ workflows:
                       branches:
                           only:
                               - dev
-                              - test-storybook-publish
             - 'publish-storybook':
                   requires:
                       - build-storybook
@@ -469,7 +468,6 @@ workflows:
                       branches:
                           only:
                               - dev
-                              - test-storybook-publish
             - 'publish-mac':
                   requires:
                       - build-mac
