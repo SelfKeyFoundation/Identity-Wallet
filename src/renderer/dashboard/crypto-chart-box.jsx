@@ -179,8 +179,6 @@ class ChartContainerComponent extends React.Component {
 		} else {
 			dataPoints = [['', 1]]; // Positive value is needed for pie chart.
 		}
-
-		console.log(data.concat(dataPoints));
 		return data.concat(dataPoints);
 	};
 
