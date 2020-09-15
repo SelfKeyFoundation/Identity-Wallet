@@ -22,6 +22,7 @@ export const createMainWindow = async () => {
 		webPreferences: {
 			nodeIntegration: true,
 			webSecurity: true,
+			enableRemoteModule: true,
 			disableBlinkFeatures: 'Auxclick',
 			preload: path.resolve(__dirname, 'preload.js'),
 			zoomFactor: +process.env.WINDOW_ZOOM_FACTOR || 1

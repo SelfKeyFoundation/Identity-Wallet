@@ -150,3 +150,7 @@ body {
 	font-family: $font-family;
 	background-color: $color-bg-main;
 }
+
+:focus {
+	outline: none;
+}
