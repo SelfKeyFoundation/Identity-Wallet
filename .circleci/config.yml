@@ -17,24 +17,28 @@ aliases:
       restore_cache:
           name: Restore Yarn Package Cache
           keys:
-              - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}-{{ checksum "yarn.lock" }}
+              - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+              - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-
+              - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}}-dev
               - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}}-
     - &step_save_cache_mac
       save_cache:
           name: Save Yarn Package Cache
-          key: yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}-{{ checksum "yarn.lock" }}
+          key: yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
               - node_modules/
     - &step_restore_cache
       restore_cache:
           name: Restore Yarn Package Cache
           keys:
-              - yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ checksum "yarn.lock" }}
+              - yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+              - yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-
+              - yarn-packages-{{ checksum "/tmp/cache_buster" }}-dev
               - yarn-packages-{{ checksum "/tmp/cache_buster" }}-
     - &step_save_cache
       save_cache:
           name: Save Yarn Package Cache
-          key: yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ checksum "yarn.lock" }}
+          key: yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
               - node_modules/
     - &step_yarn_upgrade
