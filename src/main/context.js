@@ -38,6 +38,8 @@ import { MarketplaceOrdersService } from './marketplace/orders/orders-service';
 import { TotleSwapService } from './token-swap/totle-service';
 import { CurrencyService } from './currency/currency-service';
 import { MatomoService } from './matomo/matomo-service';
+import { ContractService } from './blockchain/contracts/contract-service';
+import ContractSyncJobHandler from './blockchain/contracts/contracts-sync-job-handler';
 
 export const registerMainServices = container => {
 	container.register({
@@ -80,6 +82,8 @@ export const registerMainServices = container => {
 		countryService: asClass(CountryService).singleton(),
 		kycApplicationService: asClass(KycApplicationService).singleton(),
 		didService: asClass(DIDService).singleton(),
+		contractService: asClass(ContractService).singleton(),
+		contractSyncJobHandler: asClass(ContractSyncJobHandler).singleton(),
 		autoUpdateService: asClass(AutoUpdateService).singleton(),
 		marketplaceOrdersService: asClass(MarketplaceOrdersService).singleton(),
 		totleSwapService: asClass(TotleSwapService).singleton(),
