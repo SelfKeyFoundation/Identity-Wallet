@@ -74,9 +74,6 @@ jobs:
             - run:
                   name: Coveralls
                   command: yarn coveralls
-            - run:
-                  name: Build Storybook
-                  command: yarn build-storybook
             - persist_to_workspace:
                   root: .
                   paths:
@@ -85,6 +82,25 @@ jobs:
                   path: dist/junit
             - store_artifacts:
                   path: dist
+            - *step_save_cache
+    'build-storybook':
+        docker: &DOCKERIMAGE
+            - image: circleci/node:10.13.0-stretch-browsers
+        environment:
+            CACHE_VERSION: *cache_version
+        steps:
+            - checkout
+            - attach_workspace:
+                  at: /tmp/linux
+            - *step_prepare_cache_buster
+            - *step_restore_cache
+            - run:
+                  name: Build Storybook
+                  command: yarn build-storybook
+            - persist_to_workspace:
+                  root: .
+                  paths:
+                      - dist
             - *step_save_cache
     'publish-storybook':
         docker: *DOCKERIMAGE
@@ -494,9 +510,17 @@ workflows:
                               - nightly
                               - release
                               - /staging.*/
-            - 'publish-storybook':
+            - 'build-storybook':
                   requires:
                       - unit-test
+                  filters:
+                      branches:
+                          only:
+                              - dev
+                              - test-storybook-publish
+            - 'publish-storybook':
+                  requires:
+                      - build-storybook
                   filters:
                       branches:
                           only:
