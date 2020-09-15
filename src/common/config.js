@@ -56,7 +56,7 @@ const common = {
 	defaultLanguage: 'en',
 	forceUpdateAttributes: process.env.FORCE_UPDATE_ATTRIBUTES === 'true' && !isTestMode(),
 	userAgent: `SelfKeyIDW/${pkg.version}`,
-	airtableBaseUrl: 'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=',
+	airtableBaseUrl: 'https://airtable.selfkey.org/airtable?tableName=',
 
 	exchangeRateApiUrl: 'https://api.exchangeratesapi.io',
 
