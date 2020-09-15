@@ -50,12 +50,12 @@ class NotarizationDetailsContainerComponent extends MarketplaceNotariesComponent
 					kycOperations.loadRelyingParty(
 						vendorId,
 						authenticated,
-						this.tocRoute(),
+						this.checkoutRoute(),
 						this.cancelRoute()
 					)
 				);
 			} else {
-				await dispatch(push(this.tocRoute()));
+				await dispatch(push(this.checkoutRoute()));
 			}
 		});
 	};

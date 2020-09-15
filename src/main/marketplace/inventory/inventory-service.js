@@ -43,8 +43,8 @@ export class InventoryService {
 	loadInventory() {
 		return Inventory.findAll();
 	}
-	upsert(upsert) {
-		return Inventory.bulkUpsert(upsert);
+	upsert(upsert, hideErrors = false) {
+		return Inventory.bulkUpsert(upsert, hideErrors);
 	}
 	deleteMany(ids) {
 		return Inventory.deleteMany(ids);

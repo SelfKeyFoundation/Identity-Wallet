@@ -60,9 +60,6 @@ const styles = theme => ({
 			marginTop: '5px'
 		}
 	},
-	moneyIcon: {
-		marginRight: '18px'
-	},
 	contentHeader: {
 		marginBottom: '40px'
 	},
@@ -71,7 +68,13 @@ const styles = theme => ({
 	}
 });
 
-export const BankingApplicationButton = withStyles(styles)(
+const buttonStyles = theme => ({
+	moneyIcon: {
+		marginRight: '18px'
+	}
+});
+
+export const BankingApplicationButton = withStyles(buttonStyles)(
 	({ classes, canOpenBankAccount, startApplication, loading }) => (
 		<React.Fragment>
 			{canOpenBankAccount && !loading && (
