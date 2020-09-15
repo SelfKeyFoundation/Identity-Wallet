@@ -174,10 +174,7 @@ class ChartContainerComponent extends React.Component {
 		let dataPoints = null;
 		if (this.props.hasBalance) {
 			dataPoints = tokens.map(token => {
-				return [
-					token.name,
-					token.balanceInFiat === 0 ? 25 * Math.random() : token.balanceInFiat
-				];
+				return [token.name, token.balanceInFiat];
 			});
 		} else {
 			dataPoints = [['', 1]]; // Positive value is needed for pie chart.
