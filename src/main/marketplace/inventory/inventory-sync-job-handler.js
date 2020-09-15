@@ -57,7 +57,7 @@ export class InventorySyncJobHandler {
 			return item;
 		});
 		job.emitProgress(75, { message: 'Updating db data' });
-		await this.inventoryService.upsert(upsert);
+		await this.inventoryService.upsert(upsert, true);
 		job.emitProgress(25, { message: 'Removing obsolete inventory' });
 		await this.inventoryService.deleteMany(toRemove);
 		job.emitProgress(95, { message: 'Fetching updated inventory list' });
