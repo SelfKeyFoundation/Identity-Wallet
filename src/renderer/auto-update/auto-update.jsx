@@ -19,6 +19,14 @@ const styles = theme => ({
 		marginTop: '30px',
 		paddingTop: '30px',
 		borderTop: '1px solid #475768'
+	},
+	releaseNotes: {
+		fontSize: '18px',
+		lineHeight: '30px',
+		marginTop: '-10px'
+	},
+	title: {
+		marginBottom: '12px'
 	}
 });
 
@@ -29,13 +37,13 @@ export const AutoUpdate = withStyles(styles)(
 		const shadow = root.createShadowRoot
 			? root.createShadowRoot()
 			: root.attachShadow({ mode: 'open' });
-		shadow.innerHTML = info.releaseNotes;
-
+		shadow.innerHTML = `<style>h4 { color:#93B0C1; font-size: 18px; font-weight: 400; margin: 0; } 
+		p, ul { margin-top: 0; }</style>${info.releaseNotes}`;
 		setTimeout(() => {
 			releaseNotesRef.current.appendChild(root);
 		}, 100);
 		return (
-			<Popup closeAction={closeAction} open text="Software Update">
+			<Popup closeAction={closeAction} open text="Software Update" displayLogo>
 				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 					<Grid item xs={2}>
 						<DownloadIcon2 className={classes.downloadIcon} />
@@ -53,16 +61,20 @@ export const AutoUpdate = withStyles(styles)(
 								</Typography>
 							</Grid>
 							<Grid item>
-								<Typography variant="body1" gutterBottom>
+								<Typography variant="body1">
 									Selfkey Wallet {info && info.releaseName} is available now for
 									download. For security reasons please update to latest version!
 								</Typography>
 							</Grid>
 							<Grid item classes={{ item: classes.footer }}>
-								<Typography variant="h1" color="secondary" gutterBottom>
+								<Typography
+									variant="body1"
+									color="secondary"
+									className={classes.title}
+								>
 									Release Notes:
 								</Typography>
-								<div ref={releaseNotesRef} />
+								<div ref={releaseNotesRef} className={classes.releaseNotes} />
 								<div className={classes.actions}>
 									<Button
 										variant="contained"
