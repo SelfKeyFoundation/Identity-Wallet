@@ -174,12 +174,16 @@ class ChartContainerComponent extends React.Component {
 		let dataPoints = null;
 		if (this.props.hasBalance) {
 			dataPoints = tokens.map(token => {
-				return [token.name, token.balanceInFiat];
+				return [
+					token.name,
+					token.balanceInFiat === 0 ? 25 * Math.random() : token.balanceInFiat
+				];
 			});
 		} else {
 			dataPoints = [['', 1]]; // Positive value is needed for pie chart.
 		}
 
+		console.log(data.concat(dataPoints));
 		return data.concat(dataPoints);
 	};
 
@@ -187,12 +191,7 @@ class ChartContainerComponent extends React.Component {
 		const { events, tokens, hasBalance, colors, classes } = this.props;
 
 		const selectedColors = hasBalance ? colors : [this.DEFAULT_COLLOR];
-		let tooltip = hasBalance
-			? {
-					trigger: 'focus',
-					isHtml: true
-			  }
-			: { trigger: 'none' };
+		let tooltip = hasBalance ? { trigger: 'focus', isHtml: true } : { trigger: 'none' };
 
 		return (
 			<div className={classes.chartWrap}>
@@ -304,6 +303,8 @@ export class CryptoChartBoxComponent extends React.Component {
 		}
 	};
 
+	getColors = () => ['#46dfba', '#05538E', '#006CBE', '#006CBE', '#00C0D9'];
+
 	// ETH and KEY have hardcoded colors
 	getChartColors = tokens => {
 		let colors = [];
@@ -318,7 +319,10 @@ export class CryptoChartBoxComponent extends React.Component {
 		return [...colors, ...this.getColors()];
 	};
 
-	getColors = () => ['#46dfba', '#05538E', '#006CBE', '#006CBE', '#00C0D9'];
+	getColorByIndex = index => {
+		const colors = this.getChartColors(this.props.tokens);
+		return colors[index] ? colors[index] : this.OTHERS_COLOR;
+	};
 
 	getChartEvents = () => {
 		return this.hasBalance() ? [this.selectEvent, this.readyEvent] : [];
@@ -351,8 +355,7 @@ export class CryptoChartBoxComponent extends React.Component {
 					<div
 						className={`${classes.coloredBox} ${classes.iconRightSpace}`}
 						style={{
-							backgroundColor:
-								index <= 4 ? this.getColors()[index] : this.OTHERS_COLOR
+							backgroundColor: this.getColorByIndex(index)
 						}}
 					>
 						<div className={classes.coloredBoxText}>
