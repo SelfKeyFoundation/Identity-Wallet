@@ -1,4 +1,5 @@
 'use strict';
+import config from 'common/config';
 import fetch from 'node-fetch';
 import Exchange from './exchange';
 import ListingExchange from './listing-exchange';
@@ -9,8 +10,7 @@ import { LISTING_EXCHANGES_SYNC_JOB } from './listing-exchanges-sync-job-handler
 const log = new Logger('ExchangesService');
 const { exchangesOperations } = require('common/exchanges');
 
-const airtableBaseUrl =
-	'https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=';
+const airtableBaseUrl = config.airtableBaseUrl;
 
 export class ExchangesService {
 	constructor({ schedulerService, store }) {
