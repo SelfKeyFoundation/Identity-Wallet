@@ -20,7 +20,6 @@ export class ContractService {
 	async fetch() {
 		try {
 			let fetched = await request.get({ url: CONTRACTS_API_ENDPOINT, json: true });
-			console.log(fetched);
 			return fetched.entities.map(entity => {
 				let item = _.mapKeys(entity.data, (value, key) => _.camelCase(key));
 				try {
