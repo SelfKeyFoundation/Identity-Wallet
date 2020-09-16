@@ -9,19 +9,25 @@ import KycAdditionalRequirementsCard from './kyc-additional-requirements-card';
 
 class KycCardContainerComponent extends PureComponent {
 	handleApplicationStart = () => {
-		const { vendorId, templateId, vendor, cancelRoute, nextRoute } = this.props;
+		const {
+			vendorId,
+			templateId,
+			vendor,
+			cancelRoute,
+			nextRoute,
+			applicationTitle,
+			applicationDescription,
+			applicationAgreement
+		} = this.props;
 		this.props.dispatch(
 			kycOperations.startCurrentApplicationOperation(
 				vendorId,
 				templateId,
 				nextRoute,
 				cancelRoute,
-				`Bank Account`,
-				`You are about to begin the application process for a bank account in.
-				Please double check your required documents are Certified True or Notarized where
-				necessary. Failure to do so will result in delays in the process. You may also be
-				asked to provide more information by the service provider`,
-				'conducting KYC',
+				applicationTitle,
+				applicationDescription,
+				applicationAgreement,
 				vendor.name,
 				vendor.privacyPolicy,
 				vendor.termsOfService

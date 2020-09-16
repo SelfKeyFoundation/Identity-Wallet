@@ -24,6 +24,9 @@ class StakingDashboardContainerComponent extends PureComponent {
 						nextRoute={'/main/staking'}
 						vendorId="selfkey"
 						sku="staking_kyc"
+						applicationTitle="Airdrop"
+						applicationDescription="You are about to begin the application process for Selfkey LOCK fAirdrop"
+						applicationAgreement="conducting KYC"
 					/>
 				}
 			/>

@@ -46,6 +46,10 @@ export const didSelectors = {
 	isCurrentIdentityPending: state => {
 		const identity = identitySelectors.selectIdentity(state);
 		return didSelectors.isPending(state, identity.id);
+	},
+	selectCurrentDid: state => {
+		const identity = identitySelectors.selectIdentity(state);
+		return identity.did;
 	}
 };
 
