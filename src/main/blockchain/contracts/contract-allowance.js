@@ -27,8 +27,8 @@ export class Contract extends BaseModel {
 		};
 	}
 
-	static findAll() {
-		return this.query().where({ env });
+	static findAll(where = {}) {
+		return this.query().where({ ...where, env });
 	}
 
 	static create(data) {

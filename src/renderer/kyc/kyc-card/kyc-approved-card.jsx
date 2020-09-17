@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { CardContent, Card, CardHeader, Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { IDIcon } from 'selfkey-ui';
-import { ApplicationStatusBar } from '../application';
+import { ApplicationStatusBar } from '../application/application-status';
 
 const styles = theme => ({
 	hr: {

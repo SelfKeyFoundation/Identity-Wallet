@@ -10,7 +10,7 @@ describe('ContractAllowance model', () => {
 	const testItem2 = {
 		contractAddress: 'testC2',
 		tokenAddress: 'testT2',
-		walletId: 1
+		walletId: 2
 	};
 
 	beforeEach(async () => {
@@ -40,6 +40,15 @@ describe('ContractAllowance model', () => {
 		await ContractAllowance.create(testItem2);
 		all = await ContractAllowance.findAll();
 		expect(all.length).toBe(2);
+	});
+
+	it('findAll filter', async () => {
+		let all = await ContractAllowance.findAll();
+		expect(all.length).toBe(0);
+		await ContractAllowance.create(testItem);
+		await ContractAllowance.create(testItem2);
+		all = await ContractAllowance.findAll({ walletId: testItem2.walletId });
+		expect(all.length).toBe(1);
 	});
 
 	it('updateById', async () => {

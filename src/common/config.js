@@ -151,7 +151,8 @@ const common = {
 		transactionsListFilter: false,
 		loansMarketplace: false,
 		swapTokens: false,
-		exchangesMarketplace: false
+		exchangesMarketplace: false,
+		contract: true
 	}
 };
 
@@ -182,6 +183,7 @@ const dev = {
 		transactionsListFilter: true,
 		loansMarketplace: true,
 		swapTokens: true,
+		contract: true,
 		exchangesMarketplace: false
 	},
 	testWalletAddress: '0x23d233933c86f93b74705cf0d236b39f474249f8',
@@ -216,6 +218,7 @@ const prod = {
 		transactionsListFilter: false,
 		loansMarketplace: true,
 		swapTokens: false,
+		contract: false,
 		exchangesMarketplace: false
 	},
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'
