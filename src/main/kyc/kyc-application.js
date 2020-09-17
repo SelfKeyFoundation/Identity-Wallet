@@ -28,6 +28,7 @@ export class KycApplication extends BaseModel {
 				payments: { type: 'object' },
 				nextRoute: { type: 'string' },
 				identityId: { type: 'integer' },
+				templateId: { type: 'string' },
 				messages: { type: 'array', default: [] }
 			}
 		};

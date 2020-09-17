@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
-import { IndividualDashboardTabs } from './dashboard-tabs';
 
 const styles = theme => ({
 	container: {
@@ -14,19 +13,9 @@ const styles = theme => ({
 		marginBottom: '45px'
 	}
 });
-class IndividualDashboardPage extends PureComponent {
-	constructor(props) {
-		super(props);
-		this.state = {
-			tab: props.tab || 'overview'
-		};
-	}
-
-	onTabChange = tab => this.setState({ tab });
-
+class StakingDashboardPage extends PureComponent {
 	render() {
-		const { classes } = this.props;
-		const { tab } = this.state;
+		const { classes, didComponent, kycComponent, identity } = this.props;
 		return (
 			<Grid
 				id="individualWalletDashboard"
@@ -38,20 +27,22 @@ class IndividualDashboardPage extends PureComponent {
 			>
 				<Grid item id="header" className={classes.header}>
 					<Typography variant="h1" className={classes.title}>
-						Selfkey Profile
+						Staking
 					</Typography>
 				</Grid>
 				<Grid item className={classes.contentContainer}>
-					<IndividualDashboardTabs
-						tab={tab}
-						onTabChange={this.onTabChange}
-						{...this.props}
-					/>
+					<Grid container direction="column" spacing={4}>
+						{!identity.isSetupFinished ? (
+							<Grid item>Please complete your profile</Grid>
+						) : null}
+						{didComponent ? <Grid item>{didComponent}</Grid> : null}
+						{kycComponent ? <Grid item>{kycComponent}</Grid> : null}
+					</Grid>
 				</Grid>
 			</Grid>
 		);
 	}
 }
 
-const styledComponent = withStyles(styles)(IndividualDashboardPage);
-export { styledComponent as IndividualDashboardPage };
+const styledComponent = withStyles(styles)(StakingDashboardPage);
+export { styledComponent as StakingDashboardPage };

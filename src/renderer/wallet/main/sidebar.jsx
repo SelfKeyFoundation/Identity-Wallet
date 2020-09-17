@@ -25,7 +25,7 @@ import {
 	PowerIcon,
 	// KeyTooltip,
 	// TooltipArrow,
-	// MenuAffiliateIcon,
+	MenuAffiliateIcon,
 	MenuExportIcon,
 	// InfoTooltip,
 	primary
@@ -185,6 +185,7 @@ const styles = theme => ({
 const dashboard = React.forwardRef((props, ref) => (
 	<Link to="/main/dashboard" {...props} ref={ref} />
 ));
+const staking = React.forwardRef((props, ref) => <Link to="/main/staking" {...props} ref={ref} />);
 const marketplace = React.forwardRef((props, ref) => (
 	<Link to="/main/marketplace" {...props} ref={ref} />
 ));
@@ -260,6 +261,20 @@ class Sidebar extends PureComponent {
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
 								Dashboard
+							</Typography>
+						</ListItem>
+						<ListItem
+							id="stakingButton"
+							className={classes.listItem}
+							component={staking}
+							key="staking"
+							title="Staking"
+						>
+							<ListItemIcon className={classes.listItemIcon}>
+								<MenuAffiliateIcon width="16px" height="16px" viewBox="0 0 16 16" />
+							</ListItemIcon>
+							<Typography variant="body2" color="secondary">
+								Staking
 							</Typography>
 						</ListItem>
 						<ListItem

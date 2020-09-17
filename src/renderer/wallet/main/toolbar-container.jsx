@@ -70,6 +70,7 @@ class ToolbarContainer extends PureComponent {
 				closeProfile={this.closeProfile}
 				onProfileNavigate={this.handleProfileNavigate}
 				showCorporate={featureIsEnabled('corporate')}
+				showStaking={featureIsEnabled('staking')}
 				isExportableAccount={this.props.isExportableAccount}
 			/>
 		);
