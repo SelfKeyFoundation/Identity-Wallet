@@ -4,22 +4,21 @@ import { Grid, Button, Typography } from '@material-ui/core';
 
 const styles = theme => ({
 	root: {
-		width: '340px',
-		height: '326px',
-		marginTop: '30px',
-		marginBottom: '30px',
+		backgroundColor: '#262F39',
 		border: 'solid 1px #303c49',
 		borderRadius: '4px',
 		fontFamily: 'Lato, arial, sans-serif',
-		backgroundColor: '#262F39'
+		height: '326px',
+		marginBottom: theme.spacing(4),
+		width: '340px'
 	},
 
 	title: {
-		margin: '20px'
+		margin: theme.spacing(2)
 	},
 
 	icon: {
-		marginLeft: '20px'
+		marginLeft: theme.spacing(2)
 	},
 
 	header: {
@@ -30,24 +29,24 @@ const styles = theme => ({
 	},
 
 	svgIcon: {
-		height: '44px',
-		color: '#23E6FE'
+		color: '#23E6FE',
+		height: '44px'
 	},
 
 	body: {
-		width: '300px',
-		textAlign: 'left',
-		margin: '20px',
 		color: '#fff',
 		fontFamily: 'Lato, arial, sans-serif',
 		fontSize: '16px',
 		fontWeight: 400,
+		height: '130px',
 		lineHeight: 1.5,
-		height: '130px'
+		margin: theme.spacing(2),
+		textAlign: 'left',
+		width: '300px'
 	},
 
 	footer: {
-		margin: '20px',
+		margin: theme.spacing(2),
 		'& button': {
 			fontSize: '10px'
 		}

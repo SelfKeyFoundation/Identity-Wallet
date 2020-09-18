@@ -7,30 +7,23 @@ import { MarketplaceCategory } from './category';
 const styles = theme => ({
 	header: {
 		'& h1': {
-			marginLeft: '20px'
+			marginLeft: theme.spacing(3)
 		},
 		'& svg': {
-			marginLeft: 0
+			marginLeft: theme.spacing(0)
 		},
 		width: '100%',
-		height: '40px',
-		marginBottom: '30px'
-	},
-	headerIcon: {
-		marginLeft: '30px'
+		height: '40px'
 	},
 	headerTitle: {
-		paddingLeft: '21px'
+		paddingLeft: theme.spacing(3)
 	},
 	hr: {
 		backgroundColor: '#475768',
 		border: 0,
 		height: '1px',
-		margin: 0,
+		margin: theme.spacing(4, 0, 6),
 		width: '100%'
-	},
-	body: {
-		marginTop: '20px'
 	}
 });
 
@@ -59,7 +52,7 @@ export const MarketplaceCategoriesList = withStyles(styles)(({ classes, children
 	>
 		<Grid container item className={classes.header} xs={12} direction="row" alignItems="center">
 			<Grid item>
-				<MarketplaceIcon className={classes.headerIcon} />
+				<MarketplaceIcon />
 			</Grid>
 			<Grid item>
 				<Typography variant="h1">SelfKey Marketplace</Typography>
@@ -68,7 +61,7 @@ export const MarketplaceCategoriesList = withStyles(styles)(({ classes, children
 		<Grid container>
 			<hr className={classes.hr} />
 		</Grid>
-		<Grid item id="body" xs={12} className={classes.body}>
+		<Grid item id="body" xs={12}>
 			<Grid container direction="row" justify="space-between" alignItems="flex-start">
 				{getItems(items)}
 			</Grid>
