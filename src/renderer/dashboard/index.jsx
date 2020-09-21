@@ -16,7 +16,7 @@ const styles = theme => ({
 		width: '66%'
 	},
 	padding: {
-		padding: '16px'
+		padding: theme.spacing(2)
 	},
 	smallWidget: {
 		width: '32%'
@@ -32,11 +32,11 @@ const styles = theme => ({
 		border: '1px solid #43505B',
 		borderRadius: '4px',
 		boxSizing: 'border-box',
-		padding: '20px 30px 30px'
+		padding: theme.spacing(3, 4, 4)
 	},
 	trading: {
 		backgroundColor: '#1E262E',
-		marginBottom: '15px',
+		marginBottom: theme.spacing(2),
 		maxHeight: '236px'
 	},
 	transactions: {
@@ -44,7 +44,7 @@ const styles = theme => ({
 	},
 	title: {
 		fontSize: '20px',
-		marginBottom: '30px'
+		marginBottom: theme.spacing(4)
 	},
 	ctabutton: {
 		display: 'flex',

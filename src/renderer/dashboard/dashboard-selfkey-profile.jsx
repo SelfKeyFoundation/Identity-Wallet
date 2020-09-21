@@ -15,10 +15,10 @@ const styles = theme => ({
 		zIndex: 0
 	},
 	bottomSpace: {
-		marginBottom: '26px'
+		marginBottom: theme.spacing(4)
 	},
 	emptyStateSpace: {
-		marginBottom: '16px'
+		marginBottom: theme.spacing(2)
 	},
 	dspWrap: {
 		backgroundColor: '#262F39',
@@ -27,15 +27,15 @@ const styles = theme => ({
 		boxSizing: 'border-box',
 		height: '100%',
 		overflow: 'hidden',
-		padding: '18px 30px 30px'
+		padding: theme.spacing(3, 4, 4)
 	},
 	list: {
-		marginBottom: '32px',
-		padding: 0,
+		marginBottom: theme.spacing(4),
+		padding: theme.spacing(0),
 		'& li': {
 			columnCount: 2,
-			marginBottom: '21px',
-			padding: 0,
+			marginBottom: theme.spacing(3),
+			padding: theme.spacing(0),
 			'& p:first-child': {
 				maxWidth: '140px',
 				minWidth: '140px'
@@ -44,8 +44,7 @@ const styles = theme => ({
 	},
 	title: {
 		fontSize: '20px',
-		marginBottom: '24px',
-		marginTop: '5px'
+		marginBottom: theme.spacing(3)
 	},
 	hidden: {
 		display: 'none'
@@ -60,7 +59,7 @@ const styles = theme => ({
 		display: 'flex'
 	},
 	rightSpace: {
-		marginRight: '8px'
+		marginRight: theme.spacing(1)
 	}
 });
 

@@ -40,44 +40,44 @@ const styles = theme => ({
 		height: '36px !important'
 	},
 	type: {
-		paddingRight: '10px'
+		paddingRight: theme.spacing(1)
 	},
 	label: {
-		minWidth: '130px',
-		paddingRight: '20px'
+		minWidth: '150px',
+		paddingRight: theme.spacing(3)
 	},
 	statusInfoWrap: {
-		padding: '30px 24px'
+		padding: theme.spacing(4, 3)
 	},
 	statusInfo: {
 		width: '100%'
 	},
 	headerIcon: {
-		marginRight: '13px'
+		marginRight: theme.spacing(2)
 	},
 	list: {
-		paddingLeft: 0,
-		paddingRight: 0
+		paddingLeft: theme.spacing(0),
+		paddingRight: theme.spacing(0)
 	},
 	listItem: {
 		alignItems: 'baseline',
-		padding: 0
+		padding: theme.spacing(0)
 	},
 	noRightPadding: {
 		paddingRight: '0 !important'
 	},
 	title: {
-		padding: '16px'
+		padding: theme.spacing(2)
 	},
 	next: {
-		marginBottom: '50px',
-		marginLeft: '20px',
+		marginBottom: theme.spacing(6),
+		marginLeft: theme.spacing(2),
 		minWidth: '120px'
 	},
 	marketplaceIcon: {
 		'& svg': {
 			height: '55px !important',
-			marginLeft: '-30px',
+			marginLeft: theme.spacing(4),
 			width: '68px !important'
 		}
 	},
@@ -87,13 +87,13 @@ const styles = theme => ({
 		justifyContent: 'center'
 	},
 	cardHeader: {
-		padding: '30px'
+		padding: theme.spacing(4)
 	},
 	loading: {
 		marginTop: '5em'
 	},
 	statusName: {
-		marginLeft: '8px'
+		marginLeft: theme.spacing(1)
 	}
 });
 
@@ -103,16 +103,16 @@ const statusInfoStyle = theme =>
 			border: `1px solid ${success}`,
 			borderRadius: '4px',
 			boxSizing: 'border-box',
-			padding: '25px 30px'
+			padding: theme.spacing(3, 4)
 		},
 		grow: {
 			flexGrow: 1
 		},
 		statusIcon: {
-			marginRight: '25px'
+			marginRight: theme.spacing(3)
 		},
 		iconContainer: {
-			marginRight: '25px',
+			marginRight: theme.spacing(3),
 			textAlign: 'center',
 			width: '38px'
 		},
@@ -134,7 +134,7 @@ const statusInfoStyle = theme =>
 		},
 		refresh: {
 			cursor: 'pointer',
-			marginLeft: '30px'
+			marginLeft: theme.spacing(4)
 		}
 	});
 

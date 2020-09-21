@@ -11,7 +11,7 @@ const styles = theme => ({
 		padding: '0'
 	},
 	header: {
-		marginBottom: '45px'
+		marginBottom: theme.spacing(6)
 	}
 });
 class IndividualDashboardPage extends PureComponent {

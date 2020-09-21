@@ -22,10 +22,10 @@ const styles = theme => ({
 		boxSizing: 'border-box',
 		flexGrow: 1,
 		height: '236px',
-		marginBottom: '15px',
+		marginBottom: theme.spacing(2),
 		maxHeight: '236px',
 		overflow: 'hidden',
-		padding: '20px 30px 30px'
+		padding: theme.spacing(3, 4, 4)
 	},
 	ctabutton: {
 		backgroundColor: '#1E262E',
@@ -34,7 +34,7 @@ const styles = theme => ({
 		maxWidth: '100%',
 		marginLeft: 'auto',
 		marginRight: '0',
-		marginBottom: '1em',
+		marginBottom: theme.spacing(2),
 		position: 'relative',
 		width: '100%',
 		zIndex: 1,
@@ -48,7 +48,7 @@ const styles = theme => ({
 	},
 	title: {
 		fontSize: '20px',
-		marginBottom: '30px'
+		marginBottom: theme.spacing(3)
 	},
 	'@media screen and (min-width: 1230px)': {
 		bgIcon: {

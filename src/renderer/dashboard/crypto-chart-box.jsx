@@ -12,16 +12,16 @@ import { viewAllOperations } from 'common/view-all-tokens';
 import { withStyles } from '@material-ui/styles';
 import { ExpandMore, ExpandLess } from '@material-ui/icons';
 
-const styles = () => ({
+const styles = theme => ({
 	paper: {
 		backgroundColor: '#262F39',
 		boxShadow: 'none',
 		boxSizing: 'border-box',
 		height: '100%',
-		padding: '16px 30px'
+		padding: theme.spacing(3, 4, 2)
 	},
 	iconRightSpace: {
-		marginRight: '10px'
+		marginRight: theme.spacing(1)
 	},
 	coloredBox: {
 		borderRadius: '8px !important',
@@ -39,8 +39,8 @@ const styles = () => ({
 	},
 	prices: {
 		flexGrow: 1,
-		margin: 0,
-		padding: 0,
+		margin: theme.spacing(0),
+		padding: theme.spacing(0),
 		width: 'auto',
 		'& >div': {
 			paddingRight: '0 !important'
@@ -54,7 +54,7 @@ const styles = () => ({
 		borderRadius: '4px',
 		outlineWidth: 0,
 		border: 'none',
-		padding: '10px'
+		padding: theme.spacing(1)
 	},
 	chartCenterContainer: {
 		position: 'absolute',
@@ -94,8 +94,7 @@ const styles = () => ({
 		color: 'rgba(255, 255, 255, 0.7)'
 	},
 	title: {
-		fontSize: '20px',
-		paddingTop: '12px'
+		fontSize: '20px'
 	},
 	chartWrap: {
 		'& div.google-visualization-tooltip': {
@@ -115,11 +114,12 @@ const styles = () => ({
 		}
 	},
 	button: {
-		margin: '0 10px'
+		margin: theme.spacing(0, 1)
 	},
 	token: {
 		flexBasis: '48%',
-		margin: '13px 0',
+		margin: theme.spacing(2, 0, 1),
+		padding: theme.spacing(1),
 		'&:hover': {
 			backgroundColor: '#313D49',
 			border: 'none',
@@ -132,22 +132,22 @@ const styles = () => ({
 		display: 'flex',
 		flexWrap: 'wrap',
 		justifyContent: 'space-between',
-		marginBottom: '30px',
+		margin: theme.spacing(0, -1, 4),
 		maxHeight: '250px',
 		overflowX: 'hidden',
 		overflowY: 'auto'
 	},
 	tokenName: {
-		marginRight: '10px'
+		marginRight: theme.spacing(1)
 	},
 	tokenActionButtons: {
-		marginBottom: '30px',
-		marginTop: '20px'
+		marginBottom: theme.spacing(4),
+		marginTop: theme.spacing(2)
 	},
 	flex: {
 		display: 'flex',
 		'& svg': {
-			marginRight: '10px'
+			marginRight: theme.spacing(1)
 		}
 	},
 	flexContainer: {
@@ -467,7 +467,7 @@ export class CryptoChartBoxComponent extends React.Component {
 
 		return (
 			<Paper className={classes.paper}>
-				<Grid container alignItems="center" spacing={2}>
+				<Grid container alignItems="center">
 					<Typography variant="h1" className={classes.title}>
 						My Tokens
 					</Typography>
@@ -522,12 +522,7 @@ export class CryptoChartBoxComponent extends React.Component {
 							Send/Receive
 						</Button>
 					</Grid>
-					<Grid
-						container
-						spacing={2}
-						justify="space-between"
-						className={classes.tokenContainer}
-					>
+					<Grid container justify="space-between" className={classes.tokenContainer}>
 						{this.getTokensLegend(
 							classes,
 							tokens,

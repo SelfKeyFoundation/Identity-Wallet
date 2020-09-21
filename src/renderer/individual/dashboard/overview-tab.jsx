@@ -13,10 +13,10 @@ const styles = theme => ({
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
-		margin: '5px 16px'
+		margin: theme.spacing(1, 2)
 	},
 	info: {
-		padding: '25px 30px'
+		padding: theme.spacing(3, 4)
 	},
 	card: {
 		backgroundColor: '#1E262E',
@@ -29,7 +29,7 @@ const styles = theme => ({
 		wordBreak: 'break-all'
 	},
 	button: {
-		marginBottom: '16px'
+		marginBottom: theme.spacing(2)
 	},
 	regularText: {
 		'& span': {

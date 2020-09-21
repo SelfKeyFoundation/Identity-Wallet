@@ -16,16 +16,16 @@ import HeaderIcon from '../common/header-icon';
 const styles = theme => ({
 	allApplications: {
 		justifyContent: 'center',
-		marginTop: '16px'
+		marginTop: theme.spacing(2)
 	},
 	applicationIcon: {
-		marginRight: '16px'
+		marginRight: theme.spacing(2)
 	},
 	applicationRecord: {
 		alignItems: 'center',
 		borderBottom: '1px solid #475768',
 		display: 'flex',
-		padding: '16px 0',
+		padding: theme.spacing(2, 0),
 		'& h6:first-child': {
 			marginBottom: '4px'
 		}
@@ -43,11 +43,11 @@ const styles = theme => ({
 		zIndex: 0
 	},
 	bottomSpace: {
-		marginBottom: '40px'
+		marginBottom: theme.spacing(5)
 	},
 	btnText: {
 		fontWeight: 'normal',
-		marginLeft: '10px'
+		marginLeft: theme.spacing(1)
 	},
 	dmaWrap: {
 		backgroundColor: '#262F39',
@@ -56,7 +56,7 @@ const styles = theme => ({
 		boxSizing: 'border-box',
 		height: '100%',
 		overflow: 'hidden',
-		padding: '18px 30px 30px'
+		padding: theme.spacing(3, 4, 4)
 	},
 	flex: {
 		display: 'flex'
@@ -68,15 +68,14 @@ const styles = theme => ({
 		justifyContent: 'space-between'
 	},
 	rightSpace: {
-		marginRight: '10px'
+		marginRight: theme.spacing(1)
 	},
 	title: {
 		fontSize: '20px',
-		marginBottom: '17px',
-		marginTop: '5px'
+		marginBottom: theme.spacing(2)
 	},
 	iconMargin: {
-		marginRight: '8px'
+		marginRight: theme.spacing(1)
 	},
 	'@media screen and (min-width: 1230px)': {
 		bgIcon: {
