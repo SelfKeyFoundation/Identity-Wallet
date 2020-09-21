@@ -10,16 +10,20 @@ import { canCreate } from '../corporate/common/common-helpers';
 import { SelectDropdownIcon } from 'selfkey-ui';
 
 const styles = theme => ({
-	section1: { marginBottom: '10px' },
-	section2: { marginTop: '10px' },
+	section1: {
+		marginBottom: theme.spacing(1)
+	},
+	section2: {
+		marginTop: theme.spacing(1)
+	},
 	buttonContainer: {
-		margin: '40px -12px 0'
+		margin: theme.spacing(5, 0, 0)
 	},
 	label: {
-		marginBottom: '10px'
+		marginBottom: theme.spacing(1)
 	},
 	divider: {
-		margin: '30px 0'
+		margin: theme.spacing(4, 0)
 	},
 	selectItem: {
 		border: 0,
@@ -36,6 +40,9 @@ const styles = theme => ({
 		'& div': {
 			color: '#697C95 '
 		}
+	},
+	saveButton: {
+		marginRight: theme.spacing(3)
 	}
 });
 
@@ -251,27 +258,20 @@ class CreateAttributeComponent extends PureComponent {
 									{this.state.documentError}
 								</Typography>
 							)}
-							<Grid container spacing={3} className={classes.buttonContainer}>
-								<Grid item>
-									<Button
-										variant="contained"
-										size="large"
-										type="submit"
-										disabled={disabled}
-									>
-										Save
-									</Button>
-								</Grid>
+							<Grid container className={classes.buttonContainer}>
+								<Button
+									variant="contained"
+									size="large"
+									type="submit"
+									disabled={disabled}
+									className={classes.saveButton}
+								>
+									Save
+								</Button>
 
-								<Grid item>
-									<Button
-										variant="outlined"
-										size="large"
-										onClick={this.handleCancel}
-									>
-										Cancel
-									</Button>
-								</Grid>
+								<Button variant="outlined" size="large" onClick={this.handleCancel}>
+									Cancel
+								</Button>
 							</Grid>
 						</Form>
 					</div>

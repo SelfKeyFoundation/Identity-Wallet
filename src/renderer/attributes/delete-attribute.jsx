@@ -9,14 +9,14 @@ const styles = theme => ({
 		fontFamily: 'Lato, arial, sans-serif',
 		fontSize: '14px',
 		color: '#93b0c1',
-		marginBottom: '10px'
+		marginBottom: theme.spacing(1)
 	},
 	label: {
-		marginBottom: '20px',
-		marginTop: '20px'
+		marginBottom: theme.spacing(1),
+		marginTop: theme.spacing(3)
 	},
 	buttonContainer: {
-		margin: '20px -12px 0'
+		margin: theme.spacing(3, -1, 0)
 	}
 });
 
