@@ -18,22 +18,21 @@ const styles = theme => ({
 		}
 	},
 	header: {
-		marginBottom: '30px',
 		'& h1': {
-			marginLeft: '20px'
+			marginLeft: theme.spacing(2)
 		},
-		width: '100%',
-		height: '120px'
+		height: '120px',
+		marginBottom: theme.spacing(4),
+		width: '100%'
 	},
 	headerContent: {
-		marginTop: '70px',
 		display: 'flex',
 		flexDirection: 'row',
-		flexWrap: 'nowrap'
+		flexWrap: 'nowrap',
+		marginTop: theme.spacing(9)
 	},
 	content: {
-		marginTop: '50px',
-		margin: 0,
+		margin: theme.spacing(6, 0, 0),
 		width: '100%'
 	},
 	button: {
@@ -49,26 +48,18 @@ const styles = theme => ({
 	},
 	listContent: {
 		borderTop: 'solid 1px #475768',
-		margin: 0,
+		margin: theme.spacing(0),
 		width: '100%'
 	},
 	icon: {
-		padding: 0
+		padding: theme.spacing(0)
 	},
 	unlockIcon: {
-		marginRight: '10px'
-	},
-	disclaimer: {
-		margin: '40px auto',
-		textAlign: 'center',
-		'& h6': {
-			maxWidth: '80%',
-			margin: 'auto'
-		}
+		marginRight: theme.spacing(1)
 	},
 	divider: {
 		backgroundColor: '#475768',
-		marginBottom: '20px'
+		marginBottom: theme.spacing(3)
 	},
 	hidden: {
 		display: 'none'
@@ -141,7 +132,7 @@ const listView = (classes, items, viewAction) => {
 				<TableHead>
 					<LargeTableHeadRow>
 						<TableCell className={classes.icon}>&nbsp;</TableCell>
-						<TableCell style={{ paddingLeft: '15px' }}>
+						<TableCell style={{ paddingLeft: '16px' }}>
 							<Typography variant="overline">Exchange</Typography>
 						</TableCell>
 						<TableCell>

@@ -8,7 +8,7 @@ const styles = theme => ({
 	item: {
 		border: '1px solid #303C49',
 		borderRadius: '4px',
-		marginBottom: '30px',
+		marginBottom: theme.spacing(4),
 		width: '31.5%'
 	},
 	header: {
@@ -20,13 +20,13 @@ const styles = theme => ({
 		display: 'flex',
 		flexWrap: 'nowrap',
 		justifyContent: 'space-between',
-		padding: '15px'
+		padding: theme.spacing(2)
 	},
 	body: {
-		padding: '15px'
+		padding: theme.spacing(2)
 	},
 	icon: {
-		marginRight: '10px'
+		marginRight: theme.spacing(1)
 	},
 	iconAndName: {
 		alignItems: 'center',
@@ -38,7 +38,7 @@ const styles = theme => ({
 		transform: 'rotate(-90deg)'
 	},
 	excluded: {
-		padding: '10px 10px 10px 0',
+		padding: theme.spacing(1, 1, 1, 0),
 		whiteSpace: 'normal',
 		width: '100px',
 		wordBreak: 'break-word'

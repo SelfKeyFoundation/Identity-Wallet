@@ -18,7 +18,7 @@ const styles = theme => ({
 	root: {
 		width: '946px',
 		height: '100%',
-		margin: '70px auto 30px',
+		margin: '72px auto 32px',
 		borderRadius: '4px',
 		'@media screen and (min-width: 1230px)': {
 			width: '1140px'
@@ -26,7 +26,7 @@ const styles = theme => ({
 	},
 
 	title: {
-		margin: '20px 20px 20px 7px'
+		margin: theme.spacing(3, 3, 3, 1)
 	},
 
 	header: {
@@ -46,13 +46,13 @@ const styles = theme => ({
 		fontWeight: 400,
 		lineHeight: 1.67,
 		margin: 0,
-		padding: '44px 30px 16px',
+		padding: theme.spacing(5, 4, 2),
 		textAlign: 'justify',
 		width: '100%'
 	},
 
 	formControl: {
-		marginRight: '100px',
+		marginRight: theme.spacing(12),
 		maxWidth: '45%'
 	},
 
@@ -71,7 +71,7 @@ const styles = theme => ({
 	formGroup: {
 		backgroundColor: 'transparent',
 		'& h5': {
-			marginRight: '1em'
+			marginRight: theme.spacing(2)
 		},
 		'& span': {
 			fontSize: '14px',
@@ -90,25 +90,25 @@ const styles = theme => ({
 	},
 
 	bullet: {
+		alignItems: 'center',
+		backgroundColor: '#3b4b59',
+		border: 'solid 1px #495b70',
+		borderRadius: '18px',
 		display: 'flex',
 		flexDirection: 'column',
-		justifyContent: 'center',
-		alignItems: 'center',
-		width: '30px',
 		height: '28px',
-		borderRadius: '18px',
-		backgroundColor: '#3b4b59',
-		border: 'solid 1px #495b70'
+		justifyContent: 'center',
+		width: '30px'
 	},
 
 	description: {
-		marginTop: 0,
-		textAlign: 'left',
-		maxWidth: '620px'
+		marginTop: theme.spacing(0),
+		maxWidth: '620px',
+		textAlign: 'left'
 	},
 
 	buttonWrapper: {
-		marginRight: '30px'
+		marginRight: theme.spacing(4)
 	},
 
 	button: {
@@ -135,10 +135,10 @@ const styles = theme => ({
 	},
 
 	notEnteredRequeriment: {
-		height: '28px',
-		width: '30px',
+		backgroundColor: '#F5A623',
 		borderRadius: '18px',
-		backgroundColor: '#F5A623'
+		height: '28px',
+		width: '30px'
 	},
 
 	bold: {
@@ -156,14 +156,15 @@ const styles = theme => ({
 		fontWeight: '600'
 	},
 	ctaButton: {
-		marginBottom: '15px',
+		marginBottom: theme.spacing(2),
 		width: '100%'
 	},
 	pendingApprovalButton: {
 		height: 'initial',
-		marginBottom: '15px',
+		marginBottom: theme.spacing(2),
 		opacity: '1 !important',
-		padding: '6px 0',
+		// padding: '6px 0',
+		padding: theme.spacing(1, 0),
 		'& span': {
 			display: 'flex',
 			justifyContent: 'space-around'
@@ -174,12 +175,10 @@ const styles = theme => ({
 		justifyContent: 'space-between',
 		maxWidth: '100%',
 		marginLeft: 'auto',
-		marginRight: '0'
+		marginRight: theme.spacing(0)
 	},
 	ctaArea: {
-		'& div': {
-			// marginTop: '1em'
-		},
+		'& div': {},
 		'& div h3': {
 			textAlign: 'left',
 			fontSize: '13px',
@@ -187,7 +186,7 @@ const styles = theme => ({
 		}
 	},
 	topSpace: {
-		marginTop: '15px'
+		marginTop: theme.spacing(2)
 	},
 	link: {
 		color: primary,
@@ -203,12 +202,12 @@ const styles = theme => ({
 		color: typography,
 		fontSize: '13px !important',
 		fontWeight: 400,
-		marginTop: '-6px',
 		textTransform: 'initial'
 	},
 	kyc: {
 		'& div:first-child': {
-			marginTop: 0
+			// marginTop: 0
+			marginTop: theme.spacing(0)
 		}
 	},
 
@@ -216,7 +215,7 @@ const styles = theme => ({
 		alignItems: 'center',
 		display: 'flex',
 		height: '44px',
-		marginLeft: '22px'
+		marginLeft: theme.spacing(3)
 	},
 	defaultIcon: {
 		alignItems: 'center',
@@ -225,7 +224,7 @@ const styles = theme => ({
 		display: 'flex',
 		justifyContent: 'center',
 		maxWidth: '44px',
-		padding: '0 8px'
+		padding: theme.spacing(0, 1)
 	},
 	generatedIcon: {
 		height: 'inherit',
@@ -233,7 +232,7 @@ const styles = theme => ({
 		width: '44px'
 	},
 	disclaimer: {
-		margin: '20px auto',
+		margin: '24px auto',
 		textAlign: 'center',
 		maxWidth: '80%'
 	},
@@ -241,7 +240,8 @@ const styles = theme => ({
 		textAlign: 'left'
 	},
 	descriptionBottomSpace: {
-		marginBottom: '10px'
+		marginBottom: theme.spacing(1),
+		width: '100%'
 	}
 });
 

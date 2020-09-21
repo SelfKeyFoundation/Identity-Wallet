@@ -19,25 +19,24 @@ const styles = theme => ({
 	header: {
 		borderBottom: 'solid 1px #475768',
 		'& h1': {
-			marginLeft: '20px'
+			marginLeft: theme.spacing(2)
 		},
-		width: '100%',
-		height: '120px'
+		height: '120px',
+		width: '100%'
 	},
 	headerContent: {
-		marginTop: '50px',
 		display: 'flex',
 		flexDirection: 'row',
-		flexWrap: 'nowrap'
+		flexWrap: 'nowrap',
+		marginTop: theme.spacing(6)
 	},
 	content: {
-		marginTop: '30px',
-		margin: 0,
+		margin: theme.spacing(4, 0, 0),
 		width: '100%'
 	},
 	button: {
-		color: '#93b0c1',
 		borderColor: '#3b4a5a',
+		color: '#93b0c1',
 		'&:disabled': {
 			color: '#48565f'
 		}
@@ -46,26 +45,24 @@ const styles = theme => ({
 		top: '120px'
 	},
 	listContent: {
-		margin: 0,
+		margin: theme.spacing(0),
 		width: '100%'
 	},
 	icon: {
-		padding: 0
+		padding: theme.spacing(0)
 	},
 	unlockIcon: {
-		marginRight: '10px'
+		marginRight: theme.spacing(1)
 	},
 	disclaimer: {
-		margin: '40px auto',
 		textAlign: 'center',
 		'& h6': {
-			maxWidth: '80%',
-			margin: 'auto'
+			maxWidth: '80%'
 		}
 	},
 	divider: {
 		backgroundColor: '#475768',
-		marginBottom: '20px'
+		marginBottom: theme.spacing(3)
 	},
 	hidden: {
 		display: 'none'

@@ -7,10 +7,10 @@ import GetExchangeIcon from './common/marketplace-exchanges-icon';
 
 const styles = theme => ({
 	noRightPadding: {
-		padding: '0 0 0 20px !important'
+		padding: theme.spacing(0, 0, 0, 3)
 	},
 	excluded: {
-		padding: '10px 10px 10px 0',
+		padding: theme.spacing(1, 1, 1, 0),
 		whiteSpace: 'normal',
 		width: '100px',
 		wordBreak: 'break-word'
@@ -23,7 +23,7 @@ const styles = theme => ({
 		height: 'initial',
 		justifyContent: 'flex-start',
 		maxWidth: '300px',
-		padding: '10px'
+		padding: theme.spacing(1)
 	},
 	fee: {
 		overflow: 'hidden',
@@ -35,12 +35,12 @@ const styles = theme => ({
 		maxWidth: '90px'
 	},
 	resident: {
-		marginRight: '5px',
+		marginRight: theme.spacing(1),
 		whiteSpace: 'initial'
 	},
 	exchangeName: {
 		maxWidth: '120px',
-		paddingLeft: '15px',
+		paddingLeft: theme.spacing(2),
 		whiteSpace: 'pre-line'
 	},
 	hidden: {
@@ -51,14 +51,14 @@ const styles = theme => ({
 	},
 	detailsCell: {
 		color: '#00C0D9',
-		padding: '15px 20px',
+		paddingLeft: theme.spacing(2, 3),
 		'& span': {
 			cursor: 'pointer'
 		},
 		'& button': {
 			maxWidth: '15px',
 			minWidth: '15px',
-			padding: 0,
+			padding: theme.spacing(0),
 			width: '15px'
 		}
 	},
@@ -139,7 +139,7 @@ export const ExchangesListItem = withStyles(styles)(
 							? classes.excludedResidentCell
 							: `${classes.goodForCell} ${classes.excludedResidentCell}`
 					}
-					style={{ height: 'auto', padding: '10px' }}
+					style={{ height: 'auto', padding: '8px' }}
 				>
 					{isNotExcludedResidents
 						? '-'
