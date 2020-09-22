@@ -11,21 +11,24 @@ import { getGlobalContext } from 'common/context';
 
 const styles = theme => ({
 	bottomSpace: {
-		marginBottom: '50px'
+		marginBottom: theme.spacing(6)
 	},
 	buttonBottomSpace: {
-		marginBottom: '20px'
+		marginBottom: theme.spacing(3)
 	},
 	downloadIcon: {
 		width: '66px',
 		height: '71px'
 	},
 	icon: {
-		marginRight: '45px'
+		marginRight: theme.spacing(5)
 	},
 	publicKey: {
 		color: '#fff !important',
 		opacity: '1 !important'
+	},
+	addressText: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -88,7 +91,7 @@ class BackupAddress extends PureComponent {
 							just created. Download a backup and save this address in a convenient
 							location.
 						</Typography>
-						<Typography variant="overline" gutterBottom>
+						<Typography variant="overline" className={classes.addressText}>
 							Your Address
 						</Typography>
 						<Input

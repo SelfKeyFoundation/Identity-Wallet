@@ -12,12 +12,12 @@ import { getGlobalContext } from 'common/context';
 
 const styles = theme => ({
 	icon: {
-		marginRight: '45px'
+		marginRight: theme.spacing(5)
 	},
 	maskContainer: {
 		height: '10px',
 		justifyContent: 'space-evenly',
-		marginTop: '10px',
+		marginTop: theme.spacing(1),
 		position: 'absolute',
 		width: '598px',
 		zIndex: 1
@@ -28,6 +28,7 @@ const styles = theme => ({
 		width: '8px'
 	},
 	next: {
+		marginTop: theme.spacing(4),
 		minWidth: '120px'
 	},
 	passwordInput: {
@@ -37,7 +38,11 @@ const styles = theme => ({
 		backgroundColor: '#1E262E',
 		borderRadius: 0,
 		height: '10px',
+		marginBottom: theme.spacing(2),
 		width: '100%'
+	},
+	text: {
+		marginBottom: theme.spacing(6)
 	}
 });
 
@@ -90,13 +95,11 @@ class PasswordConfirmation extends PureComponent {
 						<PasswordConfirmIcon />
 					</Grid>
 					<Grid item>
-						<Typography variant="body1" gutterBottom>
+						<Typography variant="body1" className={classes.text}>
 							Confirm the password you just created. After this step, there is no way
 							the password can be restored or reset, and SelfKey cannot you help if it
 							is lost.
 						</Typography>
-						<br />
-						<br />
 						<Input
 							id="pwd2"
 							error={this.state.error !== ''}
@@ -128,8 +131,6 @@ class PasswordConfirmation extends PureComponent {
 							className={classes.passwordScore}
 						/>
 						{renderPasswordStrength(this.state.password, this.state.strength)}
-						<br />
-						<br />
 						<Button
 							id="pwd2Next"
 							variant="contained"

@@ -12,10 +12,10 @@ const backHome = React.forwardRef((props, ref) => <Link to="/home" {...props} re
 
 const styles = theme => ({
 	bottomSpace: {
-		marginBottom: '50px'
+		marginBottom: theme.spacing(6)
 	},
 	icon: {
-		marginRight: '45px'
+		marginRight: theme.spacing(5)
 	}
 });
 

@@ -17,7 +17,7 @@ const styles = theme => ({
 		lineHeight: '22px'
 	},
 	icon: {
-		marginRight: '45px'
+		marginRight: theme.spacing(5)
 	},
 	container: {
 		minHeight: '100vh'
@@ -35,12 +35,13 @@ const styles = theme => ({
 		boxShadow: 'none'
 	},
 	logoSection: {
-		paddingBottom: '50px'
+		paddingBottom: theme.spacing(6)
 	},
 	passwordScore: {
 		backgroundColor: '#1E262E',
 		borderRadius: 0,
 		height: '10px',
+		marginBottom: theme.spacing(2),
 		width: '100%'
 	},
 	passwordInput: {
@@ -49,7 +50,7 @@ const styles = theme => ({
 	maskContainer: {
 		height: '10px',
 		justifyContent: 'space-evenly',
-		marginTop: '10px',
+		marginTop: theme.spacing(1),
 		position: 'absolute',
 		width: '598px',
 		zIndex: 1
@@ -63,10 +64,14 @@ const styles = theme => ({
 		top: '-50px'
 	},
 	closeIcon: {
-		marginTop: '20px'
+		marginTop: theme.spacing(3)
 	},
 	next: {
+		marginTop: theme.spacing(4),
 		minWidth: '120px'
+	},
+	text: {
+		marginBottom: theme.spacing(6)
 	}
 });
 
@@ -100,14 +105,12 @@ class Password extends PureComponent {
 						<PasswordIcon className={classes.passwordIcon} />
 					</Grid>
 					<Grid item>
-						<Typography variant="body1" gutterBottom>
+						<Typography variant="body1" className={classes.text}>
 							Protect your SelfKey Identity Wallet and Ethereum address with a
 							password. Your address is like a bank account number on the blockchain,
 							used to send and receive Ether or tokens. This password is required to
 							unlock your wallet.
 						</Typography>
-						<br />
-						<br />
 						<Input
 							id="pwd1"
 							disableUnderline={true}
@@ -133,8 +136,6 @@ class Password extends PureComponent {
 							className={classes.passwordScore}
 						/>
 						{renderPasswordStrength(this.state.password, this.state.strength)}
-						<br />
-						<br />
 						<Button
 							id="pwdNext"
 							variant="contained"

@@ -10,10 +10,10 @@ import { getGlobalContext } from 'common/context';
 
 const styles = theme => ({
 	bottomSpace: {
-		marginBottom: '50px'
+		marginBottom: theme.spacing(6)
 	},
 	buttonBottomSpace: {
-		marginBottom: '20px'
+		marginBottom: theme.spacing(3)
 	},
 	container: {
 		minHeight: '100vh'
@@ -23,13 +23,13 @@ const styles = theme => ({
 		height: '71px'
 	},
 	icon: {
-		marginRight: '45px'
+		marginRight: theme.spacing(5)
 	},
 	input: {
 		display: 'none'
 	},
 	logoSection: {
-		paddingBottom: '50px'
+		paddingBottom: theme.spacing(6)
 	},
 	modalWrap: {
 		border: 'none',
@@ -48,6 +48,9 @@ const styles = theme => ({
 	},
 	root: {
 		top: '-50px'
+	},
+	addressText: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -113,7 +116,7 @@ class BackupPK extends PureComponent {
 							print a copy to make an offline backup. This is also known as &#34;cold
 							storage&#34;.
 						</Typography>
-						<Typography variant="overline" gutterBottom>
+						<Typography variant="overline" className={classes.addressText}>
 							Your Private Key
 						</Typography>
 						<Input
