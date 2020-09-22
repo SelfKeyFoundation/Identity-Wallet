@@ -3,7 +3,7 @@ import { CardContent, Card, CardHeader, Grid, Typography, Button } from '@materi
 import { withStyles } from '@material-ui/styles';
 import { IDIcon } from 'selfkey-ui';
 import KycRequirementsList from '../requirements/requirements-list';
-import { ApplicationStatusBar } from '../application';
+import { ApplicationStatusBar } from '../application/application-status';
 
 const styles = theme => ({
 	hr: {
