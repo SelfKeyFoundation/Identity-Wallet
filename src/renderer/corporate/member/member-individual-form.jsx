@@ -3,6 +3,7 @@ import { Typography, Input, Select, MenuItem, FormControl } from '@material-ui/c
 import { withStyles } from '@material-ui/styles';
 import { SelectDropdownIcon } from 'selfkey-ui';
 import { InputTitle } from '../../common';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({
 	regularText: {
@@ -241,7 +242,7 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 				</div>
 			</div>
 
-			{showDid && (
+			{featureIsEnabled('did') && showDid && (
 				<div className={classes.inputWrap}>
 					<div className={`${classes.flexColumn} ${classes.fullColumn}`}>
 						<InputTitle title="Selfkey ID (DID)" optional={true} />

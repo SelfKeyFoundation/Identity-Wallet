@@ -11,6 +11,7 @@ import { MarketplaceNotariesComponent } from '../common/marketplace-notaries-com
 import NotarizationDetailsPage from './notarization-details-page';
 import { getCryptoValue } from '../../../common/price-utils';
 import config from 'common/config';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({});
 
@@ -41,7 +42,7 @@ class NotarizationDetailsContainerComponent extends MarketplaceNotariesComponent
 			if (!identity.isSetupFinished) {
 				return dispatch(push(this.selfkeyIdRequiredRoute()));
 			}
-			if (!identity.did) {
+			if (featureIsEnabled('did') && !identity.did) {
 				return dispatch(push(this.selfkeyDIDRequiredRoute()));
 			}
 

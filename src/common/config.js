@@ -140,6 +140,7 @@ const common = {
 
 	features: {
 		paymentContract: false,
+		did: true,
 		scheduler: true,
 		corporate: false,
 		staking: false,
@@ -171,6 +172,7 @@ const dev = {
 	paymentSplitterAddress: '0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5',
 	features: {
 		paymentContract: false,
+		did: true,
 		scheduler: true,
 		corporate: true,
 		staking: true,
@@ -205,6 +207,7 @@ const prod = {
 	paymentSplitterAddress: '0xC3f1fbe8f4BE283426F913f0F2BE8329fC6BE041',
 	features: {
 		paymentContract: false,
+		did: true,
 		scheduler: true,
 		corporate: true,
 		staking: false,
