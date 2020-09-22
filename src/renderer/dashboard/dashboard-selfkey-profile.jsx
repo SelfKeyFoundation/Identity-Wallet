@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/styles';
 import { identityOperations } from 'common/identity';
 import { IdCardIcon, AttributeAlertIcon, CheckMaIcon, HourGlassIcon } from 'selfkey-ui';
 import { identitySelectors } from '../../common/identity';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({
 	bgIcon: {
@@ -123,7 +124,7 @@ const Content = ({ classes, profileData }) => {
 	};
 
 	return (
-		<>
+		<React.Fragment>
 			<Typography variant="subtitle2" color="secondary" className={classes.bottomSpace}>
 				Add more documents and informations for easy marketplace applications.
 			</Typography>
@@ -142,14 +143,16 @@ const Content = ({ classes, profileData }) => {
 					<Documents docsNumber={profileData.documents.length} />
 				</ListItem>
 
-				<ListItem key={'Selfkey DID'} style={{ overflow: 'hidden' }}>
-					<Typography variant="body2" color="secondary">
-						Selfkey DID
-					</Typography>
-					<SelfKeyDID isDID={isDID} />
-				</ListItem>
+				{featureIsEnabled('did') && (
+					<ListItem key={'Selfkey DID'} style={{ overflow: 'hidden' }}>
+						<Typography variant="body2" color="secondary">
+							Selfkey DID
+						</Typography>
+						<SelfKeyDID isDID={isDID} />
+					</ListItem>
+				)}
 			</List>
-		</>
+		</React.Fragment>
 	);
 };
 

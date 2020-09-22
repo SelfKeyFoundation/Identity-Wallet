@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({
 	container: {
@@ -35,7 +36,9 @@ class StakingDashboardPage extends PureComponent {
 						{!identity.isSetupFinished ? (
 							<Grid item>Please complete your profile</Grid>
 						) : null}
-						{didComponent ? <Grid item>{didComponent}</Grid> : null}
+						{featureIsEnabled('did') && didComponent ? (
+							<Grid item>{didComponent}</Grid>
+						) : null}
 						{kycComponent ? <Grid item>{kycComponent}</Grid> : null}
 					</Grid>
 				</Grid>

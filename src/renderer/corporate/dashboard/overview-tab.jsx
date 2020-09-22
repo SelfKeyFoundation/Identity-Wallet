@@ -7,6 +7,7 @@ import { CorporateCapTable } from '../common/corporate-cap-table';
 import { CorporateShareholding } from '../common/corporate-shareholding';
 import { DisplayDid } from '../../did/display-did';
 // import { CorporateOrgChart } from '../common/corporate-org-chart';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({
 	overviewBox: {
@@ -48,8 +49,12 @@ const CorporateOverviewTab = withStyles(styles)(
 	}) => (
 		<div>
 			<div className={classes.overviewBox}>
-				{!profile.identity.did && <Grid item>{didComponent}</Grid>}
-				{profile.identity.did && <DisplayDid did={profile.identity.did} />}
+				{featureIsEnabled('did') && !profile.identity.did && (
+					<Grid item>{didComponent}</Grid>
+				)}
+				{featureIsEnabled('did') && profile.identity.did && (
+					<DisplayDid did={profile.identity.did} />
+				)}
 				<div className="halfWidgetBox">
 					<div className="halfWidth">
 						<CorporateDetails profile={profile} onEdit={onEditCorporateDetails} />

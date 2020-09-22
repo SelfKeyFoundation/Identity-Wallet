@@ -4,6 +4,7 @@ import { identitySelectors } from 'common/identity';
 import { StakingDashboardPage } from './dashboard-page';
 import { RegisterDidCardContainer, DisplayDid } from '../../did';
 import KycCardContainer from '../../kyc/kyc-card/kyc-card-container';
+import { featureIsEnabled } from 'common/feature-flags';
 
 class StakingDashboardContainerComponent extends PureComponent {
 	render() {
@@ -12,11 +13,13 @@ class StakingDashboardContainerComponent extends PureComponent {
 			<StakingDashboardPage
 				{...this.props}
 				didComponent={
-					identity.did ? (
-						<DisplayDid did={identity.did} />
-					) : (
-						<RegisterDidCardContainer returnPath={'/main/staking'} />
-					)
+					featureIsEnabled('did') ? (
+						identity.did ? (
+							<DisplayDid did={identity.did} />
+						) : (
+							<RegisterDidCardContainer returnPath={'/main/staking'} />
+						)
+					) : null
 				}
 				kycComponent={
 					<KycCardContainer
