@@ -9,6 +9,7 @@ import { kycSelectors, kycOperations } from 'common/kyc';
 import { RegisterDidCardContainer } from 'renderer/did';
 import { IndividualDashboardPage } from './dashboard-page';
 import { NotifyPopup } from '../common/notify-popup';
+import { featureIsEnabled } from 'common/feature-flags';
 import {
 	CreateAttributeContainer,
 	EditAttributeContainer,
@@ -228,7 +229,11 @@ class IndividualDashboardContainerComponent extends PureComponent {
 					onDeleteDocument={this.handleDeleteAttribute}
 					onAvatarClick={this.handleEditAvatar}
 					onSendMessage={this.handlePostMessage}
-					didComponent={<RegisterDidCardContainer returnPath={'/main/individual'} />}
+					didComponent={
+						featureIsEnabled('did') && (
+							<RegisterDidCardContainer returnPath={'/main/individual'} />
+						)
+					}
 					onApplicationAdditionalRequirements={
 						this.handleApplicationAdditionalRequirements
 					}

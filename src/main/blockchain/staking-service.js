@@ -9,8 +9,9 @@ const log = new Logger('staking-service');
 
 // TODO: use selfkey domain here
 const AIRTABLE_NAME = CONFIG.chainId === 1 ? 'Contracts' : 'ContractsTest';
+const airtableBaseUrl = CONFIG.airtableBaseUrl;
 
-const CONFIG_URL = `https://us-central1-kycchain-master.cloudfunctions.net/airtable?tableName=${AIRTABLE_NAME}`;
+const CONFIG_URL = `${airtableBaseUrl}${AIRTABLE_NAME}`;
 
 export class StakingService {
 	constructor({ web3Service }) {

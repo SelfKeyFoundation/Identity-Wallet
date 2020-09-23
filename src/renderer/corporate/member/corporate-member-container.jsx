@@ -7,6 +7,7 @@ import { push } from 'connected-react-router';
 import { appSelectors } from 'common/app';
 import { identityAttributes } from 'common/identity/utils';
 import { identityOperations, identitySelectors } from 'common/identity';
+import { featureIsEnabled } from 'common/feature-flags';
 import {
 	EMAIL_ATTRIBUTE,
 	FIRST_NAME_ATTRIBUTE,
@@ -51,7 +52,10 @@ class CorporateMemberContainerComponent extends PureComponent {
 			type: profile ? profile.identity.type : 'individual',
 			equity: profile ? profile.identity.equity : '',
 			positions: profile ? this.filterAcceptablePositions(profile.identity.positions) : [],
-			did: profile && profile.identity.did ? profile.identity.did : '',
+			did:
+				featureIsEnabled('did') && profile && profile.identity.did
+					? profile.identity.did
+					: '',
 			parentId: props.parentId ? props.parentId : props.companies[0].identity.id,
 			email: member[EMAIL_ATTRIBUTE],
 			firstName: member[FIRST_NAME_ATTRIBUTE],

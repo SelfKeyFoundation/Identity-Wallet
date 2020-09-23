@@ -67,6 +67,10 @@ export const inventorySelectors = {
 			.selectInventory(state, entityType)
 			.filter(i => i.category === category && i.status === status),
 	selectInventoryItemById: (state, id) => inventorySelectors.selectInventoryRoot(state).byId[id],
+	selectInventoryItemByVendorSku: (state, vendorId, sku, entityType) =>
+		inventorySelectors
+			.selectInventory(state, entityType)
+			.find(itm => itm.vendorId === vendorId && itm.sku === sku),
 	isInventoryLoading: state => {
 		if (inventorySelectors.selectInventoryRoot(state).all.length) {
 			return false;

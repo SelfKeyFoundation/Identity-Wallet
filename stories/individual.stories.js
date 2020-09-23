@@ -16,7 +16,7 @@ import { dummyProfile, dummyProfileWithoutDid } from './__fixtures__/individual-
 
 storiesOf('Individual Profile', module).add('Dashboard', () => (
 	<div style={{ width: '1140px' }}>
-		<IndividualDashboardPage />
+		<IndividualDashboardPage profile={dummyProfile} />
 	</div>
 ));
 

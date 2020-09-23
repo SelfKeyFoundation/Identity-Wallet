@@ -42,7 +42,7 @@ describe('InventoryService', () => {
 		sinon.stub(Inventory, 'bulkUpsert').resolves('ok');
 		const inventory = [1, 2, 3];
 		const loaded = await inventoryService.upsert(inventory);
-		expect(Inventory.bulkUpsert.getCall(0).args).toEqual([inventory]);
+		expect(Inventory.bulkUpsert.getCall(0).args).toEqual([inventory, false]);
 		expect(loaded).toEqual('ok');
 	});
 	it('should delete many inventory from db', async () => {

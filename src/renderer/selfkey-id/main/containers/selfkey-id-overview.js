@@ -11,6 +11,7 @@ import {
 
 import { EditAvatarPopup } from './edit-avatar-popup';
 import { RegisterDidCardContainer } from '../../../did';
+import { featureIsEnabled } from 'common/feature-flags';
 
 class SelfkeyIdOverviewContainerComponent extends PureComponent {
 	state = {
@@ -74,7 +75,11 @@ class SelfkeyIdOverviewContainerComponent extends PureComponent {
 					/>
 				)}
 				<SelfkeyIdOverview
-					didCard={!this.props.identity.did ? <RegisterDidCardContainer /> : null}
+					didCard={
+						featureIsEnabled('did') && !this.props.identity.did ? (
+							<RegisterDidCardContainer />
+						) : null
+					}
 					onGetDid={this.handleGetDid}
 					onEnterDid={this.handleEnterDid}
 					onDeleteAttribute={this.handleDeleteAttribute}
