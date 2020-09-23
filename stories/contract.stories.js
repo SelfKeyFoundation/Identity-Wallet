@@ -14,7 +14,17 @@ storiesOf('Contract/AllowanceList', module).add('main', () => (
 	<ContractAllowanceList allowances={contractAllowance} tokens={tokens} />
 ));
 storiesOf('Contract/Editor', module)
-	.add('default', () => <AllowanceEditor tokens={tokens} currentAmount={10} />)
+	.add('default', () => (
+		<AllowanceEditor
+			tokens={tokens}
+			currentAmount={10}
+			onGasStationReload={action('reload gas station')}
+			onGasLimitChange={action('change gas limit')}
+			onGasPriceChange={action('change gas price')}
+			onConfirm={action('confirm')}
+			onCancel={action('cancel')}
+		/>
+	))
 	.add('selected', () => (
 		<AllowanceEditor
 			tokens={tokens}
@@ -31,22 +41,61 @@ storiesOf('Contract/Editor', module)
 				usdFee: '12341'
 			}}
 			ethGasStationInfo={{ safeLow: '10', average: '15', fast: '20' }}
+			onGasStationReload={action('reload gas station')}
+			onGasLimitChange={action('change gas limit')}
+			onGasPriceChange={action('change gas price')}
+			onConfirm={action('confirm')}
+			onCancel={action('cancel')}
+		/>
+	))
+	.add('fixed', () => (
+		<AllowanceEditor
+			tokens={tokens}
+			fixed
+			currentAmount={10}
+			selectedToken={tokens[0]}
+			contractAddress="0xsdasdsadasdas"
+			locale="en"
+			transactionInfo={{
+				nonce: 10,
+				gasPrice: 5,
+				gasLimit: 30,
+				ethFee: '15.33131',
+				fiatCurrency: 'USD',
+				usdFee: '12341'
+			}}
+			ethGasStationInfo={{ safeLow: '10', average: '15', fast: '20' }}
+			onGasStationReload={action('reload gas station')}
+			onGasLimitChange={action('change gas limit')}
+			onGasPriceChange={action('change gas price')}
+			onConfirm={action('confirm')}
+			onCancel={action('cancel')}
 		/>
 	));
 
 storiesOf('Contract/Editor/Amount', module)
-	.add('default', () => <AllowanceAmount currentAmount={10} />)
-	.add('requested', () => <AllowanceAmount currentAmount={10} requestedAmount={1000} />)
-	.add('changed amount', () => (
-		<AllowanceAmount currentAmount={10} requestedAmount={1000} amount={20} />
+	.add('default', () => <AllowanceAmount currentAmount={10} title={'Change Allowance'} />)
+	.add('requested', () => (
+		<AllowanceAmount currentAmount={10} requestedAmount={1000} title={'Change Allowance'} />
 	))
-	.add('loading', () => <AllowanceAmount loading />)
+	.add('changed amount', () => (
+		<AllowanceAmount
+			currentAmount={10}
+			requestedAmount={1000}
+			amount={20}
+			title={'Change Allowance'}
+		/>
+	))
+	.add('loading', () => (
+		<AllowanceAmount loading requestedAmount={1000} amount={20} title={'Change Allowance'} />
+	))
 	.add('error', () => (
 		<AllowanceAmount
 			currentAmount={10}
 			requestedAmount={1000}
 			amount={'hi'}
 			error="invalid amount"
+			title={'Change Allowance'}
 		/>
 	));
 

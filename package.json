@@ -118,7 +118,7 @@
 		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#e8356d2037b527f7b0a8433f20c476b6e501d70e",
 		"react-orgchart": "1.0.5",
 		"react-piwik": "1.6.0",
-		"react-redux": "6.0.1",
+		"react-redux": "7.2.1",
 		"react-router-dom": "5.1.2",
 		"redux": "4.0.1",
 		"redux-logger": "3.0.6",

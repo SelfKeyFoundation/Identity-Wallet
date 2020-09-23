@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/styles';
-import { Typography } from '@material-ui/core';
+import { Typography, Grid } from '@material-ui/core';
 
 import { TokenSelector } from '../../tokens/token-selector';
 import { PropTypes } from 'prop-types';
@@ -14,20 +14,28 @@ export const ContractTokensChooser = withStyles(styles)(
 		if (fixed && selected) {
 			return (
 				<Typography variant="body1">
-					Token: {selected.symbol} ({selected.address})
+					For Token: <b>{selected.symbol}</b> ({selected.address})
 				</Typography>
 			);
 		}
 		return (
-			<div>
-				<TokenSelector
-					title={title}
-					tokens={tokens}
-					selected={selected ? selected.symbol : null}
-					onTokenChange={handleTokenChange}
-				/>
-				{selected && <Typography variant="body1">Address: {selected.address}</Typography>}
-			</div>
+			<Grid container direction="column" spacing={2}>
+				<Grid item>
+					<TokenSelector
+						title={title}
+						tokens={tokens}
+						selected={selected ? selected.symbol : null}
+						onTokenChange={handleTokenChange}
+					/>
+				</Grid>
+				{selected && (
+					<Grid item>
+						<Typography variant="subtitle1">
+							Token Address: {selected.address}
+						</Typography>
+					</Grid>
+				)}
+			</Grid>
 		);
 	}
 );

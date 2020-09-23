@@ -31,6 +31,10 @@ export class Contract extends BaseModel {
 		return this.query().where({ ...where, env });
 	}
 
+	static findById(id) {
+		return this.query().findById(id);
+	}
+
 	static create(data) {
 		return this.query().insertAndFetch({ ...data, env });
 	}

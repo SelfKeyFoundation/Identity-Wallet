@@ -53,6 +53,8 @@ import { exchangesOperations } from '../../../common/exchanges';
 import { SwapCompletedContainer } from '../../transaction/swap/swap-complete-container';
 import { identitySelectors } from 'common/identity';
 import { StakingDashboardContainer } from '../../staking/';
+import { ContractAllowanceListContainer } from '../../contract/allowance-list/allowance-list-container';
+import { AllowanceEditorContainer } from '../../contract/allowance-editor/allowance-editor-container';
 
 const styles = theme => ({
 	headerSection: {
@@ -262,7 +264,14 @@ class Main extends PureComponent {
 							path={`${match.path}/create-did-processing`}
 							component={CreateDIDProcessingContainer}
 						/>
-
+						<Route
+							path={`${match.path}/allowance-list/:selectedToken?`}
+							component={ContractAllowanceListContainer}
+						/>
+						<Route
+							path={`${match.path}/allowance-editor`}
+							component={AllowanceEditorContainer}
+						/>
 						{isExportable && (
 							<Route
 								path={`${match.path}/export-wallet/warning`}

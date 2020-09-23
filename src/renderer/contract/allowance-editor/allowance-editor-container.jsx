@@ -6,7 +6,10 @@ import { AllowanceEditor } from './allowance-editor';
 
 export const AllowanceEditorContainer = props => {
 	const tokens = useSelector(getERC20Tokens, shallowEqual);
-	const editor = useSelector(contractSelectors.selectAllowanceEditor, shallowEqual);
+	const editor = useSelector(
+		contractSelectors.selectAllowanceEditor.bind(contractSelectors),
+		shallowEqual
+	);
 
 	return <AllowanceEditor {...props} {...editor} tokens={tokens} />;
 };

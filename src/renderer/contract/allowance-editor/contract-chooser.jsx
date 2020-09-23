@@ -5,8 +5,6 @@ import { InputTitle } from '../../common';
 import { PropTypes } from 'prop-types';
 const styles = theme => ({});
 
-// address regexp ^0x[a-fA-F0-9]{40}$
-
 export const ContractChooser = withStyles(styles)(
 	({ classes, address, name, fixed, title, error, onContractAddressChange }) => {
 		const handleAddressChange = e => {
@@ -16,7 +14,8 @@ export const ContractChooser = withStyles(styles)(
 		if (fixed) {
 			return (
 				<Typography variant="body1">
-					Requested Contract: {address} {name ? `(${name})` : null}
+					Allow contract <b>{address}</b> {name ? `(${name})` : null} to spend tokens on
+					your behalf
 				</Typography>
 			);
 		}

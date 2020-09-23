@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/styles';
-import { FormControl, Input, Typography } from '@material-ui/core';
+import { CircularProgress, FormControl, Input, Typography, Grid } from '@material-ui/core';
 import { InputTitle } from '../../common';
 import { PropTypes } from 'prop-types';
 
@@ -28,33 +28,51 @@ export const AllowanceAmount = withStyles(styles)(
 			amount = currentAmount;
 		}
 
-		if (loading) {
-			return <span>Loading...</span>;
-		}
-
 		return (
-			<div>
-				<Typography variant="body1">Current spending allowance: {currentAmount}</Typography>
-				{requestedAmount && (
-					<Typography variant="body1">Requested amount: {requestedAmount}</Typography>
-				)}
-				<FormControl variant="filled" fullWidth>
-					{title && <InputTitle title={title} />}
-					<Input
-						fullWidth
-						type="text"
-						onChange={handleAmountChange}
-						value={amount}
-						placeholder="Allowance Amount"
-					/>
+			<Grid container direction="column" spacing={2}>
+				<Grid item>
+					<Grid container direction="row" spacing={2}>
+						<Grid item>
+							<Typography variant="subtitle2">Current spending allowance:</Typography>
+						</Grid>
+						{loading && (
+							<Grid item>
+								<CircularProgress size={20} />{' '}
+							</Grid>
+						)}
+						{!loading && (
+							<Grid item>
+								<Typography variant="subtitle2">{currentAmount}</Typography>
+							</Grid>
+						)}
+					</Grid>
+				</Grid>
 
-					{error && (
-						<Typography variant="subtitle2" color="error" gutterBottom>
-							{error}
-						</Typography>
-					)}
-				</FormControl>
-			</div>
+				<Grid item>
+					<FormControl variant="filled" fullWidth>
+						{amount && !loading && title && <InputTitle title={title} />}
+						{amount && !loading && (
+							<Input
+								fullWidth
+								type="text"
+								onChange={handleAmountChange}
+								value={amount}
+								placeholder="Allowance Amount"
+							/>
+						)}
+						{amount && !loading && error && (
+							<Typography variant="subtitle2" color="error" gutterBottom>
+								{error}
+							</Typography>
+						)}
+						{requestedAmount && (
+							<Typography variant="body1">
+								Requested amount: {requestedAmount}
+							</Typography>
+						)}
+					</FormControl>
+				</Grid>
+			</Grid>
 		);
 	}
 );

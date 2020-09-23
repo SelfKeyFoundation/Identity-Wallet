@@ -178,5 +178,87 @@ describe('Contract DucK', () => {
 				}
 			});
 		});
+		describe('updateAllowanceEditorReducer', () => {
+			let state;
+			beforeEach(() => {
+				state = { ...initialState };
+			});
+			it('should set contractError on invalid contract address', () => {
+				const newState = contractReducers.updateAllowanceEditorReducer(
+					state,
+					contractActions.updateEditorAction({
+						contractAddress: 'sdasadasdasd'
+					})
+				);
+				expect(newState.editor.errors).toBeTruthy();
+				expect(newState.editor.errors.contractError).toBeTruthy();
+				expect(newState.editor.contractAddress).toEqual('sdasadasdasd');
+			});
+			it('should remove contractError on valid contract address', () => {
+				state = {
+					...initialState,
+					editor: { ...initialState.editor, errors: { contractError: 'test error' } }
+				};
+				const newState = contractReducers.updateAllowanceEditorReducer(
+					state,
+					contractActions.updateEditorAction({
+						contractAddress: '0x4cc19356f2d37338b9802aa8e8fc58b0373296e7'
+					})
+				);
+				expect(newState.editor.errors).toBeTruthy();
+				expect(newState.editor.errors.contractError).toBeFalsy();
+				expect(newState.editor.contractAddress).toEqual(
+					'0x4cc19356f2d37338b9802aa8e8fc58b0373296e7'
+				);
+			});
+			it('should validate amount', () => {
+				const newState = contractReducers.updateAllowanceEditorReducer(
+					state,
+					contractActions.updateEditorAction({
+						amount: 'sdasadasdasd',
+						tokenDecimals: 18
+					})
+				);
+				expect(newState.editor.errors).toBeTruthy();
+				expect(newState.editor.errors.amountError).toBeTruthy();
+				expect(newState.editor.amount).toEqual('sdasadasdasd');
+			});
+			it('should remove amountError on valid amount', () => {
+				state = {
+					...initialState,
+					editor: { ...initialState.editor, errors: { amountError: 'test error' } }
+				};
+				const newState = contractReducers.updateAllowanceEditorReducer(
+					state,
+					contractActions.updateEditorAction({
+						amount: '193.3',
+						tokenDecimals: 18
+					})
+				);
+				expect(newState.editor.errors).toBeTruthy();
+				expect(newState.editor.errors.amountError).toBeFalsy();
+				expect(newState.editor.amount).toEqual('193.3');
+			});
+			it('should set other options', () => {
+				const options = {
+					requestedAmount: '15',
+					currentAmount: '15',
+					contractName: 'test',
+					tokenAddress: '0x4cc19356f2d37338b9802aa8e8fc58b0373296e7',
+					tokenDecimals: '18',
+					tokenSymbol: 'FAFS',
+					fixed: true,
+					checkingAmount: true,
+					checkingGasPrice: true
+				};
+
+				const newState = contractReducers.updateAllowanceEditorReducer(
+					state,
+					contractActions.updateEditorAction(options)
+				);
+
+				expect(newState.editor).toMatchObject(options);
+			});
+		});
 	});
 });

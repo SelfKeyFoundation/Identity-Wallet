@@ -7,10 +7,12 @@ import {
 	TableRow,
 	Typography,
 	Grid,
-	Button
+	Button,
+	IconButton
 } from '@material-ui/core';
+import { PropTypes } from 'prop-types';
 import { withStyles } from '@material-ui/styles';
-import { PriceSummary, DeleteIcon, SmallTableHeadRow } from 'selfkey-ui';
+import { PriceSummary, DeleteIcon, MuiEditIcon, SmallTableHeadRow } from 'selfkey-ui';
 import { Popup } from '../common/popup';
 
 export const styles = theme => ({
@@ -147,17 +149,23 @@ class CryptoPriceTableComponent extends PureComponent {
 			icon = <DeleteIcon className={classes.iconSize} />;
 		}
 		return (
-			<div
-				className={classes.pointer}
+			<IconButton
+				aria-label="Toggle Visibility"
 				onClick={event => this.handleOpenConfirmationModal(event, token)}
 			>
 				{icon}
-			</div>
+			</IconButton>
 		);
 	}
 
 	renderRow(token, index) {
-		const { locale, fiatCurrency, classes, alwaysVisible = [] } = this.props;
+		const {
+			locale,
+			fiatCurrency,
+			classes,
+			alwaysVisible = [],
+			onManageAllowanceClick
+		} = this.props;
 		const visibilityButton = this.renderVisibilityButton(token);
 		if (alwaysVisible.includes(token.address || '') || token.recordState) {
 			return (
@@ -204,7 +212,17 @@ class CryptoPriceTableComponent extends PureComponent {
 						</Typography>
 					</TableCell>
 					<TableCell>
-						<Typography variant="h6">{visibilityButton}</Typography>
+						<Typography variant="h6">
+							{onManageAllowanceClick && (
+								<IconButton
+									aria-label="Edit Allowance"
+									onClick={event => onManageAllowanceClick(token)}
+								>
+									<MuiEditIcon />
+								</IconButton>
+							)}
+							{visibilityButton}
+						</Typography>
 					</TableCell>
 				</TableRow>
 			);
@@ -256,3 +274,12 @@ class CryptoPriceTableComponent extends PureComponent {
 export const CryptoPriceTable = withStyles(styles)(CryptoPriceTableComponent);
 
 export default CryptoPriceTable;
+
+CryptoPriceTable.propTypes = {
+	tokens: PropTypes.array,
+	alwaysVisible: PropTypes.array,
+	locale: PropTypes.string,
+	fiatCurrency: PropTypes.string,
+	toggleAction: PropTypes.func,
+	onManageAllowanceClick: PropTypes.func
+};

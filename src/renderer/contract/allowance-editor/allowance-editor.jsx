@@ -2,18 +2,35 @@ import React from 'react';
 import { withStyles } from '@material-ui/styles';
 import { PropTypes } from 'prop-types';
 import { Popup } from '../../common';
-import { Grid } from '@material-ui/core';
+import { Grid, Divider, Button } from '@material-ui/core';
 import { ContractChooser } from './contract-chooser';
 import { ContractTokensChooser } from './contract-tokens-chooser';
 import { AllowanceAmount } from './allowance-amount';
 import { AllowanceTransactionFee } from './allowance-transaction-fee';
 
-const styles = theme => ({});
+const styles = theme => ({
+	divider: {
+		marginBottom: '20px',
+		marginTop: '40px'
+	},
+	actions: {
+		textAlign: 'right',
+		'&>button': {
+			marginRight: '20px',
+			marginTop: '40px'
+		}
+	},
+	body: {
+		marginBottom: '30px'
+	}
+});
 
 export const AllowanceEditor = withStyles(styles)(
 	({
 		classes,
+		fixed,
 		onCancel,
+		onConfirm,
 		contractAddress,
 		contractName,
 		errors,
@@ -32,11 +49,12 @@ export const AllowanceEditor = withStyles(styles)(
 		onGasPriceChange
 	}) => {
 		return (
-			<Popup text={'Edit Permission'} closeAction={onCancel}>
-				<Grid container direction="column" spacing={2}>
+			<Popup text={fixed ? 'Permission Request' : 'Edit Permission'} closeAction={onCancel}>
+				<Grid container direction="column" spacing={2} className={classes.body}>
 					<Grid item>
 						<ContractTokensChooser
 							tokens={tokens}
+							fixed={fixed}
 							selected={selectedToken}
 							title="Select Token"
 						/>
@@ -44,6 +62,7 @@ export const AllowanceEditor = withStyles(styles)(
 					<Grid item>
 						<ContractChooser
 							title="Input Contract Address"
+							fixed={fixed}
 							address={contractAddress}
 							name={contractName}
 							error={errors.contractError}
@@ -52,12 +71,19 @@ export const AllowanceEditor = withStyles(styles)(
 					{contractAddress && selectedToken && (
 						<Grid item>
 							<AllowanceAmount
+								title={'Change Allowance'}
 								currentAmount={currentAmount}
 								loading={checkingAmount}
 								requestedAmount={requestedAmount}
 								amount={amount}
 								error={errors.allowanceError}
 							/>
+						</Grid>
+					)}
+
+					{contractAddress && selectedToken && (
+						<Grid item>
+							<Divider className={classes.divider} />
 						</Grid>
 					)}
 					{contractAddress && selectedToken && (
@@ -74,6 +100,15 @@ export const AllowanceEditor = withStyles(styles)(
 						</Grid>
 					)}
 				</Grid>
+				<Divider />
+				<div className={classes.actions}>
+					<Button variant="outlined" size="large" onClick={onCancel}>
+						Cancel
+					</Button>
+					<Button variant="contained" size="large" onClick={onConfirm}>
+						Allow
+					</Button>
+				</div>
 			</Popup>
 		);
 	}

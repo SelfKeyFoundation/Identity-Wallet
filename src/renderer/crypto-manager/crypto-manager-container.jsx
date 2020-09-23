@@ -1,52 +1,12 @@
 import React, { PureComponent } from 'react';
-import { Grid, Button, Typography, List } from '@material-ui/core';
-import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import CryptoPriceTableContainer from './crypto-price-table-container';
 import { push } from 'connected-react-router';
-import { MyCryptoLargeIcon, PriceSummary, BackButton } from 'selfkey-ui';
 import { getLocale } from 'common/locale/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
-import { Popup } from '../common/popup';
 import { walletTokensOperations } from 'common/wallet-tokens';
-
-const styles = theme => ({
-	wrap: {
-		margin: 0,
-		width: '100%'
-	},
-	bottomSpace: {
-		marginBottom: '15px'
-	},
-	topSpace: {
-		marginTop: '30px'
-	},
-	popup: {
-		'& > div:nth-child(2)': {
-			left: 'calc(50% - 250px)',
-			top: '275px',
-			width: '500px'
-		},
-		'& button': {
-			'& div': {
-				marginLeft: '499px !important'
-			}
-		}
-	},
-	label: {
-		width: '100px'
-	},
-	listBottomSpace: {
-		marginBottom: '30px',
-		paddingLeft: '16px'
-	},
-	listContainer: {
-		marginBottom: '10px'
-	},
-	summary: {
-		marginTop: 0
-	}
-});
+import { CryptoManager } from './crypto-manager';
+import { featureIsEnabled } from 'common/feature-flags';
 
 class CryptoManagerContainerComponent extends PureComponent {
 	state = {
@@ -95,164 +55,35 @@ class CryptoManagerContainerComponent extends PureComponent {
 		this.setState({ showRemovedModal: false });
 	};
 
-	renderTokenAddedModal() {
-		const { classes, locale } = this.props;
-		const { tokenAdded } = this.state;
-		return (
-			<Popup
-				open={true}
-				text={'New ERC-20 Token Added'}
-				closeAction={this.handleCloseTokenAddedModal}
-				className={classes.popup}
-			>
-				<Grid
-					container
-					className={classes.root}
-					spacing={4}
-					direction="column"
-					justify="flex-start"
-					alignItems="stretch"
-				>
-					<List component="dl" className={classes.listBottomSpace}>
-						<Grid container className={classes.listContainer} wrap="nowrap">
-							<dt className={classes.label}>
-								<Typography variant="body2" color="secondary">
-									Name
-								</Typography>
-							</dt>
-							<dd data-akarmi={tokenAdded.name}>
-								<Typography variant="body2" className={classes.bold}>
-									{tokenAdded.name}
-								</Typography>
-							</dd>
-						</Grid>
-						<Grid container className={classes.listContainer} wrap="nowrap">
-							<dt className={classes.label}>
-								<Typography variant="body2" color="secondary">
-									Symbol
-								</Typography>
-							</dt>
-							<dd>
-								<Typography variant="body2" className={classes.bold}>
-									{tokenAdded.symbol}
-								</Typography>
-							</dd>
-						</Grid>
-						<Grid container className={classes.listContainer} wrap="nowrap">
-							<dt className={classes.label}>
-								<Typography variant="body2" color="secondary">
-									Balance
-								</Typography>
-							</dt>
-							<dd>
-								<PriceSummary
-									locale={locale}
-									style="decimal"
-									currency={tokenAdded.symbol}
-									fractionDigits={tokenAdded.decimal}
-									value={tokenAdded.balance}
-									className={`${classes.summary} ${classes.bold}`}
-								/>
-							</dd>
-						</Grid>
-					</List>
-					<Grid item>
-						<Grid container spacing={3}>
-							<Grid item>
-								<Button
-									variant="outlined"
-									size="large"
-									color="secondary"
-									onClick={this.handleCloseTokenAddedModal}
-								>
-									Close
-								</Button>
-							</Grid>
-						</Grid>
-					</Grid>
-				</Grid>
-			</Popup>
-		);
-	}
-
-	renderTokenRemovedModal() {
-		const { classes } = this.props;
-		return (
-			<Popup
-				open={true}
-				text={'Token Removed'}
-				closeAction={this.handleCloseTokenRemovedModal}
-				className={classes.popup}
-			>
-				<Grid
-					container
-					className={classes.root}
-					spacing={4}
-					direction="column"
-					justify="flex-start"
-					alignItems="stretch"
-				>
-					<Grid item>
-						<Typography variant="body2">
-							Removing tokens from this list only disables them from the display, and{' '}
-							does not impact their status on the Ethereum blockchain.
-						</Typography>
-					</Grid>
-					<Grid item>
-						<Grid container spacing={3}>
-							<Grid item>
-								<Button
-									variant="outlined"
-									size="large"
-									color="secondary"
-									onClick={this.handleCloseTokenRemovedModal}
-								>
-									Close
-								</Button>
-							</Grid>
-						</Grid>
-					</Grid>
-				</Grid>
-			</Popup>
-		);
-	}
+	handleManageAllowanceClick = token => {
+		this.props.dispatch(push(`/main/allowance-list/${token ? token.symbol : ''}`));
+	};
 
 	render() {
-		const { classes } = this.props;
-		const { showAddedModal, showRemovedModal } = this.state;
+		const { locale } = this.props;
+		const { showAddedModal, showRemovedModal, tokenAdded } = this.state;
 		return (
-			<Grid
-				container
-				direction="column"
-				justify="flex-start"
-				alignItems="center"
-				spacing={4}
-				className={classes.wrap}
-			>
-				<BackButton onclick={this.handleBackClick} />
-				<Grid item className={classes.topSpace}>
-					<MyCryptoLargeIcon />
-				</Grid>
-				<Grid item>
-					<Typography variant="h1">Manage My Crypto</Typography>
-				</Grid>
-				<Grid item>
-					<Typography variant="body1" color="secondary">
-						Manage your ERC20 tokens displayed in the SelfKey Identity Wallet dashboard.
-					</Typography>
-				</Grid>
-				<Grid item className={classes.bottomSpace}>
-					<Button variant="outlined" size="large" onClick={this.handleAddTokenClick}>
-						Add token
-					</Button>
-				</Grid>
-				<Grid item>
-					<CryptoPriceTableContainer toggleAction={this.handleRemoveTokenClick} />
-				</Grid>
-
-				{showAddedModal && this.renderTokenAddedModal()}
-				{showRemovedModal && this.renderTokenRemovedModal()}
-			</Grid>
+			<CryptoManager
+				locale={locale}
+				tokenAdded={tokenAdded}
+				onCloseTokenAddedModal={this.handleCloseTokenAddedModal}
+				onCloseTokenRemovedModal={this.handleCloseTokenRemovedModal}
+				onBackClick={this.handleBackClick}
+				onAddTokenClick={this.handleAddTokenClick}
+				onManageAllowanceClick={
+					featureIsEnabled('contract') ? evt => this.handleManageAllowanceClick() : null
+				}
+				showAddedModal={showAddedModal}
+				showRemovedModal={showRemovedModal}
+				cryptoPriceTableComponent={
+					<CryptoPriceTableContainer
+						toggleAction={this.handleRemoveTokenClick}
+						onManageAllowanceClick={
+							featureIsEnabled('contract') ? this.handleManageAllowanceClick : null
+						}
+					/>
+				}
+			/>
 		);
 	}
 }
@@ -264,8 +95,6 @@ const mapStateToProps = (state, props) => {
 	};
 };
 
-export const CryptoMangerContainer = connect(mapStateToProps)(
-	withStyles(styles)(CryptoManagerContainerComponent)
-);
+export const CryptoMangerContainer = connect(mapStateToProps)(CryptoManagerContainerComponent);
 
 export default CryptoMangerContainer;
