@@ -9,6 +9,7 @@ import RelyingPartySession from '../platform/relying-party';
 import identityUtils from '../../common/identity/utils';
 import timeoutPromise from 'common/utils/timeout-promise';
 import EventEmitter from 'events';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const log = new Logger('LWSService');
 
@@ -54,7 +55,7 @@ export class LWSService {
 				};
 				if (unlocked) {
 					retWallet.hasSelfkeyId = identity.ident.isSetupFinished;
-					if (did && identity.did) {
+					if (featureIsEnabled('did') && did && identity.did) {
 						retWallet.did = identity.did;
 					}
 				}
@@ -195,7 +196,7 @@ export class LWSService {
 			conn.addIdentity(publicKey, identity);
 			payload.unlocked = true;
 			payload.hasSelfkeyId = ident.isSetupFinished;
-			if (config.did !== false) {
+			if (featureIsEnabled('did') && config.did !== false) {
 				payload.did = identity.did || null;
 			}
 			payload.name = wallet.name;

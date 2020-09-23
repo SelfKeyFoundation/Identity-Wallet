@@ -29,7 +29,7 @@ import {
 	FileAudioIcon,
 	FileLinkWithModal
 } from 'selfkey-ui';
-
+import { featureIsEnabled } from 'common/feature-flags';
 import { HexagonAvatar } from './hexagon-avatar';
 
 import backgroundImage from '../../../../../static/assets/images/icons/icon-marketplace.png';
@@ -89,7 +89,7 @@ const SelfkeyIdSubheading = ({ email, did }) => (
 	<React.Fragment>
 		<Typography variant="subtitle1">{email}</Typography>
 		<br />
-		{did && (
+		{featureIsEnabled('did') && did && (
 			<Typography variant="subtitle1" color="secondary">
 				did:selfkey:{did}
 			</Typography>
@@ -217,7 +217,9 @@ class SelfkeyIdOverviewComponent extends PureComponent {
 				</Grid>
 				<Grid item>
 					<Grid container direction="column" spacing={4}>
-						{this.props.didCard && <Grid item>{this.props.didCard}</Grid>}
+						{featureIsEnabled('did') && this.props.didCard && (
+							<Grid item>{this.props.didCard}</Grid>
+						)}
 						<Grid item>
 							<Card>
 								<CardHeader

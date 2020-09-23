@@ -9,6 +9,7 @@ import { identitySelectors } from 'common/identity';
 import { withStyles } from '@material-ui/styles';
 import { BankingDetailsPage } from './details-page';
 import { marketplaceSelectors } from 'common/marketplace';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({});
 
@@ -61,7 +62,7 @@ class BankAccountsDetailContainer extends MarketplaceBankAccountsComponent {
 			if (!identity.isSetupFinished) {
 				return this.props.dispatch(push(selfkeyIdRequiredRoute));
 			}
-			if (!identity.did) {
+			if (featureIsEnabled('did') && !identity.did) {
 				return this.props.dispatch(push(selfkeyDIDRequiredRoute));
 			}
 			if (!rp || !rp.authenticated) {
