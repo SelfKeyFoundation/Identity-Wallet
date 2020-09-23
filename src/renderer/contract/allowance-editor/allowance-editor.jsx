@@ -6,6 +6,7 @@ import { Grid } from '@material-ui/core';
 import { ContractChooser } from './contract-chooser';
 import { ContractTokensChooser } from './contract-tokens-chooser';
 import { AllowanceAmount } from './allowance-amount';
+import { AllowanceTransactionFee } from './allowance-transaction-fee';
 
 const styles = theme => ({});
 
@@ -22,7 +23,13 @@ export const AllowanceEditor = withStyles(styles)(
 		requestedAmount,
 		amount,
 		checkingAmount,
-		checkingGasPrice
+		checkingGasPrice,
+		locale,
+		transactionInfo,
+		ethGasStationInfo,
+		onGasStationReload,
+		onGasLimitChange,
+		onGasPriceChange
 	}) => {
 		return (
 			<Popup text={'Edit Permission'} closeAction={onCancel}>
@@ -43,13 +50,28 @@ export const AllowanceEditor = withStyles(styles)(
 						/>
 					</Grid>
 					{contractAddress && selectedToken && (
-						<AllowanceAmount
-							currentAmount={currentAmount}
-							loading={checkingAmount}
-							requestedAmount={requestedAmount}
-							amount={amount}
-							error={errors.allowanceError}
-						/>
+						<Grid item>
+							<AllowanceAmount
+								currentAmount={currentAmount}
+								loading={checkingAmount}
+								requestedAmount={requestedAmount}
+								amount={amount}
+								error={errors.allowanceError}
+							/>
+						</Grid>
+					)}
+					{contractAddress && selectedToken && (
+						<Grid item>
+							<AllowanceTransactionFee
+								locale={locale}
+								{...transactionInfo}
+								ethGasStationInfo={ethGasStationInfo}
+								loading={checkingGasPrice}
+								reloadEthGasStationInfoAction={onGasStationReload}
+								changeGasLimitAction={onGasLimitChange}
+								changeGasPriceAction={onGasPriceChange}
+							/>
+						</Grid>
 					)}
 				</Grid>
 			</Popup>

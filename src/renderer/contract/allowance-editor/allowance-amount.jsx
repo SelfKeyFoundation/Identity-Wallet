@@ -19,7 +19,6 @@ export const AllowanceAmount = withStyles(styles)(
 	}) => {
 		const handleAmountChange = e => {
 			const value = e.target.value;
-
 			if (onAmountChange) onAmountChange(value);
 		};
 		if (!amount && requestedAmount) {

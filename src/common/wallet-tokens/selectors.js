@@ -74,3 +74,7 @@ export const getVisibleTokens = createSelector(
 		}
 	}
 );
+
+export const getERC20Tokens = state => {
+	return getTokens(state).slice[0];
+};

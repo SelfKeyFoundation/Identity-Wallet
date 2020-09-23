@@ -8,6 +8,7 @@ import { ContractChooser } from '../src/renderer/contract/allowance-editor/contr
 import { ContractTokensChooser } from '../src/renderer/contract/allowance-editor/contract-tokens-chooser';
 import { action } from '@storybook/addon-actions';
 import { AllowanceAmount } from '../src/renderer/contract/allowance-editor/allowance-amount';
+import { AllowanceTransactionFee } from '../src/renderer/contract/allowance-editor/allowance-transaction-fee';
 
 storiesOf('Contract/AllowanceList', module).add('main', () => (
 	<ContractAllowanceList allowances={contractAllowance} tokens={tokens} />
@@ -20,6 +21,16 @@ storiesOf('Contract/Editor', module)
 			currentAmount={10}
 			selectedToken={tokens[0]}
 			contractAddress="0xsdasdsadasdas"
+			locale="en"
+			transactionInfo={{
+				nonce: 10,
+				gasPrice: 5,
+				gasLimit: 30,
+				ethFee: '15.33131',
+				fiatCurrency: 'USD',
+				usdFee: '12341'
+			}}
+			ethGasStationInfo={{ safeLow: '10', average: '15', fast: '20' }}
 		/>
 	));
 
@@ -73,3 +84,19 @@ storiesOf('Contract/Editor/ContractTokensChooser', module)
 		/>
 	))
 	.add('fixed', () => <ContractTokensChooser tokens={tokens} selected={tokens[0]} fixed />);
+
+storiesOf('Contract/Editor/AllowanceTransactionFee', module).add('default', () => (
+	<AllowanceTransactionFee
+		locale="en"
+		nonce={10}
+		ethGasStationInfo={{ safeLow: '10', average: '15', fast: '20' }}
+		reloadEthGasStationInfoAction={action('reload gas station')}
+		changeGasLimitAction={action('change gas limit')}
+		changeGasPriceAction={action('change gas price')}
+		gasPrice={5}
+		gasLimit={30}
+		ethFee="15.31231"
+		fiatCurrency="USD"
+		usdFee="123123412412341231"
+	/>
+));

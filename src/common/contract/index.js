@@ -108,6 +108,9 @@ export const contractSelectors = {
 				a.contractAddress === contractAddress &&
 				a.walletId === wallet.id
 		);
+	},
+	selectAllowanceEditor(state) {
+		return this.selectContractsTree(state).allowanceEditor;
 	}
 };
 

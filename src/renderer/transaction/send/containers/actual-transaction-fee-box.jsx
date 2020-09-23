@@ -1,15 +1,15 @@
 import React from 'react';
 import { NumberFormat } from 'selfkey-ui';
 import { Grid } from '@material-ui/core';
-import injectSheet from 'react-jss';
+import { withStyles } from '@material-ui/styles';
 
-const styles = {
+const styles = theme => ({
 	root: {
 		color: '#FFFFFF',
 		fontSize: '16px',
 		fontFamily: 'Lato, arial, sans-serif'
 	}
-};
+});
 
 const ActualTransactionFeeBoxComponent = props => {
 	const { classes, locale, ethFee, fiatCurrency, usdFee } = props;
@@ -49,6 +49,6 @@ const ActualTransactionFeeBoxComponent = props => {
 	);
 };
 
-export const ActualTransactionFeeBox = injectSheet(styles)(ActualTransactionFeeBoxComponent);
+export const ActualTransactionFeeBox = withStyles(styles)(ActualTransactionFeeBoxComponent);
 
 export default ActualTransactionFeeBox;
