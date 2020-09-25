@@ -95,6 +95,7 @@
 		"ethereumjs-util": "6.1.0",
 		"flag-icon-css": "3.3.0",
 		"fs-extra": "7.0.1",
+		"human-standard-token-abi": "^2.0.0",
 		"is-online": "8.2.0",
 		"jsdom": "15.0.0",
 		"json-schema-ref-parser": "6.1.0",

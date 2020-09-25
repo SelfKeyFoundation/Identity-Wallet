@@ -73,6 +73,13 @@ const operations = {
 		await dispatch(operations.reloadAllowanceOperation(allowance.id));
 	},
 	updateAllowanceEditorOperation: update => async (dispatch, getState) => {
+		// update state
+		// if contractAddress or token address updated and no errors fetch allowance
+		// if conract address and no name, try to find name
+		// if fetching allowance set to loading
+		// not fetching allowance set loading to false
+		// add allowance details
+		// update again
 		// contractAddress
 		// contractName
 		// amount

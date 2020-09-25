@@ -1,4 +1,5 @@
 import BaseModel from '../../common/base-model';
+import { Model } from 'objection';
 import { isDevMode, isTestMode } from 'common/utils/common';
 const env = isTestMode() ? 'test' : isDevMode() ? 'development' : 'production';
 const TABLE_NAME = 'contract_allowance';
@@ -23,6 +24,20 @@ export class Contract extends BaseModel {
 				allowanceAmount: { type: 'string' },
 				walletId: { type: 'integer' },
 				env: { type: 'string', enum: ['development', 'production', 'test'] }
+			}
+		};
+	}
+	static get relationMappings() {
+		const Wallet = require('../../wallet/wallet').default;
+
+		return {
+			wallet: {
+				relation: Model.BelongsToOneRelation,
+				modelClass: Wallet,
+				join: {
+					from: `${this.tableName}.walletId`,
+					to: `${Wallet.tableName}.id`
+				}
 			}
 		};
 	}
