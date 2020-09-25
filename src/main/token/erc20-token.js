@@ -5,7 +5,7 @@ export class ERC20Token {
 	constructor(address, web3Service) {
 		this.web3Service = web3Service;
 		this.address = address;
-		this.contract = web3Service.web3.eth.Contract(erc20Abi, address);
+		this.contract = new web3Service.web3.eth.Contract(erc20Abi, address);
 		this.symbol = null;
 	}
 

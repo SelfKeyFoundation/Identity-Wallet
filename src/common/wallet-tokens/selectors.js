@@ -82,3 +82,7 @@ export const getERC20Tokens = state => {
 export const getTokenBySymbol = (state, symbol) => {
 	return getTokens(state).find(t => t.symbol === symbol);
 };
+
+export const getTokenByAddress = (state, address) => {
+	return getTokens(state).find(t => t.address === address);
+};

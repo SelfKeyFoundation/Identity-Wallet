@@ -33,7 +33,7 @@ export class ContractAllowanceService {
 						a.tokenAddress,
 						a.contractAddress
 					);
-					return { ...a, currentAmount: amount || 0 };
+					return { ...a, amount };
 				} catch (error) {
 					log.error(error);
 					return a;
@@ -45,7 +45,7 @@ export class ContractAllowanceService {
 	async loadContractAllowanceById(id) {
 		const allowance = await ContractAllowance.findById(id).eager('wallet');
 		try {
-			allowance.currentAmount = await this.fetchContractAllowance(
+			allowance.amount = await this.fetchContractAllowance(
 				allowance.wallet.address,
 				allowance.tokenAddress,
 				allowance.contractAddress
@@ -55,6 +55,15 @@ export class ContractAllowanceService {
 		}
 
 		return allowance;
+	}
+
+	updateContractAllowanceById(id, update) {
+		return ContractAllowance.updateById(id, update);
+	}
+
+	updateContractAllowanceAmount(tokenAddress, contractAddress, amount, options) {
+		const token = new ERC20Token(tokenAddress, this.web3Service);
+		return token.approve(contractAddress, amount, options);
 	}
 }
 

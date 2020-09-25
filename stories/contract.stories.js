@@ -32,14 +32,12 @@ storiesOf('Contract/Editor', module)
 			selectedToken={tokens[0]}
 			contractAddress="0xsdasdsadasdas"
 			locale="en"
-			transactionInfo={{
-				nonce: 10,
-				gasPrice: 5,
-				gasLimit: 30,
-				ethFee: '15.33131',
-				fiatCurrency: 'USD',
-				usdFee: '12341'
-			}}
+			nonce={10}
+			gasPrice={5}
+			gas={30}
+			ethFee="15.33131"
+			fiatCurrency="USD"
+			usdFee="12341"
 			ethGasStationInfo={{ safeLow: '10', average: '15', fast: '20' }}
 			onGasStationReload={action('reload gas station')}
 			onGasLimitChange={action('change gas limit')}
@@ -56,14 +54,12 @@ storiesOf('Contract/Editor', module)
 			selectedToken={tokens[0]}
 			contractAddress="0xsdasdsadasdas"
 			locale="en"
-			transactionInfo={{
-				nonce: 10,
-				gasPrice: 5,
-				gasLimit: 30,
-				ethFee: '15.33131',
-				fiatCurrency: 'USD',
-				usdFee: '12341'
-			}}
+			nonce={10}
+			gasPrice={5}
+			gas={30}
+			ethFee="15.33131"
+			fiatCurrency="USD"
+			usdFee="12341"
 			ethGasStationInfo={{ safeLow: '10', average: '15', fast: '20' }}
 			onGasStationReload={action('reload gas station')}
 			onGasLimitChange={action('change gas limit')}

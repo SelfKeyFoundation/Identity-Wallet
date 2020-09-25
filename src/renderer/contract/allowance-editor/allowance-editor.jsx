@@ -42,12 +42,22 @@ export const AllowanceEditor = withStyles(styles)(
 		checkingAmount,
 		checkingGasPrice,
 		locale,
-		transactionInfo,
+		gas,
+		gasPrice,
+		nonce,
+		ethFee,
+		fiatCurrency,
+		usdFee,
 		ethGasStationInfo,
 		onGasStationReload,
 		onGasLimitChange,
-		onGasPriceChange
+		onGasPriceChange,
+		onTokenChange,
+		onContractAddressChange,
+		onAmountChange
 	}) => {
+		const readyToTransact =
+			contractAddress && selectedToken && !errors.amountError && !errors.contractError;
 		return (
 			<Popup text={fixed ? 'Permission Request' : 'Edit Permission'} closeAction={onCancel}>
 				<Grid container direction="column" spacing={2} className={classes.body}>
@@ -57,6 +67,7 @@ export const AllowanceEditor = withStyles(styles)(
 							fixed={fixed}
 							selected={selectedToken}
 							title="Select Token"
+							onTokenChange={onTokenChange}
 						/>
 					</Grid>
 					<Grid item>
@@ -65,10 +76,11 @@ export const AllowanceEditor = withStyles(styles)(
 							fixed={fixed}
 							address={contractAddress}
 							name={contractName}
+							onContractAddressChange={onContractAddressChange}
 							error={errors.contractError}
 						/>
 					</Grid>
-					{contractAddress && selectedToken && (
+					{contractAddress && selectedToken && !errors.contractError && (
 						<Grid item>
 							<AllowanceAmount
 								title={'Change Allowance'}
@@ -76,23 +88,28 @@ export const AllowanceEditor = withStyles(styles)(
 								loading={checkingAmount}
 								requestedAmount={requestedAmount}
 								amount={amount}
+								onAmountChange={onAmountChange}
 								error={errors.allowanceError}
 							/>
 						</Grid>
 					)}
 
-					{contractAddress && selectedToken && (
+					{readyToTransact && (
 						<Grid item>
 							<Divider className={classes.divider} />
 						</Grid>
 					)}
-					{contractAddress && selectedToken && (
+					{readyToTransact && (
 						<Grid item>
 							<AllowanceTransactionFee
 								locale={locale}
-								{...transactionInfo}
+								gasLimit={gas}
+								gasPrice={gasPrice}
+								nonce={nonce}
+								ethFee={ethFee}
+								fiatCurrency={fiatCurrency}
+								usdFee={usdFee}
 								ethGasStationInfo={ethGasStationInfo}
-								loading={checkingGasPrice}
 								reloadEthGasStationInfoAction={onGasStationReload}
 								changeGasLimitAction={onGasLimitChange}
 								changeGasPriceAction={onGasPriceChange}
@@ -105,7 +122,12 @@ export const AllowanceEditor = withStyles(styles)(
 					<Button variant="outlined" size="large" onClick={onCancel}>
 						Cancel
 					</Button>
-					<Button variant="contained" size="large" onClick={onConfirm}>
+					<Button
+						variant="contained"
+						size="large"
+						onClick={onConfirm}
+						disabled={!readyToTransact}
+					>
 						Allow
 					</Button>
 				</div>
@@ -128,5 +150,9 @@ AllowanceEditor.propTypes = {
 };
 
 AllowanceEditor.defaultProps = {
-	errors: {}
+	errors: {},
+	gas: 0,
+	gasPrice: 0,
+	ethFee: 0,
+	usdFee: 0
 };

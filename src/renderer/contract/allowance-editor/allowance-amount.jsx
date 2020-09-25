@@ -21,12 +21,15 @@ export const AllowanceAmount = withStyles(styles)(
 			const value = e.target.value;
 			if (onAmountChange) onAmountChange(value);
 		};
-		if (!amount && requestedAmount) {
+		console.log('XXX amount 1', amount);
+		if (amount === undefined && requestedAmount) {
 			amount = requestedAmount;
 		}
-		if (!amount && currentAmount) {
+		if (amount === undefined && currentAmount) {
 			amount = currentAmount;
 		}
+
+		console.log('XXX amount 2', amount);
 
 		return (
 			<Grid container direction="column" spacing={2}>
