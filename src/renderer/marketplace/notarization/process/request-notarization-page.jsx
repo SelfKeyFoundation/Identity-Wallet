@@ -195,6 +195,7 @@ export const RequestNotarizationPage = withStyles(styles)(props => {
 						rows="5"
 						onChange={handleMessage}
 						value={message}
+						required={true}
 						placeholder="Please describe the work that needs to be done…."
 					/>
 				</div>
@@ -212,7 +213,7 @@ export const RequestNotarizationPage = withStyles(styles)(props => {
 						variant="contained"
 						size="large"
 						onClick={onStartClick}
-						disabled={!selectedDocuments.length}
+						disabled={!selectedDocuments.length || !message}
 					>
 						Request Notarization
 					</Button>
