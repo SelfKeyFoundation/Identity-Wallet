@@ -130,6 +130,10 @@ class CurrentApplicationComponent extends PureComponent {
 			existingApplicationId,
 			memberRequirements
 		} = this.props;
+
+		if (!currentApplication.title) {
+			return null;
+		}
 		return (
 			<div>
 				<CurrentApplicationPopup
