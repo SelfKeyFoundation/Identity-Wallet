@@ -15,23 +15,31 @@ export const KycAgreementText = withStyles(styles)(
 			I consent to share my information with {vendor}, for the purposes of {purpose} and that
 			they may further share this information with partners and affiliates in accordance with
 			their{' '}
-			<a
-				className={classes.link}
-				onClick={e => {
-					window.openExternal(e, privacyPolicy);
-				}}
-			>
-				privacy policy
-			</a>{' '}
+			{privacyPolicy ? (
+				<a
+					className={classes.link}
+					onClick={e => {
+						window.openExternal(e, privacyPolicy);
+					}}
+				>
+					Privacy Policy
+				</a>
+			) : (
+				<span>Privacy Policy</span>
+			)}{' '}
 			and{' '}
-			<a
-				className={classes.link}
-				onClick={e => {
-					window.openExternal(e, termsOfService);
-				}}
-			>
-				terms and conditions
-			</a>
+			{termsOfService ? (
+				<a
+					className={classes.link}
+					onClick={e => {
+						window.openExternal(e, termsOfService);
+					}}
+				>
+					Terms and Conditions
+				</a>
+			) : (
+				<span>Terms and Conditions</span>
+			)}
 			, and by clicking the box, hereby agree to.
 		</Typography>
 	)
