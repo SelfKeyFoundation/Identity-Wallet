@@ -10,12 +10,12 @@ export class ContractAllowanceService {
 		this.web3Service = web3Service;
 	}
 
-	createContractAllowance(walletId, contractAddress, tokenAddress) {
-		return ContractAllowance.create({ walletId, contractAddress, tokenAddress });
+	createContractAllowance(walletId, contractAddress, tokenAddress, tokenDecimals) {
+		return ContractAllowance.create({ walletId, contractAddress, tokenAddress, tokenDecimals });
 	}
 
-	async fetchContractAllowance(ownerAddress, tokenAddress, contractAddress) {
-		const token = new ERC20Token(tokenAddress, this.web3Service);
+	async fetchContractAllowance(ownerAddress, tokenAddress, contractAddress, tokenDecimals) {
+		const token = new ERC20Token(tokenAddress, this.web3Service, tokenDecimals);
 		const allowance = await token.getAllowance(ownerAddress, contractAddress, {
 			from: ownerAddress
 		});
@@ -24,16 +24,18 @@ export class ContractAllowanceService {
 
 	async loadContractAllowances(walletId) {
 		const wallet = await Wallet.findById(walletId);
-		const allowances = await ContractAllowance.findAll({ walletId });
+
+		let allowances = await ContractAllowance.findAll({ walletId });
 		return Promise.all(
-			allowances.map(a => async () => {
+			allowances.map(async a => {
 				try {
-					const amount = await this.fetchContractAllowance(
+					const allowanceAmount = await this.fetchContractAllowance(
 						wallet.address,
 						a.tokenAddress,
-						a.contractAddress
+						a.contractAddress,
+						a.tokenDecimals
 					);
-					return { ...a, amount };
+					return { ...a, allowanceAmount };
 				} catch (error) {
 					log.error(error);
 					return a;
@@ -45,10 +47,11 @@ export class ContractAllowanceService {
 	async loadContractAllowanceById(id) {
 		const allowance = await ContractAllowance.findById(id).eager('wallet');
 		try {
-			allowance.amount = await this.fetchContractAllowance(
+			allowance.allowanceAmount = await this.fetchContractAllowance(
 				allowance.wallet.address,
 				allowance.tokenAddress,
-				allowance.contractAddress
+				allowance.contractAddress,
+				allowance.tokenDecimals
 			);
 		} catch (error) {
 			log.error(error);
@@ -61,8 +64,8 @@ export class ContractAllowanceService {
 		return ContractAllowance.updateById(id, update);
 	}
 
-	updateContractAllowanceAmount(tokenAddress, contractAddress, amount, options) {
-		const token = new ERC20Token(tokenAddress, this.web3Service);
+	updateContractAllowanceAmount(tokenAddress, contractAddress, amount, tokenDecimals, options) {
+		const token = new ERC20Token(tokenAddress, this.web3Service, tokenDecimals);
 		return token.approve(contractAddress, amount, options);
 	}
 }

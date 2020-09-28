@@ -4,7 +4,7 @@ import { isDevMode, isTestMode } from 'common/utils/common';
 const env = isTestMode() ? 'test' : isDevMode() ? 'development' : 'production';
 const TABLE_NAME = 'contract_allowance';
 
-export class Contract extends BaseModel {
+export class ContractAllowance extends BaseModel {
 	static get tableName() {
 		return TABLE_NAME;
 	}
@@ -21,6 +21,7 @@ export class Contract extends BaseModel {
 				id: { type: 'integer' },
 				contractAddress: { type: 'string' },
 				tokenAddress: { type: 'string' },
+				tokenDecimals: { type: 'integer', default: 18 },
 				allowanceAmount: { type: 'string' },
 				walletId: { type: 'integer' },
 				env: { type: 'string', enum: ['development', 'production', 'test'] }
@@ -59,4 +60,4 @@ export class Contract extends BaseModel {
 	}
 }
 
-export default Contract;
+export default ContractAllowance;

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { shallowEqual, useSelector, useDispatch } from 'react-redux';
 import { contractSelectors, contractOperations } from '../../../common/contract';
 import { getERC20Tokens, getTokenByAddress } from '../../../common/wallet-tokens/selectors';
@@ -10,6 +10,12 @@ import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 export const AllowanceEditorContainer = props => {
 	const tokens = useSelector(getERC20Tokens, shallowEqual);
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(ethGasStationInfoOperations.loadData());
+		dispatch(contractOperations.loadAllowancesOperation());
+		dispatch(contractOperations.loadContractsOperation());
+	}, []);
 
 	const editor = useSelector(
 		contractSelectors.selectAllowanceEditor.bind(contractSelectors),
@@ -54,6 +60,13 @@ export const AllowanceEditorContainer = props => {
 		dispatch(ethGasStationInfoOperations.loadData());
 	});
 
+	const handleEditorCancel = useCallback(() => {
+		dispatch(contractOperations.cancelAllowanceEditorOperation());
+	});
+	const handleEditorConfirm = useCallback(() => {
+		dispatch(contractOperations.submitAllowanceEditorOperation());
+	});
+
 	return (
 		<AllowanceEditor
 			{...props}
@@ -62,13 +75,15 @@ export const AllowanceEditorContainer = props => {
 			tokens={tokens}
 			locale={locale}
 			{...fiatCurrency}
-			ethGasStationInfo={ethGasStationInfo}
+			{...ethGasStationInfo}
 			onTokenChange={handleTokenChange}
 			onContractAddressChange={handleContractAddressChange}
 			onAmountChange={handleAmountChange}
 			onGasLimitChange={handleGasLimitChange}
 			onGasPriceChange={handleGasPriceChange}
 			onGasStationReload={handleGasStationReload}
+			onCancel={handleEditorCancel}
+			onConfirm={handleEditorConfirm}
 		/>
 	);
 };

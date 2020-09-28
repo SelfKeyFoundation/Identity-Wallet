@@ -4,7 +4,7 @@ import { createAliasedAction } from 'electron-redux';
 import { walletSelectors } from 'common/wallet';
 import { getTokenByAddress, getTokenBySymbol } from '../wallet-tokens/selectors';
 import { push } from 'connected-react-router';
-import { toFullAmount, validateAllowanceAmount, validateContractAddress } from './utils';
+import { validateAllowanceAmount, validateContractAddress } from './utils';
 import _ from 'lodash';
 import { getWallet } from '../wallet/selectors';
 import { appSelectors } from 'common/app';
@@ -39,6 +39,7 @@ export const contractTypes = {
 	CONTRACTS_ALLOWANCE_EDITOR_OPERATION_START: 'contracts/allowances/editor/operations/START',
 	CONTRACTS_ALLOWANCE_EDITOR_OPERATION_SUBMIT: 'contracts/allowances/editor/operations/SUBMIT',
 	CONTRACTS_ALLOWANCE_EDITOR_OPERATION_REQUEST: 'contracts/allowances/editor/operations/REQUEST',
+	CONTRACTS_ALLOWANCE_EDITOR_OPERATION_CANCEL: 'contracts/allowances/editor/operations/CANCEL',
 	CONTRACTS_ALLOWANCES_SET_ONE: 'contracts/allowances/SET_ONE'
 };
 
@@ -74,7 +75,10 @@ const operations = {
 		await dispatch(contractActions.setOneAllowanceAction(allowance));
 		return allowance;
 	},
-	fetchAllowanceOperation: (tokenAddress, contractAddress) => async (dispatch, getState) => {
+	fetchAllowanceOperation: (tokenAddress, contractAddress, tokenDecimals = 18) => async (
+		dispatch,
+		getState
+	) => {
 		const { contractAllowanceService } = getGlobalContext();
 		let allowance = contractSelectors.selectAllowanceByTokenAndContractAddress(
 			getState(),
@@ -87,7 +91,8 @@ const operations = {
 			allowance = await contractAllowanceService.createContractAllowance(
 				wallet.id,
 				contractAddress,
-				tokenAddress
+				tokenAddress,
+				tokenDecimals
 			);
 		}
 		return dispatch(operations.reloadAllowanceOperation(allowance.id));
@@ -139,8 +144,9 @@ const operations = {
 			if (
 				!afterUpdate.contractAddress ||
 				!afterUpdate.tokenAddress ||
-				(beforeUpdate.contractAddress === afterUpdate.contractAddress &&
-					beforeUpdate.tokenAddress === afterUpdate.tokenAddress)
+				(!afterUpdate.loading &&
+					(beforeUpdate.contractAddress === afterUpdate.contractAddress &&
+						beforeUpdate.tokenAddress === afterUpdate.tokenAddress))
 			) {
 				return;
 			}
@@ -149,30 +155,33 @@ const operations = {
 				return;
 			}
 
-			console.log('XXX', beforeUpdate, afterUpdate);
-
 			const allowance = await dispatch(
 				operations.fetchAllowanceOperation(
 					afterUpdate.tokenAddress,
-					afterUpdate.contractAddress
+					afterUpdate.contractAddress,
+					afterUpdate.tokenDecimals
 				)
 			);
 
-			const gas = await contractAllowanceService.updateContractAllowanceAmount(
+			let gas = await contractAllowanceService.updateContractAllowanceAmount(
 				afterUpdate.tokenAddress,
 				afterUpdate.contractAddress,
-				toFullAmount(1000, afterUpdate.tokenDecimals),
+				afterUpdate.amount || 0,
+				afterUpdate.tokenDecimals,
 				{ estimateGas: true, from: wallet.address }
 			);
 
+			gas = Math.ceil(gas * 1.5);
+
 			let gasPrice = afterUpdate.gasPrice;
 			if (!gasPrice) {
-				gasPrice = ethGasStationInfoSelectors.getEthGasStationInfo(getState).average;
+				gasPrice = ethGasStationInfoSelectors.getEthGasStationInfo(getState())
+					.ethGasStationInfo.average;
 			}
 
 			await dispatch(
 				contractActions.updateEditorAction({
-					currentAmount: allowance.amount,
+					currentAmount: allowance.allowanceAmount,
 					gasPrice,
 					gas,
 					loading: false
@@ -234,13 +243,18 @@ const operations = {
 	},
 	submitAllowanceEditorOperation: options => async (dispatch, getState) => {
 		// start allowance transaction operation
-		const editor = contractSelectors.selectAllowanceEditor(getState());
+		let editor = contractSelectors.selectAllowanceEditor(getState());
 		const wallet = getWallet(getState());
 		const transactionEventEmitter = getGlobalContext().contractAllowanceService.updateContractAllowanceAmount(
 			editor.tokenAddress,
 			editor.contractAddress,
-			editor.amount,
-			{ from: wallet.address, gas: editor.gas, gasPrice: editor.gasPrice }
+			editor.amount || 0,
+			editor.tokenDecimals,
+			{
+				from: wallet.address,
+				gas: editor.gas,
+				gasPrice: EthUnits.unitToUnit(editor.gasPrice, 'gwei', 'wei')
+			}
 		);
 
 		let hardwalletConfirmationTimeout = null;
@@ -257,11 +271,14 @@ const operations = {
 
 		transactionEventEmitter.on('transactionHash', async hash => {
 			clearTimeout(hardwalletConfirmationTimeout);
-			await dispatch(push('/main/transaction-progress'));
+			await dispatch(push('/main/allowance-transaction-processing'));
 		});
 
 		transactionEventEmitter.on('receipt', async receipt => {
-			await dispatch(push(editor.nextPath));
+			editor = contractSelectors.selectAllowanceEditor(getState());
+			if (editor.nextPath) {
+				await dispatch(push(editor.nextPath));
+			}
 		});
 
 		transactionEventEmitter.on('error', async error => {
@@ -280,12 +297,9 @@ const operations = {
 			} else if (error.statusText === 'UNKNOWN_ERROR') {
 				await dispatch(push('/main/transaction-unlock'));
 			} else {
-				await dispatch(push('/main/transaction-error'));
+				await dispatch(push('/main/allowance-transaction-error'));
 			}
 		});
-		// watch transaction state and navigate trough screens
-		// on success -> navigate to next url
-		// on cancel -> navigate to cancel url
 	},
 	cancelAllowanceEditorOperation: () => async (dispatch, getState) => {
 		const editor = contractSelectors.selectAllowanceEditor(getState());
@@ -295,11 +309,16 @@ const operations = {
 			cancelPath = `/main/allowance-list`;
 		}
 
-		return dispatch(push(cancelPath));
+		await dispatch(push(cancelPath));
+		await dispatch(contractActions.setEditorAction({}));
 	},
 	requestAllowanceOperation: options => async (dispatch, getState) => {
 		const allowance = await dispatch(
-			operations.fetchAllowanceOperation(options.tokenAddress, options.contractAddress)
+			operations.fetchAllowanceOperation(
+				options.tokenAddress,
+				options.contractAddress,
+				options.tokenDecimals
+			)
 		);
 		if (allowance.amount >= options.requestedAmount) {
 			await dispatch(push(options.nextPath));
@@ -334,6 +353,10 @@ export const contractOperations = {
 	requestAllowanceOperation: createAliasedAction(
 		contractTypes.CONTRACTS_ALLOWANCE_EDITOR_OPERATION_REQUEST,
 		operations.requestAllowanceOperation
+	),
+	cancelAllowanceEditorOperation: createAliasedAction(
+		contractTypes.CONTRACTS_ALLOWANCE_EDITOR_OPERATION_CANCEL,
+		operations.cancelAllowanceEditorOperation
 	)
 };
 
@@ -395,8 +418,8 @@ export const contractReducers = {
 
 		return {
 			...state,
-			contracts: normalized.result,
-			contractsById: normalized.entities.contracts
+			contracts: normalized.result || [],
+			contractsById: normalized.entities.contracts || {}
 		};
 	},
 	setAllowancesReducer: (state, action) => {
@@ -404,8 +427,8 @@ export const contractReducers = {
 
 		return {
 			...state,
-			allowances: normalized.result,
-			allowancesById: normalized.entities.allowances
+			allowances: normalized.result || [],
+			allowancesById: normalized.entities.allowances || {}
 		};
 	},
 	setOneAllowanceReducer: (state, action) => {
@@ -443,16 +466,21 @@ export const contractReducers = {
 			'tokenDecimals',
 			'tokenSymbol',
 			'fixed',
+			'loading',
 			'checkingAmount',
 			'checkingGasPrice',
 			'gas',
-			'gasLimit',
+			'gasPrice',
 			'nonce',
 			'nextPath',
 			'cancelPath'
 		]);
 
 		editor = { ...editor, ...options };
+
+		if (payload.amount === '') {
+			editor = { ...editor, amount: payload.amount };
+		}
 
 		if (payload.amount && editor.tokenDecimals) {
 			let amountError;

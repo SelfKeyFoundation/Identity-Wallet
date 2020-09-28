@@ -22,7 +22,7 @@ const styles = theme => ({
 	}
 });
 
-const ContactAllowanceListRow = withStyles(styles)(({ classes, allowance }) => (
+const ContactAllowanceListRow = withStyles(styles)(({ classes, allowance, onEdit }) => (
 	<TableRow className={classes.bodyTableRow}>
 		<TableCell>
 			<Typography variant="h6">{allowance.contractAddress}</Typography>
@@ -39,14 +39,22 @@ const ContactAllowanceListRow = withStyles(styles)(({ classes, allowance }) => (
 		<TableCell numeric>{allowance.allowanceAmount}</TableCell>
 		<TableCell>
 			<IconButton aria-label="Edit">
-				<MuiEditIcon />
+				<MuiEditIcon onClick={() => onEdit(allowance)} />
 			</IconButton>
 		</TableCell>
 	</TableRow>
 ));
 
 export const ContractAllowanceList = withStyles(styles)(
-	({ classes, allowances, tokens, selectedToken, onTokenChange, onAllowanceAdd }) => {
+	({
+		classes,
+		allowances,
+		tokens,
+		selectedToken,
+		onTokenChange,
+		onAllowanceAdd,
+		onAllowanceEdit
+	}) => {
 		return (
 			<div className={classes.container}>
 				<Grid
@@ -104,7 +112,11 @@ export const ContractAllowanceList = withStyles(styles)(
 							</TableHead>
 							<TableBody>
 								{allowances.map(a => (
-									<ContactAllowanceListRow key={a.id} allowance={a} />
+									<ContactAllowanceListRow
+										key={a.id}
+										allowance={a}
+										onEdit={onAllowanceEdit}
+									/>
 								))}
 							</TableBody>
 						</Table>

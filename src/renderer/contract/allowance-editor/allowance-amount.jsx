@@ -18,18 +18,15 @@ export const AllowanceAmount = withStyles(styles)(
 		loading
 	}) => {
 		const handleAmountChange = e => {
-			const value = e.target.value;
+			const value = e.target.value || '';
 			if (onAmountChange) onAmountChange(value);
 		};
-		console.log('XXX amount 1', amount);
 		if (amount === undefined && requestedAmount) {
 			amount = requestedAmount;
 		}
 		if (amount === undefined && currentAmount) {
 			amount = currentAmount;
 		}
-
-		console.log('XXX amount 2', amount);
 
 		return (
 			<Grid container direction="column" spacing={2}>
@@ -53,8 +50,8 @@ export const AllowanceAmount = withStyles(styles)(
 
 				<Grid item>
 					<FormControl variant="filled" fullWidth>
-						{amount && !loading && title && <InputTitle title={title} />}
-						{amount && !loading && (
+						{!loading && title && <InputTitle title={title} />}
+						{!loading && (
 							<Input
 								fullWidth
 								type="text"
@@ -63,12 +60,12 @@ export const AllowanceAmount = withStyles(styles)(
 								placeholder="Allowance Amount"
 							/>
 						)}
-						{amount && !loading && error && (
+						{!loading && error && (
 							<Typography variant="subtitle2" color="error" gutterBottom>
 								{error}
 							</Typography>
 						)}
-						{requestedAmount && (
+						{['string', 'number'].includes(typeof requestedAmount) && (
 							<Typography variant="body1">
 								Requested amount: {requestedAmount}
 							</Typography>

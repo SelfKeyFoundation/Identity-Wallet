@@ -6,6 +6,5 @@ import TransactionFeeBox from '../../transaction/send/containers/transaction-fee
 
 export const AllowanceTransactionFee = props => {
 	// const classes = useStyles();
-	console.log('XXX', props);
 	return <TransactionFeeBox {...props} />;
 };
