@@ -12,7 +12,7 @@ import MarketplaceNotariesComponent from '../common/marketplace-notaries-compone
 import RequestNotarizationPage from './request-notarization-page';
 import { CreateAttributeContainer } from '../../../attributes';
 
-const FIXED_GAS_LIMIT_PRICE = 21000;
+const FIXED_GAS_LIMIT_PRICE = 450000;
 
 const styles = theme => ({});
 
@@ -96,7 +96,7 @@ class RequestNotarizationContainer extends MarketplaceNotariesComponent {
 
 	getPaymentParameters() {
 		const { ethRate, ethGasStationInfo } = this.props;
-		const gasPrice = ethGasStationInfo.fast;
+		const gasPrice = ethGasStationInfo.average;
 		const gasLimit = FIXED_GAS_LIMIT_PRICE;
 		const gasEthFee = EthUnits.toEther(gasPrice * gasLimit, 'gwei');
 		const gasUsdFee = gasEthFee * ethRate;
