@@ -213,7 +213,7 @@ class CryptoPriceTableComponent extends PureComponent {
 					</TableCell>
 					<TableCell>
 						<Typography variant="h6">
-							{onManageAllowanceClick && (
+							{token.address && onManageAllowanceClick && (
 								<IconButton
 									aria-label="Edit Allowance"
 									onClick={event => onManageAllowanceClick(token)}
