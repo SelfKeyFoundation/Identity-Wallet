@@ -246,12 +246,12 @@ function registerJobHandlers(ctx) {
 	ctx.marketplaceCountrySyncJobHandler.registerHandler();
 	ctx.taxTreatiesSyncJobHandler.registerHandler();
 	ctx.listingExchangesSyncJobHandler.registerHandler();
-	ctx.contractSyncJobHandler.registerHandler();
+	if (featureIsEnabled('contract')) ctx.contractSyncJobHandler.registerHandler();
 }
 
 function scheduleInitialJobs(ctx) {
 	ctx.inventoryService.start();
-	ctx.contractService.start();
+	if (featureIsEnabled('contract')) ctx.contractService.start();
 	ctx.vendorService.start();
 	ctx.marketplaceCountryService.start();
 	ctx.taxTreatiesService.start();

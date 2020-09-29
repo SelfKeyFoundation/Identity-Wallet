@@ -53,6 +53,6 @@ function getDisplayName(WrappedComponent) {
 function mapStateToProps(state, props) {
 	return {
 		didPending: didSelectors.isCurrentIdentityPending(state),
-		did: didSelectors.selectCurrentDID(state)
+		did: didSelectors.selectCurrentDid(state)
 	};
 }

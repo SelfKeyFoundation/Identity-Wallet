@@ -40,6 +40,7 @@ import { CurrencyService } from './currency/currency-service';
 import { MatomoService } from './matomo/matomo-service';
 import { ContractService } from './blockchain/contracts/contract-service';
 import ContractSyncJobHandler from './blockchain/contracts/contracts-sync-job-handler';
+import ContractAllowanceService from './blockchain/contracts/contract-allowance-service';
 
 export const registerMainServices = container => {
 	container.register({
@@ -84,6 +85,7 @@ export const registerMainServices = container => {
 		didService: asClass(DIDService).singleton(),
 		contractService: asClass(ContractService).singleton(),
 		contractSyncJobHandler: asClass(ContractSyncJobHandler).singleton(),
+		contractAllowanceService: asClass(ContractAllowanceService).singleton(),
 		autoUpdateService: asClass(AutoUpdateService).singleton(),
 		marketplaceOrdersService: asClass(MarketplaceOrdersService).singleton(),
 		totleSwapService: asClass(TotleSwapService).singleton(),

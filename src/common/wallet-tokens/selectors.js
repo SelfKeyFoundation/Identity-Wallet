@@ -74,3 +74,15 @@ export const getVisibleTokens = createSelector(
 		}
 	}
 );
+
+export const getERC20Tokens = state => {
+	return getTokens(state).slice(1);
+};
+
+export const getTokenBySymbol = (state, symbol) => {
+	return getTokens(state).find(t => t.symbol === symbol);
+};
+
+export const getTokenByAddress = (state, address) => {
+	return getTokens(state).find(t => t.address === address);
+};

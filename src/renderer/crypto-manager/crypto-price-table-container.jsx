@@ -19,9 +19,7 @@ const mapStateToProps = state => {
 	};
 };
 
-const CryptoPriceTableContainerComponent = props => (
-	<CryptoPriceTable toggleAction={props.toggleAction} {...props} />
-);
+const CryptoPriceTableContainerComponent = props => <CryptoPriceTable {...props} />;
 
 export const CryptoPriceTableContainer = connect(mapStateToProps)(
 	CryptoPriceTableContainerComponent

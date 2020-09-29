@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Typography, Grid, Paper } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
+import { PropTypes } from 'prop-types';
 import {
 	ModalWrap,
 	ModalCloseButton,
@@ -112,3 +113,28 @@ const PopupWrap = props => {
 
 export const Popup = withStyles(styles)(PopupWrap);
 export default Popup;
+
+Popup.propTypes = {
+	children: PropTypes.element.isRequired,
+	closeAction: PropTypes.func,
+	closeComponent: PropTypes.element,
+	text: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+	open: PropTypes.bool,
+	isHeaderVisible: PropTypes.bool,
+	displayLogo: PropTypes.bool,
+	closeButtonClass: PropTypes.string,
+	headerClass: PropTypes.string,
+	xtraClass: PropTypes.string,
+	popupClass: PropTypes.string
+};
+
+Popup.defaultProps = {
+	open: true,
+	closeButtonClass: '',
+	isHeaderVisible: true,
+	displayLogo: false,
+	headerClass: '',
+	xtraClass: '',
+	popupClass: '',
+	text: ''
+};
