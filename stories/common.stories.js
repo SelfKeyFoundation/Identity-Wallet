@@ -12,6 +12,11 @@ import {
 	Scrollable
 } from '../src/renderer/common';
 import { text, boolean, object, select } from '@storybook/addon-knobs';
+import AccentedCard from '../src/renderer/common/accented-card';
+import { CardContent } from '@material-ui/core';
+import { primary } from 'selfkey-ui';
+
+import vaultImage from '../static/assets/images/bgs/vault.png';
 
 const data = {
 	basic: {
@@ -140,3 +145,36 @@ storiesOf('Common', module)
 		<TransactionProcessingPopup title={text('Title', 'Processing')} />
 	))
 	.add('TransactionErrorPopup', () => <TransactionErrorPopup title={text('Title', 'Error')} />);
+
+storiesOf('Common/AccentedCard', module)
+	.add('default', () => (
+		<AccentedCard>
+			<CardContent>hi</CardContent>
+		</AccentedCard>
+	))
+	.add('elevated', () => (
+		<AccentedCard elevation={5}>
+			<CardContent>hi</CardContent>
+		</AccentedCard>
+	))
+	.add('accented', () => (
+		<AccentedCard elevation={5} accentColor={primary}>
+			<CardContent>hi</CardContent>
+		</AccentedCard>
+	))
+	.add('gradient background', () => (
+		<AccentedCard elevation={5} accentColor={primary} gradient>
+			<CardContent>hi</CardContent>
+		</AccentedCard>
+	))
+	.add('image background', () => (
+		<AccentedCard
+			style={{ width: 257, height: 437 }}
+			elevation={5}
+			accentColor={primary}
+			gradient
+			backgroundImage={{ img: vaultImage }}
+		>
+			<CardContent>hi</CardContent>
+		</AccentedCard>
+	));

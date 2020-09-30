@@ -25,7 +25,8 @@ import {
 	PowerIcon,
 	// KeyTooltip,
 	// TooltipArrow,
-	MenuAffiliateIcon,
+	// MenuAffiliateIcon,
+	MenuStakingIcon,
 	MenuExportIcon,
 	// InfoTooltip,
 	primary
@@ -271,7 +272,7 @@ class Sidebar extends PureComponent {
 							title="Staking"
 						>
 							<ListItemIcon className={classes.listItemIcon}>
-								<MenuAffiliateIcon width="16px" height="16px" viewBox="0 0 16 16" />
+								<MenuStakingIcon width="16px" height="16px" viewBox="0 0 16 16" />
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
 								Staking
