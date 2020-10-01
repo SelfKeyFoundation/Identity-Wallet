@@ -2,17 +2,24 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Grid, Typography } from '@material-ui/core';
 import StakingDashboardCard from './dashboard-card';
-import { primary } from 'selfkey-ui';
 import vaultImage from '../../../../static/assets/images/bgs/vault.png';
+import { primary } from 'selfkey-ui';
 
 const useStyles = makeStyles({
+	action: {
+		height: 50,
+		lineHeight: '30px'
+	},
+	infoCardText: {
+		fontSize: 12
+	},
+	container: {
+		height: '100%'
+	},
 	link: {
 		cursor: 'pointer',
 		color: primary,
 		textDecoration: 'none',
-		fontSize: 12
-	},
-	infoCardText: {
 		fontSize: 12
 	}
 });
@@ -22,7 +29,7 @@ export const StakingDashboardInfoCard = () => {
 
 	return (
 		<StakingDashboardCard title="About Staking" backgroundImage={{ img: vaultImage }}>
-			<Grid container direction="column" spacing={2}>
+			<Grid container direction="column" spacing={2} className={classes.container}>
 				<Grid item>
 					<Typography variant="h2">You can stake anytime you want!</Typography>
 				</Grid>
@@ -39,8 +46,8 @@ export const StakingDashboardInfoCard = () => {
 						documets anywhere.
 					</Typography>
 				</Grid>
-				<Grid item />
-				<Grid item>
+				<Grid item xs />
+				<Grid item className={classes.action}>
 					<a className={classes.link}>Read more</a>
 				</Grid>
 			</Grid>

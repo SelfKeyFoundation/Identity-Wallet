@@ -272,7 +272,7 @@ class Sidebar extends PureComponent {
 							title="Staking"
 						>
 							<ListItemIcon className={classes.listItemIcon}>
-								<MenuStakingIcon width="16px" height="16px" viewBox="0 0 16 16" />
+								<MenuStakingIcon />
 							</ListItemIcon>
 							<Typography variant="body2" color="secondary">
 								Staking
