@@ -21143,6 +21143,29 @@ select@^1.1.2:
     react-truncate "2.4.0"
     snyk "^1.193.2"
 
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#e510a0b3e2c69b33a5b48dee0bf2b1ab1052bf3f":
+  version "1.0.0"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#e510a0b3e2c69b33a5b48dee0bf2b1ab1052bf3f"
+  dependencies:
+    "@material-ui/core" "4.9.9"
+    "@material-ui/icons" "4.9.1"
+    "@material-ui/lab" "4.0.0-alpha.48"
+    "@material-ui/styles" "4.9.6"
+    "@types/classnames" "^2.2.7"
+    "@types/google.visualization" "0.0.46"
+    "@types/react-dom" "16.9.6"
+    bignumber.js "8.0.1"
+    classnames "^2.2.6"
+    lodash "4.17.19"
+    moment "^2.23.0"
+    react "16.13.1"
+    react-copy-to-clipboard "5.0.1"
+    react-datetime "^2.16.3"
+    react-dom "16.13.1"
+    react-google-charts "3.0.10"
+    react-truncate "2.4.0"
+    snyk "^1.193.2"
+
 selfkey.js@1.0.24:
   version "1.0.24"
   resolved "https://registry.yarnpkg.com/selfkey.js/-/selfkey.js-1.0.24.tgz#7c1cefc5fb1b9c38198e3158fd916c23e39f93d0"
