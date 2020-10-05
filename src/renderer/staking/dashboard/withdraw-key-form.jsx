@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Grid, FormControl, Input, Typography, Button } from '@material-ui/core';
+import { TimelockPeriod } from './timelock-period';
+import BN from 'bignumber.js';
+import { PropTypes } from 'prop-types';
 
 const useStyles = makeStyles({
 	currencyName: {
@@ -11,14 +14,50 @@ const useStyles = makeStyles({
 	}
 });
 
-export const WithdrawKeyForm = () => {
+export const WithdrawKeyForm = ({ stakeInfo, onSubmit }) => {
 	const classes = useStyles();
+
+	const [amountError, setAmountError] = useState(null);
+	const [amount, setAmount] = useState(null);
+
+	const handleAmountChange = useCallback(evt => {
+		const amount = new BN(evt.target.value);
+
+		if (evt.target.value === '') {
+			setAmountError(null);
+			setAmount(null);
+			return;
+		}
+
+		if (amount.isNaN() || amount.isZero()) {
+			setAmountError('Invalid amount provided');
+			return;
+		}
+
+		if (amount.gt(new BN(stakeInfo.stakeBalance))) {
+			setAmountError(`Maximum is ${stakeInfo.stakeBalance}`);
+			return;
+		}
+		setAmountError(null);
+		setAmount(amount.toString());
+	});
+
+	const handleSubmit = useCallback(evt => {
+		evt.preventDefault();
+		if (onSubmit) {
+			onSubmit({
+				amount
+			});
+		}
+	});
+
 	return (
 		<Grid
 			container
 			direction="column"
 			alignItems="stretch"
 			spacing={2}
+			wrap="nowrap"
 			className={classes.container}
 		>
 			<Grid item>
@@ -29,16 +68,16 @@ export const WithdrawKeyForm = () => {
 					<Input
 						fullWidth
 						type="text"
-						onChange={() => {}}
+						onChange={handleAmountChange}
+						error={!!amountError}
+						disabled={!stakeInfo.canWithdrawStake}
 						placeholder="Amount of KEY to withdraw"
 					/>
-					<Typography
-						variant="subtitle1"
-						color="secondary"
-						className={classes.currencyName}
-					>
-						KEY
-					</Typography>
+					{amountError && (
+						<Typography variant="subtitle1" color="error">
+							{amountError}
+						</Typography>
+					)}
 				</FormControl>
 			</Grid>
 			<Grid item>
@@ -46,18 +85,21 @@ export const WithdrawKeyForm = () => {
 					<Typography variant="overline" gutterBottom>
 						Timelock Period
 					</Typography>
-					<Input
-						fullWidth
-						type="text"
-						onChange={() => {}}
-						placeholder="Period of staking"
+					<TimelockPeriod
+						startTs={stakeInfo.timelockStart}
+						endTs={stakeInfo.timelockEnd}
+						hasStaked={stakeInfo.hasStaked}
 					/>
 				</FormControl>
 			</Grid>
 			<Grid item xs />
 			<Grid item>
 				<FormControl variant="filled" fullWidth>
-					<Button variant="contained" disabled>
+					<Button
+						variant="contained"
+						onClick={handleSubmit}
+						disabled={!stakeInfo.canWithdrawStake || amountError || amount === null}
+					>
 						Withdraw
 					</Button>
 				</FormControl>
@@ -67,3 +109,8 @@ export const WithdrawKeyForm = () => {
 };
 
 export default WithdrawKeyForm;
+
+WithdrawKeyForm.propType = {
+	stakeInfo: PropTypes.object,
+	onSubmit: PropTypes.func
+};
