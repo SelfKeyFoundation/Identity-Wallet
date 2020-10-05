@@ -26,6 +26,7 @@ class StakingDashboardPage extends PureComponent {
 			lockToken,
 			onStake,
 			onWithdrawStake,
+			onWithdrawReward,
 			onHelp
 		} = this.props;
 		return (
@@ -47,7 +48,7 @@ class StakingDashboardPage extends PureComponent {
 					<Divider />
 				</Grid>
 				<Grid item>
-					<Grid container direction="row" justify="center" spacing={4}>
+					<Grid container direction="row" justify="space-between" spacing={1}>
 						<Grid item>
 							<StakingDashboardCard
 								token={keyToken}
@@ -80,7 +81,10 @@ class StakingDashboardPage extends PureComponent {
 								icon={<LockLogo width={29} height={33} />}
 								accentColor={success}
 							>
-								<WithdrawRewardForm stakeInfo={stakeInfo} />
+								<WithdrawRewardForm
+									stakeInfo={stakeInfo}
+									onSubmit={onWithdrawReward}
+								/>
 							</StakingDashboardCard>
 						</Grid>
 						<Grid item>
@@ -104,5 +108,7 @@ StakingDashboardPage.propTypes = {
 	keyToken: PropTypes.object,
 	lockToken: PropTypes.object,
 	onStake: PropTypes.func,
+	onWithdrawReward: PropTypes.func,
+	onWithdrawStake: PropTypes.func,
 	onHelp: PropTypes.func
 };

@@ -65,6 +65,7 @@ storiesOf('Staking/Dashboard/Page', module).add('default', () => (
 		{...getStakingProps()}
 		onStake={action('stake')}
 		onWithdrawStake={action('withdraw stake')}
+		onWithdrawReward={action('withdraw reward')}
 		onHelp={action('help')}
 	/>
 ));

@@ -1,37 +1,28 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { identitySelectors } from 'common/identity';
 import { StakingDashboardPage } from './dashboard-page';
-import { RegisterDidCardContainer, DisplayDid } from '../../did';
-import KycCardContainer from '../../kyc/kyc-card/kyc-card-container';
-import { featureIsEnabled } from 'common/feature-flags';
 
 class StakingDashboardContainerComponent extends PureComponent {
+	handleWithdrawStake = opt => {
+		console.log('XXX', 'withdraw stake', opt);
+	};
+	handleWithdrawReward = opt => {
+		console.log('XXX', 'withdraw reward', opt);
+	};
+	handleHelp = () => {
+		console.log('XXX', 'help');
+	};
+	handleStake = opt => {
+		console.log('XXX', 'stake', opt);
+	};
 	render() {
-		const { identity } = this.props;
 		return (
 			<StakingDashboardPage
 				{...this.props}
-				didComponent={
-					featureIsEnabled('did') ? (
-						identity.did ? (
-							<DisplayDid did={identity.did} />
-						) : (
-							<RegisterDidCardContainer returnPath={'/main/staking'} />
-						)
-					) : null
-				}
-				kycComponent={
-					<KycCardContainer
-						cancelRoute={'/main/staking'}
-						nextRoute={'/main/staking'}
-						vendorId="selfkey"
-						sku="staking_kyc"
-						applicationTitle="Airdrop"
-						applicationDescription="You are about to begin the application process for Selfkey LOCK fAirdrop"
-						applicationAgreement="conducting KYC"
-					/>
-				}
+				onStake={this.handleStake}
+				onWithdrawStake={this.handleWithdrawStake}
+				onWithdrawReward={this.handleWithdrawReward}
+				onHelp={this.handleHelp}
 			/>
 		);
 	}
@@ -39,7 +30,20 @@ class StakingDashboardContainerComponent extends PureComponent {
 
 const mapStateToProps = (state, props) => {
 	return {
-		identity: identitySelectors.selectIdentity(state)
+		keyToken: { symbol: 'KEY', decimal: 18, balance: '16000000' },
+		lockToken: { symbol: 'LOCK', decimal: 18, balance: '19' },
+		stakeInfo: {
+			stakeBalance: '80000',
+			rewardBalance: '50000',
+			timelockStart: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
+			timelockEnd: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+			canStake: true,
+			canWithdrawStake: true,
+			canWithdrawReward: true,
+			hasStaked: true,
+			minStakeDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+			minStakeAmount: '10000'
+		}
 	};
 };
 
