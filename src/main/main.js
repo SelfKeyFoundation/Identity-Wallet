@@ -101,7 +101,7 @@ function onReady() {
 			ctx.store.dispatch(walletOperations.refreshWalletBalance());
 			ctx.store.dispatch(walletTokensOperations.refreshWalletTokensBalance());
 		});
-		// ctx.stakingService.acquireContract();
+		// ctx.depositService.acquireContract();
 
 		createKeystoreFolder();
 

@@ -7,7 +7,7 @@ describe('MarketplaceService', () => {
 	const serviceId = 'testService';
 	const serviceOwner = 'testOwner';
 	const walletAddress = '0xtest';
-	let stakingService = {
+	let depositService = {
 		getStakingInfo() {},
 		placeStake() {},
 		withdrawStake() {}
@@ -28,7 +28,7 @@ describe('MarketplaceService', () => {
 	};
 	beforeEach(() => {
 		store.state = {};
-		service = new MarketplaceService({ store, stakingService, web3Service });
+		service = new MarketplaceService({ store, depositService, web3Service });
 	});
 	afterEach(() => {
 		sinon.restore();
@@ -48,10 +48,10 @@ describe('MarketplaceService', () => {
 
 	it('loadStakingInfo', async () => {
 		const stakingInfo = { balance: 0 };
-		sinon.stub(stakingService, 'getStakingInfo').resolves(stakingInfo);
+		sinon.stub(depositService, 'getStakingInfo').resolves(stakingInfo);
 		await service.loadStakingInfo(serviceOwner, serviceId);
 		expect(
-			stakingService.getStakingInfo.calledOnceWith(serviceOwner, serviceId, {
+			depositService.getStakingInfo.calledOnceWith(serviceOwner, serviceId, {
 				from: walletAddress
 			})
 		).toBeTruthy();
@@ -59,10 +59,10 @@ describe('MarketplaceService', () => {
 
 	it('estimateGasForStake', async () => {
 		const stakeTransactionsGas = { approve: { gas: 15 }, deposit: { gas: 20 } };
-		sinon.stub(stakingService, 'placeStake').resolves(stakeTransactionsGas);
+		sinon.stub(depositService, 'placeStake').resolves(stakeTransactionsGas);
 		let gas = await service.estimateGasForStake(serviceOwner, serviceId, 10);
 		expect(
-			stakingService.placeStake.calledOnceWith(10, serviceOwner, serviceId, {
+			depositService.placeStake.calledOnceWith(10, serviceOwner, serviceId, {
 				from: walletAddress,
 				method: 'estimateGas'
 			})
@@ -73,10 +73,10 @@ describe('MarketplaceService', () => {
 
 	it('estimateGasForWithdraw', async () => {
 		const withdrawTransactionsGas = { gas: 10 };
-		sinon.stub(stakingService, 'withdrawStake').resolves(withdrawTransactionsGas);
+		sinon.stub(depositService, 'withdrawStake').resolves(withdrawTransactionsGas);
 		let gas = await service.estimateGasForWithdraw(serviceOwner, serviceId);
 		expect(
-			stakingService.withdrawStake.calledOnceWith(serviceOwner, serviceId, {
+			depositService.withdrawStake.calledOnceWith(serviceOwner, serviceId, {
 				from: walletAddress,
 				method: 'estimateGas'
 			})
@@ -87,13 +87,13 @@ describe('MarketplaceService', () => {
 
 	it('placeStake', async () => {
 		const txs = ['hash1', 'hash2'];
-		sinon.stub(stakingService, 'placeStake').resolves(txs);
+		sinon.stub(depositService, 'placeStake').resolves(txs);
 		sinon.stub(MarketplaceTransactions, 'create').resolves('ok');
 
 		let tx = await service.placeStake(serviceOwner, serviceId, 10, 12, 11);
 
 		expect(
-			stakingService.placeStake.calledOnceWith(10, serviceOwner, serviceId, {
+			depositService.placeStake.calledOnceWith(10, serviceOwner, serviceId, {
 				from: walletAddress,
 				gas: 11,
 				gasPrice: 12
@@ -105,13 +105,13 @@ describe('MarketplaceService', () => {
 
 	it('withdrawStake', async () => {
 		const txs = ['hash1', 'hash2'];
-		sinon.stub(stakingService, 'withdrawStake').resolves(txs);
+		sinon.stub(depositService, 'withdrawStake').resolves(txs);
 		sinon.stub(MarketplaceTransactions, 'create').resolves('ok');
 
 		let tx = await service.withdrawStake(serviceOwner, serviceId, 12, 11);
 
 		expect(
-			stakingService.withdrawStake.calledOnceWith(serviceOwner, serviceId, {
+			depositService.withdrawStake.calledOnceWith(serviceOwner, serviceId, {
 				from: walletAddress,
 				gas: 11,
 				gasPrice: 12

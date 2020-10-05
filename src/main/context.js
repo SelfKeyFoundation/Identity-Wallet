@@ -6,7 +6,7 @@ import Web3Service from './blockchain/web3-service';
 import { LWSService } from './lws/lws-service';
 import { CrashReportService } from '../common/logger/crash-report-service';
 import RpcHandler from './rpc-handler';
-import { StakingService } from './blockchain/staking-service';
+import { DepositService } from './blockchain/deposit-service';
 import AddressBookService from './address-book/address-book-service';
 import IdentityService from './identity/identity-service';
 import MarketplaceService from './marketplace/marketplace-service';
@@ -41,6 +41,7 @@ import { MatomoService } from './matomo/matomo-service';
 import { ContractService } from './blockchain/contracts/contract-service';
 import ContractSyncJobHandler from './blockchain/contracts/contracts-sync-job-handler';
 import ContractAllowanceService from './blockchain/contracts/contract-allowance-service';
+import { StakingService } from './blockchain/staking/staking-service';
 
 export const registerMainServices = container => {
 	container.register({
@@ -74,7 +75,7 @@ export const registerMainServices = container => {
 			let Handler = RpcHandler(cradle);
 			return new Handler();
 		}).singleton(),
-		stakingService: asClass(StakingService).singleton(),
+		depositService: asClass(DepositService).singleton(),
 		tokenService: asClass(TokenService).singleton(),
 		walletTokenService: asClass(WalletTokenService).singleton(),
 		incorporationsService: asClass(IncorporationsService).singleton(),
@@ -90,6 +91,7 @@ export const registerMainServices = container => {
 		marketplaceOrdersService: asClass(MarketplaceOrdersService).singleton(),
 		totleSwapService: asClass(TotleSwapService).singleton(),
 		currencyService: asClass(CurrencyService).singleton(),
-		matomoService: asClass(MatomoService).singleton()
+		matomoService: asClass(MatomoService).singleton(),
+		stakingService: asClass(StakingService).singleton()
 	});
 };

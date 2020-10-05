@@ -1,8 +1,14 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { stakingOperations, stakingSelectors } from '../../../common/staking';
 import { StakingDashboardPage } from './dashboard-page';
+import config from 'common/config';
+import { getTokenBySymbol } from '../../../common/wallet-tokens/selectors';
 
 class StakingDashboardContainerComponent extends PureComponent {
+	componentDidMount() {
+		this.props.dispatch(stakingOperations.fetchStakeOperation());
+	}
 	handleWithdrawStake = opt => {
 		console.log('XXX', 'withdraw stake', opt);
 	};
@@ -30,20 +36,9 @@ class StakingDashboardContainerComponent extends PureComponent {
 
 const mapStateToProps = (state, props) => {
 	return {
-		keyToken: { symbol: 'KEY', decimal: 18, balance: '16000000' },
+		keyToken: getTokenBySymbol(state, config.constants.primaryToken),
 		lockToken: { symbol: 'LOCK', decimal: 18, balance: '19' },
-		stakeInfo: {
-			stakeBalance: '80000',
-			rewardBalance: '50000',
-			timelockStart: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
-			timelockEnd: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
-			canStake: true,
-			canWithdrawStake: true,
-			canWithdrawReward: true,
-			hasStaked: true,
-			minStakeDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
-			minStakeAmount: '10000'
-		}
+		stakeInfo: stakingSelectors.selectStakingInfo(state)
 	};
 };
 

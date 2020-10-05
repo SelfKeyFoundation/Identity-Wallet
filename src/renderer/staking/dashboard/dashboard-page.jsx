@@ -53,7 +53,7 @@ class StakingDashboardPage extends PureComponent {
 							<StakingDashboardCard
 								token={keyToken}
 								balance={keyToken.balance}
-								title="Total KEY balance"
+								title={`Total ${keyToken.symbol} balance`}
 								icon={<SelfkeyLogo width={29} height={33} />}
 							>
 								<StakeKeyForm
@@ -67,7 +67,7 @@ class StakingDashboardPage extends PureComponent {
 							<StakingDashboardCard
 								token={keyToken}
 								balance={stakeInfo.stakeBalance}
-								title="Total KEY staked"
+								title={`Total ${keyToken.symbol} staked`}
 								icon={<SelfkeyLogo width={29} height={33} />}
 							>
 								<WithdrawKeyForm stakeInfo={stakeInfo} onSubmit={onWithdrawStake} />
