@@ -12,6 +12,7 @@ import {
 import PriceBox from '../../price-box';
 import Sidebar from './sidebar';
 import { HexagonAvatar } from '../../selfkey-id/main/components/hexagon-avatar';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({
 	wrapper: {
@@ -351,6 +352,7 @@ class Toolbar extends PureComponent {
 			wallet,
 			onCreateCorporateProfileClick,
 			primaryToken,
+			rewardToken,
 			showCorporate,
 			isExportableAccount,
 			showStaking
@@ -382,6 +384,11 @@ class Toolbar extends PureComponent {
 							<div>
 								<PriceBox cryptoCurrency={primaryToken} />
 							</div>
+							{featureIsEnabled('rewardToken') && (
+								<div>
+									<PriceBox cryptoCurrency={rewardToken} />
+								</div>
+							)}
 							<div>
 								<PriceBox cryptoCurrency="ETH" />
 							</div>
