@@ -24,6 +24,10 @@ const PRIMARY_TOKEN = process.env.PRIMARY_TOKEN_OVERRIDE
 	? process.env.PRIMARY_TOKEN_OVERRIDE.toUpperCase()
 	: null;
 
+const REWARD_TOKEN = process.env.REWARD_TOKEN_OVERRIDE
+	? process.env.REWARD_TOKEN_OVERRIDE.toUpperCase()
+	: null;
+
 // KYCC ENV variables
 const KYCC_API_OVERRIDE = process.env.KYCC_API_OVERRIDE;
 // Incorporations ENV variables
@@ -104,7 +108,8 @@ const common = {
 			notary: 'addition_with_notary',
 			certified_true_copy: 'addition_with_certified_true_copy'
 		},
-		primaryToken: PRIMARY_TOKEN || 'KEY'
+		primaryToken: PRIMARY_TOKEN || 'KEY',
+		rewardToken: REWARD_TOKEN || 'LOCK'
 	},
 	notificationTypes: {
 		wallet: {
@@ -140,7 +145,7 @@ const common = {
 
 	features: {
 		paymentContract: false,
-		did: true,
+		did: false,
 		scheduler: true,
 		corporate: false,
 		staking: false,
@@ -153,7 +158,8 @@ const common = {
 		loansMarketplace: false,
 		swapTokens: false,
 		exchangesMarketplace: false,
-		contract: true
+		contract: true,
+		rewardToken: false
 	}
 };
 
@@ -166,14 +172,15 @@ const dev = {
 	chainId: 3,
 	node: 'infura',
 	constants: {
-		primaryToken: PRIMARY_TOKEN || 'KI'
+		primaryToken: PRIMARY_TOKEN || 'KI',
+		rewardToken: REWARD_TOKEN || 'LOCK'
 	},
 	matomoSite: 2,
 	ledgerAddress: '0x27332286A2CEaE458b82A1235f7E2a3Aa8945cAB',
 	paymentSplitterAddress: '0xb91FF8627f30494d27b91Aac1cB3c7465BE58fF5',
 	features: {
 		paymentContract: false,
-		did: true,
+		did: false,
 		scheduler: true,
 		corporate: true,
 		staking: true,
@@ -186,7 +193,8 @@ const dev = {
 		loansMarketplace: true,
 		swapTokens: true,
 		contract: true,
-		exchangesMarketplace: false
+		exchangesMarketplace: false,
+		rewardToken: true
 	},
 	testWalletAddress: '0x23d233933c86f93b74705cf0d236b39f474249f8',
 	testDidAddress: '0xee10a3335f48e10b444e299cf017d57879109c1e32cec3e31103ceca7718d0ec',
@@ -202,7 +210,8 @@ const prod = {
 	chainId: 1,
 	node: 'infura',
 	constants: {
-		primaryToken: PRIMARY_TOKEN || 'KEY'
+		primaryToken: PRIMARY_TOKEN || 'KEY',
+		rewardToken: REWARD_TOKEN || 'LOCK'
 	},
 	matomoSite: 1,
 	ledgerAddress: '0x0cb853331293d689c95187190e09bb46cb4e533e',
@@ -222,7 +231,8 @@ const prod = {
 		loansMarketplace: true,
 		swapTokens: false,
 		contract: false,
-		exchangesMarketplace: false
+		exchangesMarketplace: false,
+		rewardToken: false
 	},
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'
 };
