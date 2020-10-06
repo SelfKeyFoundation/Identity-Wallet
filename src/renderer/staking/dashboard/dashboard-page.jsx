@@ -8,6 +8,7 @@ import StakingDashboardCard from './dashboard-card';
 import StakeKeyForm from './stake-key-form';
 import WithdrawKeyForm from './withdraw-key-form';
 import WithdrawRewardForm from './withdraw-reward-form';
+import { PropTypes } from 'prop-types';
 
 const styles = theme => ({
 	container: {},
@@ -18,7 +19,16 @@ const styles = theme => ({
 });
 class StakingDashboardPage extends PureComponent {
 	render() {
-		const { classes } = this.props;
+		const {
+			classes,
+			stakeInfo,
+			keyToken,
+			lockToken,
+			onStake,
+			onWithdrawStake,
+			onWithdrawReward,
+			onHelp
+		} = this.props;
 		return (
 			<Grid
 				id="stakingDashboard"
@@ -38,40 +48,47 @@ class StakingDashboardPage extends PureComponent {
 					<Divider />
 				</Grid>
 				<Grid item>
-					<Grid container direction="row" justify="center" spacing={4}>
+					<Grid container direction="row" justify="space-between" spacing={1}>
 						<Grid item>
 							<StakingDashboardCard
-								token={{ symbol: 'KEY', decimal: 18 }}
-								balance="160000000000"
+								token={keyToken}
+								balance={keyToken.balance}
 								title="Total KEY balance"
 								icon={<SelfkeyLogo width={29} height={33} />}
 							>
-								<StakeKeyForm />
+								<StakeKeyForm
+									stakeInfo={stakeInfo}
+									keyToken={keyToken}
+									onSubmit={onStake}
+								/>
 							</StakingDashboardCard>
 						</Grid>
 						<Grid item>
 							<StakingDashboardCard
-								token={{ symbol: 'KEY', decimal: 18 }}
-								balance="8000"
+								token={keyToken}
+								balance={stakeInfo.stakeBalance}
 								title="Total KEY staked"
 								icon={<SelfkeyLogo width={29} height={33} />}
 							>
-								<WithdrawKeyForm />
+								<WithdrawKeyForm stakeInfo={stakeInfo} onSubmit={onWithdrawStake} />
 							</StakingDashboardCard>
 						</Grid>
 						<Grid item>
 							<StakingDashboardCard
-								token={{ symbol: 'LOCK', decimal: 18 }}
-								balance="16"
+								token={lockToken}
+								balance={stakeInfo.rewardBalance}
 								title="Reward LOCK"
 								icon={<LockLogo width={29} height={33} />}
 								accentColor={success}
 							>
-								<WithdrawRewardForm />
+								<WithdrawRewardForm
+									stakeInfo={stakeInfo}
+									onSubmit={onWithdrawReward}
+								/>
 							</StakingDashboardCard>
 						</Grid>
 						<Grid item>
-							<StakingDashboardInfoCard />
+							<StakingDashboardInfoCard onHelp={onHelp} />
 						</Grid>
 					</Grid>
 				</Grid>
@@ -85,3 +102,13 @@ class StakingDashboardPage extends PureComponent {
 
 const styledComponent = withStyles(styles)(StakingDashboardPage);
 export { styledComponent as StakingDashboardPage };
+
+StakingDashboardPage.propTypes = {
+	stakeInfo: PropTypes.object,
+	keyToken: PropTypes.object,
+	lockToken: PropTypes.object,
+	onStake: PropTypes.func,
+	onWithdrawReward: PropTypes.func,
+	onWithdrawStake: PropTypes.func,
+	onHelp: PropTypes.func
+};

@@ -7,7 +7,8 @@ import AccentedCard from '../../common/accented-card';
 const useStyles = makeStyles({
 	dashboardCard: {
 		width: 257,
-		height: 437
+		height: 437,
+		overflow: 'visible'
 	},
 	content: {
 		height: '100%'
@@ -83,7 +84,13 @@ export const StakingDashboardCard = ({
 			backgroundImage={backgroundImage}
 		>
 			<CardContent className={classes.content}>
-				<Grid container direction="column" spacing={2} className={classes.content}>
+				<Grid
+					container
+					direction="column"
+					spacing={2}
+					className={classes.content}
+					wrap="nowrap"
+				>
 					{title && (
 						<Grid item>
 							<StakingCardHeader title={title} icon={icon} />
