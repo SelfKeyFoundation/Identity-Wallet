@@ -93,8 +93,6 @@ export class WalletService {
 			profile: 'local'
 		});
 
-		await this.walletTokenService.populateWalletWithPopularTokens(wallet);
-
 		const newWallet = {
 			...wallet,
 			privateKey: account.privateKey
