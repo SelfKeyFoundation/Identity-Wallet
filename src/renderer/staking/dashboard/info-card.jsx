@@ -4,6 +4,7 @@ import { Grid, Typography } from '@material-ui/core';
 import StakingDashboardCard from './dashboard-card';
 import vaultImage from '../../../../static/assets/images/bgs/vault.png';
 import { primary } from 'selfkey-ui';
+import { PropTypes } from 'prop-types';
 
 const useStyles = makeStyles({
 	action: {
@@ -24,7 +25,7 @@ const useStyles = makeStyles({
 	}
 });
 
-export const StakingDashboardInfoCard = () => {
+export const StakingDashboardInfoCard = ({ onHelp }) => {
 	const classes = useStyles();
 
 	return (
@@ -48,7 +49,9 @@ export const StakingDashboardInfoCard = () => {
 				</Grid>
 				<Grid item xs />
 				<Grid item className={classes.action}>
-					<a className={classes.link}>Read more</a>
+					<a className={classes.link} onClick={onHelp}>
+						Read more
+					</a>
 				</Grid>
 			</Grid>
 		</StakingDashboardCard>
@@ -56,3 +59,13 @@ export const StakingDashboardInfoCard = () => {
 };
 
 export default StakingDashboardInfoCard;
+
+StakingDashboardCard.propTypes = {
+	onHelp: PropTypes.func
+};
+
+StakingDashboardCard.defaultProps = {
+	onHelp: evt => {
+		evt.preventDefault();
+	}
+};
