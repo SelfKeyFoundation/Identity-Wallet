@@ -2,6 +2,7 @@ import { getGlobalContext } from 'common/context';
 import BN from 'bignumber.js';
 import moment from 'moment';
 import { createAliasedAction } from 'electron-redux';
+import { getWallet } from '../wallet/selectors';
 
 export const initialState = {
 	stakeBalance: '0',
@@ -23,7 +24,8 @@ export const stakingActions = {
 const operations = {
 	...stakingActions,
 	fetchStakeOperation: () => async (dispatch, getState) => {
-		const stake = await getGlobalContext().stakingService.fetchStake();
+		const wallet = getWallet(getState());
+		const stake = await getGlobalContext().stakingService.fetchStake(wallet.id);
 
 		await dispatch(
 			stakingActions.setStakingAction({

@@ -34,6 +34,10 @@ export class Contract extends BaseModel {
 		return this.query().where({ env });
 	}
 
+	static findByType(type) {
+		return this.query().where({ env, type });
+	}
+
 	static create(data) {
 		return this.query().insertAndFetch({ ...data, env });
 	}
