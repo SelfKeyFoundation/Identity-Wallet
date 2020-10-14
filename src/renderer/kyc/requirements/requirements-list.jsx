@@ -5,9 +5,9 @@ import { CheckedIcon, StepIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	kyc: {
-		width: '100%',
-		paddingTop: '40px',
-		borderTop: '2px solid #475768'
+		borderTop: '2px solid #475768',
+		paddingTop: theme.spacing(5),
+		width: '100%'
 	},
 	list: {
 		columns: 2,
@@ -22,10 +22,13 @@ const styles = theme => ({
 	},
 	documentType: {
 		display: 'flex',
-		marginTop: '-14px'
+		marginTop: theme.spacing(-2)
 	},
 	documentIcon: {
-		marginLeft: '10px'
+		marginLeft: theme.spacing(1)
+	},
+	listTitle: {
+		marginBottom: theme.spacing(2)
 	}
 });
 
@@ -61,7 +64,7 @@ const KycRequirementsListComponent = props => {
 
 	return (
 		<div className={noUnderline ? '' : classes.kyc}>
-			<Typography variant="h2" gutterBottom>
+			<Typography variant="h2" className={classes.listTitle}>
 				KYC checklist for {title}
 			</Typography>
 			{subtitle ? <Typography variant="body2">{subtitle}</Typography> : ''}

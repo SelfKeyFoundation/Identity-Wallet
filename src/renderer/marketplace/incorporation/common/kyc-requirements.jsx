@@ -15,13 +15,6 @@ const styles = theme => ({
 		columns: 2,
 		width: '100%'
 	},
-	checkedStyle: {
-		height: '44px',
-		marginRight: '13px',
-		marginTop: '-10px',
-		paddingTop: '17px',
-		width: '30px'
-	},
 	listItem: {
 		breakInside: 'avoid',
 		pageBreakInside: 'avoid',
@@ -31,10 +24,10 @@ const styles = theme => ({
 	},
 	documentType: {
 		display: 'flex',
-		marginTop: '-14px'
+		marginTop: theme.spacing(-2)
 	},
 	documentIcon: {
-		marginLeft: '10px'
+		marginLeft: theme.spacing(1)
 	}
 });
 

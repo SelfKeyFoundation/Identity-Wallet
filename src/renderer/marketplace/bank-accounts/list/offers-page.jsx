@@ -8,8 +8,8 @@ import { BackButton, BankIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	pageContent: {
-		width: '1074px',
-		margin: '0 auto'
+		margin: '0 auto',
+		width: '1074px'
 	},
 	'@media screen and (min-width: 1230px)': {
 		pageContent: {
@@ -17,16 +17,16 @@ const styles = theme => ({
 		}
 	},
 	header: {
+		alignItems: 'center',
 		borderBottom: 'solid 1px #475768',
 		display: 'flex',
-		alignItems: 'center',
 		justifyContent: 'flex-start',
-		paddingBottom: '30px',
-		marginBottom: '40px',
-		marginTop: '70px'
+		marginBottom: theme.spacing(5),
+		marginTop: theme.spacing(9),
+		paddingBottom: theme.spacing(4)
 	},
 	headerTitle: {
-		paddingLeft: '21px'
+		paddingLeft: theme.spacing(2)
 	},
 	icon: {
 		height: '36px',
@@ -37,7 +37,7 @@ const styles = theme => ({
 		position: 'absolute'
 	},
 	tabs: {
-		marginBottom: '15px'
+		marginBottom: theme.spacing(2)
 	}
 });
 

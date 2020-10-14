@@ -7,24 +7,27 @@ import { BackButton, IncorporationsIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	pageContent: {
-		width: '1074px',
-		margin: '0 auto'
+		margin: '0 auto',
+		width: '1074px'
 	},
 	header: {
+		alignItems: 'center',
 		borderBottom: 'solid 1px #475768',
-		paddingBottom: '30px',
-		marginBottom: '40px',
-		marginTop: '70px'
+		display: 'flex',
+		justifyContent: 'flex-start',
+		marginBottom: theme.spacing(5),
+		marginTop: theme.spacing(9),
+		paddingBottom: theme.spacing(4)
 	},
 	headerTitle: {
-		paddingLeft: '21px'
+		paddingLeft: theme.spacing(2)
 	},
 	icon: {
 		height: '36px',
 		width: '36px'
 	},
 	tabs: {
-		marginBottom: '15px'
+		marginBottom: theme.spacing(2)
 	},
 	backButtonContainer: {
 		left: '75px',
@@ -48,27 +51,26 @@ const IncorporationsListPage = withStyles(styles)(
 				{!loading && (
 					<Grid item>
 						<Grid
-							container
 							id="incorporations"
+							container
 							direction="column"
 							justify="flex-start"
 							alignItems="stretch"
 							className={classes.pageContent}
 						>
-							<Grid
-								container
-								item
-								id="header"
-								alignItems="center"
-								justify="flex-start"
-								className={classes.header}
-							>
+							<Grid container item id="header" className={classes.header}>
 								<IncorporationsIcon className={classes.icon} />
 								<Typography variant="h1" className={classes.headerTitle}>
 									Incorporation Marketplace
 								</Typography>
 							</Grid>
-							<Grid container item>
+							<Grid
+								container
+								item
+								direction="row"
+								justify="space-evenly"
+								alignItems="center"
+							>
 								<IncorporationsListTable
 									keyRate={keyRate}
 									data={data}

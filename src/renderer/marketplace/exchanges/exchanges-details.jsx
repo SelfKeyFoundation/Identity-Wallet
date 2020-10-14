@@ -26,7 +26,7 @@ const styles = theme => ({
 	},
 
 	title: {
-		margin: theme.spacing(3, 3, 3, 1)
+		margin: theme.spacing(3, 3, 3, 2)
 	},
 
 	header: {
@@ -45,14 +45,14 @@ const styles = theme => ({
 		fontSize: '16px',
 		fontWeight: 400,
 		lineHeight: 1.67,
-		margin: 0,
+		margin: theme.spacing(0),
 		padding: theme.spacing(5, 4, 2),
 		textAlign: 'justify',
 		width: '100%'
 	},
 
 	formControl: {
-		marginRight: theme.spacing(12),
+		marginRight: theme.spacing(5),
 		maxWidth: '45%'
 	},
 
@@ -163,7 +163,6 @@ const styles = theme => ({
 		height: 'initial',
 		marginBottom: theme.spacing(2),
 		opacity: '1 !important',
-		// padding: '6px 0',
 		padding: theme.spacing(1, 0),
 		'& span': {
 			display: 'flex',
@@ -206,29 +205,27 @@ const styles = theme => ({
 	},
 	kyc: {
 		'& div:first-child': {
-			// marginTop: 0
 			marginTop: theme.spacing(0)
 		}
 	},
-
 	icon: {
 		alignItems: 'center',
+		borderRadius: '8px',
 		display: 'flex',
 		height: '44px',
-		marginLeft: theme.spacing(3)
-	},
-	defaultIcon: {
-		alignItems: 'center',
-		borderRadius: '8px',
-		color: '#FFFFFF',
-		display: 'flex',
-		justifyContent: 'center',
-		maxWidth: '44px',
-		padding: theme.spacing(0, 1)
+		marginLeft: theme.spacing(3),
+		'& img': {
+			borderRadius: '8px',
+			height: 'inherit',
+			maxWidth: '44px'
+		}
 	},
 	generatedIcon: {
+		alignItems: 'center',
+		borderRadius: '8px',
+		display: 'flex',
 		height: 'inherit',
-		maxWidth: '28px',
+		justifyContent: 'center',
 		width: '44px'
 	},
 	disclaimer: {
@@ -454,10 +451,10 @@ class ExchangesDetailsComponent extends PureComponent {
 
 		const icon =
 			item.data.logo && item.data.logo[0].url ? (
-				<img src={item.data.logo[0].url} className={classes.defaultIcon} />
+				<img src={item.data.logo[0].url} />
 			) : (
 				<div
-					className={`${classes.defaultIcon} ${classes.generatedIcon}`}
+					className={classes.generatedIcon}
 					style={{
 						backgroundColor: getColors()[random]
 					}}
@@ -513,7 +510,7 @@ class ExchangesDetailsComponent extends PureComponent {
 									direction="row"
 									justify="space-between"
 									alignItems="flex-start"
-									spacing={7}
+									spacing={6}
 								>
 									<Grid item xs={8}>
 										<Typography variant="body1" align="left">
