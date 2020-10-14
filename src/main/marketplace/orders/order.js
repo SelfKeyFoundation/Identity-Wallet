@@ -28,7 +28,7 @@ export class MarketplaceOrder extends BaseModel {
 				vendorName: { type: 'string' },
 				status: { type: 'string' },
 				statusMessage: { type: 'string' },
-				did: { type: 'string' },
+				did: { type: ['string', null], default: '' },
 				vendorDID: { type: 'string' },
 				affiliate1DID: { type: 'string' },
 				affiliate2DID: { type: 'string' },

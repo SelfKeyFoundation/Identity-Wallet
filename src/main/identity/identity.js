@@ -18,7 +18,7 @@ export class Identity extends BaseModel {
 			name: { type: 'string' },
 			type: { type: 'string' },
 			profilePicture: { type: 'binary' },
-			did: { type: 'string' },
+			did: { type: ['string', null], default: '' },
 			isSetupFinished: { type: 'boolean', default: false },
 			positions: { type: 'array', default: [] },
 			equity: { type: 'float', default: 0 }

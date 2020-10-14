@@ -33,7 +33,7 @@ export class Vendor extends BaseModel {
 				privacyPolicy: { type: 'string', default: '' },
 				termsOfService: { type: 'string', default: '' },
 				contactEmail: { type: 'string', default: '' },
-				did: { type: 'string', default: '' },
+				did: { type: ['string', null], default: '' },
 				paymentAddress: { type: 'string', default: '' }
 			}
 		};
