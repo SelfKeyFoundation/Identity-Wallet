@@ -8,12 +8,12 @@ import { primary, success, typography, warning, error, AttributeAlertIcon } from
 const styles = theme => ({
 	alert: {
 		border: `1px solid ${typography}`,
-		minHeight: '50px',
-		width: '100%',
 		borderRadius: '4px',
-		padding: '15px',
 		boxSizing: 'border-box',
 		color: typography,
+		minHeight: '50px',
+		padding: theme.spacing(2),
+		width: '100%',
 		'& svg': {
 			fill: typography
 		}
@@ -62,7 +62,7 @@ const styles = theme => ({
 	},
 	icon: {
 		height: '20px',
-		marginRight: '15px'
+		marginRight: theme.spacing(2)
 	},
 	iconWrap: {
 		alignItems: 'center',
