@@ -15,7 +15,7 @@ const styles = theme => ({
 		lineHeight: '21px',
 		marginBottom: '1em',
 		outline: 'none',
-		padding: '10px 15px',
+		padding: theme.spacing(1, 2),
 		width: '100%',
 		'&::placeholder': {
 			color: grey
@@ -26,7 +26,7 @@ const styles = theme => ({
 		marginBottom: '1em',
 		justifyContent: 'space-between',
 		'& > div.content': {
-			padding: '5px 10px',
+			padding: theme.spacing(0.5, 1),
 			display: 'inline-block',
 			background: '#69e',
 			borderRadius: '10px',
