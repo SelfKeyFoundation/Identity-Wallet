@@ -24,8 +24,8 @@ const styles = theme => ({
 		justifyContent: 'space-between'
 	},
 	logoSection: {
-		paddingBottom: '50px',
-		marginTop: '-100px'
+		marginTop: theme.spacing(-12),
+		paddingBottom: theme.spacing(6)
 	},
 	modalWrap: {
 		border: 'none',
