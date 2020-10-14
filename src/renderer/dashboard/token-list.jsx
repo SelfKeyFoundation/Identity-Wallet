@@ -6,6 +6,7 @@ import TokenPrice from '../common/token-price';
 import config from 'common/config';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const TokenList = props => {
 	return (
@@ -29,6 +30,19 @@ const TokenList = props => {
 					<TokenPrice cryptoCurrency={config.constants.primaryToken} />
 				</TokenBox>
 			</Grid>
+			{featureIsEnabled('rewardToken') && (
+				<Grid item>
+					<TokenBox
+						cryptoCurrencyShort={config.constants.rewardToken}
+						cryptoCurrencyName="Lock"
+						transferAction={() =>
+							props.dispatch(push(`/main/transfer/${config.constants.rewardToken}`))
+						}
+					>
+						<TokenPrice cryptoCurrency={config.constants.rewardToken} />
+					</TokenBox>
+				</Grid>
+			)}
 			<Grid item>
 				<TokenBox
 					cryptoCurrencyShort="ETH"

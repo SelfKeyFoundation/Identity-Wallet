@@ -1,7 +1,7 @@
 import { getPrices } from 'common/prices/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
 
-const getAmountUsd = (amount, state, cryptoCurrency) => {
+export const getAmountUsd = (state, amount, cryptoCurrency) => {
 	const price = getPrices(state).prices.filter(price => price.symbol === cryptoCurrency)[0];
 	if (price) {
 		return amount * price.priceUSD;
@@ -12,8 +12,8 @@ const getAmountUsd = (amount, state, cryptoCurrency) => {
 export const getTransaction = state => {
 	const transaction = state.transaction;
 	const { cryptoCurrency } = transaction;
-	transaction.amountUsd = getAmountUsd(transaction.amount, state, cryptoCurrency);
-	transaction.usdFee = getAmountUsd(transaction.ethFee, state, 'ETH');
+	transaction.amountUsd = getAmountUsd(state, transaction.amount, cryptoCurrency);
+	transaction.usdFee = getAmountUsd(state, transaction.ethFee, 'ETH');
 	const token = getTokens(state).filter(token => {
 		return token.symbol === cryptoCurrency;
 	})[0];

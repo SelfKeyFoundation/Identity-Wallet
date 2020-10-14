@@ -1,9 +1,10 @@
 import BaseModel from '../../common/base-model';
+import { Model } from 'objection';
 import { isDevMode, isTestMode } from 'common/utils/common';
 const env = isTestMode() ? 'test' : isDevMode() ? 'development' : 'production';
 const TABLE_NAME = 'contract_allowance';
 
-export class Contract extends BaseModel {
+export class ContractAllowance extends BaseModel {
 	static get tableName() {
 		return TABLE_NAME;
 	}
@@ -20,15 +21,34 @@ export class Contract extends BaseModel {
 				id: { type: 'integer' },
 				contractAddress: { type: 'string' },
 				tokenAddress: { type: 'string' },
+				tokenDecimals: { type: 'integer', default: 18 },
 				allowanceAmount: { type: 'string' },
 				walletId: { type: 'integer' },
 				env: { type: 'string', enum: ['development', 'production', 'test'] }
 			}
 		};
 	}
+	static get relationMappings() {
+		const Wallet = require('../../wallet/wallet').default;
 
-	static findAll() {
-		return this.query().where({ env });
+		return {
+			wallet: {
+				relation: Model.BelongsToOneRelation,
+				modelClass: Wallet,
+				join: {
+					from: `${this.tableName}.walletId`,
+					to: `${Wallet.tableName}.id`
+				}
+			}
+		};
+	}
+
+	static findAll(where = {}) {
+		return this.query().where({ ...where, env });
+	}
+
+	static findById(id) {
+		return this.query().findById(id);
 	}
 
 	static create(data) {
@@ -40,4 +60,4 @@ export class Contract extends BaseModel {
 	}
 }
 
-export default Contract;
+export default ContractAllowance;

@@ -89,7 +89,7 @@ export const getGasLimit = async (
 	return tokenService.getGasLimit(tokenContract, address, amount, decimals, walletAddress, nonce);
 };
 
-const getTransactionCount = async address => {
+export const getTransactionCount = async address => {
 	const params = {
 		method: 'getTransactionCount',
 		args: [address, 'pending']

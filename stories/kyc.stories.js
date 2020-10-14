@@ -281,7 +281,7 @@ storiesOf('KYC/CurrentApplication/Popup', module)
 			onSelected={action(text('Selected Action Text', 'attribute selected'))}
 			editItem={action(text('Edit Action text', 'edit item'))}
 			addItem={action(text('Add Item text', 'add item'))}
-			{...individualApplicationKnobs}
+			{...individualApplicationKnobs()}
 			onAgreementChange={action('agreement change')}
 			onSubmit={action('submit')}
 			onClose={action('close')}
@@ -298,7 +298,7 @@ storiesOf('KYC/CurrentApplication/Popup', module)
 			onSelected={action(text('Selected Action Text', 'attribute selected'))}
 			editItem={action(text('Edit Action text', 'edit item'))}
 			addItem={action(text('Add Item text', 'add item'))}
-			{...individualApplicationKnobs}
+			{...individualApplicationKnobs()}
 			onAgreementChange={action(text('Agreement Action Text', 'agreement change'))}
 			onSubmit={action(text('Submit Action Text', 'submit'))}
 			onClose={action(text('Close Action Text', 'close'))}
@@ -313,7 +313,7 @@ storiesOf('KYC/CurrentApplication/Popup', module)
 			onSelected={action(text('Selected Action Text', 'attribute selected'))}
 			editItem={action(text('Edit Action text', 'edit item'))}
 			addItem={action(text('Add Item text', 'add item'))}
-			{...individualApplicationKnobs}
+			{...individualApplicationKnobs()}
 			onAgreementChange={action(text('Agreement Action Text', 'agreement change'))}
 			onSubmit={action(text('Submit Action Text', 'submit'))}
 			onClose={action(text('Close Action Text', 'close'))}
@@ -329,7 +329,7 @@ storiesOf('KYC/CurrentApplication/Popup', module)
 			onSelected={action(text('Selected Action Text', 'attribute selected'))}
 			editItem={action(text('Edit Action text', 'edit item'))}
 			addItem={action(text('Add Item text', 'add item'))}
-			{...individualApplicationKnobs}
+			{...individualApplicationKnobs()}
 			error={text('Error', 'test error')}
 			onAgreementChange={action(text('Agreement Action Text', 'agreement change'))}
 			onSubmit={action(text('Submit Action Text', 'submit'))}
