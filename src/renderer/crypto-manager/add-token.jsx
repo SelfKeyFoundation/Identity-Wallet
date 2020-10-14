@@ -143,11 +143,7 @@ export const AddToken = React.memo(
 				</Grid>
 				<ModalWrap className={classes.modalPosition}>
 					<ModalHeader>
-						<Grid container direction="row" justify="space-between" alignItems="center">
-							<Grid item>
-								<Typography variant="body1">Add Token</Typography>
-							</Grid>
-						</Grid>
+						<Typography variant="body1">Add Token</Typography>
 					</ModalHeader>
 					<ModalBody>
 						<Grid

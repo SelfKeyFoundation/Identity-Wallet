@@ -18,11 +18,6 @@ const styles = theme => ({
 			background: `linear-gradient(135deg, rgba(43, 53, 64, 0.9) 0%, rgba(30, 38, 46, 0.9) 100%)`
 		}
 	},
-	header: {
-		alignItems: 'center',
-		display: 'flex',
-		justifyContent: 'space-between'
-	},
 	logoSection: {
 		marginTop: theme.spacing(-12),
 		paddingBottom: theme.spacing(6)
@@ -93,7 +88,7 @@ const PopupWrap = props => {
 							''
 						)}
 						{isHeaderVisible && (
-							<ModalHeader className={`${headerClass} ${classes.header}`}>
+							<ModalHeader className={headerClass}>
 								{typeof text === 'string' ? (
 									<Typography variant="body1" className={classes.title}>
 										{text}
