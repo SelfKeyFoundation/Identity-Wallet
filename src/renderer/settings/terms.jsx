@@ -183,11 +183,16 @@ class Terms extends PureComponent {
 							2) ACCOUNTS
 						</Typography>
 						<Typography variant="body2" paragraph>
+							This Section 2 discusses what you must agree to before using the Portal
+							or Portal Services and the different types of accounts that can be
+							created on the Portal, as detailed below.
+						</Typography>
+						<Typography variant="body2" paragraph>
 							2.1) Account Registration
 						</Typography>
 						<Typography variant="body2" paragraph>
 							By registering for an account to use the Portal or Portal Services (an
-							{'"'}Account{'"'}), or by using the Portal or Portal Services after the
+							{' "'}Account{'"'}), or by using the Portal or Portal Services after the
 							Effective Date if you had an Account on the Effective Date, or by
 							clicking to accept the Terms of Service when prompted on the Portal, you
 							agree to abide by this Agreement and the other Terms of Service.
@@ -206,7 +211,7 @@ class Terms extends PureComponent {
 							2.2) Account Eligibility
 						</Typography>
 						<Typography variant="body2" paragraph>
-							2.2.1) to register for an Account or use the Portal and Portal Services,
+							2.2.1) To register for an Account or use the Portal and Portal Services,
 							you must, and hereby represent and warrant:
 						</Typography>
 						<List>
@@ -1085,8 +1090,11 @@ class Terms extends PureComponent {
 						<Typography variant="body2" paragraph>
 							You acknowledge and agree that your information, including any
 							personally identifiable information, shall be handled and processed in
-							accordance with our SelfKey Privacy Policy [refer to
-							https://selfkey.org/privacy-policy.html].
+							accordance with our{' '}
+							<Link href={'https://selfkey.org/privacy-policy.html'}>
+								SelfKey Privacy Policy
+							</Link>
+							.
 						</Typography>
 						<Typography variant="body2" paragraph>
 							7.2) Records Of Compliance
@@ -1353,19 +1361,13 @@ class Terms extends PureComponent {
 						</Typography>
 
 						<Typography variant="h3" paragraph>
-							11) AGREEMENT TERM AND TERMINATION
+							11) INDEMNIFICATION
 						</Typography>
 						<Typography variant="body2" paragraph>
-							This release includes, for example and without limitation, any disputes
-							regarding the performance, functions, and quality of the services or
-							products provided under a Product/Service Agreement, requests for
-							refunds based upon such disputes, claims of losses due to your
-							management of Digital Assets using the Wallet Platform, and claims of
-							losses due to one or more Product/Service Agreements. This Section 11
-							discusses your agreement to pay for any costs or losses we have as a
-							result of a claim brought against us related to your use of the Portal
-							or Portal Services or your illegal or harmful conduct, as detailed
-							below.
+							This Section 11 discusses your agreement to pay for any costs or losses
+							we have as a result of a claim brought against us related to your use of
+							the Portal or Portal Services or your illegal or harmful conduct, as
+							detailed below.
 						</Typography>
 						<Typography variant="body2" paragraph>
 							You will indemnify, defend, and hold harmless SelfKey, our affiliated
@@ -1417,7 +1419,7 @@ class Terms extends PureComponent {
 						</Typography>
 
 						<Typography variant="h3" paragraph>
-							12) INDEMNIFICATION
+							12) AGREEMENT TERM AND TERMINATION
 						</Typography>
 						<Typography variant="body2" paragraph>
 							This Section 12 discusses your and SelfKey’s agreement about when and
@@ -1486,6 +1488,24 @@ class Terms extends PureComponent {
 							attempt to use the Portal under a different Account, we reserve the
 							right to reclaim available funds in that Account to pay for any amounts
 							owed by you to the extent permitted by applicable law.
+						</Typography>
+						<Typography variant="body2" paragraph>
+							12.2) Survival
+						</Typography>
+						<Typography variant="body2" paragraph>
+							After this Agreement terminates, the terms of this Agreement and the
+							other Terms of Service that expressly or by their nature contemplate
+							performance after this Agreement terminates or expires will survive and
+							continue in full force and effect. For example, the provisions
+							permitting audits, protecting intellectual property, requiring
+							indemnification, requiring payment of fees, and setting forth
+							limitations of liability each, by their nature, contemplate performance
+							or observance after this Agreement terminates. Without limiting any
+							other provisions of the Terms of Service, the termination of this
+							Agreement for any reason will not release you or SelfKey from any
+							obligations incurred prior to termination of this Agreement or that
+							thereafter may accrue in respect of any act or omission prior to such
+							termination.
 						</Typography>
 
 						<Typography variant="h3" paragraph>
