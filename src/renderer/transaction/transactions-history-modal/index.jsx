@@ -44,20 +44,20 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const styles = theme => ({
 	iconSpacing: {
-		marginRight: '7px'
+		marginRight: theme.spacing(1)
 	},
 	toolbar: {
 		justifyContent: 'space-between'
 	},
 	rightSpace: {
-		marginRight: '20px'
+		marginRight: theme.spacing(3)
 	},
 	narrowCell: {
-		padding: 0,
+		padding: theme.spacing(0),
 		textAlign: 'center'
 	},
 	smallPadding: {
-		padding: '0 10px'
+		padding: theme.spacing(0, 1)
 	},
 	zeroRightPadding: {
 		paddingRight: '0 !important'
@@ -66,11 +66,11 @@ const styles = theme => ({
 		display: 'flex',
 		justifyContent: 'flex-end',
 		'& button:last-child': {
-			paddingRight: 0
+			paddingRight: theme.spacing(0)
 		}
 	},
 	bottomSpace: {
-		marginBottom: '30px'
+		marginBottom: theme.spacing(4)
 	},
 	transparent: {
 		'&:nth-of-type(odd)': {
@@ -79,22 +79,22 @@ const styles = theme => ({
 	},
 	loading: {
 		position: 'relative',
-		marginLeft: '10px',
+		marginLeft: theme.spacing(1),
 		top: '5px'
 	},
 	searching: {
-		height: '19px',
-		width: '242px',
 		color: '#00C0D9',
 		fontFamily: 'Lato',
 		fontSize: '13px',
+		height: '19px',
 		lineHeight: '19px',
+		marginLeft: theme.spacing(1),
 		textTransform: 'none',
-		marginLeft: '10px'
+		width: '242px'
 	},
 	moreTransactions: {
 		'& svg': {
-			marginRight: '10px'
+			marginRight: theme.spacing(1)
 		},
 		'& span': {
 			fontWeight: '500',
@@ -102,20 +102,20 @@ const styles = theme => ({
 		}
 	},
 	lastCell: {
-		marginRight: 0,
+		marginRight: theme.spacing(0),
 		maxWidth: '110px'
 	},
 	container: {
 		border: '1px solid #384656',
 		borderRadius: '4px',
-		margin: '50px auto 0',
+		margin: theme.spacing(7, 0, 0),
 		maxWidth: '960px',
 		width: '100%'
 	},
 	title: {
 		background: '#2A3540',
 		borderRadius: '4px 4px 0 0',
-		padding: '22px 30px'
+		padding: theme.spacing(3, 4)
 	},
 	contentContainer: {
 		border: '1px solid #303C49',
@@ -126,13 +126,13 @@ const styles = theme => ({
 		borderRadius: '0 0 4px 4px',
 		boxSizing: 'border-box',
 		justifyContent: 'flex-start',
-		margin: 0,
-		padding: '22px 30px',
+		margin: theme.spacing(0),
+		padding: theme.spacing(3, 4),
 		width: '100%'
 	},
 	tableRow: {
 		'& td': {
-			padding: '20px 10px'
+			padding: theme.spacing(3, 1)
 		}
 	},
 	filterInput: {
@@ -153,6 +153,9 @@ const styles = theme => ({
 	},
 	dropdown: {
 		width: '250px'
+	},
+	label: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -369,13 +372,9 @@ class TransactionsHistoryModal extends PureComponent {
 							<Grid
 								container
 								direction="column"
-								style={{ width: '290px', marginRight: '30px' }}
+								style={{ width: '290px', marginRight: '32px' }}
 							>
-								<Typography
-									variant="overline"
-									className={classes.label}
-									gutterBottom
-								>
+								<Typography variant="overline" className={classes.label}>
 									Transaction Type
 								</Typography>
 								<FormControl variant="filled" fullWidth>
@@ -412,11 +411,7 @@ class TransactionsHistoryModal extends PureComponent {
 							</Grid>
 
 							<Grid container direction="column" style={{ width: '290px' }}>
-								<Typography
-									variant="overline"
-									className={classes.label}
-									gutterBottom
-								>
+								<Typography variant="overline" className={classes.label}>
 									Date
 								</Typography>
 								<KeyPicker id="creationDate" required />

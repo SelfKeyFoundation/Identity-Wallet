@@ -34,20 +34,20 @@ const styles = theme => ({
 		fontWeight: 'bold'
 	},
 	selectAllAmountBtn: {
+		backgroundColor: '#202932',
+		border: '1px solid #303C49',
+		borderRadius: '4px',
+		boxSizing: 'border-box',
+		color: '#A9C5D6',
 		cursor: 'pointer',
 		fontSize: '13px',
 		fontWeight: 500,
-		lineHeight: '16px',
-		color: '#A9C5D6',
-		boxSizing: 'border-box',
 		height: '37px',
-		width: '37px',
-		border: '1px solid #303C49',
-		borderRadius: '4px',
-		backgroundColor: '#202932'
+		lineHeight: '16px',
+		width: '37px'
 	},
 	actionButtonsContainer: {
-		paddingTop: '50px'
+		paddingTop: theme.spacing(6)
 	},
 	errorColor: {
 		backgroundColor: 'rgba(255,46,99,0.09) !important',
@@ -56,19 +56,19 @@ const styles = theme => ({
 		color: '#FE4B61 !important'
 	},
 	amountContainer: {
-		paddingTop: '25px',
+		paddingTop: theme.spacing(3),
 		position: 'relative'
 	},
 	cryptoCurrencyText: {
-		position: 'absolute',
-		fontSize: '20px',
 		color: '#ffffff',
+		fontSize: '20px',
+		fontWeight: 600,
 		right: 0,
-		fontWeight: 600
+		position: 'absolute'
 	},
 	usdAmoutContainer: {
-		paddingBottom: '65px',
 		color: '#ffffff',
+		paddingBottom: theme.spacing(8),
 		'&& span': {
 			'&:first-of-type': {
 				fontSize: '40px',
@@ -81,76 +81,76 @@ const styles = theme => ({
 		}
 	},
 	amountInput: {
-		width: 'calc(100% - 45px)',
 		border: 'none',
-		margin: '0px',
-		padding: '0px'
+		margin: theme.spacing(0),
+		padding: theme.spacing(0),
+		width: 'calc(100% - 45px)'
 	},
 	addressErrorText: {
-		height: '19px',
-		width: '242px',
 		color: '#FE4B61',
 		fontFamily: 'Lato',
 		fontSize: '13px',
-		lineHeight: '19px'
+		height: '19px',
+		lineHeight: '19px',
+		width: '242px'
 	},
 	addressErrorColor: {
-		color: '#FE4B61',
-		borderBottom: '2px solid #FE4B61'
+		borderBottom: '2px solid #FE4B61',
+		color: '#FE4B61'
 	},
 	divider: {
-		margin: '40px 0'
+		margin: theme.spacing(5, 0)
 	},
 	cryptoSelect: {
 		width: '100%'
 	},
 	selectItem: {
-		border: 0,
 		backgroundColor: '#1E262E',
-		color: '#FFFFFF'
+		border: 0,
+		color: '#fff'
 	},
 	amountBottomSpace: {
-		marginBottom: '36px'
+		marginBottom: theme.spacing(4)
 	},
 	tokenBottomSpace: {
-		marginBottom: '20px'
+		marginBottom: theme.spacing(3)
 	},
 	flexColumn: {
 		flexDirection: 'column'
 	},
 	fiatPrice: {
 		display: 'flex',
-		marginTop: '5px'
+		marginTop: theme.spacing(1)
 	},
 	amount: {
-		marginRight: '20px'
+		marginRight: theme.spacing(3)
 	},
 	errorText: {
-		height: '19px',
-		width: '242px',
 		color: '#FE4B61',
 		fontFamily: 'Lato',
 		fontSize: '13px',
-		lineHeight: '19px'
+		height: '19px',
+		lineHeight: '19px',
+		width: '242px'
 	},
 	tabs: {
-		marginBottom: '50px'
+		marginBottom: theme.spacing(6)
 	},
 
 	cryptoIcon: {
-		marginRight: '20px'
+		marginRight: theme.spacing(3)
 	},
 	cryptoSymbol: {
 		fontSize: '14px',
 		fontWeight: 'normal'
 	},
 	modalWrap: {
-		border: 'none',
-		backgroundColor: 'transparent'
+		backgroundColor: 'transparent',
+		border: 'none'
 	},
 	modalContentWrapper: {
 		boxShadow: 'none',
-		marginBottom: '20px'
+		marginBottom: theme.spacing(3)
 	},
 	closeIcon: {
 		'& svg': {
@@ -159,7 +159,7 @@ const styles = theme => ({
 		}
 	},
 	bottomSpace: {
-		marginBottom: '23px'
+		marginBottom: theme.spacing(3)
 	},
 	tokenMax: {
 		display: 'flex',
@@ -168,7 +168,7 @@ const styles = theme => ({
 	tabsWrap: {
 		'& .feeTitle': {
 			display: 'table',
-			marginBottom: '5px'
+			marginBottom: theme.spacing(1)
 		}
 	}
 });

@@ -23,13 +23,13 @@ import { Popup } from '../../common';
 const styles = theme => ({
 	divider: {
 		backgroundColor: '#475768',
-		marginBottom: '40px'
+		marginBottom: theme.spacing(5)
 	},
 	popup: {
 		width: '960px'
 	},
 	unlockOptions: {
-		margin: '10px 0 40px'
+		margin: theme.spacing(1, 0, 5, 0)
 	}
 });
 
@@ -57,8 +57,8 @@ const unlockOptionStyle = theme => ({
 		lineHeight: '0px'
 	},
 	grid: {
-		marginBottom: '10px',
-		paddingTop: '25px'
+		marginBottom: theme.spacing(1),
+		paddingTop: theme.spacing(3)
 	},
 	selected: {
 		borderColor: primaryTint
@@ -79,7 +79,7 @@ const UnlockOption = props => {
 						<Typography variant="body2">{title}</Typography>
 					</Grid>
 					<Grid item>
-						<Typography variant="subtitle2" color="secondary" gutterBottom>
+						<Typography variant="subtitle2" color="secondary">
 							{subtitle}
 						</Typography>
 					</Grid>

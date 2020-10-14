@@ -6,15 +6,12 @@ import Popup from '../../common/popup';
 
 const styles = theme => ({
 	custom: {
-		width: '44px !important',
+		borderRadius: '8px',
 		height: '44px !important',
-		borderRadius: '8px'
+		width: '44px !important'
 	},
 	popupPadding: {
-		padding: '60px 85px'
-	},
-	header: {
-		padding: '11px 30px'
+		padding: theme.spacing(7, 10)
 	}
 });
 
@@ -38,7 +35,6 @@ export const TransactionBox = withStyles(styles)(
 			closeAction={closeAction}
 			text={<IconTitle title={title} classes={classes} />}
 			xtraClass={classes.popupPadding}
-			headerClass={classes.header}
 		>
 			{children}
 		</Popup>

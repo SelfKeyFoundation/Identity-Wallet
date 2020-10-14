@@ -60,11 +60,14 @@ import { TransactionErrorContainer } from '../../contract/allowance-editor/trans
 
 const styles = theme => ({
 	headerSection: {
-		marginLeft: 0,
-		marginRi: 0,
+		marginLeft: theme.spacing(0),
+		marginRight: theme.spacing(0),
 		width: '100%'
 	},
 	bodySection: {
+		marginBottom: theme.spacing(7),
+		marginRight: theme.spacing(-7),
+		marginTop: theme.spacing(16),
 		maxWidth: '1074px',
 		width: '100%'
 	},
@@ -75,12 +78,6 @@ const styles = theme => ({
 	},
 	page: {}
 });
-
-const contentWrapperStyle = {
-	marginBottom: '60px',
-	marginRight: '-55px',
-	marginTop: '128px'
-};
 
 class Main extends PureComponent {
 	setMatomoId = () => {
@@ -112,7 +109,7 @@ class Main extends PureComponent {
 						createCorporateProfile={this.createCorporateProfile}
 					/>
 				</Grid>
-				<Grid item xs={12} className={classes.bodySection} style={contentWrapperStyle}>
+				<Grid item xs={12} className={classes.bodySection}>
 					<Switch>
 						<Route path={`${match.path}/dashboard`} component={Dashboard} />
 						<Route
