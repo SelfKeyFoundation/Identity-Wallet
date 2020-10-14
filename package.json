@@ -117,7 +117,7 @@
 		"qrcode.react": "1.0.0",
 		"react": "16.13.1",
 		"react-dom": "16.13.1",
-		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#e8356d2037b527f7b0a8433f20c476b6e501d70e",
+		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#1c0b7cebf3c6d224859377817a32018b094f2ba8",
 		"react-orgchart": "1.0.5",
 		"react-piwik": "1.6.0",
 		"react-redux": "7.2.1",
@@ -131,7 +131,7 @@
 		"reselect": "4.0.0",
 		"sanitize-html": "1.20.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#e510a0b3e2c69b33a5b48dee0bf2b1ab1052bf3f",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#5d4648f6df8fcc3aba0d5f4b243975e2b879c6de",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"snyk": "1.235.0",
@@ -254,8 +254,8 @@
 		"html-loader": "1.0.0-alpha.0",
 		"react": "16.13.1",
 		"react-dom": "16.13.1",
-		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#e8356d2037b527f7b0a8433f20c476b6e501d70e",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#2ed1702ce863d1f077639ea3893beecda78915d2",
+		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#1c0b7cebf3c6d224859377817a32018b094f2ba8",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#5d4648f6df8fcc3aba0d5f4b243975e2b879c6de",
 		"@material-ui/styles": "4.9.6"
 	},
 	"migrations": {
