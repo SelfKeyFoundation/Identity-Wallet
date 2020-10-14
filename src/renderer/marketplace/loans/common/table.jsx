@@ -14,18 +14,18 @@ import { DetailsIconButton } from '../../common';
 
 const styles = theme => ({
 	nameCell: {
-		padding: '15px 15px 15px 13px',
 		maxWidth: '220px',
 		minWidth: '100px',
+		padding: theme.spacing(2, 2, 2, 1),
 		whiteSpace: 'pre-line',
 		wordWrap: 'break-word'
 	},
 	logoCell: {
-		padding: '15px 0 15px 25px',
+		padding: theme.spacing(2, 0, 2, 3),
 		'& img': {
-			width: '30px',
 			borderRadius: '5px',
-			display: 'flex'
+			display: 'flex',
+			width: '30px'
 		}
 	},
 	tableHeaderRow: {
@@ -40,14 +40,14 @@ const styles = theme => ({
 	},
 	detailsCell: {
 		color: '#00C0D9',
-		padding: '15px 20px',
+		padding: theme.spacing(2),
 		'& span': {
 			cursor: 'pointer'
 		},
 		'& button': {
 			maxWidth: '15px',
 			minWidth: '15px',
-			padding: 0,
+			padding: theme.spacing(0),
 			width: '15px'
 		}
 	}

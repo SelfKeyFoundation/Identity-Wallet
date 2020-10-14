@@ -16,7 +16,7 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'flex-start',
-		padding: '30px 0',
+		padding: theme.spacing(4, 0),
 		width: '100%',
 		'& ul': {
 			listStyle: 'outside',
@@ -33,25 +33,25 @@ const styles = theme => ({
 		}
 	},
 	gridPadding: {
-		padding: '0 0 25px !important'
+		padding: theme.spacing(0, 0, 3)
 	},
 	panelBox: {
 		alignItems: 'unset',
 		display: 'flex',
 		justifyContent: 'flex-start',
 		flexWrap: 'nowrap',
-		padding: '15px 0 !important'
+		padding: theme.spacing(2, 0)
 	},
 	flexColumn: {
 		flexDirection: 'column',
-		marginTop: '15px'
+		marginTop: theme.spacing(2)
 	},
 	expansionPanel: {
 		borderRadius: '4px',
 		width: '100%'
 	},
 	panelTitle: {
-		marginBottom: '30px'
+		marginBottom: theme.spacing(4)
 	},
 	panelTextWrap: {
 		display: 'flex',
@@ -62,7 +62,7 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'flex-start',
-		marginBottom: '5px'
+		marginBottom: theme.spacing(1)
 	}
 });
 

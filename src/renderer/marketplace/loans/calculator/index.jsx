@@ -19,8 +19,8 @@ import { LoansCalculatorLendTable } from './lend-table';
 
 const styles = theme => ({
 	container: {
-		padding: '30px',
-		border: '1px solid #303C49'
+		border: '1px solid #303C49',
+		padding: theme.spacing(4)
 	},
 	gridCell: {
 		width: '470px',
@@ -42,20 +42,20 @@ const styles = theme => ({
 		float: 'right'
 	},
 	resultsTableContainer: {
-		marginTop: '20px',
+		marginTop: theme.spacing(3),
 		width: '100%'
 	},
 	sourceInput: {
-		border: '1px solid #384656',
-		fontWeight: 'normal',
-		color: '#93B0C1',
 		background: '#1E262E',
-		borderTopLeftRadius: '0',
+		border: '1px solid #384656',
 		borderBottomLeftRadius: '0',
+		borderTopLeftRadius: '0',
+		color: '#93B0C1',
 		display: 'flex-inline',
 		fontSize: '12px',
-		minWidth: 'initial',
+		fontWeight: 'normal',
 		justifyContent: 'space-around',
+		minWidth: 'initial',
 		'& svg': {
 			height: '0.7em !important',
 			width: '0.7em !important',
@@ -77,6 +77,9 @@ const styles = theme => ({
 	slider: {
 		marginLeft: '5px',
 		width: 'calc(100% - 10px)'
+	},
+	labelText: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -304,7 +307,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 				<div className={classes.container}>
 					<Grid container direction="column" justify="flex-start" spacing={4}>
 						<Grid item>
-							<Typography variant="overline" gutterBottom>
+							<Typography variant="overline" className={classes.labelText}>
 								I want to
 							</Typography>
 							<ToggleButtonGroup onChange={this.onTypeChange} exclusive value={type}>
@@ -320,7 +323,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 						<Grid item>
 							<Grid container direction="row" justify="flex-start" spacing={8}>
 								<Grid item className={classes.gridCell}>
-									<Typography variant="overline" gutterBottom>
+									<Typography variant="overline" className={classes.labelText}>
 										My Crypto
 									</Typography>
 									<ToggleButtonGroup
@@ -360,7 +363,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 									</Select>
 								</Grid>
 								<Grid item className={classes.gridCell}>
-									<Typography variant="overline" gutterBottom>
+									<Typography variant="overline" className={classes.labelText}>
 										Loan Amount
 									</Typography>
 									<div className={classes.loanAmount}>
@@ -393,7 +396,7 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 								className={classes.fixedHeight}
 							>
 								<Grid item className={classes.gridCell}>
-									<Typography variant="overline" gutterBottom>
+									<Typography variant="overline" className={classes.labelText}>
 										Loan Period
 									</Typography>
 									<Slider
@@ -416,7 +419,10 @@ class LoansCalculatorComponent extends MarketplaceLoansComponent {
 								<Grid item className={classes.gridCell}>
 									{type === 'borrowing' && (
 										<React.Fragment>
-											<Typography variant="overline" gutterBottom>
+											<Typography
+												variant="overline"
+												className={classes.labelText}
+											>
 												Repayment
 												<KeyTooltip
 													interactive

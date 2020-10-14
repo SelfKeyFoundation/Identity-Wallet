@@ -12,15 +12,15 @@ const styles = theme => ({
 		width: '100%'
 	},
 	text: {
-		marginBottom: '40px',
+		marginBottom: theme.spacing(5),
 		maxHeight: '464px',
 		overflowY: 'scroll'
 	},
 	requestBtn: {
-		marginRight: '20px'
+		marginRight: theme.spacing(2)
 	},
 	popupPadding: {
-		padding: '30px 30px 60px'
+		padding: theme.spacing(4, 4, 7)
 	}
 });
 

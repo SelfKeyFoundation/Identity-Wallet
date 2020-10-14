@@ -25,12 +25,12 @@ const styles = theme => ({
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		paddingBottom: '30px',
-		marginBottom: '40px',
-		marginTop: '70px'
+		marginBottom: theme.spacing(5),
+		marginTop: theme.spacing(9),
+		paddingBottom: theme.spacing(4)
 	},
 	headerTitle: {
-		paddingLeft: '21px'
+		paddingLeft: theme.spacing(2)
 	},
 	icon: {
 		height: '36px',
@@ -41,28 +41,28 @@ const styles = theme => ({
 		position: 'absolute'
 	},
 	tabs: {
-		marginBottom: '20px',
-		padding: '20px 0 0 !important'
+		marginBottom: theme.spacing(2),
+		padding: theme.spacing(2, 0, 0)
 	},
 	container: {
-		width: '100%',
 		margin: '0 auto',
-		maxWidth: '1140px'
+		maxWidth: '1140px',
+		width: '100%'
 	},
 	title: {
 		alignItems: 'flex-start',
 		background: '#2A3540',
 		display: 'flex',
 		justifyContent: 'flex-start',
-		padding: '22px 30px',
+		padding: theme.spacing(3, 4),
 		'& div': {
 			display: 'inline-block',
 			color: '#FFF'
 		},
 		'& .region': {
-			marginTop: '0.25em',
-			marginBottom: '0',
-			fontSize: '24px'
+			fontSize: '24px',
+			marginBottom: theme.spacing(0),
+			marginTop: theme.spacing(1)
 		}
 	},
 	content: {
@@ -74,8 +74,8 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'flex-start',
-		margin: 0,
-		padding: '22px 30px',
+		margin: theme.spacing(0),
+		padding: theme.spacing(3, 4),
 		width: '100%'
 	},
 	applyButton: {
@@ -83,35 +83,35 @@ const styles = theme => ({
 		minWidth: '270px',
 		textAlign: 'right',
 		'& button': {
-			width: '100%',
-			marginBottom: '1em'
+			marginBottom: theme.spacing(2),
+			width: '100%'
 		},
 		'& div.price': {
+			color: '#00C0D9',
 			fontFamily: 'Lato, arial, sans-serif',
 			fontSize: '16px',
-			fontWeight: 'bold',
-			color: '#00C0D9'
+			fontWeight: 'bold'
 		},
 		'& span.price-key': {
 			color: '#93B0C1',
+			display: 'block',
 			fontFamily: 'Lato, arial, sans-serif',
 			fontSize: '12px',
-			display: 'block',
 			fontWeight: 'normal',
-			marginTop: '5px'
+			marginTop: theme.spacing(4)
 		}
 	},
 	documentIcon: {
-		marginRight: '10px'
+		marginRight: theme.spacing(1)
 	},
 	alert: {
-		padding: '10px 0 20px !important'
+		padding: theme.spacing(2, 0, 3)
 	},
 	kyc: {
-		padding: '10px 0 20px !important'
+		padding: theme.spacing(1, 0, 3)
 	},
 	headerDescription: {
-		marginRight: '25px'
+		marginRight: theme.spacing(3)
 	},
 	paragraph: {
 		alignItems: 'flex-start',
@@ -119,7 +119,7 @@ const styles = theme => ({
 		flexDirection: 'row',
 		flexWrap: 'nowrap',
 		justifyContent: 'space-between',
-		padding: '20px 0 !important'
+		padding: theme.spacing(2, 0)
 	}
 });
 

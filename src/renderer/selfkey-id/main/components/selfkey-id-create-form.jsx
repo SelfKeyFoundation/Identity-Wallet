@@ -18,12 +18,12 @@ import { getGlobalContext } from 'common/context';
 
 const styles = theme => ({
 	wrap: {
-		marginTop: '128px'
+		marginTop: theme.spacing(16)
 	},
 	back: {
+		left: '20px',
 		position: 'absolute',
-		top: '100px',
-		left: '20px'
+		top: '100px'
 	},
 	backButtonContainer: {
 		left: '40px',
@@ -39,23 +39,17 @@ const styles = theme => ({
 		fontWeight: 600
 	},
 	create: {
-		marginTop: '10px',
+		marginTop: theme.spacing(1),
 		width: '321px'
 	},
 	divider: {
 		backgroundColor: '#475768',
-		width: '100%',
-		marginTop: '10px',
-		marginBottom: '10px'
+		marginBottom: theme.spacing(1),
+		marginTop: theme.spacing(1),
+		width: '100%'
 	},
 	card: {
 		width: '471px'
-	},
-	cardHeader: {
-		backgroundColor: '#2A3540',
-		fontSize: '18px',
-		lineHeight: '26px',
-		marginBottom: '10px'
 	},
 	input: {
 		width: '322px'
@@ -63,7 +57,6 @@ const styles = theme => ({
 	dropdown: {
 		width: '322px'
 	},
-	container: {},
 	modalWrap: {
 		border: 'none',
 		backgroundColor: 'transparent',
@@ -75,23 +68,26 @@ const styles = theme => ({
 		borderTop: 'none'
 	},
 	tooltip: {
-		padding: '7px 0 0 10px'
+		padding: theme.spacing(1, 0, 0, 1)
 	},
 	topSpace: {
-		marginTop: '30px'
+		marginTop: theme.spacing(4)
 	},
 	idNickname: {
 		alignItems: 'baseline',
 		display: 'flex',
 		flexDirection: 'row'
 	},
-	bb: {
+	backButton: {
 		'& div': {
 			zIndex: 3000
 		},
 		'& button': {
 			zIndex: 3000
 		}
+	},
+	bodyTitleBottomSpace: {
+		marginBottom: theme.spacing(3)
 	}
 });
 
@@ -182,7 +178,7 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 					spacing={4}
 					className={classes.wrap}
 				>
-					<BackButton onclick={this.handleBackClick} className={classes.bb} />
+					<BackButton onclick={this.handleBackClick} className={classes.backButton} />
 					<Grid item className={classes.topSpace}>
 						<IdCardIcon />
 					</Grid>
@@ -190,12 +186,16 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 						<Typography variant="h1">SelfKey ID</Typography>
 					</Grid>
 					<Grid item>
-						<Typography variant="body1" color="secondary" gutterBottom>
+						<Typography
+							variant="body1"
+							color="secondary"
+							className={classes.bodyTitleBottomSpace}
+						>
 							Fill in the basic details of your identity wallet.
 						</Typography>
 					</Grid>
 					<ModalWrap className={classes.modalWrap}>
-						<ModalHeader className={classes.modalHeader}>
+						<ModalHeader>
 							<Typography variant="h2">Identity Wallet Details</Typography>
 						</ModalHeader>
 						<ModalBody className={classes.modalBody}>

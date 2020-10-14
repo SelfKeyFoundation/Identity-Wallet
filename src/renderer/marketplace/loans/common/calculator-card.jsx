@@ -5,34 +5,34 @@ import { CalculatorIcon, ModalCloseIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	card: {
-		marginBottom: '24px'
+		marginBottom: theme.spacing(3)
 	},
 	container: {
-		padding: '30px 24px 60px !important',
+		padding: '32px 24px 56px !important',
 		position: 'relative'
 	},
 	closeIcon: {
+		cursor: 'pointer',
 		position: 'absolute',
 		right: '10px',
 		top: '10px',
-		width: '30px',
-		cursor: 'pointer'
+		width: '30px'
 	},
 	title: {
 		marginBottom: '.5em'
 	},
 	info: {
-		padding: '25px 30px'
+		padding: theme.spacing(3, 4)
 	},
 	buttons: {
-		marginTop: '20px'
+		marginTop: theme.spacing(4)
 	},
 	extraSpace: {
-		marginRight: '4px'
+		marginRight: theme.spacing(1)
 	},
 	calculatorIcon: {
-		padding: '0 24px 24px',
-		marginRight: '24px'
+		marginRight: theme.spacing(3),
+		padding: theme.spacing(0, 3, 3)
 	}
 });
 

@@ -2,9 +2,8 @@ import React, { PureComponent } from 'react';
 import { withStyles } from '@material-ui/styles';
 import {
 	BackButton,
-	UserPlusIcon,
-	primary,
-	/* CalendarDepositIcon, */ typography
+	UserPlusIcon
+	/* CalendarDepositIcon, */
 } from 'selfkey-ui';
 import { MarketplaceDisclaimer } from '../../common/disclaimer';
 import { Grid, Button, Typography } from '@material-ui/core';
@@ -21,17 +20,17 @@ import {
 
 const styles = theme => ({
 	root: {
-		width: '946px',
-		height: '100%',
-		margin: '70px auto 30px',
 		borderRadius: '4px',
+		height: '100%',
+		margin: '72px auto 32px',
+		width: '946px',
 		'@media screen and (min-width: 1230px)': {
 			width: '1140px'
 		}
 	},
 
 	title: {
-		margin: '20px 20px 20px 7px'
+		margin: theme.spacing(3, 3, 3, 2)
 	},
 
 	header: {
@@ -39,8 +38,8 @@ const styles = theme => ({
 		border: '1px solid #303C49',
 		borderRadius: '4px 4px 0 0',
 		'& img': {
-			maxWidth: '40px',
-			height: 'auto'
+			height: 'auto',
+			maxWidth: '40px'
 		}
 	},
 
@@ -54,104 +53,14 @@ const styles = theme => ({
 		fontSize: '16px',
 		fontWeight: 400,
 		lineHeight: 1.67,
-		margin: 0,
-		padding: '44px 30px 16px',
+		margin: theme.spacing(0),
+		padding: theme.spacing(5, 4, 2),
 		textAlign: 'justify',
-		width: '100%'
-	},
-
-	formControl: {
-		marginRight: '100px',
-		maxWidth: '45%'
-	},
-
-	divider: {
-		backgroundColor: '#475768'
-	},
-
-	dividerWrapper: {
 		width: '100%'
 	},
 
 	fullWidth: {
 		width: '100%'
-	},
-
-	formGroup: {
-		backgroundColor: 'transparent',
-		'& h5': {
-			marginRight: '1em'
-		},
-		'& span': {
-			fontSize: '14px',
-			lineHeight: '35px',
-			'& h5': {
-				display: 'inline'
-			},
-			'& p': {
-				display: 'inline'
-			}
-		},
-
-		'& span strong': {
-			fontSize: '16px'
-		}
-	},
-
-	bullet: {
-		display: 'flex',
-		flexDirection: 'column',
-		justifyContent: 'center',
-		alignItems: 'center',
-		width: '30px',
-		height: '28px',
-		borderRadius: '18px',
-		backgroundColor: '#3b4b59',
-		border: 'solid 1px #495b70'
-	},
-
-	description: {
-		marginTop: 0,
-		textAlign: 'left',
-		maxWidth: '620px'
-	},
-
-	buttonWrapper: {
-		marginRight: '30px'
-	},
-
-	button: {
-		color: '#93b0c1',
-		border: '1px solid #3b4a5a',
-		fontWeight: 400,
-		'&:disabled': {
-			color: '#48565f'
-		}
-	},
-
-	buttonDescription: {
-		fontSize: '12px',
-		width: '100%'
-	},
-
-	requirementListItem: {
-		columnBreakInside: 'avoid',
-		color: '#93b0c1'
-	},
-
-	requirementList: {
-		columnCount: 2
-	},
-
-	notEnteredRequeriment: {
-		height: '28px',
-		width: '30px',
-		borderRadius: '18px',
-		backgroundColor: '#F5A623'
-	},
-
-	bold: {
-		fontWeight: 600
 	},
 
 	backButtonContainer: {
@@ -161,84 +70,32 @@ const styles = theme => ({
 	exchange: {
 		paddingTop: '3px'
 	},
-	strong: {
-		fontWeight: '600'
-	},
 	ctaButton: {
-		marginBottom: '15px',
+		marginBottom: theme.spacing(2),
 		width: '100%'
-	},
-	pendingApprovalButton: {
-		height: 'initial',
-		marginBottom: '15px',
-		opacity: '1 !important',
-		padding: '6px 0',
-		'& span': {
-			display: 'flex',
-			justifyContent: 'space-around'
-		}
 	},
 	signUpButton: {
 		display: 'flex',
 		justifyContent: 'space-between',
 		maxWidth: '100%',
 		marginLeft: 'auto',
-		marginRight: '0'
+		marginRight: theme.spacing(0)
 	},
 	ctaArea: {
-		'& div': {
-			// marginTop: '1em'
-		},
 		'& div h3': {
 			textAlign: 'left',
 			fontSize: '13px',
 			lineHeight: '18px'
 		}
 	},
-	topSpace: {
-		marginTop: '15px'
-	},
-	link: {
-		color: primary,
-		cursor: 'pointer',
-		textDecoration: 'none'
-	},
-	pending: {
-		color: primary,
-		fontSize: '16px !important',
-		textTransform: 'uppercase'
-	},
-	pendingSubtitle: {
-		color: typography,
-		fontSize: '13px !important',
-		fontWeight: 400,
-		marginTop: '-6px',
-		textTransform: 'initial'
-	},
-	kyc: {
-		'& div:first-child': {
-			marginTop: 0
-		}
-	},
 	icon: {
 		alignItems: 'center',
 		display: 'flex',
 		height: '44px',
-		marginLeft: '22px'
-	},
-	defaultIcon: {
-		alignItems: 'center',
-		borderRadius: '8px',
-		color: '#FFFFFF',
-		display: 'flex',
-		justifyContent: 'center',
-		maxWidth: '44px',
-		padding: '0 8px'
-	},
-	generatedIcon: {
-		height: 'inherit',
-		maxWidth: '28px',
-		width: '44px'
+		marginLeft: theme.spacing(3),
+		'& img': {
+			borderRadius: '8px'
+		}
 	},
 	disclaimer: {
 		margin: '20px auto',
@@ -249,7 +106,7 @@ const styles = theme => ({
 		textAlign: 'left'
 	},
 	descriptionBottomSpace: {
-		marginBottom: '40px'
+		marginBottom: theme.spacing(5)
 	}
 });
 

@@ -11,41 +11,41 @@ import { DetailsIconButton } from '../../common';
 
 const styles = theme => ({
 	nameCell: {
-		padding: '15px 15px 15px 13px',
 		maxWidth: '220px',
 		minWidth: '100px',
+		padding: theme.spacing(2, 2, 2, 1),
 		whiteSpace: 'pre-line',
 		wordWrap: 'break-word'
 	},
 	tableHeaderRow: {
 		'& th': {
+			border: 'none',
+			color: '#7F8FA4',
 			fontFamily: 'Lato, arial, sans-serif',
 			fontSize: '15px',
 			fontWeight: 'bold',
-			color: '#7F8FA4',
-			textTransform: 'uppercase',
-			border: 'none'
+			textTransform: 'uppercase'
+		}
+	},
+	logoCell: {
+		padding: theme.spacing(2, 0, 2, 3),
+		'& img': {
+			borderRadius: '5px',
+			display: 'flex',
+			width: '30px'
 		}
 	},
 	detailsCell: {
 		color: '#00C0D9',
-		padding: '15px 20px',
+		padding: theme.spacing(2),
 		'& span': {
 			cursor: 'pointer'
 		},
 		'& button': {
 			maxWidth: '15px',
 			minWidth: '15px',
-			padding: 0,
+			padding: theme.spacing(0),
 			width: '15px'
-		}
-	},
-	logoCell: {
-		padding: '15px 0 15px 25px',
-		'& img': {
-			width: '30px',
-			borderRadius: '5px',
-			display: 'flex'
 		}
 	}
 });

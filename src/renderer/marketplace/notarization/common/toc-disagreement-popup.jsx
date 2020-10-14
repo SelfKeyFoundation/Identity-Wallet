@@ -8,7 +8,7 @@ const styles = theme => ({
 		borderRadius: '4px'
 	},
 	text: {
-		marginBottom: '60px'
+		marginBottom: theme.spacing(5)
 	},
 	buttons: {
 		display: 'flex',
@@ -20,7 +20,7 @@ const styles = theme => ({
 		}
 	},
 	popupPadding: {
-		padding: '30px 30px 60px'
+		padding: theme.spacing(4, 4, 7)
 	}
 });
 

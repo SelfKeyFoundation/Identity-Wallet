@@ -23,6 +23,9 @@ const styles = theme => ({
 	},
 	selectTokens: {
 		minWidth: '11em'
+	},
+	labelText: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -73,7 +76,7 @@ const LoansFilters = withStyles(styles)(
 			className={classes.container}
 		>
 			<Grid item>
-				<Typography variant="overline" gutterBottom>
+				<Typography variant="overline" className={classes.labelText}>
 					Type
 				</Typography>
 				<ToggleButtonGroup exclusive onChange={onTypeFilterChange} value={selectedType}>
@@ -87,7 +90,7 @@ const LoansFilters = withStyles(styles)(
 			</Grid>
 
 			<Grid item className={classes.rangeContainer}>
-				<Typography variant="overline" gutterBottom>
+				<Typography variant="overline" className={classes.labelText}>
 					Current Rates
 				</Typography>
 				<Slider
@@ -103,7 +106,7 @@ const LoansFilters = withStyles(styles)(
 			</Grid>
 
 			<Grid item>
-				<Typography variant="overline" gutterBottom>
+				<Typography variant="overline" className={classes.labelText}>
 					Assets Accepted
 				</Typography>
 				<FormControl variant="filled">
