@@ -81,10 +81,10 @@ jobs:
                   path: dist
             - *step_save_cache
     'build-storybook':
-        docker: &DOCKERIMAGE
-            - image: circleci/node:10.13.0-stretch-browsers
+        docker: *DOCKERIMAGE
         environment:
             CACHE_VERSION: *cache_version
+            NODE_OPTIONS: --max_old_space_size=4096
         steps:
             - checkout
             - attach_workspace:
