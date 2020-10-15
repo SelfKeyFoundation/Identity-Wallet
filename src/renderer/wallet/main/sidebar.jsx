@@ -249,7 +249,7 @@ class Sidebar extends PureComponent {
 					</Grid>
 				</Grid>
 				<Divider style={{ width: '100%', backgroundColor: '#475768', flexGrow: 0 }} />
-				<Grid item style={{ padding: '50px 0 20px', flexGrow: 1 }}>
+				<Grid item style={{ padding: '50px 0 0', flexGrow: 1 }}>
 					<List style={{ paddingLeft: '10px' }}>
 						<ListItem
 							className={classes.listItem}
