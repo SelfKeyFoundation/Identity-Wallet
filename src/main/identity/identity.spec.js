@@ -75,7 +75,7 @@ describe('Identity model', () => {
 
 	it('updateDID', async () => {
 		let itm = await Identity.query().insertAndFetch(testIdentity);
-		expect(itm.did).toBeNull();
+		expect(itm.did).toBe('');
 		itm.did = 'did';
 		await Identity.updateDID(itm);
 		let check = await Identity.query().findById(itm.id);
