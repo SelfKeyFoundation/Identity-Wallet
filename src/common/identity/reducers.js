@@ -1,4 +1,5 @@
 import identityTypes from './types';
+import _ from 'lodash';
 
 export const initialState = {
 	repositories: [],
@@ -60,7 +61,7 @@ const setDocumentsReducer = (state, action) => {
 		acc[curr.id] = curr;
 		return acc;
 	}, {});
-	documents = documents.map(attr => attr.id);
+	documents = _.uniq(documents.map(attr => attr.id));
 	return { ...state, documents, documentsById };
 };
 
@@ -73,7 +74,7 @@ const setAttributeDocumentsReducer = (state, action) => {
 		acc[curr.id] = curr;
 		return acc;
 	}, {});
-	documents = documents.map(attr => attr.id);
+	documents = _.uniq(documents.map(attr => attr.id));
 	return { ...state, documents, documentsById };
 };
 
@@ -85,7 +86,7 @@ const deleteAttributeDocumentsReducer = (state, action) => {
 		acc[curr.id] = curr;
 		return acc;
 	}, {});
-	documents = documents.map(attr => attr.id);
+	documents = _.uniq(documents.map(attr => attr.id));
 	return { ...state, documents, documentsById };
 };
 
@@ -97,7 +98,7 @@ const deleteDocumentsReducer = (state, action) => {
 		acc[curr.id] = curr;
 		return acc;
 	}, {});
-	documents = documents.map(attr => attr.id);
+	documents = _.uniq(documents.map(attr => attr.id));
 	return { ...state, documents, documentsById };
 };
 
@@ -110,7 +111,7 @@ const setIdAttributesReducer = (state, action) => {
 		acc[curr.id] = curr;
 		return acc;
 	}, {});
-	attributes = attributes.map(attr => attr.id);
+	attributes = _.uniq(attributes.map(attr => attr.id));
 	return { ...state, attributes, attributesById };
 };
 
@@ -122,7 +123,7 @@ const deleteIdAttributesReducer = (state, action) => {
 		acc[curr.id] = curr;
 		return acc;
 	}, {});
-	attributes = attributes.map(attr => attr.id);
+	attributes = _.uniq(attributes.map(attr => attr.id));
 	return { ...state, attributes, attributesById };
 };
 

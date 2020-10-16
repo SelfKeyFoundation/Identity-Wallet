@@ -10,8 +10,7 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { AttributesTable, Alert } from '../../../common';
-import { typography } from 'selfkey-ui';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import { typography, DropdownIcon } from 'selfkey-ui';
 import { sanitize } from '../../common';
 
 const styles = theme => ({
@@ -163,14 +162,7 @@ export const BankingAccountOption = withStyles(styles)(
 		const optionValue = `${account.bankName} ${account.accountTitle}`;
 		const gridSize = showBankName ? 11 : 12;
 		return (
-			<Grid
-				container
-				direction="row"
-				justify="flex-start"
-				alignItems="unset"
-				spacing={0}
-				wrap="nowrap"
-			>
+			<Grid container direction="row" justify="flex-start" spacing={0} wrap="nowrap">
 				{showBankName && (
 					<Grid item xs={1} className={classes.selectionSection}>
 						<Radio
@@ -182,14 +174,13 @@ export const BankingAccountOption = withStyles(styles)(
 						/>
 					</Grid>
 				)}
-
 				<Grid item xs={gridSize}>
 					<ExpansionPanel
 						expanded={isOpen}
 						onChange={(e, expanded) => toggleOpen && toggleOpen(expanded)}
 						style={{ borderRadius: '0 4px 4px 0' }}
 					>
-						<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
+						<ExpansionPanelSummary expandIcon={<DropdownIcon />}>
 							<Grid container direction="column" spacing={1}>
 								<Grid item>
 									<Grid
@@ -206,7 +197,7 @@ export const BankingAccountOption = withStyles(styles)(
 										</Grid>
 										{account.accountTitle && (
 											<Grid item>
-												<Typography variant="subheading">
+												<Typography variant="subtitle2" color="secondary">
 													{' '}
 													- {account.accountTitle}
 												</Typography>

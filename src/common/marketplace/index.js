@@ -5,6 +5,7 @@ import { ordersSelectors, ordersOperations, reducer as orders } from './orders';
 import { countriesSelectors, countriesOperations, reducer as countries } from './countries';
 import { incorporationsSelectors } from './incorporations';
 import { bankingSelectors } from './banking';
+import { notariesSelectors } from './notaries';
 import { loansSelectors } from './loans';
 import {
 	taxTreatiesSelectors,
@@ -25,6 +26,7 @@ export const marketplaceSelectors = {
 	...taxTreatiesSelectors,
 	...incorporationsSelectors,
 	...bankingSelectors,
+	...notariesSelectors,
 	...loansSelectors
 };
 

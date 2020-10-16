@@ -5,6 +5,7 @@ import { getGlobalContext } from 'common/context';
 import { Logger } from 'common/logger';
 import { isDevMode } from 'common/utils/common';
 import AppEth from '@ledgerhq/hw-app-eth';
+import { featureIsDisabled, featureIsEnabled } from 'common/feature-flags';
 
 const log = new Logger('Identity');
 export class Identity {
@@ -14,9 +15,10 @@ export class Identity {
 		this.profile = wallet.profile;
 		this.privateKey = wallet.privateKey ? wallet.privateKey.replace('0x', '') : null;
 		this.keystorePath = wallet.keystoreFilePath;
-		this.did = ident.did
-			? `did:selfkey:${ident.did.replace('did:selfkey:', '')}`
-			: `did:eth:${this.address ? this.address.toLowerCase() : ''}`;
+		this.did =
+			featureIsEnabled('did') && ident.did
+				? `did:selfkey:${ident.did.replace('did:selfkey:', '')}`
+				: `did:eth:${this.address ? this.address.toLowerCase() : ''}`;
 		this.wid = wallet.id;
 		this.path = wallet.path;
 		this.wallet = wallet;
@@ -45,7 +47,7 @@ export class Identity {
 		return `${this.getDidWithParams()}#keys-1`;
 	}
 	getDidWithParams() {
-		if (!this.ident.did || !isDevMode()) {
+		if (featureIsDisabled('did') || !this.ident.did || !isDevMode()) {
 			return this.did;
 		}
 		return `${this.did};selfkey:chain=ropsten`;

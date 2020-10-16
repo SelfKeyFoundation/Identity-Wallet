@@ -25,6 +25,7 @@ import gas from '../gas';
 import scheduler from '../scheduler';
 import marketplace from '../marketplace';
 import tokenSwap from '../token-swap';
+import contracts from '../contract';
 
 export const createReducers = (scope = 'main') => {
 	let scopedReducers = {};
@@ -57,6 +58,7 @@ export const createReducers = (scope = 'main') => {
 		scheduler,
 		did,
 		tokenSwap,
+		contracts,
 		...scopedReducers
 	});
 };

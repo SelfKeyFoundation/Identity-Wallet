@@ -35,8 +35,10 @@ const styles = theme => ({
 	}
 });
 
-const selfkeyIdForm = props => <Link to="/selfkeyIdForm" {...props} />;
-const back = props => <Link to="/main/dashboard" {...props} />;
+const selfkeyIdForm = React.forwardRef((props, ref) => (
+	<Link to="/selfkeyIdForm" {...props} ref={ref} />
+));
+const back = React.forwardRef((props, ref) => <Link to="/main/dashboard" {...props} ref={ref} />);
 
 class SelfKeyIdCreateComponent extends PureComponent {
 	render() {
@@ -88,6 +90,7 @@ class SelfKeyIdCreateComponent extends PureComponent {
 											>
 												<Grid
 													container
+													item
 													xs={2}
 													alignItems="center"
 													direction="column"

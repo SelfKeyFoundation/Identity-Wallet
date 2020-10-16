@@ -67,9 +67,11 @@ class ToolbarContainer extends PureComponent {
 				onCreateCorporateProfileClick={this.createCorporateProfile}
 				onToggleMenu={this.toggleDrawer}
 				primaryToken={config.constants.primaryToken}
+				rewardToken={config.constants.rewardToken}
 				closeProfile={this.closeProfile}
 				onProfileNavigate={this.handleProfileNavigate}
 				showCorporate={featureIsEnabled('corporate')}
+				showStaking={featureIsEnabled('staking')}
 				isExportableAccount={this.props.isExportableAccount}
 			/>
 		);

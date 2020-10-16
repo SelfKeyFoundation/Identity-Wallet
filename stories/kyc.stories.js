@@ -18,6 +18,10 @@ import {
 	KycChecklistItem,
 	KycMembersListItem
 } from '../src/renderer/kyc/application/kyc-checklist';
+import KycRequiredCard from '../src/renderer/kyc/kyc-card/kyc-required-card';
+import KycInProgressCard from '../src/renderer/kyc/kyc-card/kyc-in-progress-card';
+import KycApprovedCard from '../src/renderer/kyc/kyc-card/kyc-approved-card';
+import KycAdditionalRequirementsCard from '../src/renderer/kyc/kyc-card/kyc-additional-requirements-card';
 
 storiesOf('KYC/Requirements List', module)
 	.add('Loading', () => (
@@ -33,6 +37,33 @@ storiesOf('KYC/Requirements List', module)
 			requirements={object('Requirements', KYCRequirementData)}
 			title={text('Title', 'KYC Requirements and Forms')}
 			subtitle={text('Subtitle', 'simple description')}
+		/>
+	));
+
+storiesOf('KYC/KycCard', module)
+	.add('KycRequiredCard', () => (
+		<KycRequiredCard
+			title={text('Title', 'KYC Required')}
+			subtitle={text('Subtitle', 'Prove your identity')}
+			requirements={object('Requirements', KYCRequirementData)}
+		/>
+	))
+	.add('KycInProgressCard', () => (
+		<KycInProgressCard
+			title={text('Title', 'KYC Required')}
+			subtitle={text('Subtitle', 'Prove your identity')}
+		/>
+	))
+	.add('KycApprovedCard', () => (
+		<KycApprovedCard
+			title={text('Title', 'KYC Required')}
+			subtitle={text('Subtitle', 'Prove your identity')}
+		/>
+	))
+	.add('KycAdditionalRequirementsCard', () => (
+		<KycAdditionalRequirementsCard
+			title={text('Title', 'KYC Required')}
+			subtitle={text('Subtitle', 'Prove your identity')}
 		/>
 	));
 
@@ -250,7 +281,7 @@ storiesOf('KYC/CurrentApplication/Popup', module)
 			onSelected={action(text('Selected Action Text', 'attribute selected'))}
 			editItem={action(text('Edit Action text', 'edit item'))}
 			addItem={action(text('Add Item text', 'add item'))}
-			{...individualApplicationKnobs}
+			{...individualApplicationKnobs()}
 			onAgreementChange={action('agreement change')}
 			onSubmit={action('submit')}
 			onClose={action('close')}
@@ -267,7 +298,7 @@ storiesOf('KYC/CurrentApplication/Popup', module)
 			onSelected={action(text('Selected Action Text', 'attribute selected'))}
 			editItem={action(text('Edit Action text', 'edit item'))}
 			addItem={action(text('Add Item text', 'add item'))}
-			{...individualApplicationKnobs}
+			{...individualApplicationKnobs()}
 			onAgreementChange={action(text('Agreement Action Text', 'agreement change'))}
 			onSubmit={action(text('Submit Action Text', 'submit'))}
 			onClose={action(text('Close Action Text', 'close'))}
@@ -282,7 +313,7 @@ storiesOf('KYC/CurrentApplication/Popup', module)
 			onSelected={action(text('Selected Action Text', 'attribute selected'))}
 			editItem={action(text('Edit Action text', 'edit item'))}
 			addItem={action(text('Add Item text', 'add item'))}
-			{...individualApplicationKnobs}
+			{...individualApplicationKnobs()}
 			onAgreementChange={action(text('Agreement Action Text', 'agreement change'))}
 			onSubmit={action(text('Submit Action Text', 'submit'))}
 			onClose={action(text('Close Action Text', 'close'))}
@@ -298,7 +329,7 @@ storiesOf('KYC/CurrentApplication/Popup', module)
 			onSelected={action(text('Selected Action Text', 'attribute selected'))}
 			editItem={action(text('Edit Action text', 'edit item'))}
 			addItem={action(text('Add Item text', 'add item'))}
-			{...individualApplicationKnobs}
+			{...individualApplicationKnobs()}
 			error={text('Error', 'test error')}
 			onAgreementChange={action(text('Agreement Action Text', 'agreement change'))}
 			onSubmit={action(text('Submit Action Text', 'submit'))}

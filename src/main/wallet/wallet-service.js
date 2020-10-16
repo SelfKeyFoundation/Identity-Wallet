@@ -93,8 +93,6 @@ export class WalletService {
 			profile: 'local'
 		});
 
-		await this.walletTokenService.populateWalletWithPopularTokens(wallet);
-
 		const newWallet = {
 			...wallet,
 			privateKey: account.privateKey
@@ -159,6 +157,9 @@ export class WalletService {
 	}
 
 	async unlockWalletWithPrivateKey(privateKey) {
+		if (!privateKey.startsWith('0x')) {
+			privateKey = Buffer.from(privateKey).toString('hex');
+		}
 		if (!EthUtil.isValidPrivate(Buffer.from(privateKey.replace('0x', ''), 'hex'))) {
 			throw new Error('The private key you entered is incorrect. Please try again!');
 		}

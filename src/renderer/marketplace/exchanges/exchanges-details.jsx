@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { withStyles } from '@material-ui/styles';
-import { UserPlusIcon, primary, CalendarDepositIcon, typography } from 'selfkey-ui';
+import { BackButton, UserPlusIcon, primary, CalendarDepositIcon, typography } from 'selfkey-ui';
 import { MarketplaceDisclaimer } from '../common/disclaimer';
 import { Grid, Divider, FormGroup, FormControl, Button, Typography } from '@material-ui/core';
 import { KycRequirements } from '../../kyc';
@@ -18,7 +18,7 @@ const styles = theme => ({
 	root: {
 		width: '946px',
 		height: '100%',
-		margin: '50px auto 30px',
+		margin: '70px auto 30px',
 		borderRadius: '4px',
 		'@media screen and (min-width: 1230px)': {
 			width: '1140px'
@@ -61,10 +61,6 @@ const styles = theme => ({
 	},
 
 	dividerWrapper: {
-		width: '100%'
-	},
-
-	fullWidth: {
 		width: '100%'
 	},
 
@@ -147,8 +143,7 @@ const styles = theme => ({
 
 	backButtonContainer: {
 		left: '75px',
-		position: 'absolute',
-		top: '120px'
+		position: 'absolute'
 	},
 	exchange: {
 		paddingTop: '3px'
@@ -178,9 +173,7 @@ const styles = theme => ({
 		marginRight: '0'
 	},
 	ctaArea: {
-		'& div': {
-			// marginTop: '1em'
-		},
+		textAlign: 'right',
 		'& div h3': {
 			textAlign: 'left',
 			fontSize: '13px',
@@ -471,20 +464,7 @@ class ExchangesDetailsComponent extends PureComponent {
 			<Grid container>
 				<Grid item>
 					<div className={classes.backButtonContainer}>
-						<Button
-							variant="outlined"
-							color="secondary"
-							size="small"
-							onClick={backAction}
-						>
-							<Typography
-								variant="subtitle2"
-								color="secondary"
-								className={classes.bold}
-							>
-								‹ Back
-							</Typography>
-						</Button>
+						<BackButton onclick={backAction} />
 					</div>
 				</Grid>
 				<Grid container className={classes.root}>
@@ -521,7 +501,12 @@ class ExchangesDetailsComponent extends PureComponent {
 							alignItems="flex-start"
 							spacing={4}
 						>
-							<Grid item id="description" className={classes.descriptionBottomSpace}>
+							<Grid
+								container
+								item
+								id="description"
+								className={classes.descriptionBottomSpace}
+							>
 								<Grid
 									container
 									direction="row"
@@ -534,12 +519,7 @@ class ExchangesDetailsComponent extends PureComponent {
 											{item.description}
 										</Typography>
 									</Grid>
-									<Grid
-										item
-										xs={4}
-										className={classes.ctaArea}
-										alignContent="right"
-									>
+									<Grid item xs={4} className={classes.ctaArea}>
 										{this.renderActionButton(item)}
 									</Grid>
 								</Grid>
@@ -547,7 +527,7 @@ class ExchangesDetailsComponent extends PureComponent {
 							<Grid item className={classes.dividerWrapper}>
 								<Divider className={classes.divider} />
 							</Grid>
-							<Grid item id="highlights" className={classes.fullWidth}>
+							<Grid container item id="highlights">
 								<Grid
 									container
 									direction="column"
@@ -671,7 +651,7 @@ class ExchangesDetailsComponent extends PureComponent {
 								</Grid>
 							</Grid>
 							{templates && templates[0] && (
-								<Grid item id="requirements" className={classes.fullWidth}>
+								<Grid container item id="requirements">
 									<Grid
 										container
 										direction="column"
@@ -694,7 +674,7 @@ class ExchangesDetailsComponent extends PureComponent {
 							)}
 						</Grid>
 					</Grid>
-					<Grid item xs={12} alignItems="center">
+					<Grid item xs={12}>
 						<div className={classes.disclaimer}>
 							<MarketplaceDisclaimer />
 						</div>

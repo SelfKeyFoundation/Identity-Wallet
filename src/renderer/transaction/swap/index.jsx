@@ -140,6 +140,20 @@ const styles = theme => ({
 		}
 	},
 	valueDisplay: {
+		color: '#697C95',
+		fontFamily: 'Lato, arial, sans-serif',
+		fontSize: '13px',
+		lineHeight: '19px',
+		'& div': {
+			display: 'inline-block',
+			marginRight: '.5em'
+		}
+	},
+	fiatValue: {
+		color: '#fff',
+		fontFamily: 'Lato, arial, sans-serif',
+		fontSize: '16px',
+		fontWeight: 600,
 		'& div': {
 			display: 'inline-block',
 			marginRight: '.5em'
@@ -157,18 +171,8 @@ const styles = theme => ({
 });
 
 const TokenValue = withStyles(styles)(
-	({
-		classes,
-		prefix,
-		value = 0,
-		locale,
-		token,
-		separator = false,
-		variant = 'subtitle2',
-		color = 'secondary',
-		fractionDigits = 8
-	}) => (
-		<Typography variant={variant} color={color} className={classes.valueDisplay}>
+	({ classes, prefix, value = 0, locale, token, separator = false, fractionDigits = 8 }) => (
+		<div className={classes.valueDisplay}>
 			{separator && <span className={classes.separator}>|</span>}
 			{prefix && <span>{prefix}</span>}
 			<NumberFormat
@@ -180,22 +184,13 @@ const TokenValue = withStyles(styles)(
 				className="token-value"
 			/>
 			{token}
-		</Typography>
+		</div>
 	)
 );
 
 const FiatValue = withStyles(styles)(
-	({
-		classes,
-		value,
-		currency,
-		separator = false,
-		locale,
-		variant = 'subtitle2',
-		color = 'secondary',
-		fractionDigits = 2
-	}) => (
-		<Typography variant={variant} color={color} className={classes.valueDisplay}>
+	({ classes, value, currency, separator = false, locale, fractionDigits = 2 }) => (
+		<div className={classes.fiatValue}>
 			{separator && <span className={classes.separator}>|</span>}
 			<NumberFormat
 				locale={locale}
@@ -206,7 +201,7 @@ const FiatValue = withStyles(styles)(
 				className="fiat-value"
 			/>
 			{currency}
-		</Typography>
+		</div>
 	)
 );
 

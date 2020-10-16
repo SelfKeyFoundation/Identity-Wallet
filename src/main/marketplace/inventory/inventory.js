@@ -28,6 +28,7 @@ export class Inventory extends BaseModel {
 				category: { type: 'string' },
 				price: { type: ['string', null], default: null },
 				priceCurrency: { type: ['string', null], default: null },
+				relyingPartyConfig: { type: 'object', default: {} },
 				data: { type: 'object', default: {} }
 			}
 		};
@@ -49,22 +50,22 @@ export class Inventory extends BaseModel {
 		return this.query().patchAndFetchById(id, data);
 	}
 
-	static bulkEdit(items) {
+	static bulkEdit(items, hideErrors) {
 		items = items.map(item => ({ ...item, env }));
-		return this.updateMany(items);
+		return this.updateMany(items, null, hideErrors);
 	}
 
-	static bulkAdd(items) {
+	static bulkAdd(items, hideErrors) {
 		items = items.map(item => ({ ...item, env }));
-		return this.insertMany(items);
+		return this.insertMany(items, null, hideErrors);
 	}
 
-	static async bulkUpsert(items) {
+	static async bulkUpsert(items, hideErrors = false) {
 		const insert = items.filter(item => !item.hasOwnProperty(this.idColumn));
 		const update = items.filter(item => item.hasOwnProperty(this.idColumn));
 
-		let all = await this.bulkAdd(insert);
-		all = all.concat(await this.bulkEdit(update));
+		let all = await this.bulkAdd(insert, hideErrors);
+		all = all.concat(await this.bulkEdit(update, hideErrors));
 
 		return this.findAll().whereIn(this.idColumn, all.map(itm => itm[this.idColumn]));
 	}

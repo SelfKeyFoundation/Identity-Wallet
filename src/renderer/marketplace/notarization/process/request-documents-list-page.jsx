@@ -64,10 +64,18 @@ const styles = theme => ({
 });
 
 export const RequestDocumentsListPage = withStyles(styles)(props => {
-	const { classes, documents, renderDocumentName, renderExpiryDate, onAddDocument } = props;
+	const {
+		classes,
+		documents,
+		renderDocumentName,
+		renderExpiryDate,
+		onAddDocument,
+		onSelectDocument,
+		selectedDocuments
+	} = props;
 
 	return (
-		<div id="viewOverview" className={classes.wrap}>
+		<div className={classes.wrap}>
 			<div className={classes.container}>
 				<div className={classes.tableContainer}>
 					<Table>
@@ -91,7 +99,11 @@ export const RequestDocumentsListPage = withStyles(styles)(props => {
 									return (
 										<TableRow key={entry.id}>
 											<TableCell className={classes.checkbox}>
-												<Checkbox />
+												<Checkbox
+													value={entry.id}
+													onChange={onSelectDocument}
+													checked={selectedDocuments.includes(entry.id)}
+												/>
 											</TableCell>
 											<TableCell className={classes.type}>
 												<Typography variant="h6">
@@ -119,7 +131,7 @@ export const RequestDocumentsListPage = withStyles(styles)(props => {
 					onClick={onAddDocument}
 					className={classes.button}
 				>
-					Add Documents
+					Add Other Documents
 				</Button>
 			</div>
 		</div>

@@ -15,7 +15,6 @@ import {
 } from '@material-ui/core';
 import { createStyles, withStyles } from '@material-ui/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import {
 	KeyTooltip,
 	TooltipArrow,
@@ -25,6 +24,7 @@ import {
 	AttributeAlertLargeIcon,
 	NewRefreshIcon,
 	MarketplaceIcon,
+	DropdownIcon,
 	success,
 	warning,
 	typography,
@@ -32,6 +32,7 @@ import {
 } from 'selfkey-ui';
 import moment from 'moment';
 import { Popup } from '../../../common/popup';
+import MessageContainer from './message-container';
 import HeaderIcon from '../../../common/header-icon';
 
 const styles = theme => ({
@@ -331,7 +332,7 @@ class SelfkeyIdApplicationsComponent extends PureComponent {
 					this.props.applications.map((item, index) => (
 						<React.Fragment key={item.id}>
 							<ExpansionPanel defaultExpanded={index === 0}>
-								<ExpansionPanelSummary expandIcon={<ExpandLessIcon />}>
+								<ExpansionPanelSummary expandIcon={<DropdownIcon />}>
 									<Grid
 										container
 										direction="row"
@@ -421,6 +422,21 @@ class SelfkeyIdApplicationsComponent extends PureComponent {
 															</Typography>
 														</ListItem>
 														<ListItem
+															key="chatr"
+															className={classes.listItem}
+														>
+															<Typography
+																variant="body2"
+																color="secondary"
+																className={classes.label}
+															>
+																Chats
+															</Typography>
+															<Typography variant="body2">
+																{item.messages}
+															</Typography>
+														</ListItem>
+														<ListItem
 															key="providerContact"
 															className={classes.listItem}
 														>
@@ -454,6 +470,7 @@ class SelfkeyIdApplicationsComponent extends PureComponent {
 															</Typography>
 														</ListItem>
 													</List>
+													<MessageContainer messages={item.messages} />
 												</CardContent>
 											</Card>
 										</Grid>

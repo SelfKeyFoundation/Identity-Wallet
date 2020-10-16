@@ -9,6 +9,7 @@ import { identitySelectors } from 'common/identity';
 import { withStyles } from '@material-ui/styles';
 import { marketplaceSelectors } from 'common/marketplace';
 import { IncorporationsDetailsPage } from './incorporations-details-page';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({});
 
@@ -107,7 +108,7 @@ class IncorporationsDetailsContainer extends MarketplaceIncorporationsComponent 
 			if (!identity.isSetupFinished) {
 				return this.props.dispatch(push(selfkeyIdRequiredRoute));
 			}
-			if (!identity.did) {
+			if (featureIsEnabled('did') && !identity.did) {
 				return this.props.dispatch(push(selfkeyDIDRequiredRoute));
 			}
 			if (!rp || !rp.authenticated) {

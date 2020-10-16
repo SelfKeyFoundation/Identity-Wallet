@@ -19,20 +19,42 @@ class CurrentApplicationComponent extends PureComponent {
 		isDocument: false
 	};
 	componentDidMount() {
-		if (!this.props.currentApplication) return;
+		const { currentApplication, rpShouldUpdate, dispatch } = this.props;
+		if (!currentApplication) return;
 
-		const authenticated = true;
-		if (this.props.rpShouldUpdate) {
-			this.props.dispatch(
+		if (rpShouldUpdate) {
+			const authenticated = true;
+
+			dispatch(
 				kycOperations.loadRelyingParty(
-					this.props.currentApplication.relyingPartyName,
+					currentApplication.relyingPartyName,
 					authenticated,
-					`/main/kyc/current-application/${
-						this.props.currentApplication.relyingPartyName
-					}`
+					`/main/kyc/current-application/${currentApplication.relyingPartyName}`
 				)
 			);
 		}
+	}
+	isApplicationFilled() {
+		const { requirements, memberRequirements } = this.props;
+		let filled = requirements.reduce((acc, curr) => {
+			if (!acc) return acc;
+
+			return !(curr.required && (!curr.options || !curr.options.length));
+		}, true);
+
+		if (filled && memberRequirements && memberRequirements.length) {
+			filled = memberRequirements.reduce((acc, curr) => {
+				if (!acc) return acc;
+
+				return curr.requirements.reduce((acc, curr) => {
+					if (!acc) return acc;
+
+					return !(curr.required && (!curr.options || !curr.options.length));
+				}, true);
+			}, true);
+		}
+
+		return filled;
 	}
 	handleAgreementChange = agreementValue => {
 		this.setState({ agreementValue });
@@ -108,6 +130,10 @@ class CurrentApplicationComponent extends PureComponent {
 			existingApplicationId,
 			memberRequirements
 		} = this.props;
+
+		if (!currentApplication.title) {
+			return null;
+		}
 		return (
 			<div>
 				<CurrentApplicationPopup
@@ -122,6 +148,7 @@ class CurrentApplicationComponent extends PureComponent {
 					onAgreementChange={this.handleAgreementChange}
 					error={this.state.error}
 					relyingParty={relyingParty}
+					filled={this.isApplicationFilled()}
 					requirements={requirements}
 					memberRequirements={memberRequirements}
 					onClose={this.handleClose}
@@ -169,16 +196,18 @@ const mapStateToProps = (state, props) => {
 			authenticated
 		),
 		currentApplication,
-		requirements: kycSelectors.selectRequirementsForTemplate(
-			state,
-			relyingPartyName,
-			currentApplication.templateId
-		),
-		memberRequirements: kycSelectors.selectMemberRequirementsForTemplate(
-			state,
-			relyingPartyName,
-			currentApplication.templateId
-		),
+		requirements:
+			kycSelectors.selectRequirementsForTemplate(
+				state,
+				relyingPartyName,
+				currentApplication.templateId
+			) || [],
+		memberRequirements:
+			kycSelectors.selectMemberRequirementsForTemplate(
+				state,
+				relyingPartyName,
+				currentApplication.templateId
+			) || [],
 		existingApplicationId
 	};
 };

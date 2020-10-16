@@ -7,6 +7,7 @@ import { getWallet } from 'common/wallet/selectors';
 import { kycSelectors, kycOperations } from 'common/kyc';
 import { transactionSelectors } from 'common/transaction';
 import { marketplaceSelectors } from 'common/marketplace';
+import { identitySelectors } from 'common/identity';
 import { ordersSelectors } from 'common/marketplace/orders';
 import { MarketplaceNotariesComponent } from '../common/marketplace-notaries-component';
 import { MarketplaceProcessStarted } from '../../common/marketplace-process-started';
@@ -15,32 +16,33 @@ const styles = theme => ({});
 
 class NotarizationPaymentCompleteContainer extends MarketplaceNotariesComponent {
 	async componentWillMount() {
-		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: true });
+		const { vendorId } = this.props;
+		await this.loadRelyingParty({ rp: vendorId, authenticated: true });
 	}
 
 	async componentDidMount() {
-		const { order, companyCode, program, vendorId } = this.props;
+		const { order, product, productId, vendorId } = this.props;
 
 		this.saveTransactionHash();
 		this.clearRelyingParty();
 
 		this.trackEcommerceTransaction({
 			transactionHash: order.paymentHash,
-			price: program.price,
-			code: companyCode,
+			price: product.price,
+			code: productId,
 			rpName: vendorId
 		});
 	}
 
 	saveTransactionHash = async () => {
-		const { order, transaction, program, vendorId } = this.props;
+		const { order, transaction, product, vendorId, dispatch } = this.props;
 		const application = this.getLastApplication();
 
 		const transactionHash = order ? order.paymentHash : transaction.transactionHash;
 		const amountKey = order ? order.amount : transaction.amount;
 
 		if (!this.userHasPaid() && transactionHash) {
-			await this.props.dispatch(
+			await dispatch(
 				kycOperations.updateRelyingPartyKYCApplicationPayment(
 					vendorId,
 					application.id,
@@ -48,11 +50,11 @@ class NotarizationPaymentCompleteContainer extends MarketplaceNotariesComponent 
 				)
 			);
 
-			await this.props.dispatch(
+			await dispatch(
 				kycOperations.updateApplicationsOperation({
 					id: application.id,
 					payments: {
-						amount: program.price,
+						amount: product.price,
 						amountKey,
 						transactionHash,
 						date: Date.now(),
@@ -63,7 +65,7 @@ class NotarizationPaymentCompleteContainer extends MarketplaceNotariesComponent 
 		} else {
 			// TODO: what to do if no order or currentApplication exists?
 			console.error('No current application or order');
-			this.props.dispatch(push(this.cancelRoute()));
+			dispatch(push(this.cancelRoute()));
 		}
 	};
 
@@ -111,12 +113,19 @@ class NotarizationPaymentCompleteContainer extends MarketplaceNotariesComponent 
 }
 
 const mapStateToProps = (state, props) => {
-	const { companyCode, vendorId, orderId } = props.match.params;
+	const { productId, vendorId, orderId } = props.match.params;
 	const authenticated = true;
+	const identity = identitySelectors.selectIdentity(state);
 	return {
-		companyCode,
+		productId,
 		vendorId,
 		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
+		product: marketplaceSelectors.selectInventoryItemByFilter(
+			state,
+			'notaries',
+			p => p.sku === productId,
+			identity.type
+		),
 		transaction: transactionSelectors.getTransaction(state),
 		address: getWallet(state).address,
 		currentApplication: kycSelectors.selectCurrentApplication(state),

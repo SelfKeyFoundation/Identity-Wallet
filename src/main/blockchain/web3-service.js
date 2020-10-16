@@ -12,6 +12,7 @@ import SubscriptionSubprovider from 'web3-provider-engine/subproviders/subscript
 import HWTransportNodeHid from '@ledgerhq/hw-transport-node-hid';
 import Web3SubProvider from '@ledgerhq/web3-subprovider';
 import TrezorWalletSubProviderFactory from 'trezor-wallet-provider';
+import { EventEmitter } from 'events';
 
 const log = new Logger('Web3Service');
 
@@ -26,8 +27,9 @@ export const SERVER_CONFIG = {
 
 export const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].url;
 
-export class Web3Service {
+export class Web3Service extends EventEmitter {
 	constructor(ctx = {}) {
+		super();
 		this.defaultWallet();
 		this.store = ctx.store;
 		this.q = new AsyncTaskQueue(this.handleTicket.bind(this), REQUEST_INTERVAL_DELAY);
@@ -70,7 +72,9 @@ export class Web3Service {
 		engine.on('start', async () => {
 			await this.web3.eth.getBlockNumber();
 		});
+		engine.on('block', block => this.emit('block', block));
 		engine.start();
+
 		this.web3.transactionConfirmationBlocks = 1;
 	}
 

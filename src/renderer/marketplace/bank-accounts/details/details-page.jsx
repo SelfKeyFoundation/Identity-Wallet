@@ -60,15 +60,21 @@ const styles = theme => ({
 			marginTop: '5px'
 		}
 	},
-	moneyIcon: {
-		marginRight: '18px'
-	},
 	contentHeader: {
 		marginBottom: '40px'
+	},
+	barStyle: {
+		padding: '25px 30px 0'
 	}
 });
 
-export const BankingApplicationButton = withStyles(styles)(
+const buttonStyles = theme => ({
+	moneyIcon: {
+		marginRight: '18px'
+	}
+});
+
+export const BankingApplicationButton = withStyles(buttonStyles)(
 	({ classes, canOpenBankAccount, startApplication, loading }) => (
 		<React.Fragment>
 			{canOpenBankAccount && !loading && (
@@ -133,6 +139,7 @@ export const BankingDetailsPage = withStyles(styles)(props => {
 						contact={contact}
 						statusAction={onStatusAction}
 						loading={loading}
+						barStyle={classes.barStyle}
 					/>
 					<Grid
 						container

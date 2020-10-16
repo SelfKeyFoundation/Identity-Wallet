@@ -9,6 +9,7 @@ import { kycSelectors, kycOperations } from 'common/kyc';
 import { RegisterDidCardContainer } from 'renderer/did';
 import { IndividualDashboardPage } from './dashboard-page';
 import { NotifyPopup } from '../common/notify-popup';
+import { featureIsEnabled } from 'common/feature-flags';
 import {
 	CreateAttributeContainer,
 	EditAttributeContainer,
@@ -162,6 +163,19 @@ class IndividualDashboardContainerComponent extends PureComponent {
 		return dispatch(kycOperations.loadRelyingParty(application.rpName, true));
 	};
 
+	handlePostMessage = async ({ application, message }) => {
+		if (message) {
+			await this.props.dispatch(
+				kycOperations.postKYCApplicationChat({
+					rpName: application.rpName,
+					application,
+					message
+				})
+			);
+			return this.props.dispatch(kycOperations.loadRelyingParty(application.rpName, true));
+		}
+	};
+
 	render() {
 		const { profile } = this.props;
 		const { popup } = this.state;
@@ -214,7 +228,12 @@ class IndividualDashboardContainerComponent extends PureComponent {
 					onEditDocument={this.handleEditAttribute}
 					onDeleteDocument={this.handleDeleteAttribute}
 					onAvatarClick={this.handleEditAvatar}
-					didComponent={<RegisterDidCardContainer returnPath={'/main/individual'} />}
+					onSendMessage={this.handlePostMessage}
+					didComponent={
+						featureIsEnabled('did') && (
+							<RegisterDidCardContainer returnPath={'/main/individual'} />
+						)
+					}
 					onApplicationAdditionalRequirements={
 						this.handleApplicationAdditionalRequirements
 					}

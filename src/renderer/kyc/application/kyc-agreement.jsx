@@ -19,6 +19,7 @@ export const KycAgreement = withStyles(styles)(({ text, classes, onChange, value
 			<FormControlLabel
 				control={
 					<Checkbox
+						color={error && !value ? 'primary' : 'secondary'}
 						checked={value}
 						onChange={(evt, checked) => {
 							onChange && onChange(checked);

@@ -6,6 +6,7 @@ import { HexagonAvatar } from '../common/hexagon-avatar';
 import backgroundImage from '../../../../static/assets/images/icons/icon-marketplace.png';
 import { AttributesTable } from '../common/attributes-table';
 import { DocumentsTable } from '../common/documents-table';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({
 	hr: {
@@ -42,7 +43,7 @@ const SelfkeyIdSubheading = ({ email, did }) => (
 	<React.Fragment>
 		<Typography variant="subtitle1">{email}</Typography>
 		<br />
-		{did && (
+		{featureIsEnabled('did') && did && (
 			<Typography variant="subtitle1" color="secondary">
 				did:selfkey:{did}
 			</Typography>
@@ -104,7 +105,9 @@ const IndividualOverviewTab = withStyles(styles)(
 			</Grid>
 			<Grid item>
 				<Grid container direction="column" spacing={4}>
-					{!profile.identity.did && <Grid item>{didComponent}</Grid>}
+					{featureIsEnabled('did') && !profile.identity.did && (
+						<Grid item>{didComponent}</Grid>
+					)}
 					<Grid item>
 						<Card>
 							<CardHeader title="Basic Information" className={classes.regularText} />
@@ -120,8 +123,9 @@ const IndividualOverviewTab = withStyles(styles)(
 									<Grid container item spacing={0} justify="space-between">
 										<Grid
 											container
+											item
 											xs={3}
-											justify="end"
+											justify="flex-end"
 											alignItems="center"
 											direction="column"
 											wrap="nowrap"
@@ -167,8 +171,9 @@ const IndividualOverviewTab = withStyles(styles)(
 									<Grid container item spacing={0} justify="space-between">
 										<Grid
 											container
+											item
 											xs={3}
-											justify="end"
+											justify="flex-end"
 											alignItems="center"
 											direction="column"
 											wrap="nowrap"

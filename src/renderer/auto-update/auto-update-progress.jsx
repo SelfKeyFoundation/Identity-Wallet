@@ -23,7 +23,7 @@ const styles = theme => ({
 export const AutoUpdateProgress = withStyles(styles)(
 	({ classes, progress, closeAction, installRelaunchAction, downloaded }) => {
 		return (
-			<Popup closeAction={closeAction} open text="Software Update">
+			<Popup closeAction={closeAction} open text="Updating SelfKey Wallet" displayLogo>
 				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 					<Grid item xs={2}>
 						<DownloadIcon2 className={classes.downloadIcon} />
@@ -37,7 +37,7 @@ export const AutoUpdateProgress = withStyles(styles)(
 						>
 							<Grid item>
 								<Typography variant="h1" gutterBottom>
-									Downloading...
+									{downloaded ? 'Ready to install' : 'Downloading...'}
 								</Typography>
 							</Grid>
 							<Grid item>

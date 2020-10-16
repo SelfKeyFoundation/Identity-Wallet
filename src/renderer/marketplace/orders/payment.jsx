@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/styles';
 import { Grid, Typography, Button, IconButton } from '@material-ui/core';
 import { Popup } from '../../common';
 import { PaymentIcon, KeyTooltip, InfoTooltip } from 'selfkey-ui';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({
 	paymentIcon: {
@@ -79,9 +80,11 @@ export const MarketplacePayment = withStyles(styles)(
 								<Typography variant="h1" className={classes.bottomSpace}>
 									Payment Required
 								</Typography>
-								<Typography variant="subtitle" color="secondary">
-									{did}
-								</Typography>
+								{featureIsEnabled('did') && (
+									<Typography variant="subtitle" color="secondary">
+										{did}
+									</Typography>
+								)}
 							</Grid>
 							<Grid item>
 								<Typography variant="body1" className={classes.bottomSpace}>

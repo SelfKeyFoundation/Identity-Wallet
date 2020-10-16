@@ -13,7 +13,7 @@ export const individualApplication = {
 	termsOfService: 'test terms of service'
 };
 
-export const individualApplicationKnobs = {
+export const individualApplicationKnobs = () => ({
 	rpName: text('Individual Application Relying Party Name', 'relyingPartyName'),
 	templateId: text('Individual Application templateId', 'test-template-id'),
 	returnRoute: text('Individual Application return route', '/return-route'),
@@ -24,7 +24,7 @@ export const individualApplicationKnobs = {
 	vendor: text('Individual Application vendor', 'test-vendor'),
 	privacyPolicy: text('Individual Application privacy policy', 'test privacy policy'),
 	termsOfService: text('Individual Application terms of service', 'test terms of service')
-};
+});
 
 export const relyingParty = {
 	name: 'relyingPartyName'

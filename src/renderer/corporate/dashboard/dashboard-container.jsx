@@ -14,6 +14,7 @@ import {
 	DeleteAttributeContainer
 } from '../../attributes';
 import DeleteMemberContainer from '../../attributes/delete-member-container';
+import { featureIsEnabled } from 'common/feature-flags';
 
 class CorporateDashboardContainer extends PureComponent {
 	state = {
@@ -211,7 +212,11 @@ class CorporateDashboardContainer extends PureComponent {
 					onEditMember={this.handleEditMember}
 					onOpenMemberDetails={this.handleOpenDetails}
 					selectedMember={this.state.selectedMember}
-					didComponent={<RegisterDidCardContainer returnPath={'/main/corporate'} />}
+					didComponent={
+						featureIsEnabled('did') ? (
+							<RegisterDidCardContainer returnPath={'/main/corporate'} />
+						) : null
+					}
 					onApplicationAdditionalRequirements={
 						this.handleApplicationAdditionalRequirements
 					}

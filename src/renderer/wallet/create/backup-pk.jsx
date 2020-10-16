@@ -51,7 +51,7 @@ const styles = theme => ({
 	}
 });
 
-const main = props => <Link to="/main/dashboard" {...props} />;
+const main = React.forwardRef((props, ref) => <Link to="/main/dashboard" {...props} ref={ref} />);
 
 class BackupPK extends PureComponent {
 	state = {

@@ -3,7 +3,7 @@
 import request from 'request';
 import AsyncTaskQueue from 'common/utils/async-task-queue';
 import BigNumber from 'bignumber.js';
-
+import { EventEmitter } from 'events';
 import { Logger } from 'common/logger';
 import config from 'common/config';
 import Wallet from '../wallet/wallet';
@@ -76,7 +76,7 @@ export const KEY_TYPES_MAP = {
 	tokenDecimal: 'integer'
 };
 
-export class TxHistoryService {
+export class TxHistoryService extends EventEmitter {
 	static isSyncingMap = {};
 	static syncingJobIsStarted = false;
 
@@ -87,6 +87,7 @@ export class TxHistoryService {
 		return this.isSyncingMap[address];
 	}
 	constructor({ web3Service }) {
+		super();
 		this.web3Service = web3Service;
 		this.queue = new AsyncTaskQueue(this.handleTask.bind(this), REQUEST_INTERVAL_DELAY);
 	}
@@ -293,7 +294,9 @@ export class TxHistoryService {
 						walletSetting.txHistoryLastSyncedBlock = endblock;
 						await WalletSetting.updateById(walletSetting.id, walletSetting);
 					}
-
+					if (Object.keys(txHashes).length) {
+						that.emit('new-transactions', { address, txHashes });
+					}
 					return resolve();
 				}
 				let ethTxList = await that.loadEthTxHistory(address, startBlock, endblock, page);
@@ -334,7 +337,11 @@ export class TxHistoryService {
 		self.syncingJobIsStarted = true;
 		let that = this;
 		(async function next() {
-			await that.sync();
+			try {
+				await that.sync();
+			} catch (err) {
+				log.error(err);
+			}
 			next();
 		})();
 	}

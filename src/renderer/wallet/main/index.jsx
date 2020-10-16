@@ -52,6 +52,11 @@ import HardwareWalletTransactionTimer from '../../transaction/send/timer';
 import { exchangesOperations } from '../../../common/exchanges';
 import { SwapCompletedContainer } from '../../transaction/swap/swap-complete-container';
 import { identitySelectors } from 'common/identity';
+import { StakingDashboardContainer } from '../../staking/';
+import { ContractAllowanceListContainer } from '../../contract/allowance-list/allowance-list-container';
+import { AllowanceEditorContainer } from '../../contract/allowance-editor/allowance-editor-container';
+import { TransactionProcessingContainer } from '../../contract/allowance-editor/transaction-processing-container';
+import { TransactionErrorContainer } from '../../contract/allowance-editor/transaction-error-container';
 
 const styles = theme => ({
 	headerSection: {
@@ -110,6 +115,10 @@ class Main extends PureComponent {
 				<Grid item xs={12} className={classes.bodySection} style={contentWrapperStyle}>
 					<Switch>
 						<Route path={`${match.path}/dashboard`} component={Dashboard} />
+						<Route
+							path={`${match.path}/staking`}
+							component={StakingDashboardContainer}
+						/>
 						<Route
 							path={`${match.path}/crypto-manager`}
 							component={CryptoMangerContainer}
@@ -257,7 +266,22 @@ class Main extends PureComponent {
 							path={`${match.path}/create-did-processing`}
 							component={CreateDIDProcessingContainer}
 						/>
-
+						<Route
+							path={`${match.path}/allowance-list/:selectedToken?`}
+							component={ContractAllowanceListContainer}
+						/>
+						<Route
+							path={`${match.path}/allowance-editor`}
+							component={AllowanceEditorContainer}
+						/>
+						<Route
+							path={`${match.path}/allowance-transaction-processing`}
+							component={TransactionProcessingContainer}
+						/>
+						<Route
+							path={`${match.path}/allowance-transaction-error`}
+							component={TransactionErrorContainer}
+						/>
 						{isExportable && (
 							<Route
 								path={`${match.path}/export-wallet/warning`}

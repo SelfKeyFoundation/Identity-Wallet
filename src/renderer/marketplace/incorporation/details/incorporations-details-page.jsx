@@ -60,15 +60,21 @@ const styles = theme => ({
 			marginTop: '5px'
 		}
 	},
-	certificateIcon: {
-		marginRight: '18px'
-	},
 	contentHeader: {
 		marginBottom: '40px'
+	},
+	barStyle: {
+		padding: '25px 30px 0'
 	}
 });
 
-export const IncorporationsApplicationButton = withStyles(styles)(
+const buttonStyles = theme => ({
+	certificateIcon: {
+		marginRight: '18px'
+	}
+});
+
+export const IncorporationsApplicationButton = withStyles(buttonStyles)(
 	({ classes, canIncorporate, startApplication, loading }) => (
 		<React.Fragment>
 			{canIncorporate && !loading && (
@@ -133,6 +139,7 @@ export const IncorporationsDetailsPage = withStyles(styles)(props => {
 						contact={contact}
 						statusAction={onStatusAction}
 						loading={loading}
+						barStyle={classes.barStyle}
 					/>
 					<Grid
 						container

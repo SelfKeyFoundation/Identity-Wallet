@@ -1,0 +1,92 @@
+import React, { PureComponent } from 'react';
+import { CardContent, Card, CardHeader, Grid, Typography } from '@material-ui/core';
+import { withStyles } from '@material-ui/styles';
+import { IDIcon } from 'selfkey-ui';
+import { ApplicationStatusBar } from '../application/application-status';
+
+const styles = theme => ({
+	hr: {
+		backgroundColor: '#303C49',
+		border: 'none',
+		boxSizing: 'border-box',
+		height: '1px',
+		margin: '5px 16px'
+	},
+	info: {
+		padding: '25px 30px'
+	},
+	regularText: {
+		'& span': {
+			fontWeight: 400
+		}
+	},
+	buttons: {
+		marginTop: '20px'
+	},
+	extraSpace: {
+		marginRight: '4px'
+	},
+	alert: {
+		marginBottom: 10
+	}
+});
+
+class KycApprovedCardComponent extends PureComponent {
+	render() {
+		const {
+			classes,
+			title = 'Identity Verification',
+			subtitle = 'Prove your identity',
+			applicationStatus
+		} = this.props;
+		return (
+			<Card>
+				<CardHeader title={title} className={classes.regularText} />
+				<hr className={classes.hr} />
+				<CardContent>
+					<Grid
+						container
+						direction="column"
+						justify="center"
+						alignItems="center"
+						spacing={3}
+					>
+						<Grid container item spacing={0} justify="space-between">
+							<Grid
+								container
+								xs={3}
+								justify="end"
+								alignItems="center"
+								direction="column"
+								wrap="nowrap"
+								spacing={3}
+								className={classes.info}
+							>
+								<Grid item>
+									<IDIcon />
+								</Grid>
+
+								<Grid item>
+									<Typography variant="subtitle2" color="secondary">
+										{subtitle}
+									</Typography>
+								</Grid>
+							</Grid>
+
+							<Grid item xs={9}>
+								<ApplicationStatusBar
+									status={applicationStatus}
+									barStyle={classes.alert}
+								/>
+							</Grid>
+						</Grid>
+					</Grid>
+				</CardContent>
+			</Card>
+		);
+	}
+}
+
+export const KycApprovedCard = withStyles(styles)(KycApprovedCardComponent);
+
+export default KycApprovedCard;

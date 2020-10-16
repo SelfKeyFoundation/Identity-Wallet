@@ -57,7 +57,12 @@ export const kycTypes = {
 	KYC_APPLICATIONS_PROCESSING: 'kyc/applications/processing',
 	KYC_APPLICATIONS_PROCESSING_SET: 'kyc/applications/set/processing',
 	KYC_APPLICATIONS_RESET: 'kyc/applications/reset',
-	KYC_APPLICATIONS_REFRESH: 'kyc/applications/refresh'
+	KYC_APPLICATIONS_REFRESH: 'kyc/applications/refresh',
+	KYC_ADD_ADDITIONAL_REQUIREMENTS: 'kyc/applications/requirements/add',
+	KYC_UPLOAD_ADDITIONAL_FILES: 'kyc/applications/upload/files',
+	KYC_APPLICATION_MESSAGE_SET: 'kyc/application/messages/set',
+	KYC_APPLICATION_MESSAGE_CLEAR: 'kyc/application/messages/clear',
+	KYC_POST_CHAT_MESSAGE: 'kyc/application/chat/post'
 };
 
 const devRPDetails = {
@@ -323,9 +328,11 @@ export const kycSelectors = {
 	selectRequirementsForTemplate(state, rpName, templateId, identityId) {
 		const template = this.oneTemplateSelector(state, rpName, templateId);
 		if (!template) {
-			log.error(
-				`Unable to select template ${templateId} for ${rpName}, check if instance contains this template ID`
-			);
+			if (config.dev) {
+				log.warn(
+					`Unable to select template ${templateId} for ${rpName}, it's either loading or this template ID is not available in the instance`
+				);
+			}
 			return null;
 		}
 		const templateAttributes = template.attributes || [];
@@ -461,8 +468,37 @@ export const kycSelectors = {
 			id => this.kycSelector(state).applicationsById[id]
 		);
 	},
+	selectApplicationsForTemplate(state, rpName, templateId, identityId) {
+		return this.selectApplications(state).filter(app => {
+			if (identityId && identityId !== +app.identityId) {
+				return false;
+			}
+
+			if (!templateId) {
+				return rpName === app.rpName;
+			}
+
+			return templateId === app.templateId;
+		});
+	},
+	selectLastApplication(state, rpName, templateId, identityId) {
+		const applications = this.selectApplicationsForTemplate(
+			state,
+			rpName,
+			templateId,
+			identityId
+		).sort((a, b) => {
+			const aDate = new Date(a.createdAt);
+			const bDate = new Date(b.createdAt);
+			return aDate > bDate ? -1 : 1;
+		});
+		return applications[0] || null;
+	},
 	selectProcessing(state) {
 		return this.kycSelector(state).processing;
+	},
+	selectMessages(state) {
+		return this.kycSelector(state).messages;
 	}
 };
 
@@ -539,6 +575,17 @@ export const kycActions = {
 		return {
 			type: kycTypes.KYC_APPLICATIONS_PROCESSING,
 			payload: processing
+		};
+	},
+	setMessages(message) {
+		return {
+			type: kycTypes.KYC_APPLICATION_MESSAGE_SET,
+			payload: message
+		};
+	},
+	clearMessages() {
+		return {
+			type: kycTypes.KYC_APPLICATION_MESSAGE_CLEAR
 		};
 	}
 };
@@ -649,6 +696,8 @@ const loadRelyingPartyOperation = (
 		if (authenticate) {
 			applications = await session.listKYCApplications();
 			for (const application of applications) {
+				application.messages = await session.getKYCApplicationChat(application.id);
+				const formattedMessages = messageFilter(application.messages);
 				const template = templates.find(t => t.id === application.template);
 				await dispatch(
 					kycOperations.updateApplicationsOperation({
@@ -660,7 +709,9 @@ const loadRelyingPartyOperation = (
 						owner: application.owner,
 						scope: application.scope,
 						applicationDate: application.createdAt,
-						title: template ? template.name : rpName
+						title: template ? template.name : rpName,
+						templateId: template.id,
+						messages: formattedMessages
 					})
 				);
 			}
@@ -741,6 +792,30 @@ const loadRelyingPartiesForVendors = (
 	}
 };
 
+const postChatMessage = ({ rpName, application, message }) => async (dispatch, getState) => {
+	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
+	if (!rp || !rp.session) throw new Error(`relying party ${rpName} does not exist`);
+
+	if (!application || !application.id) {
+		throw new Error('application does not exist');
+	}
+	/*
+	if (!rp.templates.find(tpl => tpl.id === templateId)) {
+		throw new Error('template does not exist');
+	}
+	*/
+	const identity = identitySelectors.selectIdentity(getState());
+	if (!identity) {
+		return;
+	}
+
+	if (!rp.session.isActive()) {
+		await rp.session.establish();
+	}
+
+	await rp.session.postKYCApplicationChat(application.id, message);
+};
+
 const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title) => async (
 	dispatch,
 	getState
@@ -767,7 +842,10 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 		}
 		let application = await rp.session.createKYCApplication(templateId, attributes);
 		application = await rp.session.getKYCApplication(application.id);
-		await dispatch(kycActions.addKYCApplication(rpName, application));
+		await dispatch(kycActions.addKYCApplication(rpName, { ...application, templateId }));
+		// application.messages = await rp.session.getKYCApplicationChat(application.id);
+		application.messages = [];
+		const formattedMessages = messageFilter(application.messages);
 		await dispatch(
 			kycOperations.updateApplicationsOperation({
 				id: application.id,
@@ -778,7 +856,8 @@ const createRelyingPartyKYCApplication = (rpName, templateId, attributes, title)
 				owner: application.owner,
 				scope: application.scope,
 				applicationDate: application.createdAt,
-				title: title || rpName
+				title: title || rpName,
+				messages: formattedMessages
 			})
 		);
 		return application;
@@ -918,6 +997,10 @@ const updateRelyingPartyKYCApplication = (
 		let application = await rp.session.updateKYCApplication(updatedApplication);
 		application = await rp.session.getKYCApplication(application.id);
 		await dispatch(kycActions.addKYCApplication(rpName, application));
+
+		application.messages = await rp.session.getKYCApplicationChat(application.id);
+		const formattedMessages = messageFilter(application.messages);
+
 		await dispatch(
 			kycOperations.updateApplicationsOperation({
 				id: application.id,
@@ -927,7 +1010,8 @@ const updateRelyingPartyKYCApplication = (
 				currentStatusName: application.statusName,
 				owner: application.owner,
 				scope: application.scope,
-				applicationDate: application.createdAt
+				applicationDate: application.createdAt,
+				messages: formattedMessages
 			})
 		);
 	} catch (error) {
@@ -953,6 +1037,45 @@ const updateRelyingPartyKYCApplicationPayment = (rpName, applicationId, transact
 	await dispatch(kycActions.updateRelyingParty(rp));
 };
 
+const addAdditionalTemplateRequirements = ({ rpName, application, attributes }) => async (
+	dispatch,
+	getState
+) => {
+	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
+	if (!rp || !rp.session) throw new Error('relying party does not exist');
+
+	if (!application || !application.id) {
+		throw new Error('application does not exist');
+	}
+
+	const identity = identitySelectors.selectIdentity(getState());
+	if (!identity) return;
+
+	if (!rp.session.isActive()) {
+		await rp.session.establish();
+	}
+
+	await rp.session.addAdditionalTemplateRequirements(application.id, attributes);
+};
+
+const uploadAdditionalFiles = ({ rpName, application, files }) => async (dispatch, getState) => {
+	const rp = kycSelectors.relyingPartySelector(getState(), rpName);
+	if (!rp || !rp.session) throw new Error('relying party does not exist');
+
+	if (!application || !application.id) {
+		throw new Error('application does not exist');
+	}
+
+	const identity = identitySelectors.selectIdentity(getState());
+	if (!identity) return;
+
+	if (!rp.session.isActive()) {
+		await rp.session.establish();
+	}
+
+	await rp.session.uploadAdditionalFiles(application.id, files);
+};
+
 const startCurrentApplicationOperation = (
 	rpName,
 	templateId,
@@ -963,7 +1086,8 @@ const startCurrentApplicationOperation = (
 	agreement,
 	vendor,
 	privacyPolicy,
-	termsOfService
+	termsOfService,
+	userMessage
 ) => async (dispatch, getState) => {
 	await dispatch(
 		kycActions.setCurrentApplication(
@@ -979,6 +1103,9 @@ const startCurrentApplicationOperation = (
 			termsOfService
 		)
 	);
+	if (userMessage) {
+		await dispatch(kycActions.setMessages(userMessage));
+	}
 	await dispatch(push(`/main/kyc/current-application/${rpName}`));
 };
 
@@ -1301,7 +1428,16 @@ export const kycOperations = {
 	loadRelyingPartiesForVendors: createAliasedAction(
 		kycTypes.KYC_RP_LOAD_FOR_VENDORS,
 		loadRelyingPartiesForVendors
-	)
+	),
+	addAdditionalTemplateRequirements: createAliasedAction(
+		kycTypes.KYC_ADD_ADDITIONAL_REQUIREMENTS,
+		addAdditionalTemplateRequirements
+	),
+	uploadAdditionalFiles: createAliasedAction(
+		kycTypes.KYC_UPLOAD_ADDITIONAL_FILES,
+		uploadAdditionalFiles
+	),
+	postKYCApplicationChat: createAliasedAction(kycTypes.KYC_POST_CHAT_MESSAGE, postChatMessage)
 };
 
 export const operations = {
@@ -1346,6 +1482,15 @@ export const clearCurrentApplicationReducer = state => {
 	return { ...state, currentApplication: null };
 };
 
+export const setMessagesReducer = (state, { payload }) => {
+	let messages = payload;
+	return { ...state, messages };
+};
+
+export const clearMessagesReducer = state => {
+	return { ...state, messages: null };
+};
+
 export const setCancelRoute = (state, { payload }) => {
 	return { ...state, cancelRoute: payload };
 };
@@ -1370,6 +1515,8 @@ export const reducers = {
 	deleteKYCApplicationReducer,
 	setCurrentApplicationReducer,
 	clearCurrentApplicationReducer,
+	setMessagesReducer,
+	clearMessagesReducer,
 	setCancelRoute,
 	setApplicationsReducer,
 	setProcessingReducer
@@ -1393,8 +1540,28 @@ export const reducer = (state = initialState, action) => {
 			return reducers.setApplicationsReducer(state, action);
 		case kycTypes.KYC_APPLICATIONS_PROCESSING:
 			return reducers.setProcessingReducer(state, action);
+		case kycTypes.KYC_APPLICATION_MESSAGE_SET:
+			return reducers.setMessagesReducer(state, action);
+		case kycTypes.KYC_APPLICATION_MESSAGE_CLEAR:
+			return reducers.createMessagesReducer(state, action);
 	}
 	return state;
+};
+
+export const messageFilter = (messages = []) => {
+	let result = [];
+	for (let m of messages) {
+		let fm = {};
+		fm.id = m.id;
+		m.user.name ? (fm.name = m.user.name) : (fm.name = 'Certifier');
+		m.roles === undefined || m.roles.length === 0
+			? (fm.type = 'person')
+			: (fm.type = 'certifier');
+		fm.date = parseInt((new Date(m.createdAt).getTime() / 1000).toFixed(0));
+		fm.message = m.message;
+		result.push(fm);
+	}
+	return result;
 };
 
 export default reducer;
