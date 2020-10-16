@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = async ({ config }) => {
 	const maxAssetSize = 1024 * 1024;
@@ -51,6 +52,10 @@ module.exports = async ({ config }) => {
 			maxSize: maxAssetSize
 		}
 	};
+
+	if (process.env.CI) {
+		config.optimization.minimizer = [new TerserPlugin({ parallel: false })];
+	}
 	config.performance = {
 		maxAssetSize: maxAssetSize
 	};

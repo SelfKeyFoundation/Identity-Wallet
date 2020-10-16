@@ -41,10 +41,6 @@ const styles = theme => ({
 		overflow: 'auto',
 		width: '100%'
 	},
-	logoSection: {
-		marginBottom: '30px',
-		marginTop: '-30px'
-	},
 	logoText: {
 		fontFamily: 'Orbitron, arial, sans-serif',
 		fontSize: '16px',
@@ -52,12 +48,6 @@ const styles = theme => ({
 		lineHeight: '22px',
 		marginLeft: '13px',
 		marginTop: '3px'
-	},
-	closeSection: {
-		width: '100%'
-	},
-	pointer: {
-		cursor: 'pointer'
 	},
 	link: {
 		alignItems: 'center',
@@ -92,15 +82,6 @@ const styles = theme => ({
 		'&:focus': {
 			outline: 0
 		}
-	},
-	secondaryButtons: {
-		alignItems: 'flex-end',
-		display: 'flex',
-		flexGrow: 2,
-		width: 'inherit'
-	},
-	inheritWidth: {
-		width: 'inherit'
 	},
 	inheritHeight: {
 		height: 'inherit'
@@ -180,6 +161,28 @@ const styles = theme => ({
 	tooltipLink: {
 		color: primary,
 		textDecoration: 'none'
+	},
+	skLogo: {
+		flexGrow: 0,
+		padding: '21px 0 !important'
+	},
+	skLogoContainer: {
+		paddingLeft: '13px'
+	},
+	divider: {
+		backgroundColor: '#475768',
+		flexGrow: 0,
+		width: '100%'
+	},
+	mainMenuItemsWrap: {
+		flexGrow: 1,
+		padding: '50px 0 0 !important'
+	},
+	secondaryMenuItemsWrap: {
+		padding: '50px 0 20px !important'
+	},
+	paddingLeft: {
+		paddingLeft: '10px'
 	}
 });
 
@@ -232,13 +235,13 @@ class Sidebar extends PureComponent {
 				className={`${classes.list} sidebarContainer`}
 				spacing={5}
 			>
-				<Grid item style={{ padding: '21px 0', flexGrow: 0 }}>
+				<Grid item className={classes.skLogo}>
 					<Grid
 						container
 						direction="row"
 						alignItems="center"
 						wrap="nowrap"
-						style={{ paddingLeft: '13px' }}
+						className={classes.skLogoContainer}
 					>
 						<Link to="/main/dashboard" className={classes.link}>
 							<SelfkeyLogo width="30px" height="34px" />
@@ -248,9 +251,9 @@ class Sidebar extends PureComponent {
 						</Link>
 					</Grid>
 				</Grid>
-				<Divider style={{ width: '100%', backgroundColor: '#475768', flexGrow: 0 }} />
-				<Grid item style={{ padding: '50px 0 20px', flexGrow: 1 }}>
-					<List style={{ paddingLeft: '10px' }}>
+				<Divider className={classes.divider} />
+				<Grid item className={classes.mainMenuItemsWrap}>
+					<List className={classes.paddingLeft}>
 						<ListItem
 							className={classes.listItem}
 							component={dashboard}
@@ -345,7 +348,7 @@ class Sidebar extends PureComponent {
 						<Divider className={`divider`} />
 					</List>
 				</Grid>
-				<Grid item style={{ padding: '50px 0 20px' }}>
+				<Grid item className={classes.secondaryMenuItemsWrap}>
 					{/* <Grid item className={classes.network}>
 						<Typography variant="overline" gutterBottom>
 							Network
@@ -396,7 +399,7 @@ class Sidebar extends PureComponent {
 							))}
 						</Select>
 					</Grid> */}
-					<List style={{ paddingLeft: '10px' }}>
+					<List className={classes.paddingLeft}>
 						<ListItem
 							className={classes.listItem}
 							onClick={e => {
