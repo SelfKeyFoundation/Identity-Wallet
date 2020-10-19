@@ -5,17 +5,23 @@ import { Popup } from '../common/popup';
 
 const styles = theme => ({
 	text: {
+		color: '#93b0c1',
 		fontFamily: 'Lato, arial, sans-serif',
 		fontSize: '14px',
-		color: '#93b0c1',
-		marginBottom: '10px'
+		marginBottom: theme.spacing(1)
 	},
 	label: {
-		marginBottom: '20px',
-		marginTop: '20px'
+		marginBottom: theme.spacing(3),
+		marginTop: theme.spacing(3)
 	},
 	buttonContainer: {
-		margin: '20px -12px 0'
+		margin: theme.spacing(3, -2, 0)
+	},
+	popupWrap: {
+		width: '560px'
+	},
+	popupBody: {
+		height: '250px'
 	}
 });
 
@@ -34,7 +40,13 @@ class DeleteMemberComponent extends PureComponent {
 		const { classes, open, text } = this.props;
 
 		return (
-			<Popup open={open} closeAction={this.handleCancel} isHeaderVisible={false}>
+			<Popup
+				open={open}
+				closeAction={this.handleCancel}
+				isHeaderVisible={false}
+				popupClass={classes.popupWrap}
+				xtraClass={classes.popupBody}
+			>
 				<Grid container direction="column" spacing={1}>
 					<Grid item>
 						<Typography variant="h2">{text}</Typography>
