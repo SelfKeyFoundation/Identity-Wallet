@@ -76,7 +76,7 @@ jobs:
           command: |
             TESTFILES=$(circleci tests glob "src/**/*.{spec,test}.js" | circleci tests split)
             echo "This job runs the following tests:"
-            echo circleci tests glob "src/**/*.{spec,test}.js" | circleci tests split | xargs -n 1 echo
+            circleci tests glob "src/**/*.{spec,test}.js" | circleci tests split | xargs -n 1 echo
             yarn test:unit:ci:split $TESTFILES
       # - run:
       #     name: Coveralls
@@ -178,7 +178,8 @@ jobs:
             - yarn-packages-win-
       - run: tzutil /s "UTC"
       - run: git config --global core.autocrlf input
-      - run: Start-FileDownload 'https://storage.googleapis.com/win-open-ssl/Win64OpenSSL-1_0_2r.exe'
+      - run: $wc = New-Object System.Net.WebClient
+      - run: $wc.DownloadFile('https://storage.googleapis.com/win-open-ssl/Win64OpenSSL-1_0_2r.exe', 'Win64OpenSSL-1_0_2r.exe')
       - run: Start-Process 'Win64OpenSSL-1_0_2r.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
       - run: Start-Process 'GoogleCloudSDKInstaller.exe' -ArgumentList '/S' -Wait
       - run: refreshenv
