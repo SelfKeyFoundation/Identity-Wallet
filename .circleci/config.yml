@@ -74,9 +74,9 @@ jobs:
       - run:
           name: Unit Tests
           command: |
-            TESTFILES=$(circleci tests glob "src/**/*.{spec,test}.js" | circleci tests split)
+            TESTFILES=$(circleci tests glob "src/**/*.{spec,test}.js" | circleci tests split --split-by=timings)
             echo "This job runs the following tests:"
-            circleci tests glob "src/**/*.{spec,test}.js" | circleci tests split | xargs -n 1 echo
+            circleci tests glob "src/**/*.{spec,test}.js" | circleci tests split --split-by=timings| xargs -n 1 echo
             yarn test:unit:ci:split $TESTFILES
       # - run:
       #     name: Coveralls
