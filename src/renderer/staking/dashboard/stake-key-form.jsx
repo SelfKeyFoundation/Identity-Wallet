@@ -6,13 +6,18 @@ import moment from 'moment';
 import BN from 'bignumber.js';
 import { PropTypes } from 'prop-types';
 
-const useStyles = makeStyles({
-	currencyName: {
-		textAlign: 'right'
-	},
-	container: {
-		height: '100%'
-	}
+const useStyles = makeStyles(theme => {
+	return {
+		currencyName: {
+			textAlign: 'right'
+		},
+		container: {
+			height: '100%'
+		},
+		title: {
+			marginBottom: theme.spacing(1)
+		}
+	};
 });
 
 export const StakeKeyForm = ({ stakeInfo, keyToken, onSubmit }) => {
@@ -82,7 +87,7 @@ export const StakeKeyForm = ({ stakeInfo, keyToken, onSubmit }) => {
 		>
 			<Grid item>
 				<FormControl variant="filled" fullWidth>
-					<Typography variant="overline" gutterBottom>
+					<Typography variant="overline" className={classes.title}>
 						Stake
 					</Typography>
 					<Input
@@ -102,7 +107,7 @@ export const StakeKeyForm = ({ stakeInfo, keyToken, onSubmit }) => {
 			</Grid>
 			<Grid item>
 				<FormControl variant="filled" fullWidth>
-					<Typography variant="overline" gutterBottom>
+					<Typography variant="overline" className={classes.title}>
 						Timelock Period
 					</Typography>
 					<KeyPicker

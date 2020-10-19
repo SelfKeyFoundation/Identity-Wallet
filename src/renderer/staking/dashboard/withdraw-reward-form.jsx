@@ -4,13 +4,18 @@ import { Grid, FormControl, Input, Typography, Button } from '@material-ui/core'
 import { PropTypes } from 'prop-types';
 import BN from 'bignumber.js';
 
-const useStyles = makeStyles({
-	currencyName: {
-		textAlign: 'right'
-	},
-	container: {
-		height: '100%'
-	}
+const useStyles = makeStyles(theme => {
+	return {
+		currencyName: {
+			textAlign: 'right'
+		},
+		container: {
+			height: '100%'
+		},
+		title: {
+			marginBottom: theme.spacing(1)
+		}
+	};
 });
 
 export const WithdrawRewardForm = ({ stakeInfo, onSubmit }) => {
@@ -58,7 +63,7 @@ export const WithdrawRewardForm = ({ stakeInfo, onSubmit }) => {
 		>
 			<Grid item>
 				<FormControl variant="filled" fullWidth>
-					<Typography variant="overline" gutterBottom>
+					<Typography variant="overline" className={classes.title}>
 						Amount
 					</Typography>
 					<Input
