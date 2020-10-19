@@ -77,7 +77,7 @@ jobs:
             TESTFILES=$(circleci tests glob "src/**/*.{spec,test}.js" | circleci tests split --split-by=timings)
             echo "This job runs the following tests:"
             circleci tests glob "src/**/*.{spec,test}.js" | circleci tests split --split-by=timings| xargs -n 1 echo
-            yarn test:unit:ci:split $TESTFILES --coverageDirectory='dist/coverage/${CIRCLE_NODE_INDEX}/'
+            yarn test:unit:ci:split $TESTFILES --coverageDirectory="dist/coverage/${CIRCLE_NODE_INDEX}/"
       - store_test_results:
           path: dist/junit
       - store_artifacts:
@@ -297,7 +297,6 @@ jobs:
       - run:
           name: E2E Tests
           command: OSENV=circle-mac yarn test:e2e
-
   'e2e-linux':
     docker: *DOCKERIMAGE
     environment:
