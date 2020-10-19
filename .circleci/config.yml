@@ -55,7 +55,7 @@ jobs:
       CACHE_VERSION: *cache_version
       JEST_JUNIT_OUTPUT_DIR: dist/junit
       JEST_JUNIT_UNIQUE_OUTPUT_NAME: 'true'
-    parallelism: 4
+    parallelism: 2
     steps:
       - checkout
       - attach_workspace:
@@ -77,15 +77,41 @@ jobs:
             TESTFILES=$(circleci tests glob "src/**/*.{spec,test}.js" | circleci tests split --split-by=timings)
             echo "This job runs the following tests:"
             circleci tests glob "src/**/*.{spec,test}.js" | circleci tests split --split-by=timings| xargs -n 1 echo
-            yarn test:unit:ci:split $TESTFILES
-      # - run:
-      #     name: Coveralls
-      #     command: yarn coveralls
+            yarn test:unit:ci:split $TESTFILES --coverageDirectory='dist/coverage/${CIRCLE_NODE_INDEX}/'
       - store_test_results:
           path: dist/junit
       - store_artifacts:
           path: dist
       - *step_save_cache
+  'coveralls':
+    docker: *DOCKERIMAGE
+    environment:
+      CACHE_VERSION: *cache_version
+    steps:
+      - run:
+          name: Install OS Icov
+          command: |
+            sudo apt-get update -y
+            apt-get install -y lcov
+      - checkout
+      - attach_workspace:
+          at: /tmp/linux
+      - *step_prepare_cache_buster
+      - *step_restore_cache
+      - run:
+          name: Get storybook from attach_workspace
+          command: |
+            mkdir -p dist
+            cp -r /tmp/linux/dist/coverage dist/coverage
+      - run:
+          name: Merge coverage reports
+          command: find dist/coverage -name lcov.info -exec echo -a {} \; | xargs lcov -o dist/coverage/lcov.info
+      - run:
+          name: Coveralls
+          command: yarn coveralls
+      - store_artifacts:
+          path: dist
+
   'build-storybook':
     docker: *DOCKERIMAGE
     environment:
@@ -178,10 +204,12 @@ jobs:
             - yarn-packages-win-
       - run: tzutil /s "UTC"
       - run: git config --global core.autocrlf input
-      - run: $wc = New-Object System.Net.WebClient
-      - run: $wc.DownloadFile('https://storage.googleapis.com/win-open-ssl/Win64OpenSSL-1_0_2r.exe', 'Win64OpenSSL-1_0_2r.exe')
+      - run:
+          name: 'Install OpenSSL'
+          command: |
+            $wc = New-Object System.Net.WebClient
+            $wc.DownloadFile("https://storage.googleapis.com/win-open-ssl/Win64OpenSSL-1_0_2r.exe", "Win64OpenSSL-1_0_2r.exe")
       - run: Start-Process 'Win64OpenSSL-1_0_2r.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
-      - run: Start-Process 'GoogleCloudSDKInstaller.exe' -ArgumentList '/S' -Wait
       - run: refreshenv
       - run: Install-Product node $env:nodejs_version x64
       - run: npm i -g yarn
@@ -468,6 +496,13 @@ workflows:
   main:
     jobs:
       - 'unit-test':
+          filters:
+            branches:
+              ignore:
+                - auto-update-test
+      - coveralls:
+          requires:
+            - unit-test
           filters:
             branches:
               ignore:
