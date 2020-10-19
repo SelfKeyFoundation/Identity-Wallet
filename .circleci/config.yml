@@ -77,10 +77,10 @@ jobs:
             TESTFILES=$(circleci tests glob "src/**/*.{spec,test}.js" | circleci tests split)
             echo "This job runs the following tests:"
             echo circleci tests glob "src/**/*.{spec,test}.js" | circleci tests split | xargs -n 1 echo
-            yarn test:unit:ci $TESTFILES
-      - run:
-          name: Coveralls
-          command: yarn coveralls
+            yarn test:unit:ci:split $TESTFILES
+      # - run:
+      #     name: Coveralls
+      #     command: yarn coveralls
       - store_test_results:
           path: dist/junit
       - store_artifacts:
