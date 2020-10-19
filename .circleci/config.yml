@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 aliases:
     - &cache_version '2'
     - &step_prepare_cache_buster
@@ -45,7 +45,8 @@ aliases:
       run:
           name: Upgrade Yarn
           command: npm install -g yarn@latest
-
+orbs:
+    win: circleci/windows@2.2.0
 jobs:
     'unit-test':
         docker: &DOCKERIMAGE
@@ -155,6 +156,30 @@ jobs:
             - store_artifacts:
                   path: dist/{latest,SelfKey Identity,selfkey-identity}*
             - *step_save_cache_mac
+    'build-windows':
+        executor: win/default
+        environment:
+            OSENV: windows
+            NO_PROXY: 127.0.0.1,localhost
+        steps:
+            - checkout
+            - run: Write-Host 'Hello, Windows'
+    'stage-windows':
+        executor: win/default
+        environment:
+            OSENV: windows
+            NO_PROXY: 127.0.0.1,localhost
+        steps:
+            - checkout
+            - run: Write-Host 'Hello, Windows'
+    'publish-windows':
+        executor: win/default
+        environment:
+            OSENV: windows
+            NO_PROXY: 127.0.0.1,localhost
+        steps:
+            - checkout
+            - run: Write-Host 'Hello, Windows'
     'build-linux':
         docker: *DOCKERIMAGE
         environment:
@@ -422,9 +447,10 @@ workflows:
                       branches:
                           ignore:
                               - auto-update-test
+
             # - 'e2e-linux':
-            #       requires:
-            #           - build-linux
+            #     requires:
+            #       - build-linux
             - 'stage-linux':
                   requires:
                       # - e2e-linux
@@ -437,6 +463,26 @@ workflows:
                               - nightly
                               - release
                               - /staging.*/
+            - 'build-windows':
+                  requires:
+                      - unit-test
+                  filters:
+                      branches:
+                          ignore:
+                              - auto-update-test
+            - 'stage-windows':
+                  requires:
+                      # - e2e-linux
+                      - build-windows
+                      # - build-linux-arm
+                  filters:
+                      branches:
+                          only:
+                              - dev
+                              - nightly
+                              - release
+                              - /staging.*/
+
             - 'build-mac':
                   requires:
                       - unit-test
@@ -445,8 +491,8 @@ workflows:
                           ignore:
                               - auto-update-test
             # - 'e2e-mac':
-            #       requires:
-            #           - build-mac
+            #     requires:
+            #       - build-mac
             - 'stage-mac':
                   requires:
                       # - e2e-mac
@@ -483,6 +529,14 @@ workflows:
                   requires:
                       # - e2e-linux
                       - build-linux
+                  filters:
+                      branches:
+                          only:
+                              - master
+            - 'publish-windows':
+                  requires:
+                      # - e2e-linux
+                      - build-windows
                   filters:
                       branches:
                           only:
