@@ -55,6 +55,7 @@ jobs:
       CACHE_VERSION: *cache_version
       JEST_JUNIT_OUTPUT_DIR: dist/junit
       JEST_JUNIT_UNIQUE_OUTPUT_NAME: 'true'
+      JEST_JUNIT_ADD_FILE_ATTRIBUTE: 'true'
     parallelism: 2
     steps:
       - checkout
@@ -80,8 +81,10 @@ jobs:
             yarn test:unit:ci:split $TESTFILES --coverageDirectory="dist/coverage/${CIRCLE_NODE_INDEX}/"
       - store_test_results:
           path: dist/junit
-      - store_artifacts:
-          path: dist
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
       - *step_save_cache
   'coveralls':
     docker: *DOCKERIMAGE
@@ -215,9 +218,13 @@ jobs:
           command: |
             choco install nodejs.install --version=10.13.0
             npm i -g yarn
+      - run:
+          name: Install Build Tools
+          command: |
+            npm install --global windows-build-tools --vs2015
+            npm config set msvs_version 2015 --global
       - run: refreshenv
       - run: yarn install-all
-      - run: npm config set msvs_version 2015 --global
       - run: echo {"dsn":"%SENTRY_DSN%"} > src\assets\data\sentry.json
       - run: yarn dist --publish=never
       - store_artifacts:

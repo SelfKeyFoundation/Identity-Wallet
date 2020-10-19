@@ -48,7 +48,7 @@
 		"test:unit": "jest -i --forceExit",
 		"test:unit:coverage": "yarn test:unit --testPathPattern='src' --coverage",
 		"test:unit:ci": "yarn test:unit:coverage --ci  --reporters=default --reporters=jest-junit",
-		"test:unit:ci:split": "jest -i --forceExit --coverage",
+		"test:unit:ci:split": "jest -i --forceExit --ci --coverage",
 		"test:e2e": "jest -i --config='jest.e2e.config.js' --ci  --reporters=default --reporters=jest-junit",
 		"publish-build": "yarn compile && electron-builder -p always",
 		"check-deps-precommit": "npm-check -i eslint -i redux -s || true",
