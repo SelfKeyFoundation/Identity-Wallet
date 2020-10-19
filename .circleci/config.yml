@@ -1,543 +1,574 @@
 version: 2.1
 aliases:
-    - &cache_version '2'
-    - &step_prepare_cache_buster
-      run:
-          name: Prepare Cache Buster
-          command: echo ${CACHE_VERSION} > /tmp/cache_buster
-    - &step_setup_nvm
-      run:
-          name: Setup NVM
-          command: |
-              export NODE_VERSION=$(cat .nvmrc)
-              curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash -s -- --no-use
-              echo 'export NVM_DIR=$HOME/.nvm' >> $BASH_ENV
-              echo 'source $NVM_DIR/nvm.sh' >> $BASH_ENV
-    - &step_restore_cache_mac
-      restore_cache:
-          name: Restore Yarn Package Cache
-          keys:
-              - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
-              - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-
-              - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}}-dev
-              - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}}-
-    - &step_save_cache_mac
-      save_cache:
-          name: Save Yarn Package Cache
-          key: yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          paths:
-              - node_modules/
-    - &step_restore_cache
-      restore_cache:
-          name: Restore Yarn Package Cache
-          keys:
-              - yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
-              - yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-
-              - yarn-packages-{{ checksum "/tmp/cache_buster" }}-dev
-              - yarn-packages-{{ checksum "/tmp/cache_buster" }}-
-    - &step_save_cache
-      save_cache:
-          name: Save Yarn Package Cache
-          key: yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
-          paths:
-              - node_modules/
-    - &step_yarn_upgrade
-      run:
-          name: Upgrade Yarn
-          command: npm install -g yarn@latest
+  - &cache_version '2'
+  - &step_prepare_cache_buster
+    run:
+      name: Prepare Cache Buster
+      command: echo ${CACHE_VERSION} > /tmp/cache_buster
+  - &step_setup_nvm
+    run:
+      name: Setup NVM
+      command: |
+        export NODE_VERSION=$(cat .nvmrc)
+        curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash -s -- --no-use
+        echo 'export NVM_DIR=$HOME/.nvm' >> $BASH_ENV
+        echo 'source $NVM_DIR/nvm.sh' >> $BASH_ENV
+  - &step_restore_cache_mac
+    restore_cache:
+      name: Restore Yarn Package Cache
+      keys:
+        - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-
+        - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}}-dev
+        - yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}}-
+  - &step_save_cache_mac
+    save_cache:
+      name: Save Yarn Package Cache
+      key: yarn-packages-mac-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      paths:
+        - node_modules/
+  - &step_restore_cache
+    restore_cache:
+      name: Restore Yarn Package Cache
+      keys:
+        - yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-
+        - yarn-packages-{{ checksum "/tmp/cache_buster" }}-dev
+        - yarn-packages-{{ checksum "/tmp/cache_buster" }}-
+  - &step_save_cache
+    save_cache:
+      name: Save Yarn Package Cache
+      key: yarn-packages-{{ checksum "/tmp/cache_buster" }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      paths:
+        - node_modules/
+  - &step_yarn_upgrade
+    run:
+      name: Upgrade Yarn
+      command: npm install -g yarn@latest
 orbs:
-    win: circleci/windows@2.2.0
+  win: circleci/windows@2.2.0
 jobs:
-    'unit-test':
-        docker: &DOCKERIMAGE
-            - image: circleci/node:10.13.0-stretch-browsers
-        environment:
-            CACHE_VERSION: *cache_version
-            JEST_JUNIT_OUTPUT_DIR: dist/junit
-            JEST_JUNIT_UNIQUE_OUTPUT_NAME: 'true'
-        steps:
-            - checkout
-            - attach_workspace:
-                  at: /tmp/linux
-            - *step_prepare_cache_buster
-            - *step_restore_cache
-            - run:
-                  name: Install OS Dependecies
-                  command: |
-                      sudo apt-get update
-                      sudo apt-get install build-essential
-                      sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
-            - run:
-                  name: Install Node Packages
-                  command: yarn install-all
-            - run:
-                  name: Unit Tests
-                  command: yarn test:unit:ci
-            - run:
-                  name: Coveralls
-                  command: yarn coveralls
-            - store_test_results:
-                  path: dist/junit
-            - store_artifacts:
-                  path: dist
-            - *step_save_cache
-    'build-storybook':
-        docker: *DOCKERIMAGE
-        environment:
-            CACHE_VERSION: *cache_version
-            NODE_OPTIONS: --max_old_space_size=4096
-        steps:
-            - checkout
-            - attach_workspace:
-                  at: /tmp/linux
-            - *step_prepare_cache_buster
-            - *step_restore_cache
-            - run:
-                  name: Build Storybook
-                  command: yarn build-storybook
-            - persist_to_workspace:
-                  root: .
-                  paths:
-                      - dist
-    'publish-storybook':
-        docker: *DOCKERIMAGE
-        environment:
-            CACHE_VERSION: *cache_version
-        steps:
-            - checkout
-            - attach_workspace:
-                  at: /tmp/linux
-            - *step_prepare_cache_buster
-            - *step_restore_cache
-            - run:
-                  name: Get storybook from attach_workspace
-                  command: |
-                      mkdir -p dist
-                      cp -r /tmp/linux/dist/storybook dist/storybook
-            - run:
-                  name: Story book
-                  command: yarn deploy-storybook-ci
+  'unit-test':
+    docker: &DOCKERIMAGE
+      - image: circleci/node:10.13.0-stretch-browsers
+    environment:
+      CACHE_VERSION: *cache_version
+      JEST_JUNIT_OUTPUT_DIR: dist/junit
+      JEST_JUNIT_UNIQUE_OUTPUT_NAME: 'true'
+    parallelism: 4
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/linux
+      - *step_prepare_cache_buster
+      - *step_restore_cache
+      - run:
+          name: Install OS Dependecies
+          command: |
+            sudo apt-get update
+            sudo apt-get install build-essential
+            sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
+      - run:
+          name: Install Node Packages
+          command: yarn install-all
+      - run:
+          name: Unit Tests
+          command: |
+            TESTFILES=$(circleci tests glob "src/**/*.{spec,test}.js" | circleci tests split)
+            echo "This job runs the following tests:"
+            echo circleci tests glob "src/**/*.{spec,test}.js" | circleci tests split | xargs -n 1 echo
+            yarn test:unit:ci $TESTFILES
+      - run:
+          name: Coveralls
+          command: yarn coveralls
+      - store_test_results:
+          path: dist/junit
+      - store_artifacts:
+          path: dist
+      - *step_save_cache
+  'build-storybook':
+    docker: *DOCKERIMAGE
+    environment:
+      CACHE_VERSION: *cache_version
+      NODE_OPTIONS: --max_old_space_size=4096
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/linux
+      - *step_prepare_cache_buster
+      - *step_restore_cache
+      - run:
+          name: Build Storybook
+          command: yarn build-storybook
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+  'publish-storybook':
+    docker: *DOCKERIMAGE
+    environment:
+      CACHE_VERSION: *cache_version
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/linux
+      - *step_prepare_cache_buster
+      - *step_restore_cache
+      - run:
+          name: Get storybook from attach_workspace
+          command: |
+            mkdir -p dist
+            cp -r /tmp/linux/dist/storybook dist/storybook
+      - run:
+          name: Story book
+          command: yarn deploy-storybook-ci
 
-    'build-mac':
-        macos:
-            xcode: '11.7.0'
-        environment:
-            CACHE_VERSION: *cache_version
-        steps:
-            - checkout
-            - attach_workspace:
-                  at: /tmp/mac
-            - *step_prepare_cache_buster
-            - *step_restore_cache_mac
-            - *step_setup_nvm
-            - *step_yarn_upgrade
-            - run:
-                  name: Add Read Access to yarn config
-                  command: |
-                      sudo mkdir -p ~/.config
-                      sudo chown -R $USER:$GROUP ~/.config
+  'build-mac':
+    macos:
+      xcode: '11.7.0'
+    environment:
+      CACHE_VERSION: *cache_version
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/mac
+      - *step_prepare_cache_buster
+      - *step_restore_cache_mac
+      - *step_setup_nvm
+      - *step_yarn_upgrade
+      - run:
+          name: Add Read Access to yarn config
+          command: |
+            sudo mkdir -p ~/.config
+            sudo chown -R $USER:$GROUP ~/.config
 
-            - run:
-                  name: Install Node Packages
-                  command: yarn install-all
-                  no_output_timeout: 30m
+      - run:
+          name: Install Node Packages
+          command: yarn install-all
+          no_output_timeout: 30m
 
-            - run:
-                  name: Set Sentry
-                  command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
-            - run:
-                  name: Build App
-                  command: yarn dist --publish=never
-                  no_output_timeout: 80m
-            - persist_to_workspace:
-                  root: .
-                  paths:
-                      - dist
-            - store_artifacts:
-                  path: dist/{latest,SelfKey Identity,selfkey-identity}*
-            - *step_save_cache_mac
-    'build-windows':
-        executor: win/default
-        environment:
-            OSENV: windows
-            NO_PROXY: 127.0.0.1,localhost
-        steps:
-            - checkout
-            - run: Write-Host 'Hello, Windows'
-    'stage-windows':
-        executor: win/default
-        environment:
-            OSENV: windows
-            NO_PROXY: 127.0.0.1,localhost
-        steps:
-            - checkout
-            - run: Write-Host 'Hello, Windows'
-    'publish-windows':
-        executor: win/default
-        environment:
-            OSENV: windows
-            NO_PROXY: 127.0.0.1,localhost
-        steps:
-            - checkout
-            - run: Write-Host 'Hello, Windows'
-    'build-linux':
-        docker: *DOCKERIMAGE
-        environment:
-            CACHE_VERSION: *cache_version
-        steps:
-            - checkout
-            - attach_workspace:
-                  at: /tmp/linux
-            - *step_prepare_cache_buster
-            - *step_restore_cache
-            - run:
-                  name: Install OS Dependecies
-                  command: |
-                      sudo apt-get update
-                      sudo apt-get install libudev-dev
-                      sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
-                      sudo apt-get install libc6-dev-armhf-cross linux-libc-dev-armhf-cross g++-arm-linux-gnueabihf
-            - run:
-                  name: Install Node Packages
-                  command: yarn install-all
-            - run:
-                  name: Set Sentry
-                  command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
-            - run:
-                  name: Build App
-                  command: yarn dist --publish=never
-            - persist_to_workspace:
-                  root: .
-                  paths:
-                      - dist
-            - store_artifacts:
-                  path: dist/{latest,SelfKey Identity,selfkey-identity}*
-            - *step_save_cache
-    'e2e-mac':
-        macos:
-            xcode: '11.7.0'
-        environment:
-            CACHE_VERSION: *cache_version
-        steps:
-            - checkout
-            - attach_workspace:
-                  at: /tmp/mac
-            - *step_prepare_cache_buster
-            - *step_restore_cache_mac
-            - *step_setup_nvm
-            - *step_yarn_upgrade
-            - run:
-                  name: Add Read Access to yarn config
-                  command: |
-                      sudo mkdir -p ~/.config
-                      sudo chown -R $USER:$GROUP ~/.config
-            - run:
-                  name: E2E Tests
-                  command: OSENV=circle-mac yarn test:e2e
+      - run:
+          name: Set Sentry
+          command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
+      - run:
+          name: Build App
+          command: yarn dist --publish=never
+          no_output_timeout: 80m
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+      - store_artifacts:
+          path: dist/{latest,SelfKey Identity,selfkey-identity}*
+      - *step_save_cache_mac
+  'build-windows':
+    executor: win/default
+    environment:
+      OSENV: windows
+      NO_PROXY: 127.0.0.1,localhost
+      DEBUG: electron-builder
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-win-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-win-{{ .Branch }}-
+            - yarn-packages-win-dev-
+            - yarn-packages-win-
+      - run: tzutil /s "UTC"
+      - run: git config --global core.autocrlf input
+      - run: Start-FileDownload 'https://storage.googleapis.com/win-open-ssl/Win64OpenSSL-1_0_2r.exe'
+      - run: Start-Process 'Win64OpenSSL-1_0_2r.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
+      - run: Start-Process 'GoogleCloudSDKInstaller.exe' -ArgumentList '/S' -Wait
+      - run: refreshenv
+      - run: Install-Product node $env:nodejs_version x64
+      - run: npm i -g yarn
+      - run: yarn install-all
+      - run: npm config set msvs_version 2015 --global
+      - run: echo {"dsn":"%SENTRY_DSN%"} > src\assets\data\sentry.json
+      - run: yarn dist --publish=never
+      - store_artifacts:
+          path: dist/*.exe
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-win-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules\
+  'stage-windows':
+    executor: win/default
+    environment:
+      OSENV: windows
+      NO_PROXY: 127.0.0.1,localhost
+    steps:
+      - checkout
+      - run: Write-Host 'Hello, Windows'
+  'publish-windows':
+    executor: win/default
+    environment:
+      OSENV: windows
+      NO_PROXY: 127.0.0.1,localhost
+    steps:
+      - checkout
+      - run: Write-Host 'Hello, Windows'
+  'build-linux':
+    docker: *DOCKERIMAGE
+    environment:
+      CACHE_VERSION: *cache_version
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/linux
+      - *step_prepare_cache_buster
+      - *step_restore_cache
+      - run:
+          name: Install OS Dependecies
+          command: |
+            sudo apt-get update
+            sudo apt-get install libudev-dev
+            sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
+            sudo apt-get install libc6-dev-armhf-cross linux-libc-dev-armhf-cross g++-arm-linux-gnueabihf
+      - run:
+          name: Install Node Packages
+          command: yarn install-all
+      - run:
+          name: Set Sentry
+          command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
+      - run:
+          name: Build App
+          command: yarn dist --publish=never
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+      - store_artifacts:
+          path: dist/{latest,SelfKey Identity,selfkey-identity}*
+      - *step_save_cache
+  'e2e-mac':
+    macos:
+      xcode: '11.7.0'
+    environment:
+      CACHE_VERSION: *cache_version
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/mac
+      - *step_prepare_cache_buster
+      - *step_restore_cache_mac
+      - *step_setup_nvm
+      - *step_yarn_upgrade
+      - run:
+          name: Add Read Access to yarn config
+          command: |
+            sudo mkdir -p ~/.config
+            sudo chown -R $USER:$GROUP ~/.config
+      - run:
+          name: E2E Tests
+          command: OSENV=circle-mac yarn test:e2e
 
-    'e2e-linux':
-        docker: *DOCKERIMAGE
-        environment:
-            CACHE_VERSION: *cache_version
-        steps:
-            - checkout
-            - attach_workspace:
-                  at: /tmp/linux
-            - *step_prepare_cache_buster
-            - *step_restore_cache
-            - *step_setup_nvm
-            - *step_yarn_upgrade
-            - run:
-                  name: E2E Tests
-                  command: OSENV=circle-linux yarn test:e2e
+  'e2e-linux':
+    docker: *DOCKERIMAGE
+    environment:
+      CACHE_VERSION: *cache_version
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/linux
+      - *step_prepare_cache_buster
+      - *step_restore_cache
+      - *step_setup_nvm
+      - *step_yarn_upgrade
+      - run:
+          name: E2E Tests
+          command: OSENV=circle-linux yarn test:e2e
 
-    'stage-mac':
-        docker: &GGLOUDIMAGE
-            - image: google/cloud-sdk:latest
-        steps:
-            - checkout
-            - attach_workspace:
-                  at: /tmp/mac
-            - run:
-                  name: Deploy mac to staging
-                  command: bash deploy.sh "$(git log --format=%B -n 1 $CIRCLE_SHA1)"
-                  environment:
-                      OSENV: mac
+  'stage-mac':
+    docker: &GGLOUDIMAGE
+      - image: google/cloud-sdk:latest
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/mac
+      - run:
+          name: Deploy mac to staging
+          command: bash deploy.sh "$(git log --format=%B -n 1 $CIRCLE_SHA1)"
+          environment:
+            OSENV: mac
 
-    'stage-linux':
-        docker: &GGLOUDIMAGE
-            - image: google/cloud-sdk:latest
-        steps:
-            - checkout
-            - attach_workspace:
-                  at: /tmp/linux
-            - run:
-                  name: Deploy linux to staging
-                  command: bash deploy.sh "$(git log --format=%B -n 1 $CIRCLE_SHA1)"
-                  environment:
-                      OSENV: linux
+  'stage-linux':
+    docker: &GGLOUDIMAGE
+      - image: google/cloud-sdk:latest
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/linux
+      - run:
+          name: Deploy linux to staging
+          command: bash deploy.sh "$(git log --format=%B -n 1 $CIRCLE_SHA1)"
+          environment:
+            OSENV: linux
 
-    'publish-mac':
-        macos:
-            xcode: '11.7.0'
-        environment:
-            CACHE_VERSION: *cache_version
-        steps:
-            - checkout
-            - attach_workspace:
-                  at: /tmp/mac
-            - *step_prepare_cache_buster
-            - *step_restore_cache_mac
-            - *step_setup_nvm
-            - *step_yarn_upgrade
-            - run:
-                  name: Set Sentry
-                  command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
-            - run:
-                  name: Publish App to Github
-                  command: yarn publish-build
-                  no_output_timeout: 1h
+  'publish-mac':
+    macos:
+      xcode: '11.7.0'
+    environment:
+      CACHE_VERSION: *cache_version
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/mac
+      - *step_prepare_cache_buster
+      - *step_restore_cache_mac
+      - *step_setup_nvm
+      - *step_yarn_upgrade
+      - run:
+          name: Set Sentry
+          command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
+      - run:
+          name: Publish App to Github
+          command: yarn publish-build
+          no_output_timeout: 1h
 
-    'publish-linux':
-        docker: *DOCKERIMAGE
-        environment:
-            CACHE_VERSION: *cache_version
-        steps:
-            - checkout
-            - attach_workspace:
-                  at: /tmp/linux
-            - *step_prepare_cache_buster
-            - *step_restore_cache
-            - *step_setup_nvm
-            - *step_yarn_upgrade
-            - run:
-                  name: Install OS Dependecies
-                  command: |
-                      sudo apt-get update
-                      sudo apt-get install build-essential
-                      sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
-            - run:
-                  name: Install Node Packages
-                  command: yarn install-all
-            - run:
-                  name: Set Sentry
-                  command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
-            - run:
-                  name: Publish App to Github
-                  command: yarn publish-build
+  'publish-linux':
+    docker: *DOCKERIMAGE
+    environment:
+      CACHE_VERSION: *cache_version
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/linux
+      - *step_prepare_cache_buster
+      - *step_restore_cache
+      - *step_setup_nvm
+      - *step_yarn_upgrade
+      - run:
+          name: Install OS Dependecies
+          command: |
+            sudo apt-get update
+            sudo apt-get install build-essential
+            sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
+      - run:
+          name: Install Node Packages
+          command: yarn install-all
+      - run:
+          name: Set Sentry
+          command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
+      - run:
+          name: Publish App to Github
+          command: yarn publish-build
 
-    'mac-prepare-auto-update-test':
-        macos:
-            xcode: '11.7.0'
-        environment:
-            CACHE_VERSION: *cache_version
-        steps:
-            - checkout
-            - attach_workspace:
-                  at: /tmp/mac
-            - *step_prepare_cache_buster
-            - *step_restore_cache_mac
-            - *step_setup_nvm
-            - *step_yarn_upgrade
-            - run:
-                  name: Add Read Access to yarn config
-                  command: |
-                      sudo mkdir -p ~/.config
-                      sudo chown -R $USER:$GROUP ~/.config
+  'mac-prepare-auto-update-test':
+    macos:
+      xcode: '11.7.0'
+    environment:
+      CACHE_VERSION: *cache_version
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/mac
+      - *step_prepare_cache_buster
+      - *step_restore_cache_mac
+      - *step_setup_nvm
+      - *step_yarn_upgrade
+      - run:
+          name: Add Read Access to yarn config
+          command: |
+            sudo mkdir -p ~/.config
+            sudo chown -R $USER:$GROUP ~/.config
 
-            - run:
-                  name: Install Node Packages
-                  command: yarn install-all
-                  no_output_timeout: 30m
+      - run:
+          name: Install Node Packages
+          command: yarn install-all
+          no_output_timeout: 30m
 
-            - run:
-                  name: Set Sentry
-                  command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
-            - run:
-                  name: Bump auto update version
-                  command: yarn auto-update-version
-            - run:
-                  name: Build App
-                  command: NOTARIZE=1 yarn dist --publish=never
-                  no_output_timeout: 80m
-            - persist_to_workspace:
-                  root: .
-                  paths:
-                      - dist
-            - store_artifacts:
-                  path: dist/{latest,SelfKey Identity,selfkey-identity}*
-            - *step_save_cache_mac
-    'linux-prepare-auto-update-test':
-        docker: *DOCKERIMAGE
-        environment:
-            CACHE_VERSION: *cache_version
-        steps:
-            - checkout
-            - attach_workspace:
-                  at: /tmp/linux
-            - *step_prepare_cache_buster
-            - *step_restore_cache
-            - run:
-                  name: Install OS Dependecies
-                  command: |
-                      sudo apt-get update
-                      sudo apt-get install libudev-dev
-                      sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
-                      sudo apt-get install libc6-dev-armhf-cross linux-libc-dev-armhf-cross g++-arm-linux-gnueabihf
-            - run:
-                  name: Install Node Packages
-                  command: yarn install-all
-            - run:
-                  name: Set Sentry
-                  command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
-            - run:
-                  name: Bump auto update version
-                  command: yarn auto-update-version
-            - run:
-                  name: Build App
-                  command: yarn dist --publish=never
-            - persist_to_workspace:
-                  root: .
-                  paths:
-                      - dist
-            - store_artifacts:
-                  path: dist/{latest,SelfKey Identity,selfkey-identity}*
-            - *step_save_cache
+      - run:
+          name: Set Sentry
+          command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
+      - run:
+          name: Bump auto update version
+          command: yarn auto-update-version
+      - run:
+          name: Build App
+          command: NOTARIZE=1 yarn dist --publish=never
+          no_output_timeout: 80m
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+      - store_artifacts:
+          path: dist/{latest,SelfKey Identity,selfkey-identity}*
+      - *step_save_cache_mac
+  'linux-prepare-auto-update-test':
+    docker: *DOCKERIMAGE
+    environment:
+      CACHE_VERSION: *cache_version
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/linux
+      - *step_prepare_cache_buster
+      - *step_restore_cache
+      - run:
+          name: Install OS Dependecies
+          command: |
+            sudo apt-get update
+            sudo apt-get install libudev-dev
+            sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
+            sudo apt-get install libc6-dev-armhf-cross linux-libc-dev-armhf-cross g++-arm-linux-gnueabihf
+      - run:
+          name: Install Node Packages
+          command: yarn install-all
+      - run:
+          name: Set Sentry
+          command: echo {\"dsn\":\"${SENTRY_DSN}\"} > src/main/assets/data/sentry.json
+      - run:
+          name: Bump auto update version
+          command: yarn auto-update-version
+      - run:
+          name: Build App
+          command: yarn dist --publish=never
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+      - store_artifacts:
+          path: dist/{latest,SelfKey Identity,selfkey-identity}*
+      - *step_save_cache
 
 workflows:
-    version: 2
-    auto-update-test:
-        jobs:
-            - 'mac-prepare-auto-update-test':
-                  filters:
-                      branches:
-                          only:
-                              - auto-update-test
-            - 'stage-mac':
-                  requires:
-                      - mac-prepare-auto-update-test
-                  filters:
-                      branches:
-                          only:
-                              - auto-update-test
-            - 'linux-prepare-auto-update-test':
-                  filters:
-                      branches:
-                          only:
-                              - auto-update-test
-            - 'stage-linux':
-                  requires:
-                      - linux-prepare-auto-update-test
-                  filters:
-                      branches:
-                          only:
-                              - auto-update-test
+  version: 2
+  auto-update-test:
+    jobs:
+      - 'mac-prepare-auto-update-test':
+          filters:
+            branches:
+              only:
+                - auto-update-test
+      - 'stage-mac':
+          requires:
+            - mac-prepare-auto-update-test
+          filters:
+            branches:
+              only:
+                - auto-update-test
+      - 'linux-prepare-auto-update-test':
+          filters:
+            branches:
+              only:
+                - auto-update-test
+      - 'stage-linux':
+          requires:
+            - linux-prepare-auto-update-test
+          filters:
+            branches:
+              only:
+                - auto-update-test
 
-    main:
-        jobs:
-            - 'unit-test':
-                  filters:
-                      branches:
-                          ignore:
-                              - auto-update-test
-            - 'build-linux':
-                  requires:
-                      - unit-test
-                  filters:
-                      branches:
-                          ignore:
-                              - auto-update-test
+  main:
+    jobs:
+      - 'unit-test':
+          filters:
+            branches:
+              ignore:
+                - auto-update-test
+      - 'build-linux':
+          requires:
+            - unit-test
+          filters:
+            branches:
+              ignore:
+                - auto-update-test
 
-            # - 'e2e-linux':
-            #     requires:
-            #       - build-linux
-            - 'stage-linux':
-                  requires:
-                      # - e2e-linux
-                      - build-linux
-                      # - build-linux-arm
-                  filters:
-                      branches:
-                          only:
-                              - dev
-                              - nightly
-                              - release
-                              - /staging.*/
-            - 'build-windows':
-                  requires:
-                      - unit-test
-                  filters:
-                      branches:
-                          ignore:
-                              - auto-update-test
-            - 'stage-windows':
-                  requires:
-                      # - e2e-linux
-                      - build-windows
-                      # - build-linux-arm
-                  filters:
-                      branches:
-                          only:
-                              - dev
-                              - nightly
-                              - release
-                              - /staging.*/
+      # - 'e2e-linux':
+      #     requires:
+      #       - build-linux
+      - 'stage-linux':
+          requires:
+            # - e2e-linux
+            - build-linux
+            # - build-linux-arm
+          filters:
+            branches:
+              only:
+                - dev
+                - nightly
+                - release
+                - /staging.*/
+      - 'build-windows':
+          requires:
+            - unit-test
+          filters:
+            branches:
+              ignore:
+                - auto-update-test
+      - 'stage-windows':
+          requires:
+            # - e2e-linux
+            - build-windows
+            # - build-linux-arm
+          filters:
+            branches:
+              only:
+                - dev
+                - nightly
+                - release
+                - /staging.*/
 
-            - 'build-mac':
-                  requires:
-                      - unit-test
-                  filters:
-                      branches:
-                          ignore:
-                              - auto-update-test
-            # - 'e2e-mac':
-            #     requires:
-            #       - build-mac
-            - 'stage-mac':
-                  requires:
-                      # - e2e-mac
-                      - build-mac
-                  filters:
-                      branches:
-                          only:
-                              - dev
-                              - nightly
-                              - release
-                              - /staging.*/
-            - 'build-storybook':
-                  requires:
-                      - unit-test
-                  filters:
-                      branches:
-                          only:
-                              - dev
-            - 'publish-storybook':
-                  requires:
-                      - build-storybook
-                  filters:
-                      branches:
-                          only:
-                              - dev
-            - 'publish-mac':
-                  requires:
-                      - build-mac
-                  filters:
-                      branches:
-                          only:
-                              - master
-            - 'publish-linux':
-                  requires:
-                      # - e2e-linux
-                      - build-linux
-                  filters:
-                      branches:
-                          only:
-                              - master
-            - 'publish-windows':
-                  requires:
-                      # - e2e-linux
-                      - build-windows
-                  filters:
-                      branches:
-                          only:
-                              - master
+      - 'build-mac':
+          requires:
+            - unit-test
+          filters:
+            branches:
+              ignore:
+                - auto-update-test
+      # - 'e2e-mac':
+      #     requires:
+      #       - build-mac
+      - 'stage-mac':
+          requires:
+            # - e2e-mac
+            - build-mac
+          filters:
+            branches:
+              only:
+                - dev
+                - nightly
+                - release
+                - /staging.*/
+      - 'build-storybook':
+          requires:
+            - unit-test
+          filters:
+            branches:
+              only:
+                - dev
+      - 'publish-storybook':
+          requires:
+            - build-storybook
+          filters:
+            branches:
+              only:
+                - dev
+      - 'publish-mac':
+          requires:
+            - build-mac
+          filters:
+            branches:
+              only:
+                - master
+      - 'publish-linux':
+          requires:
+            # - e2e-linux
+            - build-linux
+          filters:
+            branches:
+              only:
+                - master
+      - 'publish-windows':
+          requires:
+            # - e2e-linux
+            - build-windows
+          filters:
+            branches:
+              only:
+                - master
