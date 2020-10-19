@@ -25,11 +25,11 @@ const styles = theme => ({
 		zIndex: 2
 	},
 	logo: {
-		width: '38px',
-		height: '44px',
-		marginLeft: '20px',
 		cursor: 'pointer',
+		height: '44px',
+		marginLeft: theme.spacing(3),
 		transition: '1.0s',
+		width: '38px',
 		'-webkit-transition': '1.0s',
 		'&:hover': {
 			transition: '1.0s',
@@ -63,7 +63,7 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'space-around',
-		margin: '0 20px 0 15px',
+		margin: theme.spacing(0, 2),
 		maxWidth: '118px',
 		'& .toolbarProfileName': {
 			maxWidth: '110px',
@@ -75,12 +75,12 @@ const styles = theme => ({
 	sepVertContainer: {
 		display: 'flex',
 		justifyContent: 'space-around',
-		marginRight: '20px'
+		marginRight: theme.spacing(3)
 	},
 	sepVert: {
 		background: 'linear-gradient(180deg, rgba(94, 11, 128, 0) 0%, #475768 100%)',
 		height: '59px',
-		marginTop: '16px',
+		marginTop: theme.spacing(2),
 		width: '1px'
 	},
 	profileContainer: {
@@ -103,9 +103,9 @@ const styles = theme => ({
 		'-webkit-transform': 'scaleY(1)'
 	},
 	profileIcon: {
-		marginTop: '13px',
-		paddingRight: '15px',
-		cursor: 'pointer'
+		cursor: 'pointer',
+		marginTop: theme.spacing(2),
+		paddingRight: theme.spacing(2)
 	},
 	absolute: {
 		position: 'absolute'
@@ -118,12 +118,12 @@ const styles = theme => ({
 		width: '222px'
 	},
 	priceBox: {
-		paddingRight: '10px'
+		paddingRight: theme.spacing(2)
 	},
 	profileAvatar: {
-		width: '40px',
 		height: '40px',
-		margin: 0
+		margin: theme.spacing(0),
+		width: '40px'
 	}
 });
 
@@ -138,43 +138,42 @@ const profileStyle = theme =>
 			border: 'solid 1px #303c49'
 		},
 		profileFooter: {
-			bottom: '7px',
-			marginTop: '10px',
-			padding: '0 15px'
+			marginTop: theme.spacing(2),
+			padding: theme.spacing(0, 2)
 		},
 		horizontalDivider: {
 			height: '1px',
 			backgroundColor: '#303c49'
 		},
 		profilePersonal: {
-			padding: '20px 0px 4px 6px',
+			alignItems: 'center',
 			display: 'flex',
 			flexDirection: 'row',
-			alignItems: 'center',
-			justifyContent: 'center'
+			justifyContent: 'center',
+			padding: theme.spacing(3, 0, 0.5, 1)
 		},
 		profileCorporate: {
-			padding: '20px 15px 14px',
+			alignItems: 'center',
 			display: 'flex',
 			flexDirection: 'row',
-			alignItems: 'center',
-			justifyContent: 'center'
+			justifyContent: 'center',
+			padding: theme.spacing(3, 2, 2)
 		},
 		profileDetail: {
 			cursor: 'pointer',
-			padding: '10px 15px 10px 15px',
+			padding: theme.spacing(1, 2),
 			width: '208px',
 			'&:hover': {
 				backgroundColor: '#313D49'
 			},
 			'&:first-child': {
-				marginTop: '5px'
+				marginTop: theme.spacing(1)
 			}
 		},
 		profileName: {
-			paddingLeft: '15px',
+			paddingLeft: theme.spacing(1),
 			'& h6:first-child': {
-				marginBottom: '5px'
+				marginBottom: theme.spacing(0.5)
 			}
 		},
 		button: {
@@ -186,9 +185,9 @@ const profileStyle = theme =>
 			width: '100%'
 		},
 		profileListAvatar: {
-			width: '28px',
 			height: '28px',
-			margin: 0
+			margin: theme.spacing(0),
+			width: '28px'
 		}
 	});
 
