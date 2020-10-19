@@ -218,7 +218,7 @@ const prod = {
 	paymentSplitterAddress: '0xC3f1fbe8f4BE283426F913f0F2BE8329fC6BE041',
 	features: {
 		paymentContract: false,
-		did: true,
+		did: false,
 		scheduler: true,
 		corporate: true,
 		staking: false,
