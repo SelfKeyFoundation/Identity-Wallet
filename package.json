@@ -54,7 +54,7 @@
 		"check-deps": "npm-check -i common",
 		"coveralls": "cat dist/coverage/lcov.info | coveralls",
 		"snyk-protect": "NODE_OPTIONS=--max-old-space-size=8192 snyk protect",
-		"postinstall": "yarn build-dll",
+		"postinstall": "test -n \"$NOYARNPOSTINSTALL\" || yarn build-dll",
 		"build-dll": "rm -rf node_modules/.cache && electron-webpack dll --env.production=${BUILD_DLL_PRODUCTION:-true}",
 		"build-dev-dll": "BUILD_DLL_PRODUCTION=false yarn build-dll",
 		"storybook": "start-storybook -p 6007",
