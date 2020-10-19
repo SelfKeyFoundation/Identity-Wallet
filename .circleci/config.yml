@@ -92,7 +92,7 @@ jobs:
           name: Install OS Icov
           command: |
             sudo apt-get update -y
-            apt-get install -y lcov
+            sudo apt-get install -y lcov
       - checkout
       - attach_workspace:
           at: /tmp/linux
@@ -209,10 +209,13 @@ jobs:
           command: |
             $wc = New-Object System.Net.WebClient
             $wc.DownloadFile("https://storage.googleapis.com/win-open-ssl/Win64OpenSSL-1_0_2r.exe", "Win64OpenSSL-1_0_2r.exe")
-      - run: Start-Process 'Win64OpenSSL-1_0_2r.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
+            Start-Process 'Win64OpenSSL-1_0_2r.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
+      - run:
+          name: Install Node
+          command: |
+            choco install nodejs.install --version=10.13.0
+            npm i -g yarn
       - run: refreshenv
-      - run: Install-Product node $env:nodejs_version x64
-      - run: npm i -g yarn
       - run: yarn install-all
       - run: npm config set msvs_version 2015 --global
       - run: echo {"dsn":"%SENTRY_DSN%"} > src\assets\data\sentry.json
