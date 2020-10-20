@@ -102,7 +102,7 @@ jobs:
       - *step_prepare_cache_buster
       - *step_restore_cache
       - run:
-          name: Get storybook from attach_workspace
+          name: Get coverage from attach_workspace
           command: |
             mkdir -p dist
             cp -r /tmp/linux/dist/coverage dist/coverage
@@ -213,18 +213,24 @@ jobs:
             $wc = New-Object System.Net.WebClient
             $wc.DownloadFile("https://storage.googleapis.com/win-open-ssl/Win64OpenSSL-1_0_2r.exe", "Win64OpenSSL-1_0_2r.exe")
             Start-Process 'Win64OpenSSL-1_0_2r.exe' -ArgumentList '/silent /verysilent /sp- /suppressmsgboxes' -Wait
+            refreshenv
       - run:
           name: Install Node
           command: |
-            choco install nodejs.install --version=10.13.0
+            nvm use 10.13.0
             npm i -g yarn
       - run:
           name: Install Build Tools
           command: |
-            npm install --global windows-build-tools --vs2015
+            npm install --global --production windows-build-tools@4.0.0
             npm config set msvs_version 2015 --global
-      - run: refreshenv
-      - run: yarn install-all
+            npm config set python %USERPROFILE%\.windows-build-tools\python27
+      - run:
+          name: Install Deps
+          command: |
+            yarn install
+            yarn build-dll
+            yarn install-app-deps
       - run: echo {"dsn":"%SENTRY_DSN%"} > src\assets\data\sentry.json
       - run: yarn dist --publish=never
       - store_artifacts:
@@ -241,7 +247,7 @@ jobs:
       NO_PROXY: 127.0.0.1,localhost
     steps:
       - checkout
-      - run: Write-Host 'Hello, Windows'
+      - run: Write-Host 'TODO implement'
   'publish-windows':
     executor: win/default
     environment:
@@ -249,7 +255,7 @@ jobs:
       NO_PROXY: 127.0.0.1,localhost
     steps:
       - checkout
-      - run: Write-Host 'Hello, Windows'
+      - run: Write-Host 'TODO implement'
   'build-linux':
     docker: *DOCKERIMAGE
     environment:
