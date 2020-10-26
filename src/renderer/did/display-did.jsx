@@ -9,25 +9,12 @@ const styles = theme => ({
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
-		margin: '5px 16px'
-	},
-	info: {
-		padding: '25px 30px'
+		margin: theme.spacing(1, 2)
 	},
 	regularText: {
 		'& span': {
 			fontWeight: 400
 		}
-	},
-	didButtons: {
-		marginTop: '20px'
-	},
-	transaction: {
-		alignItems: 'center',
-		display: 'flex'
-	},
-	extraSpace: {
-		marginRight: '4px'
 	}
 });
 

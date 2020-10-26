@@ -9,10 +9,10 @@ const styles = theme => ({
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
-		margin: '5px 16px'
+		margin: theme.spacing(1, 2)
 	},
 	info: {
-		padding: '25px 30px'
+		padding: theme.spacing(3, 4)
 	},
 	regularText: {
 		'& span': {
@@ -20,14 +20,11 @@ const styles = theme => ({
 		}
 	},
 	didButtons: {
-		marginTop: '20px'
+		marginTop: theme.spacing(3)
 	},
 	transaction: {
 		alignItems: 'center',
 		display: 'flex'
-	},
-	extraSpace: {
-		marginRight: '4px'
 	}
 });
 
@@ -80,7 +77,7 @@ class RegisterDidCardComponent extends PureComponent {
 									time only transaction.
 								</Typography>
 								<Grid container spacing={2} className={classes.didButtons}>
-									<Grid item className={classes.extraSpace}>
+									<Grid item>
 										<Button
 											disabled={this.props.pending}
 											variant="contained"
