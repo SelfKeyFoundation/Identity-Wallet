@@ -11,14 +11,14 @@ const styles = theme => ({
 	padding: {
 		marginBottom: '0 !important',
 		marginLeft: '0 !important',
-		paddingLeft: 0,
-		paddingRight: 0
+		paddingLeft: theme.spacing(0),
+		paddingRight: theme.spacing(0)
 	},
 	divider: {
-		margin: '0 16px'
+		margin: theme.spacing(0, 2)
 	},
 	listContainer: {
-		marginBottom: '24px'
+		marginBottom: theme.spacing(3)
 	},
 	term: {
 		color: typography,
@@ -31,7 +31,7 @@ const styles = theme => ({
 		fontSize: '16px',
 		lineHeight: '20px',
 		minWidth: '63%',
-		paddingLeft: '10px',
+		paddingLeft: theme.spacing(1),
 		width: 'calc(63% - 10px)'
 	}
 });

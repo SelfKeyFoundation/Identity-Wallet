@@ -6,7 +6,7 @@ const styles = theme => ({
 	hexagon: {
 		cursor: 'pointer',
 		height: '120px',
-		margin: '0 4px 0 10px',
+		margin: theme.spacing(0, 1),
 		overflow: 'hidden',
 		transform: 'rotate(120deg)',
 		visibility: 'hidden',

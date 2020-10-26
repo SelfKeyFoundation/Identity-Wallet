@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => {
 			position: 'relative'
 		},
 		accented: {
-			paddingLeft: 7,
+			paddingLeft: theme.spacing(1),
 			'&:before': {
 				content: '""',
 				position: 'absolute',
