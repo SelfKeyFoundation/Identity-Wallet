@@ -10,10 +10,10 @@ const styles = theme => ({
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
-		margin: '5px 16px'
+		margin: theme.spacing(1, 2)
 	},
 	info: {
-		padding: '25px 30px'
+		padding: theme.spacing(3, 4)
 	},
 	regularText: {
 		'& span': {
