@@ -34,10 +34,10 @@ const styles = theme => ({
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
-		margin: '5px 16px'
+		margin: theme.spacing(1, 2)
 	},
 	card: {
-		marginTop: '22px'
+		marginTop: theme.spacing(3)
 	},
 	cardHeader: {
 		whiteSpace: 'normal',

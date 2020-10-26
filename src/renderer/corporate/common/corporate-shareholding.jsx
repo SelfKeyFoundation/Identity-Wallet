@@ -10,7 +10,7 @@ const styles = theme => ({
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
-		margin: '5px 16px'
+		margin: theme.spacing(1, 2)
 	},
 	regularText: {
 		'& span': {
@@ -19,37 +19,37 @@ const styles = theme => ({
 	},
 	legend: {
 		alignSelf: 'flex-end',
-		marginBottom: '1em',
+		marginBottom: theme.spacing(2),
 		'& > div': {
 			display: 'flex',
 			alignItems: 'center',
-			marginTop: '0.5em'
+			marginTop: theme.spacing(1)
 		},
 		'& span': {
-			marginLeft: '0.5em'
+			marginLeft: theme.spacing(1)
 		}
 	},
 	coloredBox: {
-		width: '22px !important',
-		height: '8px !important',
 		borderRadius: '8px !important',
-		position: 'relative'
+		height: '8px !important',
+		position: 'relative',
+		width: '22px !important'
 	},
 	chartWrap: {
 		display: 'flex',
 		'& div.google-visualization-tooltip': {
-			display: 'flex',
+			alignItems: 'center',
 			backgroundColor: '#1F2830',
 			border: '1px solid #43505B',
 			boxShadow: 'none',
-			top: '40px !important',
-			padding: '5px',
-			alignItems: 'center',
-			fontSize: '13px !important',
 			color: '#FFFFFF !important',
+			display: 'flex',
+			fontSize: '13px !important',
+			padding: theme.spacing(1),
+			top: '40px !important',
 			'& span': {
 				color: '#93B0C1 !important',
-				marginLeft: '.5em'
+				marginLeft: theme.spacing(1)
 			}
 		}
 	}

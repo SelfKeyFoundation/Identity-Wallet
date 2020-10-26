@@ -27,7 +27,7 @@ const styles = theme => ({
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
-		margin: '5px 16px'
+		margin: theme.spacing(1, 2)
 	},
 	cardHeader: {
 		whiteSpace: 'normal',

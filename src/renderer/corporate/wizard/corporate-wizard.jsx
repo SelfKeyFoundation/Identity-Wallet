@@ -21,36 +21,36 @@ const styles = theme => ({
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
-		margin: '5px 30px 10px'
+		margin: theme.spacing(1, 4, 1)
 	},
 	card: {
 		overflow: 'visible'
 	},
 	regularText: {
-		padding: '24px 30px',
+		padding: theme.spacing(3, 4),
 		'& span': {
 			fontWeight: 400
 		}
 	},
 	cancel: {
-		paddingLeft: '20px'
+		paddingLeft: theme.spacing(3)
 	},
 	footer: {
 		alignItems: 'flex-start',
 		display: 'flex',
 		justifyContent: 'flex-start',
-		paddingTop: '60px'
+		paddingTop: theme.spacing(8)
 	},
 	inputBox: {
-		marginBottom: '35px',
+		marginBottom: theme.spacing(4),
 		width: '47%'
 	},
 	lastInputBox: {
-		marginBottom: '26px',
+		marginBottom: theme.spacing(3),
 		width: '47%'
 	},
 	keyBox: {
-		marginBottom: '35px',
+		marginBottom: theme.spacing(4),
 		marginRight: 'calc(47% - 200px)',
 		width: '200px',
 		'& .rdt': {
@@ -81,10 +81,13 @@ const styles = theme => ({
 		width: '100%'
 	},
 	cardContent: {
-		padding: '24px 30px'
+		padding: theme.spacing(3, 4)
 	},
 	wizardTitle: {
-		marginBottom: '45px'
+		marginBottom: theme.spacing(6)
+	},
+	marginBottom: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -147,7 +150,7 @@ const CompanyInformation = withStyles(styles)(props => {
 												<Typography
 													variant="subtitle2"
 													color="error"
-													gutterBottom
+													className={classes.marginBottom}
 												>
 													{errors.jurisdiction}
 												</Typography>
@@ -167,7 +170,11 @@ const CompanyInformation = withStyles(styles)(props => {
 										placeholder="Entity Name"
 									/>
 									{errors.entityName && (
-										<Typography variant="subtitle2" color="error" gutterBottom>
+										<Typography
+											variant="subtitle2"
+											color="error"
+											className={classes.marginBottom}
+										>
 											{errors.entityName}
 										</Typography>
 									)}
@@ -211,7 +218,7 @@ const CompanyInformation = withStyles(styles)(props => {
 												<Typography
 													variant="subtitle2"
 													color="error"
-													gutterBottom
+													className={classes.marginBottom}
 												>
 													{errors.entityType}
 												</Typography>
@@ -236,7 +243,11 @@ const CompanyInformation = withStyles(styles)(props => {
 										}}
 									/>
 									{errors.creationDate && (
-										<Typography variant="subtitle2" color="error" gutterBottom>
+										<Typography
+											variant="subtitle2"
+											color="error"
+											className={classes.marginBottom}
+										>
 											{errors.creationDate}
 										</Typography>
 									)}
@@ -255,7 +266,11 @@ const CompanyInformation = withStyles(styles)(props => {
 										placeholder="Entity Email"
 									/>
 									{errors.email && (
-										<Typography variant="subtitle2" color="error" gutterBottom>
+										<Typography
+											variant="subtitle2"
+											color="error"
+											className={classes.marginBottom}
+										>
 											{errors.email}
 										</Typography>
 									)}
@@ -272,7 +287,11 @@ const CompanyInformation = withStyles(styles)(props => {
 										placeholder="Tax Payer ID"
 									/>
 									{errors.taxId && (
-										<Typography variant="subtitle2" color="error" gutterBottom>
+										<Typography
+											variant="subtitle2"
+											color="error"
+											className={classes.marginBottom}
+										>
 											{errors.taxId}
 										</Typography>
 									)}

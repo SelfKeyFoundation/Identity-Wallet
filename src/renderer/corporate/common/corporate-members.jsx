@@ -33,15 +33,11 @@ const styles = theme => ({
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
-		margin: '5px 16px'
+		margin: theme.spacing(1, 2)
 	},
 	card: {
-		marginTop: '22px',
+		marginTop: theme.spacing(3),
 		overflow: 'auto'
-	},
-	cardHeader: {
-		whiteSpace: 'normal',
-		wordBreak: 'break-all'
 	},
 	cardContent: {
 		alignItems: 'center',
@@ -49,7 +45,7 @@ const styles = theme => ({
 		flexDirection: 'column',
 		justifyContent: 'center',
 		'& td, & th': {
-			padding: '15px 20px'
+			padding: theme.spacing(2, 3)
 		}
 	},
 	regularText: {
@@ -57,23 +53,10 @@ const styles = theme => ({
 			fontWeight: 400
 		}
 	},
-	documentColumn: {
-		display: 'flex',
-		alignItems: 'center',
-		'& .file-icon': {
-			marginRight: '15px'
-		}
-	},
 	button: {
 		display: 'flex',
 		justifyContent: 'center',
-		marginTop: '30px'
-	},
-	noOverflow: {
-		maxWidth: '320px',
-		overflow: 'hidden',
-		textOverflow: 'ellipsis',
-		whiteSpace: 'nowrap'
+		marginTop: theme.spacing(4)
 	},
 	openIcon: {
 		transform: 'rotate(0deg)'

@@ -20,19 +20,19 @@ const styles = theme => ({
 			display: 'flex',
 			flexWrap: 'nowrap',
 			justifyContent: 'space-between',
-			margin: '30px 0',
+			margin: theme.spacing(4, 0),
 			'& .halfWidth': {
 				width: '100%'
 			},
 			'& .halfWidth:first-child': {
-				marginRight: 15
+				marginRight: theme.spacing(2)
 			},
 			'& .halfWidth:last-child': {
-				marginLeft: 15
+				marginLeft: theme.spacing(2)
 			}
 		},
 		'& .corporateShareholding': {
-			margin: '30px 0'
+			margin: theme.spacing(4, 0)
 		}
 	}
 });

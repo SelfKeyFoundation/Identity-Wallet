@@ -30,12 +30,7 @@ const styles = theme => ({
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
-		margin: '5px 16px'
-	},
-	card: {},
-	cardHeader: {
-		whiteSpace: 'normal',
-		wordBreak: 'break-all'
+		margin: theme.spacing(1, 2)
 	},
 	cardContent: {
 		alignItems: 'stretch',
@@ -43,27 +38,9 @@ const styles = theme => ({
 		flexDirection: 'column',
 		justifyContent: 'center'
 	},
-	cardAction: {
-		padding: '20px'
-	},
 	regularText: {
 		'& span': {
 			fontWeight: 400
-		}
-	},
-	attr: {
-		margin: '0.5em',
-		display: 'block',
-		'& .label': {
-			display: 'inline-block',
-			minWidth: '12em'
-		},
-		'& h5': {
-			display: 'inline-block'
-		},
-		'& svg': {
-			marginRight: '0.5em',
-			verticalAlign: 'middle'
 		}
 	},
 	informationLeft: {
@@ -72,15 +49,15 @@ const styles = theme => ({
 		flexDirection: 'column',
 		flexWrap: 'nowrap',
 		justifyContent: 'flex-end',
-		paddingRight: '30px'
+		paddingRight: theme.spacing(4)
 	},
 	bookIcon: {
-		margin: '30px 0 20px'
+		margin: theme.spacing(4, 0, 3)
 	},
 	button: {
 		display: 'flex',
 		justifyContent: 'center',
-		marginTop: '30px'
+		marginTop: theme.spacing(4)
 	},
 	noOverflow: {
 		maxWidth: '320px',

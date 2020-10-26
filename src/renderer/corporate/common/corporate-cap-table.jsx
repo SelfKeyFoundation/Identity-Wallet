@@ -26,7 +26,7 @@ const styles = theme => ({
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
-		margin: '5px 16px'
+		margin: theme.spacing(1, 2)
 	},
 	cardHeader: {
 		height: '100%'
@@ -38,7 +38,7 @@ const styles = theme => ({
 		justifyContent: 'center'
 	},
 	cardAction: {
-		padding: '1em 1em 0'
+		padding: theme.spacing(1, 1, 0)
 	},
 	regularText: {
 		'& span': {

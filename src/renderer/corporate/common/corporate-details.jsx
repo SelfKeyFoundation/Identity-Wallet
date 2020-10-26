@@ -9,7 +9,7 @@ const styles = theme => ({
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
-		margin: '5px 16px'
+		margin: theme.spacing(1, 2)
 	},
 	cardContentBox: {
 		height: 'initial'
@@ -21,8 +21,8 @@ const styles = theme => ({
 		justifyContent: 'center'
 	},
 	cardAction: {
-		marginRight: 0,
-		marginTop: '4px'
+		marginRight: theme.spacing(0),
+		marginTop: theme.spacing(0.5)
 	},
 	regularText: {
 		'& span': {
@@ -31,8 +31,8 @@ const styles = theme => ({
 	},
 	attr: {
 		display: 'flex',
-		marginBottom: '20px',
 		flexWrap: 'nowrap',
+		marginBottom: theme.spacing(3),
 		'& .label': {
 			display: 'inline-block',
 			lineHeight: '20px',

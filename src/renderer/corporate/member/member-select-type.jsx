@@ -8,7 +8,7 @@ const styles = theme => ({
 		marginTop: '12px'
 	},
 	selectionBoxTitle: {
-		marginLeft: '15px'
+		marginLeft: theme.spacing(2)
 	},
 	selectionBoxHeader: {
 		backgroundColor: '#293743',
@@ -16,7 +16,7 @@ const styles = theme => ({
 		boxSizing: 'border-box',
 		maxWidth: '280px',
 		minWidth: '200px',
-		padding: '25px',
+		padding: theme.spacing(3),
 		'& > div': {
 			display: 'flex',
 			alignItems: 'center',
@@ -25,12 +25,12 @@ const styles = theme => ({
 		}
 	},
 	selectionBoxContainer: {
-		margin: '10px 0 40px'
+		margin: theme.spacing(1, 0, 5)
 	},
 	input: {
-		margin: '0 10px',
-		width: '200px',
+		margin: theme.spacing(0, 1),
 		minHeight: '158px',
+		width: '200px',
 		'& input, & input': {
 			opacity: 0
 		},
@@ -38,20 +38,20 @@ const styles = theme => ({
 			content: 'none'
 		},
 		'& label::before': {
+			border: '1px solid',
 			content: '',
 			display: 'inline-block',
 			height: '16px',
-			width: '16px',
-			border: '1px solid'
+			width: '16px'
 		},
 		'& label::after': {
+			borderBottom: '2px solid',
+			borderLeft: '2px solid',
 			content: '',
 			display: 'inline-block',
 			height: '6px',
-			width: '9px',
-			borderLeft: '2px solid',
-			borderBottom: '2px solid',
-			transform: 'rotate(-45deg)'
+			transform: 'rotate(-45deg)',
+			width: '9px'
 		},
 		'& input + label': {
 			'& > div': {
@@ -67,7 +67,7 @@ const styles = theme => ({
 		}
 	},
 	selectionBoxDescription: {
-		marginTop: '15px'
+		marginTop: theme.spacing(2)
 	}
 });
 

@@ -12,15 +12,10 @@ const styles = theme => ({
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
-		margin: '5px 16px'
-	},
-	card: {},
-	cardHeader: {
-		whiteSpace: 'normal',
-		wordBreak: 'break-all'
+		margin: theme.spacing(1, 2)
 	},
 	cardAction: {
-		padding: '1em 1em 0'
+		padding: theme.spacing(2, 2, 0)
 	},
 	regularText: {
 		'& span': {
@@ -28,23 +23,23 @@ const styles = theme => ({
 		}
 	},
 	orgChart: {
-		overflow: 'auto',
 		margin: 'auto',
+		overflow: 'auto',
 		'& .initechNode': {
 			backgroundColor: '#313D49',
 			border: `solid 1px ${grey}`,
 			borderRadius: '3px',
-			padding: '1em',
 			display: 'inline-block',
-			margin: '0 2px',
+			fontSize: '12px',
+			margin: theme.spacing(0),
 			minWidth: '60px',
-			fontSize: '12px'
+			padding: theme.spacing(2)
 		},
 		'& .initechNode span': {
 			display: 'block',
 			color: `${typography}`,
 			fontSize: '12px',
-			marginTop: '0.5em'
+			marginTop: theme.spacing(1)
 		},
 		'& .orgNodeChildGroup .nodeLineTable .nodeGroupLineVerticalMiddle': {
 			borderRight: `solid 1px ${grey}`
