@@ -224,7 +224,7 @@ class Sidebar extends PureComponent {
 	};
 
 	render() {
-		const { classes, onProfileNavigate, isExportableAccount } = this.props;
+		const { classes, onProfileNavigate, isExportableAccount, showStaking } = this.props;
 
 		const sideList = (
 			<Grid
@@ -267,20 +267,22 @@ class Sidebar extends PureComponent {
 								Dashboard
 							</Typography>
 						</ListItem>
-						<ListItem
-							id="stakingButton"
-							className={classes.listItem}
-							component={staking}
-							key="staking"
-							title="Staking"
-						>
-							<ListItemIcon className={classes.listItemIcon}>
-								<MenuStakingIcon />
-							</ListItemIcon>
-							<Typography variant="body2" color="secondary">
-								Staking
-							</Typography>
-						</ListItem>
+						{showStaking && (
+							<ListItem
+								id="stakingButton"
+								className={classes.listItem}
+								component={staking}
+								key="staking"
+								title="Staking"
+							>
+								<ListItemIcon className={classes.listItemIcon}>
+									<MenuStakingIcon />
+								</ListItemIcon>
+								<Typography variant="body2" color="secondary">
+									Staking
+								</Typography>
+							</ListItem>
+						)}
 						<ListItem
 							id="marketplaceButton"
 							className={classes.listItem}

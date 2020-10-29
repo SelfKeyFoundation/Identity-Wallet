@@ -223,7 +223,7 @@ const prod = {
 		corporate: true,
 		staking: false,
 		certifiers: false,
-		notaries: false,
+		notaries: true,
 		corporateMarketplace: false,
 		kyccUsersEndpoint: false,
 		walletExport: true,
