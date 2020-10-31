@@ -8,7 +8,7 @@ import { Popup } from '../../common';
 
 const styles = theme => ({
 	closeButton: {
-		marginLeft: '180px'
+		marginLeft: theme.spacing(22)
 	},
 	containerHeader: {
 		'& div': {
@@ -16,7 +16,7 @@ const styles = theme => ({
 			display: 'inline-block'
 		},
 		'& h2': {
-			marginLeft: '16px'
+			marginLeft: theme.spacing(2)
 		}
 	},
 	modalWrap: {
@@ -27,14 +27,14 @@ const styles = theme => ({
 	payButton: {
 		width: '100%',
 		'& button': {
-			marginRight: '30px'
+			marginRight: theme.spacing(4)
 		}
 	},
 	priceRow: {
-		padding: '10px 0',
+		padding: theme.spacing(1, 0),
 		'& div.rowItem': {
-			width: '33%',
-			color: '#FFF'
+			color: '#FFF',
+			width: '33%'
 		},
 		'& div.price': {
 			color: '#00C0D9',
@@ -53,19 +53,19 @@ const styles = theme => ({
 		}
 	},
 	priceTable: {
-		padding: '2em',
-		margin: '2em 0',
-		background: '#313D49'
+		background: '#313D49',
+		margin: theme.spacing(4, 0),
+		padding: theme.spacing(4)
 	},
 	rowSeparator: {
 		border: '1px solid #475768',
-		margin: '30px 0'
+		marginRight: theme.spacing(4, 0)
 	},
 	serviceCost: {
 		borderBottom: '2px solid #475768',
-		width: '100%',
-		paddingBottom: '30px',
-		marginBottom: '30px'
+		marginBottom: theme.spacing(4),
+		paddingBottom: theme.spacing(4),
+		width: '100%'
 	}
 });
 

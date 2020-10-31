@@ -6,12 +6,12 @@ const styles = theme => ({
 	howItWorksBox: {
 		width: '30%',
 		padding: '2em 3%',
-		margin: '2em 0',
+		margin: theme.spacing(2, 0),
 		color: '#FFF',
 		background: '#313D49',
 		'& header h4': {
 			display: 'inline-block',
-			marginLeft: '0.5em',
+			marginLeft: theme.spacing(1),
 			fontSize: '16px'
 		},
 		'& header span': {

@@ -5,12 +5,12 @@ import { sanitize } from '../common';
 
 const styles = theme => ({
 	whatYouGet: {
-		paddingBottom: '30px',
-		marginBottom: '30px',
+		paddingBottom: theme.spacing(4),
+		marginBottom: theme.spacing(4),
 		borderBottom: '2px solid #475768'
 	},
 	description: {
-		margin: '1em 1em 1em 0',
+		margin: theme.spacing(2, 2, 2, 0),
 		fontFamily: 'Lato, arial',
 		color: '#FFF',
 		width: '60%',
@@ -18,7 +18,7 @@ const styles = theme => ({
 		lineHeight: '1.4em',
 		fontSize: '14px',
 		'& p': {
-			marginBottom: '1.5em',
+			marginBottom: theme.spacing(3),
 			lineHeight: '1.4em',
 			maxWidth: '90%'
 		},
@@ -27,18 +27,18 @@ const styles = theme => ({
 			color: theme.palette.secondary.main,
 			display: 'block',
 			padding: '0',
-			marginBottom: '0.5em',
-			marginTop: '0em'
+			marginBottom: theme.spacing(1),
+			marginTop: theme.spacing(0)
 		},
 		'& ul': {
 			listStyle: 'outside',
 			lineHeight: '1.4em',
-			marginLeft: '1.5em',
-			marginBottom: '1.5em'
+			marginLeft: theme.spacing(3),
+			marginBottom: theme.spacing(3)
 		},
 		'& ul li': {
 			lineHeight: '1.4em',
-			marginBottom: '0.5em'
+			marginBottom: theme.spacing(1)
 		},
 		'& a': {
 			color: theme.palette.secondary.main
@@ -51,7 +51,7 @@ const styles = theme => ({
 		fontSize: '12px',
 		lineHeight: '1.5em',
 		'& p': {
-			marginBottom: '1em'
+			marginBottom: theme.spacing(2)
 		}
 	}
 });
