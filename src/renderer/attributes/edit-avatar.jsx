@@ -8,11 +8,11 @@ import { Popup } from '../common/popup';
 const styles = theme => ({
 	buttons: {
 		'& button:first-child': {
-			marginRight: '20px'
+			marginRight: theme.spacing(3)
 		}
 	},
 	divider: {
-		margin: '60px 0 30px'
+		margin: theme.spacing(8, 0, 4)
 	},
 	image: {
 		display: 'flex',
@@ -20,7 +20,7 @@ const styles = theme => ({
 		justifyContent: 'center'
 	},
 	avatarImage: {
-		marginBottom: '30px'
+		marginBottom: theme.spacing(4)
 	},
 	center: {
 		margin: '0 auto'
