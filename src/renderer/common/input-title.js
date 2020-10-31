@@ -8,13 +8,16 @@ const styles = theme => ({
 		fontStyle: 'italic',
 		marginLeft: '5px',
 		textTransform: 'lowercase'
+	},
+	title: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
 export const InputTitle = withStyles(styles)(({ classes, title, optional = false }) => {
 	return (
 		<div>
-			<Typography variant="overline" gutterBottom>
+			<Typography variant="overline" className={classes.title}>
 				{title}
 				{optional ? (
 					<Typography variant="overline" className={classes.optional}>
