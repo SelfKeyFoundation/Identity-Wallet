@@ -20,7 +20,7 @@ const styles = theme => ({
 		alignItems: 'center',
 		display: 'flex',
 		justifyContent: 'center',
-		marginBottom: '30px',
+		marginBottom: theme.spacing(4),
 		'& > p': {
 			display: 'inline'
 		},
@@ -29,15 +29,15 @@ const styles = theme => ({
 		}
 	},
 	tokenAddress: {
-		padding: '20px 0',
+		padding: theme.spacing(3, 0),
 		textAlign: 'center'
 	},
 	qrCode: {
+		marginBottom: theme.spacing(3),
 		textAlign: 'center',
-		marginBottom: '20px',
 		'& canvas': {
 			background: '#FFF',
-			padding: '10px'
+			padding: theme.spacing(1)
 		}
 	},
 	publicKey: {
@@ -48,7 +48,7 @@ const styles = theme => ({
 		}
 	},
 	bottomSpace: {
-		marginBottom: '20px'
+		marginBottom: theme.spacing(3)
 	},
 	mailIcon: {
 		height: '27px',
@@ -67,7 +67,7 @@ const styles = theme => ({
 		}
 	},
 	space: {
-		margin: '0 20px'
+		margin: theme.spacing(0, 3)
 	},
 	padding: {
 		padding: '0 5px'
@@ -82,7 +82,7 @@ const styles = theme => ({
 		}
 	},
 	emailMargin: {
-		marginTop: '11px'
+		marginTop: theme.spacing(1)
 	}
 });
 

@@ -6,23 +6,23 @@ import { NumberFormat, TransactionFeeBox } from 'selfkey-ui';
 import { InputTitle } from '../../../common/input-title';
 import { transactionOperations } from '../../../../common/transaction';
 
-const styles = {
+const styles = theme => ({
 	bottomSpace: {
-		marginBottom: '20px'
+		marginBottom: theme.spacing(2)
 	},
 	divider: {
-		margin: '40px 0'
+		margin: theme.spacing(5, 0)
 	},
 	tokenMax: {
 		display: 'flex',
 		flexWrap: 'nowrap',
-		marginBottom: '5px'
+		marginBottom: theme.spacing(1)
 	},
 	actionButtonsContainer: {
-		paddingTop: '50px'
+		paddingTop: theme.spacing(6)
 	},
 	tokenBottomSpace: {
-		marginBottom: '30px'
+		marginBottom: theme.spacing(4)
 	},
 	flexColumn: {
 		flexDirection: 'column'
@@ -31,7 +31,7 @@ const styles = {
 		display: 'flex'
 	},
 	amount: {
-		marginRight: '20px'
+		marginRight: theme.spacing(2)
 	},
 	errorText: {
 		height: '19px',
@@ -42,9 +42,9 @@ const styles = {
 		lineHeight: '19px'
 	},
 	tabs: {
-		marginBottom: '50px'
+		marginBottom: theme.spacing(6)
 	}
-};
+});
 
 class SendTokenTabComponent extends PureComponent {
 	static UPDATE_DELAY = 1000;

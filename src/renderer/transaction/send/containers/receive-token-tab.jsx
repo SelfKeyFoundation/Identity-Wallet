@@ -4,31 +4,31 @@ import { withStyles } from '@material-ui/styles';
 import { CopyWithIcon, MailIcon, PrintSmallIcon } from 'selfkey-ui';
 import QRCode from 'qrcode.react';
 
-const styles = {
+const styles = theme => ({
 	tokenAddress: {
-		padding: 0,
+		padding: theme.spacing(0),
 		textAlign: 'center'
 	},
 	qrCode: {
-		marginBottom: '36px',
+		marginBottom: theme.spacing(4),
 		textAlign: 'center',
 		'& canvas': {
 			background: '#FFF',
 			borderRadius: '4px',
 			boxSizing: 'border-box',
 			height: '199px !important',
-			padding: '10px',
+			padding: theme.spacing(1),
 			width: '199px !important'
 		}
 	},
 	bottomSpace: {
-		marginBottom: '20px'
+		marginBottom: theme.spacing(2)
 	},
 	tokenPublicKey: {
 		alignItems: 'center',
 		display: 'flex',
 		justifyContent: 'center',
-		marginBottom: '30px',
+		marginBottom: theme.spacing(4),
 		'& > p': {
 			display: 'inline'
 		},
@@ -45,13 +45,13 @@ const styles = {
 	},
 	mailIcon: {
 		height: '27px !important',
-		marginBottom: '11px',
-		marginTop: '5px',
+		marginBottom: theme.spacing(1),
+		marginTop: theme.spacing(1),
 		width: '35px !important'
 	},
 	printIcon: {
 		height: '36px !important',
-		marginBottom: '7px',
+		marginBottom: theme.spacing(1),
 		width: '34px !important'
 	},
 	iconWrap: {
@@ -63,10 +63,10 @@ const styles = {
 		}
 	},
 	space: {
-		margin: '0 20px'
+		margin: theme.spacing(0, 2)
 	},
 	padding: {
-		padding: '0 5px'
+		padding: theme.spacing(0, 1)
 	},
 	icon: {
 		cursor: 'pointer',
@@ -77,7 +77,7 @@ const styles = {
 			}
 		}
 	}
-};
+});
 
 const ReceiveTokenTabComponent = props => {
 	const { classes, sendingAddress, cryptoCurrency } = props;
