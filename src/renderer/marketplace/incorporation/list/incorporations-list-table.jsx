@@ -16,66 +16,37 @@ const styles = theme => ({
 			height: 'auto'
 		}
 	},
-	tableHeaderRow: {
-		'& th': {
-			fontFamily: 'Lato, arial, sans-serif',
-			fontSize: '15px',
-			fontWeight: 'bold',
-			color: '#7F8FA4',
-			textTransform: 'uppercase',
-			border: 'none'
-		}
-	},
-	tableBodyRow: {
-		'& span.category': {
-			display: 'inline-block',
-			margin: '2px 5px',
-			padding: '2px 8px',
-			color: '#93B0C1',
-			background: '#1E262E',
-			borderRadius: '10px',
-			fontSize: '12px',
-			lineHeight: '19px'
-		},
-		'& span.price-key': {
-			color: '#93B0C1',
-			fontSize: '12px',
-			display: 'block',
-			whiteSpace: 'nowrap',
-			margin: '2px auto'
-		}
-	},
 	costCell: {
 		width: '70px'
 	},
 	smallCell: {
-		width: '35px',
-		padding: '0 10px'
+		padding: theme.spacing(0, 1),
+		width: '35px'
 	},
 	flagCell: {
-		width: '10px',
-		paddingRight: '0'
+		paddingRight: theme.spacing(0),
+		width: '10px'
 	},
 	regionCell: {
-		width: '60px',
-		padding: '0'
+		padding: theme.spacing(0),
+		width: '60px'
 	},
 	detailsCell: {
 		color: '#00C0D9',
-		padding: '15px 20px',
+		padding: theme.spacing(2, 3),
 		'& span': {
 			cursor: 'pointer'
 		},
 		'& button': {
 			maxWidth: '15px',
 			minWidth: '15px',
-			padding: 0,
+			padding: theme.spacing(0),
 			width: '15px'
 		}
 	},
 	goodForCell: {
-		width: '305px',
-		padding: '10px'
+		padding: theme.spacing(1),
+		width: '305px'
 	}
 	/*
 	loading: {

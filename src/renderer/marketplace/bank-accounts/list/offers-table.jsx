@@ -13,10 +13,10 @@ import { DetailsIconButton, ProgramPrice, FlagCountryName } from '../../common';
 const styles = theme => ({
 	table: {
 		'& td': {
-			padding: '5px 20px'
+			padding: theme.spacing(1, 2)
 		},
 		'& th': {
-			padding: '15px 20px'
+			padding: theme.spacing(2)
 		}
 	},
 	tableHeaderRow: {
@@ -27,30 +27,6 @@ const styles = theme => ({
 			color: '#7F8FA4',
 			textTransform: 'uppercase',
 			border: 'none'
-		}
-	},
-	tableBodyRow: {
-		'& span.category': {
-			display: 'inline-block',
-			margin: '2px 5px',
-			padding: '2px 8px',
-			color: '#93B0C1',
-			background: '#1E262E',
-			borderRadius: '10px',
-			fontSize: '12px',
-			lineHeight: '19px'
-		},
-		'& span.price-key': {
-			color: '#93B0C1',
-			fontSize: '12px',
-			display: 'block',
-			whiteSpace: 'nowrap',
-			margin: '2px auto'
-		}
-	},
-	tableRow: {
-		'& td': {
-			padding: '15px 20px'
 		}
 	},
 	costCell: {
@@ -64,8 +40,8 @@ const styles = theme => ({
 		alignItems: 'center',
 		display: 'flex',
 		flexWrap: 'wrap',
-		paddingTop: '15px',
-		paddingBottom: '15px',
+		paddingBottom: theme.spacing(2),
+		paddingTop: theme.spacing(2),
 		whiteSpace: 'normal',
 		lineHeight: '19px',
 		maxWidth: '245px'
@@ -77,7 +53,7 @@ const styles = theme => ({
 		minWidth: '100px',
 		lineHeight: '19px',
 		whiteSpace: 'normal',
-		padding: '0 20px'
+		padding: theme.spacing(0, 2)
 	},
 	detailsCell: {
 		color: '#00C0D9',
@@ -87,13 +63,13 @@ const styles = theme => ({
 		'& button': {
 			maxWidth: '15px',
 			minWidth: '15px',
-			padding: 0,
+			padding: theme.spacing(0),
 			width: '15px'
 		}
 	},
 	goodForCell: {
 		width: '250px',
-		padding: '20px',
+		padding: theme.spacing(2),
 		whiteSpace: 'normal'
 	},
 	minDepositCell: {
