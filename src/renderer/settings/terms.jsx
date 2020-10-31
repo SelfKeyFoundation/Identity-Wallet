@@ -35,9 +35,6 @@ const styles = theme => ({
 		backgroundColor: 'transparent',
 		boxShadow: 'none'
 	},
-	logoSection: {
-		paddingBottom: '50px'
-	},
 	flexSection: {
 		flexGrow: 1,
 		display: 'flex',
@@ -49,7 +46,7 @@ const styles = theme => ({
 	},
 	flexColScroll: {
 		flexGrow: 1,
-		margin: '40px 0 20px',
+		margin: theme.spacing(4, 0, 3),
 		maxHeight: '400px',
 		overflow: 'auto',
 		padding: '0 20px !important'

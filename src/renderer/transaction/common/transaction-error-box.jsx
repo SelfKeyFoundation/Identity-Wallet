@@ -6,7 +6,7 @@ import Popup from '../../common/popup';
 
 const styles = theme => ({
 	divider: {
-		margin: '30px 0 20px'
+		margin: theme.spacing(4, 0, 3)
 	}
 });
 

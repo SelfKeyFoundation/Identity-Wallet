@@ -5,7 +5,7 @@ import { PaymentIcon, Copy } from 'selfkey-ui';
 
 const styles = theme => ({
 	address: {
-		marginRight: '10px'
+		marginRight: theme.spacing(1)
 	},
 	body: {
 		color: '#FFFFFF',
@@ -14,20 +14,20 @@ const styles = theme => ({
 		lineHeight: '30px'
 	},
 	bottomSpace: {
-		marginBottom: '15px'
+		marginBottom: theme.spacing(2)
 	},
 	circle: {
 		fontSize: '16px',
-		paddingRight: '10px'
+		paddingRight: theme.spacing(1)
 	},
 	divider: {
-		margin: '40px 0 25px',
+		margin: theme.spacing(5, 0, 3),
 		width: '100%'
 	},
 	exchangeItem: {
 		columnBreakInside: 'avoid',
 		color: '#FFFFFF',
-		marginBottom: 0,
+		marginBottom: theme.spacing(0),
 		position: 'initial',
 		'& a': {
 			textDecoration: 'none',
@@ -36,11 +36,11 @@ const styles = theme => ({
 	},
 	exchanges: {
 		columnCount: 2,
-		marginBottom: '30px',
-		marginLeft: '-15px'
+		marginBottom: theme.spacing(4),
+		marginLeft: theme.spacing(2)
 	},
 	icon: {
-		marginRight: '45px'
+		marginRight: theme.spacing(6)
 	},
 	link: {
 		cursor: 'pointer',

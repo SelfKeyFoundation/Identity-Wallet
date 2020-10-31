@@ -37,10 +37,10 @@ const styles = theme => ({
 		fontWeight: 400
 	},
 	viewIcon: {
-		marginRight: '7px'
+		marginRight: theme.spacing(1)
 	},
 	viewButton: {
-		paddingLeft: 0,
+		paddingLeft: theme.spacing(0),
 		textTransform: 'capitalize',
 		'&:hover': {
 			backgroundColor: 'transparent',
@@ -53,13 +53,13 @@ const styles = theme => ({
 		}
 	},
 	radioButton: {
-		paddingRight: 0,
+		paddingRight: theme.spacing(0),
 		'& span': {
-			marginRight: 0
+			marginRight: theme.spacing(0)
 		}
 	},
 	tableCellPadding: {
-		padding: '0 15px 0 10px'
+		padding: theme.spacing(0, 2, 0, 1)
 	},
 	paginationWrap: {
 		padding: '0 20px 10px !important'
@@ -78,7 +78,8 @@ const styles = theme => ({
 		width: '960px'
 	},
 	closeBtn: {
-		marginLeft: '180px'
+		// marginLeft: '180px'
+		marginLeft: theme.spacing(22)
 	}
 });
 

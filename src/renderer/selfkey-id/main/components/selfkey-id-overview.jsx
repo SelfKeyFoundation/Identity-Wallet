@@ -40,10 +40,10 @@ const styles = theme => ({
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
-		margin: '5px 16px'
+		margin: theme.spacing(1, 2)
 	},
 	info: {
-		padding: '25px 30px'
+		padding: theme.spacing(3, 4)
 	},
 	card: {
 		backgroundColor: '#1E262E',
@@ -63,14 +63,14 @@ const styles = theme => ({
 		wordBreak: 'break-all'
 	},
 	documentColumn: {
-		display: 'flex',
 		alignItems: 'center',
+		display: 'flex',
 		'& .file-icon': {
-			marginRight: '15px'
+			marginRight: theme.spacing(2)
 		}
 	},
 	button: {
-		marginBottom: '16px'
+		marginBottom: theme.spacing(2)
 	},
 	regularText: {
 		'& span': {
@@ -78,10 +78,10 @@ const styles = theme => ({
 		}
 	},
 	ellipsis: {
+		maxWidth: '222px',
 		overflow: 'hidden',
 		textOverflow: 'ellipsis',
-		whiteSpace: 'nowrap',
-		maxWidth: '222px'
+		whiteSpace: 'nowrap'
 	}
 });
 
