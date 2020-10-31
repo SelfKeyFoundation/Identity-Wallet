@@ -18,7 +18,7 @@ const styles = theme => ({
 		background: '#2A3540',
 		display: 'flex',
 		justifyContent: 'flex-start',
-		padding: '20px 30px',
+		padding: theme.spacing(3, 4),
 		'& div': {
 			display: 'inline-block',
 			color: '#FFF'
@@ -32,7 +32,7 @@ const styles = theme => ({
 	contentContainer: {
 		border: '1px solid #303C49',
 		borderRadius: '4px',
-		padding: '30px'
+		padding: theme.spacing(4)
 	},
 	howItWorks: {
 		alignItems: 'center',
@@ -46,7 +46,7 @@ const styles = theme => ({
 		boxSizing: 'border-box',
 		color: '#FFF',
 		height: '178px',
-		margin: '0 0 2em 0',
+		margin: theme.spacing(0, 0, 4, 0),
 		minHeight: '178px',
 		padding: '2em 3%',
 		width: '32%',
@@ -57,7 +57,7 @@ const styles = theme => ({
 			display: 'inline-block',
 			fontSize: '16px',
 			fontWeight: 500,
-			marginLeft: '0.5em',
+			marginLeft: theme.spacing(1),
 			marginTop: '-3px'
 		},
 		'& header span': {
@@ -68,7 +68,7 @@ const styles = theme => ({
 	},
 	divider: {
 		height: '2px',
-		marginBottom: '20px'
+		marginBottom: theme.spacing(3)
 	},
 	textArea: {
 		backgroundColor: baseDark,
@@ -79,20 +79,20 @@ const styles = theme => ({
 		fontFamily: 'Lato,arial,sans-serif',
 		fontSize: '14px',
 		lineHeight: '21px',
-		marginBottom: '40px',
+		marginBottom: theme.spacing(5),
 		outline: 'none',
-		padding: '10px 15px',
+		padding: theme.spacing(1, 2),
 		width: '100%',
 		'&::placeholder': {
 			color: grey
 		}
 	},
 	requestBtn: {
-		marginRight: '20px'
+		marginRight: theme.spacing(3)
 	},
 	barStyle: {
-		padding: '0',
-		marginBottom: '25px'
+		marginBottom: theme.spacing(3),
+		padding: theme.spacing(0)
 	}
 });
 

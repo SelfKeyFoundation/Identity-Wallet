@@ -1,26 +1,25 @@
 import React from 'react';
-import { Typography /*, IconButton */ } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
-// import { KeyTooltip, TooltipArrow, InfoTooltip } from 'selfkey-ui';
 import { ProgramPrice } from '../../common/program-price';
 
 const style = theme => ({
 	serviceCost: {
-		marginBottom: '20px',
-		paddingBottom: '30px',
+		marginBottom: theme.spacing(3),
+		paddingBottom: theme.spacing(4),
 		width: '100%'
 	},
 	priceTable: {
 		background: '#313D49',
-		margin: '20px 0 0',
-		padding: '20px'
+		margin: theme.spacing(3, 0, 0),
+		padding: theme.spacing(3)
 	},
 	priceRow: {
 		alignItems: 'center',
 		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'flex-start',
-		padding: '10px 0',
+		padding: theme.spacing(1, 0),
 		'& div.rowItem': {
 			color: '#FFF',
 			width: '33%'
@@ -30,7 +29,7 @@ const style = theme => ({
 			fontWeight: 'bold',
 			textAlign: 'right',
 			'& .time': {
-				marginTop: '5px'
+				marginTop: theme.spacing(1)
 			}
 		},
 		'& div.time': {
