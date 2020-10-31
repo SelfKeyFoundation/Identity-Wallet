@@ -26,7 +26,7 @@ const styles = theme => ({
 		width: '100%'
 	},
 	formField: {
-		marginBottom: '30px'
+		marginBottom: theme.spacing(4)
 	},
 	cryptoSelect: {
 		width: '100%'
@@ -52,7 +52,7 @@ const styles = theme => ({
 		flexBasis: '100%',
 		display: 'flex',
 		justifyContent: 'space-between',
-		marginTop: '0.25em'
+		marginTop: theme.spacing(1)
 	},
 	amountInput: {
 		borderTopRightRadius: '0',
@@ -61,7 +61,7 @@ const styles = theme => ({
 	},
 	maxSourceInput: {
 		border: '1px solid #384656',
-		marginRight: '20px',
+		marginRight: theme.spacing(3),
 		fontWeight: 'normal',
 		color: '#93B0C1',
 		background: '#1E262E',
@@ -71,13 +71,13 @@ const styles = theme => ({
 		justifyContent: 'space-around'
 	},
 	divider: {
-		margin: '40px 0'
+		margin: theme.spacing(5, 0)
 	},
 	availableAmountUsd: {
 		color: '#FFF',
 		'& div': {
 			display: 'inline-block',
-			marginRight: '0.25em'
+			marginRight: theme.spacing(0.5)
 		},
 		'& p': {
 			color: '#FFF',
@@ -91,7 +91,7 @@ const styles = theme => ({
 	},
 	actionButtonsContainer: {
 		width: '100%',
-		paddingTop: '50px'
+		paddingTop: theme.spacing(6)
 	},
 	feesContainer: {
 		width: '100%'
@@ -101,7 +101,7 @@ const styles = theme => ({
 		display: 'flex',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		marginBottom: '20px'
+		marginBottom: theme.spacing(3)
 	},
 	feesValues: {
 		textAlign: 'right',
@@ -111,12 +111,12 @@ const styles = theme => ({
 	},
 	smallFeesValues: {
 		textAlign: 'right',
-		marginTop: '0.5em',
+		marginTop: theme.spacing(1),
 		'& p': {
 			fontWeight: 'bold',
 			fontSize: '0.7em',
 			lineHeight: '1',
-			marginTop: '1em'
+			marginTop: theme.spacing(2)
 		},
 		'& h6': {
 			fontSize: '0.6em'
@@ -136,7 +136,7 @@ const styles = theme => ({
 		fontSize: '0.7em',
 		'& div': {
 			display: 'inline-block',
-			marginRight: '.5em'
+			marginRight: theme.spacing(1)
 		}
 	},
 	valueDisplay: {
@@ -146,7 +146,7 @@ const styles = theme => ({
 		lineHeight: '19px',
 		'& div': {
 			display: 'inline-block',
-			marginRight: '.5em'
+			marginRight: theme.spacing(1)
 		}
 	},
 	fiatValue: {
@@ -156,17 +156,17 @@ const styles = theme => ({
 		fontWeight: 600,
 		'& div': {
 			display: 'inline-block',
-			marginRight: '.5em'
+			marginRight: theme.spacing(1)
 		}
 	},
 	maxSwapDisplay: {
-		marginRight: '30px'
+		marginRight: theme.spacing(5)
 	},
 	separator: {
-		marginRight: '.5em'
+		marginRight: theme.spacing(1)
 	},
 	buttonRightSpace: {
-		marginRight: '20px'
+		marginRight: theme.spacing(2)
 	}
 });
 

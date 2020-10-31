@@ -6,7 +6,7 @@ import { Popup } from '../../common';
 
 const styles = theme => ({
 	icon: {
-		margin: '0 45px 0 0'
+		margin: theme.spacing(0, 6, 0, 0)
 	},
 	content: {
 		width: '100%'
@@ -17,7 +17,7 @@ const styles = theme => ({
 		lineHeight: '1.5em',
 		fontSize: '14px',
 		'& p': {
-			marginBottom: '1em'
+			marginBottom: theme.spacing(2)
 		},
 		'& p.email': {
 			color: '#00C0D9'
@@ -26,19 +26,19 @@ const styles = theme => ({
 			fontWeight: '700'
 		},
 		'& .title': {
-			marginBottom: '15px'
+			marginBottom: theme.spacing(2)
 		},
 		'& .divider': {
-			margin: '40px 0 25px 0'
+			margin: theme.spacing(5, 0, 3)
 		}
 	},
 	instructions: {
-		padding: '0 0 45px'
+		padding: theme.spacing(0, 0, 6)
 	},
 	footer: {
 		width: '100%',
 		'& button': {
-			marginRight: '20px'
+			marginRight: theme.spacing(2)
 		}
 	}
 });
