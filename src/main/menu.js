@@ -33,6 +33,7 @@ const getMenuTemplate = mainWindow => {
 								nodeIntegration: false,
 								webSecurity: true,
 								disableBlinkFeatures: 'Auxclick',
+								enableRemoteModule: true,
 								devTools: false,
 								preload: path.resolve(__dirname, 'preload.js')
 							}
