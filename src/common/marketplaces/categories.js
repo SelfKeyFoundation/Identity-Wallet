@@ -63,6 +63,15 @@ export default [
 			'https://dl.airtable.com/.attachments/f3f557d642883b0fb004c49dfe3b89aa/6547f314/icon-marketplace-loans.svg'
 	},
 	{
+		id: 'keyfi_individual',
+		name: 'keyfi',
+		title: 'KeyFI Eligibility Credentials',
+		description: 'Get your KeyFI eligibility credentials.',
+		entityType: 'individual',
+		active: featureIsEnabled('keyfi'),
+		svgIcon: 'https://dl.airtable.com/cQcRdsGeQSeM3ekJFo3E_icon-exchange-notaries.svg.png'
+	},
+	{
 		id: 'exchanges_corporate',
 		name: 'exchanges',
 		title: 'Exchanges',
@@ -118,6 +127,16 @@ export default [
 		title: 'Loans',
 		description:
 			'Start earning interest on your cryptocurrency or get a cash loan with your crypto assets as collaterals.',
+		entityType: 'corporate',
+		active: false,
+		svgIcon:
+			'https://dl.airtable.com/.attachments/f3f557d642883b0fb004c49dfe3b89aa/6547f314/icon-marketplace-loans.svg'
+	},
+	{
+		id: 'keyfi_corporate',
+		name: 'keyfi',
+		title: 'KeyFI Eligibility Credentials',
+		description: 'Get your KeyFI eligibility credentials.',
 		entityType: 'corporate',
 		active: false,
 		svgIcon:
