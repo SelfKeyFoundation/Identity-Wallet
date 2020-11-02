@@ -8,3 +8,4 @@ export { MarketplaceSelfkeyDIDRequiredContainer } from './selfkey-did-required-c
 export { MarketplaceOrdersPage } from './orders';
 export { MarketplaceContainer } from './marketplace-container';
 export { MarketplaceLoansPage } from './loans';
+export { MarketplaceKeyFi } from './keyfi';
