@@ -57,7 +57,7 @@ const mapStateToProps = (state, props) => {
 	*/
 
 	if (product) {
-		templateId = product.data.templateId;
+		templateId = product.relyingPartyConfig.templateId;
 		vendorId = product.vendorId;
 		productId = product.sku;
 	}
