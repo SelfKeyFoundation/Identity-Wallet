@@ -9,7 +9,7 @@ import TokenSwap from '../transaction/swap';
 const styles = theme => ({
 	bgIcon: {
 		top: '-60px',
-		marginTop: '-112px',
+		marginTop: theme.spacing(-14),
 		opacity: '0.5',
 		position: 'relative',
 		right: '-250px',
@@ -33,7 +33,7 @@ const styles = theme => ({
 		justifyContent: 'space-between',
 		maxWidth: '100%',
 		marginLeft: 'auto',
-		marginRight: '0',
+		marginRight: theme.spacing(0),
 		marginBottom: theme.spacing(2),
 		position: 'relative',
 		width: '100%',

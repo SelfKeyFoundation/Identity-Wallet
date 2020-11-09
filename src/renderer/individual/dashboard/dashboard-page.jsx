@@ -8,7 +8,7 @@ const styles = theme => ({
 		width: '100%'
 	},
 	title: {
-		padding: '0'
+		padding: theme.spacing(0)
 	},
 	header: {
 		marginBottom: theme.spacing(6)

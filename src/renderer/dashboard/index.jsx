@@ -51,7 +51,7 @@ const styles = theme => ({
 		justifyContent: 'space-between',
 		maxWidth: '100%',
 		marginLeft: 'auto',
-		marginRight: '0',
+		marginRight: theme.spacing(0),
 		width: '100%',
 		'& span': {
 			flexGrow: 1

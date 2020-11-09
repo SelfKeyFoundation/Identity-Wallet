@@ -10,20 +10,20 @@ const styles = theme => ({
 	paper: {
 		backgroundColor: '#262F39',
 		boxShadow: 'none',
-		padding: 20,
+		padding: theme.spacing(2),
 		maxWidth: 350
 	},
 	tokenBoxHeader: {
 		display: 'flex',
 		justifyContent: 'space-evenly',
-		margin: 0,
+		margin: theme.spacing(0),
 		width: '100%'
 	},
 	flexGrow: {
 		flexGrow: 1
 	},
 	marginSpace: {
-		marginTop: '7px'
+		marginTop: theme.spacing(1)
 	},
 	publicKey: {
 		maxWidth: '250px',

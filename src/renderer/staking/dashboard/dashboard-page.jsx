@@ -13,7 +13,7 @@ import { PropTypes } from 'prop-types';
 const styles = theme => ({
 	container: {},
 	title: {
-		padding: '0'
+		padding: theme.spacing(0)
 	},
 	header: {}
 });

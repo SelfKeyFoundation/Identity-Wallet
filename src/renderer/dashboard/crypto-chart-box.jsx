@@ -43,7 +43,7 @@ const styles = theme => ({
 		padding: theme.spacing(0),
 		width: 'auto',
 		'& >div': {
-			paddingRight: '0 !important'
+			paddingRight: `${theme.spacing(0)} !important`
 		}
 	},
 	texts: {
