@@ -31,10 +31,10 @@ const styles = theme => ({
 		width: '450px'
 	},
 	bottomSpace: {
-		marginBottom: '1em'
+		marginBottom: theme.spacing(1)
 	},
 	itemBottomSpace: {
-		marginBottom: '2em'
+		marginBottom: theme.spacing(4)
 	}
 });
 
@@ -165,7 +165,7 @@ class ExistingAddress extends PureComponent {
 										}}
 									/>
 									{this.state.error !== '' && (
-										<Typography variant="subtitle2" color="error" gutterBottom>
+										<Typography variant="subtitle2" color="error">
 											{this.state.error}
 										</Typography>
 									)}

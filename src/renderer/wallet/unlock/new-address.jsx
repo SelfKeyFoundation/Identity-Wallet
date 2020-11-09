@@ -25,11 +25,11 @@ const styles = theme => ({
 		marginLeft: '40px'
 	},
 	bottomSpace: {
-		marginBottom: '1em'
+		marginBottom: theme.spacing(1)
 	},
 	passwordSpace: {
-		marginBottom: '2em',
-		marginTop: '2em'
+		marginBottom: theme.spacing(4),
+		marginTop: theme.spacing(4)
 	},
 	keystore: {
 		marginTop: '0.5em'

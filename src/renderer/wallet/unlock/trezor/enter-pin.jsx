@@ -30,11 +30,13 @@ const styles = theme => ({
 		cursor: 'pointer'
 	},
 	header: {
-		marginBottom: '20px',
-		marginTop: '30px'
+		// marginBottom: '20px',
+		marginBottom: theme.spacing(2),
+		// marginTop: '30px'
+		marginTop: theme.spacing(3)
 	},
 	h1: {
-		marginBottom: '0.5em'
+		marginBottom: theme.spacing(1)
 	},
 	password: {
 		width: '330px'

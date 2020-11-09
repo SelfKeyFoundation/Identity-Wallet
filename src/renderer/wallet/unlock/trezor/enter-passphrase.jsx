@@ -15,11 +15,11 @@ const styles = theme => ({
 		width: '380px'
 	},
 	header: {
-		marginBottom: '20px',
-		marginTop: '30px'
+		marginBottom: theme.spacing(2),
+		marginTop: theme.spacing(3)
 	},
 	h1: {
-		marginBottom: '0.5em'
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -117,9 +117,7 @@ class EnterPassphrase extends PureComponent {
 						spacing={1}
 					>
 						<Grid item>
-							<Typography variant="overline" gutterBottom>
-								PASSPHRASE
-							</Typography>
+							<Typography variant="overline">PASSPHRASE</Typography>
 						</Grid>
 						<Grid item style={{ width: '100%' }}>
 							<Input
@@ -148,9 +146,7 @@ class EnterPassphrase extends PureComponent {
 						spacing={1}
 					>
 						<Grid item>
-							<Typography variant="overline" gutterBottom>
-								RECONFIRM PASSPHRASE
-							</Typography>
+							<Typography variant="overline">RECONFIRM PASSPHRASE</Typography>
 						</Grid>
 						<Grid item style={{ width: '100%' }}>
 							<Input
@@ -172,7 +168,7 @@ class EnterPassphrase extends PureComponent {
 				</Grid>
 				{this.state.error !== '' && (
 					<Grid item>
-						<Typography variant="subtitle2" color="error" gutterBottom>
+						<Typography variant="subtitle2" color="error">
 							{this.state.error}
 						</Typography>
 					</Grid>

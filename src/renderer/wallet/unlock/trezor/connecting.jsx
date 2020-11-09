@@ -23,8 +23,8 @@ import { push } from 'connected-react-router';
 import { Popup } from '../../../common';
 
 const styles = theme => ({
-	closeIcon: {
-		marginTop: '20px'
+	textBottomSpace: {
+		marginBottom: theme.spacing(1.5)
 	}
 });
 
@@ -47,6 +47,7 @@ class ConnectingToTrezor extends PureComponent {
 	};
 
 	renderModalBody = () => {
+		const { classes } = this.props;
 		if (this.props.error !== '') {
 			if (this.props.error === 'TREZOR_BRIDGE_NOT_FOUND') {
 				return (
@@ -69,7 +70,7 @@ class ConnectingToTrezor extends PureComponent {
 								spacing={5}
 							>
 								<Grid item>
-									<Typography variant="h1" style={{ marginBottom: '0.75em' }}>
+									<Typography variant="h1" className={classes.textBottomSpace}>
 										Please Install Trezor Bridge
 									</Typography>
 									<Typography variant="body1">
@@ -166,7 +167,7 @@ class ConnectingToTrezor extends PureComponent {
 								spacing={5}
 							>
 								<Grid item>
-									<Typography variant="h1" style={{ marginBottom: '0.75em' }}>
+									<Typography variant="h1" className={classes.textBottomSpace}>
 										Error: Can&#39;t Connect To Trezor
 									</Typography>
 									<Typography variant="body1">
@@ -229,7 +230,7 @@ class ConnectingToTrezor extends PureComponent {
 							spacing={5}
 						>
 							<Grid item>
-								<Typography variant="h1" style={{ marginBottom: '0.75em' }}>
+								<Typography variant="h1" className={classes.textBottomSpace}>
 									Connecting To Trezor
 								</Typography>
 								<Typography variant="body1">

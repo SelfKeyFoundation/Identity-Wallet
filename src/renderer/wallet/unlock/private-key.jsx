@@ -19,13 +19,13 @@ const styles = theme => ({
 		cursor: 'pointer'
 	},
 	bottomSpace: {
-		marginBottom: '1em'
+		marginBottom: theme.spacing(1)
 	},
 	itemBottomSpace: {
-		marginBottom: '2em'
+		marginBottom: theme.spacing(4)
 	},
 	buttonBottomSpace: {
-		marginBottom: '4em'
+		marginBottom: theme.spacing(8)
 	}
 });
 
