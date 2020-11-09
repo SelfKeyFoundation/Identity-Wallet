@@ -12,16 +12,16 @@ const styles = theme => ({
 		width: 'calc(100% - 120px)'
 	},
 	description: {
-		fontFamily: 'Lato, arial',
 		color: '#FFF',
-		lineHeight: '1.5em',
+		fontFamily: 'Lato, arial',
 		fontSize: '14px',
+		lineHeight: '1.5em',
 		'& p': {
-			marginBottom: '1em'
+			marginBottom: theme.spacing(2)
 		},
 		'& p.email': {
 			color: '#00C0D9',
-			padding: '10px 0 10px 0'
+			padding: theme.spacing(1, 0)
 		},
 		'& strong': {
 			fontWeight: '700'
@@ -30,7 +30,7 @@ const styles = theme => ({
 	footer: {
 		width: '100%',
 		'& button': {
-			marginRight: '30px'
+			marginRight: theme.spacing(4)
 		}
 	}
 });

@@ -8,20 +8,20 @@ const styles = theme => ({
 		'& ul.list': {
 			listStyle: 'outside',
 			lineHeight: '1.4em',
-			marginLeft: '0',
-			marginBottom: '1.5em'
+			marginLeft: theme.spacing(0),
+			marginBottom: theme.spacing(3)
 		},
 		'& ul.list li': {
 			lineHeight: '1.4em',
-			marginBottom: '0.5em',
-			paddingLeft: 0
+			marginBottom: theme.spacing(1),
+			paddingLeft: theme.spacing(0)
 		}
 	},
 	booleanProp: {
 		'& h5': {
 			fontWeight: 'normal',
 			fontSize: '14px',
-			margin: 0
+			margin: theme.spacing(0)
 		}
 	},
 	textProp: {
@@ -29,14 +29,14 @@ const styles = theme => ({
 			fontWeight: 'normal',
 			display: 'inline-block',
 			fontSize: '14px',
-			margin: 0
+			margin: theme.spacing(0)
 		},
 		'& div': {
 			display: 'inline-block'
 		},
 		'& h5.value': {
 			color: '#93B0C1',
-			marginLeft: '1em',
+			marginLeft: theme.spacing(2),
 			fontWeight: 'bold'
 		}
 	},

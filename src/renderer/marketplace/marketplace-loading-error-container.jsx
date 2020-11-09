@@ -8,37 +8,34 @@ import { vendorOperations } from '../../common/marketplace/vendors';
 const styles = theme => ({
 	header: {
 		'& h1': {
-			marginLeft: '20px'
+			marginLeft: theme.spacing(2)
 		},
 		'& svg': {
-			marginLeft: 0
+			marginLeft: theme.spacing(0)
 		},
 		width: '100%',
 		height: '40px',
-		marginBottom: '20px'
+		marginBottom: theme.spacing(2)
 	},
 	headerIcon: {
-		marginLeft: '30px'
-	},
-	headerTitle: {
-		paddingLeft: '21px'
+		marginLeft: theme.spacing(4)
 	},
 	hr: {
 		backgroundColor: '#475768',
 		border: 0,
 		height: '1px',
-		margin: 0,
+		margin: theme.spacing(0),
 		width: '100%'
 	},
 	content: {
-		maxWidth: '500px',
 		margin: '120px auto',
+		maxWidth: '500px',
 		textAlign: 'center',
 		'& svg': {
-			marginBottom: '20px'
+			marginBottom: theme.spacing(2)
 		},
 		'& h1': {
-			marginBottom: '20px'
+			marginBottom: theme.spacing(2)
 		}
 	}
 });

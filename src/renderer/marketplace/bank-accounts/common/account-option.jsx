@@ -16,25 +16,25 @@ import { sanitize } from '../../common';
 const styles = theme => ({
 	container: {},
 	tabContent: {
-		marginTop: '15px',
-		marginBottom: '15px'
+		marginBottom: theme.spacing(2),
+		marginTop: theme.spacing(2)
 	},
 	li: {
-		marginBottom: '20px'
+		marginBottom: theme.spacing(2)
 	},
 	panelHeaderText: {
-		marginRight: '40px'
+		marginRight: theme.spacing(5)
 	},
 	title: {
 		color: typography,
-		marginRight: '10px'
+		marginRight: theme.spacing(1)
 	},
 	headerText: {
 		fontWeight: 600,
 		textTransform: 'capitalize'
 	},
 	panelSummaryItem: {
-		marginBottom: '10px',
+		marginBottom: theme.spacing(1),
 		width: '100%'
 	},
 	bold: {
@@ -44,37 +44,37 @@ const styles = theme => ({
 		textTransform: 'uppercase'
 	},
 	alert: {
-		marginBottom: '40px'
+		marginBottom: theme.spacing(5)
 	},
 	listItem: {
 		alignItems: 'baseline',
 		display: 'flex',
-		paddingLeft: 0,
-		paddingRight: 0
+		paddingLeft: theme.spacing(0),
+		paddingRight: theme.spacing(0)
 	},
 	listItemText: {
 		width: '37%'
 	},
 	extraKYC: {
-		marginBottom: '30px',
-		marginTop: '40px'
+		marginBottom: theme.spacing(4),
+		marginTop: theme.spacing(5)
 	},
 	bottomSpace: {
-		marginBottom: '15px'
+		marginBottom: theme.spacing(2)
 	},
 	eligibility: {
-		marginTop: '40px'
+		marginTop: theme.spacing(5)
 	},
 	eligibilityGrid: {
-		marginBottom: '25px'
+		marginBottom: theme.spacing(3)
 	},
 	eligibilityList: {
 		listStyle: 'decimal',
-		paddingLeft: '25px'
+		paddingLeft: theme.spacing(3)
 	},
 	padding: {
-		paddingLeft: 0,
-		paddingRight: 0
+		paddingLeft: theme.spacing(0),
+		paddingRight: theme.spacing(0)
 	},
 	flexColumn: {
 		flexDirection: 'column'

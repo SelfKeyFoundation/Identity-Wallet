@@ -6,10 +6,10 @@ import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	title: {
-		marginBottom: '17px'
+		marginBottom: theme.spacing(2)
 	},
 	buttonContainer: {
-		marginTop: '60px'
+		marginTop: theme.spacing(7)
 	}
 });
 

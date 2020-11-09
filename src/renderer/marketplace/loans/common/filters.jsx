@@ -6,7 +6,7 @@ import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 
 const styles = theme => ({
 	container: {
-		marginBottom: '2em',
+		marginBottom: theme.spacing(4),
 		'& .MuiSlider-markLabel': {
 			fontSize: '12px !important',
 			marginTop: '3px'

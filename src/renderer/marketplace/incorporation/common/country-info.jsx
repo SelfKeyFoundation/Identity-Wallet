@@ -11,11 +11,11 @@ import 'flag-icon-css/css/flag-icon.css';
 const styles = theme => ({
 	countryName: {
 		textAlign: 'center',
-		marginBottom: '2em'
+		marginBottom: theme.spacing(4)
 	},
 	details: {
 		width: '50%',
-		marginLeft: '0',
+		marginLeft: theme.spacing(0),
 		'& h5': {
 			fontWeight: 'normal',
 			display: 'inline-block',
@@ -26,12 +26,12 @@ const styles = theme => ({
 		},
 		'& h5.value': {
 			color: '#93B0C1',
-			marginLeft: '1em',
+			marginLeft: theme.spacing(2),
 			fontWeight: 'bold'
 		}
 	},
 	countryInfo: {
-		marginTop: '50px'
+		marginTop: theme.spacing(6)
 	},
 	flag: {
 		width: '45%',

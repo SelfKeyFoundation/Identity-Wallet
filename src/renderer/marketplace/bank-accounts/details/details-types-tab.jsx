@@ -10,35 +10,35 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'flex-start',
-		padding: '2em 0',
+		padding: theme.spacing(4, 0),
 		width: '100%',
 		'& strong': {
 			fontWeight: 'bold',
 			color: theme.palette.secondary.main,
 			display: 'block',
-			padding: '0',
-			marginBottom: '0.5em',
-			marginTop: '0em'
+			padding: theme.spacing(0),
+			marginBottom: theme.spacing(1),
+			marginTop: theme.spacing(0)
 		},
 		'& ul': {
 			listStyle: 'outside',
 			lineHeight: '1.4em',
-			marginLeft: '1.5em',
-			marginBottom: '1.5em'
+			marginLeft: theme.spacing(3),
+			marginBottom: theme.spacing(3)
 		},
 		'& ul li': {
 			lineHeight: '1.4em',
-			marginBottom: '0.5em'
+			marginBottom: theme.spacing(1)
 		},
 		'& a': {
 			color: primary
 		}
 	},
 	text: {
-		padding: '0 0 2em'
+		padding: theme.spacing(0, 0, 4)
 	},
 	bankingAccountOption: {
-		marginBottom: '2em'
+		marginBottom: theme.spacing(4)
 	}
 });
 

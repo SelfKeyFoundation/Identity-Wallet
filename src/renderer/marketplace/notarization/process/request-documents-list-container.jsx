@@ -23,12 +23,12 @@ const styles = theme => ({
 		display: 'flex',
 		alignItems: 'center',
 		'& .file-icon': {
-			marginRight: '15px'
+			marginRight: theme.spacing(2)
 		}
 	},
 	button: {
-		marginBottom: '16px',
-		marginTop: '36px'
+		marginBottom: theme.spacing(2),
+		marginTop: theme.spacing(4)
 	},
 	ellipsis: {
 		overflow: 'hidden',
@@ -37,11 +37,11 @@ const styles = theme => ({
 		maxWidth: '222px'
 	},
 	checkbox: {
-		padding: '0 10px 0 20px',
+		padding: theme.spacing(0, 1, 0, 2),
 		width: '30px'
 	},
 	type: {
-		padding: '0'
+		padding: theme.spacing(0)
 	},
 	tableContainer: {
 		display: 'flex',
@@ -57,7 +57,7 @@ const styles = theme => ({
 	wrap: {
 		display: 'flex',
 		flexDirection: 'column',
-		margin: 0,
+		margin: theme.spacing(0),
 		width: '100%'
 	}
 });

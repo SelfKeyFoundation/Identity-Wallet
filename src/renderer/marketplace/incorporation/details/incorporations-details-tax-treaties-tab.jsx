@@ -10,7 +10,7 @@ const styles = theme => ({
 		padding: '4em 0',
 		color: '#FFFFFF',
 		'& p': {
-			marginBottom: '1.5em',
+			marginBottom: theme.spacing(3),
 			lineHeight: '1.4em'
 		},
 		'& strong': {
@@ -18,18 +18,18 @@ const styles = theme => ({
 			color: theme.palette.secondary.main,
 			display: 'block',
 			padding: '0',
-			marginBottom: '0.5em',
-			marginTop: '0em'
+			marginBottom: theme.spacing(1),
+			marginTop: theme.spacing(0)
 		},
 		'& ul': {
 			listStyle: 'outside',
 			lineHeight: '1.4em',
-			marginLeft: '1.5em',
-			marginBottom: '1.5em'
+			marginLeft: theme.spacing(3),
+			marginBottom: theme.spacing(3)
 		},
 		'& ul li': {
 			lineHeight: '1.4em',
-			marginBottom: '0.5em'
+			marginBottom: theme.spacing(1)
 		},
 		'& a': {
 			color: primary

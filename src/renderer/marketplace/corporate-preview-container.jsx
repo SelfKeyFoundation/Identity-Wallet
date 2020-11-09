@@ -6,37 +6,34 @@ import { MarketplaceIcon, HourGlassLargeIcon } from 'selfkey-ui';
 const styles = theme => ({
 	header: {
 		'& h1': {
-			marginLeft: '20px'
+			marginLeft: theme.spacing(2)
 		},
 		'& svg': {
-			marginLeft: 0
+			marginLeft: theme.spacing(0)
 		},
-		width: '100%',
+		marginBottom: theme.spacing(2),
 		height: '40px',
-		marginBottom: '20px'
+		width: '100%'
 	},
 	headerIcon: {
-		marginLeft: '30px'
-	},
-	headerTitle: {
-		paddingLeft: '21px'
+		marginLeft: theme.spacing(4)
 	},
 	hr: {
 		backgroundColor: '#475768',
 		border: 0,
 		height: '1px',
-		margin: 0,
+		margin: theme.spacing(0),
 		width: '100%'
 	},
 	content: {
-		maxWidth: '500px',
 		margin: '120px auto',
+		maxWidth: '500px',
 		textAlign: 'center',
 		'& svg': {
-			marginBottom: '20px'
+			marginBottom: theme.spacing(2)
 		},
 		'& h1': {
-			marginBottom: '20px'
+			marginBottom: theme.spacing(2)
 		}
 	}
 });
@@ -64,7 +61,7 @@ export const MarketplaceCorporatePreviewContainer = withStyles(styles)(({ classe
 			<HourGlassLargeIcon />
 			<Typography variant="h1">Coming Soon</Typography>
 			<Typography variant="body1" color="secondary" gutterBottom>
-				We are woking with our partners to bring services specially catered for your
+				We are working with our partners to bring services specially catered for your
 				business needs.
 			</Typography>
 			<Typography variant="subtitle2" color="secondary" gutterBottom>

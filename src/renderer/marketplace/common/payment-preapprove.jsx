@@ -10,24 +10,24 @@ const styles = theme => ({
 		height: '71px'
 	},
 	iconWrap: {
-		paddingLeft: '10px'
+		paddingLeft: theme.spacing(1)
 	},
 	wrap: {
-		paddingRight: '40px'
+		paddingRight: theme.spacing(5)
 	},
 	actions: {
 		'&>button': {
-			marginRight: '20px',
-			marginTop: '30px'
+			marginRight: theme.spacing(2),
+			marginTop: theme.spacing(4)
 		}
 	},
 	footer: {
-		marginTop: '30px',
-		paddingTop: '30px',
+		marginTop: theme.spacing(4),
+		paddingTop: theme.spacing(4),
 		borderTop: '1px solid #475768'
 	},
 	bottomSpace: {
-		marginBottom: '20px'
+		marginBottom: theme.spacing(2)
 	},
 	link: {
 		cursor: 'pointer',

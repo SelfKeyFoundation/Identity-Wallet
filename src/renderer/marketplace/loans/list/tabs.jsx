@@ -11,7 +11,7 @@ const styles = theme => ({
 		justifyContent: 'flex-start'
 	},
 	tabs: {
-		marginBottom: '36px'
+		marginBottom: theme.spacing(5)
 	}
 });
 

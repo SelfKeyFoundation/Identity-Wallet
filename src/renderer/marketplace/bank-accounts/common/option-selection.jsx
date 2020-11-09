@@ -14,17 +14,17 @@ const styles = theme => ({
 		maxWidth: '960px'
 	},
 	containerHeader: {
-		padding: '22px 30px',
 		background: '#2A3540',
+		padding: theme.spacing(3, 4),
 		'& div': {
-			display: 'inline-block',
-			color: '#FFF'
+			color: '#FFF',
+			display: 'inline-block'
 		},
 		'& .region': {
-			marginLeft: '1em',
-			marginTop: '0.25em',
-			marginBottom: '0',
-			fontSize: '24px'
+			fontSize: '24px',
+			marginBottom: theme.spacing(0),
+			marginLeft: theme.spacing(2),
+			marginTop: theme.spacing(0.5)
 		}
 	},
 	closeIcon: {
@@ -35,7 +35,7 @@ const styles = theme => ({
 	contentContainer: {
 		border: '1px solid #303C49',
 		borderRadius: '4px',
-		padding: '30px'
+		padding: theme.spacing(4)
 	}
 });
 class OptionSelectionComponent extends PureComponent {

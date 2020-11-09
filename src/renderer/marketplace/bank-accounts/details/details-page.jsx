@@ -13,16 +13,16 @@ const styles = theme => ({
 		maxWidth: '960px'
 	},
 	title: {
-		padding: '22px 30px',
 		background: '#2A3540',
+		padding: theme.spacing(3, 4),
 		'& div': {
 			display: 'inline-block',
 			color: '#FFF'
 		},
 		'& .region': {
-			marginLeft: '1em',
-			marginTop: '0.25em',
-			marginBottom: '0',
+			marginLeft: theme.spacing(2),
+			marginTop: theme.spacing(0.5),
+			marginBottom: theme.spacing(0),
 			fontSize: '24px'
 		}
 	},
@@ -32,7 +32,7 @@ const styles = theme => ({
 	},
 	content: {
 		background: '#262F39',
-		padding: '45px 30px 50px',
+		padding: theme.spacing(6, 4),
 		width: '100%',
 		justifyContent: 'space-between',
 		boxSizing: 'border-box',
@@ -43,7 +43,7 @@ const styles = theme => ({
 		textAlign: 'right',
 		'& button': {
 			width: '100%',
-			marginBottom: '1em'
+			marginBottom: theme.spacing(2)
 		},
 		'& div.price': {
 			fontFamily: 'Lato, arial, sans-serif',
@@ -61,16 +61,16 @@ const styles = theme => ({
 		}
 	},
 	contentHeader: {
-		marginBottom: '40px'
+		marginBottom: theme.spacing(5)
 	},
 	barStyle: {
-		padding: '25px 30px 0'
+		padding: theme.spacing(3, 4, 0)
 	}
 });
 
 const buttonStyles = theme => ({
 	moneyIcon: {
-		marginRight: '18px'
+		marginRight: theme.spacing(2)
 	}
 });
 

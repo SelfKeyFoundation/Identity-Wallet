@@ -19,7 +19,7 @@ const styles = theme => ({
 		width: '30px'
 	},
 	title: {
-		marginBottom: '.5em'
+		marginBottom: theme.spacing(1)
 	},
 	info: {
 		padding: theme.spacing(3, 4)

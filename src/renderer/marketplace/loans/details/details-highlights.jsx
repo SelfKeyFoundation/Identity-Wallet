@@ -9,7 +9,7 @@ const styles = theme => ({
 	},
 	formGroup: {
 		'& > div': {
-			marginBottom: '1em',
+			marginBottom: theme.spacing(2),
 			fontSize: '14px',
 			'& p': {
 				display: 'inline'
@@ -24,7 +24,7 @@ const styles = theme => ({
 	link: {
 		color: '#00C0D9',
 		cursor: 'pointer',
-		marginLeft: '0.5em'
+		marginLeft: theme.spacing(1)
 	}
 });
 

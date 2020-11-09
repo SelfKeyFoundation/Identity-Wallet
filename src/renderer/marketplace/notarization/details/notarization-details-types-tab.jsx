@@ -21,12 +21,12 @@ const styles = theme => ({
 		'& ul': {
 			listStyle: 'outside',
 			lineHeight: '1.4em',
-			marginLeft: '1.5em',
-			marginBottom: '1.5em'
+			marginLeft: theme.spacing(3),
+			marginBottom: theme.spacing(3)
 		},
 		'& ul li': {
 			lineHeight: '1.4em',
-			marginBottom: '0.5em'
+			marginBottom: theme.spacing(1)
 		},
 		'& a': {
 			color: theme.palette.secondary.main

@@ -19,9 +19,9 @@ const styles = theme => ({
 			color: '#FFF'
 		},
 		'& .region': {
-			marginLeft: '1em',
-			marginTop: '0.25em',
-			marginBottom: '0',
+			marginLeft: theme.spacing(2),
+			marginTop: theme.spacing(0.5),
+			marginBottom: theme.spacing(0),
 			fontSize: '24px'
 		}
 	},
@@ -50,7 +50,7 @@ const styles = theme => ({
 		lineHeight: '1.5em',
 		fontSize: '14px',
 		'& p': {
-			marginBottom: '1em'
+			marginBottom: theme.spacing(2)
 		},
 		'& p.email': {
 			color: '#00C0D9',

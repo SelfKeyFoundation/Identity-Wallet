@@ -4,8 +4,8 @@ import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	tabContent: {
-		marginTop: '15px',
-		marginBottom: '15px'
+		marginTop: theme.spacing(2),
+		marginBottom: theme.spacing(2)
 	}
 });
 
