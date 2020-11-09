@@ -55,12 +55,13 @@ export const MarketplacePayment = withStyles(styles)(
 		onBackClick,
 		onPayClick,
 		priceUSD,
-		priceKey,
+		priceCrypto,
 		feeETH,
 		feeUSD,
 		did,
 		vendorName,
-		onLearnHowClick
+		onLearnHowClick,
+		cryptoCurrency
 	}) => {
 		return (
 			<Popup closeAction={onBackClick} open text="Payment Required">
@@ -92,9 +93,10 @@ export const MarketplacePayment = withStyles(styles)(
 									<br />
 									<br />
 									You are about to initiate a payment to {vendorName}. The payment
-									will be done with KEY tokens, at the provided exchange rate.
+									will be done with {cryptoCurrency} tokens, at the provided
+									exchange rate.
 								</Typography>
-								{onLearnHowClick && (
+								{onLearnHowClick && cryptoCurrency === 'KEY' && (
 									<Typography variant="subtitle" color="secondary">
 										Don’t have KEY Tokens yet?{' '}
 										<a className={classes.link} onClick={onLearnHowClick}>
@@ -121,7 +123,8 @@ export const MarketplacePayment = withStyles(styles)(
 											Total: $ {priceUSD.toLocaleString()}
 										</Typography>
 										<Typography variant="subtitle2" color="secondary">
-											{Number.parseFloat(priceKey).toLocaleString()} KEY
+											{Number.parseFloat(priceCrypto).toLocaleString()}{' '}
+											{cryptoCurrency}
 											<KeyTooltip
 												interactive
 												placement="top-start"
@@ -141,7 +144,7 @@ export const MarketplacePayment = withStyles(styles)(
 																	);
 																}}
 															>
-																click here.
+																click here. {priceCrypto}
 															</a>
 														</span>
 													</React.Fragment>
