@@ -33,38 +33,29 @@ import { convertExponentialToDecimal } from 'common/utils/exponential-to-decimal
 import { push } from 'connected-react-router';
 
 const styles = theme => ({
-	iconSpacing: {
-		marginRight: '10px'
-	},
-	toolbar: {
-		justifyContent: 'space-between'
-	},
-	rightSpace: {
-		marginRight: '20px'
-	},
 	tableRow: {
 		backgroundColor: 'transparent !important',
 		borderBottom: '1px solid #303C49',
 		'& td': {
-			padding: '17px 0',
+			padding: theme.spacing(2, 0),
 			'&:last-child': {
-				paddingRight: 0
+				paddingRight: theme.spacing(0)
 			}
 		}
 	},
 	tableFooter: {
 		'& td': {
-			paddingBottom: 0
+			paddingBottom: theme.spacing(0)
 		}
 	},
 	title: {
 		fontSize: '20px'
 	},
 	narrowCell: {
-		padding: 0
+		padding: theme.spacing(0)
 	},
 	smallPadding: {
-		padding: '0 10px'
+		padding: theme.spacing(0, 1)
 	},
 	zeroRightPadding: {
 		paddingRight: '0 !important'
@@ -73,11 +64,8 @@ const styles = theme => ({
 		display: 'flex',
 		justifyContent: 'flex-end',
 		'& button:last-child': {
-			paddingRight: 0
+			paddingRight: theme.spacing(0)
 		}
-	},
-	bottomSpace: {
-		marginBottom: '30px'
 	},
 	transparent: {
 		'&:nth-of-type(odd)': {
@@ -86,7 +74,7 @@ const styles = theme => ({
 	},
 	loading: {
 		position: 'relative',
-		marginLeft: '10px',
+		marginLeft: theme.spacing(1),
 		top: '5px'
 	},
 	searching: {
@@ -97,11 +85,11 @@ const styles = theme => ({
 		fontSize: '13px',
 		lineHeight: '19px',
 		textTransform: 'none',
-		marginLeft: '10px'
+		marginLeft: theme.spacing(1)
 	},
 	moreTransactions: {
 		'& svg': {
-			marginRight: '10px'
+			marginRight: theme.spacing(1)
 		},
 		'& span': {
 			fontWeight: '500',

@@ -21,17 +21,9 @@ const styles = theme => ({
 	bold: {
 		fontWeight: 600
 	},
-	hr: {
-		backgroundColor: '#303C49',
-		border: 'none',
-		boxSizing: 'border-box',
-		height: '1px',
-		marginLeft: '50px',
-		marginRight: '50px'
-	},
 	create: {
-		marginTop: '15px',
-		marginBottom: '10px'
+		marginBottom: theme.spacing(1),
+		marginTop: theme.spacing(2)
 	}
 });
 

@@ -27,7 +27,7 @@ const styles = theme => ({
 		display: 'flex',
 		padding: theme.spacing(2, 0),
 		'& h6:first-child': {
-			marginBottom: '4px'
+			marginBottom: theme.spacing(0.5)
 		}
 	},
 	applicationStatus: {

@@ -10,18 +10,18 @@ import { AllowanceTransactionFee } from './allowance-transaction-fee';
 
 const styles = theme => ({
 	divider: {
-		marginBottom: '20px',
-		marginTop: '40px'
+		marginBottom: theme.spacing(2),
+		marginTop: theme.spacing(5)
 	},
 	actions: {
 		textAlign: 'right',
 		'&>button': {
-			marginRight: '20px',
-			marginTop: '40px'
+			marginRight: theme.spacing(2),
+			marginTop: theme.spacing(5)
 		}
 	},
 	body: {
-		marginBottom: '30px'
+		marginBottom: theme.spacing(4)
 	}
 });
 

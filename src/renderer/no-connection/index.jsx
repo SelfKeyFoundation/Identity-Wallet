@@ -21,10 +21,7 @@ const styles = theme => ({
 		textAlign: 'center'
 	},
 	marginBottom: {
-		marginBottom: '70px'
-	},
-	spacing: {
-		padding: '30px 30px 40px'
+		marginBottom: theme.spacing(9)
 	}
 });
 

@@ -6,27 +6,27 @@ import { DownloadIcon2 } from 'selfkey-ui';
 
 const styles = theme => ({
 	downloadIcon: {
-		width: '66px',
-		height: '71px'
+		height: '71px',
+		width: '66px'
 	},
 	actions: {
 		'&>button': {
-			marginRight: '20px',
-			marginTop: '30px'
+			marginRight: theme.spacing(2),
+			marginTop: theme.spacing(4)
 		}
 	},
 	footer: {
-		marginTop: '30px',
-		paddingTop: '30px',
-		borderTop: '1px solid #475768'
+		borderTop: '1px solid #475768',
+		marginTop: theme.spacing(4),
+		paddingTop: theme.spacing(4)
 	},
 	releaseNotes: {
 		fontSize: '18px',
 		lineHeight: '30px',
-		marginTop: '-10px'
+		marginTop: theme.spacing(-1)
 	},
 	title: {
-		marginBottom: '12px'
+		marginBottom: theme.spacing(1)
 	}
 });
 

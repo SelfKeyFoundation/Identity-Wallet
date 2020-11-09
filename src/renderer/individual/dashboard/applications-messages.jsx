@@ -13,7 +13,7 @@ const styles = theme => ({
 		fontFamily: 'Lato,arial,sans-serif',
 		fontSize: '14px',
 		lineHeight: '21px',
-		marginBottom: '1em',
+		marginBottom: theme.spacing(2),
 		outline: 'none',
 		padding: theme.spacing(1, 2),
 		width: '100%',
@@ -23,7 +23,7 @@ const styles = theme => ({
 	},
 	messagesRow: {
 		display: 'flex',
-		marginBottom: '1em',
+		marginBottom: theme.spacing(2),
 		justifyContent: 'space-between',
 		'& > div.content': {
 			padding: theme.spacing(0.5, 1),

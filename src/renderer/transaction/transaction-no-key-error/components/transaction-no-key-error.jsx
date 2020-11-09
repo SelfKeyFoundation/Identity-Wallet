@@ -6,19 +6,19 @@ import { DefaultBullet } from 'selfkey-ui';
 
 const styles = theme => ({
 	bodyText: {
-		marginBottom: '30px',
-		paddingRight: '30px'
+		marginBottom: theme.spacing(4),
+		paddingRight: theme.spacing(4)
 	},
 	list: {
 		columns: 3,
-		paddingLeft: 0,
+		paddingLeft: theme.spacing(0),
 		width: '100%',
 		'& li': {
-			paddingLeft: 0
+			paddingLeft: theme.spacing(0)
 		}
 	},
 	bottomSpace: {
-		marginBottom: '30px'
+		marginBottom: theme.spacing(4)
 	}
 });
 

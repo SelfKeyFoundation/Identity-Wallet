@@ -11,7 +11,7 @@ const styles = theme => ({
 	},
 	loading: {
 		position: 'relative',
-		marginLeft: '10px',
+		marginLeft: theme.spacing(1),
 		top: '5px'
 	},
 	searching: {
@@ -22,7 +22,7 @@ const styles = theme => ({
 		fontSize: '13px',
 		lineHeight: '19px',
 		textTransform: 'none',
-		marginLeft: '10px'
+		marginLeft: theme.spacing(1)
 	},
 	errorText: {
 		height: '19px',
@@ -45,10 +45,10 @@ const styles = theme => ({
 		}
 	},
 	label: {
-		marginBottom: '10px'
+		marginBottom: theme.spacing(1)
 	},
-	buttoms: {
-		marginTop: '30px'
+	buttons: {
+		marginTop: theme.spacing(4)
 	}
 });
 
@@ -108,7 +108,7 @@ export const AssociateDid = withStyles(styles)(props => {
 							{associateError}
 						</span>
 					)}
-					<Grid container spacing={3} className={classes.buttoms}>
+					<Grid container spacing={3} className={classes.buttons}>
 						<Grid item>
 							<Button
 								variant="contained"

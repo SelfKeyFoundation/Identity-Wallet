@@ -14,16 +14,16 @@ const styles = theme => ({
 		maxWidth: '960px'
 	},
 	containerHeader: {
-		padding: '22px 30px',
 		background: '#2A3540',
+		padding: theme.spacing(3, 4),
 		'& div': {
 			display: 'inline-block',
 			color: '#FFF'
 		},
 		'& .region': {
-			marginLeft: '1em',
-			marginTop: '0.25em',
-			marginBottom: '0',
+			marginBottom: theme.spacing(0),
+			marginLeft: theme.spacing(2),
+			marginTop: theme.spacing(0.5),
 			fontSize: '24px'
 		}
 	},
@@ -35,7 +35,7 @@ const styles = theme => ({
 	contentContainer: {
 		border: '1px solid #303C49',
 		borderRadius: '4px',
-		padding: '30px'
+		padding: theme.spacing(4)
 	},
 	icon: {
 		width: '120px'
@@ -44,29 +44,29 @@ const styles = theme => ({
 		width: 'calc(100% - 120px)'
 	},
 	description: {
-		fontFamily: 'Lato, arial',
 		color: '#FFF',
-		lineHeight: '1.5em',
+		fontFamily: 'Lato, arial',
 		fontSize: '14px',
+		lineHeight: '1.5em',
 		'& p': {
-			marginBottom: '1em'
+			marginBottom: theme.spacing(2)
 		},
 		'& p.email': {
 			color: '#00C0D9',
-			padding: '10px 0 10px 0'
+			padding: theme.spacing(1, 0)
 		},
 		'& strong': {
 			fontWeight: '700'
 		}
 	},
 	instructions: {
-		padding: '30px 0',
-		borderTop: '1px solid #475768'
+		borderTop: '1px solid #475768',
+		padding: theme.spacing(4, 0)
 	},
 	footer: {
 		width: '100%',
 		'& button': {
-			marginRight: '30px'
+			marginRight: theme.spacing(3)
 		}
 	}
 });

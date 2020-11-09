@@ -27,7 +27,7 @@ import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	button: {
-		marginBottom: '34px'
+		marginBottom: theme.spacing(4)
 	},
 
 	descriptionText: {

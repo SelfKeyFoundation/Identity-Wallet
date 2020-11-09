@@ -18,7 +18,6 @@ const styles = theme => ({
 		fontSize: '14px',
 		color: '#00C0D9'
 	},
-
 	icon: {
 		border: 'solid #00C0D9',
 		borderWidth: '0 2px 2px 0',
@@ -35,7 +34,7 @@ const styles = theme => ({
 		'-webkit-transform': 'rotate(45deg)'
 	},
 	inputsContainer: {
-		paddingTop: '52px'
+		paddingTop: theme.spacing(6)
 	},
 	formGroup: {
 		display: 'flex',
@@ -43,7 +42,7 @@ const styles = theme => ({
 		'&& label': {
 			fontSize: '12px',
 			fontWeight: '600',
-			marginBottom: '10px',
+			marginBottom: theme.spacing(1),
 			lineHeight: '15px',
 			color: '#93A4AF'
 		}
@@ -51,33 +50,13 @@ const styles = theme => ({
 	fullWidth: {
 		width: '100%'
 	},
-	checkbox: {
-		color: '#FFFFFF',
-		fontSize: '14px',
-		lineHeight: '14px'
-	},
-	checkboxRoot: {
-		color: '#00C0D9',
-		'&$checked': {
-			color: '#00C0D9 !important'
-		}
-	},
-	checkboxChecked: {
-		color: '#00C0D9 !important'
-	},
-
-	checkboxLabel: {
-		color: '#FFFFFF',
-		fontSize: '14px',
-		lineHeight: '14px'
-	},
 	nonceValue: {
 		color: '#FFFFFF',
 		fontSize: '14px',
 		lineHeight: '14px'
 	},
 	formControl: {
-		paddingLeft: '12px',
+		paddingLeft: theme.spacing(1),
 		boxSizing: 'border-box',
 		height: '46px',
 		width: '178px',
@@ -94,7 +73,7 @@ const styles = theme => ({
 	},
 	currNetworkStatusContainer: {
 		display: 'flex',
-		paddingTop: '9px'
+		paddingTop: theme.spacing(1)
 	},
 	currNetworkStatusTitle: {
 		color: '#93B0C1',
@@ -109,15 +88,14 @@ const styles = theme => ({
 		cursor: 'pointer'
 	},
 	gasPriceValuesContainer: {
-		paddingTop: '15px;',
+		paddingTop: theme.spacing(2),
 		'&& p': {
 			color: '#FFFFFF',
 			fontSize: '14px',
 			lineHeight: '26px',
-			margin: 0
+			margin: theme.spacing(0)
 		}
-	},
-	checked: {}
+	}
 });
 
 export class TransactionFeeBoxComponent extends PureComponent {

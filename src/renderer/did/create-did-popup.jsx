@@ -6,23 +6,20 @@ import { KeyTooltip, TooltipArrow, PaymentIcon, InfoTooltip } from 'selfkey-ui';
 
 const styles = theme => ({
 	footer: {
-		paddingTop: '40px'
+		paddingTop: theme.spacing(5)
 	},
 	actions: {
 		'&>button': {
-			marginRight: '20px',
-			marginTop: '40px'
+			marginRight: theme.spacing(2),
+			marginTop: theme.spacing(5)
 		}
 	},
 	networkFee: {
 		fontWeight: 600,
-		marginBottom: '4px'
+		marginBottom: theme.spacing(0.5)
 	},
 	textRight: {
 		textAlign: 'right'
-	},
-	bottomSpace: {
-		marginBottom: '30px'
 	},
 	link: {
 		cursor: 'pointer',
@@ -30,17 +27,17 @@ const styles = theme => ({
 		textDecoration: 'none'
 	},
 	tooltipIcon: {
-		padding: '0px 0 3px 10px',
+		padding: theme.spacing(0, 0, 0.5, 1),
 		'& svg': {
 			height: '10px !important',
 			width: '10px !important'
 		}
 	},
 	divider: {
-		marginBottom: '20px'
+		marginBottom: theme.spacing(2)
 	},
-	bottomSpace2: {
-		marginBottom: '20px'
+	bottomSpace: {
+		marginBottom: theme.spacing(2)
 	}
 });
 
@@ -90,7 +87,7 @@ class CreateDIDPopupComponent extends PureComponent {
 								<Grid
 									container
 									justify="space-between"
-									className={classes.bottomSpace2}
+									className={classes.bottomSpace}
 								>
 									<Grid item>
 										<Typography variant="h3" color="secondary">
