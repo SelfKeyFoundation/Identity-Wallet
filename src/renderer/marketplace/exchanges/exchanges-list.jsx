@@ -147,7 +147,7 @@ const listView = (classes, items, viewAction) => {
 						<TableCell>
 							<Typography variant="overline">Fiat Payments</Typography>
 						</TableCell>
-						<TableCell style={{ padding: '10px', minWidth: '200px' }}>
+						<TableCell style={{ padding: '8px', minWidth: '200px' }}>
 							<Typography variant="overline">Excluded Residents</Typography>
 						</TableCell>
 						<TableCell>&nbsp;</TableCell>

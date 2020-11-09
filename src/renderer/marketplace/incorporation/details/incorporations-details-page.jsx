@@ -9,11 +9,10 @@ import { IncorporationsDetailsTabs } from './incorporations-details-tabs';
 const styles = theme => ({
 	container: {
 		width: '100%',
-		margin: '50px auto 0',
+		margin: '48px auto 0',
 		maxWidth: '960px'
 	},
 	title: {
-		// padding: '22px 30px',
 		padding: theme.spacing(3, 4),
 		background: '#2A3540',
 		'& div': {
@@ -33,12 +32,11 @@ const styles = theme => ({
 	},
 	content: {
 		background: '#262F39',
-		// padding: '45px 30px 50px',
 		padding: theme.spacing(6, 4),
 		width: '100%',
 		justifyContent: 'space-between',
 		boxSizing: 'border-box',
-		margin: 0
+		margin: theme.spacing(0)
 	},
 	applyButton: {
 		maxWidth: '270px',
@@ -66,14 +64,12 @@ const styles = theme => ({
 		marginBottom: theme.spacing(5)
 	},
 	barStyle: {
-		// padding: '25px 30px 0'
 		padding: theme.spacing(3, 4, 0)
 	}
 });
 
 const buttonStyles = theme => ({
 	certificateIcon: {
-		// marginRight: '18px'
 		marginRight: theme.spacing(2)
 	}
 });

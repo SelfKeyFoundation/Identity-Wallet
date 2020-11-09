@@ -8,7 +8,7 @@ const styles = theme => ({
 		marginBottom: theme.spacing(3)
 	},
 	container: {
-		padding: '32px 24px 56px !important',
+		padding: `${theme.spacing(4, 3, 7)} !important`,
 		position: 'relative'
 	},
 	closeIcon: {

@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/styles';
 const styles = theme => ({
 	button: {
 		minWidth: '70px',
-		padding: '6px 8px',
+		padding: theme.spacing(1),
 		textAlign: 'left',
 		textTransform: 'capitalize',
 		whiteSpace: 'normal',

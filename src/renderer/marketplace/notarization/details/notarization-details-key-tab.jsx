@@ -8,22 +8,22 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'flex-start',
-		padding: '30px 0 0',
+		padding: theme.spacing(3, 0, 0),
 		width: '100%'
 	},
 	gridPadding: {
-		padding: '15px 0 !important'
+		padding: `${theme.spacing(2, 0)} !important`
 	}
 });
 
 const listItemStyles = theme => ({
 	list: {
-		paddingLeft: 0,
-		paddingRight: 0
+		paddingLeft: theme.spacing(0),
+		paddingRight: theme.spacing(0)
 	},
 	listItem: {
 		alignItems: 'baseline',
-		padding: 0
+		padding: theme.spacing(0)
 	},
 	label: {
 		width: '200px'

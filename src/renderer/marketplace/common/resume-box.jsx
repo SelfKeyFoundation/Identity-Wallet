@@ -3,13 +3,14 @@ import { withStyles } from '@material-ui/styles';
 import { Typography, Grid } from '@material-ui/core';
 import classNames from 'classnames';
 import { primary } from 'selfkey-ui';
+
 const styles = theme => ({
 	resumeTable: {},
 	topPadding: {
-		padding: '10px 15px'
+		padding: theme.spacing(1, 2)
 	},
 	bottomPadding: {
-		padding: '10px 15px 15px'
+		padding: theme.spacing(1, 2, 2)
 	},
 	resumeEntry: {
 		maxWidth: '200px',

@@ -18,29 +18,13 @@ const styles = theme => ({
 		// maxWidth: '1100px',
 		width: '100%'
 	},
-	containerHeader: {
-		alignItems: 'flex-start',
-		background: '#2A3540',
-		display: 'flex',
-		justifyContent: 'flex-start',
-		padding: '25px 30px',
-		'& div': {
-			display: 'inline-block',
-			color: '#FFF'
-		}
-	},
 	cardContent: {
-		paddingBottom: '0 !important'
-	},
-	closeIcon: {
-		position: 'absolute',
-		right: '-20px',
-		top: '-20px'
+		paddingBottom: `${theme.spacing(0)} !important`
 	},
 	contentContainer: {
 		border: '1px solid #303C49',
 		borderRadius: '4px',
-		padding: '0 30px'
+		padding: theme.spacing(0, 3)
 	},
 	send: {
 		backgroundColor: '#313D49',
@@ -48,13 +32,13 @@ const styles = theme => ({
 		display: 'flex',
 		flexWrap: 'nowrap',
 		justifyContent: 'space-between',
-		marginLeft: '-30px',
-		marginTop: 50,
-		padding: 30,
+		marginLeft: theme.spacing(-4),
+		marginTop: theme.spacing(6),
+		padding: theme.spacing(3),
 		width: 'calc(100% + 60px)'
 	},
 	textArea: {
-		marginRight: '30px',
+		marginRight: theme.spacing(3),
 		width: '100%',
 		'& div': {
 			width: '100%'
@@ -75,8 +59,8 @@ const messageStyles = theme => ({
 	messageBox: {
 		display: 'flex',
 		flexDirection: 'column',
-		marginBottom: 30,
-		marginTop: 30,
+		marginBottom: theme.spacing(3),
+		marginTop: theme.spacing(3),
 		width: '100%',
 		'& .messageHead': {
 			display: 'flex',
@@ -89,10 +73,10 @@ const messageStyles = theme => ({
 		}
 	},
 	person: {
-		marginBottom: 15,
+		marginBottom: theme.spacing(2),
 		'& .messageHead': {
 			'& h2': {
-				marginLeft: 15
+				marginLeft: theme.spacing(2)
 			}
 		},
 		'& .messageBody': {
@@ -100,23 +84,23 @@ const messageStyles = theme => ({
 				boxSizing: 'border-box',
 				backgroundColor: '#313D49',
 				borderRadius: '4px',
-				marginLeft: 50,
+				marginLeft: theme.spacing(6),
 				maxWidth: '75%',
-				padding: 15
+				padding: theme.spacing(2)
 			},
 			'& .date': {
-				marginLeft: 50,
-				marginTop: '15px'
+				marginLeft: theme.spacing(6),
+				marginTop: theme.spacing(2)
 			}
 		}
 	},
 	company: {
 		alignItems: 'flex-end',
-		marginBottom: 15,
+		marginBottom: theme.spacing(2),
 		'& .messageHead': {
 			flexDirection: 'row-reverse',
 			'& h2': {
-				marginRight: 15
+				marginRight: theme.spacing(2)
 			}
 		},
 		'& .messageBody': {
@@ -125,14 +109,14 @@ const messageStyles = theme => ({
 				boxSizing: 'border-box',
 				backgroundColor: '#384E64',
 				borderRadius: '4px',
-				marginRight: 50,
+				marginRight: theme.spacing(6),
 				maxWidth: '75%',
-				padding: 15,
+				padding: theme.spacing(2),
 				textAlign: 'right'
 			},
 			'& .date': {
-				marginRight: 50,
-				marginTop: '15px'
+				marginRight: theme.spacing(6),
+				marginTop: theme.spacing(2)
 			}
 		}
 	}

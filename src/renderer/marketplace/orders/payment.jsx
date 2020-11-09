@@ -24,7 +24,7 @@ const styles = theme => ({
 	},
 	footer: {
 		marginTop: theme.spacing(4),
-		paddingTop: '30px !important',
+		paddingTop: `${theme.spacing(3)} !important`,
 		borderTop: '1px solid #475768'
 	},
 	bottomSpace: {

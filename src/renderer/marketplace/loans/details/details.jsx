@@ -98,7 +98,7 @@ const styles = theme => ({
 		}
 	},
 	disclaimer: {
-		margin: '20px auto',
+		margin: '16px auto',
 		textAlign: 'center',
 		maxWidth: '80%'
 	},

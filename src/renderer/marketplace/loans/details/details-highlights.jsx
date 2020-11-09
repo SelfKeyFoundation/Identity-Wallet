@@ -17,7 +17,7 @@ const styles = theme => ({
 		},
 		backgroundColor: 'transparent',
 		'& h5': {
-			marginRight: '.5em',
+			marginRight: theme.spacing(1),
 			display: 'inline-block'
 		}
 	},

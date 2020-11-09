@@ -9,7 +9,7 @@ import { BankingDetailsPageTabs } from './details-tabs';
 const styles = theme => ({
 	container: {
 		width: '100%',
-		margin: '50px auto 0',
+		margin: '48px auto 0',
 		maxWidth: '960px'
 	},
 	title: {
@@ -36,7 +36,7 @@ const styles = theme => ({
 		width: '100%',
 		justifyContent: 'space-between',
 		boxSizing: 'border-box',
-		margin: 0
+		margin: theme.spacing(0)
 	},
 	applyButton: {
 		maxWidth: '270px',

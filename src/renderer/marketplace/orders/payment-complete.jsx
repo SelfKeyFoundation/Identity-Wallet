@@ -12,7 +12,7 @@ const styles = theme => ({
 		maxWidth: '960px'
 	},
 	containerHeader: {
-		padding: '22px 30px',
+		padding: theme.spacing(2, 3),
 		background: '#2A3540',
 		'& div': {
 			display: 'inline-block',
@@ -33,13 +33,13 @@ const styles = theme => ({
 	contentContainer: {
 		border: '1px solid #303C49',
 		borderRadius: '4px',
-		padding: '30px'
+		padding: theme.spacing(3)
 	},
 	icon: {
 		width: '120px'
 	},
 	iconWrap: {
-		paddingLeft: '10px'
+		paddingLeft: theme.spacing(1)
 	},
 	content: {
 		width: 'calc(100% - 120px)'
@@ -54,20 +54,20 @@ const styles = theme => ({
 		},
 		'& p.email': {
 			color: '#00C0D9',
-			padding: '10px 0 10px 0'
+			padding: theme.spacing(1, 0)
 		},
 		'& strong': {
 			fontWeight: '700'
 		}
 	},
 	instructions: {
-		padding: '30px 0',
+		padding: theme.spacing(3, 0),
 		borderTop: '1px solid #475768'
 	},
 	footer: {
 		width: '100%',
 		'& button': {
-			marginRight: '30px'
+			marginRight: theme.spacing(3)
 		}
 	}
 });
