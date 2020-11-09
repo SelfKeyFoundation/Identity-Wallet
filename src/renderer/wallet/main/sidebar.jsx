@@ -36,7 +36,7 @@ import {
 const styles = theme => ({
 	list: {
 		justifyContent: 'space-between',
-		margin: 0,
+		margin: theme.spacing(0),
 		minHeight: '100%',
 		overflow: 'auto',
 		width: '100%'
@@ -46,7 +46,7 @@ const styles = theme => ({
 		fontSize: '16px',
 		letterSpacing: '2.77px',
 		lineHeight: '22px',
-		marginLeft: '13px',
+		marginLeft: theme.spacing(2),
 		marginTop: '3px'
 	},
 	link: {
@@ -61,7 +61,7 @@ const styles = theme => ({
 	listItem: {
 		cursor: 'pointer',
 		display: 'flex',
-		marginBottom: '30px',
+		marginBottom: theme.spacing(3),
 		paddingLeft: '10px',
 		'& p': {
 			overflow: 'hidden',
@@ -94,7 +94,7 @@ const styles = theme => ({
 		width: 'auto'
 	},
 	versionWrap: {
-		paddingLeft: '50px'
+		paddingLeft: theme.spacing(6)
 	},
 	drawer: {
 		transition: 'all 3s',
@@ -116,9 +116,9 @@ const styles = theme => ({
 			width: 200
 		},
 		'& .divider': {
-			marginBottom: '30px',
-			marginLeft: 9,
-			paddingLeft: 0,
+			marginBottom: theme.spacing(3),
+			marginLeft: theme.spacing(1),
+			paddingLeft: theme.spacing(0),
 			transition: 'all 0.2s ease-out',
 			width: 160
 		}
@@ -134,26 +134,26 @@ const styles = theme => ({
 			width: 56
 		},
 		'& .divider': {
-			marginBottom: '30px',
-			marginLeft: 9,
-			paddingLeft: 0,
+			marginBottom: theme.spacing(3),
+			marginLeft: theme.spacing(1),
+			paddingLeft: theme.spacing(0),
 			transition: 'all 0.2s ease-out',
 			width: 16
 		}
 	},
 	listItemIcon: {
-		marginRight: '22px'
+		marginRight: theme.spacing(3)
 	},
 	select: {
 		width: '160px'
 	},
 	network: {
-		marginBottom: '30px',
-		paddingLeft: '20px'
+		marginBottom: theme.spacing(4),
+		paddingLeft: theme.spacing(2)
 	},
 	tooltip: {
 		marginTop: '-2px',
-		padding: '0 0 0 10px'
+		padding: theme.spacing(0, 0, 0, 1)
 	},
 	customWidth: {
 		maxWidth: '168px'
@@ -167,7 +167,7 @@ const styles = theme => ({
 		padding: '21px 0 !important'
 	},
 	skLogoContainer: {
-		paddingLeft: '13px'
+		paddingLeft: theme.spacing(1.5)
 	},
 	divider: {
 		backgroundColor: '#475768',
@@ -182,7 +182,7 @@ const styles = theme => ({
 		padding: '50px 0 20px !important'
 	},
 	paddingLeft: {
-		paddingLeft: '10px'
+		paddingLeft: theme.spacing(1.25)
 	}
 });
 

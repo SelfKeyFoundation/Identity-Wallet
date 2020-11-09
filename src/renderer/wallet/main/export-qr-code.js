@@ -6,10 +6,10 @@ import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	title: {
-		marginBottom: '7px'
+		marginBottom: theme.spacing(1)
 	},
 	buttonContainer: {
-		marginTop: '10px'
+		marginTop: theme.spacing(1)
 	},
 	popup: {
 		boxShadow: 'none',

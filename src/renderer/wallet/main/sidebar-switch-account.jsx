@@ -9,7 +9,7 @@ import CorporateIcon from 'selfkey-ui/build/lib/icons/corporate';
 const styles = theme => ({
 	list: {
 		justifyContent: 'space-between',
-		margin: 0,
+		margin: theme.spacing(0),
 		minHeight: '100%',
 		overflow: 'auto',
 		width: 300
@@ -18,7 +18,7 @@ const styles = theme => ({
 		alignItems: 'end',
 		cursor: 'pointer',
 		display: 'flex',
-		paddingLeft: 0,
+		paddingLeft: theme.spacing(0),
 		'&:hover': {
 			'& h6': {
 				transition: 'all 0.3s'
@@ -36,9 +36,9 @@ const styles = theme => ({
 		}
 	},
 	logoSection: {
-		marginBottom: '30px',
-		marginTop: '-30px',
-		paddingLeft: '16px'
+		marginBottom: theme.spacing(4),
+		marginTop: theme.spacing(4),
+		paddingLeft: theme.spacing(2)
 	},
 	logo: {
 		width: '38px',
@@ -87,10 +87,10 @@ const styles = theme => ({
 		width: '100%'
 	},
 	iconSpace: {
-		marginRight: '15px'
+		marginRight: theme.spacing(2)
 	},
 	gridBottomSpace: {
-		marginBottom: '20px'
+		marginBottom: theme.spacing(2)
 	},
 	nameRole: {
 		display: 'flex',
@@ -186,7 +186,7 @@ class SidebarSwitchAccount extends PureComponent {
 				</Grid>
 				<Grid item className={classes.fullWidth}>
 					<Grid container>
-						<Typography variant="body1" style={{ marginBottom: '30px' }}>
+						<Typography variant="body1" style={{ marginBottom: '32px' }}>
 							Choose a SelfKey ID
 						</Typography>
 					</Grid>
@@ -200,7 +200,7 @@ class SidebarSwitchAccount extends PureComponent {
 					<Grid
 						item
 						className={classes.secondaryButtons}
-						style={{ marginBottom: '20px' }}
+						style={{ marginBottom: '16px' }}
 					>
 						<Button variant="outlined" className={classes.fullWidth}>
 							New Personal Account
@@ -209,7 +209,7 @@ class SidebarSwitchAccount extends PureComponent {
 					<Grid
 						item
 						className={classes.secondaryButtons}
-						style={{ marginBottom: '20px' }}
+						style={{ marginBottom: '16px' }}
 					>
 						<Button variant="outlined" className={classes.fullWidth}>
 							New Corporate Account
