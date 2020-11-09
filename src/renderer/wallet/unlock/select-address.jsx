@@ -24,7 +24,7 @@ const styles = theme => ({
 		left: '20px'
 	},
 	hrWrapper: {
-		padding: '10px 20px !important',
+		padding: `${theme.spacing(1, 2)} !important`,
 		width: '100%'
 	},
 	hr: {
@@ -62,23 +62,22 @@ const styles = theme => ({
 		padding: theme.spacing(0, 2, 0, 1)
 	},
 	paginationWrap: {
-		padding: '0 20px 10px !important'
+		padding: `${theme.spacing(0, 2, 1)} !important`
 	},
 	pagination: {
-		padding: '4px 0 !important'
+		padding: `${theme.spacing(1, 0)} !important`
 	},
 	keyIconButton: {
 		margin: '0 3px'
 	},
 	topSpace: {
-		paddingBottom: '0 !important'
+		paddingBottom: `${theme.spacing(0)} !important`
 	},
 	popupClass: {
 		left: 'calc(50% - 480px)',
 		width: '960px'
 	},
 	closeBtn: {
-		// marginLeft: '180px'
 		marginLeft: theme.spacing(22)
 	}
 });

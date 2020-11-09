@@ -7,7 +7,7 @@ import { appOperations, appSelectors } from 'common/app';
 
 const styles = theme => ({
 	avatar: {
-		marginRight: '16px'
+		marginRight: theme.spacing(2)
 	},
 	root: {
 		flexGrow: 1

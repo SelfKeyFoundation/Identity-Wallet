@@ -16,7 +16,7 @@ import { SelectDropdownIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	avatar: {
-		marginRight: '16px'
+		marginRight: theme.spacing(2)
 	},
 	selectInput: {
 		width: '500px'

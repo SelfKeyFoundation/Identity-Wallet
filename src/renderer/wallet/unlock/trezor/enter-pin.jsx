@@ -30,9 +30,7 @@ const styles = theme => ({
 		cursor: 'pointer'
 	},
 	header: {
-		// marginBottom: '20px',
 		marginBottom: theme.spacing(2),
-		// marginTop: '30px'
 		marginTop: theme.spacing(3)
 	},
 	h1: {

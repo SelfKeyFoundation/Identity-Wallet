@@ -6,7 +6,7 @@ import { appOperations, appSelectors } from 'common/app';
 
 const styles = theme => ({
 	avatar: {
-		marginRight: '16px'
+		marginRight: theme.spacing(2)
 	},
 	passwordInput: {
 		width: '500px'
@@ -22,7 +22,7 @@ const styles = theme => ({
 		textOverflow: 'ellipsis',
 		maxWidth: '500px',
 		whiteSpace: 'nowrap',
-		marginLeft: '40px'
+		marginLeft: theme.spacing(5)
 	},
 	bottomSpace: {
 		marginBottom: theme.spacing(1)
@@ -32,7 +32,7 @@ const styles = theme => ({
 		marginTop: theme.spacing(4)
 	},
 	keystore: {
-		marginTop: '0.5em'
+		marginTop: theme.spacing(1)
 	}
 });
 

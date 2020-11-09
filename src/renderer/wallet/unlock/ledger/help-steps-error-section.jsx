@@ -4,10 +4,10 @@ import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	avatar: {
-		marginTop: 0
+		marginTop: theme.spacing(0)
 	},
 	indent: {
-		paddingLeft: '40px'
+		paddingLeft: theme.spacing(5)
 	}
 });
 
