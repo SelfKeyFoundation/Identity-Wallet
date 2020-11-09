@@ -10,7 +10,7 @@ const styles = theme => ({
 	exchangeItem: {
 		columnBreakInside: 'avoid',
 		color: '#FFFFFF',
-		marginBottom: 0,
+		marginBottom: theme.spacing(0),
 		'& a': {
 			textDecoration: 'none',
 			color: '#FFFFFF'
@@ -26,16 +26,16 @@ const styles = theme => ({
 
 	exchanges: {
 		columnCount: 2,
-		marginLeft: '-15px'
+		marginLeft: theme.spacing(-2)
 	},
 
 	circle: {
 		fontSize: '16px',
-		paddingRight: '10px'
+		paddingRight: theme.spacing(1)
 	},
 
 	bottomSpace: {
-		marginBottom: '15px'
+		marginBottom: theme.spacing(2)
 	}
 });
 

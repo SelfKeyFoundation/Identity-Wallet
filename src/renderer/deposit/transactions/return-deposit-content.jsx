@@ -6,32 +6,18 @@ import config from 'common/config';
 
 const styles = theme => ({
 	contentSection: {
-		marginBottom: '50px',
+		marginBottom: theme.spacing(6),
 		'& [role="slider"]': {
-			marginBottom: '5px',
-			marginTop: '10px'
-		}
-	},
-	understandLabel: {
-		fontFamily: theme.typography.fontFamily,
-		fontSize: '14px',
-		lineHeight: '21px',
-		color: '#93B0C1'
-	},
-	understandCheckbox: {
-		color: '#00C0D9',
-		'&$primary$checked': {
-			color: '#00C0D9'
+			marginBottom: theme.spacing(1),
+			marginTop: theme.spacing(1)
 		}
 	},
 	actions: {
 		'&>button': {
-			marginRight: '20px',
-			marginTop: '30px'
+			marginRight: theme.spacing(2),
+			marginTop: theme.spacing(4)
 		}
-	},
-	primary: {},
-	checked: {}
+	}
 });
 
 class ReturnDepositContentComponent extends PureComponent {
