@@ -9,10 +9,10 @@ const styles = theme => ({
 		width: '100%'
 	},
 	title: {
-		padding: '0'
+		padding: theme.spacing(0)
 	},
 	header: {
-		marginBottom: '45px'
+		marginBottom: theme.spacing(5)
 	}
 });
 class CorporateDashboardPage extends CorporateComponent {

@@ -6,46 +6,13 @@ import { InputTitle } from '../../common';
 import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({
-	regularText: {
-		padding: '24px 30px',
-		'& span': {
-			fontWeight: 400
-		}
-	},
-	cancel: {
-		paddingLeft: '20px'
-	},
-	footer: {
-		alignItems: 'flex-start',
-		display: 'flex',
-		justifyContent: 'flex-start',
-		paddingTop: '60px'
-	},
 	inputBox: {
-		marginBottom: '35px',
+		marginBottom: theme.spacing(4),
 		width: '47%'
 	},
 	fullColumn: {
-		marginBottom: '35px',
+		marginBottom: theme.spacing(4),
 		width: '100%'
-	},
-	lastInputBox: {
-		marginBottom: '26px',
-		width: '47%'
-	},
-	keyBox: {
-		marginBottom: '35px',
-		marginRight: 'calc(47% - 200px)',
-		width: '200px',
-		'& .rdt': {
-			width: '180px'
-		}
-	},
-	optional: {
-		display: 'inline',
-		fontStyle: 'italic',
-		marginLeft: '5px',
-		textTransform: 'lowercase'
 	},
 	select: {
 		width: '100%'

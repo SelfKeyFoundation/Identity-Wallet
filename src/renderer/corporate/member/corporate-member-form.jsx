@@ -40,23 +40,23 @@ const styles = theme => ({
 		border: 'none',
 		boxSizing: 'border-box',
 		height: '1px',
-		marginBottom: '0',
+		marginBottom: theme.spacing(0),
 		width: '100%'
 	},
 	hrInternal: {
-		marginBottom: '20px'
+		marginBottom: theme.spacing(2)
 	},
 	memberForm: {
 		width: '100%'
 	},
 	formActionArea: {
-		marginTop: '20px',
+		marginTop: theme.spacing(2),
 		'& button': {
-			marginRight: '1em'
+			marginRight: theme.spacing(2)
 		}
 	},
 	buttonErrorText: {
-		marginTop: '20px'
+		marginTop: theme.spacing(2)
 	},
 	fullWidth: {
 		width: '100%'

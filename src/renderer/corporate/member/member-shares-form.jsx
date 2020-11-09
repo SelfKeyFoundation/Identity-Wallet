@@ -5,54 +5,14 @@ import { SelectDropdownIcon } from 'selfkey-ui';
 import { InputTitle } from '../../common';
 
 const styles = theme => ({
-	regularText: {
-		padding: '24px 30px',
-		'& span': {
-			fontWeight: 400
-		}
-	},
-	cancel: {
-		paddingLeft: '20px'
-	},
-	footer: {
-		alignItems: 'flex-start',
-		display: 'flex',
-		justifyContent: 'flex-start',
-		paddingTop: '60px'
-	},
 	inputBox: {
-		marginBottom: '35px',
+		marginBottom: theme.spacing(4),
 		width: '47%',
 		'& h6': {
 			display: 'inline-block',
-			marginLeft: '5px',
-			fontWeight: 'bold'
+			fontWeight: 'bold',
+			marginLeft: theme.spacing(1)
 		}
-	},
-	fullColumn: {
-		marginBottom: '35px',
-		width: '100%'
-	},
-	lastInputBox: {
-		marginBottom: '26px',
-		width: '47%'
-	},
-	keyBox: {
-		marginBottom: '35px',
-		marginRight: 'calc(47% - 200px)',
-		width: '200px',
-		'& .rdt': {
-			width: '180px'
-		}
-	},
-	optional: {
-		display: 'inline',
-		fontStyle: 'italic',
-		marginLeft: '5px',
-		textTransform: 'lowercase'
-	},
-	select: {
-		width: '100%'
 	},
 	flexColumn: {
 		display: 'flex',
@@ -63,7 +23,7 @@ const styles = theme => ({
 		justify: 'flex-start'
 	},
 	parentCompany: {
-		marginBottom: '35px'
+		marginBottom: theme.spacing(4)
 	},
 	inputWrap: {
 		display: 'flex',
