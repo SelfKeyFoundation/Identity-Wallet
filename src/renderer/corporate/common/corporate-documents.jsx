@@ -58,13 +58,13 @@ const styles = theme => ({
 		display: 'flex',
 		alignItems: 'center',
 		'& .file-icon': {
-			marginRight: '15px'
+			marginRight: theme.spacing(2)
 		}
 	},
 	button: {
 		display: 'flex',
 		justifyContent: 'center',
-		marginTop: '30px'
+		marginTop: theme.spacing(2)
 	},
 	noOverflow: {
 		maxWidth: '320px',

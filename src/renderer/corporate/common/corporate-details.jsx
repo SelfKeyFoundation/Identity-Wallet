@@ -42,7 +42,7 @@ const styles = theme => ({
 			display: 'inline-block'
 		},
 		'& svg': {
-			marginRight: '0.5em',
+			marginRight: theme.spacing(1),
 			verticalAlign: 'middle'
 		}
 	},

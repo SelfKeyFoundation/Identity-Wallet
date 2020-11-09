@@ -60,7 +60,7 @@ const styles = theme => ({
 	optional: {
 		display: 'inline',
 		fontStyle: 'italic',
-		marginLeft: '5px',
+		marginLeft: theme.spacing(0.5),
 		textTransform: 'lowercase'
 	},
 	select: {

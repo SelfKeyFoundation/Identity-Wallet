@@ -20,7 +20,7 @@ const styles = theme => ({
 			display: 'flex',
 			flexWrap: 'nowrap',
 			justifyContent: 'space-between',
-			margin: theme.spacing(4, 0),
+			margin: theme.spacing(0),
 			'& .halfWidth': {
 				width: '100%'
 			},

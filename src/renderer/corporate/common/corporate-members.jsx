@@ -36,7 +36,6 @@ const styles = theme => ({
 		margin: theme.spacing(1, 2)
 	},
 	card: {
-		marginTop: theme.spacing(3),
 		overflow: 'auto'
 	},
 	cardContent: {
@@ -69,7 +68,7 @@ const styles = theme => ({
 	},
 	iconColumn: {
 		maxWidth: '1em',
-		padding: '0 !important',
+		padding: `${theme.spacing(0)} !important`,
 		textAlign: 'center'
 	},
 	overflow: {

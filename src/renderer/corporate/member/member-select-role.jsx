@@ -12,10 +12,10 @@ import {
 
 const styles = theme => ({
 	title: {
-		marginTop: '12px'
+		marginTop: theme.spacing(1)
 	},
 	selectionBoxTitle: {
-		marginLeft: '15px'
+		marginLeft: theme.spacing(2)
 	},
 	selectionBoxHeader: {
 		backgroundColor: '#293743',
