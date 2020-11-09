@@ -16,27 +16,27 @@ import { Popup } from '../../common';
 
 const styles = theme => ({
 	cryptoIcon: {
-		marginRight: '20px'
+		marginRight: theme.spacing(2)
 	},
 	cryptoSymbol: {
 		fontSize: '14px',
 		fontWeight: 'normal'
 	},
 	tokenPrice: {
-		padding: '20px 0'
+		padding: theme.spacing(2, 0)
 	},
 	tokenAddress: {
-		padding: '20px 0'
+		padding: theme.spacing(2, 0)
 	},
 	actionButtons: {
-		padding: '36px 0 12px 0',
+		padding: theme.spacing(4, 0, 1),
 		'& button': {
-			marginRight: '20px'
+			marginRight: theme.spacing(2)
 		},
 		'& svg': {
 			width: '0.9em !important',
 			height: '0.9em !important',
-			marginRight: '0.5em'
+			marginRight: theme.spacing(1)
 		},
 		'& svg path': {
 			fill: '#09a8ba'

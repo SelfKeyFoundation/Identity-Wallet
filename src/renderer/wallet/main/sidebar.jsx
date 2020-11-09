@@ -62,7 +62,7 @@ const styles = theme => ({
 		cursor: 'pointer',
 		display: 'flex',
 		marginBottom: theme.spacing(3),
-		paddingLeft: '10px',
+		paddingLeft: theme.spacing(1.25),
 		'& p': {
 			overflow: 'hidden',
 			textOverflow: 'ellipsis',
@@ -164,7 +164,7 @@ const styles = theme => ({
 	},
 	skLogo: {
 		flexGrow: 0,
-		padding: '21px 0 !important'
+		padding: `${theme.spacing(2.6, 0)} !important`
 	},
 	skLogoContainer: {
 		paddingLeft: theme.spacing(1.5)
@@ -176,10 +176,10 @@ const styles = theme => ({
 	},
 	mainMenuItemsWrap: {
 		flexGrow: 1,
-		padding: '50px 0 0 !important'
+		padding: theme.spacing(6, 0, 0)
 	},
 	secondaryMenuItemsWrap: {
-		padding: '50px 0 20px !important'
+		padding: theme.spacing(6, 0, 2)
 	},
 	paddingLeft: {
 		paddingLeft: theme.spacing(1.25)
@@ -233,7 +233,6 @@ class Sidebar extends PureComponent {
 				justify="flex-start"
 				alignItems="flex-start"
 				className={`${classes.list} sidebarContainer`}
-				spacing={5}
 			>
 				<Grid item className={classes.skLogo}>
 					<Grid

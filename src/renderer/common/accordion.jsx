@@ -51,8 +51,8 @@ const styles = theme => ({
 	listItem: {
 		alignItems: 'baseline',
 		display: 'flex',
-		paddingLeft: 0,
-		paddingRight: 0
+		paddingLeft: theme.spacing(0),
+		paddingRight: theme.spacing(0)
 	},
 	listItemText: {
 		width: '37%'

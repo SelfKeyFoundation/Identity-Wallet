@@ -18,13 +18,13 @@ const styles = theme => ({
 		minHeight: '100vh'
 	},
 	parentGrid: {
-		margin: 0,
+		margin: theme.spacing(0),
 		minHeight: '100vh',
 		width: '100%'
 	},
 	insideGrid: {
 		flexGrow: 1,
-		margin: 0,
+		margin: theme.spacing(0),
 		width: '100%'
 	},
 	primaryTintText: {
@@ -43,20 +43,20 @@ const styles = theme => ({
 	divider: {
 		background: 'linear-gradient(to bottom, #142a34 0%, #00c0d9 100%)',
 		height: '120px',
-		marginTop: '-88px',
+		marginTop: theme.spacing(-11),
 		position: 'absolute',
 		width: '1px'
 	},
 	footerQuit: {
-		marginLeft: '-50px',
-		marginTop: '-50px'
+		marginLeft: theme.spacing(-6),
+		marginTop: theme.spacing(-6)
 	},
 	footerHelp: {
-		marginLeft: '50px',
-		marginTop: '-50px'
+		marginLeft: theme.spacing(6),
+		marginTop: theme.spacing(-6)
 	},
 	scrollFix: {
-		margin: 0,
+		margin: theme.spacing(0),
 		width: '100%'
 	}
 });

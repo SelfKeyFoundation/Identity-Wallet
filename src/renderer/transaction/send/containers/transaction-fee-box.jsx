@@ -22,7 +22,7 @@ const styles = theme => ({
 		border: 'solid #00C0D9',
 		borderWidth: '0 2px 2px 0',
 		display: 'inline-block',
-		padding: '4px',
+		padding: theme.spacing(0.5),
 		marginLeft: '5px'
 	},
 	rightIcon: {

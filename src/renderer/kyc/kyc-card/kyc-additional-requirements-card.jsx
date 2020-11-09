@@ -21,13 +21,13 @@ const styles = theme => ({
 		}
 	},
 	buttons: {
-		marginTop: '20px'
+		marginTop: theme.spacing(2)
 	},
 	extraSpace: {
-		marginRight: '4px'
+		marginRight: theme.spacing(0.5)
 	},
 	alert: {
-		marginBottom: 10
+		marginBottom: theme.spacing(1)
 	}
 });
 

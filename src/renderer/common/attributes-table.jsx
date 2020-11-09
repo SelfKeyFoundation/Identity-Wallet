@@ -9,8 +9,8 @@ const styles = theme => ({
 		fontWeight: 600
 	},
 	padding: {
-		marginBottom: '0 !important',
-		marginLeft: '0 !important',
+		marginBottom: `${theme.spacing(0)} !important`,
+		marginLeft: `${theme.spacing(0)} !important`,
 		paddingLeft: theme.spacing(0),
 		paddingRight: theme.spacing(0)
 	},

@@ -11,8 +11,8 @@ const styles = theme => ({
 	},
 	actions: {
 		'&>button': {
-			marginRight: '20px',
-			marginTop: '30px'
+			marginRight: theme.spacing(2),
+			marginTop: theme.spacing(3)
 		}
 	},
 	progress: {

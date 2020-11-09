@@ -7,11 +7,11 @@ import {
 	withStyles
 } from '@material-ui/core';
 
-const styles = {
+const styles = theme => ({
 	agreementError: {
-		marginLeft: '30px'
+		marginLeft: theme.spacing(3)
 	}
-};
+});
 
 export const KycAgreement = withStyles(styles)(({ text, classes, onChange, value, error }) => {
 	return (

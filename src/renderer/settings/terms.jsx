@@ -49,7 +49,7 @@ const styles = theme => ({
 		margin: theme.spacing(4, 0, 3),
 		maxHeight: '400px',
 		overflow: 'auto',
-		padding: '0 20px !important'
+		padding: `${theme.spacing(0, 2)} !important`
 	},
 	'@media screen and (max-height: 800px)': {
 		flexColScroll: {

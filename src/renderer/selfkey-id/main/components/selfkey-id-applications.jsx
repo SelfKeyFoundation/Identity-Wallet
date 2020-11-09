@@ -65,7 +65,7 @@ const styles = theme => ({
 		padding: theme.spacing(0)
 	},
 	noRightPadding: {
-		paddingRight: '0 !important'
+		paddingRight: `${theme.spacing(0)} !important`
 	},
 	title: {
 		padding: theme.spacing(2)

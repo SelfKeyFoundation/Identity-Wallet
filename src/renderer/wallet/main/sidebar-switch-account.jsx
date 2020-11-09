@@ -96,6 +96,12 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'space-around'
+	},
+	marginSpace: {
+		marginBottom: theme.spacing(2)
+	},
+	titleBottomSpace: {
+		marginBottom: theme.spacing(4)
 	}
 });
 
@@ -186,7 +192,7 @@ class SidebarSwitchAccount extends PureComponent {
 				</Grid>
 				<Grid item className={classes.fullWidth}>
 					<Grid container>
-						<Typography variant="body1" style={{ marginBottom: '32px' }}>
+						<Typography variant="body1" className={classes.titleBottomSpace}>
 							Choose a SelfKey ID
 						</Typography>
 					</Grid>
@@ -197,20 +203,12 @@ class SidebarSwitchAccount extends PureComponent {
 				</Grid>
 				<Divider />
 				<Grid item className={classes.fullWidth}>
-					<Grid
-						item
-						className={classes.secondaryButtons}
-						style={{ marginBottom: '16px' }}
-					>
+					<Grid item className={`${classes.secondaryButtons} ${classes.marginSpace}`}>
 						<Button variant="outlined" className={classes.fullWidth}>
 							New Personal Account
 						</Button>
 					</Grid>
-					<Grid
-						item
-						className={classes.secondaryButtons}
-						style={{ marginBottom: '16px' }}
-					>
+					<Grid item className={`${classes.secondaryButtons} ${classes.marginSpace}`}>
 						<Button variant="outlined" className={classes.fullWidth}>
 							New Corporate Account
 						</Button>

@@ -27,16 +27,16 @@ import {
 import { Scrollable } from '../../common';
 import classNames from 'classnames';
 
-const styles = {
+const styles = theme => ({
 	duplicateAddItemBtnSmall: {
 		width: '86px',
 		marginTop: '5px',
-		padding: 0
+		padding: theme.spacing(0)
 	},
 	radioGroup: {
 		backgroundColor: 'transparent',
-		marginBottom: 0,
-		paddingTop: '10px'
+		marginBottom: theme.spacing(0),
+		paddingTop: theme.spacing(1)
 	},
 	formControlLabel: {
 		'& span': {
@@ -78,12 +78,12 @@ const styles = {
 		maxHeight: '450px'
 	},
 	checklistWrapper: {
-		padding: '10px',
+		padding: theme.spacing(1),
 		maxHeight: '450px'
 	},
 	kycMembersListItem: {
 		width: '265px',
-		padding: '10px 15px',
+		padding: theme.spacing(1, 2),
 		borderBottom: '1px solid #303C49',
 		position: 'relative',
 		cursor: 'pointer'
@@ -106,7 +106,7 @@ const styles = {
 		overflow: 'visible',
 		maxHeight: '450px'
 	}
-};
+});
 
 export const KycChecklistItemLabel = withStyles(styles)(
 	({

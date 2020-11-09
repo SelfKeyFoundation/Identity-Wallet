@@ -7,7 +7,7 @@ import { Popup } from '../../../common';
 
 const styles = theme => ({
 	cancel: {
-		paddingLeft: '20px'
+		paddingLeft: theme.spacing(2)
 	}
 });
 

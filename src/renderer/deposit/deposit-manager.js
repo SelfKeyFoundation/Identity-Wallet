@@ -35,16 +35,16 @@ const styles = theme => ({
 	},
 
 	unlockIcon: {
-		marginRight: '10px'
+		marginRight: theme.spacing(1)
 	},
 
 	hourGlassIcon: {
-		marginRight: '10px',
+		marginRight: theme.spacing(1),
 		paddingTop: '1px'
 	},
 
 	returnIcon: {
-		marginRight: '20px'
+		marginRight: theme.spacing(2)
 	}
 });
 

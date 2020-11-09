@@ -32,7 +32,7 @@ const withStyles = makeStyles({
 		position: 'static'
 	},
 	label: {
-		marginBottom: '10px'
+		marginBottom: '8px'
 	},
 	tooltip: {
 		position: 'relative',
@@ -40,7 +40,7 @@ const withStyles = makeStyles({
 	},
 	loading: {
 		position: 'relative',
-		marginLeft: '10px',
+		marginLeft: '8px',
 		top: '5px'
 	},
 	searching: {
@@ -51,7 +51,7 @@ const withStyles = makeStyles({
 		fontSize: '13px',
 		lineHeight: '19px',
 		textTransform: 'none',
-		marginLeft: '10px'
+		marginLeft: '8px'
 	},
 	errorText: {
 		height: '19px',
@@ -77,7 +77,7 @@ const withStyles = makeStyles({
 		borderBottom: '2px solid #FE4B61 !important'
 	},
 	bottomSpace: {
-		marginBottom: '30px'
+		marginBottom: '24px'
 	},
 	link: {
 		color: '#00C0D9',
@@ -85,7 +85,7 @@ const withStyles = makeStyles({
 		textDecoration: 'none'
 	},
 	topSpace: {
-		marginTop: '30px'
+		marginTop: '24px'
 	}
 });
 

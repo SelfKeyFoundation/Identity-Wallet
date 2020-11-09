@@ -34,7 +34,7 @@ const styles = theme => ({
 		display: 'flex',
 		alignItems: 'center',
 		'& .file-icon': {
-			marginRight: '15px'
+			marginRight: theme.spacing(2)
 		}
 	},
 	ellipsis: {

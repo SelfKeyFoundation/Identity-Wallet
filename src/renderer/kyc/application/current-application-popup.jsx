@@ -15,7 +15,7 @@ const styles = theme => ({
 		textDecoration: 'none'
 	},
 	headCell: {
-		paddingLeft: '15px'
+		paddingLeft: theme.spacing(2)
 	},
 	popupClass: {
 		width: '990px'
