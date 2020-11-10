@@ -13,10 +13,10 @@ import { MarketplaceKeyFiComponent } from './common/marketplace-keyfi-component'
 const styles = theme => ({});
 
 class MarketplaceKeyFiContainerComponent extends MarketplaceKeyFiComponent {
-	componentDidMount() {
+	async componentDidMount() {
 		const { vendorId } = this.props;
-		this.loadRelyingParty({ rp: vendorId, authenticated: false });
-		this.props.dispatch(push(this.productRoute()));
+		await this.loadRelyingParty({ rp: vendorId, authenticated: false });
+		this.props.dispatch(push(this.checkoutRoute()));
 	}
 
 	render = () => null;
@@ -40,8 +40,6 @@ const mapStateToProps = (state, props) => {
 		'keyfi_kyc',
 		identity.type
 	);
-
-	console.log(product);
 
 	// Redirect to error page if Residency US ?
 	/*

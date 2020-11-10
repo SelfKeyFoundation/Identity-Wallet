@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/styles';
 import { Grid, Typography, Button /*, IconButton */ } from '@material-ui/core';
-import { PaymentIcon } from 'selfkey-ui';
+import { DefiIcon } from 'selfkey-ui';
 // import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({
@@ -13,25 +13,38 @@ const styles = theme => ({
 		flexGrow: 1,
 		marginBottom: '15px',
 		overflow: 'hidden',
-		padding: '20px 30px 30px'
+		padding: '30px 30px 30px'
 	},
 	title: {
 		marginBottom: '24px'
 	},
 	paymentIcon: {
-		width: '66px',
-		height: '71px',
+		width: '64px !important',
+		height: 'auto !important',
 		display: 'block',
-		margin: 'auto'
+		margin: 'auto',
+		fill: '#697C95 !important',
+		'& g': {
+			fill: '#697C95 !important'
+		}
 	},
 	iconWrap: {
-		paddingLeft: '10px'
+		paddingLeft: '10px',
+		'& > div': {
+			maxWidth: '260px',
+			marginRight: '0',
+			marginLeft: 'auto'
+		}
 	},
 	wrap: {
 		paddingRight: '40px',
 		'& ul': {
 			color: theme.palette.secondary.main,
 			margin: 0
+		},
+		'& li': {
+			listStyle: 'outside',
+			marginLeft: '1em'
 		}
 	},
 	actions: {
@@ -56,6 +69,9 @@ const styles = theme => ({
 			width: '24px !important',
 			height: '24px !important',
 			fill: 'white !important'
+		},
+		'& svg g': {
+			fill: 'white !important'
 		}
 	}
 });
@@ -71,7 +87,7 @@ export const KeyFiWidget = withStyles(styles)(({ classes, onCredentialsClick }) 
 		>
 			<Grid item xs={8} className={classes.wrap}>
 				<Typography variant="h1" className={classes.title}>
-					Get your Credentials to start using the new KeyFi platform!
+					Get your Credentials Verified to use KeyFi.ai
 				</Typography>
 				<Grid
 					container
@@ -80,36 +96,45 @@ export const KeyFiWidget = withStyles(styles)(({ classes, onCredentialsClick }) 
 					alignItems="stretch"
 					spacing={2}
 				>
-					<Grid item xs={6}>
+					<Grid item xs={12}>
+						<Typography variant="h6" color="secondary" gutterBottom>
+							KeyFi.ai is a first of its kind DeFi aggregator platform that lets you
+							manage the top DeFi protocols. Get your Credentials verified to access
+							KeyFi.ai and be a part of a new and innovative AI-powered DeFI protocol.
+							By getting your Credentials verified, you{`'`}ll also get to claim a
+							limited-period KEY airdrop.
+						</Typography>
+					</Grid>
+					<Grid item xs={6} style={{ display: 'none' }}>
 						<ul>
 							<li>
 								<Typography variant="h6" color="secondary" gutterBottom>
-									LOCK airdrop - Basic Information about yourself. This can be
-									edited at any time, but not deleted.{' '}
+									KeyFi.ai is the first of its kind DeFi aggregator platform that
+									lets you manage all the top DeFi platforms with ease.
 								</Typography>
 							</li>
 							<li>
 								<Typography variant="h6" color="secondary" gutterBottom>
-									STAKING - Any information you provide is stored locally and
-									encrypted on-chain. SelfKey is a non custodiary wallet and it
-									doesn’t store your documets anywhere.
+									Get your Credentials verified now to access and earn rewards
+									using KeyFi.ai.
 								</Typography>
 							</li>
 						</ul>
 					</Grid>
-					<Grid item xs={6}>
+					<Grid item xs={6} style={{ display: 'none' }}>
 						<ul>
 							<li>
 								<Typography variant="h6" color="secondary" gutterBottom>
-									LOCK airdrop - Basic Information about yourself. This can be
-									edited at any time, but not deleted.{' '}
+									This AI-powered DeFi platform aims to prepare the DeFi ecosystem
+									for regulatory compliance with the first of its kind
+									decentralized user verification system backed by SelfKey
+									Credentials.
 								</Typography>
 							</li>
 							<li>
 								<Typography variant="h6" color="secondary" gutterBottom>
-									STAKING - Any information you provide is stored locally and
-									encrypted on-chain. SelfKey is a non custodiary wallet and it
-									doesn’t store your documets anywhere.
+									Also, claim a limited period KEY airdrop for getting your
+									Credentials verified.
 								</Typography>
 							</li>
 						</ul>
@@ -117,17 +142,19 @@ export const KeyFiWidget = withStyles(styles)(({ classes, onCredentialsClick }) 
 				</Grid>
 			</Grid>
 			<Grid item xs={4} className={classes.iconWrap} justify="center" alignItems="center">
-				<PaymentIcon className={classes.paymentIcon} />
-				<div className={classes.actions}>
-					<Button
-						variant="contained"
-						size="large"
-						onClick={onCredentialsClick}
-						className={classes.ctabutton}
-					>
-						<PaymentIcon width="24px" height="24px" />
-						<span>Get Credentials</span>
-					</Button>
+				<div>
+					<DefiIcon className={classes.paymentIcon} />
+					<div className={classes.actions}>
+						<Button
+							variant="contained"
+							size="large"
+							onClick={onCredentialsClick}
+							className={classes.ctabutton}
+						>
+							<DefiIcon width="24px" height="24px" />
+							<span>Get Credentials</span>
+						</Button>
+					</div>
 				</div>
 			</Grid>
 		</Grid>

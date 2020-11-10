@@ -65,8 +65,9 @@ export default [
 	{
 		id: 'keyfi_individual',
 		name: 'keyfi',
-		title: 'KeyFI Eligibility Credentials',
-		description: 'Get your KeyFI eligibility credentials.',
+		title: 'KeyFi.ai Credentials',
+		description:
+			'Verify your Credentials to access and earn using KeyFi.ai. A First of its kind DeFi aggregator platform backed by SelfKey Credentials that allows you to liquidity mine across top DeFi platforms and earn rewards.',
 		entityType: 'individual',
 		active: featureIsEnabled('keyfi'),
 		svgIcon: 'https://dl.airtable.com/cQcRdsGeQSeM3ekJFo3E_icon-exchange-notaries.svg.png'
@@ -135,8 +136,9 @@ export default [
 	{
 		id: 'keyfi_corporate',
 		name: 'keyfi',
-		title: 'KeyFI Eligibility Credentials',
-		description: 'Get your KeyFI eligibility credentials.',
+		title: 'KeyFi.ai Credentials',
+		description:
+			'Verify your Credentials to access and earn using KeyFi.ai. A First of its kind DeFi aggregator platform backed by SelfKey Credentials that allows you to liquidity mine across top DeFi platforms and earn rewards.',
 		entityType: 'corporate',
 		active: false,
 		svgIcon:

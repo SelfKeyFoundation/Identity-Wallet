@@ -144,7 +144,7 @@ export const MarketplacePayment = withStyles(styles)(
 																	);
 																}}
 															>
-																click here. {priceCrypto}
+																click here.
 															</a>
 														</span>
 													</React.Fragment>
