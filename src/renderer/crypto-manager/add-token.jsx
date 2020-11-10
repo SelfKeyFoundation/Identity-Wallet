@@ -86,6 +86,10 @@ const withStyles = makeStyles({
 	},
 	topSpace: {
 		marginTop: '30px'
+	},
+	backButtonContainer: {
+		left: '75px',
+		position: 'absolute'
 	}
 });
 
@@ -114,163 +118,172 @@ export const AddToken = React.memo(
 		}`;
 
 		return (
-			<Grid
-				container
-				direction="column"
-				justify="flex-start"
-				alignItems="center"
-				spacing={4}
-				className={classes.wrap}
-			>
-				<BackButton onclick={onBackClick} />
-				<Grid item className={classes.topSpace}>
-					<MyCryptoLargeIcon />
+			<Grid container>
+				<Grid item className={classes.backButtonContainer}>
+					<BackButton onclick={onBackClick} />
 				</Grid>
-				<Grid item>
-					<Typography variant="h1">Add Custom Token</Typography>
-				</Grid>
-				<Grid item xs={6} className={classes.textAlignCenter}>
-					<Typography
-						variant="body1"
-						color="secondary"
-						className={classes.bottomSpace}
-						gutterBottom
-					>
-						Add ERC20 tokens to be displayed in the dashboard. After entering the token
-						address, the wallet will verify it exists on the blockchain and auto-fill
-						the remaining information of ticker and decimals.
-					</Typography>
-				</Grid>
-				<ModalWrap className={classes.modalPosition}>
-					<ModalHeader>
-						<Grid container direction="row" justify="space-between" alignItems="center">
-							<Grid item>
-								<Typography variant="body1">Add Token</Typography>
-							</Grid>
-						</Grid>
-					</ModalHeader>
-					<ModalBody>
-						<Grid
-							container
-							direction="column"
-							justify="center"
-							alignItems="stretch"
-							spacing={4}
+				<Grid
+					container
+					direction="column"
+					justify="flex-start"
+					alignItems="center"
+					spacing={4}
+					className={classes.wrap}
+				>
+					<Grid item className={classes.topSpace}>
+						<MyCryptoLargeIcon />
+					</Grid>
+					<Grid item>
+						<Typography variant="h1">Add Custom Token</Typography>
+					</Grid>
+					<Grid item xs={6} className={classes.textAlignCenter}>
+						<Typography
+							variant="body1"
+							color="secondary"
+							className={classes.bottomSpace}
+							gutterBottom
 						>
-							<Grid item>
-								<Typography variant="overline" gutterBottom>
-									Token Address
-									<KeyTooltip
-										interactive
-										placement="top-start"
-										className={classes.tooltip}
-										TransitionProps={{ timeout: 0 }}
-										title={
+							Add ERC20 tokens to be displayed in the dashboard. After entering the
+							token address, the wallet will verify it exists on the blockchain and
+							auto-fill the remaining information of ticker and decimals.
+						</Typography>
+					</Grid>
+					<ModalWrap className={classes.modalPosition}>
+						<ModalHeader>
+							<Grid
+								container
+								direction="row"
+								justify="space-between"
+								alignItems="center"
+							>
+								<Grid item>
+									<Typography variant="body1">Add Token</Typography>
+								</Grid>
+							</Grid>
+						</ModalHeader>
+						<ModalBody>
+							<Grid
+								container
+								direction="column"
+								justify="center"
+								alignItems="stretch"
+								spacing={4}
+							>
+								<Grid item>
+									<Typography variant="overline" gutterBottom>
+										Token Address
+										<KeyTooltip
+											interactive
+											placement="top-start"
+											className={classes.tooltip}
+											TransitionProps={{ timeout: 0 }}
+											title={
+												<React.Fragment>
+													<span>
+														Every ERC-20 token has its own smart
+														contract address. To learn more,{' '}
+														<a
+															className={classes.link}
+															onClick={onHelpClick}
+														>
+															click here.
+														</a>
+													</span>
+												</React.Fragment>
+											}
+										>
+											<IconButton aria-label="Info">
+												<InfoTooltip />
+											</IconButton>
+										</KeyTooltip>
+										{searching && (
 											<React.Fragment>
-												<span>
-													Every ERC-20 token has its own smart contract
-													address. To learn more,{' '}
-													<a
-														className={classes.link}
-														onClick={onHelpClick}
-													>
-														click here.
-													</a>
+												<span className={classes.loading}>
+													<CircularProgress size={20} />
+												</span>
+												<span id="searching" className={classes.searching}>
+													Please wait. Checking the blockchain for ERC-20
+													token information.
 												</span>
 											</React.Fragment>
-										}
-									>
-										<IconButton aria-label="Info">
-											<InfoTooltip />
-										</IconButton>
-									</KeyTooltip>
-									{searching && (
-										<React.Fragment>
-											<span className={classes.loading}>
-												<CircularProgress size={20} />
-											</span>
-											<span id="searching" className={classes.searching}>
-												Please wait. Checking the blockchain for ERC-20
-												token information.
-											</span>
-										</React.Fragment>
+										)}
+									</Typography>
+									<Input
+										name="address"
+										value={address}
+										onChange={onFieldChange}
+										className={addressInputClass}
+										disableUnderline
+									/>
+									{!searching && hasAddressError && (
+										<span id="addressError" className={classes.errorText}>
+											{addressError || tokenError}
+										</span>
 									)}
-								</Typography>
-								<Input
-									name="address"
-									value={address}
-									onChange={onFieldChange}
-									className={addressInputClass}
-									disableUnderline
-								/>
-								{!searching && hasAddressError && (
-									<span id="addressError" className={classes.errorText}>
-										{addressError || tokenError}
-									</span>
-								)}
-								{!searching && notFound && (
-									<span id="notFound" className={classes.errorText}>
-										{`Token contract does not exist or not supported. Please double check and try again.`}
-									</span>
-								)}
-								{!searching && duplicate && (
-									<span id="duplicate" className={classes.errorText}>
-										{`Address is already being used.`}
-									</span>
-								)}
-							</Grid>
-							<Grid item>
-								<Typography variant="overline" className={classes.label}>
-									Token Symbol
-								</Typography>
-								<Input
-									name="symbol"
-									value={symbol}
-									className={classes.input}
-									disabled
-									disableUnderline
-								/>
-							</Grid>
-							<Grid item>
-								<Typography variant="overline" className={classes.label}>
-									Decimal Places
-								</Typography>
-								<Input
-									name="decimal"
-									value={decimal}
-									className={classes.input}
-									disabled
-									disableUnderline
-								/>
-							</Grid>
-							<Grid item>
-								<Grid container spacing={3}>
-									<Grid item>
-										<Button
-											variant="contained"
-											disabled={!found || duplicate || hasAddressError}
-											size="large"
-											onClick={onSubmit}
-										>
-											Add Custom Token
-										</Button>
-									</Grid>
+									{!searching && notFound && (
+										<span id="notFound" className={classes.errorText}>
+											{`Token contract does not exist or not supported. Please double check and try again.`}
+										</span>
+									)}
+									{!searching && duplicate && (
+										<span id="duplicate" className={classes.errorText}>
+											{`Address is already being used.`}
+										</span>
+									)}
+								</Grid>
+								<Grid item>
+									<Typography variant="overline" className={classes.label}>
+										Token Symbol
+									</Typography>
+									<Input
+										name="symbol"
+										value={symbol}
+										className={classes.input}
+										disabled
+										disableUnderline
+									/>
+								</Grid>
+								<Grid item>
+									<Typography variant="overline" className={classes.label}>
+										Decimal Places
+									</Typography>
+									<Input
+										name="decimal"
+										value={decimal}
+										className={classes.input}
+										disabled
+										disableUnderline
+									/>
+								</Grid>
+								<Grid item>
+									<Grid container spacing={3}>
+										<Grid item>
+											<Button
+												variant="contained"
+												disabled={!found || duplicate || hasAddressError}
+												size="large"
+												onClick={onSubmit}
+											>
+												Add Custom Token
+											</Button>
+										</Grid>
 
-									<Grid item>
-										<Button
-											variant="outlined"
-											color="secondary"
-											size="large"
-											onClick={onBackClick}
-										>
-											Cancel
-										</Button>
+										<Grid item>
+											<Button
+												variant="outlined"
+												color="secondary"
+												size="large"
+												onClick={onBackClick}
+											>
+												Cancel
+											</Button>
+										</Grid>
 									</Grid>
 								</Grid>
 							</Grid>
-						</Grid>
-					</ModalBody>
-				</ModalWrap>
+						</ModalBody>
+					</ModalWrap>
+				</Grid>
 			</Grid>
 		);
 	}
