@@ -8,9 +8,9 @@ import { Identity } from '../platform/identity';
 import { RelyingPartySession } from '../platform/relying-party';
 
 export class MarketplaceService {
-	constructor({ store, stakingService, web3Service }) {
+	constructor({ store, depositService, web3Service }) {
 		this.store = store;
-		this.stakingService = stakingService;
+		this.depositService = depositService;
 		this.web3Service = web3Service;
 	}
 	get wallet() {
@@ -30,11 +30,11 @@ export class MarketplaceService {
 	}
 	loadStakingInfo(serviceOwner, serviceId) {
 		let options = { from: this.walletAddress };
-		return this.stakingService.getStakingInfo(serviceOwner, serviceId, options);
+		return this.depositService.getStakingInfo(serviceOwner, serviceId, options);
 	}
 	async estimateGasForStake(serviceOwner, serviceId, amount) {
 		let options = { from: this.walletAddress, method: 'estimateGas' };
-		let limits = await this.stakingService.placeStake(amount, serviceOwner, serviceId, options);
+		let limits = await this.depositService.placeStake(amount, serviceOwner, serviceId, options);
 		let gasLimit = 0;
 		if (limits.approve && limits.approve.gas) {
 			gasLimit += limits.approve.gas;
@@ -46,14 +46,14 @@ export class MarketplaceService {
 	}
 	async estimateGasForWithdraw(serviceOwner, serviceId) {
 		const options = { from: this.walletAddress, method: 'estimateGas' };
-		const limit = await this.stakingService.withdrawStake(serviceOwner, serviceId, options);
+		const limit = await this.depositService.withdrawStake(serviceOwner, serviceId, options);
 		return limit.gas || 0;
 	}
 	async placeStake(serviceOwner, serviceId, amount, gasPrice, gas) {
 		let options = { from: this.walletAddress, gasPrice, gas };
 		amount = new BN(amount).times(new BN(10).pow(18)).toString();
 		let blockchainTx = [];
-		let tx = await this.stakingService.placeStake(amount, serviceOwner, serviceId, options);
+		let tx = await this.depositService.placeStake(amount, serviceOwner, serviceId, options);
 
 		if (tx.approve) {
 			blockchainTx.push(tx.approve);
@@ -78,7 +78,7 @@ export class MarketplaceService {
 	async withdrawStake(serviceOwner, serviceId, gasPrice, gas) {
 		let options = { from: this.walletAddress, gas, gasPrice };
 		let blockchainTx = [
-			await this.stakingService.withdrawStake(serviceOwner, serviceId, options)
+			await this.depositService.withdrawStake(serviceOwner, serviceId, options)
 		];
 		return MarketplaceTransactions.create({
 			serviceOwner,

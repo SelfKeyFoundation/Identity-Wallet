@@ -1,8 +1,8 @@
-import StakingService, {
-	StakingContract,
+import DepositService, {
+	DepositContract,
 	SelfKeyTokenContract,
 	EtheriumContract
-} from './staking-service';
+} from './deposit-service';
 import fetch from 'node-fetch';
 import sinon from 'sinon';
 
@@ -34,10 +34,10 @@ const remoteConfig = {
 
 const parseContractAbi = contract => ({ ...contract, abi: JSON.parse(contract.abi) });
 
-describe('StackingService', () => {
+describe('DepositService', () => {
 	let service = null;
 	beforeEach(() => {
-		service = new StakingService({ web3Service: web3ServiceMock });
+		service = new DepositService({ web3Service: web3ServiceMock });
 		fetch.mockResolvedValue({
 			json() {
 				return remoteConfig;
@@ -73,14 +73,14 @@ describe('StackingService', () => {
 
 	describe('getStakingInfo', () => {
 		it('checks deprecatred contracts for stakes', async () => {
-			sinon.stub(StakingContract.prototype, 'getBalance').resolves(0);
+			sinon.stub(DepositContract.prototype, 'getBalance').resolves(0);
 			await service.acquireContract();
 			await service.getStakingInfo('test', 'test', 'test');
 			expect(service.activeContract.getBalance.callCount).toBe(3);
 		});
 		it('checks gets release date for stakes', async () => {
-			sinon.stub(StakingContract.prototype, 'getBalance').resolves(100);
-			sinon.stub(StakingContract.prototype, 'getReleaseDate').resolves(0);
+			sinon.stub(DepositContract.prototype, 'getBalance').resolves(100);
+			sinon.stub(DepositContract.prototype, 'getReleaseDate').resolves(0);
 			await service.acquireContract();
 			await service.getStakingInfo('test', 'test', 'test');
 			expect(service.activeContract.getReleaseDate.callCount).toBe(1);
@@ -198,14 +198,14 @@ describe('Contract', () => {
 	});
 });
 
-describe('StakingContract', () => {
+describe('DepositContract', () => {
 	let contract = null;
 	const testDepositor = 'test';
 	const testServiceOwner = 'owner';
 	const testServiceID = 'testId';
 
 	beforeEach(() => {
-		contract = new StakingContract(
+		contract = new DepositContract(
 			web3ServiceMock,
 			activeContract.address,
 			activeContract.abi,

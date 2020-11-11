@@ -13,7 +13,7 @@ const airtableBaseUrl = CONFIG.airtableBaseUrl;
 
 const CONFIG_URL = `${airtableBaseUrl}${AIRTABLE_NAME}`;
 
-export class StakingService {
+export class DepositService {
 	constructor({ web3Service }) {
 		this.activeContract = null;
 		this.deprecatedContracts = [];
@@ -123,7 +123,7 @@ export class StakingService {
 	}
 	async acquireContract() {
 		let { activeContract, deprecatedContracts } = await this.fetchConfig();
-		this.activeContract = new StakingContract(
+		this.activeContract = new DepositContract(
 			this.web3,
 			activeContract.address,
 			activeContract.abi,
@@ -131,7 +131,7 @@ export class StakingService {
 		);
 		this.deprecatedContracts = deprecatedContracts.map(
 			contract =>
-				new StakingContract(
+				new DepositContract(
 					this.web3,
 					contract.address,
 					contract.abi,
@@ -192,7 +192,7 @@ export class EtheriumContract {
 	}
 }
 
-export class StakingContract extends EtheriumContract {
+export class DepositContract extends EtheriumContract {
 	constructor(web3, address, abi, isDeprecated) {
 		super(web3, address, abi);
 		this.isDeprecated = isDeprecated;
@@ -274,4 +274,4 @@ export class SelfKeyTokenContract extends EtheriumContract {
 	}
 }
 
-export default StakingService;
+export default DepositService;

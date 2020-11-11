@@ -60,6 +60,10 @@ export class ContractService {
 		});
 	}
 
+	findByType(type) {
+		return Contract.findByType(type);
+	}
+
 	loadContracts() {
 		return Contract.findAll();
 	}
