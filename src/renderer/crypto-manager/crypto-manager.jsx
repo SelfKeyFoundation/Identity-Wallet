@@ -182,58 +182,63 @@ export const CryptoManager = React.memo(
 		const classes = withStyles();
 
 		return (
-			<Grid
-				container
-				direction="column"
-				justify="flex-start"
-				alignItems="center"
-				spacing={4}
-				className={classes.wrap}
-			>
-				<BackButton onclick={onBackClick} />
-				<Grid item className={classes.topSpace}>
-					<MyCryptoLargeIcon />
-				</Grid>
+			<Grid container>
 				<Grid item>
-					<Typography variant="h1">Manage My Crypto</Typography>
+					<BackButton onclick={onBackClick} />
 				</Grid>
-				<Grid item>
-					<Typography variant="body1" color="secondary">
-						Manage your ERC20 tokens displayed in the SelfKey Identity Wallet dashboard.
-					</Typography>
-				</Grid>
-				<Grid item className={classes.bottomSpace}>
-					<Grid container direction="row" spacing={2}>
-						<Grid item>
-							<Button variant="outlined" size="large" onClick={onAddTokenClick}>
-								Add token
-							</Button>
-						</Grid>
-						{onManageAllowanceClick && (
+				<Grid
+					container
+					direction="column"
+					justify="flex-start"
+					alignItems="center"
+					spacing={4}
+					className={classes.wrap}
+				>
+					<Grid item className={classes.topSpace}>
+						<MyCryptoLargeIcon />
+					</Grid>
+					<Grid item>
+						<Typography variant="h1">Manage My Crypto</Typography>
+					</Grid>
+					<Grid item>
+						<Typography variant="body1" color="secondary">
+							Manage your ERC20 tokens displayed in the SelfKey Identity Wallet
+							dashboard.
+						</Typography>
+					</Grid>
+					<Grid item className={classes.bottomSpace}>
+						<Grid container direction="row" spacing={2}>
 							<Grid item>
-								<Button
-									variant="outlined"
-									size="large"
-									onClick={onManageAllowanceClick}
-								>
-									Manage Allowance
+								<Button variant="outlined" size="large" onClick={onAddTokenClick}>
+									Add token
 								</Button>
 							</Grid>
-						)}
+							{onManageAllowanceClick && (
+								<Grid item>
+									<Button
+										variant="outlined"
+										size="large"
+										onClick={onManageAllowanceClick}
+									>
+										Manage Allowance
+									</Button>
+								</Grid>
+							)}
+						</Grid>
 					</Grid>
-				</Grid>
-				<Grid item>{cryptoPriceTableComponent}</Grid>
+					<Grid item>{cryptoPriceTableComponent}</Grid>
 
-				{showAddedModal && (
-					<TokenAddedModal
-						locale={locale}
-						tokenAdded={tokenAdded}
-						onCloseTokenAddedModal={onCloseTokenAddedModal}
-					/>
-				)}
-				{showRemovedModal && (
-					<TokenRemovedModal onCloseTokenRemovedModal={onCloseTokenRemovedModal} />
-				)}
+					{showAddedModal && (
+						<TokenAddedModal
+							locale={locale}
+							tokenAdded={tokenAdded}
+							onCloseTokenAddedModal={onCloseTokenAddedModal}
+						/>
+					)}
+					{showRemovedModal && (
+						<TokenRemovedModal onCloseTokenRemovedModal={onCloseTokenRemovedModal} />
+					)}
+				</Grid>
 			</Grid>
 		);
 	}
