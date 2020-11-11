@@ -174,246 +174,275 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 		const { classes } = this.props;
 		return (
 			<React.Fragment>
-				<Grid
-					container
-					direction="column"
-					justify="flex-start"
-					alignItems="center"
-					spacing={4}
-					className={classes.wrap}
-				>
-					<BackButton onclick={this.handleBackClick} className={classes.bb} />
-					<Grid item className={classes.topSpace}>
-						<IdCardIcon />
+				<Grid container>
+					<Grid item className={classes.backButtonContainer}>
+						<BackButton onclick={this.handleBackClick} className={classes.bb} />
 					</Grid>
-					<Grid item>
-						<Typography variant="h1">SelfKey ID</Typography>
-					</Grid>
-					<Grid item>
-						<Typography variant="body1" color="secondary" gutterBottom>
-							Fill in the basic details of your identity wallet.
-						</Typography>
-					</Grid>
-					<ModalWrap className={classes.modalWrap}>
-						<ModalHeader className={classes.modalHeader}>
-							<Typography variant="h2">Identity Wallet Details</Typography>
-						</ModalHeader>
-						<ModalBody className={classes.modalBody}>
-							<form onSubmit={this.handleSave} noValidate>
-								<Grid
-									container
-									direction="column"
-									justify="center"
-									alignItems="center"
-									spacing={4}
-								>
-									<Grid item>
-										<Grid
-											container
-											direction="column"
-											spacing={5}
-											justify="flex-start"
-											alignItems="flex-start"
-										>
-											<Grid item>
-												<Grid
-													container
-													direction="column"
-													spacing={0}
-													justify="flex-start"
-													alignItems="flex-start"
-												>
-													<Grid item>
-														<Grid
-															container
-															direction="column"
-															justify="flex-start"
-															alignItems="flex-start"
-														>
-															<Grid item>
-																<Typography
-																	variant="overline"
-																	gutterBottom
-																	className={classes.idNickname}
-																>
-																	SELFKEY ID NICKNAME*
-																	<KeyTooltip
-																		interactive
-																		placement="top-start"
-																		className={classes.tooltip}
-																		TransitionProps={{
-																			timeout: 0
-																		}}
-																		title={
-																			<React.Fragment>
-																				<span>
-																					With nicknames
-																					it is very easy
-																					to switch
-																					between multiple
-																					accounts.
-																				</span>
-																				<TooltipArrow />
-																			</React.Fragment>
+					<Grid
+						container
+						direction="column"
+						justify="flex-start"
+						alignItems="center"
+						spacing={4}
+						className={classes.wrap}
+					>
+						<Grid item className={classes.topSpace}>
+							<IdCardIcon />
+						</Grid>
+						<Grid item>
+							<Typography variant="h1">SelfKey ID</Typography>
+						</Grid>
+						<Grid item>
+							<Typography variant="body1" color="secondary" gutterBottom>
+								Fill in the basic details of your identity wallet.
+							</Typography>
+						</Grid>
+						<ModalWrap className={classes.modalWrap}>
+							<ModalHeader className={classes.modalHeader}>
+								<Typography variant="h2">Identity Wallet Details</Typography>
+							</ModalHeader>
+							<ModalBody className={classes.modalBody}>
+								<form onSubmit={this.handleSave} noValidate>
+									<Grid
+										container
+										direction="column"
+										justify="center"
+										alignItems="center"
+										spacing={4}
+									>
+										<Grid item>
+											<Grid
+												container
+												direction="column"
+												spacing={5}
+												justify="flex-start"
+												alignItems="flex-start"
+											>
+												<Grid item>
+													<Grid
+														container
+														direction="column"
+														spacing={0}
+														justify="flex-start"
+														alignItems="flex-start"
+													>
+														<Grid item>
+															<Grid
+																container
+																direction="column"
+																justify="flex-start"
+																alignItems="flex-start"
+															>
+																<Grid item>
+																	<Typography
+																		variant="overline"
+																		gutterBottom
+																		className={
+																			classes.idNickname
 																		}
 																	>
-																		<IconButton aria-label="Info">
-																			<InfoTooltip />
-																		</IconButton>
-																	</KeyTooltip>
-																</Typography>
-															</Grid>
-															<Grid item className={classes.input}>
-																<Input
-																	id="nickName"
-																	fullWidth
-																	error={this.state.error !== ''}
-																	onChange={
-																		this.handleNickNameChange
-																	}
-																	placeholder="Alias for this account"
-																/>
-																{this.state.error !== '' && (
-																	<Typography
-																		variant="subtitle2"
-																		color="error"
-																		gutterBottom
-																	>
-																		{this.state.error}
+																		SELFKEY ID NICKNAME*
+																		<KeyTooltip
+																			interactive
+																			placement="top-start"
+																			className={
+																				classes.tooltip
+																			}
+																			TransitionProps={{
+																				timeout: 0
+																			}}
+																			title={
+																				<React.Fragment>
+																					<span>
+																						With
+																						nicknames it
+																						is very easy
+																						to switch
+																						between
+																						multiple
+																						accounts.
+																					</span>
+																					<TooltipArrow />
+																				</React.Fragment>
+																			}
+																		>
+																			<IconButton aria-label="Info">
+																				<InfoTooltip />
+																			</IconButton>
+																		</KeyTooltip>
 																	</Typography>
-																)}
+																</Grid>
+																<Grid
+																	item
+																	className={classes.input}
+																>
+																	<Input
+																		id="nickName"
+																		fullWidth
+																		error={
+																			this.state.error !== ''
+																		}
+																		onChange={
+																			this
+																				.handleNickNameChange
+																		}
+																		placeholder="Alias for this account"
+																	/>
+																	{this.state.error !== '' && (
+																		<Typography
+																			variant="subtitle2"
+																			color="error"
+																			gutterBottom
+																		>
+																			{this.state.error}
+																		</Typography>
+																	)}
+																</Grid>
 															</Grid>
 														</Grid>
 													</Grid>
 												</Grid>
-											</Grid>
-											<Divider className={classes.divider} />
-											<Grid item>
-												<Grid
-													container
-													direction="column"
-													spacing={4}
-													justify="flex-start"
-													alignItems="flex-start"
-												>
-													<Grid item>
-														<Grid
-															container
-															direction="column"
-															justify="flex-start"
-															alignItems="flex-start"
-														>
-															<Grid item>
-																<Typography
-																	variant="overline"
-																	gutterBottom
-																>
-																	FIRST NAME*
-																</Typography>
-															</Grid>
-															<Grid item className={classes.input}>
-																<Input
-																	id="firstName"
-																	fullWidth
-																	required
-																	onChange={
-																		this.handleFirstNameChange
-																	}
-																	placeholder="Given Name"
-																/>
-															</Grid>
-														</Grid>
-													</Grid>
-													<Grid item>
-														<Grid
-															container
-															direction="column"
-															justify="flex-start"
-															alignItems="flex-start"
-														>
-															<Grid item>
-																<Typography
-																	variant="overline"
-																	gutterBottom
-																>
-																	LAST NAME*
-																</Typography>
-															</Grid>
-															<Grid item className={classes.input}>
-																<Input
-																	id="lastName"
-																	fullWidth
-																	required
-																	onChange={
-																		this.handleLastNameChange
-																	}
-																	placeholder="Family Name"
-																/>
-															</Grid>
-														</Grid>
-													</Grid>
-													<Grid item>
-														<Grid
-															container
-															direction="column"
-															justify="flex-start"
-															alignItems="flex-start"
-														>
-															<Grid item>
-																<Typography
-																	variant="overline"
-																	gutterBottom
-																>
-																	EMAIL*
-																</Typography>
-															</Grid>
-															<Grid item className={classes.input}>
-																<Input
-																	id="email"
-																	fullWidth
-																	type="email"
-																	error={this.state.errorEmail}
-																	required
-																	onChange={
-																		this.handleEmailChange
-																	}
-																	placeholder="Email"
-																/>
-																{this.state.errorEmail && (
+												<Divider className={classes.divider} />
+												<Grid item>
+													<Grid
+														container
+														direction="column"
+														spacing={4}
+														justify="flex-start"
+														alignItems="flex-start"
+													>
+														<Grid item>
+															<Grid
+																container
+																direction="column"
+																justify="flex-start"
+																alignItems="flex-start"
+															>
+																<Grid item>
 																	<Typography
-																		variant="subtitle2"
-																		color="error"
+																		variant="overline"
 																		gutterBottom
 																	>
-																		{
-																			'Email provided is invalid'
-																		}
+																		FIRST NAME*
 																	</Typography>
-																)}
+																</Grid>
+																<Grid
+																	item
+																	className={classes.input}
+																>
+																	<Input
+																		id="firstName"
+																		fullWidth
+																		required
+																		onChange={
+																			this
+																				.handleFirstNameChange
+																		}
+																		placeholder="Given Name"
+																	/>
+																</Grid>
+															</Grid>
+														</Grid>
+														<Grid item>
+															<Grid
+																container
+																direction="column"
+																justify="flex-start"
+																alignItems="flex-start"
+															>
+																<Grid item>
+																	<Typography
+																		variant="overline"
+																		gutterBottom
+																	>
+																		LAST NAME*
+																	</Typography>
+																</Grid>
+																<Grid
+																	item
+																	className={classes.input}
+																>
+																	<Input
+																		id="lastName"
+																		fullWidth
+																		required
+																		onChange={
+																			this
+																				.handleLastNameChange
+																		}
+																		placeholder="Family Name"
+																	/>
+																</Grid>
+															</Grid>
+														</Grid>
+														<Grid item>
+															<Grid
+																container
+																direction="column"
+																justify="flex-start"
+																alignItems="flex-start"
+															>
+																<Grid item>
+																	<Typography
+																		variant="overline"
+																		gutterBottom
+																	>
+																		EMAIL*
+																	</Typography>
+																</Grid>
+																<Grid
+																	item
+																	className={classes.input}
+																>
+																	<Input
+																		id="email"
+																		fullWidth
+																		type="email"
+																		error={
+																			this.state.errorEmail
+																		}
+																		required
+																		onChange={
+																			this.handleEmailChange
+																		}
+																		placeholder="Email"
+																	/>
+																	{this.state.errorEmail && (
+																		<Typography
+																			variant="subtitle2"
+																			color="error"
+																			gutterBottom
+																		>
+																			{
+																				'Email provided is invalid'
+																			}
+																		</Typography>
+																	)}
+																</Grid>
 															</Grid>
 														</Grid>
 													</Grid>
 												</Grid>
-											</Grid>
-											<Grid item container justify="center">
-												<Button
-													id="selfkeyIdCreateButton"
-													variant="contained"
-													size="large"
-													type="submit"
-													className={classes.create}
-													disabled={this.state.isDisabled}
-													onClick={this.sendMatomoGoal}
-												>
-													CREATE SELFKEY ID
-												</Button>
+												<Grid item container justify="center">
+													<Button
+														id="selfkeyIdCreateButton"
+														variant="contained"
+														size="large"
+														type="submit"
+														className={classes.create}
+														disabled={this.state.isDisabled}
+														onClick={this.sendMatomoGoal}
+													>
+														CREATE SELFKEY ID
+													</Button>
+												</Grid>
 											</Grid>
 										</Grid>
 									</Grid>
-								</Grid>
-							</form>
-						</ModalBody>
-					</ModalWrap>
+								</form>
+							</ModalBody>
+						</ModalWrap>
+					</Grid>
 				</Grid>
 			</React.Fragment>
 		);
