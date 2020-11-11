@@ -67,6 +67,8 @@ export const inventorySelectors = {
 			.selectInventory(state, entityType)
 			.filter(i => i.category === category && i.status === status),
 	selectInventoryItemById: (state, id) => inventorySelectors.selectInventoryRoot(state).byId[id],
+	selectInventoryItemBySku: (state, sku, entityType) =>
+		inventorySelectors.selectInventory(state, entityType).find(item => item.sku === sku),
 	selectInventoryItemByVendorSku: (state, vendorId, sku, entityType) =>
 		inventorySelectors
 			.selectInventory(state, entityType)

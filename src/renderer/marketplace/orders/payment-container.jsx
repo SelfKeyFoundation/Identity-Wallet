@@ -31,12 +31,13 @@ class MarketplacePaymentContainer extends PureComponent {
 				onBackClick={this.handleBackClick}
 				onPayClick={this.handlePayClick}
 				priceUSD={this.props.priceUSD}
-				priceKey={this.props.order.amount}
+				priceCrypto={this.props.order.amount}
 				feeETH={this.props.feeETH}
 				feeUSD={this.props.feeUSD}
 				did={this.props.identity.did}
 				vendorName={this.props.order.vendorName}
 				onLearnHowClick={this.handleLearnHowClick}
+				cryptoCurrency={this.props.order.cryptoCurrency}
 			/>
 		);
 	}

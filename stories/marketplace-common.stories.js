@@ -16,6 +16,7 @@ import MarketplacePaymentPreapprove from '../src/renderer/marketplace/orders/pre
 import MarketplacePayment from '../src/renderer/marketplace/orders/payment';
 import MarketplacePaymentComplete from '../src/renderer/marketplace/orders/payment-complete';
 import MarketplaceDIDRequired from '../src/renderer/marketplace/selfkey-did-required';
+import KeyFiWidget from '../src/renderer/marketplace/keyfi/common/keyfi-widget';
 
 const paymentCheckoutData = {
 	title: 'Banking Support Service Fee: US',
@@ -132,3 +133,5 @@ storiesOf('Marketplace Common/Orders', module)
 			onContinueClick={action('banking payment continue click')}
 		/>
 	));
+
+storiesOf('Marketplace Common/KeyFi', module).add('Dashboard Widget', () => <KeyFiWidget />);
