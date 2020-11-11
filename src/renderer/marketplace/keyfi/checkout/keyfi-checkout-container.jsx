@@ -8,8 +8,6 @@ import EthUnits from 'common/utils/eth-units';
 import { getCryptoValue } from '../../../common/price-utils';
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
-import { getTokens } from 'common/wallet-tokens/selectors';
-import { getWallet } from 'common/wallet/selectors';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { pricesSelectors } from 'common/prices';
 import { kycSelectors, kycOperations } from 'common/kyc';
@@ -72,15 +70,17 @@ class MarketplaceKeyFiCheckoutContainerComponent extends MarketplaceKeyFiCompone
 		const keyAvailable = this.keyAvailable();
 		const transactionNoKeyError = `/main/transaction-no-key-error/${keyPrice}`;
 		const { cryptoCurrency } = this.state;
+		const completeRoute =
+			product.price > 0 ? this.payRoute(cryptoCurrency) : this.paymentCompleteRoute();
 
-		if (keyPrice.gt(keyAvailable)) {
+		if (product.price > 0 && keyPrice.gt(keyAvailable)) {
 			return this.props.dispatch(push(transactionNoKeyError));
 		} else {
 			this.props.dispatch(
 				kycOperations.startCurrentApplicationOperation(
 					vendorId,
 					templateId,
-					product.price > 0 ? this.payRoute(cryptoCurrency) : this.paymentCompleteRoute(),
+					completeRoute,
 					this.cancelRoute(),
 					`KeyFi.ai Credentials`,
 					`You are about to begin the application process for getting credentials for KeyFi.ai.
@@ -161,9 +161,7 @@ const mapStateToProps = (state, props) => {
 		...getLocale(state),
 		...getFiatCurrency(state),
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
-		tokens: getTokens(state).splice(1), // remove ETH
 		cryptoValue: getCryptoValue(state, primaryToken),
-		address: getWallet(state).address,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		ethRate: pricesSelectors.getRate(state, 'ETH', 'USD'),
 		primaryToken: CRYPTOCURRENCY,

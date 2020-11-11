@@ -1,9 +1,9 @@
 import BN from 'bignumber.js';
+import config from 'common/config';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/styles';
 import { featureIsEnabled } from 'common/feature-flags';
-import { getWallet } from 'common/wallet/selectors';
 import { kycSelectors } from 'common/kyc';
 import { pricesSelectors } from 'common/prices';
 import { marketplaceSelectors } from 'common/marketplace';
@@ -20,6 +20,8 @@ class KeyFiPayContainer extends MarketplaceKeyFiComponent {
 	}
 
 	priceInKEY = priceUSD => {
+		// Key payments have a 20% discount on base price
+		// Future improvement, discounts should be configured in Airtable
 		return new BN(priceUSD * 0.8).dividedBy(this.props.keyRate).toString();
 	};
 
@@ -31,7 +33,7 @@ class KeyFiPayContainer extends MarketplaceKeyFiComponent {
 		const { product, vendorId, vendor, cryptoCurrency } = this.props;
 		const application = this.getLastApplication();
 		const price =
-			cryptoCurrency === 'KEY'
+			cryptoCurrency === config.constants.primaryToken
 				? this.priceInKEY(product.price)
 				: this.priceInETH(product.price);
 		const walletAddress = vendor.paymentAddress;
@@ -73,7 +75,6 @@ const mapStateToProps = (state, props) => {
 		cryptoCurrency,
 		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
 		product: marketplaceSelectors.selectInventoryItemBySku(state, 'keyfi_kyc', identity.type),
-		address: getWallet(state).address,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		ethRate: pricesSelectors.getRate(state, 'ETH', 'USD'),
 		currentApplication: kycSelectors.selectCurrentApplication(state),
