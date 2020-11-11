@@ -30,16 +30,7 @@ class MarketplaceKeyFiCheckoutContainerComponent extends MarketplaceKeyFiCompone
 	async componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
 		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: true });
-		this.checkIfUserCanOpenBankAccount();
 	}
-
-	checkIfUserCanOpenBankAccount = async () => {
-		/*
-		if (!this.canApply(this.props.jurisdiction.price)) {
-			this.props.dispatch(push(this.cancelRoute()));
-		}
-		*/
-	};
 
 	getPaymentParameters() {
 		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency, product } = this.props;
@@ -89,7 +80,7 @@ class MarketplaceKeyFiCheckoutContainerComponent extends MarketplaceKeyFiCompone
 				kycOperations.startCurrentApplicationOperation(
 					vendorId,
 					templateId,
-					this.payRoute(cryptoCurrency),
+					product.price > 0 ? this.payRoute(cryptoCurrency) : this.paymentCompleteRoute(),
 					this.cancelRoute(),
 					`KeyFi.ai Credentials`,
 					`You are about to begin the application process for getting credentials for KeyFi.ai.
@@ -159,9 +150,7 @@ const mapStateToProps = (state, props) => {
 		'keyfi_kyc',
 		identity.type
 	);
-
 	const application = kycSelectors.selectApplications(state).find(app => app.rpName === 'keyfi');
-
 	return {
 		productId,
 		templateId,

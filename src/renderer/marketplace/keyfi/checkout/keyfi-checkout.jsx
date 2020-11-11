@@ -335,49 +335,53 @@ const KeyFiCheckout = withStyles(styles)(
 										variant="contained"
 										size="large"
 										onClick={onStartClick}
-										disabled={loading || applicationStatus}
+										disabled={price > 0 && (loading || applicationStatus)}
 										className={classes.ctabutton}
 									>
 										<DefiIcon width="24px" height="24px" />
 										<span>Get Credentials</span>
 									</Button>
 								</div>
-								<div>
-									{console.log(primaryToken, cryptoCurrency)}
-									<div className={classes.priceRow}>
-										<div
-											className={`rowItem price ${
-												cryptoCurrency === primaryToken ? 'selected' : ''
-											}`}
-											onClick={() => onSelectCrypto(primaryToken)}
-										>
-											Cost: ${keyPrice.toLocaleString()}
-											<div className="time">
-												{keyAmount.toLocaleString()} KEY
+								{price > 0 && (
+									<div>
+										<div className={classes.priceRow}>
+											<div
+												className={`rowItem price ${
+													cryptoCurrency === primaryToken
+														? 'selected'
+														: ''
+												}`}
+												onClick={() => onSelectCrypto(primaryToken)}
+											>
+												Cost: ${keyPrice.toLocaleString()}
+												<div className="time">
+													{keyAmount.toLocaleString()} KEY
+												</div>
+											</div>
+											<div>Or</div>
+											<div
+												className={`rowItem price ${
+													cryptoCurrency === 'ETH' ? 'selected' : ''
+												}`}
+												onClick={() => onSelectCrypto('ETH')}
+											>
+												Cost: ${ethPrice.toLocaleString()}
+												<div className="time">
+													{ethAmount.toLocaleString()} ETH
+												</div>
 											</div>
 										</div>
-										<div>Or</div>
-										<div
-											className={`rowItem price ${
-												cryptoCurrency === 'ETH' ? 'selected' : ''
-											}`}
-											onClick={() => onSelectCrypto('ETH')}
-										>
-											Cost: ${ethPrice.toLocaleString()}
+										<div className={classes.feeRow}>
+											<div>Network Fee</div>
 											<div className="time">
-												{ethAmount.toLocaleString()} ETH
+												{ethFee.toLocaleString()} ETH
 											</div>
 										</div>
 									</div>
-									<div className={classes.feeRow}>
-										<div>Network Fee</div>
-										<div className="time">{ethFee.toLocaleString()} ETH</div>
-									</div>
-								</div>
+								)}
 							</Grid>
 						</Grid>
 
-						{console.log(applicationStatus)}
 						<ApplicationStatusBar
 							status={applicationStatus}
 							statusAction={onStatusAction}

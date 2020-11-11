@@ -21,15 +21,16 @@ class MarketplaceKeyFiPaymentCompleteContainer extends MarketplaceKeyFiComponent
 	async componentDidMount() {
 		const { order, product, vendorId } = this.props;
 
-		this.saveTransactionHash();
-		this.clearRelyingParty();
-
-		this.trackEcommerceTransaction({
-			transactionHash: order.paymentHash,
-			price: product.price,
-			code: product.sku,
-			rpName: vendorId
-		});
+		if (order) {
+			this.saveTransactionHash();
+			this.clearRelyingParty();
+			this.trackEcommerceTransaction({
+				transactionHash: order.paymentHash,
+				price: product.price,
+				code: product.sku,
+				rpName: vendorId
+			});
+		}
 	}
 
 	saveTransactionHash = async () => {
@@ -93,6 +94,7 @@ const mapStateToProps = (state, props) => {
 		'keyfi_kyc',
 		identity.type
 	);
+	const order = orderId ? ordersSelectors.getOrder(state, orderId) : null;
 	return {
 		productId,
 		templateId,
@@ -102,7 +104,7 @@ const mapStateToProps = (state, props) => {
 		transaction: transactionSelectors.getTransaction(state),
 		address: getWallet(state).address,
 		currentApplication: kycSelectors.selectCurrentApplication(state),
-		order: ordersSelectors.getOrder(state, orderId),
+		order,
 		rp: kycSelectors.relyingPartySelector(state, vendorId),
 		rpShouldUpdate: kycSelectors.relyingPartyShouldUpdateSelector(
 			state,

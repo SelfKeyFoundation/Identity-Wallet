@@ -54,7 +54,7 @@ export const KeyFiPaymentComplete = withStyles(styles)(props => {
 							KeyFi.ai KYC Process Started
 						</Typography>
 						<Typography variant="body1" gutterBottom>
-							Thank you for payment!
+							Thank you!
 						</Typography>
 						<Typography variant="body2" gutterBottom>
 							One of our managers is reviewing the information you submitted and{' '}
