@@ -1,8 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/styles';
-import { Grid, Typography, Button /*, IconButton */ } from '@material-ui/core';
+import { Grid, Typography, Button } from '@material-ui/core';
 import { DefiIcon } from 'selfkey-ui';
-// import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({
 	container: {

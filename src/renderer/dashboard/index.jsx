@@ -3,7 +3,7 @@ import { Grid, Typography, Button } from '@material-ui/core';
 import CryptoChartBox from './crypto-chart-box';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
-import KeyFiWidget from '../marketplace/keyfi/common/keyfi-widget';
+import { KeyFiWidgetContainer } from '../marketplace/keyfi/widget/keyfi-widget-container';
 import BuyKeyWidget from './buy-key-widget';
 import DashboardMarketplaceApplications from './dashboard-marketplace-applications';
 import DashboardSelfkeyProfile from './dashboard-selfkey-profile';
@@ -115,11 +115,7 @@ const Dashboard = connect(mapStateToProps)(
 					wrap="nowrap"
 				>
 					<Grid item>
-						<KeyFiWidget
-							onCredentialsClick={() =>
-								props.dispatch(push(`/main/marketplace/keyfi`))
-							}
-						/>
+						<KeyFiWidgetContainer />
 					</Grid>
 				</Grid>
 				<Grid
