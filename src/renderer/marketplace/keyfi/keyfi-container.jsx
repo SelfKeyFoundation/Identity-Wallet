@@ -14,8 +14,8 @@ const styles = theme => ({});
 
 class MarketplaceKeyFiContainerComponent extends MarketplaceKeyFiComponent {
 	async componentDidMount() {
-		const { vendorId } = this.props;
-		await this.loadRelyingParty({ rp: vendorId, authenticated: false });
+		// const { vendorId } = this.props;
+		// await this.loadRelyingParty({ rp: vendorId, authenticated: false });
 		this.props.dispatch(push(this.checkoutRoute()));
 	}
 
