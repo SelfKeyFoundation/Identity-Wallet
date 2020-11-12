@@ -22,17 +22,7 @@ const styles = theme => ({
 	},
 	title: {
 		padding: '22px 30px',
-		background: '#2A3540',
-		'& div': {
-			display: 'inline-block',
-			color: '#FFF'
-		},
-		'& .region': {
-			marginLeft: '1em',
-			marginTop: '0.25em',
-			marginBottom: '0',
-			fontSize: '24px'
-		}
+		background: '#2A3540'
 	},
 	contentContainer: {
 		border: '1px solid #303C49',
@@ -49,13 +39,6 @@ const styles = theme => ({
 	backButtonContainer: {
 		left: '75px',
 		position: 'absolute'
-	},
-
-	payButton: {
-		width: '100%',
-		'& button': {
-			marginRight: '30px'
-		}
 	},
 	ctabutton: {
 		backgroundColor: '#1E262E',
@@ -134,11 +117,6 @@ const styles = theme => ({
 			fontSize: '13px'
 		}
 	},
-	priceTable: {
-		padding: '2em',
-		margin: '2em 0',
-		background: '#313D49'
-	},
 	rowSeparator: {
 		border: '1px solid #475768',
 		margin: '30px 0'
@@ -164,13 +142,6 @@ const styles = theme => ({
 		'& svg': {
 			verticalAlign: 'middle'
 		}
-	},
-	payment: {
-		textAlign: 'right'
-	},
-	alertWrap: {
-		alignItems: 'center',
-		display: 'flex'
 	}
 });
 
@@ -183,7 +154,7 @@ const howItWorksstyles = theme => ({
 		padding: '2em 3%',
 		margin: '2em 0',
 		color: '#FFF',
-		minHeight: '300px',
+		minHeight: '250px',
 		background: '#313D49',
 		'& header': {
 			display: 'flex'
@@ -286,13 +257,13 @@ const KeyFiCheckout = withStyles(styles)(
 			</Grid>
 			<Grid item className={classes.container}>
 				<Grid
-					id="bankAccountDetails"
+					id="keyFiCheckout"
 					container
 					justify="flex-start"
 					alignItems="flex-start"
 					className={classes.title}
 				>
-					<Typography variant="body2" gutterBottom className="region">
+					<Typography variant="h1" className={classes.headerTitle}>
 						{title}
 					</Typography>
 				</Grid>

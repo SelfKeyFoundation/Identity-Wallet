@@ -16,7 +16,10 @@ import MarketplacePaymentPreapprove from '../src/renderer/marketplace/orders/pre
 import MarketplacePayment from '../src/renderer/marketplace/orders/payment';
 import MarketplacePaymentComplete from '../src/renderer/marketplace/orders/payment-complete';
 import MarketplaceDIDRequired from '../src/renderer/marketplace/selfkey-did-required';
-import KeyFiWidget from '../src/renderer/marketplace/keyfi/common/keyfi-widget';
+import KeyFiWidget from '../src/renderer/marketplace/keyfi/widget/keyfi-widget';
+import KeyFiCheckout from '../src/renderer/marketplace/keyfi/checkout/keyfi-checkout';
+import KeyFiPaymentComplete from '../src/renderer/marketplace/keyfi/checkout/keyfi-payment-complete';
+import KYCRequirementData from './__fixtures__/kyc-requirements-data';
 
 const paymentCheckoutData = {
 	title: 'Banking Support Service Fee: US',
@@ -134,4 +137,40 @@ storiesOf('Marketplace Common/Orders', module)
 		/>
 	));
 
-storiesOf('Marketplace Common/KeyFi', module).add('Dashboard Widget', () => <KeyFiWidget />);
+storiesOf('Marketplace Common/KeyFi', module)
+	.add('Dashboard Widget', () => <KeyFiWidget />)
+	.add('Checkout Page KEY', () => (
+		<KeyFiCheckout
+			title="Get your SelfKey Credentials to access KeyFi.ai"
+			price="10"
+			keyPrice="8"
+			keyAmount="1234567"
+			ethPrice="10"
+			ethAmount="53332"
+			ethFee="0.12"
+			kycRequirements={KYCRequirementData}
+			loading="0"
+			templateId="1234567"
+			cryptoCurrency="KEY"
+			primaryToken="KEY"
+			onSelectCrypto={linkTo('Checkout Page ETH')}
+		/>
+	))
+	.add('Checkout Page ETH', () => (
+		<KeyFiCheckout
+			title="Get your SelfKey Credentials to access KeyFi.ai"
+			price="10"
+			keyPrice="8"
+			keyAmount="1234567"
+			ethPrice="10"
+			ethAmount="53332"
+			ethFee="0.12"
+			kycRequirements={KYCRequirementData}
+			loading="0"
+			templateId="1234567"
+			cryptoCurrency="ETH"
+			primaryToken="KEY"
+			onSelectCrypto={linkTo('Checkout Page KEY')}
+		/>
+	))
+	.add('Payment complete', () => <KeyFiPaymentComplete />);
