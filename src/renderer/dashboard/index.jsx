@@ -11,6 +11,7 @@ import TransactionsHistory from '../transaction/transactions-history';
 import { Alert } from '../common';
 import { withStyles } from '@material-ui/styles';
 import { appSelectors } from 'common/app';
+import { featureIsEnabled } from '../../common/feature-flags';
 
 const styles = theme => ({
 	leftSideWidget: {
@@ -107,17 +108,21 @@ const Dashboard = connect(mapStateToProps)(
 				<Grid container item direction="row" justify="flex-start" alignItems="flex-start">
 					<Typography variant="h1">SelfKey Dashboard</Typography>
 				</Grid>
-				<Grid
-					container
-					justify="space-between"
-					className={classes.padding}
-					spacing={1}
-					wrap="nowrap"
-				>
-					<Grid item>
-						<KeyFiWidgetContainer />
+
+				{featureIsEnabled('keyfi') && (
+					<Grid
+						container
+						justify="space-between"
+						className={classes.padding}
+						spacing={1}
+						wrap="nowrap"
+					>
+						<Grid item>
+							<KeyFiWidgetContainer />
+						</Grid>
 					</Grid>
-				</Grid>
+				)}
+
 				<Grid
 					container
 					justify="space-between"
