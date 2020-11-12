@@ -144,6 +144,7 @@ export class TxHistory extends BaseModel {
 		address = address.toLowerCase();
 		const query = await this.query()
 			.whereNull('blockNumber')
+			.andWhere({ isError: 0 })
 			.andWhere(function() {
 				this.where({ from: address }).orWhere({ to: address });
 			});
