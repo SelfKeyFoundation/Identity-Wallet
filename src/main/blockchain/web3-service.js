@@ -92,11 +92,11 @@ export class Web3Service extends EventEmitter {
 			accountsOffset: accountsOffset,
 			paths: ["44'/60'/x'/0/0", "44'/60'/0'/x"]
 		};
-		const ledger = Web3SubProvider(this.getLedgerTransport, this.ledgerConfig);
+		this.ledgerWalletSubProvider = Web3SubProvider(this.getLedgerTransport, this.ledgerConfig);
 
 		const subscriptionSubprovider = new SubscriptionSubprovider();
 
-		engine.addProvider(ledger);
+		engine.addProvider(this.ledgerWalletSubProvider);
 		engine.addProvider(subscriptionSubprovider);
 		engine.addProvider(new WebsocketProvider({ rpcUrl: SELECTED_SERVER_URL }));
 		engine.on('error', error => {

@@ -59,8 +59,11 @@ export class Identity {
 				const appEth = new AppEth(transport);
 				const address = await appEth.getAddress(this.path);
 				return ethUtil.addHexPrefix(address.publicKey);
+			} catch (err) {
+				log.error('getPublic key from ledger error %s', err);
+				throw err;
 			} finally {
-				transport.close();
+				await transport.close();
 			}
 		} else if (this.profile === 'trezor') {
 			const publicKey = await getGlobalContext().web3Service.trezorWalletSubProvider.getPublicKey(
@@ -72,22 +75,21 @@ export class Identity {
 
 	async genSignatureForMessage(msg) {
 		let signature = {};
+		// needed to avoid race condition between getPublicKeyFromHardwareWallet and signPersonalMessage
+		await this.publicKey;
 		switch (this.profile) {
 			case 'ledger':
-				const transport = await getGlobalContext().web3Service.getLedgerTransport();
-				try {
-					const appEth = new AppEth(transport);
-					const msgBufferHex = Buffer.from(msg).toString('hex');
-					const result = await appEth.signPersonalMessage(this.path, msgBufferHex);
-					const v = parseInt(result.v, 10) - 27;
-					let vHex = v.toString(16);
-					if (vHex.length < 2) {
-						vHex = `0${v}`;
-					}
-					return `0x${result.r}${result.s}${vHex}`;
-				} finally {
-					transport.close();
-				}
+				const data = { from: this.address, data: Buffer.from(msg).toString('hex') };
+				const ledgerSignature = await new Promise((resolve, reject) => {
+					getGlobalContext().web3Service.ledgerWalletSubProvider.signPersonalMessage(
+						data,
+						(err, msg) => {
+							if (err) return reject(err);
+							return resolve(msg);
+						}
+					);
+				});
+				return ledgerSignature;
 			case 'trezor':
 				const msgBufferHex = Buffer.from(msg).toString('hex');
 				const trezorSignature = await getGlobalContext().web3Service.trezorWalletSubProvider.signPersonalMessage(

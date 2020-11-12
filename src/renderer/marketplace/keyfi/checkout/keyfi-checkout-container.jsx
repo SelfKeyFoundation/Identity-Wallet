@@ -27,7 +27,12 @@ class MarketplaceKeyFiCheckoutContainerComponent extends MarketplaceKeyFiCompone
 
 	async componentDidMount() {
 		this.props.dispatch(ethGasStationInfoOperations.loadData());
-		await this.loadRelyingParty({ rp: this.props.vendorId, authenticated: true });
+		await this.loadRelyingParty({
+			rp: this.props.vendorId,
+			authenticated: true,
+			nextRoute: this.checkoutRoute(),
+			cancelRoute: this.cancelRoute()
+		});
 	}
 
 	getPaymentParameters() {

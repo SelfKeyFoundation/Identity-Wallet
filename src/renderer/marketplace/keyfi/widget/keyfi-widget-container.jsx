@@ -26,7 +26,7 @@ KeyFiWidgetContainerComponent.propTypes = {
 const mapStateToProps = (state, props) => {
 	const application = kycSelectors.selectApplications(state).find(app => app.rpName === 'keyfi');
 	return {
-		applied: application !== null
+		applied: !!application
 	};
 };
 
