@@ -142,7 +142,7 @@
 		"striptags": "3.1.1",
 		"sudo-prompt": "8.2.3",
 		"tcp-port-used": "1.0.1",
-		"trezor-wallet-provider": "https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#bae8e180f3f6b9d34e3279e99e802076c6f72c65",
+		"trezor-wallet-provider": "https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#2a944494e6cd0ba507d5a4946d3d20d984548e60",
 		"trezor.js": "9.0.0",
 		"url-join": "4.0.0",
 		"web3": "1.2.11",
