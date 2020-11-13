@@ -8,6 +8,9 @@ import { Popup } from '../../../common';
 const styles = theme => ({
 	cancel: {
 		paddingLeft: theme.spacing(2)
+	},
+	bottomSpace: {
+		marginBottom: theme.spacing(2)
 	}
 });
 
@@ -28,7 +31,7 @@ class SelfKeyIdCreateDisclaimerComponent extends PureComponent {
 			<Popup displayLogo open text="What Are ID Attributes & Documents?">
 				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 					<Grid item>
-						<Typography variant="body1" gutterBottom>
+						<Typography variant="body1" className={classes.bottomSpace}>
 							Your identity profile is broken down into two parts: attributes and
 							documents. Attributes are details about your identity such as birthday,
 							phone, address, and city. Documents are proof of your identity such as a
@@ -36,7 +39,7 @@ class SelfKeyIdCreateDisclaimerComponent extends PureComponent {
 						</Typography>
 						<br />
 						<br />
-						<Typography variant="body1" gutterBottom>
+						<Typography variant="body1" className={classes.bottomSpace}>
 							We{"'"}ll be adding more features in the future, such as blockchain
 							verified claims in your identity profile. All attributes and documents
 							regarding your identity profile are stored locally on your computer, and

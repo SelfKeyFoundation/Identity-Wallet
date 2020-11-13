@@ -130,12 +130,7 @@ export const AddToken = React.memo(
 					<Typography variant="h1">Add Custom Token</Typography>
 				</Grid>
 				<Grid item xs={6} className={classes.textAlignCenter}>
-					<Typography
-						variant="body1"
-						color="secondary"
-						className={classes.bottomSpace}
-						gutterBottom
-					>
+					<Typography variant="body1" color="secondary" className={classes.bottomSpace}>
 						Add ERC20 tokens to be displayed in the dashboard. After entering the token
 						address, the wallet will verify it exists on the blockchain and auto-fill
 						the remaining information of ticker and decimals.
@@ -154,7 +149,7 @@ export const AddToken = React.memo(
 							spacing={4}
 						>
 							<Grid item>
-								<Typography variant="overline" gutterBottom>
+								<Typography variant="overline">
 									Token Address
 									<KeyTooltip
 										interactive

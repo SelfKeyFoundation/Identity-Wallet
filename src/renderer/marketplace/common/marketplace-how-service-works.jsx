@@ -4,20 +4,21 @@ import { withStyles } from '@material-ui/styles';
 
 const styles = theme => ({
 	howItWorksBox: {
-		width: '30%',
-		padding: '2em 3%',
-		margin: theme.spacing(2, 0),
-		color: '#FFF',
 		background: '#313D49',
+		color: '#FFF',
+		margin: theme.spacing(2, 0),
+		padding: '2em 3%',
+		width: '30%',
 		'& header h4': {
 			display: 'inline-block',
-			marginLeft: theme.spacing(1),
-			fontSize: '16px'
+			fontSize: '16px',
+			marginBottom: theme.spacing(2),
+			marginLeft: theme.spacing(1)
 		},
 		'& header span': {
 			color: '#00C0D9',
-			fontWeight: 'bold',
-			fontSize: '20px'
+			fontSize: '20px',
+			fontWeight: 'bold'
 		},
 		'& h3': {
 			fontSize: '13px'
@@ -40,40 +41,28 @@ const HowServiceWorks = withStyles(styles)(
 					<div className={classes.howItWorksBox}>
 						<header>
 							<span>1</span>
-							<Typography variant="h4" gutterBottom>
-								Provide initial documents
-							</Typography>
+							<Typography variant="h4">Provide initial documents</Typography>
 						</header>
 						<div>
-							<Typography variant="h3" gutterBottom>
-								{initialDocsText}
-							</Typography>
+							<Typography variant="h3">{initialDocsText}</Typography>
 						</div>
 					</div>
 					<div className={classes.howItWorksBox}>
 						<header>
 							<span>2</span>
-							<Typography variant="h4" gutterBottom>
-								KYC Process
-							</Typography>
+							<Typography variant="h4">KYC Process</Typography>
 						</header>
 						<div>
-							<Typography variant="h3" gutterBottom>
-								{kycProcessText}
-							</Typography>
+							<Typography variant="h3">{kycProcessText}</Typography>
 						</div>
 					</div>
 					<div className={classes.howItWorksBox}>
 						<header>
 							<span>3</span>
-							<Typography variant="h4" gutterBottom>
-								Get final documents
-							</Typography>
+							<Typography variant="h4">Get final documents</Typography>
 						</header>
 						<div>
-							<Typography variant="h3" gutterBottom>
-								{getFinalDocsText}
-							</Typography>
+							<Typography variant="h3">{getFinalDocsText}</Typography>
 						</div>
 					</div>
 				</Grid>

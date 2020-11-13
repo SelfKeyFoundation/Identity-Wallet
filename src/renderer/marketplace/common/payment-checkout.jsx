@@ -66,6 +66,9 @@ const styles = theme => ({
 		marginBottom: theme.spacing(4),
 		paddingBottom: theme.spacing(4),
 		width: '100%'
+	},
+	bottomSpace: {
+		marginBottom: theme.spacing(2)
 	}
 });
 
@@ -129,7 +132,7 @@ const PaymentCheckout = withStyles(styles)(
 					/>
 				</div>
 				<div style={{ width: '100%' }}>
-					<Typography variant="h2" gutterBottom>
+					<Typography variant="h2" className={classes.bottomSpace}>
 						Service Costs
 					</Typography>
 

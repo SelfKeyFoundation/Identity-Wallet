@@ -103,6 +103,7 @@ const styles = theme => ({
 		maxWidth: '80%'
 	},
 	affiliateMessage: {
+		marginBottom: theme.spacing(1),
 		textAlign: 'left'
 	},
 	descriptionBottomSpace: {
@@ -130,7 +131,6 @@ const ProviderLinkButton = withStyles(styles)(
 					className={classes.affiliateMessage}
 					variant="subtitle2"
 					color="secondary"
-					gutterBottom
 				>
 					Disclosure: The button above is an affiliate link, we may receive a commission
 					for purchases made through this link.

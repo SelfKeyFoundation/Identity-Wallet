@@ -76,7 +76,8 @@ const styles = theme => ({
 	idNickname: {
 		alignItems: 'baseline',
 		display: 'flex',
-		flexDirection: 'row'
+		flexDirection: 'row',
+		marginBottom: theme.spacing(1)
 	},
 	backButton: {
 		'& div': {
@@ -88,6 +89,9 @@ const styles = theme => ({
 	},
 	bodyTitleBottomSpace: {
 		marginBottom: theme.spacing(3)
+	},
+	overlineBottom: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -233,7 +237,6 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 															<Grid item>
 																<Typography
 																	variant="overline"
-																	gutterBottom
 																	className={classes.idNickname}
 																>
 																	SELFKEY ID NICKNAME*
@@ -277,7 +280,7 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 																	<Typography
 																		variant="subtitle2"
 																		color="error"
-																		gutterBottom
+																		className={classes.subtitle}
 																	>
 																		{this.state.error}
 																	</Typography>
@@ -306,7 +309,9 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 															<Grid item>
 																<Typography
 																	variant="overline"
-																	gutterBottom
+																	className={
+																		classes.overlineBottom
+																	}
 																>
 																	FIRST NAME*
 																</Typography>
@@ -334,7 +339,9 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 															<Grid item>
 																<Typography
 																	variant="overline"
-																	gutterBottom
+																	className={
+																		classes.overlineBottom
+																	}
 																>
 																	LAST NAME*
 																</Typography>
@@ -362,7 +369,9 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 															<Grid item>
 																<Typography
 																	variant="overline"
-																	gutterBottom
+																	className={
+																		classes.overlineBottom
+																	}
 																>
 																	EMAIL*
 																</Typography>
@@ -383,7 +392,7 @@ class SelfKeyIdCreateFormComponent extends PureComponent {
 																	<Typography
 																		variant="subtitle2"
 																		color="error"
-																		gutterBottom
+																		className={classes.subtitle}
 																	>
 																		{
 																			'Email provided is invalid'

@@ -10,6 +10,9 @@ const styles = theme => ({
 		color: '#00C0D9',
 		cursor: 'pointer',
 		textDecoration: 'none'
+	},
+	bottomSpace: {
+		marginBottom: theme.spacing(2)
 	}
 });
 
@@ -31,7 +34,7 @@ class SelfKeyIdCreateAboutComponent extends PureComponent {
 			<Popup displayLogo open text="About the SelfKey Identity Wallet">
 				<Grid container direction="row" justify="flex-start" alignItems="flex-start">
 					<Grid item>
-						<Typography variant="body1" gutterBottom>
+						<Typography variant="body1" className={classes.bottomSpace}>
 							Inside the SelfKey Identity Wallet you can manage, own, and fully
 							control various parts of your SelfKey ID. It is also a direct interface
 							to the Ethereum blockchain, allowing you to manage all of your ETH and
@@ -39,7 +42,7 @@ class SelfKeyIdCreateAboutComponent extends PureComponent {
 						</Typography>
 						<br />
 						<br />
-						<Typography variant="body1" gutterBottom>
+						<Typography variant="body1" className={classes.bottomSpace}>
 							After building out your SelfKey ID, you can unlock products and services
 							inside the SelfKey Marketplace by staking KEY tokens. Think of staking
 							like a refundable deposit. Staking is required to prevent spam and to

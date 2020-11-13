@@ -35,6 +35,12 @@ const styles = theme => ({
 		'& h1': {
 			marginBottom: theme.spacing(2)
 		}
+	},
+	bodySpace: {
+		marginBottom: theme.spacing(2)
+	},
+	paragraphSpace: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -60,11 +66,11 @@ export const MarketplaceCorporatePreviewContainer = withStyles(styles)(({ classe
 		<Grid item id="body" xs={12} alignItems="center" className={classes.content}>
 			<HourGlassLargeIcon />
 			<Typography variant="h1">Coming Soon</Typography>
-			<Typography variant="body1" color="secondary" gutterBottom>
+			<Typography variant="body1" color="secondary" className={classes.bodySpace}>
 				We are working with our partners to bring services specially catered for your
 				business needs.
 			</Typography>
-			<Typography variant="subtitle2" color="secondary" gutterBottom>
+			<Typography variant="subtitle2" color="secondary" className={classes.paragraphSpace}>
 				Please switch to your personal profile, from the dropdown menu, if you want to
 				access the individual marketplace instead.
 			</Typography>

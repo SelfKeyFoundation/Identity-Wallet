@@ -29,6 +29,12 @@ const styles = theme => ({
 		display: 'flex',
 		flexDirection: 'column',
 		width: '100%'
+	},
+	error: {
+		marginBottom: theme.spacing(1)
+	},
+	percentage: {
+		marginBottom: theme.spacing(2)
 	}
 });
 
@@ -68,7 +74,11 @@ const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 								))}
 							</Select>
 							{errors.parentId && (
-								<Typography variant="subtitle2" color="error" gutterBottom>
+								<Typography
+									variant="subtitle2"
+									color="error"
+									className={classes.error}
+								>
 									{errors.parentId}
 								</Typography>
 							)}
@@ -87,12 +97,12 @@ const CorporateMemberSharesFormComponent = withStyles(styles)(props => {
 							onChange={onFieldChange('equity')}
 							placeholder="0"
 						/>
-						<Typography variant="title" color="primary" gutterBottom>
+						<Typography variant="h6" color="primary" className={classes.percentage}>
 							%
 						</Typography>
 					</div>
 					{errors.equity && (
-						<Typography variant="subtitle2" color="error" gutterBottom>
+						<Typography variant="subtitle2" color="error" className={classes.error}>
 							{errors.equity}
 						</Typography>
 					)}

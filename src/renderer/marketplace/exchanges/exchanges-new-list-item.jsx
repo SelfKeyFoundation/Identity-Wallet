@@ -45,6 +45,9 @@ const styles = theme => ({
 	},
 	rightSpace: {
 		marginRight: '3px'
+	},
+	bottomSpace: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -110,11 +113,11 @@ export const ExchangesNewListItem = withStyles(styles)(
 					</div>
 				</div>
 				<div className={classes.body}>
-					<Typography variant="subtitle2" gutterBottom>
+					<Typography variant="subtitle2" className={classes.bottomSpace}>
 						<span className={classes.rightSpace}>Location: </span>
 						<b>{location}</b>
 					</Typography>
-					<Typography variant="subtitle2" gutterBottom>
+					<Typography variant="subtitle2" className={classes.bottomSpace}>
 						<span className={classes.rightSpace}>Fiat Payments:</span>
 						{isFiatPayments
 							? fiatPayments.map((payment, index) => (
@@ -125,7 +128,7 @@ export const ExchangesNewListItem = withStyles(styles)(
 							  ))
 							: '-'}
 					</Typography>
-					<Typography variant="subtitle2" gutterBottom>
+					<Typography variant="subtitle2" className={classes.bottomSpace}>
 						<span className={classes.rightSpace}>Fiat Supported:</span>
 						{isFiatSupported
 							? fiatSupported.length > 3

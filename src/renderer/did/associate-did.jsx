@@ -49,6 +49,9 @@ const styles = theme => ({
 	},
 	buttons: {
 		marginTop: theme.spacing(4)
+	},
+	bottomSpace: {
+		marginBottom: theme.spacing(2)
 	}
 });
 
@@ -77,12 +80,12 @@ export const AssociateDid = withStyles(styles)(props => {
 					<MergeIcon className={classes.icon} />
 				</Grid>
 				<Grid item xs={10}>
-					<Typography variant="body1" gutterBottom>
+					<Typography variant="body1" className={classes.bottomSpace}>
 						If you already registered on the SelfKey Network, you can associate your
 						existing DID number with this wallet. Just copy/paste it below.
 					</Typography>
 					<br />
-					<Typography variant="overline" gutterBottom className={classes.label}>
+					<Typography variant="overline" className={classes.label}>
 						DID Number
 						{searching && (
 							<React.Fragment>

@@ -68,6 +68,9 @@ const styles = theme => ({
 		'& button': {
 			marginRight: theme.spacing(3)
 		}
+	},
+	bottomSpace: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -126,7 +129,11 @@ class ApplicationInProgressComponent extends PureComponent {
 								</Typography>
 							</div>
 							<div className={classes.instructions} style={{ display: 'none' }}>
-								<Typography variant="subtitle2" color="secondary" gutterBottom>
+								<Typography
+									variant="subtitle2"
+									color="secondary"
+									className={classes.bottomSpace}
+								>
 									The application is available to you at any point under the
 									marketplace applications tab, in your SelfKey ID Profile.
 								</Typography>

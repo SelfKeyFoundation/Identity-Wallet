@@ -25,6 +25,9 @@ const styles = theme => ({
 	},
 	saveButton: {
 		marginRight: theme.spacing(3)
+	},
+	error: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -160,7 +163,7 @@ class EditAttributeComponent extends PureComponent {
 						fullWidth
 					/>
 					{this.state.errorLabel && (
-						<Typography variant="subtitle2" color="error" gutterBottom>
+						<Typography variant="subtitle2" color="error" className={classes.error}>
 							{this.state.errorLabel}
 						</Typography>
 					)}
@@ -185,7 +188,11 @@ class EditAttributeComponent extends PureComponent {
 							onPDFOpen={file => window.openPDF(file.content || file.url)}
 						>
 							{this.state.documentError && (
-								<Typography variant="subtitle2" color="error" gutterBottom>
+								<Typography
+									variant="subtitle2"
+									color="error"
+									className={classes.error}
+								>
 									{this.state.documentError}
 								</Typography>
 							)}

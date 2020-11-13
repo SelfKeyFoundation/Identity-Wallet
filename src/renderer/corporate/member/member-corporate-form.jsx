@@ -30,6 +30,9 @@ const styles = theme => ({
 		flexWrap: 'nowrap',
 		justifyContent: 'space-between',
 		width: '100%'
+	},
+	errorText: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -83,7 +86,11 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 							))}
 						</Select>
 						{errors.jurisdiction && (
-							<Typography variant="subtitle2" color="error" gutterBottom>
+							<Typography
+								variant="subtitle2"
+								color="error"
+								className={classes.errorText}
+							>
 								{errors.jurisdiction}
 							</Typography>
 						)}
@@ -101,7 +108,7 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 						placeholder="Entity Name"
 					/>
 					{errors.entityName && (
-						<Typography variant="subtitle2" color="error" gutterBottom>
+						<Typography variant="subtitle2" color="error" className={classes.errorText}>
 							{errors.entityName}
 						</Typography>
 					)}
@@ -139,7 +146,11 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 							))}
 						</Select>
 						{errors.entityType && (
-							<Typography variant="subtitle2" color="error" gutterBottom>
+							<Typography
+								variant="subtitle2"
+								color="error"
+								className={classes.errorText}
+							>
 								{errors.entityType}
 							</Typography>
 						)}
@@ -162,7 +173,7 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 						}}
 					/>
 					{errors.creationDate && (
-						<Typography variant="subtitle2" color="error" gutterBottom>
+						<Typography variant="subtitle2" color="error" className={classes.errorText}>
 							{errors.creationDate}
 						</Typography>
 					)}
@@ -182,7 +193,7 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 						placeholder="Entity Email"
 					/>
 					{errors.email && (
-						<Typography variant="subtitle2" color="error" gutterBottom>
+						<Typography variant="subtitle2" color="error" className={classes.errorText}>
 							{errors.email}
 						</Typography>
 					)}
@@ -199,7 +210,7 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 						placeholder="Tax Payer ID"
 					/>
 					{errors.taxId && (
-						<Typography variant="subtitle2" color="error" gutterBottom>
+						<Typography variant="subtitle2" color="error" className={classes.errorText}>
 							{errors.taxId}
 						</Typography>
 					)}
@@ -218,7 +229,11 @@ const CorporateMemberCorporateFormComponent = withStyles(styles)(props => {
 							placeholder="did:selfkey:"
 						/>
 						{errors.did && (
-							<Typography variant="subtitle2" color="error" gutterBottom>
+							<Typography
+								variant="subtitle2"
+								color="error"
+								className={classes.errorText}
+							>
 								{errors.did}
 							</Typography>
 						)}

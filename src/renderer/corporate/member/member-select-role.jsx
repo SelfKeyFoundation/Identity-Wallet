@@ -78,6 +78,7 @@ const styles = theme => ({
 		marginTop: theme.spacing(2)
 	},
 	error: {
+		marginBottom: theme.spacing(1),
 		marginTop: theme.spacing(2),
 		textAlign: 'center',
 		width: '100%'
@@ -177,12 +178,7 @@ class CorporateMemberSelectRoleComponent extends PureComponent {
 							</div>
 						))}
 						{errors.positions && (
-							<Typography
-								variant="subtitle2"
-								color="error"
-								gutterBottom
-								className={classes.error}
-							>
+							<Typography variant="subtitle2" color="error" className={classes.error}>
 								{errors.positions}
 							</Typography>
 						)}

@@ -9,7 +9,10 @@ const styles = theme => ({
 		width: '100%',
 		paddingTop: '40px',
 		borderTop: '2px solid #475768',
-		marginTop: '40px'
+		marginTop: '40px',
+		'& h2': {
+			marginBottom: theme.spacing(2)
+		}
 	},
 	list: {
 		columns: 2,
@@ -63,9 +66,7 @@ const IncorporationsKYC = props => {
 	if (!requirements) {
 		return (
 			<div className={classes.kyc}>
-				<Typography variant="h2" gutterBottom>
-					KYC Requirements and Forms
-				</Typography>
+				<Typography variant="h2">KYC Requirements and Forms</Typography>
 				<Grid container justify="center" alignItems="center">
 					<CircularProgress size={50} />
 				</Grid>
@@ -75,9 +76,7 @@ const IncorporationsKYC = props => {
 
 	return (
 		<div className={classes.kyc}>
-			<Typography variant="h2" gutterBottom>
-				KYC Requirements and Forms
-			</Typography>
+			<Typography variant="h2">KYC Requirements and Forms</Typography>
 			<Grid container justify="flex-start" alignItems="flex-start" direction="column">
 				<List className={classes.list}>
 					{requirements.map((r, index) => (

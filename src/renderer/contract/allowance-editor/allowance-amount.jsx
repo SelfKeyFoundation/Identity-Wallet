@@ -4,7 +4,11 @@ import { CircularProgress, FormControl, Input, Typography, Grid } from '@materia
 import { InputTitle } from '../../common';
 import { PropTypes } from 'prop-types';
 
-const styles = theme => ({});
+const styles = theme => ({
+	error: {
+		marginBottom: theme.spacing(1)
+	}
+});
 
 export const AllowanceAmount = withStyles(styles)(
 	({
@@ -61,7 +65,7 @@ export const AllowanceAmount = withStyles(styles)(
 							/>
 						)}
 						{!loading && error && (
-							<Typography variant="subtitle2" color="error" gutterBottom>
+							<Typography variant="subtitle2" color="error" className={classes.error}>
 								{error}
 							</Typography>
 						)}

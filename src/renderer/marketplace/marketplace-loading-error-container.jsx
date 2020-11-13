@@ -37,6 +37,9 @@ const styles = theme => ({
 		'& h1': {
 			marginBottom: theme.spacing(2)
 		}
+	},
+	bottomSpace: {
+		marginBottom: theme.spacing(2)
 	}
 });
 
@@ -76,7 +79,7 @@ export const MarketplaceLoadingErrorContainer = connect(mapStateToProps)(
 				<Grid item id="body" xs={12} alignItems="center" className={classes.content}>
 					<WarningShieldIcon />
 					<Typography variant="h1">Loading Error</Typography>
-					<Typography variant="body1" color="secondary" gutterBottom>
+					<Typography variant="body1" color="secondary" className={classes.bottomSpace}>
 						It appears that the selfkey marketplace has failed to load
 					</Typography>
 					<Button variant="contained" size="large" onClick={tryAgainClick}>

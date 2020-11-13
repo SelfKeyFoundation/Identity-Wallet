@@ -32,6 +32,9 @@ const styles = theme => ({
 		'& button': {
 			marginRight: theme.spacing(4)
 		}
+	},
+	bottomSpace: {
+		marginBottom: theme.spacing(2)
 	}
 });
 
@@ -54,7 +57,7 @@ export const BankAccountsPaymentComplete = withStyles(styles)(props => {
 						<Typography variant="h1" gutterBottom>
 							Bank Account KYC Process Started
 						</Typography>
-						<Typography variant="body1" gutterBottom>
+						<Typography variant="body1" className={classes.bottomSpace}>
 							Thank you for payment!
 						</Typography>
 						{simpleFlow && (

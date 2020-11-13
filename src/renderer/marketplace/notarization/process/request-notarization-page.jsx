@@ -57,6 +57,7 @@ const styles = theme => ({
 			display: 'inline-block',
 			fontSize: '16px',
 			fontWeight: 500,
+			marginBottom: theme.spacing(2),
 			marginLeft: theme.spacing(1),
 			marginTop: '-3px'
 		},
@@ -93,6 +94,12 @@ const styles = theme => ({
 	barStyle: {
 		marginBottom: theme.spacing(3),
 		padding: theme.spacing(0)
+	},
+	subheaderBottom: {
+		marginBottom: theme.spacing(2)
+	},
+	overlineBottom: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -126,14 +133,14 @@ export const RequestNotarizationPage = withStyles(styles)(props => {
 					loading={loading}
 					barStyle={classes.barStyle}
 				/>
-				<Typography variant="h2" gutterBottom>
+				<Typography variant="h2" className={classes.subheaderBottom}>
 					How the process works
 				</Typography>
 				<div className={classes.howItWorks}>
 					<div className={classes.howItWorksBox}>
 						<header className={classes.header}>
 							<span>1</span>
-							<Typography variant="h4" gutterBottom>
+							<Typography variant="h4">
 								Provide documents you want notarized
 							</Typography>
 						</header>
@@ -147,9 +154,7 @@ export const RequestNotarizationPage = withStyles(styles)(props => {
 					<div className={classes.howItWorksBox}>
 						<header className={classes.header}>
 							<span>2</span>
-							<Typography variant="h4" gutterBottom>
-								Video Call
-							</Typography>
+							<Typography variant="h4">Video Call</Typography>
 						</header>
 						<div>
 							<Typography variant="subtitle2" color="secondary">
@@ -162,9 +167,7 @@ export const RequestNotarizationPage = withStyles(styles)(props => {
 					<div className={classes.howItWorksBox}>
 						<header className={classes.header}>
 							<span>3</span>
-							<Typography variant="h4" gutterBottom>
-								Receive the notarized documents
-							</Typography>
+							<Typography variant="h4">Receive the notarized documents</Typography>
 						</header>
 						<div>
 							<Typography variant="subtitle2" color="secondary">
@@ -176,7 +179,7 @@ export const RequestNotarizationPage = withStyles(styles)(props => {
 				</div>
 				<Divider className={classes.divider} />
 				<div>
-					<Typography variant="h2" gutterBottom>
+					<Typography variant="h2" className={classes.subheaderBottom}>
 						Select the documents you want notarized
 					</Typography>
 					<RequestDocumentsList
@@ -187,7 +190,7 @@ export const RequestNotarizationPage = withStyles(styles)(props => {
 					/>
 				</div>
 				<div>
-					<Typography variant="overline" gutterBottom>
+					<Typography variant="overline" className={classes.overlineBottom}>
 						Message for Notary*
 					</Typography>
 					<textarea

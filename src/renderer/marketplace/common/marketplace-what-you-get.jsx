@@ -53,13 +53,16 @@ const styles = theme => ({
 		'& p': {
 			marginBottom: theme.spacing(2)
 		}
+	},
+	bottomSpace: {
+		marginBottom: theme.spacing(2)
 	}
 });
 
 const WhatYouGet = withStyles(styles)(({ classes, description, timeToForm, whatYouGet }) => {
 	return (
 		<div className={classes.whatYouGet}>
-			<Typography variant="h2" gutterBottom>
+			<Typography variant="h2" className={classes.bottomSpace}>
 				What you get
 			</Typography>
 			<Grid container direction="row" justify="space-between" alignItems="center" spacing={0}>

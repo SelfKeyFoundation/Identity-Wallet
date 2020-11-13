@@ -94,6 +94,9 @@ const styles = theme => ({
 	},
 	statusName: {
 		marginLeft: theme.spacing(1)
+	},
+	bottomSpace: {
+		marginBottom: theme.spacing(2)
 	}
 });
 
@@ -263,7 +266,11 @@ class IndividualApplicationsTabComponent extends PureComponent {
 									<Typography variant="h1" gutterBottom>
 										You {"haven't"} applied for any service in the Marketplace
 									</Typography>
-									<Typography variant="body1" color="secondary" gutterBottom>
+									<Typography
+										variant="body1"
+										color="secondary"
+										className={classes.bottomSpace}
+									>
 										Once you apply to a service in the marketplace, you will be
 										able to manage it from this area.
 									</Typography>

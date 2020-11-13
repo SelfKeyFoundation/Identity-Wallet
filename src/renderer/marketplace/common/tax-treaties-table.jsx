@@ -26,6 +26,9 @@ const styles = theme => ({
 			cursor: 'pointer',
 			textDecoration: 'none'
 		}
+	},
+	bottomSpace: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -46,22 +49,22 @@ const TaxTreatiesTable = withStyles(styles)(({ classes, data }) => (
 					<LargeTableHeadRow>
 						<TableCell className={classes.flagCell} />
 						<TableCell>
-							<Typography variant="overline" gutterBottom>
+							<Typography variant="overline" classNAme={classes.bottomSpace}>
 								Country
 							</Typography>
 						</TableCell>
 						<TableCell>
-							<Typography variant="overline" gutterBottom>
+							<Typography variant="overline" classNAme={classes.bottomSpace}>
 								Treaty Type
 							</Typography>
 						</TableCell>
 						<TableCell>
-							<Typography variant="overline" gutterBottom>
+							<Typography variant="overline" classNAme={classes.bottomSpace}>
 								Date Signed
 							</Typography>
 						</TableCell>
 						<TableCell className={classes.detailsCell}>
-							<Typography variant="overline" gutterBottom>
+							<Typography variant="overline" classNAme={classes.bottomSpace}>
 								PDF
 							</Typography>
 						</TableCell>

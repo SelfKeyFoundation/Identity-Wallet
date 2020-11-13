@@ -12,7 +12,11 @@ import { ordersSelectors } from 'common/marketplace/orders';
 import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorporations-component';
 import { MarketplaceProcessStarted } from '../../common/marketplace-process-started';
 
-const styles = theme => ({});
+const styles = theme => ({
+	bottomSpace: {
+		marginBottom: theme.spacing(2)
+	}
+});
 
 class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsComponent {
 	async componentWillMount() {
@@ -76,13 +80,13 @@ class IncorporationsPaymentCompleteContainer extends MarketplaceIncorporationsCo
 	onContinueClick = () => this.props.dispatch(push(this.getNextRoute()));
 
 	render() {
-		const { vendor } = this.props;
+		const { classes, vendor } = this.props;
 		const body = (
 			<React.Fragment>
 				<Typography variant="h1" gutterBottom>
 					Incorporation Process Started
 				</Typography>
-				<Typography variant="body1" gutterBottom>
+				<Typography variant="body1" className={classes.bottomSpace}>
 					Thank you for payment!
 				</Typography>
 				<Typography variant="body2" gutterBottom>

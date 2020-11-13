@@ -3,7 +3,11 @@ import { withStyles } from '@material-ui/styles';
 import { FormControl, Input, Typography } from '@material-ui/core';
 import { InputTitle } from '../../common';
 import { PropTypes } from 'prop-types';
-const styles = theme => ({});
+const styles = theme => ({
+	error: {
+		marginBottom: theme.spacing(1)
+	}
+});
 
 export const ContractChooser = withStyles(styles)(
 	({ classes, address, name, fixed, title, error, onContractAddressChange }) => {
@@ -31,8 +35,8 @@ export const ContractChooser = withStyles(styles)(
 				/>
 				{name && <Typography variant="subtitle1">{name}</Typography>}
 				{error && (
-					<Typography variant="subtitle2" color="error" gutterBottom>
-						{error}
+					<Typography variant="subtitle2" color="error" className={classes.error}>
+						ERRROR {error}
 					</Typography>
 				)}
 			</FormControl>

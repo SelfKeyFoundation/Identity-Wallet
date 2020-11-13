@@ -30,6 +30,9 @@ const styles = theme => ({
 		flexWrap: 'nowrap',
 		justifyContent: 'space-between',
 		width: '100%'
+	},
+	errorText: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -72,7 +75,7 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 						placeholder="First Name"
 					/>
 					{errors.firstName && (
-						<Typography variant="subtitle2" color="error" gutterBottom>
+						<Typography variant="subtitle2" color="error" className={classes.errorText}>
 							{errors.firstName}
 						</Typography>
 					)}
@@ -89,7 +92,7 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 						placeholder="Last Name"
 					/>
 					{errors.lastName && (
-						<Typography variant="subtitle2" color="error" gutterBottom>
+						<Typography variant="subtitle2" color="error" className={classes.errorText}>
 							{errors.lastName}
 						</Typography>
 					)}
@@ -129,7 +132,11 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 							))}
 						</Select>
 						{errors.nationality && (
-							<Typography variant="subtitle2" color="error" gutterBottom>
+							<Typography
+								variant="subtitle2"
+								color="error"
+								className={classes.errorText}
+							>
 								{errors.nationality}
 							</Typography>
 						)}
@@ -165,7 +172,11 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 							))}
 						</Select>
 						{errors.country && (
-							<Typography variant="subtitle2" color="error" gutterBottom>
+							<Typography
+								variant="subtitle2"
+								color="error"
+								className={classes.errorText}
+							>
 								{errors.country}
 							</Typography>
 						)}
@@ -186,7 +197,7 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 						placeholder="Email"
 					/>
 					{errors.email && (
-						<Typography variant="subtitle2" color="error" gutterBottom>
+						<Typography variant="subtitle2" color="error" className={classes.errorText}>
 							{errors.email}
 						</Typography>
 					)}
@@ -202,7 +213,7 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 						placeholder="Phone"
 					/>
 					{errors.phoneNumber && (
-						<Typography variant="subtitle2" color="error" gutterBottom>
+						<Typography variant="subtitle2" color="error" className={classes.errorText}>
 							{errors.phoneNumber}
 						</Typography>
 					)}
@@ -222,7 +233,11 @@ const CorporateMemberIndividualFormComponent = withStyles(styles)(props => {
 							placeholder="did:selfkey:"
 						/>
 						{errors.did && (
-							<Typography variant="subtitle2" color="error" gutterBottom>
+							<Typography
+								variant="subtitle2"
+								color="error"
+								className={classes.errorText}
+							>
 								{errors.did}
 							</Typography>
 						)}

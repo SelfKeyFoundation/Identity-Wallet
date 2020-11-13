@@ -6,7 +6,11 @@ import { Typography, Divider } from '@material-ui/core';
 import { marketplaceSelectors } from 'common/marketplace';
 import { MarketplaceProcessStarted } from '../../common/marketplace-process-started';
 
-const styles = theme => ({});
+const styles = theme => ({
+	bottomSpace: {
+		marginBottom: theme.spacing(2)
+	}
+});
 const MARKETPLACE_BANK_ACCOUNTS_ROOT_PATH = `/main/marketplace/bank-accounts`;
 const SELFKEY_PATH = `/main/selfkeyId`;
 
@@ -16,16 +20,16 @@ class BankAccountsProcessStartedContainer extends PureComponent {
 	onSelfKeyClick = () => this.props.dispatch(push(SELFKEY_PATH));
 
 	render() {
-		const { vendor } = this.props;
+		const { classes, vendor } = this.props;
 		const body = (
 			<React.Fragment>
 				<Typography variant="h1" className="title">
 					Bank Account Process Started
 				</Typography>
-				<Typography variant="body1" gutterBottom>
+				<Typography variant="body1" className={classes.bottomSpace}>
 					Thank you for payment!
 				</Typography>
-				<Typography variant="body1" gutterBottom>
+				<Typography variant="body1" className={classes.bottomSpace}>
 					One of our managers is reviewing the information you submitted and{' '}
 					<strong>will contact you shortly on the e-mail you provided</strong>, to
 					continue the process. If you have any questions in the meantime, you can reach

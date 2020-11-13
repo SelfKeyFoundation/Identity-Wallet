@@ -12,7 +12,11 @@ import { ordersSelectors } from 'common/marketplace/orders';
 import { MarketplaceNotariesComponent } from '../common/marketplace-notaries-component';
 import { MarketplaceProcessStarted } from '../../common/marketplace-process-started';
 
-const styles = theme => ({});
+const styles = theme => ({
+	bottomSpace: {
+		marginBottom: theme.spacing(2)
+	}
+});
 
 class NotarizationPaymentCompleteContainer extends MarketplaceNotariesComponent {
 	async componentWillMount() {
@@ -76,16 +80,16 @@ class NotarizationPaymentCompleteContainer extends MarketplaceNotariesComponent 
 	onContinueClick = () => this.props.dispatch(push(this.getNextRoute()));
 
 	render() {
-		const { vendor } = this.props;
+		const { classes, vendor } = this.props;
 		const body = (
 			<React.Fragment>
 				<Typography variant="h1" gutterBottom>
 					Notarization Process Started
 				</Typography>
-				<Typography variant="body1" gutterBottom>
+				<Typography variant="body1" className={classes.bottomSpace}>
 					Thank you for payment!
 				</Typography>
-				<Typography variant="body1" gutterBottom>
+				<Typography variant="body1" className={classes.bottomSpace}>
 					One of our our notaries is reviewing the information you submitted and{' '}
 					<strong>
 						will contact you shortly to continue the process and set up a live call with

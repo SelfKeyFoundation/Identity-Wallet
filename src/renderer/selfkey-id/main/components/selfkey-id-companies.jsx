@@ -16,161 +16,186 @@ import {
 	Button
 } from '@material-ui/core';
 import { DropdownIcon } from 'selfkey-ui';
+import { withStyles } from '@material-ui/styles';
 
-const SelfkeyIdCompanies = () => (
-	<React.Fragment>
-		<Typography variant="body1" color="secondary" gutterBottom>
-			Pending Corporate Association
-		</Typography>
-		<ExpansionPanel defaultExpanded={true}>
-			<ExpansionPanelSummary expandIcon={<DropdownIcon />}>
-				<Grid container direction="row" justify="flex-start" alignItems="baseline">
-					<Typography variant="h2">Trust Fund Ltd.</Typography>
-				</Grid>
-			</ExpansionPanelSummary>
-			<Divider />
+const styles = theme => ({
+	bottomSpace: {
+		marginBottom: theme.spacing(2)
+	}
+});
 
-			<ExpansionPanelDetails>
-				<br />
-				<Grid container spacing={4}>
-					<Grid item xs>
-						<Card>
-							<CardHeader title="Company Details" />
-							<CardContent>
-								<List>
-									{['Binance', 'KuCoin', 'IDEX'].map(item => (
-										<ListItem key={item}>
-											<Typography
-												variant="body2"
-												color="secondary"
-												gutterBottom
-											>
-												Definition Title 16px
-											</Typography>
-											<Typography variant="body2" align="right" gutterBottom>
-												{item}
-											</Typography>
-										</ListItem>
-									))}
-								</List>
-							</CardContent>
-						</Card>
+const SelfkeyIdCompanies = withStyles(styles)(({ classes }) => {
+	return (
+		<React.Fragment>
+			<Typography variant="body1" color="secondary" className={classes.bottomSpace}>
+				Pending Corporate Association
+			</Typography>
+			<ExpansionPanel defaultExpanded={true}>
+				<ExpansionPanelSummary expandIcon={<DropdownIcon />}>
+					<Grid container direction="row" justify="flex-start" alignItems="baseline">
+						<Typography variant="h2">Trust Fund Ltd.</Typography>
 					</Grid>
+				</ExpansionPanelSummary>
+				<Divider />
 
-					<Grid item xs>
-						<Card>
-							<CardHeader title="Your Information" />
-							<CardContent>
-								<List>
-									{['Binance', 'KuCoin', 'IDEX'].map(item => (
-										<ListItem key={item}>
-											<Typography
-												variant="body2"
-												color="secondary"
-												gutterBottom
-											>
-												Definition Title 16px
-											</Typography>
-											<Typography variant="body2" align="right" gutterBottom>
-												{item}
-											</Typography>
-										</ListItem>
-									))}
-								</List>
-							</CardContent>
-						</Card>
+				<ExpansionPanelDetails>
+					<br />
+					<Grid container spacing={4}>
+						<Grid item xs>
+							<Card>
+								<CardHeader title="Company Details" />
+								<CardContent>
+									<List>
+										{['Binance', 'KuCoin', 'IDEX'].map(item => (
+											<ListItem key={item}>
+												<Typography
+													variant="body2"
+													color="secondary"
+													gutterBottom
+												>
+													Definition Title 16px
+												</Typography>
+												<Typography
+													variant="body2"
+													align="right"
+													gutterBottom
+												>
+													{item}
+												</Typography>
+											</ListItem>
+										))}
+									</List>
+								</CardContent>
+							</Card>
+						</Grid>
+
+						<Grid item xs>
+							<Card>
+								<CardHeader title="Your Information" />
+								<CardContent>
+									<List>
+										{['Binance', 'KuCoin', 'IDEX'].map(item => (
+											<ListItem key={item}>
+												<Typography
+													variant="body2"
+													color="secondary"
+													gutterBottom
+												>
+													Definition Title 16px
+												</Typography>
+												<Typography
+													variant="body2"
+													align="right"
+													gutterBottom
+												>
+													{item}
+												</Typography>
+											</ListItem>
+										))}
+									</List>
+								</CardContent>
+							</Card>
+						</Grid>
+
+						<Grid item xs justify="flex-end">
+							<Button variant="contained" size="large">
+								Accept Invitation
+							</Button>
+						</Grid>
 					</Grid>
+				</ExpansionPanelDetails>
+			</ExpansionPanel>
+			<br />
 
-					<Grid item xs justify="flex-end">
-						<Button variant="contained" size="large">
-							Accept Invitation
-						</Button>
+			<Typography variant="body1" color="secondary" className={classes.bottomSpace}>
+				Your Companies
+			</Typography>
+			<ExpansionPanel>
+				<ExpansionPanelSummary expandIcon={<DropdownIcon />}>
+					<Grid container direction="row" justify="flex-start" alignItems="baseline">
+						<Typography variant="h2">Trust Fund Ltd.</Typography>
 					</Grid>
-				</Grid>
-			</ExpansionPanelDetails>
-		</ExpansionPanel>
-		<br />
+				</ExpansionPanelSummary>
+				<Divider />
 
-		<Typography variant="body1" color="secondary" gutterBottom>
-			Your Companies
-		</Typography>
-		<ExpansionPanel>
-			<ExpansionPanelSummary expandIcon={<DropdownIcon />}>
-				<Grid container direction="row" justify="flex-start" alignItems="baseline">
-					<Typography variant="h2">Trust Fund Ltd.</Typography>
-				</Grid>
-			</ExpansionPanelSummary>
-			<Divider />
+				<ExpansionPanelDetails>
+					<br />
+					<Grid container spacing={4}>
+						<Grid item xs>
+							<Card>
+								<CardHeader title="Company Details" />
+								<CardContent>
+									<List>
+										{['Binance', 'KuCoin', 'IDEX'].map(item => (
+											<ListItem key={item}>
+												<Typography
+													variant="body2"
+													color="secondary"
+													gutterBottom
+												>
+													Definition Title 16px
+												</Typography>
+												<Typography
+													variant="body2"
+													align="right"
+													gutterBottom
+												>
+													{item}
+												</Typography>
+											</ListItem>
+										))}
+									</List>
+								</CardContent>
+							</Card>
+						</Grid>
 
-			<ExpansionPanelDetails>
-				<br />
-				<Grid container spacing={4}>
-					<Grid item xs>
-						<Card>
-							<CardHeader title="Company Details" />
-							<CardContent>
-								<List>
-									{['Binance', 'KuCoin', 'IDEX'].map(item => (
-										<ListItem key={item}>
-											<Typography
-												variant="body2"
-												color="secondary"
-												gutterBottom
-											>
-												Definition Title 16px
-											</Typography>
-											<Typography variant="body2" align="right" gutterBottom>
-												{item}
-											</Typography>
-										</ListItem>
-									))}
-								</List>
-							</CardContent>
-						</Card>
+						<Grid item xs>
+							<Card>
+								<CardHeader title="Your Information" />
+								<CardContent>
+									<List>
+										{['Binance', 'KuCoin', 'IDEX'].map(item => (
+											<ListItem key={item}>
+												<Typography
+													variant="body2"
+													color="secondary"
+													gutterBottom
+												>
+													Definition Title 16px
+												</Typography>
+												<Typography
+													variant="body2"
+													align="right"
+													gutterBottom
+												>
+													{item}
+												</Typography>
+											</ListItem>
+										))}
+									</List>
+								</CardContent>
+							</Card>
+						</Grid>
+
+						<Grid item xs justify="flex-end">
+							<Button variant="contained" size="large">
+								Accept Invitation
+							</Button>
+						</Grid>
 					</Grid>
+				</ExpansionPanelDetails>
+			</ExpansionPanel>
 
-					<Grid item xs>
-						<Card>
-							<CardHeader title="Your Information" />
-							<CardContent>
-								<List>
-									{['Binance', 'KuCoin', 'IDEX'].map(item => (
-										<ListItem key={item}>
-											<Typography
-												variant="body2"
-												color="secondary"
-												gutterBottom
-											>
-												Definition Title 16px
-											</Typography>
-											<Typography variant="body2" align="right" gutterBottom>
-												{item}
-											</Typography>
-										</ListItem>
-									))}
-								</List>
-							</CardContent>
-						</Card>
-					</Grid>
-
-					<Grid item xs justify="flex-end">
-						<Button variant="contained" size="large">
-							Accept Invitation
-						</Button>
-					</Grid>
-				</Grid>
-			</ExpansionPanelDetails>
-		</ExpansionPanel>
-
-		<Card>
-			<CardHeader title="Companies" />
-			<CardContent>
-				<Table>
-					<TableBody />
-				</Table>
-			</CardContent>
-		</Card>
-	</React.Fragment>
-);
+			<Card>
+				<CardHeader title="Companies" />
+				<CardContent>
+					<Table>
+						<TableBody />
+					</Table>
+				</CardContent>
+			</Card>
+		</React.Fragment>
+	);
+});
 
 export default SelfkeyIdCompanies;

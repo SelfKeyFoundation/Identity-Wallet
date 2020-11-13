@@ -73,7 +73,7 @@ export const IncorporationsCountryTab = withStyles(styles)(({ classes, country, 
 		{!country && <PageLoading />}
 		{!!country && (
 			<React.Fragment>
-				<Typography variant="h1" gutterBottom className={classes.countryName}>
+				<Typography variant="h1" className={classes.countryName}>
 					{country.name}
 				</Typography>
 				<Grid container justify="flex-start" alignItems="flex-start">
