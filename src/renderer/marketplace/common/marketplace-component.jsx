@@ -19,10 +19,22 @@ class MarketplaceComponent extends PureComponent {
 
 	manageApplicationsRoute = () => `/main/individual/dashboard/applications`;
 
-	loadRelyingParty = async ({ rp, authenticated = false, nextRoute, cancelRoute }) => {
+	loadRelyingParty = async ({
+		rp,
+		authenticated = false,
+		nextRoute,
+		cancelRoute,
+		background = false
+	}) => {
 		if (this.props.rpShouldUpdate) {
 			await this.props.dispatch(
-				kycOperations.loadRelyingParty(rp, authenticated, nextRoute, cancelRoute)
+				kycOperations.loadRelyingParty(
+					rp,
+					authenticated,
+					nextRoute,
+					cancelRoute,
+					background
+				)
 			);
 		}
 	};

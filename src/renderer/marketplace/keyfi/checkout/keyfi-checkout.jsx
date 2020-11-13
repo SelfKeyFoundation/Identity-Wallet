@@ -76,7 +76,7 @@ const styles = theme => ({
 			color: '#00C0D9',
 			fontWeight: 'bold',
 			textAlign: 'left',
-			'& .time': {
+			'& .amount-in-crypto': {
 				marginTop: '5px'
 			},
 			border: '1px solid #262F39',
@@ -92,7 +92,7 @@ const styles = theme => ({
 				border: '1px solid #00C0D9'
 			}
 		},
-		'& div.time': {
+		'& div.amount-in-crypto': {
 			color: theme.palette.secondary.main,
 			fontSize: '13px'
 		},
@@ -112,7 +112,7 @@ const styles = theme => ({
 		alignItems: 'center',
 		padding: '0 1em',
 		justifyContent: 'space-between',
-		'& .time': {
+		'& .amount-in-crypto': {
 			color: theme.palette.secondary.main,
 			fontSize: '13px'
 		}
@@ -306,7 +306,7 @@ const KeyFiCheckout = withStyles(styles)(
 										variant="contained"
 										size="large"
 										onClick={onStartClick}
-										disabled={price > 0 && (loading || applicationStatus)}
+										disabled={!!applicationStatus || loading}
 										className={classes.ctabutton}
 									>
 										<DefiIcon width="24px" height="24px" />
@@ -325,7 +325,7 @@ const KeyFiCheckout = withStyles(styles)(
 												onClick={() => onSelectCrypto(primaryToken)}
 											>
 												Cost: ${keyPrice.toLocaleString()}
-												<div className="time">
+												<div className="amount-in-crypto">
 													{keyAmount.toLocaleString()} KEY
 												</div>
 											</div>
@@ -337,14 +337,14 @@ const KeyFiCheckout = withStyles(styles)(
 												onClick={() => onSelectCrypto('ETH')}
 											>
 												Cost: ${ethPrice.toLocaleString()}
-												<div className="time">
+												<div className="amount-in-crypto">
 													{ethAmount.toLocaleString()} ETH
 												</div>
 											</div>
 										</div>
 										<div className={classes.feeRow}>
 											<div>Network Fee</div>
-											<div className="time">
+											<div className="amount-in-crypto">
 												{ethFee.toLocaleString()} ETH
 											</div>
 										</div>
