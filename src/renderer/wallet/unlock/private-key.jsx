@@ -137,7 +137,7 @@ class PrivateKey extends PureComponent {
 											<Typography
 												variant="subtitle2"
 												color="error"
-												gutterBottom
+												className={classes.bottomSpace}
 											>
 												{this.state.error}
 											</Typography>

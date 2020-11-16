@@ -38,6 +38,9 @@ const styles = theme => ({
 	},
 	password: {
 		width: '330px'
+	},
+	bottomSpace: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -214,7 +217,11 @@ class EnterPIN extends PureComponent {
 						}
 					/>
 					{this.props.error !== '' && (
-						<Typography variant="subtitle2" color="error" gutterBottom>
+						<Typography
+							variant="subtitle2"
+							color="error"
+							className={classes.bottomSpace}
+						>
 							{this.props.error}
 						</Typography>
 					)}

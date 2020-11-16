@@ -43,6 +43,9 @@ const styles = theme => ({
 	},
 	text: {
 		marginBottom: theme.spacing(6)
+	},
+	bottomSpace: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -116,7 +119,11 @@ class PasswordConfirmation extends PureComponent {
 							}}
 						/>
 						{this.state.error !== '' && (
-							<Typography variant="subtitle2" color="error" gutterBottom>
+							<Typography
+								variant="subtitle2"
+								color="error"
+								className={classes.bottomSpace}
+							>
 								{this.state.error}
 							</Typography>
 						)}

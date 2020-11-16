@@ -24,6 +24,9 @@ const styles = theme => ({
 	create: {
 		marginBottom: theme.spacing(1),
 		marginTop: theme.spacing(2)
+	},
+	bottomSpace: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -103,7 +106,7 @@ class SelfKeyIdCreateComponent extends PureComponent {
 														<Typography
 															variant="subtitle2"
 															color="secondary"
-															gutterBottom
+															className={classes.bottomSpace}
 														>
 															Setup the Selfkey ID. This will form the{' '}
 															basis of your locally managed and stored{' '}

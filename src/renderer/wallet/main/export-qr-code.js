@@ -16,6 +16,9 @@ const styles = theme => ({
 		'& .paper': {
 			boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
 		}
+	},
+	bottomSpace: {
+		marginBottom: theme.spacing(1)
 	}
 });
 
@@ -57,7 +60,11 @@ class WalletExportQRCodeComponent extends PureComponent {
 						)}
 					</Grid>
 					<Grid item>
-						<Typography variant="subtitle2" color="secondary" gutterBottom>
+						<Typography
+							variant="subtitle2"
+							color="secondary"
+							className={classes.bottomSpace}
+						>
 							Don’t have the mobile app yet? Download it for iOS & Android
 						</Typography>
 					</Grid>
