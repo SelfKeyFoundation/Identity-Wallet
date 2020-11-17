@@ -141,7 +141,7 @@ storiesOf('Marketplace Common/KeyFi', module)
 	.add('Dashboard Widget', () => <KeyFiWidget />)
 	.add('Checkout Page KEY', () => (
 		<KeyFiCheckout
-			title="Get your SelfKey Credentials to access KeyFi.ai"
+			title="Get your SelfKey Credentials to access KeyFi.com"
 			price="10"
 			keyPrice="8"
 			keyAmount="1234567"
@@ -158,7 +158,7 @@ storiesOf('Marketplace Common/KeyFi', module)
 	))
 	.add('Checkout Page ETH', () => (
 		<KeyFiCheckout
-			title="Get your SelfKey Credentials to access KeyFi.ai"
+			title="Get your SelfKey Credentials to access KeyFi.com"
 			price="10"
 			keyPrice="8"
 			keyAmount="1234567"

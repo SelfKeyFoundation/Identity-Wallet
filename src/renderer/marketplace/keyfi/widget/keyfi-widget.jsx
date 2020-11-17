@@ -86,7 +86,7 @@ export const KeyFiWidget = withStyles(styles)(({ classes, onCredentialsClick }) 
 		>
 			<Grid item xs={8} className={classes.wrap}>
 				<Typography variant="h1" className={classes.title}>
-					Get your Credentials Verified to use KeyFi.ai
+					Get your Credentials Verified to use KeyFi.com
 				</Typography>
 				<Grid
 					container
@@ -97,25 +97,25 @@ export const KeyFiWidget = withStyles(styles)(({ classes, onCredentialsClick }) 
 				>
 					<Grid item xs={12}>
 						<Typography variant="h6" color="secondary" gutterBottom>
-							KeyFi.ai is a first of its kind DeFi aggregator platform that lets you
+							KeyFi.com is a first of its kind DeFi aggregator platform that lets you
 							manage the top DeFi protocols. Get your Credentials verified to access
-							KeyFi.ai and be a part of a new and innovative AI-powered DeFI protocol.
-							By getting your Credentials verified, you{`'`}ll also get to claim a
-							limited-period KEY airdrop.
+							KeyFi.com and be a part of a new and innovative AI-powered DeFI
+							protocol. By getting your Credentials verified, you{`'`}ll also get to
+							claim a limited-period KEY airdrop.
 						</Typography>
 					</Grid>
 					<Grid item xs={6} style={{ display: 'none' }}>
 						<ul>
 							<li>
 								<Typography variant="h6" color="secondary" gutterBottom>
-									KeyFi.ai is the first of its kind DeFi aggregator platform that
+									KeyFi.com is the first of its kind DeFi aggregator platform that
 									lets you manage all the top DeFi platforms with ease.
 								</Typography>
 							</li>
 							<li>
 								<Typography variant="h6" color="secondary" gutterBottom>
 									Get your Credentials verified now to access and earn rewards
-									using KeyFi.ai.
+									using KeyFi.com.
 								</Typography>
 							</li>
 						</ul>

@@ -213,13 +213,13 @@ const KeyFiHowServiceWorks = withStyles(howItWorksstyles)(({ classes }) => {
 					<header>
 						<span>3</span>
 						<Typography variant="h4" gutterBottom>
-							Access KeyFi.ai and Earn Rewards
+							Access KeyFi.com and Earn Rewards
 						</Typography>
 					</header>
 					<div>
 						<Typography variant="h3" gutterBottom>
 							Once your Credentials are verified, you will be eligible to claim a
-							limited-period KEY airdrop, and can access and use KeyFi.ai to earn
+							limited-period KEY airdrop, and can access and use KeyFi.com to earn
 							rewards.
 						</Typography>
 					</div>
@@ -283,12 +283,12 @@ const KeyFiCheckout = withStyles(styles)(
 										exponentially.
 									</p>
 									<p>
-										KeyFi.ai is a first of its kind DeFi aggregator platform
+										KeyFi.com is a first of its kind DeFi aggregator platform
 										that lets you manage your investments among the top DeFi
 										protocols with ease.
 									</p>
 									<p>
-										Powered by AI, KeyFi.ai aims to prepare the DeFi ecosystem
+										Powered by AI, KeyFi.com aims to prepare the DeFi ecosystem
 										for regulatory compliance with a first of its kind
 										decentralized user verification system backed by SelfKey
 										Credentials.
@@ -366,7 +366,7 @@ const KeyFiCheckout = withStyles(styles)(
 							requirements={kycRequirements}
 							loading={loading}
 							templateId={templateId}
-							title="KYC Requirements and Forms"
+							title="KeyFi.com eligibility"
 						/>
 					</Grid>
 				</Grid>
