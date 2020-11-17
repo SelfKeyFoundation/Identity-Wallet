@@ -42,7 +42,7 @@ class KeyFiPayContainer extends MarketplaceKeyFiComponent {
 
 		this.props.dispatch(
 			ordersOperations.startOrderOperation({
-				productInfo: `KeyFi.ai Credential`,
+				productInfo: `KeyFi.com Credential`,
 				applicationId: application.id,
 				amount: price,
 				vendorId,

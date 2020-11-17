@@ -51,7 +51,7 @@ export const KeyFiPaymentComplete = withStyles(styles)(props => {
 				<div className={classes.content}>
 					<div className={classes.description}>
 						<Typography variant="h1" gutterBottom>
-							KeyFi.ai KYC Process Started
+							KeyFi.com KYC Process Started
 						</Typography>
 						<Typography variant="body1" gutterBottom>
 							Thank you!
