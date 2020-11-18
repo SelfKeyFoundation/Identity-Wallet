@@ -1,7 +1,7 @@
 {
 	"name": "selfkey-identity-wallet",
 	"productName": "SelfKey Identity Wallet",
-	"version": "1.7.4",
+	"version": "1.7.5",
 	"description": "The Official SelfKey Identity Wallet for Desktop",
 	"browser": [
 		"chrome"
@@ -70,9 +70,9 @@
 	},
 	"dependencies": {
 		"@babel/polyfill": "7.4.3",
-		"@ledgerhq/hw-app-eth": "5.7.0",
-		"@ledgerhq/hw-transport-node-hid": "5.7.0",
-		"@ledgerhq/web3-subprovider": "5.7.1",
+		"@ledgerhq/hw-app-eth": "5.28.0",
+		"@ledgerhq/hw-transport-node-hid": "5.28.0",
+		"@ledgerhq/web3-subprovider": "5.28.0",
 		"@material-ui/core": "4.9.9",
 		"@material-ui/icons": "4.9.1",
 		"@material-ui/lab": "4.0.0-alpha.48",
@@ -131,7 +131,7 @@
 		"reselect": "4.0.0",
 		"sanitize-html": "1.20.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#e510a0b3e2c69b33a5b48dee0bf2b1ab1052bf3f",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#d1cd8f84e44caba17e64dca083ff81d3c62c3040",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"snyk": "1.235.0",
@@ -142,8 +142,8 @@
 		"striptags": "3.1.1",
 		"sudo-prompt": "8.2.3",
 		"tcp-port-used": "1.0.1",
-		"trezor-wallet-provider": "https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#fa3f49406bf469402f611cc752f8f3f45867e3cb",
-		"trezor.js": "8.1.0",
+		"trezor-wallet-provider": "https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#2a944494e6cd0ba507d5a4946d3d20d984548e60",
+		"trezor.js": "9.0.0",
 		"url-join": "4.0.0",
 		"web3": "1.2.11",
 		"web3-provider-engine": "15.0.4",
@@ -255,7 +255,7 @@
 		"react": "16.13.1",
 		"react-dom": "16.13.1",
 		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#e8356d2037b527f7b0a8433f20c476b6e501d70e",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#2ed1702ce863d1f077639ea3893beecda78915d2",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#d1cd8f84e44caba17e64dca083ff81d3c62c3040",
 		"@material-ui/styles": "4.9.6"
 	},
 	"migrations": {

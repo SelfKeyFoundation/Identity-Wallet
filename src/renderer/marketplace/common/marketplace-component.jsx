@@ -19,9 +19,25 @@ class MarketplaceComponent extends PureComponent {
 
 	manageApplicationsRoute = () => `/main/individual/dashboard/applications`;
 
-	loadRelyingParty = async ({ rp, authenticated = false }) => {
+	noKeyErrorRoute = keyPrice => `/main/transaction-no-key-error/${keyPrice}`;
+
+	loadRelyingParty = async ({
+		rp,
+		authenticated = false,
+		nextRoute,
+		cancelRoute,
+		background = false
+	}) => {
 		if (this.props.rpShouldUpdate) {
-			await this.props.dispatch(kycOperations.loadRelyingParty(rp, authenticated));
+			await this.props.dispatch(
+				kycOperations.loadRelyingParty(
+					rp,
+					authenticated,
+					nextRoute,
+					cancelRoute,
+					background
+				)
+			);
 		}
 	};
 
@@ -166,12 +182,6 @@ class MarketplaceComponent extends PureComponent {
 	clearRelyingParty = async () => {
 		await this.props.dispatch(kycOperations.clearRelyingPartyOperation());
 	};
-
-	selfKeyIdRoute = () => `/main/individual`;
-
-	selfkeyIdRequiredRoute = () => `/main/marketplace/selfkey-id-required`;
-
-	selfkeyDIDRequiredRoute = () => `/main/marketplace/selfkey-did-required`;
 }
 
 export { MarketplaceComponent };

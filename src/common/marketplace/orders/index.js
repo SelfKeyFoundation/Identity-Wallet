@@ -81,7 +81,8 @@ const createOrderOperation = ({
 	vendorDID,
 	productInfo,
 	vendorName,
-	vendorWallet
+	vendorWallet,
+	cryptoCurrency = config.constants.primaryToken
 }) => async (dispatch, getState) => {
 	const ordersService = getGlobalContext().marketplaceOrdersService;
 	const wallet = walletSelectors.getWallet(getState());
@@ -98,6 +99,7 @@ const createOrderOperation = ({
 		identityId: identity.id,
 		walletId: wallet.id,
 		vendorWallet,
+		cryptoCurrency,
 		// On marketplace direct payment orders, allowance is considered complete as initial state
 		status: featureIsEnabled('paymentContract')
 			? orderStatus.PENDING
@@ -117,7 +119,8 @@ const startOrderOperation = ({
 	vendorName,
 	backUrl,
 	completeUrl,
-	vendorWallet
+	vendorWallet,
+	cryptoCurrency = config.constants.primaryToken
 }) => async (dispatch, getState) => {
 	let order = ordersSelectors.getLatestActiveOrderForApplication(getState(), applicationId);
 	if (!order) {
@@ -130,7 +133,8 @@ const startOrderOperation = ({
 				vendorDID,
 				productInfo,
 				vendorName,
-				vendorWallet
+				vendorWallet,
+				cryptoCurrency
 			})
 		);
 	}
@@ -352,8 +356,8 @@ const directPayCurrentOrderOperation = ({ trezorAccountIndex }) => async (dispat
 	const { orderId, backUrl, completeUrl, paymentGas } = ordersSelectors.getCurrentOrder(
 		getState()
 	);
-	const cryptoCurrency = config.constants.primaryToken;
 	let order = ordersSelectors.getOrder(getState(), orderId);
+	const cryptoCurrency = order.cryptoCurrency;
 	const { ethGasStationInfo } = ethGasStationInfoSelectors.getEthGasStationInfo(getState());
 	const amount = new BN(order.amount).toFixed(18);
 
@@ -637,7 +641,7 @@ const ordersSelectors = {
 	getOrderPriceUsd: (state, id) => {
 		const order = ordersSelectors.getOrder(state, id);
 		let fiat = fiatCurrencySelectors.getFiatCurrency(state);
-		let fiatRate = pricesSelectors.getRate(state, 'KEY', fiat.fiatCurrency);
+		let fiatRate = pricesSelectors.getRate(state, order.cryptoCurrency, fiat.fiatCurrency);
 		return new BN(order.amount).multipliedBy(fiatRate).toFixed(2);
 	},
 	getCurrentPaymentFeeUsd: state => {
