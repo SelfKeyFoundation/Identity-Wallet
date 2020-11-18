@@ -1,4 +1,5 @@
 import React from 'react';
+import { featureIsEnabled } from 'common/feature-flags';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { withStyles } from '@material-ui/styles';
@@ -69,36 +70,46 @@ class MarketplaceKeyFiCheckoutContainerComponent extends MarketplaceKeyFiCompone
 	onSelectCrypto = cryptoCurrency => this.setState({ cryptoCurrency });
 
 	onStartClick = async () => {
-		const { templateId, vendorId, vendor, product } = this.props;
+		const { templateId, vendorId, vendor, product, identity } = this.props;
+		const { cryptoCurrency } = this.state;
 
 		const keyPrice = this.priceInKEY(product.price);
 		const keyAvailable = this.keyAvailable();
-		const transactionNoKeyError = `/main/transaction-no-key-error/${keyPrice}`;
-		const { cryptoCurrency } = this.state;
+
 		const completeRoute =
 			product.price > 0 ? this.payRoute(cryptoCurrency) : this.paymentCompleteRoute();
 
-		if (product.price > 0 && keyPrice.gt(keyAvailable)) {
-			return this.props.dispatch(push(transactionNoKeyError));
-		} else {
-			this.props.dispatch(
-				kycOperations.startCurrentApplicationOperation(
-					vendorId,
-					templateId,
-					completeRoute,
-					this.cancelRoute(),
-					`KeyFi.ai Credentials`,
-					`You are about to begin the application process for getting credentials for KeyFi.ai.
-					Please double check your required documents are Certified True or Notarized where
-					necessary. Failure to do so will result in delays in the process. You may also be
-					asked to provide more information by the service provider`,
-					'conducting KYC',
-					vendor.name,
-					vendor.privacyPolicy,
-					vendor.termsOfService
-				)
-			);
+		if (
+			product.price > 0 &&
+			keyPrice.gt(keyAvailable) &&
+			cryptoCurrency === config.primaryToken
+		) {
+			return this.props.dispatch(push(this.noKeyErrorRoute(keyPrice)));
 		}
+		if (!identity.isSetupFinished) {
+			return this.props.dispatch(push(this.selfkeyIdRequiredRoute()));
+		}
+		if (featureIsEnabled('did') && !identity.did) {
+			return this.props.dispatch(push(this.selfkeyDIDRequiredRoute()));
+		}
+
+		this.props.dispatch(
+			kycOperations.startCurrentApplicationOperation(
+				vendorId,
+				templateId,
+				completeRoute,
+				this.cancelRoute(),
+				`KeyFi.ai Credentials`,
+				`You are about to begin the application process for getting credentials for KeyFi.ai.
+				Please double check your required documents are Certified True or Notarized where
+				necessary. Failure to do so will result in delays in the process. You may also be
+				asked to provide more information by the service provider`,
+				'conducting KYC',
+				vendor.name,
+				vendor.privacyPolicy,
+				vendor.termsOfService
+			)
+		);
 	};
 
 	onBackClick = () => this.props.dispatch(push(this.cancelRoute()));
@@ -162,6 +173,7 @@ const mapStateToProps = (state, props) => {
 		vendorId,
 		product,
 		application,
+		identity,
 		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
 		...getLocale(state),
 		...getFiatCurrency(state),
