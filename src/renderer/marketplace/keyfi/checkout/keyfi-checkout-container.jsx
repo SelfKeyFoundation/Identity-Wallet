@@ -99,7 +99,7 @@ class MarketplaceKeyFiCheckoutContainerComponent extends MarketplaceKeyFiCompone
 				templateId,
 				completeRoute,
 				this.cancelRoute(),
-				`KeyFi.ai Credentials`,
+				`KeyFi.com Credentials`,
 				`You are about to begin the application process for getting credentials for KeyFi.ai.
 				Please double check your required documents are Certified True or Notarized where
 				necessary. Failure to do so will result in delays in the process. You may also be
@@ -136,7 +136,7 @@ class MarketplaceKeyFiCheckoutContainerComponent extends MarketplaceKeyFiCompone
 		const { cryptoCurrency } = this.state;
 		return (
 			<KeyFiCheckout
-				title={`Get your SelfKey Credentials to access KeyFi.ai`}
+				title={`Get your SelfKey Credentials to access KeyFi.com`}
 				{...this.getPaymentParameters()}
 				price={this.props.product.price}
 				onBackClick={this.onBackClick}
