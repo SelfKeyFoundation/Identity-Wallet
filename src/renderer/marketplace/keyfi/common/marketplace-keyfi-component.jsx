@@ -27,12 +27,24 @@ export default class MarketplaceKeyFiComponent extends MarketplaceComponent {
 		return `${MARKETPLACE_KEYFI_ROOT_PATH}/pay/${templateId}/${vendorId}/${productId}/${cryptoCurrency}`;
 	};
 
+	userHasPaid = () => {
+		const { product } = this.props;
+		if (product && +product.price === 0) {
+			return 0;
+		}
+		const application = this.getLastApplication();
+		if (!application || !application.payments) {
+			return false;
+		}
+		return !!application.payments.length;
+	};
+
 	getApplicationStatus = () => {
-		const { rp, product } = this.props;
+		const { rp } = this.props;
 		if (rp && rp.authenticated && this.userHasApplied()) {
 			if (this.applicationCompleted()) return 'completed';
 			if (this.applicationWasRejected()) return 'rejected';
-			if (!this.userHasPaid() && product && product.price > 0) return 'unpaid';
+			if (!this.userHasPaid()) return 'unpaid';
 			if (this.applicationRequiresAdditionalDocuments()) return 'additionalRequirements';
 
 			return 'progress';
