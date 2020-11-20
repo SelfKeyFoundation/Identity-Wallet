@@ -59,7 +59,6 @@ export default class MarketplaceBankAccountsComponent extends MarketplaceCompone
 			);
 			return false;
 		}
-		console.log('XXX', questions);
 		const keys = Object.keys(questions);
 		const questionId = keys.filter(k =>
 			questions[k].question
