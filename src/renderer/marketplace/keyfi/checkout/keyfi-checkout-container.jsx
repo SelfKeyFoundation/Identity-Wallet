@@ -125,8 +125,6 @@ class MarketplaceKeyFiCheckoutContainerComponent extends MarketplaceKeyFiCompone
 				this.redirectToKYCC(rp);
 			} else if (!this.userHasPaid()) {
 				this.props.dispatch(push(this.payRoute()));
-			} else if (!this.userHasSelectedBankPreference()) {
-				this.props.dispatch(push(this.selectBankRoute()));
 			}
 		}
 		return null;
