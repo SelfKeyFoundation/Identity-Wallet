@@ -28,10 +28,11 @@ export default class MarketplaceKeyFiComponent extends MarketplaceComponent {
 	};
 
 	getApplicationStatus = () => {
-		if (this.props.rp && this.props.rp.authenticated && this.userHasApplied()) {
+		const { rp, product } = this.props;
+		if (rp && rp.authenticated && this.userHasApplied()) {
 			if (this.applicationCompleted()) return 'completed';
 			if (this.applicationWasRejected()) return 'rejected';
-			if (!this.userHasPaid()) return 'unpaid';
+			if (!this.userHasPaid() && product && product.price > 0) return 'unpaid';
 			if (this.applicationRequiresAdditionalDocuments()) return 'additionalRequirements';
 
 			return 'progress';
