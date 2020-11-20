@@ -30,7 +30,7 @@ export default class MarketplaceKeyFiComponent extends MarketplaceComponent {
 	userHasPaid = () => {
 		const { product } = this.props;
 		if (product && +product.price === 0) {
-			return 0;
+			return 1;
 		}
 		const application = this.getLastApplication();
 		if (!application || !application.payments) {
