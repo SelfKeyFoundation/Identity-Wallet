@@ -160,7 +160,7 @@ const common = {
 		exchangesMarketplace: false,
 		contract: true,
 		rewardToken: false,
-		keyfi: false
+		keyfi: true
 	}
 };
 
@@ -235,7 +235,7 @@ const prod = {
 		contract: false,
 		exchangesMarketplace: false,
 		rewardToken: false,
-		keyfi: false
+		keyfi: true
 	},
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'
 };
