@@ -60,8 +60,10 @@ export default class MarketplaceBankAccountsComponent extends MarketplaceCompone
 			return false;
 		}
 		const keys = Object.keys(questions);
-		const questionId = keys.filter(
-			k => questions[k].question.toLowerCase() === 'bank preference'
+		const questionId = keys.filter(k =>
+			questions[k].question
+				? questions[k].question.toLowerCase() === 'bank preference'
+				: false
 		);
 		return questionId ? questionId[0] : false;
 	};
@@ -72,7 +74,7 @@ export default class MarketplaceBankAccountsComponent extends MarketplaceCompone
 		}
 		const questions = application.questions;
 		const questionId = this.getBankQuestionId(questions);
-		return questions[questionId].value ? questions[questionId].value[0] : '';
+		return questionId && questions[questionId].value ? questions[questionId].value[0] : '';
 	};
 
 	userHasSelectedBankPreference = () => {

@@ -46,7 +46,8 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		onSelected,
 		editItem,
 		addItem,
-		existingApplicationId
+		existingApplicationId,
+		loading = false
 	}) => {
 		if (!relyingParty || !currentApplication || !requirements)
 			return (
@@ -78,7 +79,8 @@ export const CurrentApplicationPopup = withStyles(styles)(
 			agreementText = <KycAgreementText vendor="Far Horizon Capital Inc" purpose={rpName} />;
 		}
 
-		const submitDisabled = (agreement && agreementError && !agreementValue) || error || !filled;
+		const submitDisabled =
+			(agreement && agreementError && !agreementValue) || error || !filled || loading;
 
 		return (
 			<Popup
