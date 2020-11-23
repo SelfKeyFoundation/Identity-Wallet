@@ -16,7 +16,8 @@ class CurrentApplicationComponent extends PureComponent {
 		agreementValue: false,
 		editAttribute: {},
 		typeId: -1,
-		isDocument: false
+		isDocument: false,
+		loading: false
 	};
 	componentDidMount() {
 		const { currentApplication, rpShouldUpdate, dispatch } = this.props;
@@ -83,6 +84,8 @@ class CurrentApplicationComponent extends PureComponent {
 			this.setState({ error });
 			return;
 		}
+
+		this.setState({ loading: true });
 		if (this.props.existingApplicationId) {
 			this.props.dispatch(push('/main/selfkeyIdApplications'));
 		} else {
@@ -158,6 +161,7 @@ class CurrentApplicationComponent extends PureComponent {
 					editItem={this.handleEdit}
 					addItem={this.handleAdd}
 					existingApplicationId={existingApplicationId}
+					loading={this.state.loading}
 				/>
 				{this.state.showCreateAttribute && (
 					<CreateAttributeContainer

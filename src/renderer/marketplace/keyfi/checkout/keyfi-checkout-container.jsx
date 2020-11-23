@@ -100,7 +100,7 @@ class MarketplaceKeyFiCheckoutContainerComponent extends MarketplaceKeyFiCompone
 				completeRoute,
 				this.cancelRoute(),
 				`KeyFi.com Credentials`,
-				`You are about to begin the application process for getting credentials for KeyFi.ai.
+				`You are about to begin the application process for getting credentials for KeyFi.com.
 				Please double check your required documents are Certified True or Notarized where
 				necessary. Failure to do so will result in delays in the process. You may also be
 				asked to provide more information by the service provider`,
