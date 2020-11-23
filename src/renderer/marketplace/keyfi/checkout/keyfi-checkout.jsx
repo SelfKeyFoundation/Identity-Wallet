@@ -295,8 +295,9 @@ const KeyFiCheckout = withStyles(styles)(
 									</p>
 									<p>
 										Verify your Credentials now to enjoy the ease of managing
-										multiple platforms, all while earning rewards and claiming a
-										limited period KEY airdrop.
+										multiple platforms, all while earning rewards.
+										{/* and claiming a
+										limited period KEY airdrop.*/}
 									</p>
 								</Typography>
 							</Grid>
