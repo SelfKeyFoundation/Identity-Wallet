@@ -13,7 +13,7 @@ import Home from './home';
 import CreateWallet from './wallet/create';
 import CreatePassword from './wallet/create/password';
 import NoConnection from './no-connection';
-import PasswordConfirmation from './wallet/create/password/confirmation';
+import PasswordConfirmation from './wallet/create/password/confirmation-container';
 import BackupAddress from './wallet/create/backup-address';
 import BackupPK from './wallet/create/backup-pk';
 import Main from './wallet/main';
