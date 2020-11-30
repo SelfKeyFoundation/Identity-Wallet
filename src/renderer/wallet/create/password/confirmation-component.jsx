@@ -1,14 +1,10 @@
 import React, { PureComponent } from 'react';
-import { Link } from 'react-router-dom';
 import { Grid, Typography, Input, LinearProgress, Button } from '@material-ui/core';
 import { PasswordConfirmIcon } from 'selfkey-ui';
 import { withStyles } from '@material-ui/styles';
-import { handlePassword, renderPasswordStrength } from './password-util';
-import { createWalletSelectors, createWalletOperations } from 'common/create-wallet';
-import { push } from 'connected-react-router';
-import { connect } from 'react-redux';
+import { renderPasswordStrength } from './password-util';
 import { Popup } from '../../../common';
-import { getGlobalContext } from 'common/context';
+import { PropTypes } from 'prop-types';
 
 const styles = theme => ({
 	icon: {
@@ -41,40 +37,23 @@ const styles = theme => ({
 	}
 });
 
-const goBackCreatePassword = React.forwardRef((props, ref) => (
-	<Link to="/createPassword" {...props} ref={ref} />
-));
-
-class PasswordConfirmation extends PureComponent {
-	state = {
-		password: '',
-		passwordScore: 0,
-		strength: '',
-		error: ''
-	};
-
-	handleNext = async () => {
-		if (this.props.firstPassword === this.state.password) {
-			getGlobalContext().matomoService.trackEvent(
-				'wallet_setup',
-				'password_create',
-				undefined,
-				undefined,
-				true
-			);
-			await this.props.dispatch(createWalletOperations.createWalletOperation());
-			await this.props.dispatch(push('/backupAddress'));
-		} else {
-			this.setState({ ...this.state, error: 'Password does not match' });
-		}
-	};
-
+class PasswordConfirmationComponent extends PureComponent {
 	render() {
-		const { classes } = this.props;
+		const {
+			classes,
+			password,
+			passwordScore,
+			strength,
+			error,
+			backElement,
+			onBackAction,
+			onPasswordChange,
+			onNextClick
+		} = this.props;
 		return (
 			<Popup
-				closeComponent={goBackCreatePassword}
-				closeAction={this.handleBackAction}
+				closeComponent={backElement}
+				closeAction={onBackAction}
 				open
 				displayLogo
 				text="Step 2: Confirm Password"
@@ -99,22 +78,22 @@ class PasswordConfirmation extends PureComponent {
 						<br />
 						<Input
 							id="pwd2"
-							error={this.state.error !== ''}
+							error={error !== ''}
 							disableUnderline={true}
 							placeholder="Password"
 							type="password"
-							value={this.state.password}
-							onChange={e => this.setState(handlePassword(e, this.state))}
+							value={password}
+							onChange={onPasswordChange}
 							className={classes.passwordInput}
 							onKeyUp={event => {
 								if (event.keyCode === 13) {
-									this.handleNext();
+									onNextClick();
 								}
 							}}
 						/>
-						{this.state.error !== '' && (
+						{error !== '' && (
 							<Typography variant="subtitle2" color="error" gutterBottom>
-								{this.state.error}
+								{error}
 							</Typography>
 						)}
 						<Grid container className={classes.maskContainer}>
@@ -124,17 +103,17 @@ class PasswordConfirmation extends PureComponent {
 						</Grid>
 						<LinearProgress
 							variant="determinate"
-							value={this.state.passwordScore}
+							value={passwordScore}
 							className={classes.passwordScore}
 						/>
-						{renderPasswordStrength(this.state.password, this.state.strength)}
+						{renderPasswordStrength(password, strength)}
 						<br />
 						<br />
 						<Button
 							id="pwd2Next"
 							variant="contained"
-							disabled={this.state.password === ''}
-							onClick={this.handleNext}
+							disabled={password === ''}
+							onClick={onNextClick}
 							className={classes.next}
 							size="large"
 						>
@@ -147,10 +126,21 @@ class PasswordConfirmation extends PureComponent {
 	}
 }
 
-const mapStateToProps = state => {
-	return {
-		firstPassword: createWalletSelectors.selectCreateWallet(state).password
-	};
+const PasswordConfirmation = withStyles(styles)(PasswordConfirmationComponent);
+
+PasswordConfirmation.displayName = 'PasswordConfirmation';
+PasswordConfirmation.propTypes = {
+	onNextClick: PropTypes.func.isRequired,
+	onPasswordChange: PropTypes.func.isRequired,
+	password: PropTypes.string,
+	strength: PropTypes.string,
+	passwordScore: PropTypes.number,
+	backComponent: PropTypes.element,
+	onBackAction: PropTypes.func
+};
+PasswordConfirmation.defaultProps = {
+	password: '',
+	passwordScore: 0
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(PasswordConfirmation));
+export default PasswordConfirmation;
