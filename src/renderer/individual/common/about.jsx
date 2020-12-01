@@ -1,3 +1,6 @@
+/**
+ * NOT USED, KEPT HERE FOR FUTURE REFERENCE
+ */
 import React, { PureComponent } from 'react';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
