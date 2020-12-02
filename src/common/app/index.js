@@ -180,8 +180,8 @@ const unlockWalletOperation = (wallet, type) => async dispatch => {
 		);
 		throw error;
 	} finally {
-		await dispatch(appActions.setHardwareWalletsAction([]));
-		await dispatch(appActions.setSeedAction(null));
+		dispatch(appActions.setSeedAction(null));
+		dispatch(appActions.setHardwareWalletsAction([]));
 	}
 };
 
