@@ -96,7 +96,6 @@ describe('HDWallet', () => {
 	it('getAccounts', async () => {
 		const hdWallet = await HDWallet.createFromMnemonic(testMnemonic);
 		const accounts = hdWallet.getAccounts();
-		console.log(JSON.stringify(accounts));
 		expect(accounts).toEqual(testAccounts);
 	});
 
