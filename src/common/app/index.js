@@ -25,6 +25,7 @@ const transformErrorMessage = msg => {
 export const initialState = {
 	walletsLoading: false,
 	wallets: [],
+	seed: null,
 	hardwareWallets: [],
 	error: '',
 	walletType: '',
@@ -42,6 +43,7 @@ export const initialState = {
 
 export const appTypes = {
 	APP_SET_WALLETS: 'app/set/WALLETS',
+	APP_SET_SEED: 'app/set/SEED',
 	APP_SET_WALLETS_LOADING: 'app/set/WALLETS_LOADING',
 	APP_SET_SETTINGS: 'app/set/SETTINGS',
 	APP_SET_HARDWARE_WALLETS: 'app/set/hardware/WALLETS',
@@ -71,13 +73,18 @@ export const appTypes = {
 	APP_INSTALL_UPDATE: 'app/update/INSTALL',
 	APP_UNLOCK_WALLET: 'app/unlock/wallet',
 	APP_SET_KEYSTORE_VALUE: 'app/keystore/SET',
-	LOAD_KEYSTORE_VALUE: 'app/keystore/LOAD'
+	LOAD_KEYSTORE_VALUE: 'app/keystore/LOAD',
+	APP_SEED_UNLOCK_START: 'app/seed/unlock'
 };
 
 const appActions = {
 	setWalletsAction: wallets => ({
 		type: appTypes.APP_SET_WALLETS,
 		payload: wallets
+	}),
+	setSeedAction: seed => ({
+		type: appTypes.APP_SET_SEED,
+		payload: seed
 	}),
 	setSettingsAction: settings => ({
 		type: appTypes.APP_SET_SETTINGS,
@@ -172,6 +179,9 @@ const unlockWalletOperation = (wallet, type) => async dispatch => {
 			true
 		);
 		throw error;
+	} finally {
+		await dispatch(appActions.setHardwareWalletsAction([]));
+		await dispatch(appActions.setSeedAction(null));
 	}
 };
 
@@ -272,6 +282,29 @@ const unlockWalletWithPublicKey = (address, path) => async (dispatch, getState) 
 	}
 };
 
+const startSeedUnlockOperation = seed => async dispatch => {
+	await dispatch(appActions.setSeedAction(seed));
+	await dispatch(loadHDWalletsOperation());
+};
+
+const loadHDWalletsOperation = (page = 0) => async (dispatch, getState) => {
+	const walletService = getGlobalContext().walletService;
+	try {
+		const wallets = await walletService.getHDWalletAccounts(
+			selectSeed(getState()),
+			page * 10,
+			10
+		);
+		await dispatch(appActions.setHardwareWalletsAction(wallets));
+		await dispatch(appActions.setWalletType('local'));
+		await dispatch(push('/selectAddress'));
+	} catch (error) {
+		const message = transformErrorMessage(error.message);
+		log.error(error);
+		await dispatch(appActions.setUnlockWalletErrorAction(message));
+	}
+};
+
 const loadLedgerWallets = (page = 0) => async dispatch => {
 	const walletService = getGlobalContext().walletService;
 	try {
@@ -336,6 +369,8 @@ const loadOtherHardwareWallets = page => async (dispatch, getState) => {
 		await dispatch(loadLedgerWallets(page));
 	} else if (walletType === 'trezor') {
 		await dispatch(loadTrezorWallets(page));
+	} else if (walletType === 'local') {
+		await dispatch(loadHDWalletsOperation(page));
 	}
 };
 
@@ -446,7 +481,8 @@ const operations = {
 	downloadUpdate,
 	installUpdate,
 	unlockWalletOperation,
-	loadKeystoreValue
+	loadKeystoreValue,
+	startSeedUnlockOperation
 };
 
 const appOperations = {
@@ -516,6 +552,10 @@ const appOperations = {
 	loadKeystoreValueOperation: createAliasedAction(
 		appTypes.LOAD_KEYSTORE_VALUE,
 		operations.loadKeystoreValue
+	),
+	startSeedUnlockOperation: createAliasedAction(
+		appTypes.APP_SEED_UNLOCK_START,
+		operations.startSeedUnlockOperation
 	)
 };
 
@@ -571,6 +611,10 @@ const setKeystoreValueReducer = (state, action) => {
 	return { ...state, keyStoreValue: action.payload };
 };
 
+const setSeedReducer = (state, action) => {
+	return { ...state, seed: action.payload };
+};
+
 const appReducers = {
 	setWalletsReducer,
 	setWalletsLoadingReducer,
@@ -584,13 +628,16 @@ const appReducers = {
 	setAutoUpdateInfoReducer,
 	setAutoUpdateProgressReducer,
 	setAutoUpdateDownloadedReducer,
-	setKeystoreValueReducer
+	setKeystoreValueReducer,
+	setSeedReducer
 };
 
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
 		case appTypes.APP_SET_WALLETS:
 			return appReducers.setWalletsReducer(state, action);
+		case appTypes.APP_SET_SEED:
+			return appReducers.setSeedReducer(state, action);
 		case appTypes.APP_SET_WALLETS_LOADING:
 			return appReducers.setWalletsLoadingReducer(state, action);
 		case appTypes.APP_SET_SETTINGS:
@@ -665,6 +712,8 @@ const selectCanExportWallet = state => {
 
 const selectKeystoreValue = state => selectApp(state).keyStoreValue;
 
+const selectSeed = state => selectApp(state).seed;
+
 const appSelectors = {
 	selectApp,
 	hasConnected,
@@ -676,7 +725,8 @@ const appSelectors = {
 	selectAutoUpdateProgress,
 	selectAutoUpdateDownloaded,
 	selectCanExportWallet,
-	selectKeystoreValue
+	selectKeystoreValue,
+	selectSeed
 };
 
 export { appSelectors, appReducers, appActions, appOperations };

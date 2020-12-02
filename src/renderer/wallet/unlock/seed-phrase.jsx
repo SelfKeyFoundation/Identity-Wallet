@@ -47,9 +47,7 @@ class SeedPhrase extends PureComponent {
 	};
 
 	handleUnlockAction = async () => {
-		// await this.props.dispatch(
-		// 	appOperations.unlockWalletWithPrivateKeyOperation(this.state.privateKey)
-		// );
+		await this.props.dispatch(appOperations.startSeedUnlockOperation(this.state.seed));
 	};
 
 	handleSeedChange = async event => {

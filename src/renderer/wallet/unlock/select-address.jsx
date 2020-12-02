@@ -121,11 +121,18 @@ class SelectAddress extends PureComponent {
 		this.setState({
 			selectedAddress: event.target.value,
 			selected: index,
-			path: this.props.hardwareWallets[index].path
+			path: this.props.hardwareWallets[index].path,
+			selectedPrivateKey: this.props.hardwareWallets[index].privateKey
 		});
 	};
 
 	handleSelectedAddress = async () => {
+		if (this.state.selectedPrivateKey) {
+			await this.props.dispatch(
+				appOperations.unlockWalletWithPrivateKeyOperation(this.state.selectedPrivateKey)
+			);
+			return;
+		}
 		await this.props.dispatch(
 			appOperations.unlockWalletWithPublicKeyOperation(
 				this.state.selectedAddress,
