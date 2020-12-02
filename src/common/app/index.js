@@ -292,8 +292,8 @@ const loadHDWalletsOperation = (page = 0) => async (dispatch, getState) => {
 	try {
 		const wallets = await walletService.getHDWalletAccounts(
 			selectSeed(getState()),
-			page * 10,
-			10
+			page * 6,
+			6
 		);
 		await dispatch(appActions.setHardwareWalletsAction(wallets));
 		await dispatch(appActions.setWalletType('local'));
