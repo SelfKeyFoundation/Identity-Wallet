@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import EthUnits from 'common/utils/eth-units';
 import * as EthUtil from 'ethereumjs-util';
+import { HDWallet } from './hd-wallet';
 
 const log = new Logger('wallet-service');
 export class WalletService {
@@ -253,6 +254,22 @@ export class WalletService {
 	async getTrezorWallets(page, accountsQuantity, eventEmitter) {
 		await this.web3Service.switchToTrezorWallet(page, accountsQuantity, eventEmitter);
 		return this._getWallets(page, accountsQuantity, 'trezor');
+	}
+
+	async getHDWalletAccounts(seed, offset, limit) {
+		const wallet = await HDWallet.createFromMnemonic(seed);
+		const accounts = wallet.getAccounts(offset, limit);
+
+		const promises = accounts.map(async a => {
+			const balanceInWei = await this.web3Service.web3.eth.getBalance(a.address);
+
+			return {
+				...a,
+				balance: EthUnits.toEther(balanceInWei, 'wei')
+			};
+		});
+
+		return Promise.all(promises);
 	}
 
 	estimateGas(transactionObject) {
