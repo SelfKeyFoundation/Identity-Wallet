@@ -1,4 +1,4 @@
-import { mnemonicToSeed, generateMnemonic } from 'bip39';
+import { mnemonicToSeed, generateMnemonic, validateMnemonic } from 'bip39';
 import * as ethUtil from 'ethereumjs-util';
 import HDNode from 'hdkey';
 
@@ -8,11 +8,18 @@ export class HDWallet {
 		this.seed = seed;
 	}
 
+	static validateMnemonic(seed) {
+		return validateMnemonic(seed);
+	}
+
 	static generateMnemonic() {
 		return generateMnemonic();
 	}
 
 	static async createFromMnemonic(mnemonic) {
+		if (!this.validateMnemonic(mnemonic)) {
+			throw new Error('seed phrase is invalid');
+		}
 		const seed = await mnemonicToSeed(mnemonic);
 		const rootNode = HDNode.fromMasterSeed(seed);
 
@@ -36,10 +43,7 @@ export class HDWallet {
 			const accountPath = this.constructor.getPathForAccountIdx(i, pathTpl);
 			const wallet = this.createWallet(accountPath);
 
-			accounts.push({
-				address: wallet.address,
-				path: wallet.path
-			});
+			accounts.push(wallet);
 		}
 
 		return accounts;
