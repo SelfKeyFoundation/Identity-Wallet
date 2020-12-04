@@ -9,10 +9,11 @@ import config from 'common/config';
 import Wallet from '../wallet/wallet';
 import WalletSetting from '../wallet/wallet-setting';
 import TxHistory from './tx-history';
+import { sleep } from '../../common/utils/async';
 
 const log = new Logger('tx-history-service');
 
-export const REQUEST_INTERVAL_DELAY = 600; // millis
+export const REQUEST_INTERVAL_DELAY = 100; // millis
 export const ETH_BALANCE_DIVIDER = new BigNumber(10 ** 18);
 export const ENDPOINT_CONFIG = {
 	1: { url: 'https://api.etherscan.io/api' },
@@ -79,6 +80,7 @@ export const KEY_TYPES_MAP = {
 export class TxHistoryService extends EventEmitter {
 	static isSyncingMap = {};
 	static syncingJobIsStarted = false;
+	static tokensCache = {};
 
 	static isSyncing(address) {
 		if (!address) {
@@ -127,6 +129,12 @@ export class TxHistoryService extends EventEmitter {
 		});
 	}
 	async getContractInfo(contractAddress) {
+		if (
+			TxHistoryService.tokensCache[contractAddress] ||
+			TxHistoryService.tokensCache[contractAddress] === null
+		) {
+			return TxHistoryService.tokensCache[contractAddress];
+		}
 		try {
 			let tokenDecimal = await this.web3Service.waitForTicket({
 				method: 'call',
@@ -146,7 +154,7 @@ export class TxHistoryService extends EventEmitter {
 				contractAddress,
 				contractMethod: 'name'
 			});
-			return {
+			TxHistoryService.tokensCache[contractAddress] = {
 				tokenDecimal: Number.isInteger(tokenDecimal)
 					? tokenDecimal
 					: tokenDecimal && typeof tokenDecimal === 'object'
@@ -155,9 +163,11 @@ export class TxHistoryService extends EventEmitter {
 				tokenSymbol,
 				tokenName
 			};
+			return TxHistoryService.tokensCache[contractAddress];
 		} catch (err) {
 			if (!err.message.startsWith("Returned values aren't valid")) {
 				log.error('ContractInfo error, %s, %s', contractAddress, err);
+				TxHistoryService.tokensCache[contractAddress] = null;
 			}
 			return null;
 		}
@@ -299,10 +309,12 @@ export class TxHistoryService extends EventEmitter {
 					}
 					return resolve();
 				}
-				let ethTxList = await that.loadEthTxHistory(address, startBlock, endblock, page);
-				let tokenTxList = await that.loadERCTxHistory(address, startBlock, endblock, page);
+				let ethTxList =
+					(await that.loadEthTxHistory(address, startBlock, endblock, page)) || [];
+				let tokenTxList =
+					(await that.loadERCTxHistory(address, startBlock, endblock, page)) || [];
 
-				(ethTxList || []).concat(tokenTxList || []).forEach((tx, index) => {
+				ethTxList.concat(tokenTxList).forEach((tx, index) => {
 					let hash = tx.hash;
 					txHashes[hash] = txHashes[hash] || {};
 					let isToken = index >= ethTxList.length;
@@ -310,6 +322,7 @@ export class TxHistoryService extends EventEmitter {
 				});
 
 				page++;
+
 				next(ethTxList.length === OFFSET || tokenTxList.length === OFFSET);
 			})(true);
 		});
@@ -339,6 +352,7 @@ export class TxHistoryService extends EventEmitter {
 		(async function next() {
 			try {
 				await that.sync();
+				await sleep(1000);
 			} catch (err) {
 				log.error(err);
 			}
