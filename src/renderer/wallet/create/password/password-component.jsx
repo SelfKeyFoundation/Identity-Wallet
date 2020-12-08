@@ -105,7 +105,7 @@ class PasswordComponent extends PureComponent {
 							placeholder="Password"
 							type="password"
 							value={password}
-							onChange={e => onPasswordChange}
+							onChange={onPasswordChange}
 							className={classes.passwordInput}
 							onKeyUp={event => {
 								if (event.keyCode === 13) {
