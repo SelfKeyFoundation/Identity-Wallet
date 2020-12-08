@@ -74,6 +74,14 @@ storiesOf('KYC/Application Status bar', module)
 	.add('completed', () => (
 		<ApplicationStatusBar status={select('Status', kycStatuses, 'completed')} />
 	))
+	.add('completed with custom action', () => (
+		<ApplicationStatusBar
+			status={select('Status', kycStatuses, 'completed')}
+			completedButtonText="Complete Action"
+			statusAction={action('complete action')}
+		/>
+	))
+
 	.add('progress', () => (
 		<ApplicationStatusBar status={select('Status', kycStatuses, 'progress')} />
 	))

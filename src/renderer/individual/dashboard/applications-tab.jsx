@@ -43,7 +43,7 @@ const styles = theme => ({
 		paddingRight: '10px'
 	},
 	label: {
-		minWidth: '130px',
+		minWidth: '150px',
 		paddingRight: '20px'
 	},
 	statusInfoWrap: {
@@ -94,6 +94,9 @@ const styles = theme => ({
 	},
 	statusName: {
 		marginLeft: '8px'
+	},
+	rpLink: {
+		marginTop: '1em'
 	}
 });
 
@@ -416,6 +419,24 @@ class IndividualApplicationsTabComponent extends PureComponent {
 														</Typography>
 													</ListItem>
 												</List>
+												{getRpInfo(item.rpName, 'name') === 'KeyFI' &&
+													item.currentStatus === 2 && (
+														<React.Fragment>
+															<Divider variant="middle" />
+															<Button
+																className={classes.rpLink}
+																variant="contained"
+																onClick={() =>
+																	window.openExternal(
+																		null,
+																		'https://keyfi.com'
+																	)
+																}
+															>
+																visit keyfi.com
+															</Button>
+														</React.Fragment>
+													)}
 											</CardContent>
 										</Card>
 									</Grid>
