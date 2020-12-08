@@ -279,6 +279,32 @@ export class WalletService {
 	sendTransaction(transactionObject) {
 		return this.web3Service.web3.eth.sendTransaction(transactionObject);
 	}
+
+	async signPersonalMessage(wallet, msg) {
+		switch (wallet.profile) {
+			case 'ledger':
+				const data = { from: wallet.address, data: msg.replace('0x', '') };
+				const ledgerSignature = await new Promise((resolve, reject) => {
+					this.web3Service.ledgerWalletSubProvider.signPersonalMessage(
+						data,
+						(err, msg) => {
+							if (err) return reject(err);
+							return resolve(msg);
+						}
+					);
+				});
+				return ledgerSignature;
+			case 'trezor':
+				const trezorSignature = await this.web3Service.trezorWalletSubProvider.signPersonalMessage(
+					wallet.address,
+					msg.replace('0x', '')
+				);
+				return EthUtil.addHexPrefix(trezorSignature.message.signature);
+			case 'local':
+			default:
+				return this.web3Service.web3.eth.personal.sign(msg, wallet.address);
+		}
+	}
 }
 
 export default WalletService;

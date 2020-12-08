@@ -1,13 +1,19 @@
 import { getGlobalContext } from '../context';
 import { createAliasedAction } from 'electron-redux';
-
 import { push } from 'connected-react-router';
 import { getWallet } from '../wallet/selectors';
+import { Logger } from 'common/logger';
+const log = new Logger('WalletConnectDuck');
+
+let hardwalletConfirmationTimeout = null;
 
 export const walletConnectInitialState = {
 	hasSessionRequest: false,
+	hasSignRequest: false,
 	peerMeta: {},
-	peerId: null
+	peerId: null,
+	requestId: null,
+	message: null
 };
 
 export const walletConnectTypes = {
@@ -15,6 +21,9 @@ export const walletConnectTypes = {
 	WALLET_CONNECT_SESSION_REQUEST_APPROVE_OPERATION:
 		'wallet-connect/session/operation/REQUEST_APPROVE',
 	WALLET_CONNECT_SESSION_REQUEST_DENY_OPERATION: 'wallet-connect/session/operation/REQUEST_DENY',
+	WALLET_CONNECT_SIGN_MESSAGE_OPERATION: 'wallet-connect/message/operation/SIGN',
+	WALLET_CONNECT_SIGN_MESSAGE_DENY_OPERATION: 'wallet-connect/message/operation/SIGN_DENY',
+	WALLET_CONNECT_SIGN_MESSAGE_APPROVE_OPERATION: 'wallet-connect/message/operation/SIGN_APPROVE',
 	WALLET_CONNECT_SESSION_SET: 'wallet-connect/session/SET',
 	WALLET_CONNECT_SESSION_RESET: 'wallet-connect/session/RESET'
 };
@@ -71,6 +80,80 @@ export const operations = {
 		walletConnectService.approveSession(wallet.address);
 		await dispatch(operations.resetSessionAction());
 		return dispatch(push('/main/dashboard'));
+	},
+	signMessageOperation: (requestId, peerMeta, peerId, message) => async (dispatch, getState) => {
+		const wallet = getWallet(getState());
+		if (!wallet) {
+			throw new Error('Cannot sign message without wallet');
+		}
+		await dispatch(operations.resetSessionAction());
+		await dispatch(
+			operations.setSessionAction({
+				hasSignRequest: true,
+				requestId,
+				peerMeta,
+				peerId,
+				message
+			})
+		);
+		await dispatch(push('/wallet-connect/sign-message'));
+	},
+	signMessageDenyOperation: () => async (dispatch, getState) => {
+		try {
+			const wc = walletConnectSelectors.selectWalletConnect(getState());
+			const { walletConnectService } = getGlobalContext();
+			walletConnectService.rejectRequest(wc.requestId);
+			await dispatch(walletConnectOperations.resetSessionAction());
+			await dispatch(push('/main/dashboard'));
+		} catch (error) {
+			log.error(error);
+			throw error;
+		}
+	},
+	signMessageApproveOperation: () => async (dispatch, getState) => {
+		try {
+			const wc = walletConnectSelectors.selectWalletConnect(getState());
+			const wallet = getWallet(getState());
+			const walletType = wallet.profile;
+			const { walletConnectService, walletService } = getGlobalContext();
+			let result;
+			try {
+				if (walletType === 'ledger' || walletType === 'trezor') {
+					const hardwalletConfirmationTime = '30000';
+					hardwalletConfirmationTimeout = setTimeout(async () => {
+						clearTimeout(hardwalletConfirmationTimeout);
+						await dispatch(push('/main/hd-timeout'));
+					}, hardwalletConfirmationTime);
+					await dispatch(push('/main/hd-timer'));
+				}
+				result = await walletService.signPersonalMessage(wallet, wc.message);
+				if (hardwalletConfirmationTimeout) {
+					clearTimeout(hardwalletConfirmationTimeout);
+				}
+			} catch (error) {
+				log.error(error);
+				if (walletType === 'ledger' || walletType === 'trezor') {
+					clearTimeout(hardwalletConfirmationTimeout);
+					if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
+						await dispatch(push('/main/hd-declined'));
+					} else if (error.code === 'Failure_ActionCancelled') {
+						await dispatch(push('/main/hd-declined'));
+					} else if (error.statusText === 'UNKNOWN_ERROR') {
+						await dispatch(push('/main/hd-unlock'));
+					} else {
+						await dispatch(push('/main/hd-error'));
+					}
+				}
+				throw error;
+			}
+
+			walletConnectService.approveRequest(wc.requestId, result);
+			await dispatch(walletConnectOperations.resetSessionAction());
+			await dispatch(push('/main/dashboard'));
+		} catch (error) {
+			log.error(error);
+			throw error;
+		}
 	}
 };
 
@@ -87,12 +170,26 @@ export const walletConnectOperations = {
 	sessionRequestApproveOperation: createAliasedAction(
 		walletConnectTypes.WALLET_CONNECT_SESSION_REQUEST_APPROVE_OPERATION,
 		operations.sessionRequestApproveOperation
+	),
+	signMessageOperation: createAliasedAction(
+		walletConnectTypes.WALLET_CONNECT_SIGN_MESSAGE_OPERATION,
+		operations.signMessageOperation
+	),
+	signMessageDenyOperation: createAliasedAction(
+		walletConnectTypes.WALLET_CONNECT_SIGN_MESSAGE_DENY_OPERATION,
+		operations.signMessageDenyOperation
+	),
+	signMessageApproveOperation: createAliasedAction(
+		walletConnectTypes.WALLET_CONNECT_SIGN_MESSAGE_APPROVE_OPERATION,
+		operations.signMessageApproveOperation
 	)
 };
 
 export const walletConnectSelectors = {
 	selectWalletConnect: state => state.walletConnect,
-	hasSessionRequest: state => walletConnectSelectors.selectWalletConnect(state).hasSessionRequest
+	hasSessionRequest: state => walletConnectSelectors.selectWalletConnect(state).hasSessionRequest,
+	hasSignMessageRequest: state =>
+		walletConnectSelectors.selectWalletConnect(state).hasSignMessageRequest
 };
 
 export const walletConnectReducer = (state = walletConnectInitialState, action) => {

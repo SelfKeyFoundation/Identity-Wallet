@@ -2,6 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import ApproveSessionComponent from '../src/renderer/wallet-connect/approve-session-component';
 import { action } from '@storybook/addon-actions';
+import SignMessageComponent from '../src/renderer/wallet-connect/sign-message-component';
 
 storiesOf('WalletConnect', module);
 
@@ -30,3 +31,13 @@ storiesOf('WalletConnect/ApproveSession')
 			onApprove={action('approve')}
 		/>
 	));
+
+storiesOf('WalletConnect/SignMessage').add('default', () => (
+	<SignMessageComponent
+		peerMeta={peerMeta}
+		onCancel={action('cancel')}
+		onSignMessage={action('sign message')}
+		message="HI! I am the message to sign"
+		address="0xdadasdasdsa"
+	/>
+));

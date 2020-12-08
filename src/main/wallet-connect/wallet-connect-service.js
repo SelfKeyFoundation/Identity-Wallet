@@ -1,6 +1,10 @@
 import WalletConnect from '@walletconnect/client';
+// import * as ethUtil from 'ethereumjs-util';
 import { Logger } from 'common/logger';
 import { walletConnectOperations } from '../../common/wallet-connect';
+import { Identity } from '../platform/identity';
+import { getWallet } from '../../common/wallet/selectors';
+import { identitySelectors } from 'common/identity';
 const log = new Logger('WalletConnectService');
 
 export class WalletConnectService {
@@ -57,7 +61,11 @@ export class WalletConnectService {
 				throw error;
 			}
 
-			// perform call
+			switch (payload.method) {
+				case 'personal_sign':
+					return this.handlePersonalSignRequest(payload);
+			}
+			log.info('unsuported call method %s', payload.method);
 		});
 
 		this.connector.on('connect', (error, payload) => {
@@ -79,6 +87,44 @@ export class WalletConnectService {
 
 			log.info('disconnect');
 		});
+	}
+
+	handlePersonalSignRequest({ id, method, params }) {
+		const [message] = params;
+
+		this.store.dispatch(
+			walletConnectOperations.signMessageOperation(id, this.peerMeta, this.peerId, message)
+		);
+	}
+
+	async signPersonalMessage(id, message) {
+		const state = this.store.getState();
+		const identity = new Identity(getWallet(state), identitySelectors.selectIdentity(state));
+		try {
+			const signature = await identity.genSignatureForMessage(message);
+			this.approveRequest(id, signature);
+		} catch (error) {
+			log.error(error);
+			this.rejectRequest(id);
+		}
+	}
+
+	rejectRequest(id, error = {}) {
+		if (this.connector) {
+			this.connector.rejectRequest({
+				id,
+				error
+			});
+		}
+	}
+
+	approveRequest(id, result) {
+		if (this.connector) {
+			this.connector.approveRequest({
+				id,
+				result
+			});
+		}
 	}
 
 	approveSession(address) {

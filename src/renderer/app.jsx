@@ -30,6 +30,7 @@ import { SelfKeyIdCreateForm } from './selfkey-id/main/components/selfkey-id-cre
 import AutoUpdate from './auto-update/auto-update-contatiner';
 import AutoUpdateProgress from './auto-update/auto-update-progress-contatiner';
 import ApproveSessionContainer from './wallet-connect/approve-session-container';
+import SignMessageContainer from './wallet-connect/sign-message-container';
 
 const log = new Logger('AppComponent');
 
@@ -85,6 +86,7 @@ class AppContainerComponent extends PureComponent {
 						path="/wallet-connect/approve-session"
 						component={ApproveSessionContainer}
 					/>
+					<Route path="/wallet-connect/sign-message" component={SignMessageContainer} />
 				</Switch>
 			</ConnectedRouter>
 		);
