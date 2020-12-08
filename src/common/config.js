@@ -185,7 +185,7 @@ const dev = {
 		did: false,
 		scheduler: true,
 		corporate: true,
-		staking: true,
+		staking: false,
 		certifiers: false,
 		notaries: true,
 		corporateMarketplace: false,
