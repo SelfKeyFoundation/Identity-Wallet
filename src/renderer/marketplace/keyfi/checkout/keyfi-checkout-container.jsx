@@ -163,18 +163,14 @@ const mapStateToProps = (state, props) => {
 	const identity = identitySelectors.selectIdentity(state);
 
 	// Block US users
-	const residencyAttribute = identitySelectors.selectAttributeValue(state, {
+	const residencyAndNationalityAttributes = identitySelectors.selectAttributesByUrl(state, {
 		identityId: identity.id,
-		attributeTypeUrl: RESIDENCY_ATTRIBUTE
+		attributeTypeUrls: [NATIONALITY_ATTRIBUTE, RESIDENCY_ATTRIBUTE]
 	});
-	const nationalityAttribute = identitySelectors.selectAttributeValue(state, {
-		identityId: identity.id,
-		attributeTypeUrl: NATIONALITY_ATTRIBUTE
-	});
-	const isBlockedJurisdiction =
-		residencyAttribute && nationalityAttribute
-			? residencyAttribute.country === 'US' || nationalityAttribute.country === 'US'
-			: false;
+
+	const isBlockedJurisdiction = residencyAndNationalityAttributes.some(
+		attr => attr.data.value.country === 'US'
+	);
 
 	const product = marketplaceSelectors.selectInventoryItemBySku(
 		state,
