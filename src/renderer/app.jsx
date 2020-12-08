@@ -29,6 +29,7 @@ import ConnectingToLedger from './wallet/unlock/ledger/connecting';
 import { SelfKeyIdCreateForm } from './selfkey-id/main/components/selfkey-id-create-form';
 import AutoUpdate from './auto-update/auto-update-contatiner';
 import AutoUpdateProgress from './auto-update/auto-update-progress-contatiner';
+import ApproveSessionContainer from './wallet-connect/approve-session-container';
 
 const log = new Logger('AppComponent');
 
@@ -80,6 +81,10 @@ class AppContainerComponent extends PureComponent {
 					<Route path="/selfkeyIdForm" component={SelfKeyIdCreateForm} />
 					<Route path="/auto-update" component={AutoUpdate} />
 					<Route path="/auto-update-progress" component={AutoUpdateProgress} />
+					<Route
+						path="/wallet-connect/approve-session"
+						component={ApproveSessionContainer}
+					/>
 				</Switch>
 			</ConnectedRouter>
 		);
