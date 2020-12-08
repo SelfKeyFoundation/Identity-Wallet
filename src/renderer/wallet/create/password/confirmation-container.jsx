@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 
 import { getGlobalContext } from 'common/context';
 import PasswordConfirmation from './confirmation-component';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const goBackCreatePassword = React.forwardRef((props, ref) => (
 	<Link to="/createPassword" {...props} ref={ref} />
@@ -29,6 +30,10 @@ class PasswordConfirmationContainer extends PureComponent {
 	handleNext = async e => {
 		e && e.preventDefault();
 		if (this.props.firstPassword === this.state.password) {
+			if (featureIsEnabled('hdWallet')) {
+				await this.props.dispatch(push('/backupHDWallet'));
+				return;
+			}
 			getGlobalContext().matomoService.trackEvent(
 				'wallet_setup',
 				'password_create',

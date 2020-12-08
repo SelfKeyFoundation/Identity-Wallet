@@ -15,6 +15,8 @@ import CreatePassword from './wallet/create/password';
 import NoConnection from './no-connection';
 import PasswordConfirmation from './wallet/create/password/confirmation-container';
 import BackupAddress from './wallet/create/backup-address';
+import BackupHDWallet from './wallet/create/backup-hd-container';
+import ConfirmHDWallet from './wallet/create/confirm-hd-container';
 import BackupPK from './wallet/create/backup-pk';
 import Main from './wallet/main';
 import Unlock from './wallet/unlock';
@@ -68,6 +70,8 @@ class AppContainerComponent extends PureComponent {
 					<Route path="/createPasswordConfirmation" component={PasswordConfirmation} />
 					<Route path="/backupAddress" component={BackupAddress} />
 					<Route path="/backupPrivateKey" component={BackupPK} />
+					<Route path="/backupHDWallet" component={BackupHDWallet} />
+					<Route path="/confirmHDWallet" component={ConfirmHDWallet} />
 					<Route path="/main" component={Main} />
 					<Route path="/unlockWallet" component={Unlock} />
 					<Route path="/enterTrezorPin" component={EnterPin} />

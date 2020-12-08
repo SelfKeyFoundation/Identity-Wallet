@@ -11,6 +11,7 @@ export const handlePassword = (event, state) => {
 		4: 'Strong'
 	};
 	const newPassword = event.target.value;
+	console.log(newPassword);
 	const score = zxcvbn(newPassword).score;
 
 	const normalizedScore = ((score - 0) * 100) / (4 - 0);
