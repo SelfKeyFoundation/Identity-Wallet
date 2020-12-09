@@ -168,6 +168,9 @@ function onReady() {
 				ctx.rpcHandler[actionName](event, actionId, actionName, args);
 			}
 		});
+		if (featureIsEnabled('deepLinks')) {
+			ctx.deepLinksService.registerDeepLinks();
+		}
 	};
 }
 
@@ -202,6 +205,8 @@ async function loadIdentity(ctx) {
 function onWindowAllClosed() {
 	return () => {
 		log.debug('all windows closed, quitting');
+		const ctx = getGlobalContext();
+		ctx.walletConnectService.killSession();
 		return electron.app.quit();
 	};
 }
