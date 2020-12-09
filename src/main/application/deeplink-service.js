@@ -24,7 +24,7 @@ export class DeepLinksService {
 			const urlRegexp = /^[^:/]*:\/\/([^/]*)\/(.*)$/;
 			const match = (url || '').match(urlRegexp);
 			if (!match || match.length !== 3) {
-				log.info('invalid deepl ink format');
+				log.info('invalid deep link format');
 				return;
 			}
 			if (!this.handlers[match[1]]) {
