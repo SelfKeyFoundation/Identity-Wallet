@@ -9,6 +9,9 @@ const useStyles = makeStyles({
 		width: 50,
 		height: 50,
 		background: 'transparent'
+	},
+	actions: {
+		marginTop: 20
 	}
 });
 
@@ -51,7 +54,7 @@ export const ApproveSessionComponent = ({
 						<Typography variant="body1">Current address is {address}</Typography>
 					</Grid>
 				)}
-				<Grid item>
+				<Grid item className={classes.actions}>
 					<Grid container direction="row" spacing={2}>
 						{!address && (
 							<Grid item>

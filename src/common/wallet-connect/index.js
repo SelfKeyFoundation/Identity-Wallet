@@ -10,10 +10,14 @@ let hardwalletConfirmationTimeout = null;
 export const walletConnectInitialState = {
 	hasSessionRequest: false,
 	hasSignRequest: false,
+	hasTxRequest: false,
 	peerMeta: {},
 	peerId: null,
 	requestId: null,
-	message: null
+	message: null,
+	tx: {},
+	method: null,
+	rawTx: null
 };
 
 export const walletConnectTypes = {
@@ -24,6 +28,9 @@ export const walletConnectTypes = {
 	WALLET_CONNECT_SIGN_MESSAGE_OPERATION: 'wallet-connect/message/operation/SIGN',
 	WALLET_CONNECT_SIGN_MESSAGE_DENY_OPERATION: 'wallet-connect/message/operation/SIGN_DENY',
 	WALLET_CONNECT_SIGN_MESSAGE_APPROVE_OPERATION: 'wallet-connect/message/operation/SIGN_APPROVE',
+	WALLET_CONNECT_TRANSACTION_OPERATION: 'wallet-connect/transaction/operation/REQUEST',
+	WALLET_CONNECT_TRANSACTION_DENY_OPERATION: 'wallet-connect/transaction/operation/DENY',
+	WALLET_CONNECT_TRANSACTION_APPROVE_OPERATION: 'wallet-connect/transaction/operation/APPROVE',
 	WALLET_CONNECT_SESSION_SET: 'wallet-connect/session/SET',
 	WALLET_CONNECT_SESSION_RESET: 'wallet-connect/session/RESET'
 };
@@ -144,7 +151,102 @@ export const operations = {
 						await dispatch(push('/main/hd-error'));
 					}
 				}
-				throw error;
+				walletConnectService.rejectRequest(wc.requestId, error);
+				return;
+			}
+
+			walletConnectService.approveRequest(wc.requestId, result);
+			await dispatch(walletConnectOperations.resetSessionAction());
+			await dispatch(push('/main/dashboard'));
+		} catch (error) {
+			log.error(error);
+			throw error;
+		}
+	},
+	transactionOperation: (requestId, peerMeta, peerId, tx, method, rawTx) => async (
+		dispatch,
+		getState
+	) => {
+		const wallet = getWallet(getState());
+		if (!wallet) {
+			throw new Error('Cannot sign message without wallet');
+		}
+		await dispatch(operations.resetSessionAction());
+		await dispatch(
+			operations.setSessionAction({
+				hasTxRequest: true,
+				requestId,
+				peerMeta,
+				peerId,
+				tx,
+				method,
+				rawTx
+			})
+		);
+		await dispatch(push('/wallet-connect/transaction'));
+	},
+	transactionDenyOperation: () => async (dispatch, getState) => {
+		try {
+			const wc = walletConnectSelectors.selectWalletConnect(getState());
+			const { walletConnectService } = getGlobalContext();
+			walletConnectService.rejectRequest(wc.requestId);
+			await dispatch(walletConnectOperations.resetSessionAction());
+			await dispatch(push('/main/dashboard'));
+		} catch (error) {
+			log.error(error);
+			throw error;
+		}
+	},
+	transactionApproveOperation: () => async (dispatch, getState) => {
+		try {
+			const wc = walletConnectSelectors.selectWalletConnect(getState());
+			const wallet = getWallet(getState());
+			if (wallet.address.toLowerCase() !== wc.tx.from.toLowerCase()) {
+				throw new Error('invalid source address');
+			}
+			const walletType = wallet.profile;
+			const { walletConnectService, walletService } = getGlobalContext();
+			let result;
+			try {
+				if (walletType === 'ledger' || walletType === 'trezor') {
+					const hardwalletConfirmationTime = '30000';
+					hardwalletConfirmationTimeout = setTimeout(async () => {
+						clearTimeout(hardwalletConfirmationTimeout);
+						await dispatch(push('/main/hd-timeout'));
+					}, hardwalletConfirmationTime);
+					await dispatch(push('/main/hd-timer'));
+				}
+				if (wc.method === 'eth_sendTransaction') {
+					result = await new Promise((resolve, reject) => {
+						const res = walletService.sendTransaction(wc.rawTx);
+						res.on('transactionHash', hash => resolve(hash)).on('error', err =>
+							reject(err)
+						);
+					});
+				} else if (wc.method === 'eth_signTransaction') {
+					result = await walletService.signTransaction(wc.rawTx);
+				} else {
+					throw new Error('unsupported transaction method');
+				}
+				if (hardwalletConfirmationTimeout) {
+					clearTimeout(hardwalletConfirmationTimeout);
+				}
+			} catch (error) {
+				log.error(error);
+				if (walletType === 'ledger' || walletType === 'trezor') {
+					clearTimeout(hardwalletConfirmationTimeout);
+					if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
+						await dispatch(push('/main/hd-declined'));
+					} else if (error.code === 'Failure_ActionCancelled') {
+						await dispatch(push('/main/hd-declined'));
+					} else if (error.statusText === 'UNKNOWN_ERROR') {
+						await dispatch(push('/main/hd-unlock'));
+					} else {
+						await dispatch(push('/main/hd-error'));
+					}
+				}
+				walletConnectService.rejectRequest(wc.requestId, error);
+				return;
 			}
 
 			walletConnectService.approveRequest(wc.requestId, result);
@@ -182,6 +284,18 @@ export const walletConnectOperations = {
 	signMessageApproveOperation: createAliasedAction(
 		walletConnectTypes.WALLET_CONNECT_SIGN_MESSAGE_APPROVE_OPERATION,
 		operations.signMessageApproveOperation
+	),
+	transactionOperation: createAliasedAction(
+		walletConnectTypes.WALLET_CONNECT_TRANSACTION_OPERATION,
+		operations.transactionOperation
+	),
+	transactionDenyOperation: createAliasedAction(
+		walletConnectTypes.WALLET_CONNECT_TRANSACTION_DENY_OPERATION,
+		operations.transactionDenyOperation
+	),
+	transactionApproveOperation: createAliasedAction(
+		walletConnectTypes.WALLET_CONNECT_TRANSACTION_APPROVE_OPERATION,
+		operations.transactionApproveOperation
 	)
 };
 

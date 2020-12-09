@@ -280,6 +280,10 @@ export class WalletService {
 		return this.web3Service.web3.eth.sendTransaction(transactionObject);
 	}
 
+	signTransaction(transactionObject) {
+		return this.web3Service.web3.eth.signTransaction(transactionObject);
+	}
+
 	async signPersonalMessage(wallet, msg) {
 		switch (wallet.profile) {
 			case 'ledger':
