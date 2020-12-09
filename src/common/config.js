@@ -162,7 +162,7 @@ const common = {
 		rewardToken: false,
 		keyfi: true,
 		hdWallet: false,
-		deepLinks: false
+		deepLinks: true
 	}
 };
 
@@ -243,7 +243,7 @@ const prod = {
 		rewardToken: false,
 		keyfi: true,
 		hdWallet: false,
-		deepLinks: false
+		deepLinks: true
 	},
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'
 };
