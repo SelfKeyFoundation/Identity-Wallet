@@ -74,7 +74,7 @@ export const operations = {
 
 		walletConnectService.rejectSession();
 		await dispatch(operations.resetSessionAction());
-		if (wallet) {
+		if (wallet && wallet.address) {
 			return dispatch(push('/main/dashboard'));
 		}
 
@@ -168,7 +168,7 @@ export const operations = {
 		getState
 	) => {
 		const wallet = getWallet(getState());
-		if (!wallet) {
+		if (!wallet || !wallet.address) {
 			throw new Error('Cannot sign message without wallet');
 		}
 		await dispatch(operations.resetSessionAction());
