@@ -1,13 +1,10 @@
 import React, { PureComponent } from 'react';
 import { Grid, Typography, Input, LinearProgress, Button } from '@material-ui/core';
+import { renderPasswordStrength } from './password-util';
 import { PasswordIcon } from 'selfkey-ui';
 import { withStyles } from '@material-ui/styles';
-import { Link } from 'react-router-dom';
-import { handlePassword, renderPasswordStrength } from './password-util';
-import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
-import { createWalletOperations } from 'common/create-wallet';
 import { Popup } from '../../../common';
+import { PropTypes } from 'prop-types';
 
 const styles = theme => ({
 	logoText: {
@@ -70,25 +67,19 @@ const styles = theme => ({
 	}
 });
 
-const gotBackHome = React.forwardRef((props, ref) => <Link to="/home" {...props} ref={ref} />);
-
-class Password extends PureComponent {
-	state = {
-		password: '',
-		passwordScore: 0,
-		strength: '',
-		error: ''
-	};
-
-	handleNext = () => {
-		this.props.dispatch(createWalletOperations.setPasswordAction(this.state.password));
-		this.props.dispatch(push('/createPasswordConfirmation'));
-	};
-
+class PasswordComponent extends PureComponent {
 	render() {
-		const { classes } = this.props;
+		const {
+			classes,
+			onNextClick,
+			onPasswordChange,
+			password,
+			strength,
+			passwordScore,
+			backComponent
+		} = this.props;
 		return (
-			<Popup closeComponent={gotBackHome} open displayLogo text="Step 1: Create Password">
+			<Popup closeComponent={backComponent} open displayLogo text="Step 1: Create Password">
 				<Grid
 					container
 					direction="row"
@@ -103,7 +94,7 @@ class Password extends PureComponent {
 						<Typography variant="body1" gutterBottom>
 							Protect your SelfKey Identity Wallet and Ethereum address with a
 							password. Your address is like a bank account number on the blockchain,
-							used to send and receive Ether or tokens. This password is required to
+							used to send and receive Ether or tokens. This password is isRequired to
 							unlock your wallet.
 						</Typography>
 						<br />
@@ -113,12 +104,12 @@ class Password extends PureComponent {
 							disableUnderline={true}
 							placeholder="Password"
 							type="password"
-							value={this.state.password}
-							onChange={e => this.setState(handlePassword(e, this.state))}
+							value={password}
+							onChange={onPasswordChange}
 							className={classes.passwordInput}
 							onKeyUp={event => {
 								if (event.keyCode === 13) {
-									this.handleNext();
+									onNextClick();
 								}
 							}}
 						/>
@@ -129,17 +120,17 @@ class Password extends PureComponent {
 						</Grid>
 						<LinearProgress
 							variant="determinate"
-							value={this.state.passwordScore}
+							value={passwordScore}
 							className={classes.passwordScore}
 						/>
-						{renderPasswordStrength(this.state.password, this.state.strength)}
+						{renderPasswordStrength(password, strength)}
 						<br />
 						<br />
 						<Button
 							id="pwdNext"
 							variant="contained"
-							disabled={this.state.password === ''}
-							onClick={this.handleNext}
+							disabled={password === ''}
+							onClick={onNextClick}
 							className={classes.next}
 							size="large"
 						>
@@ -152,8 +143,20 @@ class Password extends PureComponent {
 	}
 }
 
-const mapStateToProps = (state, props) => {
-	return {};
+export const Password = withStyles(styles)(PasswordComponent);
+
+Password.displayName = 'Password';
+Password.propTypes = {
+	onNextClick: PropTypes.func.isRequired,
+	onPasswordChange: PropTypes.func.isRequired,
+	password: PropTypes.string,
+	strength: PropTypes.string,
+	passwordScore: PropTypes.number,
+	backComponent: PropTypes.element
+};
+Password.defaultProps = {
+	password: '',
+	passwordScore: 0
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(Password));
+export default Password;

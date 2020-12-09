@@ -1,13 +1,15 @@
 import React, { PureComponent } from 'react';
 import { Grid, Typography, Paper, Divider } from '@material-ui/core';
 import { appOperations, appSelectors } from 'common/app';
+import { Subject as SubjectIcon } from '@material-ui/icons';
 import {
 	ExistingAddressIcon,
 	primaryTint,
 	NewAddressIcon,
 	KeyIcon,
 	LedgerIcon,
-	TrezorIcon
+	TrezorIcon,
+	primary
 } from 'selfkey-ui';
 import { withStyles } from '@material-ui/styles';
 import { Link, Route, Redirect, Switch } from 'react-router-dom';
@@ -16,9 +18,11 @@ import { push } from 'connected-react-router';
 import ExistingAddress from './existing-address';
 import NewAddress from './new-address';
 import PrivateKey from './private-key';
+import SeedPhrase from './seed-phrase';
 import Ledger from './ledger';
 import Trezor from './trezor';
 import { Popup } from '../../common';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({
 	divider: {
@@ -29,7 +33,12 @@ const styles = theme => ({
 		width: '960px'
 	},
 	unlockOptions: {
-		margin: '10px 0 40px'
+		margin: '10px 0 40px',
+		maxWidth: 530
+	},
+	seedIcon: {
+		marginTop: -10,
+		marginBottom: -5
 	}
 });
 
@@ -47,6 +56,11 @@ const unlockOptionStyle = theme => ({
 		cursor: 'pointer',
 		'&:hover': {
 			borderColor: primaryTint
+		},
+		'& svg': {
+			width: 40,
+			height: 40,
+			color: primary
 		}
 	},
 	body1: {
@@ -138,8 +152,9 @@ class Unlock extends PureComponent {
 						<Grid
 							container
 							direction="row"
-							justify="space-between"
+							justify="flex-start"
 							alignItems="center"
+							spacing={2}
 							className={classes.unlockOptions}
 						>
 							{wallets.length ? (
@@ -183,6 +198,20 @@ class Unlock extends PureComponent {
 								/>
 							</Grid>
 
+							{featureIsEnabled('hdWallet') && (
+								<Grid item id="privateKey">
+									<UnlockOptionWrapped
+										selected={selected === 5}
+										icon={<SubjectIcon className={classes.seedIcon} />}
+										title="Seed Phrase"
+										onClick={this.switchUnlockOptions(
+											'/unlockWallet/seedPhrase',
+											5
+										)}
+									/>
+								</Grid>
+							)}
+
 							<Grid item>
 								<UnlockOptionWrapped
 									selected={selected === 3}
@@ -215,6 +244,7 @@ class Unlock extends PureComponent {
 								<Route path={`${match.path}/privateKey`} component={PrivateKey} />
 								<Route path={`${match.path}/ledger`} component={Ledger} />
 								<Route path={`${match.path}/trezor`} component={Trezor} />
+								<Route path={`${match.path}/seedPhrase`} component={SeedPhrase} />
 								<Redirect
 									from={`${match.path}/`}
 									to={
