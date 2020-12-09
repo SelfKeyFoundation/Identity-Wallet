@@ -13,7 +13,7 @@ import Home from './home';
 import CreateWallet from './wallet/create';
 import CreatePassword from './wallet/create/password';
 import NoConnection from './no-connection';
-import PasswordConfirmation from './wallet/create/password/confirmation';
+import PasswordConfirmation from './wallet/create/password/confirmation-container';
 import BackupAddress from './wallet/create/backup-address';
 import BackupPK from './wallet/create/backup-pk';
 import Main from './wallet/main';
@@ -29,6 +29,9 @@ import ConnectingToLedger from './wallet/unlock/ledger/connecting';
 import { SelfKeyIdCreateForm } from './selfkey-id/main/components/selfkey-id-create-form';
 import AutoUpdate from './auto-update/auto-update-contatiner';
 import AutoUpdateProgress from './auto-update/auto-update-progress-contatiner';
+import ApproveSessionContainer from './wallet-connect/approve-session-container';
+import SignMessageContainer from './wallet-connect/sign-message-container';
+import TransactionContainer from './wallet-connect/transaction-container';
 
 const log = new Logger('AppComponent');
 
@@ -80,6 +83,12 @@ class AppContainerComponent extends PureComponent {
 					<Route path="/selfkeyIdForm" component={SelfKeyIdCreateForm} />
 					<Route path="/auto-update" component={AutoUpdate} />
 					<Route path="/auto-update-progress" component={AutoUpdateProgress} />
+					<Route
+						path="/wallet-connect/approve-session"
+						component={ApproveSessionContainer}
+					/>
+					<Route path="/wallet-connect/sign-message" component={SignMessageContainer} />
+					<Route path="/wallet-connect/transaction" component={TransactionContainer} />
 				</Switch>
 			</ConnectedRouter>
 		);

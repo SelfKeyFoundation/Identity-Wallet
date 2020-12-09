@@ -21,6 +21,7 @@ import { asValue } from 'awilix';
 import { featureIsEnabled } from 'common/feature-flags';
 import { walletOperations } from 'common/wallet';
 import { walletTokensOperations } from 'common/wallet-tokens';
+import { getWallet } from 'common/wallet/selectors';
 
 const log = new Logger('main');
 
@@ -97,6 +98,8 @@ function onReady() {
 			ctx.store.dispatch(pricesOperations.updatePrices(newPrices));
 		});
 		ctx.txHistoryService.on('new-transactions', () => {
+			const wallet = getWallet(store.getState());
+			if (!wallet.address) return;
 			ctx.store.dispatch(transactionHistoryOperations.loadTransactionsOperation());
 			ctx.store.dispatch(walletOperations.refreshWalletBalance());
 			ctx.store.dispatch(walletTokensOperations.refreshWalletTokensBalance());
@@ -165,6 +168,9 @@ function onReady() {
 				ctx.rpcHandler[actionName](event, actionId, actionName, args);
 			}
 		});
+		if (featureIsEnabled('deepLinks')) {
+			ctx.deepLinksService.registerDeepLinks();
+		}
 	};
 }
 
@@ -199,6 +205,8 @@ async function loadIdentity(ctx) {
 function onWindowAllClosed() {
 	return () => {
 		log.debug('all windows closed, quitting');
+		const ctx = getGlobalContext();
+		ctx.walletConnectService.killSession();
 		return electron.app.quit();
 	};
 }

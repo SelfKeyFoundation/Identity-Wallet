@@ -43,7 +43,7 @@ const SelfkeyIdSubheading = ({ email, did }) => (
 	<React.Fragment>
 		<Typography variant="subtitle1">{email}</Typography>
 		<br />
-		{featureIsEnabled('did') && did && (
+		{did && (
 			<Typography variant="subtitle1" color="secondary">
 				did:selfkey:{did}
 			</Typography>

@@ -1,4 +1,5 @@
 import { asClass, asValue, asFunction } from 'awilix';
+import electron from 'electron';
 import PriceService from './token/price-service';
 import ExchangesService from './exchanges/exchanges-service';
 import TxHistoryService from './blockchain/tx-history-service';
@@ -41,10 +42,13 @@ import { MatomoService } from './matomo/matomo-service';
 import { ContractService } from './blockchain/contracts/contract-service';
 import ContractSyncJobHandler from './blockchain/contracts/contracts-sync-job-handler';
 import ContractAllowanceService from './blockchain/contracts/contract-allowance-service';
+import DeepLinksService from './application/deeplink-service';
+import WalletConnectService from './wallet-connect/wallet-connect-service';
 
 export const registerMainServices = container => {
 	container.register({
 		app: asFunction(createApp).singleton(),
+		electron: asValue(electron),
 		networkService: asClass(NetworkService).singleton(),
 		schedulerService: asClass(SchedulerService).singleton(),
 		vendorService: asClass(VendorService).singleton(),
@@ -90,6 +94,8 @@ export const registerMainServices = container => {
 		marketplaceOrdersService: asClass(MarketplaceOrdersService).singleton(),
 		totleSwapService: asClass(TotleSwapService).singleton(),
 		currencyService: asClass(CurrencyService).singleton(),
-		matomoService: asClass(MatomoService).singleton()
+		matomoService: asClass(MatomoService).singleton(),
+		deepLinksService: asClass(DeepLinksService).singleton(),
+		walletConnectService: asClass(WalletConnectService).singleton()
 	});
 };
