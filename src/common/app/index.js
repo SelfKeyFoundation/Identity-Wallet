@@ -10,6 +10,7 @@ import { Logger } from 'common/logger';
 import { featureIsEnabled } from 'common/feature-flags';
 import { kycOperations } from '../kyc';
 import { schedulerOperations } from '../scheduler';
+import { createWalletOperations } from '../create-wallet';
 
 const log = new Logger('app-redux');
 
@@ -187,6 +188,7 @@ const unlockWalletOperation = (wallet, type) => async dispatch => {
 		throw error;
 	} finally {
 		dispatch(appActions.setSeedAction(null));
+		dispatch(createWalletOperations.setPasswordAction(''));
 		dispatch(appActions.setHardwareWalletsAction([]));
 	}
 };
@@ -233,10 +235,10 @@ const unlockWalletWithNewFile = (filePath, password) => async dispatch => {
 	}
 };
 
-const unlockWalletWithPrivateKey = privateKey => async dispatch => {
+const unlockWalletWithPrivateKey = (privateKey, password) => async dispatch => {
 	const walletService = getGlobalContext().walletService;
 	try {
-		const wallet = await walletService.unlockWalletWithPrivateKey(privateKey);
+		const wallet = await walletService.unlockWalletWithPrivateKey(privateKey, password);
 		await dispatch(appOperations.unlockWalletOperation(wallet, 'privateKey'));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {

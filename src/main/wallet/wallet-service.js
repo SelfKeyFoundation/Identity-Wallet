@@ -83,6 +83,13 @@ export class WalletService {
 		return wallet;
 	}
 
+	async updateKeystorePath(id, keystoreFilePath) {
+		return Wallet.updateKeyStorePath({
+			id,
+			keystoreFilePath
+		});
+	}
+
 	async createWalletWithPassword(password) {
 		const account = this.web3Service.createAccount(password);
 		this.web3Service.setDefaultAccount(account);
@@ -157,7 +164,8 @@ export class WalletService {
 		return newWallet;
 	}
 
-	async unlockWalletWithPrivateKey(privateKey) {
+	async unlockWalletWithPrivateKey(privateKey, password) {
+		console.log('XXX', privateKey);
 		if (!privateKey.startsWith('0x')) {
 			privateKey = Buffer.from(privateKey).toString('hex');
 		}
@@ -167,14 +175,19 @@ export class WalletService {
 		const account = this.web3Service.privateKeyToAccount(privateKey);
 
 		this.web3Service.setDefaultAccount(account);
-
+		let keystoreFilePath;
 		let wallet = await Wallet.findByPublicKey(account.address);
-
+		if ((!wallet && password) || (wallet && password && !wallet.keystoreFilePath)) {
+			keystoreFilePath = await this.saveAccountToKeystore(account, password);
+		}
 		if (!wallet) {
 			wallet = await this.createWallet({
 				address: account.address,
+				keystoreFilePath,
 				profile: 'local'
 			});
+		} else if (keystoreFilePath) {
+			wallet = await this.updateKeystorePath(wallet.id, keystoreFilePath);
 		}
 		const newWallet = {
 			...wallet,
