@@ -1,7 +1,7 @@
 {
 	"name": "selfkey-identity-wallet",
 	"productName": "SelfKey Identity Wallet",
-	"version": "1.7.8",
+	"version": "1.8.0",
 	"description": "The Official SelfKey Identity Wallet for Desktop",
 	"browser": [
 		"chrome"
@@ -79,6 +79,8 @@
 		"@material-ui/styles": "4.9.6",
 		"@sentry/electron": "0.17.1",
 		"@trodi/electron-splashscreen": "0.3.4",
+		"@walletconnect/client": "^1.3.1",
+		"@walletconnect/utils": "^1.3.1",
 		"ajv": "6.10.0",
 		"async": "2.6.2",
 		"awilix": "4.2.1",
@@ -147,6 +149,7 @@
 		"trezor-wallet-provider": "https://github.com/SelfKeyFoundation/trezor-wallet-provider.git#2a944494e6cd0ba507d5a4946d3d20d984548e60",
 		"trezor.js": "9.0.0",
 		"url-join": "4.0.0",
+		"walletconnect": "^1.3.1",
 		"web3": "1.2.11",
 		"web3-provider-engine": "15.0.4",
 		"ws": "7.0.0",
@@ -322,6 +325,14 @@
 				}
 			]
 		},
+		"protocols": [
+			{
+				"name": "Selfkey",
+				"schemes": [
+					"selfkey"
+				]
+			}
+		],
 		"win": {
 			"target": "nsis"
 		}
