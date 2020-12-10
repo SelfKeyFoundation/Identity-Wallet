@@ -117,6 +117,11 @@ export class Wallet extends BaseModel {
 		return wallet;
 	}
 
+	static async updateKeyStorePath({ id, keystoreFilePath }) {
+		let wallet = await this.query().patchAndFetchById(id, { keystoreFilePath });
+		return wallet;
+	}
+
 	async hasSignedUpTo(websiteUrl) {
 		let logins = await this.$relatedQuery('loginAttempts')
 			.where({
