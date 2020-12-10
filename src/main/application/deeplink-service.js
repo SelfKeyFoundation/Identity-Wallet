@@ -1,4 +1,6 @@
 import { Logger } from 'common/logger';
+import path from 'path';
+import { isDevMode } from '../../common/utils/common';
 const log = new Logger('DeepLinksService');
 
 export class DeepLinksService {
@@ -24,7 +26,7 @@ export class DeepLinksService {
 			const urlRegexp = /^[^:/]*:\/\/([^/]*)\/(.*)$/;
 			const match = (url || '').match(urlRegexp);
 			if (!match || match.length !== 3) {
-				log.info('invalid deepl ink format');
+				log.info('invalid deep link format');
 				return;
 			}
 			if (!this.handlers[match[1]]) {
@@ -39,18 +41,40 @@ export class DeepLinksService {
 	};
 
 	registerDeepLinks() {
-		const success = this.electron.app.setAsDefaultProtocolClient(this.config.protocol);
+		let success = false;
+		try {
+			if (isDevMode() && process.platform === 'win32') {
+				success = this.electron.app.setAsDefaultProtocolClient(
+					this.config.protocol,
+					process.execPath,
+					[path.resolve(process.argv[2])]
+				);
+			} else {
+				success = this.electron.app.setAsDefaultProtocolClient(this.config.protocol);
+			}
+			if (!success) {
+				const err = new Error('failed to registrer protocol');
+				log.error(err);
+				throw err;
+			}
 
-		if (!success) {
-			const err = new Error('failed to registrer protocol');
-			log.error(err);
-			throw err;
+			this.electron.app.on('second-instance', (e, argv = []) => {
+				e.preventDefault();
+				if (!argv.length) {
+					return;
+				}
+				if (process.platform === 'win32' || process.platform === 'linux') {
+					this.handleOpenLink(argv[argv.length - 1]);
+				}
+			});
+
+			this.electron.app.on('open-url', (evt, url) => {
+				evt.preventDefault();
+				this.handleOpenLink(url);
+			});
+		} catch (error) {
+			log.error(error);
 		}
-
-		this.electron.app.on('open-url', (evt, url) => {
-			evt.preventDefault();
-			this.handleOpenLink(url);
-		});
 	}
 }
 
