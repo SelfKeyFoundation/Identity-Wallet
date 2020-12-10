@@ -14,6 +14,7 @@ class CurrentApplicationComponent extends PureComponent {
 		showEditAttribute: false,
 		agreementError: false,
 		agreementValue: false,
+		blockedJurisdictionError: false,
 		editAttribute: {},
 		typeId: -1,
 		isDocument: false,
@@ -85,6 +86,37 @@ class CurrentApplicationComponent extends PureComponent {
 			return;
 		}
 
+		// Future improvement: Load blocked jurisdictions from vendor/product airtable
+		if (currentApplication.relyingPartyName === 'keyfi') {
+			const req = this.props.requirements.filter(
+				req =>
+					req.type.url ===
+						'http://platform.selfkey.org/schema/attribute/nationality.json' ||
+					req.type.url ===
+						'http://platform.selfkey.org/schema/attribute/country-of-residency.json'
+			);
+			const jurisdictionError = req.reduce((acc, curr) => {
+				if (acc) return acc;
+				const attribute = selected[`_${curr.uiId}`] || curr.options[0];
+				// Ignore optional empty attributes
+				if (!attribute && !curr.required) {
+					return false;
+				}
+				if (attribute.data.value.country === 'US') {
+					return true;
+				}
+				return false;
+			}, false);
+
+			if (jurisdictionError) {
+				this.setState({
+					blockedJurisdictionError:
+						'Apologies, the jurisdiction you selected is not currently eligible.'
+				});
+				return;
+			}
+		}
+
 		this.setState({ loading: true });
 		if (this.props.existingApplicationId) {
 			this.props.dispatch(push('/main/selfkeyIdApplications'));
@@ -107,10 +139,12 @@ class CurrentApplicationComponent extends PureComponent {
 		this.setState({ selected: { ...selected, [uiId]: item } });
 	};
 	handleEdit = (item, identityId) => {
+		const { selected } = this.state;
 		const attrName = `${identityId || ''}_${item.uiId}`;
 		this.setState({
 			showEditAttribute: true,
-			editAttribute: this.state.selected[attrName] || item.options[0]
+			editAttribute: selected[attrName] || item.options[0],
+			selected: { ...selected, [attrName]: null }
 		});
 	};
 	handleAdd = (item, identityId) => {
@@ -162,6 +196,7 @@ class CurrentApplicationComponent extends PureComponent {
 					addItem={this.handleAdd}
 					existingApplicationId={existingApplicationId}
 					loading={this.state.loading}
+					blockedJurisdictionError={this.state.blockedJurisdictionError}
 				/>
 				{this.state.showCreateAttribute && (
 					<CreateAttributeContainer

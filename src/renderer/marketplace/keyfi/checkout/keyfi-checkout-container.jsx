@@ -16,6 +16,7 @@ import { marketplaceSelectors } from 'common/marketplace';
 import { KeyFiCheckout } from './keyfi-checkout';
 import { MarketplaceKeyFiComponent } from '../common/marketplace-keyfi-component';
 import { identitySelectors } from 'common/identity';
+import { RESIDENCY_ATTRIBUTE, NATIONALITY_ATTRIBUTE } from 'common/identity/constants';
 
 const styles = theme => ({});
 const CRYPTOCURRENCY = config.constants.primaryToken;
@@ -150,6 +151,7 @@ class MarketplaceKeyFiCheckoutContainerComponent extends MarketplaceKeyFiCompone
 				onSelectCrypto={this.onSelectCrypto}
 				applicationStatus={this.getApplicationStatus()}
 				onStatusAction={this.onStatusActionClick}
+				isBlockedJurisdiction={this.props.isBlockedJurisdiction}
 			/>
 		);
 	}
@@ -161,6 +163,17 @@ const mapStateToProps = (state, props) => {
 	const primaryToken = { ...props, cryptoCurrency: config.constants.primaryToken };
 
 	const identity = identitySelectors.selectIdentity(state);
+
+	// Block US users
+	const residencyAndNationalityAttributes = identitySelectors.selectAttributesByUrl(state, {
+		identityId: identity.id,
+		attributeTypeUrls: [NATIONALITY_ATTRIBUTE, RESIDENCY_ATTRIBUTE]
+	});
+
+	const isBlockedJurisdiction = residencyAndNationalityAttributes.some(
+		attr => attr.data.value.country === 'US'
+	);
+
 	const product = marketplaceSelectors.selectInventoryItemBySku(
 		state,
 		'keyfi_kyc',
@@ -174,6 +187,7 @@ const mapStateToProps = (state, props) => {
 		product,
 		application,
 		identity,
+		isBlockedJurisdiction,
 		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
 		...getLocale(state),
 		...getFiatCurrency(state),
