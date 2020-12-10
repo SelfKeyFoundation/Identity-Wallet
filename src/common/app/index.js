@@ -74,7 +74,9 @@ export const appTypes = {
 	APP_UNLOCK_WALLET: 'app/unlock/wallet',
 	APP_SET_KEYSTORE_VALUE: 'app/keystore/SET',
 	LOAD_KEYSTORE_VALUE: 'app/keystore/LOAD',
-	APP_SEED_UNLOCK_START: 'app/seed/unlock'
+	APP_SEED_UNLOCK_START: 'app/seed/unlock',
+	APP_SEED_GENERATE: 'app/seed/generate',
+	APP_RESET: 'app/reset'
 };
 
 const appActions = {
@@ -132,6 +134,10 @@ const appActions = {
 	}),
 	setKeystoreValue: payload => ({
 		type: appTypes.APP_SET_KEYSTORE_VALUE,
+		payload
+	}),
+	resetAppAction: payload => ({
+		type: appTypes.APP_RESET,
 		payload
 	})
 };
@@ -280,6 +286,13 @@ const unlockWalletWithPublicKey = (address, path) => async (dispatch, getState) 
 		log.error(error);
 		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
+};
+
+const generateSeedPhraseOperation = () => async (dispatch, getState) => {
+	const { walletService } = getGlobalContext();
+	const seed = walletService.generateSeedPhrase();
+	await dispatch(appActions.setSeedAction(seed));
+	return seed;
 };
 
 const startSeedUnlockOperation = seed => async dispatch => {
@@ -482,7 +495,8 @@ const operations = {
 	installUpdate,
 	unlockWalletOperation,
 	loadKeystoreValue,
-	startSeedUnlockOperation
+	startSeedUnlockOperation,
+	generateSeedPhraseOperation
 };
 
 const appOperations = {
@@ -556,6 +570,10 @@ const appOperations = {
 	startSeedUnlockOperation: createAliasedAction(
 		appTypes.APP_SEED_UNLOCK_START,
 		operations.startSeedUnlockOperation
+	),
+	generateSeedPhraseOperation: createAliasedAction(
+		appTypes.APP_SEED_GENERATE,
+		operations.generateSeedPhraseOperation
 	)
 };
 
@@ -615,6 +633,10 @@ const setSeedReducer = (state, action) => {
 	return { ...state, seed: action.payload };
 };
 
+const appResetReducer = (state, action) => {
+	return { ...initialState };
+};
+
 const appReducers = {
 	setWalletsReducer,
 	setWalletsLoadingReducer,
@@ -629,7 +651,8 @@ const appReducers = {
 	setAutoUpdateProgressReducer,
 	setAutoUpdateDownloadedReducer,
 	setKeystoreValueReducer,
-	setSeedReducer
+	setSeedReducer,
+	appResetReducer
 };
 
 const reducer = (state = initialState, action) => {
@@ -662,6 +685,8 @@ const reducer = (state = initialState, action) => {
 			return appReducers.setAutoUpdateDownloadedReducer(state, action);
 		case appTypes.APP_SET_KEYSTORE_VALUE:
 			return appReducers.setKeystoreValueReducer(state, action);
+		case appTypes.APP_RESET:
+			return appReducers.appResetReducer(state, action);
 	}
 	return state;
 };

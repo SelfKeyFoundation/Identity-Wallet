@@ -1,21 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import BackupHDPhrase from './backup-hd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
+import { appOperations, appSelectors } from 'common/app';
 
 const goBackConfirmPassword = React.forwardRef((props, ref) => (
-	<Link to="/createPasswordConfirmation" {...props} ref={ref} />
+	<Link to="/home" {...props} ref={ref} />
 ));
 
 export const BackupHDWalletContainer = () => {
 	const [copied, setCopied] = useState(false);
 
 	const dispatch = useDispatch();
+	const seed = useSelector(appSelectors.selectSeed);
+
+	useEffect(
+		() => {
+			if (!seed) {
+				dispatch(appOperations.generateSeedPhraseOperation());
+			}
+		},
+		[seed]
+	);
 
 	const handleCancel = e => {
 		e.preventDefault();
-		dispatch(push('/createPasswordConfirmation'));
+		dispatch(push('/home'));
 	};
 
 	const handleNext = e => {
@@ -30,9 +41,7 @@ export const BackupHDWalletContainer = () => {
 	return (
 		<BackupHDPhrase
 			copied={copied}
-			seedPhrase={'end artist warrior civil pool average afford hour episode relief pluck that'.split(
-				' '
-			)}
+			seedPhrase={(seed || '').split(' ')}
 			backComponent={goBackConfirmPassword}
 			onCancelClick={handleCancel}
 			onNextClick={handleNext}

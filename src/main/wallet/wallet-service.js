@@ -256,6 +256,10 @@ export class WalletService {
 		return this._getWallets(page, accountsQuantity, 'trezor');
 	}
 
+	generateSeedPhrase() {
+		return HDWallet.generateMnemonic();
+	}
+
 	async getHDWalletAccounts(seed, offset, limit) {
 		const wallet = await HDWallet.createFromMnemonic(seed);
 		const accounts = wallet.getAccounts(offset, limit);

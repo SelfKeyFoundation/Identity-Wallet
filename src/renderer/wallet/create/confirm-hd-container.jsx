@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import _ from 'lodash';
 import ConfirmHDPhrase from './confirm-hd';
-import { useDispatch /*, useSelector */ } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
-// import { appSelectors } from 'common/app';
+import { appSelectors, appOperations } from 'common/app';
 
 const goBackConfirmPassword = React.forwardRef((props, ref) => (
 	<Link to="/backupHDWallet" {...props} ref={ref} />
 ));
 
 export const ConfirmHDWalletContainer = () => {
+	const seed = useSelector(appSelectors.selectSeed);
+
 	const [selected, setSelected] = useState([]);
-	const [shuffled] = useState([]);
-	const [error] = useState(null);
+	const [shuffled] = useState(_.shuffle((seed || '').split(' ')));
+	const [error, setError] = useState(null);
 
 	// const seed = useSelector(appSelectors.selectSeedPhrase);
 
@@ -25,8 +28,19 @@ export const ConfirmHDWalletContainer = () => {
 
 	const handleNext = e => {
 		e.preventDefault();
+		let newError = null;
+		if (seed !== selected.join(' ')) {
+			newError = 'Incorrect seed phrase';
+		}
 
-		// dispatch(push('/main/dashboard"'))
+		setError(newError);
+
+		if (newError) {
+			setSelected([]);
+			return;
+		}
+
+		dispatch(appOperations.startSeedUnlockOperation(seed));
 	};
 
 	const handleClear = () => {
