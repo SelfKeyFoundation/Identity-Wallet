@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, List, ListItem, Typography, Divider } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
-import { PaymentIcon, Copy } from 'selfkey-ui';
+import { PaymentIcon, Copy, primary } from 'selfkey-ui';
 
 const styles = theme => ({
 	address: {
@@ -32,6 +32,11 @@ const styles = theme => ({
 		'& a': {
 			textDecoration: 'none',
 			color: '#FFFFFF'
+		},
+		'& a:hover': {
+			'& p': {
+				color: primary
+			}
 		}
 	},
 	exchanges: {

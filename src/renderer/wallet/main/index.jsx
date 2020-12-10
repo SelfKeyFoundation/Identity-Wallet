@@ -57,6 +57,8 @@ import { ContractAllowanceListContainer } from '../../contract/allowance-list/al
 import { AllowanceEditorContainer } from '../../contract/allowance-editor/allowance-editor-container';
 import { TransactionProcessingContainer } from '../../contract/allowance-editor/transaction-processing-container';
 import { TransactionErrorContainer } from '../../contract/allowance-editor/transaction-error-container';
+import { walletConnectSelectors } from '../../../common/wallet-connect';
+import { push } from 'connected-react-router';
 
 const styles = theme => ({
 	headerSection: {
@@ -90,10 +92,14 @@ class Main extends PureComponent {
 		);
 	};
 	async componentDidMount() {
+		this.setMatomoId();
+		if (this.props.hasWalletConnectSessionRequest) {
+			await this.props.dispatch(push('/wallet-connect/approve-session'));
+			return;
+		}
 		await this.props.dispatch(walletTokensOperations.loadWalletTokens());
 		await this.props.dispatch(marketplaceOperations.loadMarketplaceOperation());
 		await this.props.dispatch(exchangesOperations.loadListingExchangesOperation());
-		this.setMatomoId();
 	}
 
 	render() {
@@ -321,6 +327,7 @@ class Main extends PureComponent {
 
 const mapStateToProps = (state, props) => {
 	return {
+		hasWalletConnectSessionRequest: walletConnectSelectors.hasSessionRequest(state),
 		isCorporate: identitySelectors.isCorporateIdentity(state),
 		isIndividual: identitySelectors.isIndividualIdentity(state),
 		address: walletSelectors.getWallet(state).address,
