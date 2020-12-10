@@ -304,6 +304,20 @@ export class Web3Service extends EventEmitter {
 		return this.getTransactionStatus(tx);
 	}
 
+	async getNextNonce(address, opt) {
+		opt = opt || {};
+		let block = 'pending';
+
+		if (opt.block) {
+			block = opt.block;
+		}
+
+		let nonce = await this.web3.eth.getTransactionCount(address, block);
+		if (nonce <= this.nonce) {
+			return this.nonce;
+		}
+	}
+
 	async sendSignedTransaction(contactMethodInstance, contractAdress, args, wallet) {
 		let opts = { ...(args || [])[0] };
 		if (!opts.from) {
@@ -333,10 +347,7 @@ export class Web3Service extends EventEmitter {
 			});
 		}
 		let data = contactMethodInstance.encodeABI();
-		let nonce = await this.web3.eth.getTransactionCount(opts.from, 'pending');
-		if (nonce === this.nonce) {
-			nonce++;
-		}
+		let nonce = await this.getNextNonce();
 		let rawTx = {
 			nonce: this.web3.utils.toHex(nonce),
 			to: contractAdress,

@@ -1,18 +1,19 @@
 import WalletConnect from '@walletconnect/client';
-import { convertHexToNumber } from '@walletconnect/utils';
 import { Logger } from 'common/logger';
 import { walletConnectOperations } from '../../common/wallet-connect';
 import { Identity } from '../platform/identity';
 import { getWallet } from '../../common/wallet/selectors';
 import { identitySelectors } from 'common/identity';
+import EthUtils from '../../common/utils/eth-utils';
 const log = new Logger('WalletConnectService');
 
 export class WalletConnectService {
 	HANDLER_NAME = 'wallet-connect';
 
-	constructor({ config, store }) {
+	constructor({ config, store, web3Service }) {
 		this.config = config;
 		this.store = store;
+		this.web3Service = web3Service;
 	}
 
 	async handleUrlCommand(cmd) {
@@ -100,14 +101,13 @@ export class WalletConnectService {
 		);
 	}
 
-	handleTransaction({ id, method, params }) {
+	async handleTransaction({ id, method, params }) {
 		const rawTx = params[0];
-
+		rawTx.nonce = await this.web3Service.getNextNonce(rawTx.from);
 		const tx = { ...rawTx };
-		tx.gas = convertHexToNumber(tx.gas);
-		tx.gasPrice = convertHexToNumber(tx.gasPrice);
-		tx.nonce = convertHexToNumber(tx.nonce || '');
-		tx.value = convertHexToNumber(tx.value || '');
+		tx.gas = EthUtils.hexToDecimal(tx.gas);
+		tx.gasPrice = EthUtils.hexToDecimal(tx.gasPrice);
+		if (tx.value) tx.value = EthUtils.hexToDecimal(tx.value);
 
 		this.store.dispatch(
 			walletConnectOperations.transactionOperation(
