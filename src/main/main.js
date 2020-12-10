@@ -58,9 +58,10 @@ if (!gotTheLock) {
 } else {
 	electron.app.on('second-instance', (event, commandLine, workingDirectory) => {
 		// Someone tried to run a second instance, we should focus our window.
-		if (electron.app.win) {
-			if (electron.app.win.isMinimized()) electron.app.win.restore();
-			electron.app.win.focus();
+		const { mainWindow } = getGlobalContext();
+		if (mainWindow) {
+			if (mainWindow.isMinimized()) mainWindow.restore();
+			mainWindow.focus();
 		}
 	});
 }
