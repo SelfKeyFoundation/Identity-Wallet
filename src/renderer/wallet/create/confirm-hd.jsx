@@ -159,6 +159,10 @@ class ConfirmDPhraseComponent extends PureComponent {
 											variant="contained"
 											onClick={onNextClick}
 											className={classes.next}
+											disabled={
+												selectedSeedPhrase.length !==
+												shuffledSeedPhrase.length
+											}
 											size="large"
 										>
 											Continue
