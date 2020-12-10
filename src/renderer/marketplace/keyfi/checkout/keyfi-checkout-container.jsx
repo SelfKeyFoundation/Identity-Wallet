@@ -120,7 +120,9 @@ class MarketplaceKeyFiCheckoutContainerComponent extends MarketplaceKeyFiCompone
 	onStatusActionClick = () => {
 		const { rp } = this.props;
 		if (rp && rp.authenticated && this.userHasApplied()) {
-			if (this.applicationCompleted() || this.applicationWasRejected()) {
+			if (this.applicationCompleted()) {
+				window.openExternal(null, 'https://keyfi.com');
+			} else if (this.applicationWasRejected()) {
 				this.props.dispatch(push(this.manageApplicationsRoute()));
 			} else if (this.applicationRequiresAdditionalDocuments()) {
 				this.redirectToKYCC(rp);

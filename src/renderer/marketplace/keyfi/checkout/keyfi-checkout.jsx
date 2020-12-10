@@ -365,6 +365,7 @@ const KeyFiCheckout = withStyles(styles)(
 							statusAction={onStatusAction}
 							loading={loading}
 							barStyle={classes.barStyle}
+							completedButtonText={'visit keyfi.com'}
 						/>
 
 						<KeyFiHowServiceWorks classes={classes.howItWorks} />
