@@ -94,7 +94,7 @@ class PasswordComponent extends PureComponent {
 						<Typography variant="body1" gutterBottom>
 							Protect your SelfKey Identity Wallet and Ethereum address with a
 							password. Your address is like a bank account number on the blockchain,
-							used to send and receive Ether or tokens. This password is isRequired to
+							used to send and receive Ether or tokens. This password is required to
 							unlock your wallet.
 						</Typography>
 						<br />
