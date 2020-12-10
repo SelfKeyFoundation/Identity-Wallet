@@ -165,7 +165,6 @@ export class WalletService {
 	}
 
 	async unlockWalletWithPrivateKey(privateKey, password) {
-		console.log('XXX', privateKey);
 		if (!privateKey.startsWith('0x')) {
 			privateKey = Buffer.from(privateKey).toString('hex');
 		}
