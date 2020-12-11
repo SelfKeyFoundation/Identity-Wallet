@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core';
 import { GreenTickIcon } from 'selfkey-ui';
 
-const SelfkeyIdHistory = ({ attributeHistory }) => (
+const AttributeHistory = ({ attributeHistory }) => (
 	<Card>
 		<CardHeader title="ID Wallet History" />
 		<CardContent>
@@ -37,4 +37,4 @@ const SelfkeyIdHistory = ({ attributeHistory }) => (
 	</Card>
 );
 
-export default SelfkeyIdHistory;
+export default AttributeHistory;
