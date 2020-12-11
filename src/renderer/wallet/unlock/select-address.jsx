@@ -12,6 +12,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import { connect } from 'react-redux';
 import { appOperations, appSelectors } from 'common/app';
+import { createWalletSelectors } from 'common/create-wallet';
 import { push } from 'connected-react-router';
 import { Popup } from '../../common';
 
@@ -121,11 +122,21 @@ class SelectAddress extends PureComponent {
 		this.setState({
 			selectedAddress: event.target.value,
 			selected: index,
-			path: this.props.hardwareWallets[index].path
+			path: this.props.hardwareWallets[index].path,
+			selectedPrivateKey: this.props.hardwareWallets[index].privateKey
 		});
 	};
 
 	handleSelectedAddress = async () => {
+		if (this.state.selectedPrivateKey) {
+			await this.props.dispatch(
+				appOperations.unlockWalletWithPrivateKeyOperation(
+					this.state.selectedPrivateKey,
+					this.props.password
+				)
+			);
+			return;
+		}
 		await this.props.dispatch(
 			appOperations.unlockWalletWithPublicKeyOperation(
 				this.state.selectedAddress,
@@ -292,8 +303,10 @@ class SelectAddress extends PureComponent {
 
 const mapStateToProps = (state, props) => {
 	const app = appSelectors.selectApp(state);
+	const cp = createWalletSelectors.selectCreateWallet(state);
 	return {
-		hardwareWallets: app.hardwareWallets
+		hardwareWallets: app.hardwareWallets,
+		password: cp.password
 	};
 };
 

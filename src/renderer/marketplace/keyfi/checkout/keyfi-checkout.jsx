@@ -4,6 +4,7 @@ import { Grid, Typography, Button } from '@material-ui/core';
 import { MarketplaceKycRequirements } from '../../common/marketplace-kyc-requirements';
 import { BackButton, DefiIcon } from 'selfkey-ui';
 import { ApplicationStatusBar } from '../../../kyc/application/application-status';
+import { BlockedJurisdiction } from '../../common/blocked-jurisdiction';
 
 const styles = theme => ({
 	pageContent: {
@@ -249,7 +250,8 @@ const KeyFiCheckout = withStyles(styles)(
 		cryptoCurrency,
 		applicationStatus,
 		onStatusAction,
-		primaryToken
+		primaryToken,
+		isBlockedJurisdiction
 	}) => (
 		<Grid container>
 			<Grid item className={classes.backButtonContainer}>
@@ -305,7 +307,9 @@ const KeyFiCheckout = withStyles(styles)(
 										variant="contained"
 										size="large"
 										onClick={onStartClick}
-										disabled={!!applicationStatus || loading}
+										disabled={
+											!!applicationStatus || loading || isBlockedJurisdiction
+										}
 										className={classes.ctabutton}
 									>
 										<DefiIcon width="24px" height="24px" />
@@ -352,11 +356,16 @@ const KeyFiCheckout = withStyles(styles)(
 							</Grid>
 						</Grid>
 
+						{isBlockedJurisdiction && (
+							<BlockedJurisdiction text="Apologies, the jurisdiction you selected is not currently eligible for a KeyFi credential." />
+						)}
+
 						<ApplicationStatusBar
 							status={applicationStatus}
 							statusAction={onStatusAction}
 							loading={loading}
 							barStyle={classes.barStyle}
+							completedButtonText={'visit keyfi.com'}
 						/>
 
 						<KeyFiHowServiceWorks classes={classes.howItWorks} />

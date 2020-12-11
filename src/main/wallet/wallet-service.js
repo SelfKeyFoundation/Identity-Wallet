@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import EthUnits from 'common/utils/eth-units';
 import * as EthUtil from 'ethereumjs-util';
+import { HDWallet } from './hd-wallet';
 
 const log = new Logger('wallet-service');
 export class WalletService {
@@ -82,6 +83,13 @@ export class WalletService {
 		return wallet;
 	}
 
+	async updateKeystorePath(id, keystoreFilePath) {
+		return Wallet.updateKeyStorePath({
+			id,
+			keystoreFilePath
+		});
+	}
+
 	async createWalletWithPassword(password) {
 		const account = this.web3Service.createAccount(password);
 		this.web3Service.setDefaultAccount(account);
@@ -156,7 +164,7 @@ export class WalletService {
 		return newWallet;
 	}
 
-	async unlockWalletWithPrivateKey(privateKey) {
+	async unlockWalletWithPrivateKey(privateKey, password) {
 		if (!privateKey.startsWith('0x')) {
 			privateKey = Buffer.from(privateKey).toString('hex');
 		}
@@ -166,14 +174,19 @@ export class WalletService {
 		const account = this.web3Service.privateKeyToAccount(privateKey);
 
 		this.web3Service.setDefaultAccount(account);
-
+		let keystoreFilePath;
 		let wallet = await Wallet.findByPublicKey(account.address);
-
+		if ((!wallet && password) || (wallet && password && !wallet.keystoreFilePath)) {
+			keystoreFilePath = await this.saveAccountToKeystore(account, password);
+		}
 		if (!wallet) {
 			wallet = await this.createWallet({
 				address: account.address,
+				keystoreFilePath,
 				profile: 'local'
 			});
+		} else if (keystoreFilePath) {
+			wallet = await this.updateKeystorePath(wallet.id, keystoreFilePath);
 		}
 		const newWallet = {
 			...wallet,
@@ -255,12 +268,62 @@ export class WalletService {
 		return this._getWallets(page, accountsQuantity, 'trezor');
 	}
 
+	generateSeedPhrase() {
+		return HDWallet.generateMnemonic();
+	}
+
+	async getHDWalletAccounts(seed, offset, limit) {
+		const wallet = await HDWallet.createFromMnemonic(seed);
+		const accounts = wallet.getAccounts(offset, limit);
+
+		const promises = accounts.map(async a => {
+			const balanceInWei = await this.web3Service.web3.eth.getBalance(a.address);
+
+			return {
+				...a,
+				balance: EthUnits.toEther(balanceInWei, 'wei')
+			};
+		});
+
+		return Promise.all(promises);
+	}
+
 	estimateGas(transactionObject) {
 		return this.web3Service.web3.eth.estimateGas(transactionObject);
 	}
 
 	sendTransaction(transactionObject) {
 		return this.web3Service.web3.eth.sendTransaction(transactionObject);
+	}
+
+	signTransaction(transactionObject) {
+		return this.web3Service.web3.eth.signTransaction(transactionObject);
+	}
+
+	async signPersonalMessage(wallet, msg) {
+		switch (wallet.profile) {
+			case 'ledger':
+				const data = { from: wallet.address, data: msg.replace('0x', '') };
+				const ledgerSignature = await new Promise((resolve, reject) => {
+					this.web3Service.ledgerWalletSubProvider.signPersonalMessage(
+						data,
+						(err, msg) => {
+							if (err) return reject(err);
+							return resolve(msg);
+						}
+					);
+				});
+				return ledgerSignature;
+			case 'trezor':
+				const trezorSignature = await this.web3Service.trezorWalletSubProvider.signPersonalMessage(
+					wallet.address,
+					msg.replace('0x', '')
+				);
+				return EthUtil.addHexPrefix(trezorSignature.message.signature);
+			case 'local':
+			default:
+				return this.web3Service.web3.eth.personal.sign(msg, wallet.address);
+		}
 	}
 }
 

@@ -47,7 +47,8 @@ export const CurrentApplicationPopup = withStyles(styles)(
 		editItem,
 		addItem,
 		existingApplicationId,
-		loading = false
+		loading = false,
+		blockedJurisdictionError
 	}) => {
 		if (!relyingParty || !currentApplication || !requirements)
 			return (
@@ -137,6 +138,13 @@ export const CurrentApplicationPopup = withStyles(styles)(
 									  currentApplication.error.details.message
 									? currentApplication.error.details.message
 									: 'You must provide all required information to proceed. Please update any missing details.'}
+							</Typography>
+						</Grid>
+					) : null}
+					{blockedJurisdictionError ? (
+						<Grid item>
+							<Typography variant="body2" color="error">
+								Error: The jurisdiction you selected is not currently eligible.
 							</Typography>
 						</Grid>
 					) : null}
