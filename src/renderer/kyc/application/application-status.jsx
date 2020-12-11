@@ -23,24 +23,26 @@ const styles = theme => ({
 	}
 });
 
-export const ApplicationStatusCompleted = withStyles(styles)(({ classes, statusAction }) => (
-	<React.Fragment>
-		<Alert type="success" xtraClass={classes.alertWrap}>
-			<Grid item xs={9}>
-				<Typography variant="body2" color="secondary">
-					Your application was successful
-				</Typography>
-			</Grid>
-			{statusAction ? (
-				<Grid item xs={3} className={classes.payment}>
-					<Button variant="contained" onClick={statusAction}>
-						Manage Applications
-					</Button>
+export const ApplicationStatusCompleted = withStyles(styles)(
+	({ classes, statusAction, completedButtonText = 'Manage Applications' }) => (
+		<React.Fragment>
+			<Alert type="success" xtraClass={classes.alertWrap}>
+				<Grid item xs={9}>
+					<Typography variant="body2" color="secondary">
+						Your application was successful
+					</Typography>
 				</Grid>
-			) : null}
-		</Alert>
-	</React.Fragment>
-));
+				{statusAction ? (
+					<Grid item xs={3} className={classes.payment}>
+						<Button variant="contained" onClick={statusAction}>
+							{completedButtonText}
+						</Button>
+					</Grid>
+				) : null}
+			</Alert>
+		</React.Fragment>
+	)
+);
 
 export const ApplicationStatusRejected = withStyles(styles)(({ classes, statusAction }) => (
 	<React.Fragment>
@@ -117,7 +119,15 @@ const statusComponent = {
 };
 
 export const ApplicationStatusBar = withStyles(styles)(
-	({ classes, status, contact, statusAction, loading = false, barStyle }) => {
+	({
+		classes,
+		status,
+		contact,
+		statusAction,
+		loading = false,
+		barStyle,
+		completedButtonText = 'Manage Applications'
+	}) => {
 		if (!statusComponent.hasOwnProperty(status) || loading) {
 			return null;
 		}
@@ -130,7 +140,11 @@ export const ApplicationStatusBar = withStyles(styles)(
 				alignItems="flex-start"
 				className={`${classes.status} ${barStyle}`}
 			>
-				<StatusComponent contact={contact} statusAction={statusAction} />
+				<StatusComponent
+					contact={contact}
+					statusAction={statusAction}
+					completedButtonText={completedButtonText}
+				/>
 			</Grid>
 		);
 	}

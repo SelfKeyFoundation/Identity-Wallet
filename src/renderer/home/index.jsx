@@ -69,6 +69,7 @@ const unlockWalletLink = React.forwardRef((props, ref) => (
 ));
 class Home extends PureComponent {
 	componentDidMount() {
+		this.props.dispatch(appOperations.resetAppAction());
 		this.props.dispatch(appOperations.loadWalletsOperation());
 		this.props.dispatch(tokensOperations.loadTokensOperation());
 	}

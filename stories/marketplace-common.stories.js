@@ -19,6 +19,7 @@ import MarketplaceDIDRequired from '../src/renderer/marketplace/selfkey-did-requ
 import KeyFiWidget from '../src/renderer/marketplace/keyfi/widget/keyfi-widget';
 import KeyFiCheckout from '../src/renderer/marketplace/keyfi/checkout/keyfi-checkout';
 import KeyFiPaymentComplete from '../src/renderer/marketplace/keyfi/checkout/keyfi-payment-complete';
+import { BlockedJurisdiction } from '../src/renderer/marketplace/common/blocked-jurisdiction';
 import KYCRequirementData from './__fixtures__/kyc-requirements-data';
 
 const paymentCheckoutData = {
@@ -67,6 +68,13 @@ storiesOf('Marketplace Common', module)
 			onConfirm={action('did confirm')}
 			onEnterDid={action('did associate')}
 			onClose={action('did close')}
+		/>
+	))
+	.add('Blocked Jurisdiction', () => (
+		<BlockedJurisdiction
+			text="Apologies, the jurisdiction you selected is not currently eligible for a KeyFi credential. "
+			onActionClick={action('blocked jurisdiction button click')}
+			actionButtonText="Action Button"
 		/>
 	));
 

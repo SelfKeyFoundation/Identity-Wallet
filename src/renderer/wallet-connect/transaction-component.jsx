@@ -10,6 +10,10 @@ const useStyles = makeStyles({
 		height: 50,
 		background: 'transparent'
 	},
+	data: {
+		width: 300,
+		overflowWrap: 'break-word'
+	},
 	actions: {
 		marginTop: 20
 	}
@@ -67,11 +71,12 @@ export const TransactionComponent = ({ onCancel, peerMeta, address, method, tx, 
 					</Grid>
 				)}
 				<Grid item>
-					<Typography variant="body1">Value: {tx.value} WEI</Typography>
+					<Typography variant="body1">Value: {tx.value || 0} WEI</Typography>
 				</Grid>
 				{!!tx.data && (
-					<Grid item>
-						<Typography variant="body1">Data: {tx.data}</Typography>
+					<Grid item className={classes.data}>
+						<Typography variant="h3">Data:</Typography>
+						<Typography variant="body1">{tx.data}</Typography>
 					</Grid>
 				)}
 

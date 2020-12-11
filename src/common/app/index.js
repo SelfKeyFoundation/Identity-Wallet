@@ -10,6 +10,7 @@ import { Logger } from 'common/logger';
 import { featureIsEnabled } from 'common/feature-flags';
 import { kycOperations } from '../kyc';
 import { schedulerOperations } from '../scheduler';
+import { createWalletOperations } from '../create-wallet';
 
 const log = new Logger('app-redux');
 
@@ -74,7 +75,9 @@ export const appTypes = {
 	APP_UNLOCK_WALLET: 'app/unlock/wallet',
 	APP_SET_KEYSTORE_VALUE: 'app/keystore/SET',
 	LOAD_KEYSTORE_VALUE: 'app/keystore/LOAD',
-	APP_SEED_UNLOCK_START: 'app/seed/unlock'
+	APP_SEED_UNLOCK_START: 'app/seed/unlock',
+	APP_SEED_GENERATE: 'app/seed/generate',
+	APP_RESET: 'app/reset'
 };
 
 const appActions = {
@@ -133,6 +136,10 @@ const appActions = {
 	setKeystoreValue: payload => ({
 		type: appTypes.APP_SET_KEYSTORE_VALUE,
 		payload
+	}),
+	resetAppAction: payload => ({
+		type: appTypes.APP_RESET,
+		payload
 	})
 };
 
@@ -181,6 +188,7 @@ const unlockWalletOperation = (wallet, type) => async dispatch => {
 		throw error;
 	} finally {
 		dispatch(appActions.setSeedAction(null));
+		dispatch(createWalletOperations.setPasswordAction(''));
 		dispatch(appActions.setHardwareWalletsAction([]));
 	}
 };
@@ -227,10 +235,10 @@ const unlockWalletWithNewFile = (filePath, password) => async dispatch => {
 	}
 };
 
-const unlockWalletWithPrivateKey = privateKey => async dispatch => {
+const unlockWalletWithPrivateKey = (privateKey, password) => async dispatch => {
 	const walletService = getGlobalContext().walletService;
 	try {
-		const wallet = await walletService.unlockWalletWithPrivateKey(privateKey);
+		const wallet = await walletService.unlockWalletWithPrivateKey(privateKey, password);
 		await dispatch(appOperations.unlockWalletOperation(wallet, 'privateKey'));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
@@ -280,6 +288,13 @@ const unlockWalletWithPublicKey = (address, path) => async (dispatch, getState) 
 		log.error(error);
 		await dispatch(appActions.setUnlockWalletErrorAction(message));
 	}
+};
+
+const generateSeedPhraseOperation = () => async (dispatch, getState) => {
+	const { walletService } = getGlobalContext();
+	const seed = walletService.generateSeedPhrase();
+	await dispatch(appActions.setSeedAction(seed));
+	return seed;
 };
 
 const startSeedUnlockOperation = seed => async dispatch => {
@@ -482,7 +497,8 @@ const operations = {
 	installUpdate,
 	unlockWalletOperation,
 	loadKeystoreValue,
-	startSeedUnlockOperation
+	startSeedUnlockOperation,
+	generateSeedPhraseOperation
 };
 
 const appOperations = {
@@ -556,6 +572,10 @@ const appOperations = {
 	startSeedUnlockOperation: createAliasedAction(
 		appTypes.APP_SEED_UNLOCK_START,
 		operations.startSeedUnlockOperation
+	),
+	generateSeedPhraseOperation: createAliasedAction(
+		appTypes.APP_SEED_GENERATE,
+		operations.generateSeedPhraseOperation
 	)
 };
 
@@ -615,6 +635,10 @@ const setSeedReducer = (state, action) => {
 	return { ...state, seed: action.payload };
 };
 
+const appResetReducer = (state, action) => {
+	return { ...initialState };
+};
+
 const appReducers = {
 	setWalletsReducer,
 	setWalletsLoadingReducer,
@@ -629,7 +653,8 @@ const appReducers = {
 	setAutoUpdateProgressReducer,
 	setAutoUpdateDownloadedReducer,
 	setKeystoreValueReducer,
-	setSeedReducer
+	setSeedReducer,
+	appResetReducer
 };
 
 const reducer = (state = initialState, action) => {
@@ -662,6 +687,8 @@ const reducer = (state = initialState, action) => {
 			return appReducers.setAutoUpdateDownloadedReducer(state, action);
 		case appTypes.APP_SET_KEYSTORE_VALUE:
 			return appReducers.setKeystoreValueReducer(state, action);
+		case appTypes.APP_RESET:
+			return appReducers.appResetReducer(state, action);
 	}
 	return state;
 };

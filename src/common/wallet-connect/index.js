@@ -105,11 +105,11 @@ export const operations = {
 		);
 		await dispatch(push('/wallet-connect/sign-message'));
 	},
-	signMessageDenyOperation: () => async (dispatch, getState) => {
+	signMessageDenyOperation: error => async (dispatch, getState) => {
 		try {
 			const wc = walletConnectSelectors.selectWalletConnect(getState());
 			const { walletConnectService } = getGlobalContext();
-			walletConnectService.rejectRequest(wc.requestId);
+			walletConnectService.rejectRequest(wc.requestId, error);
 			await dispatch(walletConnectOperations.resetSessionAction());
 			await dispatch(push('/main/dashboard'));
 		} catch (error) {
@@ -151,7 +151,7 @@ export const operations = {
 						await dispatch(push('/main/hd-error'));
 					}
 				}
-				walletConnectService.rejectRequest(wc.requestId, error);
+				await dispatch(walletConnectOperations.signMessageDenyOperation(error));
 				return;
 			}
 
@@ -185,11 +185,11 @@ export const operations = {
 		);
 		await dispatch(push('/wallet-connect/transaction'));
 	},
-	transactionDenyOperation: () => async (dispatch, getState) => {
+	transactionDenyOperation: error => async (dispatch, getState) => {
 		try {
 			const wc = walletConnectSelectors.selectWalletConnect(getState());
 			const { walletConnectService } = getGlobalContext();
-			walletConnectService.rejectRequest(wc.requestId);
+			walletConnectService.rejectRequest(wc.requestId, error);
 			await dispatch(walletConnectOperations.resetSessionAction());
 			await dispatch(push('/main/dashboard'));
 		} catch (error) {
@@ -245,7 +245,7 @@ export const operations = {
 						await dispatch(push('/main/hd-error'));
 					}
 				}
-				walletConnectService.rejectRequest(wc.requestId, error);
+				await dispatch(walletConnectOperations.transactionDenyOperation(error));
 				return;
 			}
 

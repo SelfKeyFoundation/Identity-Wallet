@@ -4,6 +4,7 @@ import { PasswordIcon } from 'selfkey-ui';
 import { withStyles } from '@material-ui/styles';
 import { Popup } from '../../common';
 import { PropTypes } from 'prop-types';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const styles = theme => ({
 	icon: {
@@ -42,6 +43,7 @@ class BackupHDPhraseComponent extends PureComponent {
 	render() {
 		const {
 			classes,
+			copied,
 			backComponent,
 			onNextClick,
 			onCancelClick,
@@ -87,14 +89,16 @@ class BackupHDPhraseComponent extends PureComponent {
 										<span key={w}>{w}</span>
 									))}
 								</div>
-								<Button
-									variant="text"
-									color="primary"
-									className={classes.copyButton}
-									onClick={onCopyPhrase}
-								>
-									COPY PHRASE
-								</Button>
+								<CopyToClipboard text={seedPhrase.join(' ')} onCopy={onCopyPhrase}>
+									<Button
+										variant="text"
+										color="primary"
+										className={classes.copyButton}
+										onClick={onCopyPhrase}
+									>
+										COPY PHRASE {copied && <span>- Copied</span>}
+									</Button>
+								</CopyToClipboard>
 							</Grid>
 							<Grid item>
 								<Typography variant="subtitle2" color="secondary">
@@ -146,10 +150,13 @@ export const BackupHDPhrase = withStyles(styles)(BackupHDPhraseComponent);
 
 BackupHDPhrase.displayName = 'BackupHDPhrase';
 BackupHDPhrase.propTypes = {
+	copied: PropTypes.bool,
+	seedPhrase: PropTypes.array.isRequired,
 	onNextClick: PropTypes.func.isRequired,
-
-	backComponent: PropTypes.element
+	backComponent: PropTypes.object
 };
-BackupHDPhrase.defaultProps = {};
+BackupHDPhrase.defaultProps = {
+	copied: false
+};
 
 export default BackupHDPhrase;
