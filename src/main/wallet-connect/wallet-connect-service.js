@@ -10,10 +10,34 @@ const log = new Logger('WalletConnectService');
 export class WalletConnectService {
 	HANDLER_NAME = 'wallet-connect';
 
-	constructor({ config, store, web3Service }) {
+	constructor({ config, store, mainWindow, web3Service }) {
 		this.config = config;
 		this.store = store;
+		this.mainWindow = mainWindow;
 		this.web3Service = web3Service;
+	}
+
+	focusWindow() {
+		if (this.mainWindow) {
+			if (this.mainWindow.isMinimized()) this.mainWindow.restore();
+
+			let attempts = 0;
+			let timeout = null;
+			const refocus = () => {
+				if ((this.mainWindow.isFocused() || attempts > 5) && timeout) {
+					clearTimeout(timeout);
+					timeout = null;
+					return;
+				}
+				this.mainWindow.setFocusable(true);
+				this.mainWindow.moveTop();
+				this.mainWindow.focus();
+				this.mainWindow.flashFrame(true);
+				attempts++;
+				timeout = setTimeout(refocus, 1000);
+			};
+			refocus();
+		}
 	}
 
 	async handleUrlCommand(cmd) {
@@ -41,7 +65,7 @@ export class WalletConnectService {
 
 			this.peerMeta = peerMeta;
 			this.peerId = peerId;
-
+			this.focusWindow();
 			this.store.dispatch(walletConnectOperations.sessionRequestOperation(peerId, peerMeta));
 		});
 
@@ -95,7 +119,7 @@ export class WalletConnectService {
 
 	handlePersonalSignRequest({ id, method, params }) {
 		const [message] = params;
-
+		this.focusWindow();
 		this.store.dispatch(
 			walletConnectOperations.signMessageOperation(id, this.peerMeta, this.peerId, message)
 		);
@@ -108,7 +132,7 @@ export class WalletConnectService {
 		tx.gas = EthUtils.hexToDecimal(tx.gas);
 		tx.gasPrice = EthUtils.hexToDecimal(tx.gasPrice);
 		if (tx.value) tx.value = EthUtils.hexToDecimal(tx.value);
-
+		this.focusWindow();
 		this.store.dispatch(
 			walletConnectOperations.transactionOperation(
 				id,
