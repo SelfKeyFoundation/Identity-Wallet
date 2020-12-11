@@ -241,6 +241,13 @@ export class TransactionFeeBoxComponent extends PureComponent {
 								Network Transaction Fee:
 							</span>
 						</Grid>
+						<Grid item>
+							<div>
+								<div>Slow</div>
+								<div>Average</div>
+								<div>Fast</div>
+							</div>
+						</Grid>
 						<Grid item>{this.renderActualTransactionFeeBox()}</Grid>
 					</Grid>
 				</Grid>

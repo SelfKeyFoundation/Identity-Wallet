@@ -31,7 +31,8 @@ import { NumberFormat, TransactionFeeBox, SelectDropdownIcon } from 'selfkey-ui'
 const styles = theme => ({
 	balance: {
 		color: '#fff',
-		fontWeight: 'bold'
+		fontWeight: 'bold',
+		marginLeft: '.5em'
 	},
 	selectAllAmountBtn: {
 		cursor: 'pointer',
@@ -134,7 +135,7 @@ const styles = theme => ({
 		lineHeight: '19px'
 	},
 	tabs: {
-		marginBottom: '50px'
+		marginBottom: '20px'
 	},
 
 	cryptoIcon: {
@@ -169,6 +170,50 @@ const styles = theme => ({
 		'& .feeTitle': {
 			display: 'table',
 			marginBottom: '5px'
+		}
+	},
+	transactionFeeContainer: {
+		display: 'grid',
+		gridTemplateColumns: 'max-content 1fr',
+		alignItems: 'center',
+		columnGap: '1em'
+	},
+	transactionFee: {
+		display: 'grid',
+		gridTemplateColumns: '1fr 1fr 1fr',
+		alignItems: 'center',
+
+		'& > div': {
+			padding: '1em',
+			color: '#00C0D9',
+			fontWeight: 'bold',
+			minHeight: '50px',
+			textAlign: 'left',
+			'& .amount-in-crypto': {
+				marginTop: '5px'
+			},
+			border: '1px solid #262F39',
+			borderRadius: '5px',
+			cursor: 'pointer',
+			'&:hover': {
+				border: '1px solid #aaa'
+			}
+		},
+		'& div.selected': {
+			border: '1px solid #00C0D9',
+			'&:hover': {
+				border: '1px solid #00C0D9'
+			}
+		},
+		'& div.amount-in-crypto': {
+			color: theme.palette.secondary.main,
+			fontSize: '13px'
+		},
+		'& .transactionFee': {
+			color: theme.palette.secondary.main
+		},
+		'& div.price:last-child': {
+			textAlign: 'right'
 		}
 	}
 });
@@ -362,6 +407,7 @@ class TransactionSendBoxContainer extends PureComponent {
 		let { cryptoCurrency } = this.state;
 		const title = 'Send/Receive ERC-20 Tokens';
 		const labelInputClass = `${addressError ? classes.errorColor : ''}`;
+		console.log(this.props);
 		return (
 			<TransactionBox closeAction={this.handleCancelAction} title={title}>
 				<div className={classes.tokenBottomSpace}>
@@ -404,7 +450,7 @@ class TransactionSendBoxContainer extends PureComponent {
 							<React.Fragment>
 								<div className={classes.bottomSpace}>
 									<Typography variant="body2" color="secondary">
-										Available:{' '}
+										Balance:
 										<span className={classes.balance}>
 											{this.props.balance}{' '}
 											{cryptoCurrency !== 'custom' ? cryptoCurrency : ''}
@@ -475,6 +521,28 @@ class TransactionSendBoxContainer extends PureComponent {
 									</span>
 								)}
 								<Divider className={classes.divider} />
+
+								<div className={classes.transactionFeeContainer}>
+									<div>
+										<span className={classes.networkTransactionFeeTitle}>
+											Network Transaction Fee:
+										</span>
+									</div>
+									<div className={classes.transactionFee}>
+										<div>
+											<span>Slow</span>
+											<span>{this.props.ethFee}</span>
+										</div>
+										<div>
+											<span>Average</span>
+											<span>{this.props.ethFee}</span>
+										</div>
+										<div>
+											<span>Fast</span>
+											<span>{this.props.ethFee}</span>
+										</div>
+									</div>
+								</div>
 
 								<TransactionFeeBox
 									changeGasLimitAction={this.withLock(this.handleGasLimitChange)}
