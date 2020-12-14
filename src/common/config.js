@@ -161,7 +161,7 @@ const common = {
 		contract: true,
 		rewardToken: false,
 		keyfi: true,
-		hdWallet: false,
+		hdWallet: true,
 		deepLinks: true
 	}
 };
@@ -242,7 +242,7 @@ const prod = {
 		exchangesMarketplace: false,
 		rewardToken: false,
 		keyfi: true,
-		hdWallet: false,
+		hdWallet: true,
 		deepLinks: true
 	},
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'
