@@ -161,7 +161,7 @@ const common = {
 		contract: true,
 		rewardToken: false,
 		keyfi: true,
-		hdWallet: false,
+		hdWallet: true,
 		deepLinks: true,
 		moonpay: false
 	}
@@ -244,7 +244,7 @@ const prod = {
 		exchangesMarketplace: false,
 		rewardToken: false,
 		keyfi: true,
-		hdWallet: false,
+		hdWallet: true,
 		deepLinks: true,
 		moonpay: false
 	},
