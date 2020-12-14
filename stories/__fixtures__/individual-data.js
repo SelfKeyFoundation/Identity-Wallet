@@ -189,3 +189,11 @@ export const dummyProfileWithoutDid = {
 		}
 	]
 };
+
+export const attributeHistory = [
+	{
+		id: 1,
+		timestamp: '2020-01-01 17:35:23',
+		action: 'Created'
+	}
+];

@@ -1,9 +1,12 @@
+/**
+ * NOT USED, KEPT HERE FOR FUTURE REFERENCE
+ */
 import React, { PureComponent } from 'react';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom';
 import history from 'common/store/history';
-import { Popup } from '../../../common';
+import { Popup } from '../../common';
 
 const styles = theme => ({
 	cancel: {
