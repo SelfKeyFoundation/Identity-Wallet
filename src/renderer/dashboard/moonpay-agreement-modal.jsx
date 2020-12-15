@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
 export const MoonpayAgreementModal = ({ onCloseClick, onAgreeClick, onLinkClick }) => {
 	const classes = useStyles();
 	return (
-		<Popup closeAction={onCloseClick} text="Moonpay Terms Agreement">
+		<Popup closeAction={onCloseClick} text="MoonPay Terms Agreement">
 			<Grid container direction="column" spacing={4}>
 				<Grid item>
 					<Typography variant="body1">Please read the following documents:</Typography>
@@ -59,7 +59,7 @@ export const MoonpayAgreementModal = ({ onCloseClick, onAgreeClick, onLinkClick 
 				</Grid>
 				<Grid item>
 					<Typography variant="subtitle" color="secondary" gutterBottom>
-						By clicking &#34;Agree with terms of Service&#34; you consent that you have
+						By clicking &#34;Agree to terms of Service&#34; you consent that you have
 						read and accept the terms.
 					</Typography>
 				</Grid>

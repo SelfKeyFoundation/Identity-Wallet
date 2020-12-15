@@ -109,7 +109,7 @@ export const BuyKeyModal = withStyles(styles)(
 										variant="contained"
 										onClick={onMoonpayClick}
 									>
-										Connect With Moonpay
+										Connect With MoonPay
 									</Button>
 								</Grid>
 								<Grid item>
