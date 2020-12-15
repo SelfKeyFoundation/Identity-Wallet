@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Typography, Button } from '@material-ui/core';
+import { Grid, Typography, Button, Divider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { Popup } from '../common';
 import { PropTypes } from 'prop-types';
@@ -16,11 +16,13 @@ export const MoonpayAgreementModal = ({ onCloseClick, onAgreeClick, onLinkClick 
 	const classes = useStyles();
 	return (
 		<Popup closeAction={onCloseClick} text="Moonpay Terms Agreement">
-			<Grid container direction="column" spacing={3}>
+			<Grid container direction="column" spacing={4}>
 				<Grid item>
-					<Typography variant="body1">
-						Please read and agree with MoonPay service agreement
-					</Typography>
+					<Typography variant="body1">Please read the following documents:</Typography>
+				</Grid>
+
+				<Grid item>
+					<Divider />
 				</Grid>
 				<Grid item>
 					<Typography variant="body1">
@@ -56,14 +58,23 @@ export const MoonpayAgreementModal = ({ onCloseClick, onAgreeClick, onLinkClick 
 					</Typography>
 				</Grid>
 				<Grid item>
+					<Typography variant="subtitle" color="secondary" gutterBottom>
+						By clicking &#34;Agree with terms of Service&#34; you consent that you have
+						read and accept the terms.
+					</Typography>
+				</Grid>
+				<Grid item>
+					<Divider />
+				</Grid>
+				<Grid item>
 					<Grid container direction="row" spacing={2}>
 						<Grid item>
-							<Button variant="contained" size="large" onClick={onAgreeClick}>
+							<Button variant="outlined" size="large" onClick={onAgreeClick}>
 								Agree to terms of service
 							</Button>
 						</Grid>
 						<Grid item>
-							<Button variant="outlined" size="large" onClick={onCloseClick}>
+							<Button variant="contained" size="large" onClick={onCloseClick}>
 								Cancel
 							</Button>
 						</Grid>
