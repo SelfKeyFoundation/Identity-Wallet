@@ -3,6 +3,7 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import BuyKeyWidget from '../src/renderer/dashboard/buy-key-widget';
 import BuyKeyModal from '../src/renderer/dashboard/buy-key-popup-modal';
+import MoonpayAgreementModal from '../src/renderer/dashboard/moonpay-agreement-modal';
 
 storiesOf('Buy Key/Dashboard Widget', module)
 	.add('default', () => (
@@ -39,3 +40,7 @@ storiesOf('Buy Key/Buy Key Popup', module)
 			onCloseClick={action('close')}
 		/>
 	));
+
+storiesOf('Buy Key/Moonpay/Moonpay', module).add('AgreementModal', () => (
+	<MoonpayAgreementModal onAgreeClick={action('agree')} onCloseClick={action('close')} />
+));
