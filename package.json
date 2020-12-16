@@ -135,7 +135,7 @@
 		"reselect": "4.0.0",
 		"sanitize-html": "1.20.0",
 		"scrypt": "6.0.3",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#f6189415d43dc4f1d90b2c6c2f76b2bd465ce9e5",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#7fd78160fb8204981debf30796bee6d69f6ec3f6",
 		"selfkey.js": "1.0.24",
 		"serialize-error": "3.0.0",
 		"snyk": "1.235.0",
@@ -260,7 +260,7 @@
 		"react": "16.13.1",
 		"react-dom": "16.13.1",
 		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#e8356d2037b527f7b0a8433f20c476b6e501d70e",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#f6189415d43dc4f1d90b2c6c2f76b2bd465ce9e5",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#7fd78160fb8204981debf30796bee6d69f6ec3f6",
 		"@material-ui/styles": "4.9.6"
 	},
 	"migrations": {

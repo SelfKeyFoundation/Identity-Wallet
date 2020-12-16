@@ -5,6 +5,7 @@ import BuyKeyWidget from '../src/renderer/dashboard/buy-key-widget';
 import BuyKeyModal from '../src/renderer/dashboard/buy-key-popup-modal';
 import MoonpayAgreementModal from '../src/renderer/dashboard/moonpay-agreement-modal';
 import PhoneVerificationModal from '../src/renderer/dashboard/phone-verification-modal';
+import AddPaymentMethodModal from '../src/renderer/dashboard/add-payment-method-modal';
 
 storiesOf('Buy Key/Dashboard Widget', module)
 	.add('default', () => (
@@ -80,6 +81,50 @@ storiesOf('Buy Key/Verify Phone', module)
 	))
 	.add('error', () => (
 		<PhoneVerificationModal
+			code="1313132"
+			error="Code verification failed"
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onResendClick={action('resend')}
+			onCodeChange={action('code change')}
+			phone="+213134115151"
+		/>
+	));
+
+storiesOf('Buy Key/Add payment method', module)
+	.add('loading', () => (
+		<AddPaymentMethodModal
+			loading
+			code=""
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onResendClick={action('resend')}
+			onCodeChange={action('code change')}
+			phone="+213134115151"
+		/>
+	))
+	.add('default', () => (
+		<AddPaymentMethodModal
+			code=""
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onResendClick={action('resend')}
+			onCodeChange={action('code change')}
+			phone="+213134115151"
+		/>
+	))
+	.add('filled', () => (
+		<AddPaymentMethodModal
+			code="1313132"
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onResendClick={action('resend')}
+			onCodeChange={action('code change')}
+			phone="+213134115151"
+		/>
+	))
+	.add('error', () => (
+		<AddPaymentMethodModal
 			code="1313132"
 			error="Code verification failed"
 			onContinueClick={action('continue')}
