@@ -3,6 +3,7 @@ import { Grid, Typography, Button, FormControl, Input, CircularProgress } from '
 import { makeStyles } from '@material-ui/styles';
 import { Popup, InputTitle } from '../common';
 import { PropTypes } from 'prop-types';
+import { CodeIcon } from 'selfkey-ui';
 
 const useStyles = makeStyles(theme => ({
 	link: {
@@ -34,7 +35,7 @@ export const PhoneVerificationModal = ({
 		<Popup closeAction={onCloseClick} text="Verify Phone Number">
 			<Grid container direction="row" spacing={4}>
 				<Grid item xs={2}>
-					icon
+					<CodeIcon />
 				</Grid>
 				<Grid item xs>
 					<Grid container direction="column" spacing={4}>

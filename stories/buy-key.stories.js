@@ -51,27 +51,30 @@ storiesOf('Buy Key/Verify Phone', module)
 		<PhoneVerificationModal
 			loading
 			code=""
-			onContinueClick={action('agree')}
+			onContinueClick={action('continue')}
 			onCloseClick={action('close')}
 			onResendClick={action('resend')}
+			onCodeChange={action('code change')}
 			phone="+213134115151"
 		/>
 	))
 	.add('default', () => (
 		<PhoneVerificationModal
 			code=""
-			onContinueClick={action('agree')}
+			onContinueClick={action('continue')}
 			onCloseClick={action('close')}
 			onResendClick={action('resend')}
+			onCodeChange={action('code change')}
 			phone="+213134115151"
 		/>
 	))
 	.add('filled', () => (
 		<PhoneVerificationModal
 			code="1313132"
-			onContinueClick={action('agree')}
+			onContinueClick={action('continue')}
 			onCloseClick={action('close')}
 			onResendClick={action('resend')}
+			onCodeChange={action('code change')}
 			phone="+213134115151"
 		/>
 	))
@@ -79,9 +82,10 @@ storiesOf('Buy Key/Verify Phone', module)
 		<PhoneVerificationModal
 			code="1313132"
 			error="Code verification failed"
-			onContinueClick={action('agree')}
+			onContinueClick={action('continue')}
 			onCloseClick={action('close')}
 			onResendClick={action('resend')}
+			onCodeChange={action('code change')}
 			phone="+213134115151"
 		/>
 	));
