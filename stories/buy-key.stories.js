@@ -4,6 +4,7 @@ import { action } from '@storybook/addon-actions';
 import BuyKeyWidget from '../src/renderer/dashboard/buy-key-widget';
 import BuyKeyModal from '../src/renderer/dashboard/buy-key-popup-modal';
 import MoonpayAgreementModal from '../src/renderer/dashboard/moonpay-agreement-modal';
+import PhoneVerificationModal from '../src/renderer/dashboard/phone-verification-modal';
 
 storiesOf('Buy Key/Dashboard Widget', module)
 	.add('default', () => (
@@ -41,6 +42,50 @@ storiesOf('Buy Key/Buy Key Popup', module)
 		/>
 	));
 
-storiesOf('Buy Key/Moonpay/Moonpay', module).add('AgreementModal', () => (
+storiesOf('Buy Key/Moonpay', module).add('AgreementModal', () => (
 	<MoonpayAgreementModal onAgreeClick={action('agree')} onCloseClick={action('close')} />
 ));
+
+storiesOf('Buy Key/Verify Phone', module)
+	.add('loading', () => (
+		<PhoneVerificationModal
+			loading
+			code=""
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onResendClick={action('resend')}
+			onCodeChange={action('code change')}
+			phone="+213134115151"
+		/>
+	))
+	.add('default', () => (
+		<PhoneVerificationModal
+			code=""
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onResendClick={action('resend')}
+			onCodeChange={action('code change')}
+			phone="+213134115151"
+		/>
+	))
+	.add('filled', () => (
+		<PhoneVerificationModal
+			code="1313132"
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onResendClick={action('resend')}
+			onCodeChange={action('code change')}
+			phone="+213134115151"
+		/>
+	))
+	.add('error', () => (
+		<PhoneVerificationModal
+			code="1313132"
+			error="Code verification failed"
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onResendClick={action('resend')}
+			onCodeChange={action('code change')}
+			phone="+213134115151"
+		/>
+	));
