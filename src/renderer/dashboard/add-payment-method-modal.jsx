@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Popup, InputTitle } from '../common';
 import { PropTypes } from 'prop-types';
 import { CodeIcon, KeyPicker } from 'selfkey-ui';
+import PhysicalAddressChooser from './physical-address-chooser';
 
 const useStyles = makeStyles(theme => ({
 	link: {
@@ -27,6 +28,7 @@ export const AddPaymentMethodModal = ({
 	cardNumber,
 	onCreditCardNumberChange,
 	onExpiryDateChange,
+	addresses,
 	loading,
 	disabled,
 	error
@@ -107,7 +109,9 @@ export const AddPaymentMethodModal = ({
 								<Grid item>
 									<Typography variant="body1">Billing Address</Typography>
 								</Grid>
-								<Grid item>addess chooser</Grid>
+								<Grid item>
+									<PhysicalAddressChooser addresses={addresses} />
+								</Grid>
 							</React.Fragment>
 						)}
 						{error && (
@@ -151,13 +155,15 @@ AddPaymentMethodModal.propTypes = {
 	code: PropTypes.string,
 	onCodeChange: PropTypes.func.isRequired,
 	loading: PropTypes.bool,
-	error: PropTypes.string
+	error: PropTypes.string,
+	addresses: PropTypes.arrayOf(PropTypes.object)
 };
 
 AddPaymentMethodModal.defaultProps = {
 	code: '',
 	loading: false,
-	error: ''
+	error: '',
+	addresses: []
 };
 
 export default AddPaymentMethodModal;
