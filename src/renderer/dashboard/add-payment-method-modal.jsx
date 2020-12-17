@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/styles';
 import { Popup, InputTitle } from '../common';
 import { PropTypes } from 'prop-types';
 import { CodeIcon, KeyPicker } from 'selfkey-ui';
-import PhysicalAddressChooser from './physical-address-chooser';
 
 const useStyles = makeStyles(theme => ({
 	link: {
@@ -26,9 +25,11 @@ export const AddPaymentMethodModal = ({
 	onCloseClick,
 	onContinueClick,
 	cardNumber,
-	onCreditCardNumberChange,
+	expiryDate,
+	ccv,
+	onCardNumberChange,
 	onExpiryDateChange,
-	addresses,
+	onCCVChange,
 	loading,
 	disabled,
 	error
@@ -66,7 +67,7 @@ export const AddPaymentMethodModal = ({
 												<Input
 													fullWidth
 													type="text"
-													onChange={onCreditCardNumberChange}
+													onChange={onCardNumberChange}
 													value={cardNumber}
 													placeholder="1234 1234 1234 1234"
 												/>
@@ -81,6 +82,7 @@ export const AddPaymentMethodModal = ({
 															onChange={onExpiryDateChange}
 															viewDate={startOfMonth}
 															format="MM/YYYY"
+															value={expiryDate}
 															isValidDate={current => {
 																return current.isSameOrAfter(
 																	startOfMonth,
@@ -96,8 +98,8 @@ export const AddPaymentMethodModal = ({
 														<Input
 															fullWidth
 															type="text"
-															onChange={onCreditCardNumberChange}
-															value={cardNumber}
+															onChange={onCCVChange}
+															value={ccv}
 															placeholder="123"
 														/>
 													</FormControl>
@@ -105,12 +107,6 @@ export const AddPaymentMethodModal = ({
 											</Grid>
 										</Grid>
 									</Grid>
-								</Grid>
-								<Grid item>
-									<Typography variant="body1">Billing Address</Typography>
-								</Grid>
-								<Grid item>
-									<PhysicalAddressChooser addresses={addresses} />
 								</Grid>
 							</React.Fragment>
 						)}
@@ -128,7 +124,7 @@ export const AddPaymentMethodModal = ({
 										variant="contained"
 										size="large"
 										onClick={onContinueClick}
-										disabled={loading || !disabled}
+										disabled={loading || disabled}
 									>
 										Continue
 									</Button>
@@ -150,20 +146,24 @@ export const AddPaymentMethodModal = ({
 AddPaymentMethodModal.propTypes = {
 	onContinueClick: PropTypes.func.isRequired,
 	onCloseClick: PropTypes.func.isRequired,
-	onResendClick: PropTypes.func.isRequired,
-	phone: PropTypes.string.isRequired,
-	code: PropTypes.string,
-	onCodeChange: PropTypes.func.isRequired,
+	onCardNumberChange: PropTypes.func.isRequired,
+	cardNumber: PropTypes.string,
+	onExpiryDateChange: PropTypes.func.isRequired,
+	expiryDate: PropTypes.string,
+	onCCVChange: PropTypes.func.isRequired,
+	ccv: PropTypes.string,
 	loading: PropTypes.bool,
 	error: PropTypes.string,
-	addresses: PropTypes.arrayOf(PropTypes.object)
+	disabled: PropTypes.bool
 };
 
 AddPaymentMethodModal.defaultProps = {
-	code: '',
+	cardNumber: '',
+	expiryDate: '',
+	ccv: '',
 	loading: false,
 	error: '',
-	addresses: []
+	disabled: false
 };
 
 export default AddPaymentMethodModal;

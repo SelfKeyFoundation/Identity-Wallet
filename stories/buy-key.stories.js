@@ -95,42 +95,54 @@ storiesOf('Buy Key/Add payment method', module)
 	.add('loading', () => (
 		<AddPaymentMethodModal
 			loading
-			code=""
 			onContinueClick={action('continue')}
 			onCloseClick={action('close')}
-			onResendClick={action('resend')}
-			onCodeChange={action('code change')}
-			phone="+213134115151"
+			onCardNumberChange={action('cc change')}
+			onExpiryDateChange={action('expiry change')}
+			onCCVChange={action('ccv change')}
 		/>
 	))
 	.add('default', () => (
 		<AddPaymentMethodModal
-			code=""
 			onContinueClick={action('continue')}
 			onCloseClick={action('close')}
-			onResendClick={action('resend')}
-			onCodeChange={action('code change')}
-			phone="+213134115151"
+			onCardNumberChange={action('cc change')}
+			onExpiryDateChange={action('expiry change')}
+			onCCVChange={action('ccv change')}
 		/>
 	))
 	.add('filled', () => (
 		<AddPaymentMethodModal
-			code="1313132"
+			cardNumber="1234 1234 1234 1234"
+			expiryDate="04/2028"
+			ccv="123"
 			onContinueClick={action('continue')}
 			onCloseClick={action('close')}
-			onResendClick={action('resend')}
-			onCodeChange={action('code change')}
-			phone="+213134115151"
+			onCardNumberChange={action('cc change')}
+			onExpiryDateChange={action('expiry change')}
+			onCCVChange={action('ccv change')}
+		/>
+	))
+	.add('disabled', () => (
+		<AddPaymentMethodModal
+			cardNumber="1234 1234 1234 1234"
+			expiryDate="04/2028"
+			ccv="123"
+			disabled
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onCardNumberChange={action('cc change')}
+			onExpiryDateChange={action('expiry change')}
+			onCCVChange={action('ccv change')}
 		/>
 	))
 	.add('error', () => (
 		<AddPaymentMethodModal
-			code="1313132"
-			error="Code verification failed"
+			error="Invalid expiry date"
 			onContinueClick={action('continue')}
 			onCloseClick={action('close')}
-			onResendClick={action('resend')}
-			onCodeChange={action('code change')}
-			phone="+213134115151"
+			onCardNumberChange={action('cc change')}
+			onExpiryDateChange={action('expiry change')}
+			onCCVChange={action('ccv change')}
 		/>
 	));
