@@ -116,6 +116,7 @@
 		"node-machine-id": "1.1.10",
 		"normalizr": "3.6.0",
 		"objection": "1.6.8",
+		"parameter-validator": "1.0.5",
 		"prop-types": "15.7.2",
 		"qrcode-generator": "1.4.3",
 		"qrcode.react": "1.0.0",
