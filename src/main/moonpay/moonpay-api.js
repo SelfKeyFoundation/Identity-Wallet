@@ -412,6 +412,33 @@ export class MoonPayApi {
 		});
 	}
 
+	async createCard(opt) {
+		this.verifyLoggedIn();
+		opt = validate(opt, ['tokenId']);
+		return this.api.request({
+			method: 'post',
+			url: 'cards',
+			body: opt
+		});
+	}
+
+	async listCards() {
+		this.verifyLoggedIn();
+		return this.api.request({
+			method: 'get',
+			url: 'cards'
+		});
+	}
+
+	async deleteCard(opt) {
+		this.verifyLoggedIn();
+		const { cardId } = validate(opt, ['cardId']);
+		return this.api.request({
+			method: 'delete',
+			url: `cards/${cardId}`
+		});
+	}
+
 	setLoginInfo(loginInfo) {
 		if (!loginInfo) {
 			this.loginInfo = null;

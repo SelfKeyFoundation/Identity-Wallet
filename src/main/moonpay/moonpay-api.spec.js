@@ -1588,9 +1588,7 @@ describe('MoonPayApi', () => {
 						sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
 						sinon.stub(mpApi, 'isLoggedIn').returns(true);
 						opt = _.omit(opt, [parameter]);
-						await mpApi.createToken({
-							opt
-						});
+						await mpApi.createToken(opt);
 						fail('no error thrown');
 					} catch (error) {
 						expect(error).toBeInstanceOf(ParameterValidationError);
@@ -1645,6 +1643,169 @@ describe('MoonPayApi', () => {
 				'billingAddress.postCode',
 				'billingAddress.country'
 			].map(p => t(p, payload));
+		});
+
+		describe('createCard', () => {
+			const expectedResponse = {
+				id: '68e46314-93e5-4420-ac10-485aef4e19d0',
+				createdAt: '2018-08-24T08:43:32.013Z',
+				updatedAt: '2018-08-24T08:43:32.013Z',
+				expiryMonth: 12,
+				expiryYear: 2020,
+				brand: 'Visa',
+				bin: '411111',
+				lastDigits: '1111',
+				billingAddress: {
+					street: '123 Mission St',
+					subStreet: null,
+					town: 'San Francisco',
+					postCode: '94105',
+					state: 'CA',
+					country: 'USA'
+				},
+				customerId: '7138fb07-7c66-4f9a-a83a-a106e66bfde6'
+			};
+			const payload = {
+				tokenId: 'fc33e149-1f18-4cc9-841e-0d28c13410bf'
+			};
+
+			const t = (parameter, opt) =>
+				it(`should return parameter error if no ${parameter}`, async () => {
+					try {
+						sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+						sinon.stub(mpApi, 'isLoggedIn').returns(true);
+						opt = _.omit(opt, [parameter]);
+						await mpApi.createCard(opt);
+						fail('no error thrown');
+					} catch (error) {
+						expect(error).toBeInstanceOf(ParameterValidationError);
+					}
+				});
+			it('should create card', async () => {
+				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				sinon.stub(mpApi, 'isLoggedIn').returns(true);
+				const resp = await mpApi.createCard(payload);
+				expect(resp).toEqual(expectedResponse);
+				expect(rp.getCall(0).args[0]).toEqual({
+					method: 'post',
+					url: 'cards',
+					body: payload
+				});
+			});
+
+			it('should reject if not logged in', async () => {
+				sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				sinon.stub(mpApi, 'isLoggedIn').returns(false);
+				try {
+					await mpApi.createCard();
+					fail('no error thrown');
+				} catch (error) {
+					expect(error).toBeInstanceOf(Error);
+				}
+			});
+			['tokenId'].map(p => t(p, payload));
+		});
+
+		describe('listCards', () => {
+			const expectedResponse = [
+				{
+					id: '68e46314-93e5-4420-ac10-485aef4e19d0',
+					createdAt: '2018-08-24T08:43:32.013Z',
+					updatedAt: '2018-08-24T08:43:32.013Z',
+					expiryMonth: 12,
+					expiryYear: 2020,
+					brand: 'Visa',
+					bin: '411111',
+					lastDigits: '1111',
+					billingAddress: {
+						street: '123 Mission St',
+						subStreet: null,
+						town: 'San Francisco',
+						postCode: '94105',
+						state: 'CA',
+						country: 'USA'
+					},
+					customerId: '7138fb07-7c66-4f9a-a83a-a106e66bfde6'
+				}
+			];
+			it('should resolve cards', async () => {
+				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				sinon.stub(mpApi, 'isLoggedIn').returns(true);
+				const resp = await mpApi.listCards();
+				expect(resp).toEqual(expectedResponse);
+				expect(rp.getCall(0).args[0]).toEqual({
+					method: 'get',
+					url: 'cards'
+				});
+			});
+
+			it('should reject if not logged in', async () => {
+				sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				sinon.stub(mpApi, 'isLoggedIn').returns(false);
+				try {
+					await mpApi.listCards();
+					fail('no error thrown');
+				} catch (error) {
+					expect(error).toBeInstanceOf(Error);
+				}
+			});
+		});
+		describe('deleteCard', () => {
+			const expectedResponse = {
+				id: '68e46314-93e5-4420-ac10-485aef4e19d0',
+				createdAt: '2018-08-24T08:43:32.013Z',
+				updatedAt: '2018-08-24T08:43:32.013Z',
+				expiryMonth: 12,
+				expiryYear: 2020,
+				brand: 'Visa',
+				bin: '411111',
+				lastDigits: '1111',
+				billingAddress: {
+					street: '123 Mission St',
+					subStreet: null,
+					town: 'San Francisco',
+					postCode: '94105',
+					state: 'CA',
+					country: 'USA'
+				},
+				customerId: '7138fb07-7c66-4f9a-a83a-a106e66bfde6'
+			};
+			const payload = { cardId: '68e46314-93e5-4420-ac10-485aef4e19d0' };
+
+			const t = (parameter, opt) =>
+				it(`should return parameter error if no ${parameter}`, async () => {
+					try {
+						sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+						sinon.stub(mpApi, 'isLoggedIn').returns(true);
+						opt = _.omit(opt, [parameter]);
+						await mpApi.deleteCard(opt);
+						fail('no error thrown');
+					} catch (error) {
+						expect(error).toBeInstanceOf(ParameterValidationError);
+					}
+				});
+			it('should create card', async () => {
+				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				sinon.stub(mpApi, 'isLoggedIn').returns(true);
+				const resp = await mpApi.deleteCard(payload);
+				expect(resp).toEqual(expectedResponse);
+				expect(rp.getCall(0).args[0]).toEqual({
+					method: 'delete',
+					url: `cards/${payload.cardId}`
+				});
+			});
+
+			it('should reject if not logged in', async () => {
+				sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				sinon.stub(mpApi, 'isLoggedIn').returns(false);
+				try {
+					await mpApi.deleteCard();
+					fail('no error thrown');
+				} catch (error) {
+					expect(error).toBeInstanceOf(Error);
+				}
+			});
+			['cardId'].map(p => t(p, payload));
 		});
 	});
 });
