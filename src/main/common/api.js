@@ -10,15 +10,23 @@ export class Api {
 
 	async request(opt) {
 		let { url, method } = validate(opt, ['url', 'method']);
-		let { headers = {}, qs = {}, body } = opt;
+		let { headers = {}, qs = {}, body, formData, json = true } = opt;
+
 		qs = { ...this.opt.qs, ...qs };
 		headers = { ...this.opt.headers, ...headers };
-		url = urljoin(this.opt.endpoint, url);
+		if (!url.startsWith('https://') && !url.startsWith('http://')) {
+			url = urljoin(this.opt.endpoint, url);
+		}
 		method = method.toUpperCase();
-		const rpOpt = { url, method, json: true, headers, qs };
+
+		const rpOpt = { url, method, json, headers, qs };
 
 		if (body) {
 			rpOpt.body = body;
+		}
+
+		if (formData) {
+			rpOpt.formData = formData;
 		}
 		try {
 			const resp = await rp(rpOpt);

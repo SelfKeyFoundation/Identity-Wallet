@@ -164,6 +164,25 @@ describe('Api', () => {
 			);
 		});
 
+		it('should call request with formData if  defined', async () => {
+			const formData = { token: 'hi' };
+			await api.request({ url: '/hi', method: 'get', formData });
+			expect(rp).toHaveBeenCalledWith(
+				expect.objectContaining({
+					formData
+				})
+			);
+		});
+
+		it('should call request with json if  defined', async () => {
+			await api.request({ url: '/hi', method: 'get', json: true });
+			expect(rp).toHaveBeenCalledWith(
+				expect.objectContaining({
+					json: true
+				})
+			);
+		});
+
 		it('should call request with empty qs if not defined', async () => {
 			await api.request({ url: '/hi', method: 'get' });
 			expect(rp).toHaveBeenCalledWith(
@@ -207,6 +226,16 @@ describe('Api', () => {
 			expect(rp).toHaveBeenCalledWith(
 				expect.objectContaining({
 					body
+				})
+			);
+		});
+
+		it('should not prepend endpoint if absolute url', async () => {
+			const url = 'http://selfkey.org';
+			await api.request({ url, method: 'get' });
+			expect(rp).toHaveBeenCalledWith(
+				expect.objectContaining({
+					url
 				})
 			);
 		});
