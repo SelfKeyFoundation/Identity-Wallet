@@ -11,6 +11,7 @@ export class MoonPayApi {
 	static FILE_TYPES = ['passport', 'national_identity_card', 'driving_licence', 'selfie'];
 	static FILE_SIDES = ['front', 'back'];
 	static FILES_REQUIRING_SIDE = ['national_identity_card', 'driving_licence'];
+	static COUNTRIES_REQUIRING_STATE = ['USA'];
 
 	constructor(identity, opt) {
 		if (!identity) throw new ParameterValidationError('"identity" is a required parameter');
@@ -381,6 +382,33 @@ export class MoonPayApi {
 		return this.api.request({
 			method: 'get',
 			url: 'files'
+		});
+	}
+
+	async createToken(opt) {
+		this.verifyLoggedIn();
+		const body = validate(opt, ['expiryDate', 'number', 'cvc', 'billingAddress']);
+		body.billingAddress = validate(opt.billingAddress, [
+			'street',
+			'subStreet',
+			'town',
+			'postCode',
+			'country'
+		]);
+		const { state, country } = opt.billingAddress;
+
+		if (this.constructor.COUNTRIES_REQUIRING_STATE.includes(country) && !state) {
+			throw new ParameterValidationError(`state is required for ${country}`);
+		}
+
+		if (state) {
+			body.billingAddress.state = state;
+		}
+
+		return this.api.request({
+			method: 'post',
+			url: 'tokens',
+			body
 		});
 	}
 

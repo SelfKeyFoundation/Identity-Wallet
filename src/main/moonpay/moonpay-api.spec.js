@@ -1547,5 +1547,104 @@ describe('MoonPayApi', () => {
 				}
 			});
 		});
+
+		describe('createToken', () => {
+			const expectedResponse = {
+				id: 'fc33e149-1f18-4cc9-841e-0d28c13410bf',
+				createdAt: '2018-08-24T08:43:32.013Z',
+				updatedAt: '2018-08-24T08:43:32.013Z',
+				expiresAt: '2018-08-24T09:43:32.013Z',
+				expiryMonth: 12,
+				expiryYear: 2020,
+				brand: 'Visa',
+				bin: '497600',
+				lastDigits: '3436',
+				billingAddress: {
+					street: '123 Mission St',
+					subStreet: null,
+					town: 'San Francisco',
+					postCode: '94105',
+					state: 'CA',
+					country: 'USA'
+				}
+			};
+			const payload = {
+				expiryDate: '22/2028',
+				number: '12314151241241',
+				cvc: '123',
+				billingAddress: {
+					street: '123 Mission St',
+					subStreet: null,
+					town: 'San Francisco',
+					postCode: '94105',
+					state: 'CA',
+					country: 'USA'
+				}
+			};
+
+			const t = (parameter, opt) =>
+				it(`should return parameter error if no ${parameter}`, async () => {
+					try {
+						sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+						sinon.stub(mpApi, 'isLoggedIn').returns(true);
+						opt = _.omit(opt, [parameter]);
+						await mpApi.createToken({
+							opt
+						});
+						fail('no error thrown');
+					} catch (error) {
+						expect(error).toBeInstanceOf(ParameterValidationError);
+					}
+				});
+			it('should create token', async () => {
+				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				sinon.stub(mpApi, 'isLoggedIn').returns(true);
+				const resp = await mpApi.createToken(payload);
+				expect(resp).toEqual(expectedResponse);
+				expect(rp.getCall(0).args[0]).toEqual({
+					method: 'post',
+					url: 'tokens',
+					body: payload
+				});
+			});
+
+			it('should throw parameter error if country USA and no state', async () => {
+				try {
+					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+					sinon.stub(mpApi, 'isLoggedIn').returns(true);
+					await mpApi.createToken({
+						...payload,
+						billingAddress: {
+							..._.omit(payload.billingAddress, ['state']),
+							country: 'USA'
+						}
+					});
+					fail('no error thrown');
+				} catch (error) {
+					expect(error).toBeInstanceOf(ParameterValidationError);
+				}
+			});
+			it('should reject if not logged in', async () => {
+				sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				sinon.stub(mpApi, 'isLoggedIn').returns(false);
+				try {
+					await mpApi.createToken();
+					fail('no error thrown');
+				} catch (error) {
+					expect(error).toBeInstanceOf(Error);
+				}
+			});
+			[
+				'expiryDate',
+				'number',
+				'cvc',
+				'billingAddress',
+				'billingAddress.street',
+				'billingAddress.subStreet',
+				'billingAddress.town',
+				'billingAddress.postCode',
+				'billingAddress.country'
+			].map(p => t(p, payload));
+		});
 	});
 });
