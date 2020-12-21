@@ -118,7 +118,7 @@ export const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimi
 			gasPrice = transaction.gasPrice;
 		}
 
-		if (address && amount) {
+		if (address) {
 			const tokenContract = transaction.contractAddress;
 			const tokenDecimal = transaction.tokenDecimal;
 			const nonce = await getTransactionCount(walletAddress);
@@ -197,6 +197,14 @@ const setLimitPrice = gasLimit => async dispatch => {
 		})
 	);
 	await dispatch(setTransactionFee(undefined, undefined, undefined, gasLimit));
+};
+
+const setNonce = nonce => async dispatch => {
+	await dispatch(
+		actions.updateTransaction({
+			nonce
+		})
+	);
 };
 
 const generateContractData = (toAddress, value, decimal) => {
@@ -555,6 +563,7 @@ export default {
 	setAmount: createAliasedAction(types.AMOUNT_SET, setAmount),
 	setGasPrice: createAliasedAction(types.GAS_PRICE_SET, setGasPrice),
 	setLimitPrice: createAliasedAction(types.LIMIT_PRICE_SET, setLimitPrice),
+	setNonce: createAliasedAction(types.NONCE_SET, setNonce),
 	init: createAliasedAction(types.INIT, init),
 	setTransactionFee: createAliasedAction(types.TRANSACTION_FEE_SET, setTransactionFee),
 	confirmSend: createAliasedAction(types.CONFIRM_SEND, confirmSend),
