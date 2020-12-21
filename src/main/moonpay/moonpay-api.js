@@ -79,6 +79,7 @@ export class MoonPayApi {
 	static TEST_ETH_ADDRESS = '0xc216eD2D6c295579718dbd4a797845CdA70B3C36';
 	static TEST_XPR_ADDRESS = 'rUZTCFB6zPyeEmDhrAVqVbBaLPWrzjKCQz';
 	static TEST_STELLAR_ADDRESS = 'GD4KAFADEFXOLNWWUA4IZI5YG23AH2OSJMIJAZ6YLNHJWNPX3T366FIY';
+	static TEST_MOON_TOKEN_RINKEBY = '0x7887139c92d95d0569a6ab17f5281494a94c8d74';
 
 	constructor(identity, opt) {
 		if (!identity) throw new ParameterValidationError('"identity" is a required parameter');
