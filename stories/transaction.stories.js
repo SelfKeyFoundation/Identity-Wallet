@@ -1,6 +1,5 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-// import { linkTo } from '@storybook/addon-links';
 import { action } from '@storybook/addon-actions';
 import ReceiveTokenTabComponent from '../src/renderer/transaction/send/components/receive-token-tab';
 import SendTokenTabComponent from '../src/renderer/transaction/send/components/send-token-tab';

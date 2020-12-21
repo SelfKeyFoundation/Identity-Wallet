@@ -16,11 +16,7 @@ import { InputTitle } from '../../common/input-title';
 import { getWallet } from 'common/wallet/selectors';
 import ReceiveTokenTab from './components/receive-token-tab';
 import SendTokenTab from './components/send-token-tab';
-
-// import SendTokenTab from './containers/send-token-tab';
 import { SelectDropdownIcon } from 'selfkey-ui';
-
-const DEFAULT_ETH_GAS_LIMIT = 21000;
 
 const styles = theme => ({
 	balance: {
@@ -210,27 +206,6 @@ class TransactionSendBoxContainer extends PureComponent {
 		this.props.dispatch(push(`/main/dashboard`));
 	};
 
-	getFee(type) {
-		return this.props.ethGasStationInfo[type];
-	}
-
-	getFeeInEth(type) {
-		const gasPrice = this.getFee(type);
-		const gasLimit = DEFAULT_ETH_GAS_LIMIT;
-		const ethFee = EthUnits.toEther(gasPrice * gasLimit, 'gwei');
-		return ethFee;
-	}
-
-	getFeeUsd(type) {
-		const { cryptoCurrency, tokens } = this.props;
-		const ethFee = this.getFeeInEth(type);
-		const token = tokens.find(token => token.symbol === cryptoCurrency);
-		if (token && token.price) {
-			return ethFee * token.price;
-		}
-		return '0';
-	}
-
 	handleGasLimitChange = debounce(
 		value => this.props.dispatch(transactionOperations.setLimitPrice(value)),
 		TransactionSendBoxContainer.UPDATE_DELAY
@@ -263,7 +238,6 @@ class TransactionSendBoxContainer extends PureComponent {
 		this.setState({ sending: false });
 	};
 
-	// TransactionSendBox - Start
 	handleAllAmountClick = () => {
 		let value = String(this.props.balance);
 
@@ -346,12 +320,9 @@ class TransactionSendBoxContainer extends PureComponent {
 	}
 
 	render() {
-		// const { classes, sendingAddress, addressError } = this.props;
 		const { classes, sendingAddress } = this.props;
 		let { cryptoCurrency } = this.state;
-		// let { cryptoCurrency, address } = this.state;
 		const title = 'Send/Receive ERC-20 Tokens';
-		// const labelInputClass = `${addressError ? classes.errorColor : ''}`;
 		return (
 			<TransactionBox closeAction={this.handleCancelAction} title={title}>
 				<div className={classes.tokenBottomSpace}>
