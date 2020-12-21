@@ -81,16 +81,13 @@ export class MoonPayApi {
 	static TEST_STELLAR_ADDRESS = 'GD4KAFADEFXOLNWWUA4IZI5YG23AH2OSJMIJAZ6YLNHJWNPX3T366FIY';
 	static TEST_MOON_TOKEN_RINKEBY = '0x7887139c92d95d0569a6ab17f5281494a94c8d74';
 
-	constructor(identity, opt) {
-		if (!identity) throw new ParameterValidationError('"identity" is a required parameter');
-		if (!opt) throw new ParameterValidationError('"opt" is a required parameter');
-		validate(opt, ['endpoint', 'apiKey']);
-		this.identity = identity;
+	constructor(opt = {}) {
+		const { endpoint, apiKey } = validate(opt, ['endpoint', 'apiKey']);
 		this.loginInfo = null;
 		this.opt = opt;
 		const apiOpt = {
-			endpoint: opt.endpoint,
-			qs: { apiKey: opt.apiKey },
+			endpoint,
+			qs: { apiKey },
 			onRequestError: this.handleRequestError.bind(this)
 		};
 		this.api = new Api(apiOpt);
@@ -134,10 +131,13 @@ export class MoonPayApi {
 		}
 	}
 
-	async establishSession(data) {
+	async establishSession(data, messageSigner) {
 		validate(data, ['email', 'walletAddress']);
+		if (typeof messageSigner !== 'function') {
+			throw new ParameterValidationError('message signer is required');
+		}
 		const nonce = await this.getChallenge(data);
-		const signature = await this.identity.genSignatureForMessage(nonce);
+		const signature = await messageSigner(nonce, data.walletAddress);
 		const loginInfo = await this.postChallenge({ ...data, signature });
 		this.setLoginInfo(loginInfo);
 		return loginInfo;

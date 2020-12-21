@@ -7,9 +7,6 @@ import Api from '../common/api';
 const ENDPOINT = 'http://test.com';
 const API_KEY = 'test-key';
 describe('MoonPayApi', () => {
-	const identity = {
-		genSignatureForMessage() {}
-	};
 	const opt = { endpoint: ENDPOINT, apiKey: API_KEY };
 
 	afterEach(() => {
@@ -18,9 +15,8 @@ describe('MoonPayApi', () => {
 
 	describe('constructor', () => {
 		it('should construct if all parameters are correct', () => {
-			const mpApi = new MoonPayApi(identity, opt);
+			const mpApi = new MoonPayApi(opt);
 
-			expect(mpApi.identity).toEqual(identity);
 			expect(mpApi.opt).toEqual(opt);
 			expect(mpApi.api).toBeInstanceOf(Api);
 			expect(mpApi.api.opt).toEqual(
@@ -31,20 +27,10 @@ describe('MoonPayApi', () => {
 			);
 		});
 
-		it('should throw parameter error if no identity', () => {
-			try {
-				// eslint-disable-next-line no-new
-				new MoonPayApi(null, opt);
-				fail('no error thrown');
-			} catch (error) {
-				expect(error).toBeInstanceOf(ParameterValidationError);
-			}
-		});
-
 		it('should throw parameter error if no opts', () => {
 			try {
 				// eslint-disable-next-line no-new
-				new MoonPayApi(identity, null);
+				new MoonPayApi(null);
 				fail('no error thrown');
 			} catch (error) {
 				expect(error).toBeInstanceOf(ParameterValidationError);
@@ -53,7 +39,7 @@ describe('MoonPayApi', () => {
 		it('should throw parameter error if no endpoint', () => {
 			try {
 				// eslint-disable-next-line no-new
-				new MoonPayApi(identity, _.omit(opt, ['endpoint']));
+				new MoonPayApi(_.omit(opt, ['endpoint']));
 				fail('no error thrown');
 			} catch (error) {
 				expect(error).toBeInstanceOf(ParameterValidationError);
@@ -63,7 +49,7 @@ describe('MoonPayApi', () => {
 		it('should throw parameter error if no apiKey', () => {
 			try {
 				// eslint-disable-next-line no-new
-				new MoonPayApi(identity, _.omit(opt, ['apiKey']));
+				new MoonPayApi(_.omit(opt, ['apiKey']));
 				fail('no error thrown');
 			} catch (error) {
 				expect(error).toBeInstanceOf(ParameterValidationError);
@@ -75,7 +61,7 @@ describe('MoonPayApi', () => {
 		let mpApi;
 
 		beforeEach(() => {
-			mpApi = new MoonPayApi(identity, opt);
+			mpApi = new MoonPayApi(opt);
 		});
 
 		it('should set login info', () => {
@@ -110,7 +96,7 @@ describe('MoonPayApi', () => {
 		let mpApi;
 
 		beforeEach(() => {
-			mpApi = new MoonPayApi(identity, opt);
+			mpApi = new MoonPayApi(opt);
 		});
 		it('should return login info', () => {
 			expect(mpApi.getLoginInfo()).toBeNull();
@@ -123,7 +109,7 @@ describe('MoonPayApi', () => {
 		let mpApi;
 
 		beforeEach(() => {
-			mpApi = new MoonPayApi(identity, opt);
+			mpApi = new MoonPayApi(opt);
 		});
 		it('should true if logged in', () => {
 			mpApi.loginInfo = 'test';
@@ -167,7 +153,7 @@ describe('MoonPayApi', () => {
 			});
 
 		beforeEach(() => {
-			mpApi = new MoonPayApi(identity, opt);
+			mpApi = new MoonPayApi(opt);
 		});
 
 		describe('handleRequestError', () => {
@@ -298,13 +284,13 @@ describe('MoonPayApi', () => {
 			it('should resolve login info', async () => {
 				const c = sinon.stub(mpApi, 'getChallenge').resolves(NONCE);
 				const pc = sinon.stub(mpApi, 'postChallenge').resolves(response);
-				const id = sinon.stub(identity, 'genSignatureForMessage').resolves(SIGNATURE);
+				const signer = sinon.stub().resolves(SIGNATURE);
 				const setLogin = sinon.stub(mpApi, 'setLoginInfo');
 
-				const resp = await mpApi.establishSession(data);
+				const resp = await mpApi.establishSession(data, signer);
 
 				expect(c.getCall(0).args[0]).toEqual(data);
-				expect(id.getCall(0).args[0]).toEqual(NONCE);
+				expect(signer.getCall(0).args[0]).toEqual(NONCE);
 				expect(pc.getCall(0).args[0]).toEqual({ ...data, signature: SIGNATURE });
 
 				expect(resp).toEqual(response);
