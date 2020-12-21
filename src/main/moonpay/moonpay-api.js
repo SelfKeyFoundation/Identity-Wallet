@@ -12,6 +12,10 @@ export class MoonPayApi {
 	static FILE_SIDES = ['front', 'back'];
 	static FILES_REQUIRING_SIDE = ['national_identity_card', 'driving_licence'];
 	static COUNTRIES_REQUIRING_STATE = ['USA'];
+	static BANK_ACCOUNT_CURRENCIES = ['eur', 'gbp'];
+	static BANK_ACCOUNT_CURRENCIES_REQUIRING_IBAN = ['eur'];
+	static BANK_ACCOUNT_CURRENCIES_REQUIRING_ACCOUNT = ['gbp'];
+	static BANK_ACCOUNT_CURRENCIES_REQUIRING_SORT_CODE = ['gbp'];
 
 	constructor(identity, opt) {
 		if (!identity) throw new ParameterValidationError('"identity" is a required parameter');
@@ -84,6 +88,7 @@ export class MoonPayApi {
 	}
 
 	async updateCustomer(opt) {
+		this.verifyLoggedIn();
 		opt = _.pick(opt, [
 			'firstName',
 			'lastName',
@@ -105,7 +110,6 @@ export class MoonPayApi {
 			]);
 		}
 
-		this.verifyLoggedIn();
 		return this.api.request({
 			method: 'patch',
 			url: 'customers/me',
@@ -114,8 +118,8 @@ export class MoonPayApi {
 	}
 
 	async verifyPhone(opt) {
-		const body = validate(opt, ['verificationCode']);
 		this.verifyLoggedIn();
+		const body = validate(opt, ['verificationCode']);
 		return this.api.request({
 			method: 'post',
 			url: 'customers/verify_phone_number',
@@ -436,6 +440,152 @@ export class MoonPayApi {
 		return this.api.request({
 			method: 'delete',
 			url: `cards/${cardId}`
+		});
+	}
+
+	async createBankAccount(opt) {
+		this.verifyLoggedIn();
+		let { currencyCode } = validate(opt, ['currencyCode']);
+		currencyCode = currencyCode.toLowerCase();
+
+		let body = { currencyCode };
+
+		if (!this.constructor.BANK_ACCOUNT_CURRENCIES.includes(currencyCode)) {
+			throw new ParameterValidationError(`Currency ${currencyCode} is not supported`);
+		}
+
+		if (this.constructor.BANK_ACCOUNT_CURRENCIES_REQUIRING_IBAN.includes(currencyCode)) {
+			body = { ...body, ...validate(opt, ['iban']) };
+		}
+
+		if (this.constructor.BANK_ACCOUNT_CURRENCIES_REQUIRING_ACCOUNT.includes(currencyCode)) {
+			body = { ...body, ...validate(opt, ['accountNumber']) };
+		}
+
+		if (this.constructor.BANK_ACCOUNT_CURRENCIES_REQUIRING_SORT_CODE.includes(currencyCode)) {
+			body = { ...body, ...validate(opt, ['sortCode']) };
+		}
+
+		return this.api.request({
+			method: 'post',
+			url: 'bank_accounts',
+			body
+		});
+	}
+
+	async listBankAccounts() {
+		this.verifyLoggedIn();
+
+		return this.api.request({
+			method: 'get',
+			url: 'bank_accounts'
+		});
+	}
+
+	async deleteBankAccount(opt) {
+		this.verifyLoggedIn();
+
+		const { bankAccountId } = validate(opt, ['bankAccountId']);
+
+		return this.api.request({
+			method: 'delete',
+			url: `bank_accounts/${bankAccountId}`
+		});
+	}
+
+	async createBankTransaction(opt) {
+		this.verifyLoggedIn();
+		const {
+			baseCurrencyAmount,
+			extraFeePercentage,
+			walletAddress,
+			baseCurrencyCode,
+			currencyCode,
+			bankAccountId
+		} = validate(opt, [
+			'baseCurrencyAmount',
+			'extraFeePercentage',
+			'walletAddress',
+			'baseCurrencyCode',
+			'currencyCode',
+			'bankAccountId'
+		]);
+
+		const { walletAddressTag, externalTransactionId } = opt;
+
+		return this.api.request({
+			method: 'post',
+			url: 'transactions',
+			body: {
+				baseCurrencyAmount,
+				extraFeePercentage,
+				walletAddress,
+				baseCurrencyCode,
+				currencyCode,
+				bankAccountId,
+				walletAddressTag,
+				externalTransactionId
+			}
+		});
+	}
+
+	async createCardTransaction(opt) {
+		this.verifyLoggedIn();
+		const {
+			baseCurrencyAmount,
+			extraFeePercentage,
+			walletAddress,
+			baseCurrencyCode,
+			currencyCode,
+			returnUrl
+		} = validate(opt, [
+			'baseCurrencyAmount',
+			'extraFeePercentage',
+			'walletAddress',
+			'baseCurrencyCode',
+			'currencyCode',
+			'returnUrl'
+		]);
+
+		const { walletAddressTag, externalTransactionId, cardId, tokenId } = opt;
+
+		if (!cardId && !tokenId) {
+			throw new ParameterValidationError('one of cardId, tokenId is required');
+		}
+
+		return this.api.request({
+			method: 'post',
+			url: 'transactions',
+			body: {
+				baseCurrencyAmount,
+				extraFeePercentage,
+				walletAddress,
+				baseCurrencyCode,
+				currencyCode,
+				returnUrl,
+				walletAddressTag,
+				externalTransactionId,
+				cardId,
+				tokenId
+			}
+		});
+	}
+
+	async getTransaction(opt) {
+		this.verifyLoggedIn();
+		const { transactionId } = validate(opt, ['transactionId']);
+
+		return this.api.request({
+			method: 'get',
+			url: `transactions/${transactionId}`
+		});
+	}
+
+	async listTransactions(opt) {
+		this.verifyLoggedIn();
+		return this.api.request({
+			method: 'get',
+			url: `transactions`
 		});
 	}
 

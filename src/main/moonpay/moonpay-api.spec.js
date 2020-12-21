@@ -138,6 +138,34 @@ describe('MoonPayApi', () => {
 	describe('requests', () => {
 		let mpApi;
 
+		const testMissingParam = (parameter, method, opt) =>
+			testInvalidParam(`no ${parameter} passed`, method, _.omit(opt, parameter));
+
+		const testInvalidParam = (message, method, opt) =>
+			it(`${method} should throw ParameterValidationError if ${message}`, async () => {
+				try {
+					sinon.stub(mpApi.api, 'request').resolves();
+					sinon.stub(mpApi, 'isLoggedIn').returns(true);
+					await mpApi[method](opt);
+					fail('no error thrown');
+				} catch (error) {
+					expect(error).toBeInstanceOf(ParameterValidationError);
+				}
+			});
+
+		const testLoggedIn = (method, opt) =>
+			it(`${method} should reject if not logged in`, async () => {
+				sinon.stub(mpApi.api, 'request').resolves();
+				sinon.stub(mpApi, 'isLoggedIn').returns(false);
+				try {
+					await mpApi[method](opt);
+					fail('no error thrown');
+				} catch (error) {
+					expect(error).toBeInstanceOf(Error);
+					expect(error.message).toEqual('not logged in');
+				}
+			});
+
 		beforeEach(() => {
 			mpApi = new MoonPayApi(identity, opt);
 		});
@@ -198,25 +226,9 @@ describe('MoonPayApi', () => {
 				expect(resp).toEqual(NONCE);
 			});
 
-			it('should throw if no email', async () => {
-				sinon.stub(mpApi.api, 'request').resolves();
-				try {
-					await mpApi.getChallenge(_.omit(data, ['email']));
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
-
-			it('should throw if no walletAddress', async () => {
-				sinon.stub(mpApi.api, 'request').resolves();
-				try {
-					await mpApi.getChallenge(_.omit(data, ['walletAddress']));
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
+			['walletAddress', 'email'].map(parameter =>
+				testMissingParam(parameter, 'getChallenge', data)
+			);
 		});
 
 		describe('postChallenge', () => {
@@ -258,35 +270,9 @@ describe('MoonPayApi', () => {
 				expect(resp).toEqual(response);
 			});
 
-			it('should throw if no email', async () => {
-				sinon.stub(mpApi.api, 'request').resolves();
-				try {
-					await mpApi.postChallenge(_.omit(data, ['email']));
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
-
-			it('should throw if no walletAddress', async () => {
-				sinon.stub(mpApi.api, 'request').resolves();
-				try {
-					await mpApi.postChallenge(_.omit(data, ['walletAddress']));
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
-
-			it('should throw if no signature', async () => {
-				sinon.stub(mpApi.api, 'request').resolves();
-				try {
-					await mpApi.postChallenge(_.omit(data, ['signature']));
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
+			['walletAddress', 'email', 'signature'].map(parameter =>
+				testMissingParam(parameter, 'postChallenge', data)
+			);
 		});
 
 		describe('establishSession', () => {
@@ -325,25 +311,9 @@ describe('MoonPayApi', () => {
 				expect(setLogin.getCall(0).args[0]).toEqual(response);
 			});
 
-			it('should throw if no email', async () => {
-				sinon.stub(mpApi.api, 'request').resolves();
-				try {
-					await mpApi.postChallenge(_.omit(data, ['email']));
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
-
-			it('should throw if no walletAddress', async () => {
-				sinon.stub(mpApi.api, 'request').resolves();
-				try {
-					await mpApi.postChallenge(_.omit(data, ['walletAddress']));
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
+			['walletAddress', 'email'].map(parameter =>
+				testMissingParam(parameter, 'establishSession', data)
+			);
 		});
 
 		describe('getCustomer', () => {
@@ -379,17 +349,8 @@ describe('MoonPayApi', () => {
 					url: 'customers/me'
 				});
 			});
-			it('should reject if not logged in', async () => {
-				sinon.stub(mpApi.api, 'request').resolves(customer);
-				sinon.stub(mpApi, 'setLoginInfo');
-				sinon.stub(mpApi, 'isLoggedIn').returns(false);
-				try {
-					await mpApi.getCustomer();
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(Error);
-				}
-			});
+
+			testLoggedIn('getCustomer');
 		});
 
 		describe('updateCustomer', () => {
@@ -440,16 +401,8 @@ describe('MoonPayApi', () => {
 					}
 				});
 			});
-			it('should reject if not logged in', async () => {
-				sinon.stub(mpApi.api, 'request').resolves(customer);
-				sinon.stub(mpApi, 'isLoggedIn').returns(false);
-				try {
-					await mpApi.updateCustomer({ customer });
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(Error);
-				}
-			});
+
+			testLoggedIn('updateCustomer');
 		});
 		describe('verifyPhone', () => {
 			const expectedResponse = {
@@ -473,27 +426,11 @@ describe('MoonPayApi', () => {
 					body: payload
 				});
 			});
-			it('should reject if not logged in', async () => {
-				sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-				sinon.stub(mpApi, 'isLoggedIn').returns(false);
-				try {
-					await mpApi.verifyPhone();
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(Error);
-				}
-			});
+			testLoggedIn('verifyPhone');
 
-			it('should throw parameter error if no verificationCode', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-
-					await mpApi.verifyPhone({});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
+			['verificationCode'].map(parameter =>
+				testMissingParam(parameter, 'verifyPhone', payload)
+			);
 		});
 		describe('refreshToken', () => {
 			const TOKEN = 'asdaddasdasd';
@@ -537,17 +474,7 @@ describe('MoonPayApi', () => {
 				expect(setLogin.getCall(0).args[0]).toEqual(expectedResponse);
 			});
 
-			it('should reject if not logged in', async () => {
-				sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-				sinon.stub(mpApi, 'setLoginInfo');
-				sinon.stub(mpApi, 'isLoggedIn').returns(false);
-				try {
-					await mpApi.refreshToken();
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(Error);
-				}
-			});
+			testLoggedIn('refreshToken');
 		});
 		describe('getAccount', () => {
 			const expectedResponse = {
@@ -684,16 +611,9 @@ describe('MoonPayApi', () => {
 				});
 			});
 
-			it('should throw parameter error if no currencyCode', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-
-					await mpApi.listCurrencyPrices({});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
+			['currencyCode'].map(parameter =>
+				testMissingParam(parameter, 'getCurrencyPrice', { currencyCode })
+			);
 		});
 		describe('listCurrencyPrices', () => {
 			const expectedResponse = {
@@ -724,31 +644,12 @@ describe('MoonPayApi', () => {
 				});
 			});
 
-			it('should throw parameter error if no cryptoCurrencies', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-
-					await mpApi.listCurrencyPrices({
-						fiatCurrencies
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
-
-			it('should throw parameter error if no cryptoCurrencies', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-
-					await mpApi.listCurrencyPrices({
-						cryptoCurrencies
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
+			['cryptoCurrencies', 'fiatCurrencies'].map(parameter =>
+				testMissingParam(parameter, 'listCurrencyPrices', {
+					cryptoCurrencies,
+					fiatCurrencies
+				})
+			);
 		});
 		describe('getQuote', () => {
 			const expectedResponse1 = {
@@ -876,61 +777,20 @@ describe('MoonPayApi', () => {
 				});
 			});
 
-			it('should throw parameter error if no currencyCode', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse1);
+			['baseCurrencyAmount', 'baseCurrencyCode', 'currencyCode'].map(parameter =>
+				testMissingParam(parameter, 'getQuote', {
+					currencyCode,
+					baseCurrencyCode,
+					baseCurrencyAmount,
+					extraFeePercentage
+				})
+			);
 
-					await mpApi.listCurrencyPrices({
-						baseCurrencyCode,
-						baseCurrencyAmount
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
-
-			it('should throw parameter error if no baseCurrencyCode', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse1);
-
-					await mpApi.listCurrencyPrices({
-						currencyCode,
-						baseCurrencyAmount
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
-			it('should throw parameter error if no baseCurrencyAmount', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse1);
-
-					await mpApi.listCurrencyPrices({
-						currencyCode,
-						baseCurrencyCode
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
-
-			it('should throw parameter error if no payment method not supported', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse1);
-
-					await mpApi.listCurrencyPrices({
-						currencyCode,
-						baseCurrencyCode,
-						baseCurrencyAmount,
-						paymentMethod: 'test'
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
+			testInvalidParam('payment method not supported', 'getQuote', {
+				currencyCode,
+				baseCurrencyCode,
+				baseCurrencyAmount,
+				paymentMethod: 'test'
 			});
 		});
 		describe('listCountries', () => {
@@ -1036,17 +896,7 @@ describe('MoonPayApi', () => {
 				});
 			});
 
-			it('should reject if not logged in', async () => {
-				sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-
-				sinon.stub(mpApi, 'isLoggedIn').returns(false);
-				try {
-					await mpApi.getLimits();
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(Error);
-				}
-			});
+			testLoggedIn('getLimits');
 		});
 
 		describe('_genS3SignedRequest', () => {
@@ -1078,6 +928,11 @@ describe('MoonPayApi', () => {
 					expect(error).toBeInstanceOf(ParameterValidationError);
 				}
 			});
+			['fileType'].map(parameter =>
+				testMissingParam(parameter, '_genS3SignedRequest', {
+					fileType
+				})
+			);
 		});
 
 		describe('_uploadToS3', () => {
@@ -1105,37 +960,16 @@ describe('MoonPayApi', () => {
 				});
 			});
 
-			it('should throw parameter error if no signedRequest', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+			['file', 'signedRequest'].map(parameter =>
+				testMissingParam(parameter, '_uploadToS3', {
+					file,
+					signedRequest
+				})
+			);
 
-					await mpApi._uploadToS3({ file });
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
-
-			it('should throw parameter error if no file', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-
-					await mpApi._uploadToS3({ signedRequest });
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
-
-			it('should throw parameter error if file is not buffer', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-
-					await mpApi._uploadToS3({ signedRequest, file: 'test file' });
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
+			testInvalidParam('file is not buffer', '_uploadToS3', {
+				signedRequest,
+				file: 'test file'
 			});
 		});
 
@@ -1173,123 +1007,42 @@ describe('MoonPayApi', () => {
 				});
 			});
 
-			it('should throw parameter error if no key', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-					sinon.stub(mpApi, 'isLoggedIn').returns(true);
-					await mpApi._createFile({
-						type,
-						country,
-						side
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
+			['key', 'type', 'country'].map(parameter =>
+				testMissingParam(parameter, '_createFile', {
+					key,
+					type,
+					country,
+					side
+				})
+			);
+
+			testInvalidParam('type not supported', '_createFile', {
+				key,
+				type: 'not_supported',
+				country,
+				side
 			});
 
-			it('should throw parameter error if no type', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-					sinon.stub(mpApi, 'isLoggedIn').returns(true);
-					await mpApi._createFile({
-						key,
-						country,
-						side
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
+			testInvalidParam('type national_identity_card and no side', '_createFile', {
+				key,
+				type: 'national_identity_card',
+				country
 			});
 
-			it('should throw parameter error if type not supportedd', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-					sinon.stub(mpApi, 'isLoggedIn').returns(true);
-					await mpApi._createFile({
-						key,
-						type: 'not_supported',
-						country,
-						side
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
+			testInvalidParam('type driving_licence and no side', '_createFile', {
+				key,
+				type: 'national_identity_card',
+				country
 			});
 
-			it('should throw parameter error if no country', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-					sinon.stub(mpApi, 'isLoggedIn').returns(true);
-					await mpApi._createFile({
-						key,
-						type,
-						side
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
+			testInvalidParam('side is not front or back', '_createFile', {
+				key,
+				type,
+				country,
+				side: 'invalid_side'
 			});
 
-			it('should throw parameter error if type national_identity_card and no side', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-					sinon.stub(mpApi, 'isLoggedIn').returns(true);
-					await mpApi._createFile({
-						key,
-						type: 'national_identity_card',
-						country
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
-
-			it('should throw parameter error if type driving_licence and no side', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-					sinon.stub(mpApi, 'isLoggedIn').returns(true);
-					await mpApi._createFile({
-						key,
-						type: 'driving_licence',
-						country
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
-
-			it('should throw parameter error if side is not front or back', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-					sinon.stub(mpApi, 'isLoggedIn').returns(true);
-					await mpApi._createFile({
-						key,
-						type,
-						country,
-						side: 'invalid_side'
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
-
-			it('should reject if not logged in', async () => {
-				sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-				sinon.stub(mpApi, 'isLoggedIn').returns(false);
-				try {
-					await mpApi._createFile({ key, type, country, side });
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(Error);
-				}
-			});
+			testLoggedIn('_createFile');
 		});
 
 		describe('uploadFile', () => {
@@ -1344,163 +1097,55 @@ describe('MoonPayApi', () => {
 				});
 			});
 
-			it('should throw parameter error if no file', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-					sinon.stub(mpApi, 'isLoggedIn').returns(true);
-					await mpApi.uploadFile({
-						fileType,
-						type,
-						country,
-						side
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
+			['file', 'fileType', 'type', 'country'].map(parameter =>
+				testMissingParam(parameter, 'uploadFile', {
+					file,
+					fileType,
+					type,
+					country,
+					side
+				})
+			);
+
+			testInvalidParam('file is not buffer', 'uploadFile', {
+				file: 'test file',
+				fileType,
+				type,
+				country,
+				side
 			});
 
-			it('should throw parameter error if file is not buffer', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-					sinon.stub(mpApi, 'isLoggedIn').returns(true);
-					await mpApi.uploadFile({
-						file: 'test file',
-						fileType,
-						type,
-						country,
-						side
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
+			testInvalidParam('type not supported', 'uploadFile', {
+				file,
+				fileType,
+				type: 'not_supported',
+				country,
+				side
 			});
 
-			it('should throw parameter error if no fileType', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-					sinon.stub(mpApi, 'isLoggedIn').returns(true);
-					await mpApi.uploadFile({
-						file,
-						type,
-						country,
-						side
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
+			testInvalidParam('type national_identity_card and no side', 'uploadFile', {
+				file,
+				fileType,
+				type: 'national_identity_card',
+				country
 			});
 
-			it('should throw parameter error if no type', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-					sinon.stub(mpApi, 'isLoggedIn').returns(true);
-					await mpApi.uploadFile({
-						file,
-						fileType,
-						country,
-						side
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
+			testInvalidParam('type driving_licence and no side', 'uploadFile', {
+				file,
+				fileType,
+				type: 'driving_licence',
+				country
 			});
 
-			it('should throw parameter error if type not supportedd', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-					sinon.stub(mpApi, 'isLoggedIn').returns(true);
-					await mpApi.uploadFile({
-						file,
-						fileType,
-						type: 'not_supported',
-						country,
-						side
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
+			testInvalidParam('side is not front or back', 'uploadFile', {
+				file,
+				fileType,
+				type,
+				country,
+				side: 'invalid_side'
 			});
 
-			it('should throw parameter error if no country', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-					sinon.stub(mpApi, 'isLoggedIn').returns(true);
-					await mpApi.uploadFile({
-						file,
-						fileType,
-						type,
-						side
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
-
-			it('should throw parameter error if type national_identity_card and no side', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-					sinon.stub(mpApi, 'isLoggedIn').returns(true);
-					await mpApi.uploadFile({
-						type: 'national_identity_card',
-						file,
-						fileType,
-						country
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
-
-			it('should throw parameter error if type driving_licence and no side', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-					sinon.stub(mpApi, 'isLoggedIn').returns(true);
-					await mpApi.uploadFile({
-						type: 'driving_licence',
-						file,
-						fileType,
-						country
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
-
-			it('should throw parameter error if side is not front or back', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-					sinon.stub(mpApi, 'isLoggedIn').returns(true);
-					await mpApi.uploadFile({
-						file,
-						fileType,
-						type,
-						country,
-						side: 'invalid_side'
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
-				}
-			});
-
-			it('should reject if not logged in', async () => {
-				sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-				sinon.stub(mpApi, 'isLoggedIn').returns(false);
-				try {
-					await mpApi.uploadFile({ file, fileType, type, country, side });
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(Error);
-				}
-			});
+			testLoggedIn('uploadFile');
 		});
 
 		describe('listFiles', () => {
@@ -1536,16 +1181,7 @@ describe('MoonPayApi', () => {
 				});
 			});
 
-			it('should reject if not logged in', async () => {
-				sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-				sinon.stub(mpApi, 'isLoggedIn').returns(false);
-				try {
-					await mpApi.listFiles();
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(Error);
-				}
-			});
+			testLoggedIn('listFiles');
 		});
 
 		describe('createToken', () => {
@@ -1582,18 +1218,6 @@ describe('MoonPayApi', () => {
 				}
 			};
 
-			const t = (parameter, opt) =>
-				it(`should return parameter error if no ${parameter}`, async () => {
-					try {
-						sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-						sinon.stub(mpApi, 'isLoggedIn').returns(true);
-						opt = _.omit(opt, [parameter]);
-						await mpApi.createToken(opt);
-						fail('no error thrown');
-					} catch (error) {
-						expect(error).toBeInstanceOf(ParameterValidationError);
-					}
-				});
 			it('should create token', async () => {
 				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
 				sinon.stub(mpApi, 'isLoggedIn').returns(true);
@@ -1606,32 +1230,16 @@ describe('MoonPayApi', () => {
 				});
 			});
 
-			it('should throw parameter error if country USA and no state', async () => {
-				try {
-					sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-					sinon.stub(mpApi, 'isLoggedIn').returns(true);
-					await mpApi.createToken({
-						...payload,
-						billingAddress: {
-							..._.omit(payload.billingAddress, ['state']),
-							country: 'USA'
-						}
-					});
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(ParameterValidationError);
+			testLoggedIn('createToken');
+
+			testInvalidParam('country USA and no state', 'createToken', {
+				...payload,
+				billingAddress: {
+					..._.omit(payload.billingAddress, ['state']),
+					country: 'USA'
 				}
 			});
-			it('should reject if not logged in', async () => {
-				sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-				sinon.stub(mpApi, 'isLoggedIn').returns(false);
-				try {
-					await mpApi.createToken();
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(Error);
-				}
-			});
+
 			[
 				'expiryDate',
 				'number',
@@ -1642,7 +1250,7 @@ describe('MoonPayApi', () => {
 				'billingAddress.town',
 				'billingAddress.postCode',
 				'billingAddress.country'
-			].map(p => t(p, payload));
+			].map(p => testMissingParam(p, 'createToken', payload));
 		});
 
 		describe('createCard', () => {
@@ -1668,19 +1276,6 @@ describe('MoonPayApi', () => {
 			const payload = {
 				tokenId: 'fc33e149-1f18-4cc9-841e-0d28c13410bf'
 			};
-
-			const t = (parameter, opt) =>
-				it(`should return parameter error if no ${parameter}`, async () => {
-					try {
-						sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-						sinon.stub(mpApi, 'isLoggedIn').returns(true);
-						opt = _.omit(opt, [parameter]);
-						await mpApi.createCard(opt);
-						fail('no error thrown');
-					} catch (error) {
-						expect(error).toBeInstanceOf(ParameterValidationError);
-					}
-				});
 			it('should create card', async () => {
 				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
 				sinon.stub(mpApi, 'isLoggedIn').returns(true);
@@ -1693,17 +1288,9 @@ describe('MoonPayApi', () => {
 				});
 			});
 
-			it('should reject if not logged in', async () => {
-				sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-				sinon.stub(mpApi, 'isLoggedIn').returns(false);
-				try {
-					await mpApi.createCard();
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(Error);
-				}
-			});
-			['tokenId'].map(p => t(p, payload));
+			testLoggedIn('createCard');
+
+			['tokenId'].map(p => testMissingParam(p, 'createCard', payload));
 		});
 
 		describe('listCards', () => {
@@ -1739,16 +1326,7 @@ describe('MoonPayApi', () => {
 				});
 			});
 
-			it('should reject if not logged in', async () => {
-				sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-				sinon.stub(mpApi, 'isLoggedIn').returns(false);
-				try {
-					await mpApi.listCards();
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(Error);
-				}
-			});
+			testLoggedIn('listCards');
 		});
 		describe('deleteCard', () => {
 			const expectedResponse = {
@@ -1772,19 +1350,7 @@ describe('MoonPayApi', () => {
 			};
 			const payload = { cardId: '68e46314-93e5-4420-ac10-485aef4e19d0' };
 
-			const t = (parameter, opt) =>
-				it(`should return parameter error if no ${parameter}`, async () => {
-					try {
-						sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-						sinon.stub(mpApi, 'isLoggedIn').returns(true);
-						opt = _.omit(opt, [parameter]);
-						await mpApi.deleteCard(opt);
-						fail('no error thrown');
-					} catch (error) {
-						expect(error).toBeInstanceOf(ParameterValidationError);
-					}
-				});
-			it('should create card', async () => {
+			it('should delete card', async () => {
 				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
 				sinon.stub(mpApi, 'isLoggedIn').returns(true);
 				const resp = await mpApi.deleteCard(payload);
@@ -1795,17 +1361,415 @@ describe('MoonPayApi', () => {
 				});
 			});
 
-			it('should reject if not logged in', async () => {
-				sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
-				sinon.stub(mpApi, 'isLoggedIn').returns(false);
-				try {
-					await mpApi.deleteCard();
-					fail('no error thrown');
-				} catch (error) {
-					expect(error).toBeInstanceOf(Error);
-				}
+			testLoggedIn('deleteCard');
+
+			['cardId'].map(p => testMissingParam(p, 'deleteCard', payload));
+		});
+
+		describe('createBankAccount', () => {
+			const expectedResponse = {
+				id: '74b38e1a-d636-4faa-909a-24e0beeb5b08',
+				createdAt: '2019-10-24T08:43:32.013Z',
+				updatedAt: '2019-10-24T08:43:32.013Z',
+				iban: 'AT622905300345678901',
+				bic: 'OSTBATYYZZZ',
+				accountNumber: null,
+				sortCode: null,
+				bankName: 'Bank Österreich',
+				currencyId: '71435a8d-211c-4664-a59e-2a5361a6c5a7',
+				customerId: '7138fb07-7c66-4f9a-a83a-a106e66bfde6'
+			};
+
+			const payload = {
+				currencyCode: 'EUR',
+				iban: 'AT622905300345678901'
+			};
+
+			it('should create bank account', async () => {
+				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				sinon.stub(mpApi, 'isLoggedIn').returns(true);
+				const resp = await mpApi.createBankAccount(payload);
+				expect(resp).toEqual(expectedResponse);
+				expect(rp.getCall(0).args[0]).toEqual({
+					method: 'post',
+					url: 'bank_accounts',
+					body: { currencyCode: 'eur', iban: 'AT622905300345678901' }
+				});
 			});
-			['cardId'].map(p => t(p, payload));
+
+			testLoggedIn('createBankAccount');
+
+			['currencyCode'].map(p => testMissingParam(p, 'createBankAccount', payload));
+
+			testInvalidParam('currencyCode not supported', 'createBankAccount', {
+				currencyCode: 'test'
+			});
+
+			testInvalidParam('eur and no iban', 'createBankAccount', {
+				currencyCode: 'eur'
+			});
+
+			testInvalidParam('gbp and no account number', 'createBankAccount', {
+				currencyCode: 'gbp',
+				sortCode: '1231'
+			});
+
+			testInvalidParam('gbp and no sortCode', 'createBankAccount', {
+				currencyCode: 'gbp',
+				accountNumber: 'sfasdawa'
+			});
+		});
+
+		describe('listBankAccounts', () => {
+			const expectedResponse = [
+				{
+					id: '74b38e1a-d636-4faa-909a-24e0beeb5b08',
+					createdAt: '2019-10-24T08:43:32.013Z',
+					updatedAt: '2019-10-24T08:43:32.013Z',
+					iban: 'AT622905300345678901',
+					bic: 'OSTBATYYZZZ',
+					accountNumber: null,
+					sortCode: null,
+					bankName: 'Bank Österreich',
+					currencyId: '71435a8d-211c-4664-a59e-2a5361a6c5a7',
+					customerId: '7138fb07-7c66-4f9a-a83a-a106e66bfde6'
+				},
+				{
+					id: '43851745-533f-4cd0-b6f4-66652f194125',
+					createdAt: '2019-11-05T09:50:02.011Z',
+					updatedAt: '2019-11-05T09:50:02.011Z',
+					iban: null,
+					bic: null,
+					accountNumber: '31247568',
+					sortCode: '531246',
+					bankName: 'City of Glasgow Bank',
+					currencyId: '6f424585-8936-4eb1-b01e-443fb306d1f5',
+					customerId: '7138fb07-7c66-4f9a-a83a-a106e66bfde6'
+				}
+			];
+
+			it('should list bank accounts', async () => {
+				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				sinon.stub(mpApi, 'isLoggedIn').returns(true);
+				const resp = await mpApi.listBankAccounts();
+				expect(resp).toEqual(expectedResponse);
+				expect(rp.getCall(0).args[0]).toEqual({
+					method: 'get',
+					url: 'bank_accounts'
+				});
+			});
+
+			testLoggedIn('listBankAccounts');
+		});
+
+		describe('deleteBankAccount', () => {
+			const expectedResponse = {
+				id: '74b38e1a-d636-4faa-909a-24e0beeb5b08',
+				createdAt: '2019-10-24T08:43:32.013Z',
+				updatedAt: '2019-10-24T08:43:32.013Z',
+				iban: 'AT622905300345678901',
+				bic: 'OSTBATYYZZZ',
+				accountNumber: null,
+				sortCode: null,
+				bankName: 'Bank Österreich',
+				currencyId: '71435a8d-211c-4664-a59e-2a5361a6c5a7',
+				customerId: '7138fb07-7c66-4f9a-a83a-a106e66bfde6'
+			};
+
+			const payload = {
+				bankAccountId: '74b38e1a-d636-4faa-909a-24e0beeb5b08'
+			};
+
+			it('should delete bank account', async () => {
+				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				sinon.stub(mpApi, 'isLoggedIn').returns(true);
+				const resp = await mpApi.deleteBankAccount(payload);
+				expect(resp).toEqual(expectedResponse);
+				expect(rp.getCall(0).args[0]).toEqual({
+					method: 'delete',
+					url: `bank_accounts/${payload.bankAccountId}`
+				});
+			});
+
+			testLoggedIn('deleteBankAccount');
+
+			['bankAccountId'].map(p => testMissingParam(p, 'deleteBankAccount', payload));
+		});
+
+		describe('createBankTransaction', () => {
+			const expectedResponse = {
+				id: 'ca83aa45-fa6b-446d-b01d-33a062db16e8',
+				createdAt: '2018-10-11T07:30:42.858Z',
+				updatedAt: '2018-10-11T07:30:42.858Z',
+				baseCurrencyAmount: 40,
+				quoteCurrencyAmount: null,
+				feeAmount: 4.99,
+				extraFeeAmount: 2.5,
+				networkFeeAmount: 0,
+				areFeesIncluded: false,
+				status: 'waitingPayment',
+				failureReason: null,
+				walletAddress: '0x9c76ae45c36a4da3801a5ba387bbfa3c073ecae2',
+				walletAddressTag: null,
+				cryptoTransactionId: null,
+				returnUrl: null,
+				redirectUrl: null,
+				baseCurrencyId: '71435a8d-211c-4664-a59e-2a5361a6c5a7',
+				currencyId: 'e1c58187-7486-4291-a95e-0a8a1e8ef51d',
+				customerId: '7138fb07-7c66-4f9a-a83a-a106e66bfde6',
+				cardId: null,
+				bankAccountId: '74b38e1a-d636-4faa-909a-24e0beeb5b08',
+				bankDepositInformation: {
+					iban: 'ZZ135790000087654321',
+					bic: 'ABCDZZ21XXX',
+					bankName: 'Cosmic Bank',
+					bankAddress: '123 Luna Lane, London LL1 1LL, United Kingdom',
+					accountName: 'Moon Pay Limited',
+					accountAddress: 'Triq l-Uqija, Swieqi SWQ 2332, Malta'
+				},
+				bankTransferReference: 'jTxDd17ATQ',
+				eurRate: 1,
+				usdRate: 1.11341,
+				gbpRate: 0.86046,
+				externalTransactionId: null
+			};
+
+			const payload = {
+				baseCurrencyAmount: 40,
+				extraFeePercentage: 5,
+				walletAddress: '0x9c76ae45c36a4da3801a5ba387bbfa3c073ecae2',
+				baseCurrencyCode: 'eur',
+				currencyCode: 'eth',
+				bankAccountId: '74b38e1a-d636-4faa-909a-24e0beeb5b08'
+			};
+
+			it('should create bank transaction', async () => {
+				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				sinon.stub(mpApi, 'isLoggedIn').returns(true);
+				const resp = await mpApi.createBankTransaction(payload);
+				expect(resp).toEqual(expectedResponse);
+				expect(rp.getCall(0).args[0]).toEqual({
+					method: 'post',
+					url: 'transactions',
+					body: payload
+				});
+			});
+
+			testLoggedIn('createBankTransaction');
+
+			[
+				'baseCurrencyAmount',
+				'extraFeePercentage',
+				'walletAddress',
+				'baseCurrencyCode',
+				'currencyCode',
+				'bankAccountId'
+			].map(p => testMissingParam(p, 'createBankTransaction', payload));
+		});
+		describe('createCardTransaction', () => {
+			const expectedResponse = {
+				id: '354b1f46-480c-4307-9896-f4c81c1e1e17',
+				createdAt: '2018-08-27T19:40:43.748Z',
+				updatedAt: '2018-08-27T19:40:43.748Z',
+				baseCurrencyAmount: 50,
+				quoteCurrencyAmount: null,
+				feeAmount: 4.99,
+				extraFeeAmount: 2.5,
+				networkFeeAmount: 0,
+				areFeesIncluded: false,
+				status: 'pending',
+				failureReason: null,
+				walletAddress: '0x9c76ae45c36a4da3801a5ba387bbfa3c073ecae2',
+				walletAddressTag: null,
+				cryptoTransactionId: null,
+				returnUrl: 'https://buy.moonpay.com',
+				redirectUrl: null,
+				baseCurrencyId: '71435a8d-211c-4664-a59e-2a5361a6c5a7',
+				currencyId: 'e1c58187-7486-4291-a95e-0a8a1e8ef51d',
+				customerId: '7138fb07-7c66-4f9a-a83a-a106e66bfde6',
+				cardId: '68e46314-93e5-4420-ac10-485aef4e19d0',
+				bankAccountId: null,
+				bankDepositInformation: null,
+				bankTransferReference: null,
+				eurRate: 1,
+				usdRate: 1.11336,
+				gbpRate: 0.86044,
+				externalTransactionId: null
+			};
+
+			const payload = {
+				baseCurrencyAmount: 50,
+				extraFeePercentage: 5,
+				walletAddress: '0x9c76ae45c36a4da3801a5ba387bbfa3c073ecae2',
+				baseCurrencyCode: 'eur',
+				currencyCode: 'eth',
+				returnUrl: 'https://buy.moonpay.com',
+				tokenId: 'fc33e149-1f18-4cc9-841e-0d28c13410bf'
+			};
+
+			it('should create card transaction', async () => {
+				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				sinon.stub(mpApi, 'isLoggedIn').returns(true);
+				const resp = await mpApi.createCardTransaction(payload);
+				expect(resp).toEqual(expectedResponse);
+				expect(rp.getCall(0).args[0]).toEqual({
+					method: 'post',
+					url: 'transactions',
+					body: payload
+				});
+			});
+
+			testLoggedIn('createCardTransaction');
+
+			[
+				'baseCurrencyAmount',
+				'extraFeePercentage',
+				'walletAddress',
+				'baseCurrencyCode',
+				'currencyCode',
+				'returnUrl'
+			].map(p => testMissingParam(p, 'createCardTransaction', payload));
+
+			testInvalidParam(
+				'no tokenId or cardId',
+				'createCardTransaction',
+				_.omit(payload, ['tokenId'])
+			);
+		});
+
+		describe('getTransaction', () => {
+			const expectedResponse = {
+				id: '354b1f46-480c-4307-9896-f4c81c1e1e17',
+				createdAt: '2018-08-27T19:40:43.748Z',
+				updatedAt: '2018-08-27T19:40:43.804Z',
+				baseCurrencyAmount: 50,
+				quoteCurrencyAmount: 0.12255,
+				feeAmount: 4.99,
+				extraFeeAmount: 2.5,
+				networkFeeAmount: 0,
+				areFeesIncluded: false,
+				status: 'completed',
+				failureReason: null,
+				walletAddress: '0x9c76ae45c36a4da3801a5ba387bbfa3c073ecae2',
+				walletAddressTag: null,
+				cryptoTransactionId:
+					'0x548b15d1673d4a8c9ab93a48bc8b42e223c5f7776cea6044b91d0f3fe79b0bd6',
+				returnUrl: 'https://buy.moonpay.com',
+				redirectUrl: null,
+				baseCurrencyId: '71435a8d-211c-4664-a59e-2a5361a6c5a7',
+				currencyId: 'e1c58187-7486-4291-a95e-0a8a1e8ef51d',
+				customerId: '7138fb07-7c66-4f9a-a83a-a106e66bfde6',
+				cardId: '68e46314-93e5-4420-ac10-485aef4e19d0',
+				bankAccountId: null,
+				bankDepositInformation: null,
+				bankTransferReference: null,
+				eurRate: 1,
+				usdRate: 1.11336,
+				gbpRate: 0.86044,
+				externalTransactionId: null
+			};
+
+			const payload = { transactionId: expectedResponse.id };
+
+			it('should get transaction', async () => {
+				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				sinon.stub(mpApi, 'isLoggedIn').returns(true);
+				const resp = await mpApi.getTransaction(payload);
+				expect(resp).toEqual(expectedResponse);
+				expect(rp.getCall(0).args[0]).toEqual({
+					method: 'get',
+					url: `transactions/${payload.transactionId}`
+				});
+			});
+
+			testLoggedIn('getTransaction');
+
+			['transactionId'].map(p => testMissingParam(p, 'getTransaction', payload));
+		});
+
+		describe('listTransactions', () => {
+			const expectedResponse = [
+				{
+					id: 'ca83aa45-fa6b-446d-b01d-33a062db16e8',
+					createdAt: '2018-10-11T07:30:42.858Z',
+					updatedAt: '2018-10-11T07:30:42.858Z',
+					baseCurrencyAmount: 40,
+					quoteCurrencyAmount: 0.12576,
+					feeAmount: 4.99,
+					extraFeeAmount: 2.5,
+					networkFeeAmount: 0,
+					areFeesIncluded: false,
+					status: 'completed',
+					failureReason: null,
+					walletAddress: '0x9c76ae45c36a4da3801a5ba387bbfa3c073ecae2',
+					walletAddressTag: null,
+					cryptoTransactionId:
+						'0x548b15d1673d4a8c9ab93a48bc8b42e223c5f7776cea6044b91d0f3fe79b0cf8',
+					returnUrl: null,
+					redirectUrl: null,
+					baseCurrencyId: '71435a8d-211c-4664-a59e-2a5361a6c5a7',
+					currencyId: 'e1c58187-7486-4291-a95e-0a8a1e8ef51d',
+					customerId: '7138fb07-7c66-4f9a-a83a-a106e66bfde6',
+					cardId: null,
+					bankAccountId: '74b38e1a-d636-4faa-909a-24e0beeb5b08',
+					bankDepositInformation: {
+						iban: 'ZZ135790000087654321',
+						bic: 'ABCDZZ21XXX',
+						bankName: 'Cosmic Bank',
+						bankAddress: '123 Luna Lane, London LL1 1LL, United Kingdom',
+						accountName: 'Moon Pay Limited',
+						accountAddress: 'Triq l-Uqija, Swieqi SWQ 2332, Malta'
+					},
+					bankTransferReference: 'jTxDd17ATQ',
+					eurRate: 1,
+					usdRate: 1.11341,
+					gbpRate: 0.86046,
+					externalTransactionId: null
+				},
+				{
+					id: '354b1f46-480c-4307-9896-f4c81c1e1e17',
+					createdAt: '2018-08-27T19:45:43.748Z',
+					updatedAt: '2018-08-27T19:45:43.804Z',
+					baseCurrencyAmount: 50,
+					quoteCurrencyAmount: 0.12255,
+					feeAmount: 4.99,
+					extraFeeAmount: 2.5,
+					networkFeeAmount: 0,
+					areFeesIncluded: false,
+					status: 'completed',
+					failureReason: null,
+					walletAddress: '0x9c76ae45c36a4da3801a5ba387bbfa3c073ecae2',
+					walletAddressTag: null,
+					cryptoTransactionId:
+						'0x548b15d1673d4a8c9ab93a48bc8b42e223c5f7776cea6044b91d0f3fe79b0bd6',
+					returnUrl: 'https://buy.moonpay.com',
+					redirectUrl: null,
+					baseCurrencyId: '71435a8d-211c-4664-a59e-2a5361a6c5a7',
+					currencyId: 'e1c58187-7486-4291-a95e-0a8a1e8ef51d',
+					customerId: '7138fb07-7c66-4f9a-a83a-a106e66bfde6',
+					cardId: '68e46314-93e5-4420-ac10-485aef4e19d0',
+					bankAccountId: null,
+					bankDepositInformation: null,
+					bankTransferReference: null,
+					eurRate: 1,
+					usdRate: 1.11336,
+					gbpRate: 0.86044,
+					externalTransactionId: null
+				}
+			];
+
+			it('should list transactions', async () => {
+				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				sinon.stub(mpApi, 'isLoggedIn').returns(true);
+				const resp = await mpApi.listTransactions();
+				expect(resp).toEqual(expectedResponse);
+				expect(rp.getCall(0).args[0]).toEqual({
+					method: 'get',
+					url: `transactions`
+				});
+			});
+
+			testLoggedIn('listTransactions');
 		});
 	});
 });
