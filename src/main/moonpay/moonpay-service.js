@@ -8,8 +8,29 @@ export class MoonPayService {
 	}
 
 	checkServiceAvailability() {
-		// check if service available based on ip/residency attributes
+		// check if service available based on ip
+		// check if service available based on country of residency
 	}
+
+	auth(identity) {
+		// authenticate with moonpay
+	}
+
+	getKycRequirements() {}
+
+	checkKycStatus() {}
+
+	getLimits() {}
+
+	verifyPhone() {}
+
+	getQuote(opt) {}
+
+	listCreditCards() {}
+
+	addPaymentMethod() {}
+
+	getTransaction(transactionId) {}
 }
 
 export default MoonPayService;
