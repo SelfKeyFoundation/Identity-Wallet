@@ -4,7 +4,7 @@ import CryptoChartBox from './crypto-chart-box';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { KeyFiWidgetContainer } from '../marketplace/keyfi/widget/keyfi-widget-container';
-import BuyKeyWidget from './buy-key-widget';
+import BuyKeyWidget from './buy-key-widget-container';
 import DashboardMarketplaceApplications from './dashboard-marketplace-applications';
 import DashboardSelfkeyProfile from './dashboard-selfkey-profile';
 import TransactionsHistory from '../transaction/transactions-history';

@@ -1,3 +1,6 @@
+/**
+ * NOT USED, FUTURE IMPROVEMENT
+ */
 import React from 'react';
 import {
 	CardHeader,

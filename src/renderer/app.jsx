@@ -28,7 +28,7 @@ import Terms from './settings/terms';
 import TermsWarning from './settings/terms-warning';
 import Loading from './home/loading';
 import ConnectingToLedger from './wallet/unlock/ledger/connecting';
-import { SelfKeyIdCreateForm } from './selfkey-id/main/components/selfkey-id-create-form';
+import { SelfKeyIdCreateForm } from './individual/common/create-form';
 import AutoUpdate from './auto-update/auto-update-contatiner';
 import AutoUpdateProgress from './auto-update/auto-update-progress-contatiner';
 import ApproveSessionContainer from './wallet-connect/approve-session-container';
