@@ -3,7 +3,7 @@ import EthUnits from 'common/utils/eth-units';
 import { Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { NumberFormat } from 'selfkey-ui';
-import { CustomTransactionBox } from './custom-transaction-box';
+import { CustomTransactionSettings } from './custom-transaction-settings';
 
 const DEFAULT_ETH_GAS_LIMIT = 21000;
 
@@ -276,7 +276,7 @@ export class TransactionFeeBoxComponent extends PureComponent {
 					)}
 				</div>
 				{showAdvanced && (
-					<CustomTransactionBox
+					<CustomTransactionSettings
 						ethGasStationInfo={ethGasStationInfo}
 						reloadEthGasStationInfoAction={reloadEthGasStationInfoAction}
 						nonce={nonce}

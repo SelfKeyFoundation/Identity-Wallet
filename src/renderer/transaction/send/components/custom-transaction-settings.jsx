@@ -66,7 +66,7 @@ const styles = theme => ({
 	}
 });
 
-export const CustomTransactionBox = withStyles(styles)(
+export const CustomTransactionSettings = withStyles(styles)(
 	({
 		classes,
 		ethGasStationInfo,
@@ -150,3 +150,5 @@ export const CustomTransactionBox = withStyles(styles)(
 		);
 	}
 );
+
+export default CustomTransactionSettings;
