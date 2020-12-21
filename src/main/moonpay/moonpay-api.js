@@ -17,6 +17,69 @@ export class MoonPayApi {
 	static BANK_ACCOUNT_CURRENCIES_REQUIRING_ACCOUNT = ['gbp'];
 	static BANK_ACCOUNT_CURRENCIES_REQUIRING_SORT_CODE = ['gbp'];
 
+	static TEST_CARDS_SUCCESS = [
+		{
+			cardType: 'Visa',
+			number: '4000 0231 0466 253',
+			expiryDate: '12/2020',
+			cvs: '123'
+		},
+		{
+			cardType: 'Visa',
+			number: '4002 6297 9820 5148',
+			expiryDate: '12/2020',
+			cvs: '123'
+		},
+		{
+			cardType: 'Mastercard',
+			number: '5101 0822 4004 9218',
+			expiryDate: '12/2020',
+			cvs: '123'
+		},
+		{
+			cardType: 'Mastercard',
+			number: '5333 3009 8952 1936',
+			expiryDate: '12/2020',
+			cvs: '123'
+		}
+	];
+
+	static TEST_CARDS_FAIL = [
+		{
+			cardType: 'Visa',
+			number: '4008 3708 9666 2369',
+			expiryDate: '12/2020',
+			cvs: '123'
+		},
+		{
+			cardType: 'Mastercard',
+			number: '5101 1186 1177 9692',
+			expiryDate: '12/2020',
+			cvs: '123'
+		}
+	];
+
+	static TEST_CARD_3D_SECURE = [
+		{
+			cardType: 'Visa',
+			number: '4012 0010 3749 0014',
+			expiryDate: '12/2020',
+			cvs: '123'
+		},
+		{
+			cardType: 'Mastercard',
+			number: '2221 0080 1217 4837',
+			expiryDate: '12/2020',
+			cvs: '123'
+		}
+	];
+
+	static TEST_BCH_ADDRESS = 'bchtest:qrn45hfjpqd0w5p7dur5a2aasgp3nj8d8qh4exym5k';
+	static TEST_BTC_ADDRESS = 'tb1q45h8zexwztmz3nyd8gmkxhpavdsva4znwwhzvs';
+	static TEST_ETH_ADDRESS = '0xc216eD2D6c295579718dbd4a797845CdA70B3C36';
+	static TEST_XPR_ADDRESS = 'rUZTCFB6zPyeEmDhrAVqVbBaLPWrzjKCQz';
+	static TEST_STELLAR_ADDRESS = 'GD4KAFADEFXOLNWWUA4IZI5YG23AH2OSJMIJAZ6YLNHJWNPX3T366FIY';
+
 	constructor(identity, opt) {
 		if (!identity) throw new ParameterValidationError('"identity" is a required parameter');
 		if (!opt) throw new ParameterValidationError('"opt" is a required parameter');
