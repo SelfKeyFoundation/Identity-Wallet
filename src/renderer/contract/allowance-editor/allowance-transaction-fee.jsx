@@ -1,6 +1,6 @@
 import React from 'react';
 // import { makeStyles } from '@material-ui/styles';
-import TransactionFeeBox from '../../transaction/send/containers/transaction-fee-box';
+import TransactionFeeBox from '../../transaction/send/components/transaction-fee-box';
 
 // const useStyles = makeStyles({});
 

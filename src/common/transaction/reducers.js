@@ -7,7 +7,7 @@ const initialState = {
 	usdFee: 0,
 	gasPrice: 0,
 	gasLimit: 0,
-	nouce: 0,
+	nonce: 0,
 	signedHex: '',
 	transactionHash: '',
 	addressError: false,
