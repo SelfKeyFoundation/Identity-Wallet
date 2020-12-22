@@ -44,6 +44,7 @@ import ContractSyncJobHandler from './blockchain/contracts/contracts-sync-job-ha
 import ContractAllowanceService from './blockchain/contracts/contract-allowance-service';
 import DeepLinksService from './application/deeplink-service';
 import WalletConnectService from './wallet-connect/wallet-connect-service';
+import MoonPayService from './moonpay/moonpay-service';
 
 export const registerMainServices = container => {
 	container.register({
@@ -96,6 +97,7 @@ export const registerMainServices = container => {
 		currencyService: asClass(CurrencyService).singleton(),
 		matomoService: asClass(MatomoService).singleton(),
 		deepLinksService: asClass(DeepLinksService).singleton(),
-		walletConnectService: asClass(WalletConnectService).singleton()
+		walletConnectService: asClass(WalletConnectService).singleton(),
+		moonpayService: asClass(MoonPayService).singleton()
 	});
 };
