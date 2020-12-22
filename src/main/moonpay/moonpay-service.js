@@ -1,9 +1,17 @@
+import { validate } from 'parameter-validator';
 import { MoonPayApi } from './moonpay-api';
 export class MoonPayService {
 	constructor({ config }) {
-		this.api = new MoonPayApi({
-			endpoint: config.moonPayEndpoint,
-			apiKey: config.moonPayApiKey
+		this.config = config;
+		this.endpoint = config.moonPayApiEndpoint;
+		this.apiKey = config.moonPayApiKey;
+	}
+
+	getApi(loginInfo = null) {
+		return new MoonPayApi({
+			endpoint: this.endpoint,
+			apiKey: this.apiKey,
+			loginInfo
 		});
 	}
 
@@ -12,21 +20,29 @@ export class MoonPayService {
 		// check if service available based on country of residency
 	}
 
-	auth(identity) {
-		// authenticate with moonpay
+	async auth(identity, email) {
+		validate({ identity, email }, ['identity', 'email']);
+		const signer = async msg => {
+			const signature = await identity.genSignatureForMessage(msg);
+			return signature;
+		};
+		const authData = { email, walletAddress: identity.address };
+		return this.getApi().establishSession(authData, signer);
 	}
 
 	getKycRequirements() {}
 
 	checkKycStatus() {}
 
-	getLimits() {}
+	async getLimits(auth) {
+		this.getApi(auth).getLimits();
+	}
 
 	verifyPhone() {}
 
 	getQuote(opt) {}
 
-	listCreditCards() {}
+	getCreditCards() {}
 
 	addPaymentMethod() {}
 

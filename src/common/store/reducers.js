@@ -27,6 +27,8 @@ import marketplace from '../marketplace';
 import tokenSwap from '../token-swap';
 import contracts from '../contract';
 import walletConnect from '../wallet-connect';
+import { moonpayAuth } from '../moonpay';
+import hardwareWallet from '../hardware-wallet';
 
 export const createReducers = (scope = 'main') => {
 	let scopedReducers = {};
@@ -61,6 +63,8 @@ export const createReducers = (scope = 'main') => {
 		tokenSwap,
 		contracts,
 		walletConnect,
+		moonpayAuth,
+		hardwareWallet,
 		...scopedReducers
 	});
 };

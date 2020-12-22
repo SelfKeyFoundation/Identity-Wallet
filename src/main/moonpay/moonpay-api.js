@@ -83,7 +83,7 @@ export class MoonPayApi {
 
 	constructor(opt = {}) {
 		const { endpoint, apiKey } = validate(opt, ['endpoint', 'apiKey']);
-		this.loginInfo = null;
+		const { loginInfo = null } = opt;
 		this.opt = opt;
 		const apiOpt = {
 			endpoint,
@@ -91,6 +91,8 @@ export class MoonPayApi {
 			onRequestError: this.handleRequestError.bind(this)
 		};
 		this.api = new Api(apiOpt);
+
+		this.setLoginInfo(loginInfo);
 	}
 
 	handleRequestError(error) {
