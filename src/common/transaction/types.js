@@ -15,6 +15,7 @@ const MARKETPLACE_SEND = 'app/transaction/marketplaceSend';
 const SWAP = 'app/transactions/swap';
 const CRYPTO_CURRENCY_SET = 'app/transaction/cryptoCurrency/SET';
 const LOCKED_SET = 'app/transaction/locked/SET';
+const NONCE_SET = 'app/transaction/nonce/SET';
 
 export {
 	TRANSACTION_UPDATE,
@@ -32,5 +33,6 @@ export {
 	MARKETPLACE_SEND,
 	CRYPTO_CURRENCY_SET,
 	LOCKED_SET,
-	SWAP
+	SWAP,
+	NONCE_SET
 };

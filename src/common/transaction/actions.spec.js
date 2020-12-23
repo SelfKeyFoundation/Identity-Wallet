@@ -10,7 +10,7 @@ describe('actions', () => {
 			usdFee: 2,
 			gasPrice: 1221,
 			gasLimit: 21321,
-			nouce: 11,
+			nonce: 11,
 			signedHex: 'dasdas',
 			transactionHash: 'dsadas',
 			addressError: false,

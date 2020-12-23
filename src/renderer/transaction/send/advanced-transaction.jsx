@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import EthUnits from 'common/utils/eth-units';
 import { TransactionBox } from '../common/transaction-box';
 import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/eth-gas-station';
 import { transactionOperations, transactionSelectors } from 'common/transaction';
@@ -7,31 +8,21 @@ import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
 import { withStyles } from '@material-ui/styles';
-import {
-	MenuItem,
-	Select,
-	Input,
-	Tabs,
-	Tab,
-	Grid,
-	Button,
-	Typography,
-	Divider,
-	FormControl
-} from '@material-ui/core';
+import { MenuItem, Select, Input, Tabs, Tab, Typography, FormControl } from '@material-ui/core';
 import { appOperations, appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
 import { debounce, over } from 'lodash';
 import { InputTitle } from '../../common/input-title';
 import { getWallet } from 'common/wallet/selectors';
-import ReceiveTokenTab from './containers/receive-token-tab';
-// import SendTokenTab from './containers/send-token-tab';
-import { NumberFormat, TransactionFeeBox, SelectDropdownIcon } from 'selfkey-ui';
+import ReceiveTokenTab from './components/receive-token-tab';
+import SendTokenTab from './components/send-token-tab';
+import { SelectDropdownIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	balance: {
 		color: '#fff',
-		fontWeight: 'bold'
+		fontWeight: 'bold',
+		marginLeft: '.5em'
 	},
 	selectAllAmountBtn: {
 		cursor: 'pointer',
@@ -109,9 +100,6 @@ const styles = theme => ({
 		backgroundColor: '#1E262E',
 		color: '#FFFFFF'
 	},
-	amountBottomSpace: {
-		marginBottom: '36px'
-	},
 	tokenBottomSpace: {
 		marginBottom: '20px'
 	},
@@ -134,7 +122,7 @@ const styles = theme => ({
 		lineHeight: '19px'
 	},
 	tabs: {
-		marginBottom: '50px'
+		marginBottom: '20px'
 	},
 
 	cryptoIcon: {
@@ -174,7 +162,7 @@ const styles = theme => ({
 });
 
 class TransactionSendBoxContainer extends PureComponent {
-	static UPDATE_DELAY = 1000;
+	static UPDATE_DELAY = 100;
 
 	state = {
 		amount: '',
@@ -185,11 +173,23 @@ class TransactionSendBoxContainer extends PureComponent {
 		tab: 'send'
 	};
 
-	componentDidMount() {
+	async componentDidMount() {
 		this.loadData();
 
 		let { trezorAccountIndex, cryptoCurrency } = this.props;
-		this.props.dispatch(transactionOperations.init({ trezorAccountIndex, cryptoCurrency }));
+		await this.props.dispatch(
+			transactionOperations.init({ trezorAccountIndex, cryptoCurrency })
+		);
+	}
+
+	componentDidUpdate(prevProps) {
+		if (
+			prevProps.gasLimit !== this.props.gasLimit ||
+			prevProps.gasPrice !== this.props.gasPrice ||
+			prevProps.ethFee !== this.props.ethFee
+		) {
+			this.adjustMaxAmount();
+		}
 	}
 
 	loadData = () => {
@@ -216,6 +216,11 @@ class TransactionSendBoxContainer extends PureComponent {
 		TransactionSendBoxContainer.UPDATE_DELAY
 	);
 
+	handleNonceChange = debounce(
+		value => this.props.dispatch(transactionOperations.setNonce(value)),
+		TransactionSendBoxContainer.UPDATE_DELAY
+	);
+
 	lockTransaction = () => this.props.dispatch(transactionOperations.setLocked(true));
 
 	withLock = targetFunction => over([this.lockTransaction, targetFunction]);
@@ -233,14 +238,30 @@ class TransactionSendBoxContainer extends PureComponent {
 		this.setState({ sending: false });
 	};
 
-	// TransactionSendBox - Start
 	handleAllAmountClick = () => {
-		const value = String(this.props.balance);
-		this.setState({
-			...this.state,
-			amount: value
-		});
+		let value = String(this.props.balance);
+
+		if (this.state.cryptoCurrency === 'ETH') {
+			value =
+				this.props.balance -
+				EthUnits.toEther(this.props.gasPrice * this.props.gasLimit, 'gwei');
+			value = String(value);
+		}
+
+		this.setState({ amount: value });
 		this.props.dispatch(transactionOperations.setAmount(value));
+	};
+
+	adjustMaxAmount = () => {
+		if (this.state.cryptoCurrency === 'ETH') {
+			const max =
+				this.props.balance -
+				EthUnits.toEther(this.props.gasPrice * this.props.gasLimit, 'gwei');
+			if (this.state.amount > max) {
+				this.setState({ amount: max });
+				this.props.dispatch(transactionOperations.setAmount(max));
+			}
+		}
 	};
 
 	handleAddressChange = event => {
@@ -298,70 +319,10 @@ class TransactionSendBoxContainer extends PureComponent {
 		});
 	}
 
-	renderButtons() {
-		const { classes, addressError, address, ethFee, locked } = this.props;
-		const { sending, amount } = this.state;
-		const sendBtnIsEnabled = address && +amount && !addressError && ethFee && !locked;
-
-		if (sending) {
-			return (
-				<Grid
-					container
-					direction="row"
-					justify="center"
-					alignItems="center"
-					className={classes.actionButtonsContainer}
-					spacing={3}
-				>
-					<Grid item>
-						<Button variant="contained" size="large" onClick={this.handleConfirm}>
-							CONFIRM
-						</Button>
-					</Grid>
-					<Grid item>
-						<Button variant="outlined" size="large" onClick={this.handleCancel}>
-							CANCEL
-						</Button>
-					</Grid>
-				</Grid>
-			);
-		} else {
-			return (
-				<Grid
-					container
-					direction="row"
-					justify="center"
-					alignItems="center"
-					className={classes.actionButtonsContainer}
-				>
-					<Grid item>
-						<Button
-							disabled={!sendBtnIsEnabled}
-							className={classes.button}
-							onClick={this.handleSend}
-							variant="contained"
-							size="large"
-						>
-							SEND
-						</Button>
-					</Grid>
-				</Grid>
-			);
-		}
-	}
-
 	render() {
-		const {
-			classes,
-			sendingAddress,
-			locale,
-			fiatCurrency,
-			amountUsd,
-			addressError
-		} = this.props;
+		const { classes, sendingAddress } = this.props;
 		let { cryptoCurrency } = this.state;
 		const title = 'Send/Receive ERC-20 Tokens';
-		const labelInputClass = `${addressError ? classes.errorColor : ''}`;
 		return (
 			<TransactionBox closeAction={this.handleCancelAction} title={title}>
 				<div className={classes.tokenBottomSpace}>
@@ -400,90 +361,24 @@ class TransactionSendBoxContainer extends PureComponent {
 							<Tab id="send" value="send" label="Send" />
 							<Tab id="receive" value="receive" label="Receive" />
 						</Tabs>
+
 						{this.state.tab === 'send' && (
-							<React.Fragment>
-								<div className={classes.bottomSpace}>
-									<Typography variant="body2" color="secondary">
-										Available:{' '}
-										<span className={classes.balance}>
-											{this.props.balance}{' '}
-											{cryptoCurrency !== 'custom' ? cryptoCurrency : ''}
-										</span>
-									</Typography>
-								</div>
-								<div className={classes.amountBottomSpace}>
-									<InputTitle
-										title={`Amount${
-											cryptoCurrency !== 'custom'
-												? ` (${cryptoCurrency})`
-												: ''
-										}`}
-									/>
-									<div className={classes.tokenMax}>
-										<Input
-											type="text"
-											onChange={this.handleAmountChange}
-											value={`${this.state.amount}`}
-											placeholder="0.00"
-											className={classes.amount}
-											fullWidth
-										/>
-										<Button
-											onClick={this.handleAllAmountClick}
-											variant="outlined"
-											size="large"
-										>
-											Max
-										</Button>
-									</div>
-									<div className={classes.fiatPrice}>
-										<Typography
-											variant="subtitle2"
-											color="secondary"
-											style={{ marginRight: '3px' }}
-										>
-											<NumberFormat
-												locale={locale}
-												priceStyle="currency"
-												currency={fiatCurrency}
-												value={amountUsd}
-												fractionDigits={15}
-											/>
-										</Typography>
-										<Typography variant="subtitle2" color="secondary">
-											USD
-										</Typography>
-									</div>
-								</div>
-
-								<div>
-									<InputTitle title="Send to" />
-									<div className={`${classes.tokenMax} ${classes.flexColumn}`}>
-										<Input
-											type="text"
-											onChange={this.handleAddressChange}
-											value={this.state.address}
-											placeholder="0x"
-											className={labelInputClass}
-											fullWidth
-										/>
-									</div>
-								</div>
-								{addressError && (
-									<span id="labelError" className={classes.errorText}>
-										Invalid address. Please check and try again.
-									</span>
-								)}
-								<Divider className={classes.divider} />
-
-								<TransactionFeeBox
-									changeGasLimitAction={this.withLock(this.handleGasLimitChange)}
-									changeGasPriceAction={this.withLock(this.handleGasPriceChange)}
-									reloadEthGasStationInfoAction={this.loadData}
-									{...this.props}
-								/>
-								{this.renderButtons()}
-							</React.Fragment>
+							<SendTokenTab
+								{...this.props}
+								sending={this.state.sending}
+								address={this.state.address}
+								amount={this.state.amount}
+								handleAddressChange={this.handleAddressChange}
+								handleAmountChange={this.handleAmountChange}
+								handleGasLimitChange={this.withLock(this.handleGasLimitChange)}
+								handleGasPriceChange={this.withLock(this.handleGasPriceChange)}
+								handleNonceChange={this.withLock(this.handleNonceChange)}
+								reloadEthGasStationInfoAction={this.loadData}
+								handleAllAmountClick={this.handleAllAmountClick}
+								handleConfirm={this.handleConfirm}
+								handleCancel={this.handleCancel}
+								handleSend={this.handleSend}
+							/>
 						)}
 						{this.state.tab === 'receive' && (
 							<ReceiveTokenTab

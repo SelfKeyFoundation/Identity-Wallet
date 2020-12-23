@@ -6,6 +6,7 @@ import BuyKeyModal from '../src/renderer/dashboard/buy-key-popup-modal';
 import MoonpayAgreementModal from '../src/renderer/moonpay/moonpay-agreement-modal';
 import PhoneVerificationModal from '../src/renderer/moonpay/phone-verification-modal';
 import MoonpayAuthModal from '../src/renderer/moonpay/auth-modal';
+import AddPaymentMethodModal from '../src/renderer/moonpay/add-payment-method-modal';
 
 storiesOf('Buy Key/Dashboard Widget', module)
 	.add('default', () => (
@@ -94,3 +95,58 @@ storiesOf('Buy Key/MoonPay/Verify Phone', module)
 storiesOf('Buy Key/Moonpay/Auth', module).add('default', () => (
 	<MoonpayAuthModal onAContinueClick={action('continue')} onCloseClick={action('close')} />
 ));
+storiesOf('Buy Key/Moonpay/Add payment method', module)
+	.add('loading', () => (
+		<AddPaymentMethodModal
+			loading
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onCardNumberChange={action('cc change')}
+			onExpiryDateChange={action('expiry change')}
+			onCCVChange={action('ccv change')}
+		/>
+	))
+	.add('default', () => (
+		<AddPaymentMethodModal
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onCardNumberChange={action('cc change')}
+			onExpiryDateChange={action('expiry change')}
+			onCCVChange={action('ccv change')}
+		/>
+	))
+	.add('filled', () => (
+		<AddPaymentMethodModal
+			cardNumber="1234 1234 1234 1234"
+			expiryDate="04/2028"
+			ccv="123"
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onCardNumberChange={action('cc change')}
+			onExpiryDateChange={action('expiry change')}
+			onCCVChange={action('ccv change')}
+		/>
+	))
+	.add('disabled', () => (
+		<AddPaymentMethodModal
+			cardNumber="1234 1234 1234 1234"
+			expiryDate="04/2028"
+			ccv="123"
+			disabled
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onCardNumberChange={action('cc change')}
+			onExpiryDateChange={action('expiry change')}
+			onCCVChange={action('ccv change')}
+		/>
+	))
+	.add('error', () => (
+		<AddPaymentMethodModal
+			error="Invalid expiry date"
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onCardNumberChange={action('cc change')}
+			onExpiryDateChange={action('expiry change')}
+			onCCVChange={action('ccv change')}
+		/>
+	));
