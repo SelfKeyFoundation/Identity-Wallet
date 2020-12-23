@@ -3,8 +3,9 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import BuyKeyWidget from '../src/renderer/dashboard/buy-key-widget';
 import BuyKeyModal from '../src/renderer/dashboard/buy-key-popup-modal';
-import MoonpayAgreementModal from '../src/renderer/dashboard/moonpay-agreement-modal';
-import PhoneVerificationModal from '../src/renderer/dashboard/phone-verification-modal';
+import MoonpayAgreementModal from '../src/renderer/moonpay/moonpay-agreement-modal';
+import PhoneVerificationModal from '../src/renderer/moonpay/phone-verification-modal';
+import MoonpayAuthModal from '../src/renderer/moonpay/auth-modal';
 
 storiesOf('Buy Key/Dashboard Widget', module)
 	.add('default', () => (
@@ -42,11 +43,11 @@ storiesOf('Buy Key/Buy Key Popup', module)
 		/>
 	));
 
-storiesOf('Buy Key/Moonpay', module).add('AgreementModal', () => (
+storiesOf('Buy Key/Moonpay/Terms', module).add('default', () => (
 	<MoonpayAgreementModal onAgreeClick={action('agree')} onCloseClick={action('close')} />
 ));
 
-storiesOf('Buy Key/Verify Phone', module)
+storiesOf('Buy Key/MoonPay/Verify Phone', module)
 	.add('loading', () => (
 		<PhoneVerificationModal
 			loading
@@ -89,3 +90,7 @@ storiesOf('Buy Key/Verify Phone', module)
 			phone="+213134115151"
 		/>
 	));
+
+storiesOf('Buy Key/Moonpay/Auth', module).add('default', () => (
+	<MoonpayAuthModal onAContinueClick={action('continue')} onCloseClick={action('close')} />
+));
