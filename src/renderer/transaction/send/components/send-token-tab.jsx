@@ -206,11 +206,18 @@ class SendTokenTabComponent extends PureComponent {
 						<Divider className={classes.divider} />
 
 						<TransactionFeeBox
+							showAdvanced={false}
+							ethGasStationInfo={ethGasStationInfo}
+							fiatCurrency={fiatCurrency}
+							locale={locale}
+							gasLimit={gasLimit}
+							gasPrice={gasPrice}
+							nonce={nonce}
+							ethRate={ethRate}
 							changeGasLimitAction={handleGasLimitChange}
 							changeGasPriceAction={handleGasPriceChange}
 							changeNonceAction={handleNonceChange}
 							reloadEthGasStationInfoAction={reloadEthGasStationInfoAction}
-							{...this.props}
 							cryptoCurrency={cryptoCurrency}
 							address={address}
 							amount={amount}

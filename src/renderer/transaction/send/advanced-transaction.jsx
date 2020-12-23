@@ -7,6 +7,7 @@ import { transactionOperations, transactionSelectors } from 'common/transaction'
 import { getLocale } from 'common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { getTokens } from 'common/wallet-tokens/selectors';
+import { pricesSelectors } from 'common/prices';
 import { withStyles } from '@material-ui/styles';
 import { MenuItem, Select, Input, Tabs, Tab, Typography, FormControl } from '@material-ui/core';
 import { appOperations, appSelectors } from 'common/app';
@@ -404,6 +405,7 @@ const mapStateToProps = (state, props) => {
 		sendingAddress: getWallet(state).address,
 		tokens: getTokens(state),
 		cryptoCurrency: props.match.params.cryptoCurrency,
+		ethRate: pricesSelectors.getRate(state, 'ETH', 'USD'),
 		confirmation: props.match.params.confirmation,
 		walletType: appSelectors.selectWalletType(state)
 	};

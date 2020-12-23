@@ -6,9 +6,11 @@ import { AllowanceEditor } from './allowance-editor';
 import { ethGasStationInfoSelectors, ethGasStationInfoOperations } from 'common/eth-gas-station';
 import { getLocale } from '../../../common/locale/selectors';
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
+import { pricesSelectors } from 'common/prices';
 
 export const AllowanceEditorContainer = props => {
 	const tokens = useSelector(getERC20Tokens, shallowEqual);
+
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -34,6 +36,8 @@ export const AllowanceEditorContainer = props => {
 	const selectedToken = useSelector(state =>
 		getTokenByAddress(state, editor.tokenAddress, shallowEqual)
 	);
+
+	const ethRate = useSelector(state => pricesSelectors.getRate(state, 'ETH', 'USD'));
 
 	const handleTokenChange = useCallback(token => {
 		const tokenAddress = token ? token.address : null;
@@ -76,6 +80,7 @@ export const AllowanceEditorContainer = props => {
 			locale={locale}
 			{...fiatCurrency}
 			{...ethGasStationInfo}
+			ethRate={ethRate}
 			onTokenChange={handleTokenChange}
 			onContractAddressChange={handleContractAddressChange}
 			onAmountChange={handleAmountChange}

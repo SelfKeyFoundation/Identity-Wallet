@@ -101,13 +101,9 @@ export class TransactionFeeBoxComponent extends PureComponent {
 	}
 
 	getFeeUsd(type) {
-		const { tokens } = this.props;
+		const { ethRate } = this.props;
 		const ethFee = this.getFeeInEth(type);
-		const token = tokens.find(token => token.symbol === 'ETH');
-		if (token && token.price) {
-			return ethFee * token.price;
-		}
-		return '0';
+		return ethFee * ethRate;
 	}
 
 	toggleShowAdvanced() {
@@ -291,6 +287,23 @@ export class TransactionFeeBoxComponent extends PureComponent {
 		);
 	}
 }
+
+/*
+AllowanceEditor.propTypes = {
+	showAdvanced: PropTypes.bool,
+	ethGasStationInfo: PropTypes.object,
+	reloadEthGasStationInfoAction: PropTypes.func,
+	changeGasLimitAction: PropTypes.func,
+	changeGasPriceAction: PropTypes.func,
+	changeNonceAction: PropTypes.func,
+	fiatCurrency: PropTypes.string,
+	locale: PropTypes.string,
+	gasLimit: PropTypes.string,
+	gasPrice: PropTypes.string,
+	nonce: PropTypes.string,
+	ethRate: PropTypes.string
+};
+*/
 
 export const TransactionFeeBox = withStyles(styles)(TransactionFeeBoxComponent);
 

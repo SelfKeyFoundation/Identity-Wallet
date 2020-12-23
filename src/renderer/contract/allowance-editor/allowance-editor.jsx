@@ -48,6 +48,7 @@ export const AllowanceEditor = withStyles(styles)(
 		ethFee,
 		fiatCurrency,
 		usdFee,
+		ethRate,
 		ethGasStationInfo,
 		onGasStationReload,
 		onGasLimitChange,
@@ -109,6 +110,7 @@ export const AllowanceEditor = withStyles(styles)(
 								ethFee={ethFee}
 								fiatCurrency={fiatCurrency}
 								usdFee={usdFee}
+								ethRate={ethRate}
 								ethGasStationInfo={ethGasStationInfo}
 								reloadEthGasStationInfoAction={onGasStationReload}
 								changeGasLimitAction={onGasLimitChange}
@@ -146,7 +148,8 @@ AllowanceEditor.propTypes = {
 	checkingAmount: PropTypes.bool,
 	checkingGasPrice: PropTypes.bool,
 	requestedAmount: PropTypes.string,
-	amount: PropTypes.string
+	amount: PropTypes.string,
+	ethRate: PropTypes.string
 };
 
 AllowanceEditor.defaultProps = {
