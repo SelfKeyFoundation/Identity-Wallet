@@ -13,7 +13,7 @@ export const ContractChooser = withStyles(styles)(
 		};
 		if (fixed) {
 			return (
-				<Typography variant="body1">
+				<Typography variant="subtitle2">
 					Allow contract <b>{address}</b> {name ? `(${name})` : null} to spend tokens on
 					your behalf
 				</Typography>

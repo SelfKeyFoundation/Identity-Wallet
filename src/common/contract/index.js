@@ -131,7 +131,7 @@ const operations = {
 				}
 			}
 
-			if (!beforeUpdate.nonce && update) {
+			if (!beforeUpdate.nonce && update && !update.nonce) {
 				update.nonce = await getTransactionCount(wallet.address);
 			}
 
