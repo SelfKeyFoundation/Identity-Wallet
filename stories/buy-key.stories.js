@@ -45,7 +45,7 @@ storiesOf('Buy Key/Buy Key Popup', module)
 	));
 
 storiesOf('Buy Key/Moonpay/Terms', module).add('default', () => (
-	<MoonpayAgreementModal onAgreeClick={action('agree')} onCloseClick={action('close')} />
+	<MoonpayAgreementModal onNext={action('agree')} onCancel={action('close')} />
 ));
 
 storiesOf('Buy Key/MoonPay/Verify Phone', module)
@@ -93,7 +93,7 @@ storiesOf('Buy Key/MoonPay/Verify Phone', module)
 	));
 
 storiesOf('Buy Key/Moonpay/Auth', module).add('default', () => (
-	<MoonpayAuthModal onAContinueClick={action('continue')} onCloseClick={action('close')} />
+	<MoonpayAuthModal onNext={action('next')} onCancel={action('cancel')} />
 ));
 storiesOf('Buy Key/Moonpay/Add payment method', module)
 	.add('loading', () => (

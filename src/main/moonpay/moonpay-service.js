@@ -35,7 +35,7 @@ export class MoonPayService {
 	checkKycStatus() {}
 
 	async getLimits(auth) {
-		this.getApi(auth).getLimits();
+		return this.getApi(auth).getLimits();
 	}
 
 	verifyPhone() {}

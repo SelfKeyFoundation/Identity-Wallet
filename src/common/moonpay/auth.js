@@ -6,15 +6,17 @@ import { Identity } from '../../main/platform/identity';
 import { createSelector } from 'reselect';
 import { createAliasedSlice } from '../utils/duck';
 import { hardwareWalletOperations } from '../hardware-wallet';
+import { navigationFlowOperations } from '../navigation/flow';
+import { sleep } from '../utils/async';
 
 const log = new Logger('MoonpayAuthDuck');
 
-const SLICE_NAME = 'moonpayAuth';
+const SLICE_NAME = 'moonPayAuth';
 
 const initialState = {
 	agreedToTerms: false,
 	authInfo: null,
-	isAllowed: null,
+	isServiceAllowed: false,
 	limits: null
 };
 
@@ -30,7 +32,12 @@ const isAuthenticated = createSelector(
 	auth => !!auth
 );
 
-const selectors = { isAuthenticated, selectAuthInfo };
+const isServiceAllowed = createSelector(
+	selectSelf,
+	({ isServiceAllowed }) => isServiceAllowed
+);
+
+const selectors = { isAuthenticated, selectAuthInfo, isServiceAllowed };
 
 const authOperation = ops => ({ email, cancelUrl, completeUrl }) => async (dispatch, getState) => {
 	const { moonPayService } = getGlobalContext();
@@ -60,11 +67,39 @@ const loadLimitsOperation = ops => () => async (dispatch, getState) => {
 	await dispatch(ops.setLimits(limits));
 };
 
+const connectFlowOperation = ops => ({ cancel, complete }) => async (dispatch, getState) => {
+	await dispatch(
+		navigationFlowOperations.startFlowOperation({
+			name: 'moonpay-connect',
+			current: '/main/moonpay/loading',
+			cancel,
+			complete
+		})
+	);
+	await sleep(5000);
+	await dispatch(ops.connectFlowNextStepOperation());
+};
+
+const connectFlowNextStepOperation = ops => opt => async (dispatch, getState) => {
+	const authenticated = isAuthenticated(getState());
+
+	if (!authenticated) {
+		await dispatch(
+			navigationFlowOperations.navigateToStepOperation({
+				current: '/main/moonpay/auth'
+			})
+		);
+		return;
+	}
+
+	await dispatch(navigationFlowOperations.navigateCancelOperation());
+};
+
 const agreedToTermsOperations = ops => agree => async (dispatch, getState) => {
 	// record agreedToTerms
 };
 
-const moonpayAuthSlice = createAliasedSlice({
+const moonPayAuthSlice = createAliasedSlice({
 	name: SLICE_NAME,
 	initialState,
 	reducers: {
@@ -81,11 +116,13 @@ const moonpayAuthSlice = createAliasedSlice({
 	aliasedOperations: {
 		authOperation,
 		agreedToTermsOperations,
-		loadLimitsOperation
+		loadLimitsOperation,
+		connectFlowOperation,
+		connectFlowNextStepOperation
 	}
 });
 
-const { reducer, operations } = moonpayAuthSlice;
+const { reducer, operations } = moonPayAuthSlice;
 
 export { operations, selectors };
 

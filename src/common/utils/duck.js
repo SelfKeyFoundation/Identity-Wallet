@@ -6,7 +6,7 @@ export const createAliasedSlice = ({ aliasedOperations = {}, operations = {}, ..
 	const created = createSlice(slice);
 
 	let rawOperations = { ...operations, ...aliasedOperations };
-	let exportedOperations;
+	let exportedOperations = {};
 
 	rawOperations = {
 		...created.actions,
@@ -18,7 +18,7 @@ export const createAliasedSlice = ({ aliasedOperations = {}, operations = {}, ..
 		return createAliasedAction(type, op(exportedOperations));
 	});
 
-	exportedOperations = { ...rawOperations, ...aliasedOperations };
+	_.merge(exportedOperations, { ...rawOperations, ...aliasedOperations });
 
-	return { ...created, operations, rawOperations };
+	return { ...created, operations: exportedOperations, rawOperations };
 };

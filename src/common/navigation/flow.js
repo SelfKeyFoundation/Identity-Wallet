@@ -4,8 +4,11 @@ import { createAliasedSlice } from '../utils/duck';
 import { createSelector } from 'reselect';
 import { validate, ParameterValidationError } from 'parameter-validator';
 import { push } from 'connected-react-router';
+import { Logger } from 'common/logger';
 
-export const SLICE_NAME = 'navigation_flow';
+const log = new Logger('NavigationFlowDuck');
+
+export const SLICE_NAME = 'navigationFlow';
 
 const initialState = {
 	currentFlow: null,
@@ -96,6 +99,28 @@ const navigateCompleteOperation = ops => opt => async (dispatch, getState) => {
 	await dispatch(push(complete));
 };
 
+const startFlowOperation = ops => (opt = {}) => async (dispatch, getState) => {
+	try {
+		await dispatch(ops.startFlow(opt));
+		if (opt.current) {
+			await dispatch(push(opt.current));
+		}
+	} catch (error) {
+		log.error(error);
+	}
+};
+
+const navigateToStepOperation = ops => (opt = {}) => async (dispatch, getState) => {
+	try {
+		await dispatch(ops.setStep(opt));
+		if (opt.current) {
+			await dispatch(push(opt.current));
+		}
+	} catch (error) {
+		log.error(error);
+	}
+};
+
 export const createSlice = (state = initialState) => {
 	return createAliasedSlice({
 		name: SLICE_NAME,
@@ -141,7 +166,9 @@ export const createSlice = (state = initialState) => {
 			navigateNextOperation,
 			navigatePrevOperation,
 			navigateCancelOperation,
-			navigateCompleteOperation
+			navigateCompleteOperation,
+			startFlowOperation,
+			navigateToStepOperation
 		}
 	});
 };

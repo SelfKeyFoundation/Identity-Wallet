@@ -6,6 +6,7 @@ import { getWallet } from 'common/wallet/selectors';
 import BuyKeyModal from './buy-key-popup-modal';
 import { featureIsEnabled } from 'common/feature-flags';
 import { PropTypes } from 'prop-types';
+import { moonPayOperations } from '../../common/moonpay';
 
 const handleLinkClick = e => {
 	window.openExternal(e, e.target.href || e.currentTarget.href);
@@ -13,9 +14,12 @@ const handleLinkClick = e => {
 
 const BuyKeyPopupComponent = props => {
 	const handleMoonpayClick = () => {
-		if (props.closeAction) {
-			props.closeAction();
-		}
+		props.dispatch(
+			moonPayOperations.connectFlowOperation({
+				cancel: '/main/dashboard',
+				complete: '/main/dashboard'
+			})
+		);
 	};
 	return (
 		<BuyKeyModal
