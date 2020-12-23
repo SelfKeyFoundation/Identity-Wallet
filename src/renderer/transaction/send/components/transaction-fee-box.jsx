@@ -8,9 +8,6 @@ import { CustomTransactionSettings } from './custom-transaction-settings';
 const DEFAULT_ETH_GAS_LIMIT = 21000;
 
 const styles = theme => ({
-	container: {
-		fontFamily: 'Lato, arial, sans-serif'
-	},
 	networkTransactionFeeTitle: {
 		paddingRight: '5px',
 		color: '#93B0C1',
@@ -20,7 +17,7 @@ const styles = theme => ({
 		cursor: 'pointer',
 		fontSize: '14px',
 		color: '#00C0D9',
-		margin: '3em auto 2em auto',
+		margin: '2em auto 2em auto',
 		textAlign: 'center'
 	},
 	icon: {
@@ -44,11 +41,13 @@ const styles = theme => ({
 		alignItems: 'center',
 		columnGap: '1em'
 	},
+	fiatPrice: {
+		display: 'flex'
+	},
 	transactionFee: {
 		display: 'grid',
 		gridTemplateColumns: '1fr 1fr 1fr',
 		alignItems: 'center',
-
 		'& > div': {
 			padding: '1em',
 			color: '#00C0D9',
@@ -185,10 +184,8 @@ export class TransactionFeeBoxComponent extends PureComponent {
 										currency={fiatCurrency}
 										value={this.getFeeUsd('safeLow')}
 										fractionDigits={2}
+										showCurrency={true}
 									/>
-								</Typography>
-								<Typography variant="subtitle2" color="secondary">
-									USD
 								</Typography>
 							</div>
 						</div>
@@ -218,10 +215,8 @@ export class TransactionFeeBoxComponent extends PureComponent {
 										currency={fiatCurrency}
 										value={this.getFeeUsd('average')}
 										fractionDigits={2}
+										showCurrency={true}
 									/>
-								</Typography>
-								<Typography variant="subtitle2" color="secondary">
-									USD
 								</Typography>
 							</div>
 						</div>
@@ -251,10 +246,8 @@ export class TransactionFeeBoxComponent extends PureComponent {
 										currency={fiatCurrency}
 										value={this.getFeeUsd('fast')}
 										fractionDigits={2}
+										showCurrency={true}
 									/>
-								</Typography>
-								<Typography variant="subtitle2" color="secondary">
-									USD
 								</Typography>
 							</div>
 						</div>

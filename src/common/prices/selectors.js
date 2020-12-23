@@ -9,7 +9,6 @@ export const getRate = (state, symbol, fiat) => {
 	if (!price || !fiat) {
 		return 0;
 	}
-
 	const indexKey = `price${(fiat || 'usd').toUpperCase()}`;
 	if (indexKey in price) {
 		return price[indexKey];

@@ -20,57 +20,11 @@ import SendTokenTab from './components/send-token-tab';
 import { SelectDropdownIcon } from 'selfkey-ui';
 
 const styles = theme => ({
-	balance: {
-		color: '#fff',
-		fontWeight: 'bold',
-		marginLeft: '.5em'
-	},
-	selectAllAmountBtn: {
-		cursor: 'pointer',
-		fontSize: '13px',
-		fontWeight: 500,
-		lineHeight: '16px',
-		color: '#A9C5D6',
-		boxSizing: 'border-box',
-		height: '37px',
-		width: '37px',
-		border: '1px solid #303C49',
-		borderRadius: '4px',
-		backgroundColor: '#202932'
-	},
-	actionButtonsContainer: {
-		paddingTop: '50px'
-	},
 	errorColor: {
 		backgroundColor: 'rgba(255,46,99,0.09) !important',
 		border: '2px solid #FE4B61 !important',
 		boxShadow: 'none !important',
 		color: '#FE4B61 !important'
-	},
-	amountContainer: {
-		paddingTop: '25px',
-		position: 'relative'
-	},
-	cryptoCurrencyText: {
-		position: 'absolute',
-		fontSize: '20px',
-		color: '#ffffff',
-		right: 0,
-		fontWeight: 600
-	},
-	usdAmoutContainer: {
-		paddingBottom: '65px',
-		color: '#ffffff',
-		'&& span': {
-			'&:first-of-type': {
-				fontSize: '40px',
-				fontWeight: 300
-			},
-			'&:last-of-type': {
-				fontSize: '20px',
-				fontWeight: 600
-			}
-		}
 	},
 	amountInput: {
 		width: 'calc(100% - 45px)',
@@ -90,9 +44,6 @@ const styles = theme => ({
 		color: '#FE4B61',
 		borderBottom: '2px solid #FE4B61'
 	},
-	divider: {
-		margin: '40px 0'
-	},
 	cryptoSelect: {
 		width: '100%'
 	},
@@ -104,28 +55,9 @@ const styles = theme => ({
 	tokenBottomSpace: {
 		marginBottom: '20px'
 	},
-	flexColumn: {
-		flexDirection: 'column'
-	},
-	fiatPrice: {
-		display: 'flex',
-		marginTop: '5px'
-	},
-	amount: {
-		marginRight: '20px'
-	},
-	errorText: {
-		height: '19px',
-		width: '242px',
-		color: '#FE4B61',
-		fontFamily: 'Lato',
-		fontSize: '13px',
-		lineHeight: '19px'
-	},
 	tabs: {
 		marginBottom: '20px'
 	},
-
 	cryptoIcon: {
 		marginRight: '20px'
 	},
@@ -146,13 +78,6 @@ const styles = theme => ({
 			position: 'relative',
 			top: '20px'
 		}
-	},
-	bottomSpace: {
-		marginBottom: '23px'
-	},
-	tokenMax: {
-		display: 'flex',
-		flexWrap: 'nowrap'
 	},
 	tabsWrap: {
 		'& .feeTitle': {
@@ -322,7 +247,7 @@ class TransactionSendBoxContainer extends PureComponent {
 
 	render() {
 		const { classes, sendingAddress } = this.props;
-		let { cryptoCurrency } = this.state;
+		const { cryptoCurrency, sending, tab } = this.state;
 		const title = 'Send/Receive ERC-20 Tokens';
 		return (
 			<TransactionBox closeAction={this.handleCancelAction} title={title}>
@@ -331,7 +256,7 @@ class TransactionSendBoxContainer extends PureComponent {
 						<InputTitle title="Token" />
 						<Select
 							className={classes.cryptoSelect}
-							value={this.state.cryptoCurrency}
+							value={cryptoCurrency}
 							onChange={e => this.handleCryptoCurrencyChange(e)}
 							name="cryptoCurrency"
 							disableUnderline
@@ -352,10 +277,10 @@ class TransactionSendBoxContainer extends PureComponent {
 						</Select>
 					</FormControl>
 				</div>
-				{this.state.cryptoCurrency !== 'custom' ? (
+				{cryptoCurrency !== 'custom' ? (
 					<div className={classes.tabsWrap}>
 						<Tabs
-							value={this.state.tab}
+							value={tab}
 							onChange={(evt, value) => this.onTabChange(value)}
 							className={classes.tabs}
 						>
@@ -366,7 +291,7 @@ class TransactionSendBoxContainer extends PureComponent {
 						{this.state.tab === 'send' && (
 							<SendTokenTab
 								{...this.props}
-								sending={this.state.sending}
+								sending={sending}
 								address={this.state.address}
 								amount={this.state.amount}
 								handleAddressChange={this.handleAddressChange}
@@ -397,15 +322,16 @@ class TransactionSendBoxContainer extends PureComponent {
 }
 
 const mapStateToProps = (state, props) => {
+	const { fiatCurrency = 'USD' } = getFiatCurrency(state);
 	return {
 		...getLocale(state),
-		...getFiatCurrency(state),
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),
 		...transactionSelectors.getTransaction(state),
+		fiatCurrency,
 		sendingAddress: getWallet(state).address,
 		tokens: getTokens(state),
 		cryptoCurrency: props.match.params.cryptoCurrency,
-		ethRate: pricesSelectors.getRate(state, 'ETH', 'USD'),
+		ethRate: pricesSelectors.getRate(state, 'ETH', fiatCurrency),
 		confirmation: props.match.params.confirmation,
 		walletType: appSelectors.selectWalletType(state)
 	};

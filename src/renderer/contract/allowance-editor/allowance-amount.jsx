@@ -4,7 +4,14 @@ import { CircularProgress, FormControl, Input, Typography, Grid } from '@materia
 import { InputTitle } from '../../common';
 import { PropTypes } from 'prop-types';
 
-const styles = theme => ({});
+const styles = theme => ({
+	horizontalRow: {
+		display: 'flex',
+		'& > h6': {
+			marginRight: '5px'
+		}
+	}
+});
 
 export const AllowanceAmount = withStyles(styles)(
 	({
@@ -33,18 +40,16 @@ export const AllowanceAmount = withStyles(styles)(
 				<Grid item>
 					<Grid container direction="row" spacing={2}>
 						<Grid item>
-							<Typography variant="subtitle2">Current spending allowance:</Typography>
+							<div className={classes.horizontalRow}>
+								<Typography variant="subtitle2" color="secondary">
+									Current spending allowance:
+								</Typography>
+								{loading && <CircularProgress size={20} />}
+								{!loading && (
+									<Typography variant="subtitle2">{currentAmount}</Typography>
+								)}
+							</div>
 						</Grid>
-						{loading && (
-							<Grid item>
-								<CircularProgress size={20} />{' '}
-							</Grid>
-						)}
-						{!loading && (
-							<Grid item>
-								<Typography variant="subtitle2">{currentAmount}</Typography>
-							</Grid>
-						)}
 					</Grid>
 				</Grid>
 

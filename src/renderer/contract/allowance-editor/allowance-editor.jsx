@@ -55,7 +55,8 @@ export const AllowanceEditor = withStyles(styles)(
 		onGasPriceChange,
 		onTokenChange,
 		onContractAddressChange,
-		onAmountChange
+		onAmountChange,
+		onNonceChange
 	}) => {
 		const readyToTransact =
 			contractAddress && selectedToken && !errors.amountError && !errors.contractError;
@@ -115,6 +116,7 @@ export const AllowanceEditor = withStyles(styles)(
 								reloadEthGasStationInfoAction={onGasStationReload}
 								changeGasLimitAction={onGasLimitChange}
 								changeGasPriceAction={onGasPriceChange}
+								changeNonceAction={onNonceChange}
 							/>
 						</Grid>
 					)}
