@@ -281,23 +281,6 @@ export class TransactionFeeBoxComponent extends PureComponent {
 	}
 }
 
-/*
-AllowanceEditor.propTypes = {
-	showAdvanced: PropTypes.bool,
-	ethGasStationInfo: PropTypes.object,
-	reloadEthGasStationInfoAction: PropTypes.func,
-	changeGasLimitAction: PropTypes.func,
-	changeGasPriceAction: PropTypes.func,
-	changeNonceAction: PropTypes.func,
-	fiatCurrency: PropTypes.string,
-	locale: PropTypes.string,
-	gasLimit: PropTypes.string,
-	gasPrice: PropTypes.string,
-	nonce: PropTypes.string,
-	ethRate: PropTypes.string
-};
-*/
-
 export const TransactionFeeBox = withStyles(styles)(TransactionFeeBoxComponent);
 
 export default TransactionFeeBox;
