@@ -34,12 +34,14 @@ storiesOf('Transactions', module)
 				locale="en"
 				amountUsd="5.45"
 				fiatCurrency="USD"
+				cryptoCurrency="ETH"
 				sending={false}
 				address={'0x27462DF3542882455E3bD6a23496a06E5E686162'}
 				amount={1.22}
 				gasLimit={2100}
 				gasPrice={35}
 				nonce={231}
+				ethRate={631}
 				handleAddressChange={action('address changed')}
 				handleAmountChange={action('amount changed')}
 				handleGasLimitChange={action('gas limit changed')}
