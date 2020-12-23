@@ -32,7 +32,7 @@ const isAuthenticated = createSelector(
 
 const selectors = { isAuthenticated, selectAuthInfo };
 
-const authOperation = ops => email => async (dispatch, getState) => {
+const authOperation = ops => ({ email, cancelUrl, completeUrl }) => async (dispatch, getState) => {
 	const { moonPayService } = getGlobalContext();
 
 	const state = getState();
@@ -42,7 +42,10 @@ const authOperation = ops => email => async (dispatch, getState) => {
 
 	try {
 		const authInfo = dispatch(
-			hardwareWalletOperations(() => moonPayService.auth(identity, email))
+			hardwareWalletOperations(() => moonPayService.auth(identity, email), {
+				cancelUrl,
+				completeUrl
+			})
 		);
 		await dispatch(ops.setAuthInfo(authInfo));
 	} catch (error) {

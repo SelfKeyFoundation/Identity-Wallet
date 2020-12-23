@@ -113,6 +113,7 @@
 		"md5": "2.2.1",
 		"mime-types": "2.1.23",
 		"moment": "2.24.0",
+		"nanoid": "^3.1.20",
 		"node-fetch": "2.3.0",
 		"node-machine-id": "1.1.10",
 		"normalizr": "3.6.0",

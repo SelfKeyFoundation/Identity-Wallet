@@ -29,6 +29,7 @@ import contracts from '../contract';
 import walletConnect from '../wallet-connect';
 import { moonpayAuth } from '../moonpay';
 import hardwareWallet from '../hardware-wallet';
+import navigationFlow from '../navigation/flow';
 
 export const createReducers = (scope = 'main') => {
 	let scopedReducers = {};
@@ -65,6 +66,7 @@ export const createReducers = (scope = 'main') => {
 		walletConnect,
 		moonpayAuth,
 		hardwareWallet,
+		navigationFlow,
 		...scopedReducers
 	});
 };

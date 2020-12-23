@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import Popup from '../../../common/popup';
 import { kycSelectors } from 'common/kyc';
-import { push } from 'connected-react-router';
+import { hardwareWalletOperations } from 'common/hardware-wallet';
 import { HourGlassLargeIcon } from 'selfkey-ui';
 import { appSelectors } from 'common/app';
 
@@ -12,7 +12,9 @@ const styles = theme => ({});
 
 class HardwareWalletTimer extends PureComponent {
 	handleClose = () => {
-		this.props.dispatch(push(this.props.cancelRoute));
+		this.props.dispatch(
+			hardwareWalletOperations.cancelAuthOperation({ cancelRoute: this.props.cancelRoute })
+		);
 	};
 
 	render() {

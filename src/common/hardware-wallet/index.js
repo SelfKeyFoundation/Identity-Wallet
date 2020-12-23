@@ -4,6 +4,8 @@ import { createAliasedSlice } from '../utils/duck';
 import { createSelector } from 'reselect';
 import { appSelectors } from 'common/app';
 import { push } from 'connected-react-router';
+import { navigationFlowOperations, navigationFlowSelectors } from '../navigation/flow';
+
 const log = new Logger('HardwareWalletDuck');
 const SLICE_NAME = 'hardwareWallet';
 const CONFIRMATION_TIMEOUT = config.hwConfirmTimeout || 30000;
@@ -29,17 +31,28 @@ const isHardwareWallet = createSelector(
 
 const selectors = { isHardwareWallet, isActive };
 
-const useHardwareWalletOperation = ops => (exec, silent = false) => async (dispatch, getState) => {
+const useHardwareWalletOperation = ops => (
+	exec,
+	{ silent = false, cancelUrl, completeUrl }
+) => async (dispatch, getState) => {
 	try {
+		await dispatch(
+			navigationFlowOperations.startFlow({
+				cancel: cancelUrl,
+				complete: completeUrl,
+				name: 'hd-auth'
+			})
+		);
 		if (!isHardwareWallet(getState())) {
-			return exec();
+			const res = await exec();
+			await dispatch(navigationFlowOperations.navigateCompleteOperation());
+			return res;
 		}
 		clearTimeout(timeout);
 		if (isActive(getState())) {
 			log.debug('starting hw operation while another is in progress');
 			await dispatch(ops.cancel());
 		}
-
 		const timeoutPromise = new Promise((resolve, reject) => {
 			timeout = setTimeout(async () => {
 				reject(new Error('timeout'));
@@ -49,10 +62,11 @@ const useHardwareWalletOperation = ops => (exec, silent = false) => async (dispa
 		await dispatch(push('/main/hd-timer'));
 
 		const res = await Promise.race(timeoutPromise, exec());
+		await dispatch(navigationFlowOperations());
 		return res;
 	} catch (error) {
 		log.error(error);
-		if (isHardwareWallet(getState())) {
+		if (isHardwareWallet(getState()) && isActive(getState())) {
 			await dispatch(ops.error());
 			clearTimeout(timeout);
 			if (error.statusText === 'CONDITIONS_OF_USE_NOT_SATISFIED') {
@@ -67,10 +81,29 @@ const useHardwareWalletOperation = ops => (exec, silent = false) => async (dispa
 				await dispatch(push('/main/hd-error'));
 				if (!silent) throw error;
 			}
+			return;
 		} else if (!silent) {
 			throw error;
 		}
+		await dispatch(ops.cancelAuthOperation());
 	}
+};
+
+const cancelAuthOperation = ops => (opts = {}) => async (dispatch, getState) => {
+	if (isActive(getState())) {
+		await dispatch(ops.cancel());
+	}
+
+	const flow = navigationFlowSelectors.getCurrentFlow(getState());
+
+	if (!flow || flow.name !== 'hd-auth') {
+		if (opts.cancelRoute) {
+			await dispatch(push(opts.cancelRoute));
+		}
+		return;
+	}
+
+	await dispatch(navigationFlowOperations.navigateCancelOperation());
 };
 
 const hardwareWalletSlice = createAliasedSlice({
@@ -85,10 +118,12 @@ const hardwareWalletSlice = createAliasedSlice({
 		},
 		cancel(state) {
 			state.active = false;
+			state.error = false;
 		}
 	},
 	operations: {
-		useHardwareWalletOperation
+		useHardwareWalletOperation,
+		cancelAuthOperation
 	}
 });
 

@@ -29,11 +29,9 @@ export const testSliceReducer = createSlice => (
 
 	let isError = expected.prototype && expected.prototype instanceof Error;
 
-	console.log('XXX', isError, expected, expected.prototype);
+	message = message ? ' ' + message + ' ' : '';
 
-	message = `reducer ${isError ? ' error' : ''}${slice.name}:${action}${
-		message ? ' ' + message : ''
-	}`;
+	message = `reducer ${slice.name}:${action}${isError ? ' error' : ' success'}${message}`;
 
 	it(message, async () => {
 		try {
@@ -41,7 +39,7 @@ export const testSliceReducer = createSlice => (
 			if (isError) {
 				fail('no error thrown');
 			}
-			expect(store.getState()[slice.name]).toEqual(expected);
+			expect(store.getState()[slice.name]).toEqual(expect.objectContaining(expected));
 			expect(store.getState()[slice.name]).not.toBe(expected);
 		} catch (error) {
 			if (!isError) {
