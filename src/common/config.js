@@ -240,7 +240,7 @@ const prod = {
 		transactionsListFilter: false,
 		loansMarketplace: true,
 		swapTokens: false,
-		contract: false,
+		contract: true,
 		exchangesMarketplace: false,
 		rewardToken: false,
 		keyfi: true,
