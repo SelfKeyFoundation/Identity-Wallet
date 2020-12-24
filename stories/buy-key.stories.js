@@ -1,12 +1,14 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import { number, object } from '@storybook/addon-knobs';
 import BuyKeyWidget from '../src/renderer/dashboard/buy-key-widget';
 import BuyKeyModal from '../src/renderer/dashboard/buy-key-popup-modal';
 import MoonpayAgreementModal from '../src/renderer/moonpay/moonpay-agreement-modal';
 import PhoneVerificationModal from '../src/renderer/moonpay/phone-verification-modal';
 import MoonpayAuthModal from '../src/renderer/moonpay/auth-modal';
 import AddPaymentMethodModal from '../src/renderer/moonpay/add-payment-method-modal';
+import MoonpayChooseLoginEmailModal from '../src/renderer/moonpay/choose-login-email-modal';
 
 storiesOf('Buy Key/Dashboard Widget', module)
 	.add('default', () => (
@@ -91,10 +93,49 @@ storiesOf('Buy Key/MoonPay/Verify Phone', module)
 			phone="+213134115151"
 		/>
 	));
+const emailAttributes = [
+	{
+		id: 1,
+		name: 'Test Email',
+		identityId: 1,
+		typeId: 1,
+		data: {
+			value: 'test@test.com'
+		}
+	},
+	{
+		id: 2,
+		name: 'Personal Email',
+		identityId: 1,
+		typeId: 1,
+		data: {
+			value: 'personal@test.com'
+		}
+	}
+];
 
-storiesOf('Buy Key/Moonpay/Auth', module).add('default', () => (
-	<MoonpayAuthModal onNext={action('next')} onCancel={action('cancel')} />
-));
+const typesByTypeId = {
+	1: {
+		url: 'http://platform.selfkey.org/schema/attribute/email.json'
+	}
+};
+
+storiesOf('Buy Key/Moonpay/Auth', module)
+	.add('AuthModal', () => (
+		<MoonpayAuthModal onNext={action('next')} onCancel={action('cancel')} />
+	))
+	.add('ChooseLoginEmailModal', () => (
+		<MoonpayChooseLoginEmailModal
+			onNext={action('next')}
+			onCancel={action('cancel')}
+			onSelectOption={action('select')}
+			onEditAttribute={action('edit')}
+			onAddAttribute={action('add')}
+			selected={number('Selected Email', null)}
+			typesByTypeId={object('Types by ID', typesByTypeId)}
+			attributes={object('Array of attributes', emailAttributes)}
+		/>
+	));
 storiesOf('Buy Key/Moonpay/Add payment method', module)
 	.add('loading', () => (
 		<AddPaymentMethodModal

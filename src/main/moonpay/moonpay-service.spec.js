@@ -8,10 +8,15 @@ describe('MoonPayService', () => {
 		moonPayApiKey: 'asdsadasdasdas'
 	};
 
+	const walletService = {
+		getWalletSettings: sinon.stub(),
+		updateWalletSettings: sinon.stub()
+	};
+
 	let service;
 
 	beforeEach(() => {
-		service = new MoonPayService({ config });
+		service = new MoonPayService({ config, walletService });
 	});
 
 	afterEach(() => {
@@ -23,6 +28,49 @@ describe('MoonPayService', () => {
 			expect(service.endpoint).toEqual(config.moonPayApiEndpoint);
 			expect(service.apiKey).toEqual(config.moonPayApiKey);
 			expect(service.config).toEqual(config);
+			expect(service.walletService).toBe(walletService);
+		});
+	});
+
+	describe('getSettings', () => {
+		it('should return moonpay settings', async () => {
+			walletService.getWalletSettings.resolves({
+				moonPayTermsAccepted: true,
+				moonPayLogin: 'test@test.com',
+				id: 2,
+				walletId: 4
+			});
+			const res = await service.getSettings(4);
+
+			expect(walletService.getWalletSettings.getCall(0).args[0]).toEqual(4);
+			expect(res).toEqual({
+				loginEmail: 'test@test.com',
+				agreedToTerms: true
+			});
+		});
+	});
+
+	describe('updateSettings', () => {
+		it('should update moonpay settings', async () => {
+			walletService.updateWalletSettings.resolves({
+				moonPayTermsAccepted: true,
+				moonPayLogin: 'test@test.com',
+				id: 2,
+				walletId: 4
+			});
+			const res = await service.updateSettings(4, {
+				loginEmail: 'test@test.com',
+				agreedToTerms: true
+			});
+
+			expect(walletService.updateWalletSettings.getCall(0).args).toEqual([
+				4,
+				{ moonPayTermsAccepted: true, moonPayLogin: 'test@test.com' }
+			]);
+			expect(res).toEqual({
+				loginEmail: 'test@test.com',
+				agreedToTerms: true
+			});
 		});
 	});
 	describe('getApi', () => {

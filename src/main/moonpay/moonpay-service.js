@@ -1,10 +1,32 @@
+import _ from 'lodash';
 import { validate } from 'parameter-validator';
 import { MoonPayApi } from './moonpay-api';
 export class MoonPayService {
-	constructor({ config }) {
+	constructor({ config, walletService }) {
 		this.config = config;
+		this.walletService = walletService;
 		this.endpoint = config.moonPayApiEndpoint;
 		this.apiKey = config.moonPayApiKey;
+	}
+
+	async getSettings(walletId) {
+		const settings = await this.walletService.getWalletSettings(walletId);
+		return { agreedToTerms: settings.moonPayTermsAccepted, loginEmail: settings.moonPayLogin };
+	}
+
+	async updateSettings(walletId, opts) {
+		opts = _.pick(opts, ['loginEmail', 'agreedToTerms']);
+		const settings = {};
+		if (opts.loginEmail) {
+			settings.moonPayLogin = opts.loginEmail;
+		}
+		if (opts.agreedToTerms) {
+			settings.moonPayTermsAccepted = opts.agreedToTerms;
+		}
+		if (!_.isEmpty(settings)) {
+			await this.walletService.updateWalletSettings(walletId, settings);
+		}
+		return this.getSettings(walletId);
 	}
 
 	getApi(loginInfo = null) {

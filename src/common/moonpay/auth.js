@@ -7,16 +7,19 @@ import { createSelector } from 'reselect';
 import { createAliasedSlice } from '../utils/duck';
 import { hardwareWalletOperations } from '../hardware-wallet';
 import { navigationFlowOperations } from '../navigation/flow';
-import { sleep } from '../utils/async';
+import { validate } from 'parameter-validator';
 
 const log = new Logger('MoonpayAuthDuck');
 
 const SLICE_NAME = 'moonPayAuth';
 
 const initialState = {
+	loaded: false,
 	agreedToTerms: false,
+	loginEmail: null,
 	authInfo: null,
 	isServiceAllowed: false,
+	settingsLoaded: false,
 	limits: null
 };
 
@@ -37,7 +40,29 @@ const isServiceAllowed = createSelector(
 	({ isServiceAllowed }) => isServiceAllowed
 );
 
-const selectors = { isAuthenticated, selectAuthInfo, isServiceAllowed };
+const hasAgreedToTerms = createSelector(
+	selectSelf,
+	({ agreedToTerms }) => agreedToTerms
+);
+
+const getLoginEmail = createSelector(
+	selectSelf,
+	({ loginEmail }) => loginEmail
+);
+
+const haveSettingsLoaded = createSelector(
+	selectSelf,
+	({ settingsLoaded }) => settingsLoaded
+);
+
+const selectors = {
+	hasAgreedToTerms,
+	getLoginEmail,
+	isAuthenticated,
+	selectAuthInfo,
+	isServiceAllowed,
+	haveSettingsLoaded
+};
 
 const authOperation = ops => ({ email, cancelUrl, completeUrl }) => async (dispatch, getState) => {
 	const { moonPayService } = getGlobalContext();
@@ -60,6 +85,38 @@ const authOperation = ops => ({ email, cancelUrl, completeUrl }) => async (dispa
 	}
 };
 
+const agreeToTermsOperation = ops => () => async (dispatch, getState) => {
+	const wallet = getWallet(getState());
+	if (!wallet) throw new Error('no wallet unlocked');
+	const { moonpayService } = getGlobalContext();
+	await moonpayService.updateSettings(wallet.id, {
+		agreedToTerms: true
+	});
+	await dispatch(ops.setAgreedToTerms(true));
+};
+
+const loginEmailChosenOperation = ops => opts => async (dispatch, getState) => {
+	const { loginEmail } = validate(opts, ['loginEmail']);
+	const wallet = getWallet(getState());
+	if (!wallet) throw new Error('no wallet unlocked');
+	const { moonpayService } = getGlobalContext();
+	await moonpayService.updateSettings(wallet.id, {
+		loginEmail
+	});
+	await dispatch(ops.setLoginEmail(loginEmail));
+	await dispatch(ops.setAuthInfo(null));
+};
+
+const loadSettingsOperation = ops => opts => async (dispatch, getState) => {
+	const wallet = getWallet(getState());
+	if (!wallet) throw new Error('no wallet unlocked');
+	const { moonpayService } = getGlobalContext();
+	const settings = await moonpayService.getSettings(wallet.id);
+	await dispatch(ops.setAgreedToTerms(!!settings.agreedToTerms));
+	await dispatch(ops.setLoginEmail(settings.loginEmail || null));
+	await dispatch(ops.setSettingsLoaded(true));
+};
+
 const loadLimitsOperation = ops => () => async (dispatch, getState) => {
 	const authInfo = selectAuthInfo(getState());
 	const { moonPayService } = getGlobalContext();
@@ -76,27 +133,49 @@ const connectFlowOperation = ops => ({ cancel, complete }) => async (dispatch, g
 			complete
 		})
 	);
-	await sleep(5000);
-	await dispatch(ops.connectFlowNextStepOperation());
 };
 
 const connectFlowNextStepOperation = ops => opt => async (dispatch, getState) => {
-	const authenticated = isAuthenticated(getState());
+	if (!haveSettingsLoaded(getState())) {
+		await dispatch(ops.loadSettingsOperation());
+	}
+	const agreedToTerms = hasAgreedToTerms(getState());
 
-	if (!authenticated) {
+	if (!agreedToTerms) {
 		await dispatch(
 			navigationFlowOperations.navigateToStepOperation({
-				current: '/main/moonpay/auth'
+				current: '/main/moonpay/auth/terms',
+				next: '/main/moonpay/loading'
 			})
 		);
 		return;
 	}
 
-	await dispatch(navigationFlowOperations.navigateCancelOperation());
-};
+	const authenticated = isAuthenticated(getState());
 
-const agreedToTermsOperations = ops => agree => async (dispatch, getState) => {
-	// record agreedToTerms
+	if (!authenticated) {
+		const loginEmail = getLoginEmail(getState());
+
+		if (loginEmail) {
+			await dispatch(
+				navigationFlowOperations.navigateToStepOperation({
+					current: '/main/moonpay/auth',
+					next: '/main/moonpay/loading'
+				})
+			);
+		} else {
+			await dispatch(
+				navigationFlowOperations.navigateToStepOperation({
+					current: '/main/moonpay/auth/choose-email',
+					next: '/main/moonpay/loading'
+				})
+			);
+		}
+
+		return;
+	}
+
+	await dispatch(navigationFlowOperations.navigateCancelOperation());
 };
 
 const moonPayAuthSlice = createAliasedSlice({
@@ -111,14 +190,25 @@ const moonPayAuthSlice = createAliasedSlice({
 		},
 		setLimits(state, action) {
 			state.limits = action.payload;
+		},
+		setAgreedToTerms(state, action) {
+			state.agreedToTerms = action.payload;
+		},
+		setLoginEmail(state, action) {
+			state.loginEmail = action.payload;
+		},
+		setSettingsLoaded(state, action) {
+			state.settingsLoaded = action.payload;
 		}
 	},
 	aliasedOperations: {
 		authOperation,
-		agreedToTermsOperations,
+		agreeToTermsOperation,
+		loginEmailChosenOperation,
 		loadLimitsOperation,
 		connectFlowOperation,
-		connectFlowNextStepOperation
+		connectFlowNextStepOperation,
+		loadSettingsOperation
 	}
 });
 

@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
+import _ from 'lodash';
 import history from './history';
 import locale from '../locale';
 import fiatCurrency from '../fiatCurrency';
@@ -20,7 +21,7 @@ import identity from '../identity';
 import createWallet from '../create-wallet';
 import did from '../did';
 import transactionHistory from '../transaction-history';
-import app from '../app';
+import app, { appTypes } from '../app';
 import gas from '../gas';
 import scheduler from '../scheduler';
 import marketplace from '../marketplace';
@@ -37,7 +38,7 @@ export const createReducers = (scope = 'main') => {
 		let router = connectRouter(history.getHistory());
 		scopedReducers = { router };
 	}
-	return combineReducers({
+	const combined = combineReducers({
 		locale,
 		fiatCurrency,
 		wallet,
@@ -69,5 +70,28 @@ export const createReducers = (scope = 'main') => {
 		navigationFlow,
 		...scopedReducers
 	});
+
+	return (state, action) => {
+		if (action.type === appTypes.APP_RESET) {
+			state = _.pick(state, [
+				'locale',
+				'fiatCurrency',
+				'prices',
+				'ethGasStationInfo',
+				'incorporations',
+				'bankAccounts',
+				'exchanges',
+				'createWallet',
+				'identity',
+				'gas',
+				'tokens',
+				'scheduler',
+				'contracts',
+				'walletConnect',
+				'router'
+			]);
+		}
+		return combined(state, action);
+	};
 };
 export default createReducers;

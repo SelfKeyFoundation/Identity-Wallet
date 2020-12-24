@@ -44,7 +44,9 @@ export class WalletSetting extends BaseModel {
 				walletId: { type: 'integer' },
 				showDesktopNotifications: { type: 'integer' },
 				txHistoryLastSyncedBlock: { type: 'integer' },
-				airDropCode: { type: ['string', 'null'] }
+				airDropCode: { type: ['string', 'null'] },
+				moonPayTermsAccepted: { type: 'boolean', default: false },
+				moonPayLogin: { type: ['string', null], default: null }
 			}
 		};
 	}

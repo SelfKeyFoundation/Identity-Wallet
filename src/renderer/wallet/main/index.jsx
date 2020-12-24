@@ -59,10 +59,8 @@ import { TransactionProcessingContainer } from '../../contract/allowance-editor/
 import { TransactionErrorContainer } from '../../contract/allowance-editor/transaction-error-container';
 import { walletConnectSelectors } from '../../../common/wallet-connect';
 import { push } from 'connected-react-router';
-import LoadingModal from '../../common/loading-modal';
-import { withNavFlow } from '../../navigation/with-flow-hoc';
 import MoonPayAuthContainer from '../../moonpay/auth-container';
-import { MoonpayAgreementModal } from '../../moonpay/moonpay-agreement-modal';
+import MoonPayLoadingContainer from '../../moonpay/moonpay-loading-container';
 
 const styles = theme => ({
 	headerSection: {
@@ -295,23 +293,12 @@ class Main extends PureComponent {
 
 						<Route
 							path={`${match.path}/moonpay/loading`}
-							render={props => {
-								const Component = withNavFlow(LoadingModal);
-								return <Component {...props} title="MoonPay Authentication" />;
-							}}
+							component={MoonPayLoadingContainer}
 						/>
 
 						<Route
 							path={`${match.path}/moonpay/auth`}
 							component={MoonPayAuthContainer}
-						/>
-
-						<Route
-							path={`${match.path}/moonpay/terms`}
-							component={withNavFlow(MoonpayAgreementModal, {
-								next: `${match.path}/moonpay/auth`,
-								current: `${match.path}/moonpay/terms`
-							})}
 						/>
 
 						{/*

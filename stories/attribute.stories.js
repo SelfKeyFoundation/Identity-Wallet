@@ -5,6 +5,7 @@ import { CreateAttribute } from '../src/renderer/attributes/create-attribute';
 import { EditAttribute } from '../src/renderer/attributes/edit-attribute';
 import { DeleteAttribute } from '../src/renderer/attributes/delete-attribute';
 import ListAttributeChooser from '../src/renderer/attributes/choosers/list-attribute-chooser';
+import { number, object } from '@storybook/addon-knobs';
 
 storiesOf('Attributes/CreateAttribute', module).add('default', () => (
 	<CreateAttribute
@@ -90,6 +91,15 @@ const attributes = [
 		typeId: 2,
 		data: {
 			country: 'US'
+		}
+	},
+	{
+		id: 4,
+		name: 'Test Email',
+		identityId: 1,
+		typeId: 3,
+		data: {
+			value: 'test@email.com'
 		}
 	}
 ];
@@ -621,14 +631,17 @@ const typesByTypeId = {
 			},
 			required: ['country']
 		}
+	},
+	3: {
+		url: 'http://platform.selfkey.org/schema/attribute/email.json'
 	}
 };
 
 storiesOf('Attributes/ListAttributeChooser', module).add('default', () => (
 	<ListAttributeChooser
-		selected={1}
-		attributes={attributes}
-		typesByTypeId={typesByTypeId}
+		selected={number('selected', 1)}
+		attributes={object('attributes', attributes)}
+		typesByTypeId={object('types', typesByTypeId)}
 		onSelectOption={action('select')}
 		onEditAttribute={action('edit')}
 		onAddAttribute={action('add')}

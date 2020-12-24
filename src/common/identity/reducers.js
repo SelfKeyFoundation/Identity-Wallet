@@ -241,6 +241,7 @@ export const identityReducers = {
 };
 
 const reducer = (state = initialState, action) => {
+	const { appTypes } = require('common/app');
 	switch (action.type) {
 		case identityTypes.IDENTITY_COUNTRIES_SET:
 			return identityReducers.setCountries(state, action);
@@ -282,6 +283,19 @@ const reducer = (state = initialState, action) => {
 			return identityReducers.updateIdentityReducer(state, action);
 		case identityTypes.IDENTITY_CURRENT_SET:
 			return identityReducers.setCurrentIdentityReducer(state, action);
+		case appTypes.APP_RESET:
+			return {
+				...initialState,
+				..._.pick(state, [
+					'repositories',
+					'repositoriesById',
+					'idAtrributeTypes',
+					'idAtrributeTypesById',
+					'uiSchemas',
+					'uiSchemasById',
+					'countries'
+				])
+			};
 	}
 	return state;
 };
