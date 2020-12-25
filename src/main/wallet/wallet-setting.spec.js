@@ -6,7 +6,8 @@ describe('WalletSetting model', () => {
 		walletId: 1,
 		showDesktopNotifications: 1,
 		moonPayTermsAccepted: true,
-		moonPayLogin: 'test@test.com'
+		moonPayLogin: 'test@test.com',
+		moonPayPreviousAuth: true
 	};
 	beforeEach(async () => {
 		await TestDb.init();

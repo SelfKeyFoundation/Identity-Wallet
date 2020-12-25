@@ -37,6 +37,7 @@ describe('MoonPayService', () => {
 			walletService.getWalletSettings.resolves({
 				moonPayTermsAccepted: true,
 				moonPayLogin: 'test@test.com',
+				moonPayPreviousAuth: false,
 				id: 2,
 				walletId: 4
 			});
@@ -45,31 +46,40 @@ describe('MoonPayService', () => {
 			expect(walletService.getWalletSettings.getCall(0).args[0]).toEqual(4);
 			expect(res).toEqual({
 				loginEmail: 'test@test.com',
-				agreedToTerms: true
+				agreedToTerms: true,
+				authenticatedPreviously: false
 			});
 		});
 	});
 
 	describe('updateSettings', () => {
 		it('should update moonpay settings', async () => {
-			walletService.updateWalletSettings.resolves({
-				moonPayTermsAccepted: true,
-				moonPayLogin: 'test@test.com',
-				id: 2,
-				walletId: 4
+			sinon.stub(service, 'getSettings').resolves({
+				loginEmail: 'test@test.com',
+				agreedToTerms: true,
+				authenticatedPreviously: true
 			});
+
+			walletService.updateWalletSettings.resolves();
+
 			const res = await service.updateSettings(4, {
 				loginEmail: 'test@test.com',
-				agreedToTerms: true
+				agreedToTerms: true,
+				authenticatedPreviously: true
 			});
 
 			expect(walletService.updateWalletSettings.getCall(0).args).toEqual([
 				4,
-				{ moonPayTermsAccepted: true, moonPayLogin: 'test@test.com' }
+				{
+					moonPayTermsAccepted: true,
+					moonPayLogin: 'test@test.com',
+					moonPayPreviousAuth: true
+				}
 			]);
 			expect(res).toEqual({
 				loginEmail: 'test@test.com',
-				agreedToTerms: true
+				agreedToTerms: true,
+				authenticatedPreviously: true
 			});
 		});
 	});

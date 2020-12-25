@@ -10,7 +10,7 @@ export const MoonPayLoadingContainer = withNavFlow(
 		useEffect(() => {
 			setTimeout(() => {
 				dispatch(moonPayOperations.connectFlowNextStepOperation());
-			}, 5000);
+			}, 2000);
 
 			// const interval = setInterval(() => {
 			// 	dispatch(moonPayOperations.connectFlowNextStepOperation());

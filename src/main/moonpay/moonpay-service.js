@@ -11,17 +11,24 @@ export class MoonPayService {
 
 	async getSettings(walletId) {
 		const settings = await this.walletService.getWalletSettings(walletId);
-		return { agreedToTerms: settings.moonPayTermsAccepted, loginEmail: settings.moonPayLogin };
+		return {
+			agreedToTerms: settings.moonPayTermsAccepted,
+			loginEmail: settings.moonPayLogin,
+			authenticatedPreviously: settings.moonPayPreviousAuth
+		};
 	}
 
 	async updateSettings(walletId, opts) {
-		opts = _.pick(opts, ['loginEmail', 'agreedToTerms']);
+		opts = _.pick(opts, ['loginEmail', 'agreedToTerms', 'authenticatedPreviously']);
 		const settings = {};
 		if (opts.loginEmail) {
 			settings.moonPayLogin = opts.loginEmail;
 		}
 		if (opts.agreedToTerms) {
 			settings.moonPayTermsAccepted = opts.agreedToTerms;
+		}
+		if (opts.authenticatedPreviously) {
+			settings.moonPayPreviousAuth = opts.authenticatedPreviously;
 		}
 		if (!_.isEmpty(settings)) {
 			await this.walletService.updateWalletSettings(walletId, settings);

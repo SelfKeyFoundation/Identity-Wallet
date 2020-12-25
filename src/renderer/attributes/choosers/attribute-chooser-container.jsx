@@ -35,10 +35,12 @@ export const AttributeChooserContainer = props => {
 			return;
 		}
 		evt.preventDefault();
+		const id = +evt.target.value;
 
-		setSelected(+evt.target.value);
+		setSelected(id);
+
 		if (onSelectOption) {
-			const attribute = attributes.find(attr => attr.id);
+			const attribute = attributes.find(attr => attr.id === id);
 			onSelectOption(attribute);
 		}
 	};

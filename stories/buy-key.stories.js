@@ -9,6 +9,7 @@ import PhoneVerificationModal from '../src/renderer/moonpay/phone-verification-m
 import MoonpayAuthModal from '../src/renderer/moonpay/auth-modal';
 import AddPaymentMethodModal from '../src/renderer/moonpay/add-payment-method-modal';
 import MoonpayChooseLoginEmailModal from '../src/renderer/moonpay/choose-login-email-modal';
+import MoonpayAuthErrorModal from '../src/renderer/moonpay/auth-error';
 
 storiesOf('Buy Key/Dashboard Widget', module)
 	.add('default', () => (
@@ -121,8 +122,13 @@ const typesByTypeId = {
 };
 
 storiesOf('Buy Key/Moonpay/Auth', module)
-	.add('AuthModal', () => (
-		<MoonpayAuthModal onNext={action('next')} onCancel={action('cancel')} />
+	.add('AuthModal first connection', () => (
+		<MoonpayAuthModal
+			email="test@test.com"
+			onChooseEmail={action('choose-email')}
+			onNext={action('next')}
+			onCancel={action('cancel')}
+		/>
 	))
 	.add('ChooseLoginEmailModal', () => (
 		<MoonpayChooseLoginEmailModal
@@ -134,6 +140,16 @@ storiesOf('Buy Key/Moonpay/Auth', module)
 			selected={number('Selected Email', null)}
 			typesByTypeId={object('Types by ID', typesByTypeId)}
 			attributes={object('Array of attributes', emailAttributes)}
+		/>
+	))
+	.add('AuthErrorModal', () => (
+		<MoonpayAuthErrorModal onNext={action('next')} onCancel={action('cancel')} />
+	))
+	.add('AuthErrorModal with error message', () => (
+		<MoonpayAuthErrorModal
+			error={'authentication error'}
+			onNext={action('next')}
+			onCancel={action('cancel')}
 		/>
 	));
 storiesOf('Buy Key/Moonpay/Add payment method', module)

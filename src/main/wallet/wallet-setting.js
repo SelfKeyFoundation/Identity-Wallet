@@ -46,7 +46,8 @@ export class WalletSetting extends BaseModel {
 				txHistoryLastSyncedBlock: { type: 'integer' },
 				airDropCode: { type: ['string', 'null'] },
 				moonPayTermsAccepted: { type: 'boolean', default: false },
-				moonPayLogin: { type: ['string', null], default: null }
+				moonPayLogin: { type: ['string', null], default: null },
+				moonPayPreviousAuth: { type: 'boolean', default: false }
 			}
 		};
 	}

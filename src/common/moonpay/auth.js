@@ -8,18 +8,21 @@ import { createAliasedSlice } from '../utils/duck';
 import { hardwareWalletOperations } from '../hardware-wallet';
 import { navigationFlowOperations } from '../navigation/flow';
 import { validate } from 'parameter-validator';
+import { sleep } from '../utils/async';
 
 const log = new Logger('MoonpayAuthDuck');
 
 const SLICE_NAME = 'moonPayAuth';
 
 const initialState = {
-	loaded: false,
 	agreedToTerms: false,
 	loginEmail: null,
 	authInfo: null,
+	authError: null,
+	authenticatedPreviously: false,
 	isServiceAllowed: false,
 	settingsLoaded: false,
+	authInProgress: false,
 	limits: null
 };
 
@@ -55,41 +58,69 @@ const haveSettingsLoaded = createSelector(
 	({ settingsLoaded }) => settingsLoaded
 );
 
+const hasAuthenticatedPreviously = createSelector(
+	selectSelf,
+	({ authenticatedPreviously }) => authenticatedPreviously
+);
+
+const isAuthInProgress = createSelector(
+	selectSelf,
+	({ authInProgress }) => authInProgress
+);
+
+const getAuthError = createSelector(
+	selectSelf,
+	({ authError }) => authError
+);
+
 const selectors = {
 	hasAgreedToTerms,
 	getLoginEmail,
 	isAuthenticated,
 	selectAuthInfo,
 	isServiceAllowed,
-	haveSettingsLoaded
+	haveSettingsLoaded,
+	hasAuthenticatedPreviously,
+	isAuthInProgress,
+	getAuthError
 };
 
 const authOperation = ops => ({ email, cancelUrl, completeUrl }) => async (dispatch, getState) => {
-	const { moonPayService } = getGlobalContext();
-
-	const state = getState();
-	const wallet = getWallet(state);
-	const identityInfo = identitySelectors.selectIdentity(state);
-	const identity = new Identity(wallet, identityInfo);
-
 	try {
-		const authInfo = dispatch(
-			hardwareWalletOperations(() => moonPayService.auth(identity, email), {
-				cancelUrl,
-				completeUrl
-			})
+		const { moonPayService } = getGlobalContext();
+		const state = getState();
+		const wallet = getWallet(state);
+		const identityInfo = identitySelectors.selectIdentity(state);
+		const identity = new Identity(wallet, identityInfo);
+		if (isAuthInProgress(getState())) {
+			return;
+		}
+		await dispatch(ops.setAuthInProgress(true));
+		const authInfo = await dispatch(
+			hardwareWalletOperations.useHardwareWalletOperation(
+				() => moonPayService.auth(identity, email),
+				{
+					cancelUrl,
+					completeUrl
+				}
+			)
 		);
 		await dispatch(ops.setAuthInfo(authInfo));
+		await dispatch(ops.setPreviousAuthentication(true));
 	} catch (error) {
 		log.error(error);
+		console.error(error);
+		await dispatch(ops.setAuthError(error.message));
+	} finally {
+		await dispatch(ops.setAuthInProgress(false));
 	}
 };
 
 const agreeToTermsOperation = ops => () => async (dispatch, getState) => {
 	const wallet = getWallet(getState());
 	if (!wallet) throw new Error('no wallet unlocked');
-	const { moonpayService } = getGlobalContext();
-	await moonpayService.updateSettings(wallet.id, {
+	const { moonPayService } = getGlobalContext();
+	await moonPayService.updateSettings(wallet.id, {
 		agreedToTerms: true
 	});
 	await dispatch(ops.setAgreedToTerms(true));
@@ -99,8 +130,8 @@ const loginEmailChosenOperation = ops => opts => async (dispatch, getState) => {
 	const { loginEmail } = validate(opts, ['loginEmail']);
 	const wallet = getWallet(getState());
 	if (!wallet) throw new Error('no wallet unlocked');
-	const { moonpayService } = getGlobalContext();
-	await moonpayService.updateSettings(wallet.id, {
+	const { moonPayService } = getGlobalContext();
+	await moonPayService.updateSettings(wallet.id, {
 		loginEmail
 	});
 	await dispatch(ops.setLoginEmail(loginEmail));
@@ -110,10 +141,11 @@ const loginEmailChosenOperation = ops => opts => async (dispatch, getState) => {
 const loadSettingsOperation = ops => opts => async (dispatch, getState) => {
 	const wallet = getWallet(getState());
 	if (!wallet) throw new Error('no wallet unlocked');
-	const { moonpayService } = getGlobalContext();
-	const settings = await moonpayService.getSettings(wallet.id);
+	const { moonPayService } = getGlobalContext();
+	const settings = await moonPayService.getSettings(wallet.id);
 	await dispatch(ops.setAgreedToTerms(!!settings.agreedToTerms));
 	await dispatch(ops.setLoginEmail(settings.loginEmail || null));
+	await dispatch(ops.setPreviousAuthentication(settings.authenticatedPreviously));
 	await dispatch(ops.setSettingsLoaded(true));
 };
 
@@ -125,6 +157,7 @@ const loadLimitsOperation = ops => () => async (dispatch, getState) => {
 };
 
 const connectFlowOperation = ops => ({ cancel, complete }) => async (dispatch, getState) => {
+	await dispatch(ops.setAuthError(null));
 	await dispatch(
 		navigationFlowOperations.startFlowOperation({
 			name: 'moonpay-connect',
@@ -155,22 +188,48 @@ const connectFlowNextStepOperation = ops => opt => async (dispatch, getState) =>
 
 	if (!authenticated) {
 		const loginEmail = getLoginEmail(getState());
+		const authInProgress = isAuthInProgress(getState());
 
-		if (loginEmail) {
-			await dispatch(
-				navigationFlowOperations.navigateToStepOperation({
-					current: '/main/moonpay/auth',
-					next: '/main/moonpay/loading'
-				})
-			);
-		} else {
+		if (!loginEmail) {
 			await dispatch(
 				navigationFlowOperations.navigateToStepOperation({
 					current: '/main/moonpay/auth/choose-email',
 					next: '/main/moonpay/loading'
 				})
 			);
+			return;
 		}
+		if (authInProgress) {
+			while (isAuthInProgress(getState())) {
+				await sleep(500);
+			}
+			if (!isAuthenticated(getState())) {
+				await dispatch(
+					navigationFlowOperations.navigateToStepOperation({
+						current: '/main/moonpay/auth/error',
+						next: '/main/moonpay/auth'
+					})
+				);
+				return;
+			}
+			await dispatch(navigationFlowOperations.navigateCompleteOperation());
+			return;
+		}
+		if (getAuthError(getState())) {
+			await dispatch(
+				navigationFlowOperations.navigateToStepOperation({
+					current: '/main/moonpay/auth/error',
+					next: '/main/moonpay/auth'
+				})
+			);
+			return;
+		}
+		await dispatch(
+			navigationFlowOperations.navigateToStepOperation({
+				current: '/main/moonpay/auth',
+				next: '/main/moonpay/loading'
+			})
+		);
 
 		return;
 	}
@@ -199,6 +258,15 @@ const moonPayAuthSlice = createAliasedSlice({
 		},
 		setSettingsLoaded(state, action) {
 			state.settingsLoaded = action.payload;
+		},
+		setPreviousAuthentication(state, action) {
+			state.authenticatedPreviously = action.payload;
+		},
+		setAuthInProgress(state, action) {
+			state.authInProgress = action.payload;
+		},
+		setAuthError(state, action) {
+			state.authError = action.payload;
 		}
 	},
 	aliasedOperations: {

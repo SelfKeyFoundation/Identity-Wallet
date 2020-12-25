@@ -11,11 +11,7 @@ export function withNavFlow(WrappedComponent, config = {}) {
 				return;
 			}
 
-			const step = _.pick(config, ['next', 'prev', 'current']);
-
-			if (!_.isEmpty(step)) {
-				this.props.dispatch(navigationFlowOperations.setStep(step));
-			}
+			this.updateStep(config);
 		}
 
 		isCorrectFlow() {
@@ -37,28 +33,35 @@ export function withNavFlow(WrappedComponent, config = {}) {
 				path = undefined;
 			}
 
-			dispatch(navigationFlowOperations.navigateCancelOperation({ path }));
+			return dispatch(navigationFlowOperations.navigateCancelOperation({ path }));
 		};
 		handleNext = path => {
 			const { dispatch } = this.props;
 			if (typeof path !== 'string') {
 				path = undefined;
 			}
-			dispatch(navigationFlowOperations.navigateNextOperation({ path }));
+			return dispatch(navigationFlowOperations.navigateNextOperation({ path }));
 		};
 		handlePrev = path => {
 			const { dispatch } = this.props;
 			if (typeof path !== 'string') {
 				path = undefined;
 			}
-			dispatch(navigationFlowOperations.navigatePrevOperation({ path }));
+			return dispatch(navigationFlowOperations.navigatePrevOperation({ path }));
 		};
 		handleComplete = path => {
 			const { dispatch } = this.props;
 			if (typeof path !== 'string') {
 				path = undefined;
 			}
-			dispatch(navigationFlowOperations.navigateCompleteOperation({ path }));
+			return dispatch(navigationFlowOperations.navigateCompleteOperation({ path }));
+		};
+		updateStep = async opt => {
+			const step = _.pick(opt, ['next', 'prev', 'current']);
+
+			if (!_.isEmpty(step)) {
+				return this.props.dispatch(navigationFlowOperations.setStep(step));
+			}
 		};
 		render() {
 			let { dispatch, flow, store, ...passThroughProps } = this.props;
@@ -70,6 +73,7 @@ export function withNavFlow(WrappedComponent, config = {}) {
 					onNext={this.handleNext}
 					onPrev={this.handlePrev}
 					onComplete={this.handleComplete}
+					onStepUpdate={this.updateStep}
 				/>
 			);
 		}

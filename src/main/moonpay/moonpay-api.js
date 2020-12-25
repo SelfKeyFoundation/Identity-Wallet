@@ -659,11 +659,20 @@ export class MoonPayApi {
 		if (!loginInfo) {
 			this.loginInfo = null;
 			this.api.setHeader('Authorization', null);
+			this.api.setHeader('X-CSRF-TOKEN', null);
 			return;
 		}
-		validate(loginInfo, ['token', 'customer']);
+		validate(loginInfo, ['customer']);
+		if (!loginInfo.token && !loginInfo.csrfToken) {
+			throw new ParameterValidationError('token or csrf token are required in login info');
+		}
 		this.loginInfo = loginInfo;
-		this.api.setHeader('Authorization', `Bearer ${loginInfo.token}`);
+		if (loginInfo.token) {
+			this.api.setHeader('Authorization', `Bearer ${loginInfo.token}`);
+		}
+		if (loginInfo.csrfToken) {
+			this.api.setHeader('X-CSRF-TOKEN', loginInfo.csrfToken);
+		}
 	}
 
 	verifyLoggedIn() {

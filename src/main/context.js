@@ -98,6 +98,6 @@ export const registerMainServices = container => {
 		matomoService: asClass(MatomoService).singleton(),
 		deepLinksService: asClass(DeepLinksService).singleton(),
 		walletConnectService: asClass(WalletConnectService).singleton(),
-		moonpayService: asClass(MoonPayService).singleton()
+		moonPayService: asClass(MoonPayService).singleton()
 	});
 };
