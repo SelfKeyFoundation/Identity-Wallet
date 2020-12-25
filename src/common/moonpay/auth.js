@@ -1,4 +1,5 @@
 import { Logger } from 'common/logger';
+import _ from 'lodash';
 import { getGlobalContext } from 'common/context';
 import { getWallet } from '../wallet/selectors';
 import { identitySelectors } from 'common/identity';
@@ -9,6 +10,8 @@ import { hardwareWalletOperations } from '../hardware-wallet';
 import { navigationFlowOperations } from '../navigation/flow';
 import { validate } from 'parameter-validator';
 import { sleep } from '../utils/async';
+import { selectAttributesByUrl } from '../identity/selectors';
+import { COUNTRY_ATTRIBUTE } from '../identity/constants';
 
 const log = new Logger('MoonpayAuthDuck');
 
@@ -114,6 +117,26 @@ const authOperation = ops => ({ email, cancelUrl, completeUrl }) => async (dispa
 		await dispatch(ops.setAuthError(error.message));
 	} finally {
 		await dispatch(ops.setAuthInProgress(false));
+	}
+};
+
+const checkServiceAllowedOperation = ops => opt => async (dispatch, getState) => {
+	if (isServiceAllowed(getState())) {
+		return true;
+	}
+	const countries = await selectAttributesByUrl(getState(), { COUNTRY_ATTRIBUTE });
+	const { moonPayService } = getGlobalContext();
+	try {
+		const checks = _.pick(await moonPayService.checkServiceAvailability(countries), [
+			'isServiceAllowed',
+			'allowedCountries',
+			'ipCheck'
+		]);
+		await dispatch(ops.setServiceChecks(checks));
+
+		return checks;
+	} catch (error) {
+		log.error(error);
 	}
 };
 
@@ -268,6 +291,15 @@ const moonPayAuthSlice = createAliasedSlice({
 		},
 		setAuthError(state, action) {
 			state.authError = action.payload;
+		},
+		setServiceChecks(state, action) {
+			const serviceChecks = _.pick(action.payload, [
+				'isServiceAllowed',
+				'allowedCountries',
+				'ipCheck'
+			]);
+
+			_.merge(state, serviceChecks);
 		}
 	},
 	aliasedOperations: {
@@ -277,7 +309,8 @@ const moonPayAuthSlice = createAliasedSlice({
 		loadLimitsOperation,
 		connectFlowOperation,
 		connectFlowNextStepOperation,
-		loadSettingsOperation
+		loadSettingsOperation,
+		checkServiceAllowedOperation
 	}
 });
 

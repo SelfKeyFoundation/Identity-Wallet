@@ -158,6 +158,97 @@ describe('MoonPayService', () => {
 		});
 	});
 
+	describe('checkServiceAvailability', () => {
+		const ipCheckResponse = {
+			alpha2: 'AT',
+			alpha3: 'AUT',
+			ipAddress: '123.414.511.13',
+			isAllowed: true,
+			isBuyAllowed: true,
+			isSellAllowed: true,
+			state: ''
+		};
+
+		const countriesResponse = [
+			{
+				alpha2: 'AM',
+				alpha3: 'ARM',
+				isBuyAllowed: true,
+				isSellAllowed: false,
+				isLightKycAllowed: true,
+				name: 'Armenia',
+				supportedDocuments: [
+					'passport',
+					'driving_licence',
+					'national_identity_card',
+					'residence_permit'
+				],
+				isAllowed: true
+			},
+			{
+				alpha2: 'AU',
+				alpha3: 'AUS',
+				isBuyAllowed: true,
+				isSellAllowed: false,
+				isLightKycAllowed: true,
+				name: 'Australia',
+				supportedDocuments: [
+					'passport',
+					'driving_licence',
+					'national_identity_card',
+					'residence_permit'
+				],
+				isAllowed: true
+			}
+		];
+
+		let api;
+
+		beforeEach(() => {
+			api = service.getApi();
+			sinon.stub(service, 'getApi').returns(api);
+		});
+		it('should return true if ipCheck succeeds', async () => {
+			sinon.stub(api, 'getIpAddress').resolves(ipCheckResponse);
+			sinon.stub(api, 'listCountries').resolves(countriesResponse);
+			const res = await service.checkServiceAvailability([]);
+			expect(res).toEqual({
+				ipCheck: ipCheckResponse,
+				allowedCountries: [],
+				isServiceAllowed: true
+			});
+		});
+
+		it('should return true if countryCheck succeeds', async () => {
+			sinon.stub(api, 'getIpAddress').resolves({ ...ipCheckResponse, isAllowed: true });
+			sinon.stub(api, 'listCountries').resolves(countriesResponse);
+			const res = await service.checkServiceAvailability([
+				{ data: { value: { country: 'AM' } } }
+			]);
+			expect(res).toEqual({
+				ipCheck: ipCheckResponse,
+				allowedCountries: [
+					{
+						alpha2: 'AM',
+						alpha3: 'ARM',
+						isBuyAllowed: true,
+						isSellAllowed: false,
+						isLightKycAllowed: true,
+						name: 'Armenia',
+						supportedDocuments: [
+							'passport',
+							'driving_licence',
+							'national_identity_card',
+							'residence_permit'
+						],
+						isAllowed: true
+					}
+				],
+				isServiceAllowed: true
+			});
+		});
+	});
+
 	describe('authenticated requests', () => {
 		const auth = { token: 'sdasdasdsad', customer: { id: 'sdasdasdsda' } };
 		let api;
