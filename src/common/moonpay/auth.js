@@ -106,6 +106,7 @@ const authOperation = ops => ({ email, cancelUrl, completeUrl }) => async (dispa
 			)
 		);
 		await dispatch(ops.setAuthInfo(authInfo));
+		await moonPayService.updateSettings(wallet.id, { authenticatedPreviously: true });
 		await dispatch(ops.setPreviousAuthentication(true));
 	} catch (error) {
 		log.error(error);
