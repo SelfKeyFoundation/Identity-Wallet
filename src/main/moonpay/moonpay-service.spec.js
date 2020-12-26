@@ -213,8 +213,9 @@ describe('MoonPayService', () => {
 			sinon.stub(api, 'listCountries').resolves(countriesResponse);
 			const res = await service.checkServiceAvailability([]);
 			expect(res).toEqual({
-				ipCheck: ipCheckResponse,
+				ipCheck: { ...ipCheckResponse, name: 'Austria' },
 				allowedCountries: [],
+				customerCountries: [],
 				isServiceAllowed: true
 			});
 		});
@@ -228,6 +229,23 @@ describe('MoonPayService', () => {
 			expect(res).toEqual({
 				ipCheck: ipCheckResponse,
 				allowedCountries: [
+					{
+						alpha2: 'AM',
+						alpha3: 'ARM',
+						isBuyAllowed: true,
+						isSellAllowed: false,
+						isLightKycAllowed: true,
+						name: 'Armenia',
+						supportedDocuments: [
+							'passport',
+							'driving_licence',
+							'national_identity_card',
+							'residence_permit'
+						],
+						isAllowed: true
+					}
+				],
+				customerCountries: [
 					{
 						alpha2: 'AM',
 						alpha3: 'ARM',

@@ -8,6 +8,9 @@ class CreateAttributeContainerComponent extends PureComponent {
 		this.props.dispatch(
 			identityOperations.createIdAttributeOperation(attribute, this.props.identityId)
 		);
+		if (this.props.onNext) {
+			this.props.onNext(attribute);
+		}
 	};
 	handleCancel = () => {
 		if (this.props.onClose) return this.props.onClose();

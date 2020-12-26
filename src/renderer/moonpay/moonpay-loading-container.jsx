@@ -11,13 +11,6 @@ export const MoonPayLoadingContainer = withNavFlow(
 			setTimeout(() => {
 				dispatch(moonPayOperations.connectFlowNextStepOperation());
 			}, 2000);
-
-			// const interval = setInterval(() => {
-			// 	dispatch(moonPayOperations.connectFlowNextStepOperation());
-			// }, 5000);
-			// return () => {
-			// 	clearInterval(interval);
-			// };
 		}, []);
 		return <LoadingModal {...props} title="MoonPay Connect" />;
 	},

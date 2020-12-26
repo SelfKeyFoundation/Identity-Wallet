@@ -54,15 +54,35 @@ export class MoonPayService {
 		const api = this.getApi();
 
 		const ipCheck = await api.getIpAddress();
-		const remoteCountries = await api.listCountries();
+		ipCheck.name = isoCountries.getName(ipCheck.alpha3, 'en', { select: 'official' });
 
-		const allowedCountries = await remoteCountries.filter(
-			c => countries.includes(c.alpha3) && c.isAllowed
-		);
+		const remoteCountries = await api.listCountries();
+		const customerCountries = countries.map(c => {
+			const country = remoteCountries.find(rc => rc.alpha3 === c);
+
+			if (country) {
+				return country;
+			}
+
+			return {
+				alpha2: isoCountries.alpha3ToAlpha2(c),
+				alpha3: c,
+				isBuyAllowed: false,
+				isSellAllowed: false,
+				isLightKycAllowed: false,
+				name: isoCountries.getName(c, 'en', { select: 'official' }),
+				supportedDocuments: [],
+				isAllowed: false
+			};
+		});
+		const allowedCountries = customerCountries.filter(c => c.isAllowed);
+
 		const isServiceAllowed = allowedCountries.length > 0 || ipCheck.isAllowed;
+
 		return {
 			ipCheck,
 			allowedCountries,
+			customerCountries,
 			isServiceAllowed
 		};
 	}

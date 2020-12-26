@@ -10,6 +10,7 @@ import MoonpayAuthModal from '../src/renderer/moonpay/auth-modal';
 import AddPaymentMethodModal from '../src/renderer/moonpay/add-payment-method-modal';
 import MoonpayChooseLoginEmailModal from '../src/renderer/moonpay/choose-login-email-modal';
 import MoonpayAuthErrorModal from '../src/renderer/moonpay/auth-error';
+import MoonPayNotAllowedModal from '../src/renderer/moonpay/not-allowed-modal';
 
 storiesOf('Buy Key/Dashboard Widget', module)
 	.add('default', () => (
@@ -150,6 +151,55 @@ storiesOf('Buy Key/Moonpay/Auth', module)
 			error={'authentication error'}
 			onNext={action('next')}
 			onCancel={action('cancel')}
+		/>
+	))
+	.add('Service not availalbe', () => (
+		<MoonPayNotAllowedModal
+			ipCheck={{
+				alpha2: 'AT',
+				alpha3: 'AUT',
+				name: 'Austria',
+				ipAddress: '123.414.511.13',
+				isAllowed: false,
+				isBuyAllowed: true,
+				isSellAllowed: true,
+				state: ''
+			}}
+			customerCountries={[
+				{
+					alpha2: 'AM',
+					alpha3: 'ARM',
+					isBuyAllowed: true,
+					isSellAllowed: false,
+					isLightKycAllowed: true,
+					name: 'Armenia',
+					supportedDocuments: [
+						'passport',
+						'driving_licence',
+						'national_identity_card',
+						'residence_permit'
+					],
+					isAllowed: false
+				},
+				{
+					alpha2: 'AU',
+					alpha3: 'AUS',
+					isBuyAllowed: true,
+					isSellAllowed: false,
+					isLightKycAllowed: true,
+					name: 'Australia',
+					supportedDocuments: [
+						'passport',
+						'driving_licence',
+						'national_identity_card',
+						'residence_permit'
+					],
+					isAllowed: false
+				}
+			]}
+			onNext={action('next')}
+			onCancel={action('cancel')}
+			onLinkClick={action('link click')}
 		/>
 	));
 storiesOf('Buy Key/Moonpay/Add payment method', module)
