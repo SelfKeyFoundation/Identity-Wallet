@@ -79,7 +79,7 @@ export const MoonPayNotAllowedModal = ({
 				<Grid item>
 					<Typography variant="body2" gutterBottom>
 						<a
-							href="https://www.moonpay.io/terms_of_use"
+							href="https://support.moonpay.com/hc/en-gb/articles/360009279877-What-are-your-supported-countries-states-and-territories-"
 							target="_blank"
 							rel="noopener noreferrer"
 							onClick={onLinkClick}
