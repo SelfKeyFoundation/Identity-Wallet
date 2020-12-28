@@ -10,7 +10,9 @@ import MoonpayAuthModal from '../src/renderer/moonpay/auth-modal';
 import AddPaymentMethodModal from '../src/renderer/moonpay/add-payment-method-modal';
 import MoonpayChooseLoginEmailModal from '../src/renderer/moonpay/choose-login-email-modal';
 import MoonpayAuthErrorModal from '../src/renderer/moonpay/auth-error';
+import KYCRequirementData from './__fixtures__/kyc-requirements-moonpay';
 import MoonPayNotAllowedModal from '../src/renderer/moonpay/not-allowed-modal';
+import MoonPayKycModal from '../src/renderer/moonpay/kyc-modal';
 
 storiesOf('Buy Key/Dashboard Widget', module)
 	.add('default', () => (
@@ -202,6 +204,56 @@ storiesOf('Buy Key/Moonpay/Auth', module)
 			onLinkClick={action('link click')}
 		/>
 	));
+
+storiesOf('Buy Key/Moonpay/Kyc', module)
+	.add('loading', () => (
+		<MoonPayKycModal
+			requirements={[]}
+			onNext={action('next')}
+			onCancel={action('cancel')}
+			onAttributeSelected={action('attribute-selected')}
+			editAttribute={action('edit-attribute')}
+			addAttribute={action('add-attribute')}
+			loading
+			selectedAttributes={[]}
+		/>
+	))
+	.add('filled', () => (
+		<MoonPayKycModal
+			requirements={KYCRequirementData}
+			onNext={action('next')}
+			onCancel={action('cancel')}
+			onAttributeSelected={action('attribute-selected')}
+			editAttribute={action('edit-attribute')}
+			addAttribute={action('add-attribute')}
+			selectedAttributes={[]}
+		/>
+	))
+	.add('disabled', () => (
+		<MoonPayKycModal
+			requirements={KYCRequirementData}
+			onNext={action('next')}
+			onCancel={action('cancel')}
+			onAttributeSelected={action('attribute-selected')}
+			editAttribute={action('edit-attribute')}
+			addAttribute={action('add-attribute')}
+			selectedAttributes={[]}
+			disabled
+		/>
+	))
+	.add('error', () => (
+		<MoonPayKycModal
+			requirements={KYCRequirementData}
+			onNext={action('next')}
+			onCancel={action('cancel')}
+			onAttributeSelected={action('attribute-selected')}
+			editAttribute={action('edit-attribute')}
+			addAttribute={action('add-attribute')}
+			selectedAttributes={[]}
+			error="an error has occured"
+		/>
+	));
+
 storiesOf('Buy Key/Moonpay/Add payment method', module)
 	.add('loading', () => (
 		<AddPaymentMethodModal
