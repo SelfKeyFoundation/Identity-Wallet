@@ -1,4 +1,5 @@
 import { Logger } from 'common/logger';
+import _ from 'lodash';
 import { getGlobalContext } from 'common/context';
 import { getWallet } from '../wallet/selectors';
 import { identitySelectors } from 'common/identity';
@@ -9,6 +10,9 @@ import { hardwareWalletOperations } from '../hardware-wallet';
 import { navigationFlowOperations } from '../navigation/flow';
 import { validate } from 'parameter-validator';
 import { sleep } from '../utils/async';
+import { selectAttributesByUrl, selectIdentity } from '../identity/selectors';
+import { COUNTRY_ATTRIBUTE } from '../identity/constants';
+import { push } from 'connected-react-router';
 
 const log = new Logger('MoonpayAuthDuck');
 
@@ -21,6 +25,9 @@ const initialState = {
 	authError: null,
 	authenticatedPreviously: false,
 	isServiceAllowed: false,
+	ipCheck: null,
+	allowedCountries: [],
+	customerCountries: [],
 	settingsLoaded: false,
 	authInProgress: false,
 	limits: null
@@ -41,6 +48,11 @@ const isAuthenticated = createSelector(
 const isServiceAllowed = createSelector(
 	selectSelf,
 	({ isServiceAllowed }) => isServiceAllowed
+);
+
+const selectServiceCheck = createSelector(
+	selectSelf,
+	state => _.pick(state, ['isServiceAllowed', 'allowedCountries', 'customerCountries', 'ipCheck'])
 );
 
 const hasAgreedToTerms = createSelector(
@@ -82,7 +94,8 @@ const selectors = {
 	haveSettingsLoaded,
 	hasAuthenticatedPreviously,
 	isAuthInProgress,
-	getAuthError
+	getAuthError,
+	selectServiceCheck
 };
 
 const authOperation = ops => ({ email, cancelUrl, completeUrl }) => async (dispatch, getState) => {
@@ -114,6 +127,26 @@ const authOperation = ops => ({ email, cancelUrl, completeUrl }) => async (dispa
 		await dispatch(ops.setAuthError(error.message));
 	} finally {
 		await dispatch(ops.setAuthInProgress(false));
+	}
+};
+
+const checkServiceAllowedOperation = ops => opt => async (dispatch, getState) => {
+	const countries = selectAttributesByUrl(getState(), {
+		attributeTypeUrls: [COUNTRY_ATTRIBUTE]
+	});
+	const { moonPayService } = getGlobalContext();
+	try {
+		const checks = _.pick(await moonPayService.checkServiceAvailability(countries), [
+			'isServiceAllowed',
+			'allowedCountries',
+			'customerCountries',
+			'ipCheck'
+		]);
+		await dispatch(ops.setServiceChecks(checks));
+
+		return checks;
+	} catch (error) {
+		log.error(error);
 	}
 };
 
@@ -158,6 +191,16 @@ const loadLimitsOperation = ops => () => async (dispatch, getState) => {
 };
 
 const connectFlowOperation = ops => ({ cancel, complete }) => async (dispatch, getState) => {
+	const identity = selectIdentity(getState());
+
+	if (!identity) {
+		return;
+	}
+
+	if (!identity.isSetupFinished) {
+		await dispatch(push('/main/selfkeyId'));
+		return;
+	}
 	await dispatch(ops.setAuthError(null));
 	await dispatch(
 		navigationFlowOperations.startFlowOperation({
@@ -173,6 +216,23 @@ const connectFlowNextStepOperation = ops => opt => async (dispatch, getState) =>
 	if (!haveSettingsLoaded(getState())) {
 		await dispatch(ops.loadSettingsOperation());
 	}
+
+	const serviceCheck = selectServiceCheck(getState());
+
+	if (!serviceCheck.ipCheck) {
+		await dispatch(ops.checkServiceAllowedOperation());
+	}
+
+	if (!isServiceAllowed(getState())) {
+		await dispatch(
+			navigationFlowOperations.navigateToStepOperation({
+				current: '/main/moonpay/auth/not-allowed',
+				next: null
+			})
+		);
+		return;
+	}
+
 	const agreedToTerms = hasAgreedToTerms(getState());
 
 	if (!agreedToTerms) {
@@ -268,6 +328,23 @@ const moonPayAuthSlice = createAliasedSlice({
 		},
 		setAuthError(state, action) {
 			state.authError = action.payload;
+		},
+		setServiceChecks(state, action) {
+			if (action.payload === null) {
+				state.isServiceAllowed = false;
+				state.allowedCountries = [];
+				state.customerCountries = [];
+				state.ipCheck = null;
+				return;
+			}
+			const serviceChecks = _.pick(action.payload, [
+				'isServiceAllowed',
+				'allowedCountries',
+				'customerCountries',
+				'ipCheck'
+			]);
+
+			_.merge(state, serviceChecks);
 		}
 	},
 	aliasedOperations: {
@@ -277,7 +354,8 @@ const moonPayAuthSlice = createAliasedSlice({
 		loadLimitsOperation,
 		connectFlowOperation,
 		connectFlowNextStepOperation,
-		loadSettingsOperation
+		loadSettingsOperation,
+		checkServiceAllowedOperation
 	}
 });
 

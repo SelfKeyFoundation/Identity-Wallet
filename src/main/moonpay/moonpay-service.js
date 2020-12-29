@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import { validate } from 'parameter-validator';
 import { MoonPayApi } from './moonpay-api';
+import isoCountries from 'i18n-iso-countries';
+
 export class MoonPayService {
 	constructor({ config, walletService }) {
 		this.config = config;
@@ -44,9 +46,45 @@ export class MoonPayService {
 		});
 	}
 
-	checkServiceAvailability() {
-		// check if service available based on ip
-		// check if service available based on country of residency
+	async checkServiceAvailability(countries = []) {
+		countries = countries
+			.map(c => c.data.value.country)
+			.map(c => isoCountries.alpha2ToAlpha3(c));
+
+		const api = this.getApi();
+
+		const ipCheck = await api.getIpAddress();
+		ipCheck.name = isoCountries.getName(ipCheck.alpha3, 'en', { select: 'official' });
+
+		const remoteCountries = await api.listCountries();
+		const customerCountries = countries.map(c => {
+			const country = remoteCountries.find(rc => rc.alpha3 === c);
+
+			if (country) {
+				return country;
+			}
+
+			return {
+				alpha2: isoCountries.alpha3ToAlpha2(c),
+				alpha3: c,
+				isBuyAllowed: false,
+				isSellAllowed: false,
+				isLightKycAllowed: false,
+				name: isoCountries.getName(c, 'en', { select: 'official' }),
+				supportedDocuments: [],
+				isAllowed: false
+			};
+		});
+		const allowedCountries = customerCountries.filter(c => c.isAllowed);
+
+		const isServiceAllowed = allowedCountries.length > 0 || ipCheck.isAllowed;
+
+		return {
+			ipCheck,
+			allowedCountries,
+			customerCountries,
+			isServiceAllowed
+		};
 	}
 
 	async auth(identity, email) {

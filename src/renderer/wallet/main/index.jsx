@@ -59,7 +59,7 @@ import { TransactionProcessingContainer } from '../../contract/allowance-editor/
 import { TransactionErrorContainer } from '../../contract/allowance-editor/transaction-error-container';
 import { walletConnectSelectors } from '../../../common/wallet-connect';
 import { push } from 'connected-react-router';
-import MoonPayAuthContainer from '../../moonpay/auth-container';
+import MoonPayAuthRouter from '../../moonpay/auth-router';
 import MoonPayLoadingContainer from '../../moonpay/moonpay-loading-container';
 
 const styles = theme => ({
@@ -296,10 +296,7 @@ class Main extends PureComponent {
 							component={MoonPayLoadingContainer}
 						/>
 
-						<Route
-							path={`${match.path}/moonpay/auth`}
-							component={MoonPayAuthContainer}
-						/>
+						<Route path={`${match.path}/moonpay/auth`} component={MoonPayAuthRouter} />
 
 						{/*
 

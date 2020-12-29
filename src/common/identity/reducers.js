@@ -203,12 +203,14 @@ const addIdentityReducer = (state, action) => {
 };
 
 const updateIdentityReducer = (state, action) => {
-	const { identities, identitiesById } = state;
+	let { identities, identitiesById } = state;
 
-	if (!identities.includes(action.payload.id)) {
+	const { id } = action.payload;
+
+	if (!identities.includes(id)) {
 		return state;
 	}
-	identitiesById[action.payload.id] = { ...identitiesById[action.payload.id], ...action.payload };
+	identitiesById = { ...identitiesById, [id]: { ...identitiesById[id], ...action.payload } };
 
 	return { ...state, identities, identitiesById };
 };
