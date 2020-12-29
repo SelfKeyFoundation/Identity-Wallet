@@ -24,7 +24,7 @@ const tx = {
 	data: '0xasdagakljsfdnaskldjaslkdjaslkdjasolikdjas'
 };
 
-storiesOf('WalletConnect/ApproveSession')
+storiesOf('WalletConnect/ApproveSession', module)
 	.add('wallet-unlocked', () => (
 		<ApproveSessionComponent
 			peerMeta={peerMeta}
@@ -43,7 +43,7 @@ storiesOf('WalletConnect/ApproveSession')
 		/>
 	));
 
-storiesOf('WalletConnect/SignMessage').add('default', () => (
+storiesOf('WalletConnect/SignMessage', module).add('default', () => (
 	<SignMessageComponent
 		peerMeta={peerMeta}
 		onCancel={action('cancel')}
@@ -53,7 +53,7 @@ storiesOf('WalletConnect/SignMessage').add('default', () => (
 	/>
 ));
 
-storiesOf('WalletConnect/Transaction')
+storiesOf('WalletConnect/Transaction', module)
 	.add('send', () => (
 		<TransactionComponent
 			method="eth_sendTransaction"

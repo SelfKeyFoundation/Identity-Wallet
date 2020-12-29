@@ -5,14 +5,16 @@ import { connect } from 'react-redux';
 import Popup from '../../../common/popup';
 import { HourGlassLargeIcon } from 'selfkey-ui';
 import { kycSelectors } from 'common/kyc';
-import { push } from 'connected-react-router';
+import { hardwareWalletOperations } from 'common/hardware-wallet';
 import { appSelectors } from 'common/app';
 
 const styles = theme => ({});
 
 class HardwareWalletTimeout extends PureComponent {
 	handleClose = () => {
-		this.props.dispatch(push(this.props.cancelRoute));
+		this.props.dispatch(
+			hardwareWalletOperations.cancelAuthOperation({ cancelRoute: this.props.cancelRoute })
+		);
 	};
 
 	render() {

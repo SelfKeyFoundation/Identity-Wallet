@@ -4,7 +4,10 @@ import TestDb from '../db/test-db';
 describe('WalletSetting model', () => {
 	const testItem = {
 		walletId: 1,
-		showDesktopNotifications: 1
+		showDesktopNotifications: 1,
+		moonPayTermsAccepted: true,
+		moonPayLogin: 'test@test.com',
+		moonPayPreviousAuth: true
 	};
 	beforeEach(async () => {
 		await TestDb.init();

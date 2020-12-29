@@ -17,6 +17,7 @@ import { CardContent } from '@material-ui/core';
 import { primary } from 'selfkey-ui';
 
 import vaultImage from '../static/assets/images/bgs/vault.png';
+import LoadingModal from '../src/renderer/common/loading-modal';
 
 const data = {
 	basic: {
@@ -177,4 +178,19 @@ storiesOf('Common/AccentedCard', module)
 		>
 			<CardContent>hi</CardContent>
 		</AccentedCard>
+	));
+
+storiesOf('Common/LoadingModal', module)
+	.add('default', () => (
+		<LoadingModal
+			onCloseClick={action('close clicked')}
+			title={text('Modal Title', 'Loading')}
+			text={text('Modal Text', 'Loading in progress')}
+		/>
+	))
+	.add('no close', () => (
+		<LoadingModal
+			title={text('Modal Title', 'Loading')}
+			text={text('Modal Text', 'Loading in progress')}
+		/>
 	));

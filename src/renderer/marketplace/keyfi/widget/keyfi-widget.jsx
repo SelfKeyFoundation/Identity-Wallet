@@ -140,8 +140,8 @@ export const KeyFiWidget = withStyles(styles)(({ classes, onCredentialsClick }) 
 					</Grid>
 				</Grid>
 			</Grid>
-			<Grid item xs={4} className={classes.iconWrap} justify="center" alignItems="center">
-				<div>
+			<Grid item xs={4} className={classes.iconWrap}>
+				<Grid container justify="center" alignItems="center">
 					<DefiIcon className={classes.paymentIcon} />
 					<div className={classes.actions}>
 						<Button
@@ -154,7 +154,7 @@ export const KeyFiWidget = withStyles(styles)(({ classes, onCredentialsClick }) 
 							<span>Get Credentials</span>
 						</Button>
 					</div>
-				</div>
+				</Grid>
 			</Grid>
 		</Grid>
 	);

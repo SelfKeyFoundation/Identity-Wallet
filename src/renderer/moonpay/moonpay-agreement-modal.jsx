@@ -12,10 +12,10 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export const MoonpayAgreementModal = ({ onCloseClick, onAgreeClick, onLinkClick }) => {
+export const MoonpayAgreementModal = ({ onCancel, onNext, onLinkClick }) => {
 	const classes = useStyles();
 	return (
-		<Popup closeAction={onCloseClick} text="MoonPay Terms Agreement">
+		<Popup closeAction={onCancel} text="MoonPay Terms Agreement">
 			<Grid container direction="column" spacing={4}>
 				<Grid item>
 					<Typography variant="body1">Please read the following documents:</Typography>
@@ -58,7 +58,7 @@ export const MoonpayAgreementModal = ({ onCloseClick, onAgreeClick, onLinkClick 
 					</Typography>
 				</Grid>
 				<Grid item>
-					<Typography variant="subtitle" color="secondary" gutterBottom>
+					<Typography variant="subtitle1" color="secondary">
 						By clicking &#34;Agree to terms of Service&#34; you consent that you have
 						read and accept the terms.
 					</Typography>
@@ -69,12 +69,12 @@ export const MoonpayAgreementModal = ({ onCloseClick, onAgreeClick, onLinkClick 
 				<Grid item>
 					<Grid container direction="row" spacing={2}>
 						<Grid item>
-							<Button variant="outlined" size="large" onClick={onAgreeClick}>
+							<Button variant="outlined" size="large" onClick={onNext}>
 								Agree to terms of service
 							</Button>
 						</Grid>
 						<Grid item>
-							<Button variant="contained" size="large" onClick={onCloseClick}>
+							<Button variant="contained" size="large" onClick={onCancel}>
 								Cancel
 							</Button>
 						</Grid>
@@ -86,8 +86,8 @@ export const MoonpayAgreementModal = ({ onCloseClick, onAgreeClick, onLinkClick 
 };
 
 MoonpayAgreementModal.propTypes = {
-	onAgreeClick: PropTypes.func.isRequired,
-	onCloseClick: PropTypes.func.isRequired,
+	onNext: PropTypes.func.isRequired,
+	onCancel: PropTypes.func.isRequired,
 	onLinkClick: PropTypes.func
 };
 
