@@ -271,6 +271,62 @@ describe('MoonPayApi', () => {
 			);
 		});
 
+		describe('loginWithEmail', () => {
+			const EMAIL = 'test@email.com';
+			const SECURITY_CODE = '1241';
+			const TOKEN = 'asdaddasdasd';
+			const CUSTOMER_ID = '131231';
+
+			const data = {
+				email: EMAIL,
+				securityCode: SECURITY_CODE
+			};
+
+			it('should return login status if no security code', async () => {
+				const expectedResponse = {
+					preAuthenticated: true,
+					showTermsOfUse: false
+				};
+
+				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				const setLogin = sinon.stub(mpApi, 'setLoginInfo');
+
+				const resp = await mpApi.loginWithEmail(_.omit(data, ['securityCode']));
+
+				expect(rp.getCall(0).args[0]).toEqual({
+					method: 'post',
+					url: '/customers/email_login',
+					body: _.omit(data, ['securityCode'])
+				});
+				expect(resp).toEqual(expectedResponse);
+				expect(setLogin.called).toBe(false);
+			});
+
+			it('should return login info security code provided', async () => {
+				const expectedResponse = {
+					token: TOKEN,
+					customer: {
+						id: CUSTOMER_ID
+					}
+				};
+
+				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				const setLogin = sinon.stub(mpApi, 'setLoginInfo');
+
+				const resp = await mpApi.loginWithEmail(data);
+
+				expect(rp.getCall(0).args[0]).toEqual({
+					method: 'post',
+					url: '/customers/email_login',
+					body: data
+				});
+				expect(resp).toEqual(expectedResponse);
+				expect(setLogin.getCall(0).args[0]).toEqual(expectedResponse);
+			});
+
+			['email'].map(parameter => testMissingParam(parameter, 'establishSession', data));
+		});
+
 		describe('establishSession', () => {
 			const EMAIL = 'test@email.com';
 			const ADDRESS = '0xdasdsadsadsadsaada';

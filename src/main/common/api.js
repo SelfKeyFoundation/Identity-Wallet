@@ -10,7 +10,15 @@ export class Api {
 
 	async request(opt) {
 		let { url, method } = validate(opt, ['url', 'method']);
-		let { headers = {}, qs = {}, body, formData, json = true } = opt;
+		let {
+			headers = {},
+			qs = {},
+			body,
+			formData,
+			json = true,
+			simple = true,
+			resolveWithFullResponse = false
+		} = opt;
 
 		qs = { ...this.opt.qs, ...qs };
 		headers = { ...this.opt.headers, ...headers };
@@ -19,7 +27,7 @@ export class Api {
 		}
 		method = method.toUpperCase();
 
-		const rpOpt = { url, method, json, headers, qs };
+		const rpOpt = { url, method, json, headers, qs, simple, resolveWithFullResponse };
 
 		if (body) {
 			rpOpt.body = body;

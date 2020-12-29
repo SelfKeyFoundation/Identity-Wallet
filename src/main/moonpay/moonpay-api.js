@@ -8,7 +8,13 @@ const log = new Logger('MoonPayApi');
 export class MoonPayApi {
 	static PAYMENT_METHODS = ['credit_debit_card', 'sepa_bank_transfer', 'gbp_bank_transfer'];
 	static DEFAULT_PAYMENT_METHOD = 'credit_debit_card';
-	static FILE_TYPES = ['passport', 'national_identity_card', 'driving_licence', 'selfie'];
+	static FILE_TYPES = [
+		'passport',
+		'national_identity_card',
+		'driving_licence',
+		'selfie',
+		'residence_permit'
+	];
 	static FILE_SIDES = ['front', 'back'];
 	static FILES_REQUIRING_SIDE = ['national_identity_card', 'driving_licence'];
 	static COUNTRIES_REQUIRING_STATE = ['USA'];
@@ -90,6 +96,7 @@ export class MoonPayApi {
 			qs: { apiKey },
 			onRequestError: this.handleRequestError.bind(this)
 		};
+		this.authErrorCb = opt.authErrorCb;
 		this.api = new Api(apiOpt);
 
 		this.setLoginInfo(loginInfo);
@@ -99,8 +106,46 @@ export class MoonPayApi {
 		log.error('Request error %s', error);
 		if (error.statusCode === 401) {
 			this.setLoginInfo(null);
+			if (this.authErrorCb) {
+				return this.authErrorCb(error);
+			}
 		}
 		throw error;
+	}
+
+	async loginWithEmail(data) {
+		const body = validate(data, ['email']);
+
+		if (data.securityCode) {
+			body.securityCode = data.securityCode;
+		}
+
+		const res = await this.api.request({
+			method: 'post',
+			url: '/customers/email_login',
+			body,
+			resolveWithFullResponse: true
+		});
+
+		const authInfo = res.body;
+		if (body.securityCode) {
+			authInfo.token = this.getTokenFromResponse(res);
+		}
+
+		if (body.securityCode) {
+			this.setLoginInfo(authInfo);
+		}
+		return authInfo;
+	}
+
+	getTokenFromResponse(res) {
+		const match = (res.headers['set-cookie'] || [])
+			.map((c = '') => c.match(/customerToken=([^;]*)/))
+			.find(m => m !== null);
+		if (match) {
+			return match[1];
+		}
+		return null;
 	}
 
 	async getChallenge(data) {
@@ -124,9 +169,15 @@ export class MoonPayApi {
 			const resp = await this.api.request({
 				method: 'post',
 				url: '/customers/wallet_address_login',
-				body: _.pick(data, ['email', 'walletAddress', 'signature'])
+				body: _.pick(data, ['email', 'walletAddress', 'signature']),
+				resolveWithFullResponse: true
 			});
-			return resp;
+
+			const authInfo = resp.body;
+
+			authInfo.token = this.getTokenFromResponse(resp);
+
+			return resp.body;
 		} catch (error) {
 			log.error(error);
 			throw error;

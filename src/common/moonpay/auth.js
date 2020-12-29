@@ -10,9 +10,20 @@ import { hardwareWalletOperations } from '../hardware-wallet';
 import { navigationFlowOperations } from '../navigation/flow';
 import { validate } from 'parameter-validator';
 import { sleep } from '../utils/async';
-import { selectAttributesByUrl, selectIdentity } from '../identity/selectors';
-import { COUNTRY_ATTRIBUTE } from '../identity/constants';
+import {
+	selectAttributesByUrl,
+	selectAttributesByUrlMapFactory,
+	selectIdentity
+} from '../identity/selectors';
+import {
+	COUNTRY_ATTRIBUTE,
+	FIRST_NAME_ATTRIBUTE,
+	LAST_NAME_ATTRIBUTE,
+	PHONE_ATTRIBUTE,
+	ADDRESS_ATTRIBUTE
+} from '../identity/constants';
 import { push } from 'connected-react-router';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const log = new Logger('MoonpayAuthDuck');
 
@@ -22,6 +33,7 @@ const initialState = {
 	agreedToTerms: false,
 	loginEmail: null,
 	authInfo: null,
+	emailVerificationRequired: false,
 	authError: null,
 	authenticatedPreviously: false,
 	isServiceAllowed: false,
@@ -30,7 +42,10 @@ const initialState = {
 	customerCountries: [],
 	settingsLoaded: false,
 	authInProgress: false,
-	limits: null
+	limits: null,
+	selectedAttributes: {},
+	kycSubmitting: false,
+	kycError: null
 };
 
 const selectSelf = state => state[SLICE_NAME];
@@ -85,6 +100,197 @@ const getAuthError = createSelector(
 	({ authError }) => authError
 );
 
+const getLimits = createSelector(
+	selectSelf,
+	({ limits }) => limits
+);
+
+const isKycSubmitting = createSelector(
+	selectSelf,
+	({ kycSubmitting }) => kycSubmitting
+);
+
+const getKYCChecks = createSelector(
+	getLimits,
+	limits => {
+		const { verificationLevels } = limits;
+
+		return verificationLevels.reduce((acc, curr) => {
+			return curr.requirements.reduce((acc, curr) => {
+				acc[curr.identifier] = curr.completed;
+				return acc;
+			}, acc);
+		}, {});
+	}
+);
+
+const isKycRequired = createSelector(
+	getKYCChecks,
+	checks =>
+		checks['identity_verification'] ||
+		!checks['document_verification'] ||
+		!checks['face_match_verification']
+);
+
+const getSelectedAttributes = createSelector(
+	selectSelf,
+	({ selectedAttributes }) => selectedAttributes
+);
+
+const getSelectedCountry = createSelector(
+	getSelectedAttributes,
+	selectServiceCheck,
+	(selected, serviceCheck) => {
+		let country = Object.keys(selected).find(uiId => {
+			return selected[uiId].schemaId === COUNTRY_ATTRIBUTE;
+		});
+
+		if (country) {
+			country = serviceCheck.customerCountries.find(
+				c => c.alpha2 === selected[country].data.value.country
+			);
+		}
+		return country;
+	}
+);
+
+const selectAttributesByUrlMap = selectAttributesByUrlMapFactory();
+
+const getKYCRequirements = createSelector(
+	getKYCChecks,
+	getSelectedCountry,
+	state =>
+		selectAttributesByUrlMap(state, {
+			attributeTypeUrls: [
+				FIRST_NAME_ATTRIBUTE,
+				LAST_NAME_ATTRIBUTE,
+				PHONE_ATTRIBUTE,
+				ADDRESS_ATTRIBUTE,
+				COUNTRY_ATTRIBUTE,
+				'http://platform.selfkey.org/schema/attribute/passport.json',
+				'http://platform.selfkey.org/schema/attribute/national-id-number.json',
+				'http://platform.selfkey.org/schema/attribute/drivers-license.json'
+			]
+		}),
+	(checks, country, attributesByUrl) => {
+		let requirements = [];
+
+		const getType = url =>
+			attributesByUrl[url] && attributesByUrl[url].length ? attributesByUrl[url].type : null;
+
+		const createRequirement = (types = [], title, name, required = true) => {
+			const options = !Array.isArray(types)
+				? attributesByUrl[types]
+				: types.flatMap(t => attributesByUrl[t]);
+			const attributeTypes = !Array.isArray(types) ? getType(types) : types.map(getType);
+
+			if (!name) {
+				name = Array.isArray(types) ? types[0] : types;
+			}
+
+			return {
+				uiId: name,
+				required,
+				schemaId: types,
+				options,
+				title:
+					title || Array.isArray(attributeTypes)
+						? attributeTypes[0]
+							? attributeTypes[0].content.title
+							: null
+						: attributeTypes
+						? attributeTypes.content.title
+						: null,
+				tType: 'individual',
+				type: attributeTypes,
+				duplicateType: false
+			};
+		};
+		// TODO turn strings to actual requirements
+		if (!checks['identity_verification']) {
+			requirements.concat(
+				[
+					FIRST_NAME_ATTRIBUTE,
+					LAST_NAME_ATTRIBUTE,
+					PHONE_ATTRIBUTE,
+					ADDRESS_ATTRIBUTE,
+					COUNTRY_ATTRIBUTE
+				].map(createRequirement)
+			);
+		}
+
+		if (country && (!checks['document_verification'] || !checks['face_match_verification'])) {
+			const types = [];
+
+			if (country.supportedDocuments.includes('passport')) {
+				types.push('http://platform.selfkey.org/schema/attribute/passport.json');
+			}
+
+			if (country.supportedDocuments.includes('national_identity_card')) {
+				types.push('http://platform.selfkey.org/schema/attribute/national-id-number.json');
+			}
+
+			if (country.supportedDocuments.includes('driving_licence')) {
+				types.push('http://platform.selfkey.org/schema/attribute/drivers-license.json');
+			}
+
+			requirements.push(
+				createRequirement(types, 'Identity Document', 'document_verification')
+			);
+		}
+
+		return requirements;
+	}
+);
+
+const selectFilledKycRequirements = createSelector(
+	getKYCRequirements,
+	getSelectedAttributes,
+	(requirements, selected) => {
+		return requirements.map(r => {
+			const attributeName = `_${r.uiId}`;
+			const sel =
+				!r.options || !r.options.length ? null : selected[attributeName] || r.options[0];
+			return {
+				id: r.id,
+				attribute: sel || undefined,
+				attributeId: sel ? sel.id : undefined,
+				schemaId: r.schemaId,
+				schema: r.schema || (r.type ? r.type.content : undefined),
+				required: r.required,
+				type: r.tType || 'individual'
+			};
+		});
+	}
+);
+
+const areKycRequirementsValid = createSelector(
+	selectFilledKycRequirements,
+	requirements => {
+		return requirements.reduce((acc, curr) => {
+			if (acc) return acc;
+			const attribute = curr.attribute;
+			// Ignore optional empty attributes
+			if (!attribute && !curr.required) {
+				return false;
+			}
+			if (!attribute || !attribute.isValid) return true;
+
+			return false;
+		}, false);
+	}
+);
+
+const getKycError = createSelector(
+	selectSelf,
+	({ kycError }) => kycError
+);
+
+const isEmailVerificationRequired = createSelector(
+	selectSelf,
+	({ emailVerificationRequired }) => emailVerificationRequired
+);
+
 const selectors = {
 	hasAgreedToTerms,
 	getLoginEmail,
@@ -95,10 +301,26 @@ const selectors = {
 	hasAuthenticatedPreviously,
 	isAuthInProgress,
 	getAuthError,
-	selectServiceCheck
+	selectServiceCheck,
+	getKYCChecks,
+	getSelectedAttributes,
+	getSelectedCountry,
+	getKYCRequirements,
+	isKycRequired,
+	isKycSubmitting,
+	areKycRequirementsValid,
+	getKycError,
+	isEmailVerificationRequired
 };
 
-const authOperation = ops => ({ email, cancelUrl, completeUrl }) => async (dispatch, getState) => {
+const authErrorOperation = ops => () => async (dispatch, getState) => {
+	await dispatch(ops.setAuthInfo(null));
+};
+
+const authOperation = ops => ({ email, securityCode, cancelUrl, completeUrl }) => async (
+	dispatch,
+	getState
+) => {
 	try {
 		const { moonPayService } = getGlobalContext();
 		const state = getState();
@@ -108,16 +330,25 @@ const authOperation = ops => ({ email, cancelUrl, completeUrl }) => async (dispa
 		if (isAuthInProgress(getState())) {
 			return;
 		}
+		let authInfo = null;
 		await dispatch(ops.setAuthInProgress(true));
-		const authInfo = await dispatch(
-			hardwareWalletOperations.useHardwareWalletOperation(
-				() => moonPayService.auth(identity, email),
-				{
-					cancelUrl,
-					completeUrl
-				}
-			)
-		);
+		if (featureIsEnabled('moonpayWalletLogin')) {
+			authInfo = await dispatch(
+				hardwareWalletOperations.useHardwareWalletOperation(
+					() => moonPayService.auth(identity, email),
+					{
+						cancelUrl,
+						completeUrl
+					}
+				)
+			);
+		} else {
+			authInfo = await moonPayService.loginWithEmail({ email, securityCode });
+			if (authInfo.preAuthenticated) {
+				await dispatch(ops.setEmailVerificationRequired(true));
+				return;
+			}
+		}
 		await dispatch(ops.setAuthInfo(authInfo));
 		await moonPayService.updateSettings(wallet.id, { authenticatedPreviously: true });
 		await dispatch(ops.setPreviousAuthentication(true));
@@ -188,6 +419,23 @@ const loadLimitsOperation = ops => () => async (dispatch, getState) => {
 	const { moonPayService } = getGlobalContext();
 	const limits = await moonPayService.getLimits(authInfo);
 	await dispatch(ops.setLimits(limits));
+};
+
+const submitKycDocumentsOperation = ops => () => async (dispatch, getState) => {
+	try {
+		if (!areKycRequirementsValid(getState())) {
+			throw new Error('Please fill all required attributes');
+		}
+		await dispatch(ops.setKycSubmitting(false));
+		const authInfo = selectAuthInfo(getState());
+		const filledKycRequirements = selectFilledKycRequirements(getState());
+		const { moonPayService } = getGlobalContext();
+		await moonPayService.submitKycRequirements(filledKycRequirements, authInfo);
+	} catch (error) {
+		await dispatch(ops.setKycError(error.message));
+	} finally {
+		await dispatch(ops.setKycSubmitting(false));
+	}
 };
 
 const connectFlowOperation = ops => ({ cancel, complete }) => async (dispatch, getState) => {
@@ -264,6 +512,17 @@ const connectFlowNextStepOperation = ops => opt => async (dispatch, getState) =>
 			while (isAuthInProgress(getState())) {
 				await sleep(500);
 			}
+
+			if (isEmailVerificationRequired(getState())) {
+				await dispatch(
+					navigationFlowOperations.navigateToStepOperation({
+						current: '/main/moonpay/auth/verify-email',
+						next: '/main/moonpay/loading'
+					})
+				);
+				return;
+			}
+
 			if (!isAuthenticated(getState())) {
 				await dispatch(
 					navigationFlowOperations.navigateToStepOperation({
@@ -285,6 +544,17 @@ const connectFlowNextStepOperation = ops => opt => async (dispatch, getState) =>
 			);
 			return;
 		}
+
+		if (isEmailVerificationRequired(getState())) {
+			await dispatch(
+				navigationFlowOperations.navigateToStepOperation({
+					current: '/main/moonpay/auth/verify-email',
+					next: '/main/moonpay/loading'
+				})
+			);
+			return;
+		}
+
 		await dispatch(
 			navigationFlowOperations.navigateToStepOperation({
 				current: '/main/moonpay/auth',
@@ -292,6 +562,20 @@ const connectFlowNextStepOperation = ops => opt => async (dispatch, getState) =>
 			})
 		);
 
+		return;
+	}
+
+	await dispatch(ops.loadLimitsOperation());
+
+	const kycRequired = isKycRequired(getState());
+
+	if (kycRequired) {
+		await dispatch(
+			navigationFlowOperations.navigateToStepOperation({
+				current: '/main/moonpay/auth/kyc',
+				next: null
+			})
+		);
 		return;
 	}
 
@@ -345,6 +629,18 @@ const moonPayAuthSlice = createAliasedSlice({
 			]);
 
 			_.merge(state, serviceChecks);
+		},
+		setSelectedAttributes(state, action) {
+			state.selectedAttributes = action.payload;
+		},
+		setKycSubmitting(state, action) {
+			state.kycSubmitting = action.payload;
+		},
+		setKycError(state, action) {
+			state.kycError = action.payload;
+		},
+		setEmailVerificationRequired(state, action) {
+			state.emailVerificationRequired = action.payload;
 		}
 	},
 	aliasedOperations: {
@@ -355,7 +651,9 @@ const moonPayAuthSlice = createAliasedSlice({
 		connectFlowOperation,
 		connectFlowNextStepOperation,
 		loadSettingsOperation,
-		checkServiceAllowedOperation
+		checkServiceAllowedOperation,
+		submitKycDocumentsOperation,
+		authErrorOperation
 	}
 });
 

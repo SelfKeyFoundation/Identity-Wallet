@@ -13,6 +13,7 @@ import MoonpayAuthErrorModal from '../src/renderer/moonpay/auth-error';
 import KYCRequirementData from './__fixtures__/kyc-requirements-moonpay';
 import MoonPayNotAllowedModal from '../src/renderer/moonpay/not-allowed-modal';
 import MoonPayKycModal from '../src/renderer/moonpay/kyc-modal';
+import EmailVerificationModal from '../src/renderer/moonpay/email-verification-modal';
 
 storiesOf('Buy Key/Dashboard Widget', module)
 	.add('default', () => (
@@ -95,6 +96,50 @@ storiesOf('Buy Key/MoonPay/Verify Phone', module)
 			onResendClick={action('resend')}
 			onCodeChange={action('code change')}
 			phone="+213134115151"
+		/>
+	));
+
+storiesOf('Buy Key/MoonPay/Verify Email', module)
+	.add('loading', () => (
+		<EmailVerificationModal
+			loading
+			code=""
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onResendClick={action('resend')}
+			onCodeChange={action('code change')}
+			email="test@test.com"
+		/>
+	))
+	.add('default', () => (
+		<EmailVerificationModal
+			code=""
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onResendClick={action('resend')}
+			onCodeChange={action('code change')}
+			email="test@test.com"
+		/>
+	))
+	.add('filled', () => (
+		<EmailVerificationModal
+			code="1313132"
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onResendClick={action('resend')}
+			onCodeChange={action('code change')}
+			email="test@test.com"
+		/>
+	))
+	.add('error', () => (
+		<EmailVerificationModal
+			code="1313132"
+			error="Code verification failed"
+			onContinueClick={action('continue')}
+			onCloseClick={action('close')}
+			onResendClick={action('resend')}
+			onCodeChange={action('code change')}
+			email="test@test.com"
 		/>
 	));
 const emailAttributes = [

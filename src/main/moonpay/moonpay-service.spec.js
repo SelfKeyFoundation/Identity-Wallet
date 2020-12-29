@@ -112,6 +112,44 @@ describe('MoonPayService', () => {
 		});
 	});
 
+	describe('loginWithEmail', () => {
+		let api;
+
+		beforeEach(() => {
+			api = service.getApi();
+			sinon.stub(service, 'getApi').returns(api);
+		});
+
+		it('should throw parameter validation error if email is not provided', async () => {
+			try {
+				await service.loginWithEmail({});
+				fail('did not throw error');
+			} catch (error) {
+				expect(error).toBeInstanceOf(ParameterValidationError);
+			}
+		});
+
+		it('should preauthenticate', async () => {
+			const expectedRes = { test: 'test' };
+			const data = { email: 'test@test.com' };
+			sinon.stub(api, 'loginWithEmail').resolves(expectedRes);
+			const res = await service.loginWithEmail(data);
+
+			expect(res).toEqual(expectedRes);
+			expect(api.loginWithEmail.getCall(0).args[0]).toEqual(data);
+		});
+
+		it('should authenticate', async () => {
+			const expectedRes = { test: 'test' };
+			const data = { email: 'test@test.com', securityCode: '1234' };
+			sinon.stub(api, 'loginWithEmail').resolves(expectedRes);
+			const res = await service.loginWithEmail(data);
+
+			expect(res).toEqual(expectedRes);
+			expect(api.loginWithEmail.getCall(0).args[0]).toEqual(data);
+		});
+	});
+
 	describe('authenticate', () => {
 		const authData = {
 			email: 'test@test.com',
@@ -283,6 +321,19 @@ describe('MoonPayService', () => {
 				expect(res).toEqual(expected);
 				expect(service.getApi.getCall(0).args[0]).toEqual(auth);
 				expect(l.called).toBe(true);
+			});
+		});
+
+		describe('submitKycRequirements', () => {
+			const testKycRequirements = {};
+			it('should submit kyc requirements', async () => {
+				const expected = { customer: {} };
+				const updateInfo = {};
+				const l = sinon.stub(api, 'updateCustomer').resolves(expected);
+				const res = await service.submitKycRequirements(testKycRequirements, auth);
+				expect(res).toEqual(expected);
+				expect(service.getApi.getCall(0).args[0]).toEqual(auth);
+				expect(l.getCall(0).args[0]).toEqual(updateInfo);
 			});
 		});
 	});

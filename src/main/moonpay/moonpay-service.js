@@ -4,11 +4,18 @@ import { MoonPayApi } from './moonpay-api';
 import isoCountries from 'i18n-iso-countries';
 
 export class MoonPayService {
-	constructor({ config, walletService }) {
+	constructor({ config, walletService, store }) {
 		this.config = config;
 		this.walletService = walletService;
 		this.endpoint = config.moonPayApiEndpoint;
 		this.apiKey = config.moonPayApiKey;
+		this.store = store;
+	}
+
+	handleAuthError(error) {
+		const { moonPayOperations } = require('common/moonpay/auth');
+		this.store.dispatch(moonPayOperations.authErrorOperation(error));
+		throw error;
 	}
 
 	async getSettings(walletId) {
@@ -42,7 +49,8 @@ export class MoonPayService {
 		return new MoonPayApi({
 			endpoint: this.endpoint,
 			apiKey: this.apiKey,
-			loginInfo
+			loginInfo,
+			authServiceCb: this.handleAuthError.bind(this)
 		});
 	}
 
@@ -87,6 +95,15 @@ export class MoonPayService {
 		};
 	}
 
+	async loginWithEmail(opt) {
+		const auth = validate(opt, ['email']);
+		if (opt.securityCode) {
+			auth.securityCode = opt.securityCode;
+		}
+
+		return this.getApi().loginWithEmail(auth);
+	}
+
 	async auth(identity, email) {
 		validate({ identity, email }, ['identity', 'email']);
 		const signer = async msg => {
@@ -97,9 +114,11 @@ export class MoonPayService {
 		return this.getApi().establishSession(authData, signer);
 	}
 
-	getKycRequirements() {}
-
-	checkKycStatus() {}
+	submitKycRequirements(kyc, loginInfo) {
+		const customerInfo = {};
+		console.log(kyc);
+		return this.getApi(loginInfo).updateCustomer(customerInfo);
+	}
 
 	async getLimits(auth) {
 		return this.getApi(auth).getLimits();

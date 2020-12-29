@@ -163,7 +163,8 @@ const common = {
 		keyfi: true,
 		hdWallet: true,
 		deepLinks: true,
-		moonpay: false
+		moonpay: false,
+		moonpayWalletLogin: false
 	}
 };
 
@@ -203,7 +204,8 @@ const dev = {
 		keyfi: true,
 		hdWallet: true,
 		deepLinks: true,
-		moonpay: true
+		moonpay: true,
+		moonpayWalletLogin: true
 	},
 	moonPayApiKey: 'pk_test_WLWaG0mO6kbetXr3tOODlXGsnzs3HR',
 	moonPayApiEndpoint: 'https://api.moonpay.com/v3',
@@ -248,7 +250,8 @@ const prod = {
 		keyfi: true,
 		hdWallet: true,
 		deepLinks: true,
-		moonpay: false
+		moonpay: false,
+		moonpayWalletLogin: false
 	},
 	// TODO: change to prod before release
 	moonPayApiKey: 'pk_test_WLWaG0mO6kbetXr3tOODlXGsnzs3HR',
