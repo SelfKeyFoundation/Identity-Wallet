@@ -5,6 +5,7 @@ import path from 'path';
 import EthUnits from 'common/utils/eth-units';
 import * as EthUtil from 'ethereumjs-util';
 import { HDWallet } from './hd-wallet';
+import WalletSetting from './wallet-setting';
 
 const log = new Logger('wallet-service');
 export class WalletService {
@@ -13,6 +14,16 @@ export class WalletService {
 		this.matomoService = matomoService;
 		this.config = config;
 		this.walletTokenService = walletTokenService;
+	}
+
+	async getWalletSettings(walletId) {
+		return WalletSetting.findByWalletId(walletId);
+	}
+
+	async updateWalletSettings(walletId, update = {}) {
+		const settings = await WalletSetting.findByWalletId(walletId);
+		if (!settings) return null;
+		return WalletSetting.updateById(settings.id, update);
 	}
 
 	getWalletKeystorePath(address, walletsPath = null) {

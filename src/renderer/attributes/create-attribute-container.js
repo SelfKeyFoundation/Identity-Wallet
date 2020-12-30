@@ -8,19 +8,23 @@ class CreateAttributeContainerComponent extends PureComponent {
 		this.props.dispatch(
 			identityOperations.createIdAttributeOperation(attribute, this.props.identityId)
 		);
+		if (this.props.onNext) {
+			this.props.onNext(attribute);
+		}
 	};
 	handleCancel = () => {
 		if (this.props.onClose) return this.props.onClose();
 	};
 	render() {
 		let {
-			types,
+			types = [],
 			open = true,
 			text,
 			subtitle,
 			uiSchemas,
 			typeId,
 			isDocument,
+			documentsAndInformation,
 			attributeOptions = {}
 		} = this.props;
 
@@ -33,11 +37,17 @@ class CreateAttributeContainerComponent extends PureComponent {
 		}
 
 		if (!subtitle) {
-			if (isDocument) {
+			if (documentsAndInformation) {
+				subtitle = 'Attribute Type *';
+			} else if (isDocument) {
 				subtitle = 'Document Type *';
 			} else {
 				subtitle = 'Information Type *';
 			}
+		}
+
+		if (types.length === 1) {
+			typeId = types[0].id;
 		}
 
 		return (
@@ -51,11 +61,14 @@ class CreateAttributeContainerComponent extends PureComponent {
 				attributeOptions={attributeOptions}
 				uiSchemas={uiSchemas}
 				isDocument={isDocument}
+				documentsAndInformation={documentsAndInformation}
 				typeId={typeId}
 			/>
 		);
 	}
 }
+
+const typesSelector = identitySelectors.selectAttributeTypesByUrlsFactory();
 
 const mapStateToProps = (state, props) => {
 	let entityType = 'individual';
@@ -70,10 +83,18 @@ const mapStateToProps = (state, props) => {
 		entityType = 'corporate';
 	}
 
-	return {
-		types: identitySelectors.selectAttributeTypesFiltered(state, {
+	let types;
+
+	if (props.attributeTypeUrls && props.attributeTypeUrls.length) {
+		types = typesSelector(state, { attributeTypeUrls: props.attributeTypeUrls });
+	} else {
+		types = identitySelectors.selectAttributeTypesFiltered(state, {
 			entityType
-		}),
+		});
+	}
+
+	return {
+		types,
 		uiSchemas: identitySelectors.selectUiSchemas(state)
 	};
 };

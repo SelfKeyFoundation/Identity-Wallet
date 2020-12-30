@@ -107,12 +107,31 @@ describe('Identity Duck', () => {
 					identitySelectors.selectIdentity(state, { identityId: 3, type: 'individual' })
 				).toEqual({ id: 3, type: 'individual' });
 			});
+
+			it('should memoize select identity', () => {
+				const res1 = identitySelectors.selectIdentity(state, {
+					identityId: 3,
+					type: 'individual'
+				});
+				const res2 = identitySelectors.selectIdentity(state, {
+					identityId: 3,
+					type: 'individual'
+				});
+				expect(res1).toBe(res2);
+			});
 			it('selectIdentity current', () => {
 				state.identity.currentIdentity = 3;
 				expect(identitySelectors.selectIdentity(state)).toEqual({
 					id: 3,
 					type: 'individual'
 				});
+			});
+			it('should memoize current identity', () => {
+				state.identity.currentIdentity = 3;
+				const res1 = identitySelectors.selectIdentity(state);
+				const res2 = identitySelectors.selectIdentity(state);
+
+				expect(res1).toBe(res2);
 			});
 		});
 	});
@@ -292,6 +311,43 @@ describe('Identity Duck', () => {
 						attributeTypeId: testIdAttributeTypes[0].id
 					})
 				).toEqual(testIdAttributeTypes[0]);
+			});
+
+			describe('selectAttributeTypesByUrlsFactory', () => {
+				it('should select types by urls', () => {
+					const selector = identitySelectors.selectAttributeTypesByUrlsFactory();
+					const attributeTypeUrls = testIdAttributeTypes.slice(0, 2).map(t => t.url);
+					expect(selector(state, { attributeTypeUrls })).toEqual(
+						testIdAttributeTypes.slice(0, 2)
+					);
+				});
+
+				it('should memoize returned values', () => {
+					const selector = identitySelectors.selectAttributeTypesByUrlsFactory();
+					const attributeTypeUrls = testIdAttributeTypes.slice(0, 2).map(t => t.url);
+					const res1 = selector(state, { attributeTypeUrls });
+					const res2 = selector(state, { attributeTypeUrls });
+					expect(res1).toBe(res2);
+				});
+			});
+
+			describe('selectAttributeTypesByUrlsMappedFactory', () => {
+				it('should select types map by urls', () => {
+					const selector = identitySelectors.selectAttributeTypesByUrlsMappedFactory();
+					const attributeTypeUrls = testIdAttributeTypes.slice(0, 2).map(t => t.url);
+					expect(selector(state, { attributeTypeUrls })).toEqual({
+						[testIdAttributeTypes[0].id]: testIdAttributeTypes[0],
+						[testIdAttributeTypes[1].id]: testIdAttributeTypes[1]
+					});
+				});
+
+				it('should memoize returned values', () => {
+					const selector = identitySelectors.selectAttributeTypesByUrlsMappedFactory();
+					const attributeTypeUrls = testIdAttributeTypes.slice(0, 2).map(t => t.url);
+					const res1 = selector(state, { attributeTypeUrls });
+					const res2 = selector(state, { attributeTypeUrls });
+					expect(res1).toBe(res2);
+				});
 			});
 		});
 	});

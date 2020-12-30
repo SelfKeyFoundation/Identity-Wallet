@@ -83,7 +83,7 @@ export class MoonPayApi {
 
 	constructor(opt = {}) {
 		const { endpoint, apiKey } = validate(opt, ['endpoint', 'apiKey']);
-		this.loginInfo = null;
+		const { loginInfo = null } = opt;
 		this.opt = opt;
 		const apiOpt = {
 			endpoint,
@@ -91,6 +91,8 @@ export class MoonPayApi {
 			onRequestError: this.handleRequestError.bind(this)
 		};
 		this.api = new Api(apiOpt);
+
+		this.setLoginInfo(loginInfo);
 	}
 
 	handleRequestError(error) {
@@ -657,11 +659,20 @@ export class MoonPayApi {
 		if (!loginInfo) {
 			this.loginInfo = null;
 			this.api.setHeader('Authorization', null);
+			this.api.setHeader('X-CSRF-TOKEN', null);
 			return;
 		}
-		validate(loginInfo, ['token', 'customer']);
+		validate(loginInfo, ['customer']);
+		if (!loginInfo.token && !loginInfo.csrfToken) {
+			throw new ParameterValidationError('token or csrf token are required in login info');
+		}
 		this.loginInfo = loginInfo;
-		this.api.setHeader('Authorization', `Bearer ${loginInfo.token}`);
+		if (loginInfo.token) {
+			this.api.setHeader('Authorization', `Bearer ${loginInfo.token}`);
+		}
+		if (loginInfo.csrfToken) {
+			this.api.setHeader('X-CSRF-TOKEN', loginInfo.csrfToken);
+		}
 	}
 
 	verifyLoggedIn() {

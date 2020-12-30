@@ -1,11 +1,16 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import { number, object } from '@storybook/addon-knobs';
 import BuyKeyWidget from '../src/renderer/dashboard/buy-key-widget';
 import BuyKeyModal from '../src/renderer/dashboard/buy-key-popup-modal';
-import MoonpayAgreementModal from '../src/renderer/dashboard/moonpay-agreement-modal';
-import PhoneVerificationModal from '../src/renderer/dashboard/phone-verification-modal';
-import AddPaymentMethodModal from '../src/renderer/dashboard/add-payment-method-modal';
+import MoonpayAgreementModal from '../src/renderer/moonpay/moonpay-agreement-modal';
+import PhoneVerificationModal from '../src/renderer/moonpay/phone-verification-modal';
+import MoonpayAuthModal from '../src/renderer/moonpay/auth-modal';
+import AddPaymentMethodModal from '../src/renderer/moonpay/add-payment-method-modal';
+import MoonpayChooseLoginEmailModal from '../src/renderer/moonpay/choose-login-email-modal';
+import MoonpayAuthErrorModal from '../src/renderer/moonpay/auth-error';
+import MoonPayNotAllowedModal from '../src/renderer/moonpay/not-allowed-modal';
 
 storiesOf('Buy Key/Dashboard Widget', module)
 	.add('default', () => (
@@ -43,11 +48,11 @@ storiesOf('Buy Key/Buy Key Popup', module)
 		/>
 	));
 
-storiesOf('Buy Key/Moonpay', module).add('AgreementModal', () => (
-	<MoonpayAgreementModal onAgreeClick={action('agree')} onCloseClick={action('close')} />
+storiesOf('Buy Key/Moonpay/Terms', module).add('default', () => (
+	<MoonpayAgreementModal onNext={action('agree')} onCancel={action('close')} />
 ));
 
-storiesOf('Buy Key/Verify Phone', module)
+storiesOf('Buy Key/MoonPay/Verify Phone', module)
 	.add('loading', () => (
 		<PhoneVerificationModal
 			loading
@@ -90,8 +95,114 @@ storiesOf('Buy Key/Verify Phone', module)
 			phone="+213134115151"
 		/>
 	));
+const emailAttributes = [
+	{
+		id: 1,
+		name: 'Test Email',
+		identityId: 1,
+		typeId: 1,
+		data: {
+			value: 'test@test.com'
+		}
+	},
+	{
+		id: 2,
+		name: 'Personal Email',
+		identityId: 1,
+		typeId: 1,
+		data: {
+			value: 'personal@test.com'
+		}
+	}
+];
 
-storiesOf('Buy Key/Add payment method', module)
+const typesByTypeId = {
+	1: {
+		url: 'http://platform.selfkey.org/schema/attribute/email.json'
+	}
+};
+
+storiesOf('Buy Key/Moonpay/Auth', module)
+	.add('AuthModal first connection', () => (
+		<MoonpayAuthModal
+			email="test@test.com"
+			onChooseEmail={action('choose-email')}
+			onNext={action('next')}
+			onCancel={action('cancel')}
+		/>
+	))
+	.add('ChooseLoginEmailModal', () => (
+		<MoonpayChooseLoginEmailModal
+			onNext={action('next')}
+			onCancel={action('cancel')}
+			onSelectOption={action('select')}
+			onEditAttribute={action('edit')}
+			onAddAttribute={action('add')}
+			selected={number('Selected Email', null)}
+			typesByTypeId={object('Types by ID', typesByTypeId)}
+			attributes={object('Array of attributes', emailAttributes)}
+		/>
+	))
+	.add('AuthErrorModal', () => (
+		<MoonpayAuthErrorModal onNext={action('next')} onCancel={action('cancel')} />
+	))
+	.add('AuthErrorModal with error message', () => (
+		<MoonpayAuthErrorModal
+			error={'authentication error'}
+			onNext={action('next')}
+			onCancel={action('cancel')}
+		/>
+	))
+	.add('Service not availalbe', () => (
+		<MoonPayNotAllowedModal
+			ipCheck={{
+				alpha2: 'AT',
+				alpha3: 'AUT',
+				name: 'Austria',
+				ipAddress: '123.414.511.13',
+				isAllowed: false,
+				isBuyAllowed: true,
+				isSellAllowed: true,
+				state: ''
+			}}
+			customerCountries={[
+				{
+					alpha2: 'AM',
+					alpha3: 'ARM',
+					isBuyAllowed: true,
+					isSellAllowed: false,
+					isLightKycAllowed: true,
+					name: 'Armenia',
+					supportedDocuments: [
+						'passport',
+						'driving_licence',
+						'national_identity_card',
+						'residence_permit'
+					],
+					isAllowed: false
+				},
+				{
+					alpha2: 'AU',
+					alpha3: 'AUS',
+					isBuyAllowed: true,
+					isSellAllowed: false,
+					isLightKycAllowed: true,
+					name: 'Australia',
+					supportedDocuments: [
+						'passport',
+						'driving_licence',
+						'national_identity_card',
+						'residence_permit'
+					],
+					isAllowed: false
+				}
+			]}
+			onNext={action('next')}
+			onCancel={action('cancel')}
+			onLinkClick={action('link click')}
+		/>
+	));
+storiesOf('Buy Key/Moonpay/Add payment method', module)
 	.add('loading', () => (
 		<AddPaymentMethodModal
 			loading

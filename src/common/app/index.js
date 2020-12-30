@@ -1,4 +1,5 @@
 import { getGlobalContext } from 'common/context';
+import _ from 'lodash';
 import crypto from 'crypto';
 import { createAliasedAction } from 'electron-redux';
 import { walletOperations, walletSelectors } from '../wallet';
@@ -16,6 +17,8 @@ const log = new Logger('app-redux');
 
 const eventEmitter = new EventEmitter();
 
+export const appSelectors = {};
+
 const transformErrorMessage = msg => {
 	if (msg === 'Key derivation failed - possibly wrong password') {
 		return 'Wrong password. Please try again';
@@ -23,7 +26,7 @@ const transformErrorMessage = msg => {
 	return msg;
 };
 
-export const initialState = {
+const initialState = {
 	walletsLoading: false,
 	wallets: [],
 	seed: null,
@@ -43,7 +46,7 @@ export const initialState = {
 	keyStoreValue: null
 };
 
-export const appTypes = {
+const appTypes = {
 	APP_SET_WALLETS: 'app/set/WALLETS',
 	APP_SET_SEED: 'app/set/SEED',
 	APP_SET_WALLETS_LOADING: 'app/set/WALLETS_LOADING',
@@ -766,7 +769,7 @@ const selectKeystoreValue = state => selectApp(state).keyStoreValue;
 
 const selectSeed = state => selectApp(state).seed;
 
-const appSelectors = {
+_.merge(appSelectors, {
 	selectApp,
 	hasConnected,
 	hasAcceptedTracking,
@@ -779,8 +782,8 @@ const appSelectors = {
 	selectCanExportWallet,
 	selectKeystoreValue,
 	selectSeed
-};
+});
 
-export { appSelectors, appReducers, appActions, appOperations };
+export { appReducers, appActions, appOperations, appTypes, initialState };
 
 export default reducer;

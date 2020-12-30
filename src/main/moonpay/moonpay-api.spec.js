@@ -64,7 +64,7 @@ describe('MoonPayApi', () => {
 			mpApi = new MoonPayApi(opt);
 		});
 
-		it('should set login info', () => {
+		it('should set login info with token', () => {
 			const setHeader = sinon.stub(mpApi.api, 'setHeader');
 			const loginInfo = { token: '123', customer: { id: 123 } };
 			expect(mpApi.loginInfo).toBeNull();
@@ -73,15 +73,25 @@ describe('MoonPayApi', () => {
 			expect(setHeader.getCall(0).args).toEqual(['Authorization', `Bearer 123`]);
 		});
 
+		it('should set login info with csrfToken', () => {
+			const setHeader = sinon.stub(mpApi.api, 'setHeader');
+			const loginInfo = { csrfToken: 'csrf-token', customer: { id: 123 } };
+			expect(mpApi.loginInfo).toBeNull();
+			mpApi.setLoginInfo(loginInfo);
+			expect(mpApi.loginInfo).toEqual(loginInfo);
+			expect(setHeader.getCall(0).args).toEqual(['X-CSRF-TOKEN', `csrf-token`]);
+		});
+
 		it('should unset login info', () => {
 			const setHeader = sinon.stub(mpApi.api, 'setHeader');
 			mpApi.loginInfo = { token: 123 };
 			mpApi.setLoginInfo(null);
 			expect(mpApi.loginInfo).toBeNull();
 			expect(setHeader.getCall(0).args).toEqual(['Authorization', null]);
+			expect(setHeader.getCall(1).args).toEqual(['X-CSRF-TOKEN', null]);
 		});
 
-		it('should throw if no token in login info', () => {
+		it('should throw if no token or csrfToken in login info', () => {
 			const loginInfo = { customer: { id: 123 } };
 			expect(() => mpApi.setLoginInfo(loginInfo)).toThrowError(ParameterValidationError);
 		});
