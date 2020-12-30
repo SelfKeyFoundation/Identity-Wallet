@@ -13,6 +13,7 @@ import { sleep } from '../utils/async';
 import {
 	selectAttributesByUrl,
 	selectAttributesByUrlMapFactory,
+	selectAttributeTypesByUrlsFactory,
 	selectIdentity
 } from '../identity/selectors';
 import {
@@ -45,7 +46,9 @@ const initialState = {
 	limits: null,
 	selectedAttributes: {},
 	kycSubmitting: false,
-	kycError: null
+	kycError: null,
+	KYCSubmitted: null,
+	customer: null
 };
 
 const selectSelf = state => state[SLICE_NAME];
@@ -124,12 +127,22 @@ const getKYCChecks = createSelector(
 	}
 );
 
+const getCustomer = createSelector(
+	selectSelf,
+	({ customer }) => customer
+);
+
+const isPhoneVerificationRequired = createSelector(
+	getCustomer,
+	customer => customer.phoneNumber && !customer.isPhoneNumberVerified
+);
+
 const isKycRequired = createSelector(
 	getKYCChecks,
 	checks =>
-		checks['identity_verification'] ||
-		!checks['document_verification'] ||
-		!checks['face_match_verification']
+		(checks.hasOwnProperty('identity_verification') && !checks['identity_verification']) ||
+		(checks.hasOwnProperty('document_verification') && !checks['document_verification']) ||
+		(checks.hasOwnProperty('face_match_verification') && !checks['face_match_verification'])
 );
 
 const getSelectedAttributes = createSelector(
@@ -142,7 +155,7 @@ const getSelectedCountry = createSelector(
 	selectServiceCheck,
 	(selected, serviceCheck) => {
 		let country = Object.keys(selected).find(uiId => {
-			return selected[uiId].schemaId === COUNTRY_ATTRIBUTE;
+			return selected[uiId].type.url === COUNTRY_ATTRIBUTE;
 		});
 
 		if (country) {
@@ -155,10 +168,25 @@ const getSelectedCountry = createSelector(
 );
 
 const selectAttributesByUrlMap = selectAttributesByUrlMapFactory();
+const selectIdAttributeTypes = selectAttributeTypesByUrlsFactory();
 
 const getKYCRequirements = createSelector(
 	getKYCChecks,
 	getSelectedCountry,
+	state =>
+		selectIdAttributeTypes(state, {
+			attributeTypeUrls: [
+				FIRST_NAME_ATTRIBUTE,
+				LAST_NAME_ATTRIBUTE,
+				PHONE_ATTRIBUTE,
+				ADDRESS_ATTRIBUTE,
+				COUNTRY_ATTRIBUTE,
+				'http://platform.selfkey.org/schema/attribute/date-of-birth.json',
+				'http://platform.selfkey.org/schema/attribute/passport.json',
+				'http://platform.selfkey.org/schema/attribute/national-id.json',
+				'http://platform.selfkey.org/schema/attribute/drivers-license.json'
+			]
+		}),
 	state =>
 		selectAttributesByUrlMap(state, {
 			attributeTypeUrls: [
@@ -167,21 +195,19 @@ const getKYCRequirements = createSelector(
 				PHONE_ATTRIBUTE,
 				ADDRESS_ATTRIBUTE,
 				COUNTRY_ATTRIBUTE,
+				'http://platform.selfkey.org/schema/attribute/date-of-birth.json',
 				'http://platform.selfkey.org/schema/attribute/passport.json',
-				'http://platform.selfkey.org/schema/attribute/national-id-number.json',
+				'http://platform.selfkey.org/schema/attribute/national-id.json',
 				'http://platform.selfkey.org/schema/attribute/drivers-license.json'
 			]
 		}),
-	(checks, country, attributesByUrl) => {
-		let requirements = [];
-
-		const getType = url =>
-			attributesByUrl[url] && attributesByUrl[url].length ? attributesByUrl[url].type : null;
+	(checks, country, idTypes, attributesByUrl) => {
+		const getType = url => idTypes.find(t => t.url === url);
 
 		const createRequirement = (types = [], title, name, required = true) => {
-			const options = !Array.isArray(types)
+			let options = !Array.isArray(types)
 				? attributesByUrl[types]
-				: types.flatMap(t => attributesByUrl[t]);
+				: types.flatMap(t => attributesByUrl[t]).filter(t => !!t);
 			const attributeTypes = !Array.isArray(types) ? getType(types) : types.map(getType);
 
 			if (!name) {
@@ -194,32 +220,40 @@ const getKYCRequirements = createSelector(
 				schemaId: types,
 				options,
 				title:
-					title || Array.isArray(attributeTypes)
+					title ||
+					(Array.isArray(attributeTypes)
 						? attributeTypes[0]
 							? attributeTypes[0].content.title
 							: null
 						: attributeTypes
 						? attributeTypes.content.title
-						: null,
+						: null),
 				tType: 'individual',
 				type: attributeTypes,
 				duplicateType: false
 			};
 		};
-		// TODO turn strings to actual requirements
-		if (!checks['identity_verification']) {
-			requirements.concat(
+
+		let requirements = [createRequirement(COUNTRY_ATTRIBUTE)];
+		if (checks.hasOwnProperty('phone_number_verification')) {
+			requirements.push(createRequirement(PHONE_ATTRIBUTE));
+		}
+		if (checks.hasOwnProperty('identity_verification')) {
+			requirements = requirements.concat(
 				[
 					FIRST_NAME_ATTRIBUTE,
 					LAST_NAME_ATTRIBUTE,
-					PHONE_ATTRIBUTE,
 					ADDRESS_ATTRIBUTE,
-					COUNTRY_ATTRIBUTE
-				].map(createRequirement)
+					'http://platform.selfkey.org/schema/attribute/date-of-birth.json'
+				].map(t => createRequirement(t))
 			);
 		}
 
-		if (country && (!checks['document_verification'] || !checks['face_match_verification'])) {
+		if (
+			country &&
+			(checks.hasOwnProperty('document_verification') ||
+				checks.hasOwnProperty('face_match_verification'))
+		) {
 			const types = [];
 
 			if (country.supportedDocuments.includes('passport')) {
@@ -227,16 +261,17 @@ const getKYCRequirements = createSelector(
 			}
 
 			if (country.supportedDocuments.includes('national_identity_card')) {
-				types.push('http://platform.selfkey.org/schema/attribute/national-id-number.json');
+				types.push('http://platform.selfkey.org/schema/attribute/national-id.json');
 			}
 
 			if (country.supportedDocuments.includes('driving_licence')) {
 				types.push('http://platform.selfkey.org/schema/attribute/drivers-license.json');
 			}
-
-			requirements.push(
-				createRequirement(types, 'Identity Document', 'document_verification')
-			);
+			if (types.length) {
+				requirements.push(
+					createRequirement(types, 'Identity Document', 'document_verification')
+				);
+			}
 		}
 
 		return requirements;
@@ -268,16 +303,16 @@ const areKycRequirementsValid = createSelector(
 	selectFilledKycRequirements,
 	requirements => {
 		return requirements.reduce((acc, curr) => {
-			if (acc) return acc;
+			if (!acc) return acc;
 			const attribute = curr.attribute;
 			// Ignore optional empty attributes
 			if (!attribute && !curr.required) {
-				return false;
+				return true;
 			}
-			if (!attribute || !attribute.isValid) return true;
+			if (!attribute || !attribute.isValid) return false;
 
-			return false;
-		}, false);
+			return true;
+		}, true);
 	}
 );
 
@@ -310,7 +345,9 @@ const selectors = {
 	isKycSubmitting,
 	areKycRequirementsValid,
 	getKycError,
-	isEmailVerificationRequired
+	isEmailVerificationRequired,
+	isPhoneVerificationRequired,
+	getCustomer
 };
 
 const authErrorOperation = ops => () => async (dispatch, getState) => {
@@ -423,6 +460,7 @@ const loadLimitsOperation = ops => () => async (dispatch, getState) => {
 
 const submitKycDocumentsOperation = ops => () => async (dispatch, getState) => {
 	try {
+		await dispatch(ops.setKycError(null));
 		if (!areKycRequirementsValid(getState())) {
 			throw new Error('Please fill all required attributes');
 		}
@@ -431,7 +469,11 @@ const submitKycDocumentsOperation = ops => () => async (dispatch, getState) => {
 		const filledKycRequirements = selectFilledKycRequirements(getState());
 		const { moonPayService } = getGlobalContext();
 		await moonPayService.submitKycRequirements(filledKycRequirements, authInfo);
+		await dispatch(ops.loadLimitsOperation());
+		await dispatch(ops.loadCustomerOperation());
+		await dispatch(ops.setKYCSubmitted(true));
 	} catch (error) {
+		log.error(error);
 		await dispatch(ops.setKycError(error.message));
 	} finally {
 		await dispatch(ops.setKycSubmitting(false));
@@ -566,6 +608,7 @@ const connectFlowNextStepOperation = ops => opt => async (dispatch, getState) =>
 	}
 
 	await dispatch(ops.loadLimitsOperation());
+	await dispatch(ops.loadCustomerOperation());
 
 	const kycRequired = isKycRequired(getState());
 
@@ -579,7 +622,38 @@ const connectFlowNextStepOperation = ops => opt => async (dispatch, getState) =>
 		return;
 	}
 
-	await dispatch(navigationFlowOperations.navigateCancelOperation());
+	if (isPhoneVerificationRequired(getState())) {
+		await dispatch(
+			navigationFlowOperations.navigateToStepOperation({
+				current: '/main/moonpay/auth/verify-phone',
+				next: null
+			})
+		);
+		return;
+	}
+
+	await dispatch(navigationFlowOperations.navigateContinueOperation());
+};
+
+const loadCustomerOperation = ops => () => async (dispatch, getState) => {
+	const authInfo = selectAuthInfo(getState());
+	const { moonPayService } = getGlobalContext();
+	const customer = await moonPayService.loadCustomer(authInfo);
+	await dispatch(ops.setCustomer(customer));
+};
+
+const verifyPhoneOperation = ops => opt => async (dispatch, getState) => {
+	const { moonPayService } = getGlobalContext();
+	const authInfo = selectAuthInfo(getState());
+	await moonPayService.verifyPhone(opt.securityCode, authInfo);
+	await dispatch(ops.getLimits());
+	await dispatch(ops.loadCustomerOperation());
+};
+
+const resendSMSOperation = ops => opt => async (dispatch, getState) => {
+	const authInfo = selectAuthInfo(getState());
+	const { moonPayService } = getGlobalContext();
+	await moonPayService.resendSMS(opt.phone, authInfo);
 };
 
 const moonPayAuthSlice = createAliasedSlice({
@@ -613,6 +687,9 @@ const moonPayAuthSlice = createAliasedSlice({
 		setAuthError(state, action) {
 			state.authError = action.payload;
 		},
+		setKYCSubmitted(state, action) {
+			state.KYCSubmitted = action.payload;
+		},
 		setServiceChecks(state, action) {
 			if (action.payload === null) {
 				state.isServiceAllowed = false;
@@ -641,6 +718,9 @@ const moonPayAuthSlice = createAliasedSlice({
 		},
 		setEmailVerificationRequired(state, action) {
 			state.emailVerificationRequired = action.payload;
+		},
+		setCustomer(state, action) {
+			state.customer = action.payload;
 		}
 	},
 	aliasedOperations: {
@@ -653,7 +733,10 @@ const moonPayAuthSlice = createAliasedSlice({
 		loadSettingsOperation,
 		checkServiceAllowedOperation,
 		submitKycDocumentsOperation,
-		authErrorOperation
+		authErrorOperation,
+		loadCustomerOperation,
+		verifyPhoneOperation,
+		resendSMSOperation
 	}
 });
 

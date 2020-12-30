@@ -6,91 +6,102 @@ import { useSelector, useDispatch } from 'react-redux';
 import { CreateAttributeContainer, EditAttributeContainer } from '../attributes';
 
 import { moonPayOperations, moonPaySelectors } from '../../common/moonpay';
-import {
-	FIRST_NAME_ATTRIBUTE,
-	LAST_NAME_ATTRIBUTE,
-	PHONE_ATTRIBUTE,
-	ADDRESS_ATTRIBUTE,
-	COUNTRY_ATTRIBUTE
-} from '../../common/identity/constants';
 
-export const MoonPayKycContainer = withNavFlow(({ onNext, onCancel }) => {
-	const [popup, setPopup] = useState(null);
-	const [editAttribute, setAttributeToEdit] = useState(null);
+export const MoonPayKycContainer = withNavFlow(
+	({ onNext, onCancel }) => {
+		const [popup, setPopup] = useState(null);
+		const [attr, setAttribute] = useState(null);
 
-	const validRequirements = useSelector(moonPaySelectors.areKycRequirementsValid);
-	const requirements = useSelector(moonPaySelectors.getKYCRequirements);
-	const loading = useSelector(moonPaySelectors.isKycSubmitting);
-	const error = useSelector(moonPayOperations.getKycError);
-	const selected = useSelector(moonPaySelectors.getSelectedAttributes);
+		const validRequirements = useSelector(moonPaySelectors.areKycRequirementsValid);
+		const requirements = useSelector(moonPaySelectors.getKYCRequirements);
+		const loading = useSelector(moonPaySelectors.isKycSubmitting);
+		let error = useSelector(moonPaySelectors.getKycError);
+		const selected = useSelector(moonPaySelectors.getSelectedAttributes);
+		const country = useSelector(moonPaySelectors.getSelectedCountry);
+		let countryError = null;
+		if (country && !country.isAllowed) {
+			countryError = 'MoonPay does not provide service is selected country';
+		}
 
-	const dispatch = useDispatch();
+		const dispatch = useDispatch();
 
-	useEffect(() => {
-		dispatch(moonPayOperations.setSelectedAttributes({}));
-	}, []);
+		useEffect(() => {
+			dispatch(moonPayOperations.setSelectedAttributes({}));
+		}, []);
 
-	const handleAttributeSelected = async (uiId, item) => {
-		const newSelected = { ...selected, [uiId]: item };
-		await dispatch(moonPayOperations.setSelectedAttributes(newSelected));
-	};
+		const handleAttributeSelected = async (uiId, item) => {
+			const prev = selected[uiId];
+			if (!prev && !item) return;
+			if (prev && item && item.id === prev.id) return;
 
-	const handleNext = () => {};
+			const newSelected = { ...selected, [uiId]: item };
+			await dispatch(moonPayOperations.setSelectedAttributes(newSelected));
+		};
 
-	const handleAddAttribute = () => {
-		setPopup('add-attribute');
-	};
+		const handleNext = () => {
+			onNext();
+			dispatch(moonPayOperations.submitKycDocumentsOperation());
+		};
 
-	const handleEditAttribute = attr => {
-		setAttributeToEdit(attr);
-		setPopup('edit-attribute');
-	};
+		const handleAddAttribute = attr => {
+			setAttribute(attr);
+			setPopup('add-attribute');
+		};
 
-	const handlePopupClose = () => {
-		setPopup(null);
-	};
+		const handleEditAttribute = attr => {
+			const selectedAttribute =
+				selected[`_${attr.uiId}`] || (attr.options.length ? attr.options[0] : null);
+			if (!selectedAttribute) return;
+			setAttribute(selectedAttribute);
+			setPopup('edit-attribute');
+		};
 
-	return (
-		<React.Fragment>
-			{popup === 'add-attribute' && (
-				<CreateAttributeContainer
-					open={true}
-					onClose={handlePopupClose}
-					documentsAndInformation
-					attributeTypeUrls={[
-						FIRST_NAME_ATTRIBUTE,
-						LAST_NAME_ATTRIBUTE,
-						PHONE_ATTRIBUTE,
-						ADDRESS_ATTRIBUTE,
-						COUNTRY_ATTRIBUTE,
-						'http://platform.selfkey.org/schema/attribute/passport.json',
-						'http://platform.selfkey.org/schema/attribute/national-id-number.json',
-						'http://platform.selfkey.org/schema/attribute/drivers-license.json'
-					]}
+		const handlePopupClose = () => {
+			setPopup(null);
+			setAttribute(null);
+		};
+
+		return (
+			<React.Fragment>
+				{popup === 'add-attribute' && (
+					<CreateAttributeContainer
+						open={true}
+						onClose={handlePopupClose}
+						documentsAndInformation
+						onNext={() => {
+							dispatch(moonPayOperations.checkServiceAllowedOperation());
+						}}
+						attributeTypeUrls={
+							Array.isArray(attr.type) ? attr.type.map(t => t.url) : [attr.type.url]
+						}
+					/>
+				)}
+				{popup === 'edit-attribute' && (
+					<EditAttributeContainer
+						open={true}
+						onClose={handlePopupClose}
+						attribute={attr}
+					/>
+				)}
+				<MoonPayKycModal
+					requirements={requirements}
+					onNext={handleNext}
+					onCancel={onCancel}
+					onAttributeSelected={handleAttributeSelected}
+					selectedAttributes={selected}
+					editAttribute={handleEditAttribute}
+					addAttribute={handleAddAttribute}
+					loading={loading}
+					disabled={!validRequirements || countryError}
+					error={error || countryError}
 				/>
-			)}
-			{popup === 'edit-attribute' && (
-				<EditAttributeContainer
-					open={true}
-					onClose={handlePopupClose}
-					attribute={editAttribute}
-				/>
-			)}
-			<MoonPayKycModal
-				requirements={requirements}
-				onNext={handleNext}
-				onCancel={onCancel}
-				onAttributeSelected={handleAttributeSelected}
-				selectedAttributes={selected}
-				editAttribute={handleEditAttribute}
-				addAttribute={handleAddAttribute}
-				loading={loading}
-				disabled={!validRequirements}
-				error={error}
-			/>
-		</React.Fragment>
-	);
-});
+			</React.Fragment>
+		);
+	},
+	{
+		next: '/main/moonpay/loading'
+	}
+);
 
 MoonPayKycContainer.propTypes = {};
 

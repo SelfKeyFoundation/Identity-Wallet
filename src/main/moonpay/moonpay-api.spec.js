@@ -248,22 +248,24 @@ describe('MoonPayApi', () => {
 			};
 
 			it('should call api', async () => {
-				const rq = sinon.stub(mpApi.api, 'request').resolves(response);
-
+				const rq = sinon.stub(mpApi.api, 'request').resolves({ body: response });
+				sinon.stub(mpApi, 'getTokenFromResponse').returns(TOKEN);
 				await mpApi.postChallenge(data);
 
 				expect(rq.getCall(0).args[0]).toEqual({
 					method: 'post',
 					url: '/customers/wallet_address_login',
-					body: data
+					body: data,
+					resolveWithFullResponse: true
 				});
 			});
 			it('should resolve login data', async () => {
-				sinon.stub(mpApi.api, 'request').resolves(response);
+				sinon.stub(mpApi.api, 'request').resolves({ body: response });
+				sinon.stub(mpApi, 'getTokenFromResponse').returns(TOKEN);
 
 				const resp = await mpApi.postChallenge(data);
 
-				expect(resp).toEqual(response);
+				expect(resp).toEqual({ ...response });
 			});
 
 			['walletAddress', 'email', 'signature'].map(parameter =>
@@ -288,7 +290,7 @@ describe('MoonPayApi', () => {
 					showTermsOfUse: false
 				};
 
-				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				const rp = sinon.stub(mpApi.api, 'request').resolves({ body: expectedResponse });
 				const setLogin = sinon.stub(mpApi, 'setLoginInfo');
 
 				const resp = await mpApi.loginWithEmail(_.omit(data, ['securityCode']));
@@ -296,7 +298,8 @@ describe('MoonPayApi', () => {
 				expect(rp.getCall(0).args[0]).toEqual({
 					method: 'post',
 					url: '/customers/email_login',
-					body: _.omit(data, ['securityCode'])
+					body: _.omit(data, ['securityCode']),
+					resolveWithFullResponse: true
 				});
 				expect(resp).toEqual(expectedResponse);
 				expect(setLogin.called).toBe(false);
@@ -310,15 +313,17 @@ describe('MoonPayApi', () => {
 					}
 				};
 
-				const rp = sinon.stub(mpApi.api, 'request').resolves(expectedResponse);
+				const rp = sinon.stub(mpApi.api, 'request').resolves({ body: expectedResponse });
 				const setLogin = sinon.stub(mpApi, 'setLoginInfo');
+				sinon.stub(mpApi, 'getTokenFromResponse').returns(TOKEN);
 
 				const resp = await mpApi.loginWithEmail(data);
 
 				expect(rp.getCall(0).args[0]).toEqual({
 					method: 'post',
 					url: '/customers/email_login',
-					body: data
+					body: data,
+					resolveWithFullResponse: true
 				});
 				expect(resp).toEqual(expectedResponse);
 				expect(setLogin.getCall(0).args[0]).toEqual(expectedResponse);
@@ -1004,10 +1009,11 @@ describe('MoonPayApi', () => {
 					method: 'put',
 					url:
 						'https://moonpay-documents.s3.amazonaws.com/1562247531050?AWSAccessKeyId=AKIAI6R5E66IE34WI77Q&Content-Type=image%2Fjpeg&Expires=1562247591&Signature=NJrKLp0fMLlcHj1NVocylodf6%2FE%3D&x-amz-server-side-encryption=AES256',
-					formData: {
-						document: {
-							value: file
-						}
+					qs: { apiKey: null },
+					body: file,
+					headers: {
+						Authorization: null,
+						'Content-Type': null
 					}
 				});
 			});
@@ -1059,9 +1065,10 @@ describe('MoonPayApi', () => {
 				});
 			});
 
-			['key', 'type', 'country'].map(parameter =>
+			['type', 'country'].map(parameter =>
 				testMissingParam(parameter, '_createFile', {
 					key,
+
 					type,
 					country,
 					side
@@ -1122,8 +1129,8 @@ describe('MoonPayApi', () => {
 
 			it('should create file', async () => {
 				sinon.stub(mpApi, 'isLoggedIn').returns(true);
-				const gen = sinon.stub(mpApi, '_genS3SignedRequest').resolves(signedRequestResp);
-				const up = sinon.stub(mpApi, '_uploadToS3').resolves({});
+				sinon.stub(mpApi, '_genS3SignedRequest').resolves(signedRequestResp);
+				sinon.stub(mpApi, '_uploadToS3').resolves({});
 				const create = sinon.stub(mpApi, '_createFile').resolves(expectedResponse);
 				const resp = await mpApi.uploadFile({
 					file,
@@ -1134,15 +1141,10 @@ describe('MoonPayApi', () => {
 				});
 
 				expect(resp).toEqual(expectedResponse);
-				expect(gen.getCall(0).args[0]).toEqual({
-					fileType
-				});
-				expect(up.getCall(0).args[0]).toEqual({
-					file,
-					signedRequest: signedRequestResp.signedRequest
-				});
+
 				expect(create.getCall(0).args[0]).toEqual({
-					key: signedRequestResp.key,
+					file,
+					fileType,
 					type,
 					side,
 					country

@@ -6,6 +6,7 @@ import MoonpayAuthErrorContainer from './auth-error-container';
 import MoonPayAuthContainer from './auth-container';
 import MoonPayNotAllowedContainer from './not-allowed-container';
 import MoonPayEmailVerificationContainer from './email-verification-container';
+import MoonPayPhoneVerificationContainer from './phone-verification-container';
 import MoonPayKycContainer from './kyc-container';
 
 export const MoonPayAuthRouter = props => {
@@ -23,6 +24,11 @@ export const MoonPayAuthRouter = props => {
 				exact
 				path={`${match.path}/verify-email`}
 				component={MoonPayEmailVerificationContainer}
+			/>
+			<Route
+				exact
+				path={`${match.path}/verify-phone`}
+				component={MoonPayPhoneVerificationContainer}
 			/>
 			<Route
 				exact

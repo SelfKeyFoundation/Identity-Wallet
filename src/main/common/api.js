@@ -22,6 +22,19 @@ export class Api {
 
 		qs = { ...this.opt.qs, ...qs };
 		headers = { ...this.opt.headers, ...headers };
+
+		for (let key in headers) {
+			if (headers[key] === null) {
+				delete headers[key];
+			}
+		}
+
+		for (let key in qs) {
+			if (qs[key] === null) {
+				delete qs[key];
+			}
+		}
+
 		if (!url.startsWith('https://') && !url.startsWith('http://')) {
 			url = urljoin(this.opt.endpoint, url);
 		}

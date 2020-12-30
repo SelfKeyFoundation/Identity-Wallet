@@ -390,11 +390,12 @@ export class MoonPayApi {
 		const res = await this.api.request({
 			method: 'put',
 			url: signedRequest,
-			formData: {
-				document: {
-					value: file
-				}
-			}
+			headers: {
+				Authorization: null,
+				'Content-Type': null
+			},
+			qs: { apiKey: null },
+			body: file
 		});
 
 		return res;
@@ -402,8 +403,8 @@ export class MoonPayApi {
 
 	async _createFile(opt) {
 		this.verifyLoggedIn();
-		const { key, type, country } = validate(opt, ['key', 'type', 'country']);
-		const { side } = opt;
+		const { type, country } = validate(opt, ['type', 'country']);
+		const { side, key, file } = opt;
 
 		if (!this.constructor.FILE_TYPES.includes(type)) {
 			throw new ParameterValidationError(
@@ -426,7 +427,6 @@ export class MoonPayApi {
 		}
 
 		const body = {
-			key,
 			type,
 			country
 		};
@@ -435,12 +435,25 @@ export class MoonPayApi {
 			body.side = side;
 		}
 
-		this.verifyLoggedIn();
+		if (key) {
+			body.key = key;
+		}
+
+		if (file) {
+			body.file = {
+				value: file,
+				options: {
+					contentType: null,
+					filename: 'image'
+				}
+			};
+		}
 
 		const res = await this.api.request({
 			method: 'post',
 			url: 'files',
-			body
+			body: body.key ? body : undefined,
+			formData: body.file ? body : undefined
 		});
 
 		return res;
@@ -481,15 +494,18 @@ export class MoonPayApi {
 			throw new ParameterValidationError(`File of type ${type} requires a side`);
 		}
 
-		const signedRequest = await this._genS3SignedRequest({ fileType });
+		// const signedRequest = await this._genS3SignedRequest({ fileType });
 
-		await this._uploadToS3({
-			file,
-			signedRequest: signedRequest.signedRequest
-		});
+		// await this._uploadToS3({
+		// 	file,
+		// 	fileType,
+		// 	signedRequest: signedRequest.signedRequest
+		// });
 
 		const res = await this._createFile({
-			key: signedRequest.key,
+			// key: signedRequest.key,
+			file,
+			fileType,
 			type,
 			country,
 			side

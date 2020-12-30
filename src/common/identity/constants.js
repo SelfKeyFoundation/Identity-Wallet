@@ -15,7 +15,8 @@ export const JURISDICTION_ATTRIBUTE =
 export const CREATION_DATE_ATTRIBUTE =
 	'http://platform.selfkey.org/schema/attribute/incorporation-date.json';
 export const TAX_ID_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/tax-id-number.json';
-export const ADDRESS_ATTRIBUTE = 'http://platform.selfkey.org/schema/attribute/address.json';
+export const ADDRESS_ATTRIBUTE =
+	'http://platform.selfkey.org/schema/attribute/physical-address.json';
 export const NATIONALITY_ATTRIBUTE =
 	'http://platform.selfkey.org/schema/attribute/nationality.json';
 export const PHONE_NUMBER_ATTRIBUTE =
