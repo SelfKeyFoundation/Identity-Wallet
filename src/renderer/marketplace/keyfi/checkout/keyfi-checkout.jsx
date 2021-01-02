@@ -364,9 +364,10 @@ const KeyFiCheckout = withStyles(styles)(
 							<BlockedJurisdiction text="Apologies, the jurisdiction you selected is not currently eligible for a KeyFi credential." />
 						)}
 
-						{product.status === 'inactive' && (
-							<BlockedJurisdiction text="The keyfi credentials process is not currently available" />
-						)}
+						{!product ||
+							(product.status !== 'active' && (
+								<BlockedJurisdiction text="The KeyFi Credentials verification has been temporarily paused. You cannot verify your Credentials at this time." />
+							))}
 
 						<ApplicationStatusBar
 							status={applicationStatus}
@@ -376,7 +377,7 @@ const KeyFiCheckout = withStyles(styles)(
 							completedButtonText={'visit keyfi.com'}
 						/>
 
-						{product.status !== 'inactive' && (
+						{product && product.status === 'active' && (
 							<React.Fragment>
 								<KeyFiHowServiceWorks classes={classes.howItWorks} />
 								<MarketplaceKycRequirements

@@ -13,11 +13,11 @@ const styles = theme => ({});
 
 class KeyFiWidgetContainerComponent extends MarketplaceKeyFiComponent {
 	render() {
-		return this.props.active ? null : (
+		return this.props.active ? (
 			<KeyFiWidget
 				onCredentialsClick={() => this.props.dispatch(push(`/main/marketplace/keyfi`))}
 			/>
-		);
+		) : null;
 	}
 }
 
@@ -34,7 +34,7 @@ const mapStateToProps = (state, props) => {
 		identity.type
 	);
 	return {
-		active: product.status === 'inactive' && !application
+		active: product && product.status === 'active' && !application
 	};
 };
 
