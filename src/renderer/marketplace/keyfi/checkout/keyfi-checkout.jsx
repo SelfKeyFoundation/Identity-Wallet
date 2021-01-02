@@ -312,7 +312,7 @@ const KeyFiCheckout = withStyles(styles)(
 											!!applicationStatus ||
 											loading ||
 											isBlockedJurisdiction ||
-											product.status === 'inactive'
+											product.status !== 'active'
 										}
 										className={classes.ctabutton}
 									>
