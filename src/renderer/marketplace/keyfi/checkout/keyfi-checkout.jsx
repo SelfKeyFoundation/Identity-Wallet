@@ -251,7 +251,8 @@ const KeyFiCheckout = withStyles(styles)(
 		applicationStatus,
 		onStatusAction,
 		primaryToken,
-		isBlockedJurisdiction
+		isBlockedJurisdiction,
+		product
 	}) => (
 		<Grid container>
 			<Grid item className={classes.backButtonContainer}>
@@ -308,7 +309,10 @@ const KeyFiCheckout = withStyles(styles)(
 										size="large"
 										onClick={onStartClick}
 										disabled={
-											!!applicationStatus || loading || isBlockedJurisdiction
+											!!applicationStatus ||
+											loading ||
+											isBlockedJurisdiction ||
+											product.status === 'inactive'
 										}
 										className={classes.ctabutton}
 									>
@@ -360,6 +364,10 @@ const KeyFiCheckout = withStyles(styles)(
 							<BlockedJurisdiction text="Apologies, the jurisdiction you selected is not currently eligible for a KeyFi credential." />
 						)}
 
+						{product.status === 'inactive' && (
+							<BlockedJurisdiction text="The keyfi credentials process is not currently available" />
+						)}
+
 						<ApplicationStatusBar
 							status={applicationStatus}
 							statusAction={onStatusAction}
@@ -368,14 +376,17 @@ const KeyFiCheckout = withStyles(styles)(
 							completedButtonText={'visit keyfi.com'}
 						/>
 
-						<KeyFiHowServiceWorks classes={classes.howItWorks} />
-
-						<MarketplaceKycRequirements
-							requirements={kycRequirements}
-							loading={loading}
-							templateId={templateId}
-							title="KeyFi.com eligibility"
-						/>
+						{product.status !== 'inactive' && (
+							<React.Fragment>
+								<KeyFiHowServiceWorks classes={classes.howItWorks} />
+								<MarketplaceKycRequirements
+									requirements={kycRequirements}
+									loading={loading}
+									templateId={templateId}
+									title="KeyFi.com eligibility"
+								/>
+							</React.Fragment>
+						)}
 					</Grid>
 				</Grid>
 			</Grid>
