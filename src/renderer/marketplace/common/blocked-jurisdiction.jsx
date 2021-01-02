@@ -36,7 +36,7 @@ export const BlockedJurisdiction = withStyles(styles)(
 	}) => (
 		<div className={classes.container}>
 			<Alert type="warning" xtraClass={classes.alertWrap}>
-				<Grid item xs={9}>
+				<Grid item xs={onActionClick ? 9 : 12}>
 					<Typography variant="body2" color="secondary">
 						{text}
 					</Typography>
