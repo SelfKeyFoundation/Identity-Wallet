@@ -152,7 +152,6 @@ class MarketplaceKeyFiCheckoutContainerComponent extends MarketplaceKeyFiCompone
 				applicationStatus={this.getApplicationStatus()}
 				onStatusAction={this.onStatusActionClick}
 				isBlockedJurisdiction={this.props.isBlockedJurisdiction}
-				product={this.props.product}
 			/>
 		);
 	}
