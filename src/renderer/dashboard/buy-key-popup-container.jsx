@@ -2,14 +2,32 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { selectListingExchanges } from 'common/exchanges/selectors';
 import { getWallet } from 'common/wallet/selectors';
-import { Popup } from '../common';
-import BuyKeyContent from './buy-key-popup-modal';
+
+import BuyKeyModal from './buy-key-popup-modal';
+import { featureIsEnabled } from 'common/feature-flags';
+import { PropTypes } from 'prop-types';
+import { moonPayOperations } from '../../common/moonpay';
+
+const handleLinkClick = e => {
+	window.openExternal(e, e.target.href || e.currentTarget.href);
+};
 
 const BuyKeyPopupComponent = props => {
+	const handleMoonpayClick = () => {
+		props.dispatch(
+			moonPayOperations.connectFlowOperation({
+				cancel: '/main/dashboard',
+				complete: '/main/dashboard'
+			})
+		);
+	};
 	return (
-		<Popup closeAction={props.closeAction} text="Buy KEY from our partners.">
-			<BuyKeyContent {...props} />
-		</Popup>
+		<BuyKeyModal
+			{...props}
+			onMoonpayClick={featureIsEnabled('moonpay') && handleMoonpayClick}
+			onCloseClick={props.closeAction}
+			onLinkClick={handleLinkClick}
+		/>
 	);
 };
 
@@ -21,5 +39,9 @@ const mapStateToProps = state => {
 };
 
 export const BuyKeyPopup = connect(mapStateToProps)(BuyKeyPopupComponent);
+
+BuyKeyPopup.propTypes = {
+	closeAction: PropTypes.func
+};
 
 export default BuyKeyPopup;

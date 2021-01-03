@@ -11,7 +11,7 @@ import {
 } from 'selfkey-ui';
 import PriceBox from '../../price-box';
 import Sidebar from './sidebar';
-import { HexagonAvatar } from '../../selfkey-id/main/components/hexagon-avatar';
+import { HexagonAvatar } from '../../individual/common/hexagon-avatar';
 import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({

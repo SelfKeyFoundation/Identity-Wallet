@@ -22,7 +22,7 @@ const getStoreMock = (transaction = {}) =>
 			usdFee: 0,
 			gasPrice: 0,
 			gasLimit: 0,
-			nouce: 0,
+			nonce: 0,
 			signedHex: '',
 			transactionHash: '',
 			addressError: false,
@@ -169,7 +169,7 @@ describe('operations', () => {
 			const store = getStoreMock({
 				cryptoCurrency: 'ETH'
 			});
-			const newAddress = `${Math.random()}`;
+			const newAddress = ``;
 			const newAmount = null;
 			const newGasPrice = null;
 			const newGasLimit = null;
@@ -177,9 +177,8 @@ describe('operations', () => {
 			await setTransactionFee(newAddress, newAmount, newGasPrice, newGasLimit)(dispatch, () =>
 				store.getState()
 			);
-
 			expect(dispatch).toBeCalledWith(setLocked(true));
-			expect(dispatch).toBeCalledWith(setLocked(false));
+			expect(dispatch).toHaveBeenLastCalledWith(setLocked(false));
 		});
 
 		it('should calculate ethFee, gasPrice and gasLimit', async () => {
@@ -321,7 +320,7 @@ describe('operations', () => {
 				usdFee: 0,
 				gasPrice: 0,
 				gasLimit: 0,
-				nouce: 0,
+				nonce: 0,
 				signedHex: '',
 				transactionHash: '',
 				addressError: false,
@@ -376,7 +375,7 @@ describe('operations', () => {
 				usdFee: 0,
 				gasPrice: 0,
 				gasLimit: 0,
-				nouce: 0,
+				nonce: 0,
 				signedHex: '',
 				transactionHash: '',
 				addressError: false,
@@ -431,7 +430,7 @@ describe('operations', () => {
 				usdFee: 0,
 				gasPrice: 0,
 				gasLimit: 0,
-				nouce: 0,
+				nonce: 0,
 				signedHex: '',
 				transactionHash: '',
 				addressError: false,

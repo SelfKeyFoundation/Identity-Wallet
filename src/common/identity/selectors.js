@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { forceUpdateAttributes } from 'common/config';
 import { createSelector } from 'reselect';
 import { jsonSchema, identityAttributes } from './utils';
@@ -24,10 +23,36 @@ import {
 	CORPORATE_MEMBER_CORPORATE_ATTRIBUTES
 } from './constants';
 
-const createRootSelector = rootKey => (...fields) => state => _.pick(state[rootKey], fields);
+// const createRootSelector = rootKey => (...fields) => state => _.pick(state[rootKey], fields);
 
-const selectRoot = createRootSelector('identity');
-const selectProps = (...fields) => (state, props = {}) => _.pick(props, fields);
+// const selectRoot = createRootSelector('identity');
+
+const selectRoot = (...fields) => {
+	const selectors = fields.map(field => state => state.identity[field]);
+	return createSelector(
+		...selectors,
+		(...props) => {
+			return props.reduce((acc, curr, idx) => {
+				acc[fields[idx]] = curr;
+				return acc;
+			}, {});
+		}
+	);
+};
+
+const selectProps = (...fields) => {
+	const selectors = fields.map(field => (state, props = {}) => props[field]);
+	return createSelector(
+		...selectors,
+		(...props) => {
+			return props.reduce((acc, curr, idx) => {
+				acc[fields[idx]] = curr;
+				return acc;
+			}, {});
+		}
+	);
+};
+// const selectProps = (...fields) => (state, props = {}) => _.pick(props, fields);
 
 // Repositories
 
@@ -73,6 +98,29 @@ export const selectAttributeTypesFiltered = createSelector(
 		});
 	}
 );
+
+export const selectAttributeTypesByUrlsFactory = () =>
+	createSelector(
+		selectIdAttributeTypes,
+		selectProps('attributeTypeUrls'),
+		(attributeTypes, { attributeTypeUrls = [] }) => {
+			const urlsMap = attributeTypeUrls.reduce((acc, curr) => {
+				acc[curr] = true;
+				return acc;
+			}, {});
+
+			return attributeTypes.filter(type => urlsMap[type.url]);
+		}
+	);
+export const selectAttributeTypesByUrlsMappedFactory = () =>
+	createSelector(
+		selectAttributeTypesByUrlsFactory(),
+		(attributeTypes = []) =>
+			attributeTypes.reduce((acc, curr) => {
+				acc[curr.id] = curr;
+				return acc;
+			}, {})
+	);
 
 export const selectExpiredIdAttributeTypes = state => {
 	let now = Date.now();

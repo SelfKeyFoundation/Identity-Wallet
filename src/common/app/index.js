@@ -1,4 +1,5 @@
 import { getGlobalContext } from 'common/context';
+import _ from 'lodash';
 import crypto from 'crypto';
 import { createAliasedAction } from 'electron-redux';
 import { walletOperations, walletSelectors } from '../wallet';
@@ -16,6 +17,8 @@ const log = new Logger('app-redux');
 
 const eventEmitter = new EventEmitter();
 
+export const appSelectors = {};
+
 const transformErrorMessage = msg => {
 	if (msg === 'Key derivation failed - possibly wrong password') {
 		return 'Wrong password. Please try again';
@@ -23,7 +26,7 @@ const transformErrorMessage = msg => {
 	return msg;
 };
 
-export const initialState = {
+const initialState = {
 	walletsLoading: false,
 	wallets: [],
 	seed: null,
@@ -34,6 +37,7 @@ export const initialState = {
 	isOnline: true,
 	goBackPath: '',
 	goNextPath: '',
+	selectedPrivateKey: '',
 	autoUpdate: {
 		info: {},
 		progress: {},
@@ -42,7 +46,7 @@ export const initialState = {
 	keyStoreValue: null
 };
 
-export const appTypes = {
+const appTypes = {
 	APP_SET_WALLETS: 'app/set/WALLETS',
 	APP_SET_SEED: 'app/set/SEED',
 	APP_SET_WALLETS_LOADING: 'app/set/WALLETS_LOADING',
@@ -77,7 +81,8 @@ export const appTypes = {
 	LOAD_KEYSTORE_VALUE: 'app/keystore/LOAD',
 	APP_SEED_UNLOCK_START: 'app/seed/unlock',
 	APP_SEED_GENERATE: 'app/seed/generate',
-	APP_RESET: 'app/reset'
+	APP_RESET: 'app/reset',
+	APP_SET_SELECTED_PK: 'app/set/selected/private-key'
 };
 
 const appActions = {
@@ -140,6 +145,10 @@ const appActions = {
 	resetAppAction: payload => ({
 		type: appTypes.APP_RESET,
 		payload
+	}),
+	setSelectedPrivateKeyAction: key => ({
+		type: appTypes.APP_SET_SELECTED_PK,
+		payload: key
 	})
 };
 
@@ -235,10 +244,21 @@ const unlockWalletWithNewFile = (filePath, password) => async dispatch => {
 	}
 };
 
-const unlockWalletWithPrivateKey = (privateKey, password) => async dispatch => {
+const unlockWalletWithPrivateKey = (privateKey, password, checkPassword = true) => async (
+	dispatch,
+	getState
+) => {
 	const walletService = getGlobalContext().walletService;
+	const wallet = await walletService.unlockWalletWithPrivateKey(privateKey, password);
+	const wallets = selectApp(getState()).wallets;
 	try {
-		const wallet = await walletService.unlockWalletWithPrivateKey(privateKey, password);
+		if (checkPassword && !password && !wallets.find(w => w.address === wallet.address)) {
+			await dispatch(appActions.setSelectedPrivateKeyAction(privateKey));
+			await dispatch(push('/saveWallet'));
+			return;
+		}
+
+		await dispatch(appActions.setSelectedPrivateKeyAction(''));
 		await dispatch(appOperations.unlockWalletOperation(wallet, 'privateKey'));
 		await dispatch(push('/main/dashboard'));
 	} catch (error) {
@@ -312,6 +332,7 @@ const loadHDWalletsOperation = (page = 0) => async (dispatch, getState) => {
 		);
 		await dispatch(appActions.setHardwareWalletsAction(wallets));
 		await dispatch(appActions.setWalletType('local'));
+
 		await dispatch(push('/selectAddress'));
 	} catch (error) {
 		const message = transformErrorMessage(error.message);
@@ -639,6 +660,10 @@ const appResetReducer = (state, action) => {
 	return { ...initialState };
 };
 
+const appSelectedPrivateKeyReducer = (state, action) => {
+	return { ...state, selectedPrivateKey: action.payload };
+};
+
 const appReducers = {
 	setWalletsReducer,
 	setWalletsLoadingReducer,
@@ -654,7 +679,8 @@ const appReducers = {
 	setAutoUpdateDownloadedReducer,
 	setKeystoreValueReducer,
 	setSeedReducer,
-	appResetReducer
+	appResetReducer,
+	appSelectedPrivateKeyReducer
 };
 
 const reducer = (state = initialState, action) => {
@@ -689,6 +715,8 @@ const reducer = (state = initialState, action) => {
 			return appReducers.setKeystoreValueReducer(state, action);
 		case appTypes.APP_RESET:
 			return appReducers.appResetReducer(state, action);
+		case appTypes.APP_SET_SELECTED_PK:
+			return appReducers.appSelectedPrivateKeyReducer(state, action);
 	}
 	return state;
 };
@@ -741,7 +769,7 @@ const selectKeystoreValue = state => selectApp(state).keyStoreValue;
 
 const selectSeed = state => selectApp(state).seed;
 
-const appSelectors = {
+_.merge(appSelectors, {
 	selectApp,
 	hasConnected,
 	hasAcceptedTracking,
@@ -754,8 +782,8 @@ const appSelectors = {
 	selectCanExportWallet,
 	selectKeystoreValue,
 	selectSeed
-};
+});
 
-export { appSelectors, appReducers, appActions, appOperations };
+export { appReducers, appActions, appOperations, appTypes, initialState };
 
 export default reducer;

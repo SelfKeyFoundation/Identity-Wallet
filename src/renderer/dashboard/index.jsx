@@ -4,7 +4,7 @@ import CryptoChartBox from './crypto-chart-box';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
 import { KeyFiWidgetContainer } from '../marketplace/keyfi/widget/keyfi-widget-container';
-import BuyKeyWidget from './buy-key-widget';
+import BuyKeyWidget from './buy-key-widget-container';
 import DashboardMarketplaceApplications from './dashboard-marketplace-applications';
 import DashboardSelfkeyProfile from './dashboard-selfkey-profile';
 import TransactionsHistory from '../transaction/transactions-history';
@@ -105,8 +105,12 @@ const Dashboard = connect(mapStateToProps)(
 						</Alert>
 					</Grid>
 				)}
-				<Grid container item direction="row" justify="flex-start" alignItems="flex-start">
-					<Typography variant="h1">SelfKey Dashboard</Typography>
+				<Grid item>
+					<Grid container direction="row" justify="flex-start" alignItems="flex-start">
+						<Grid item>
+							<Typography variant="h1">SelfKey Dashboard</Typography>
+						</Grid>
+					</Grid>
 				</Grid>
 
 				{featureIsEnabled('keyfi') && (

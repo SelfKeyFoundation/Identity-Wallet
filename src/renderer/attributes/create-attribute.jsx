@@ -143,8 +143,10 @@ class CreateAttributeComponent extends PureComponent {
 		);
 	}
 
-	getTypes = _.memoize((isDocument, types, attributeOptions) =>
-		(isDocument
+	getTypes = _.memoize((documentsAndInformation, isDocument, types, attributeOptions) =>
+		(documentsAndInformation
+			? types
+			: isDocument
 			? types.filter(type => jsonSchema.containsFile(type.content))
 			: types.filter(type => !jsonSchema.containsFile(type.content))
 		)
@@ -155,7 +157,12 @@ class CreateAttributeComponent extends PureComponent {
 	);
 
 	get types() {
-		return this.getTypes(this.props.isDocument, this.props.types, this.props.attributeOptions);
+		return this.getTypes(
+			this.props.documentsAndInformation,
+			this.props.isDocument,
+			this.props.types,
+			this.props.attributeOptions
+		);
 	}
 	render() {
 		const { classes, subtitle, open, text } = this.props;
@@ -187,6 +194,7 @@ class CreateAttributeComponent extends PureComponent {
 							onChange={this.handleFieldChange('typeId')}
 							displayEmpty
 							disableUnderline
+							disabled={typeId >= 1 && types.length === 1}
 							IconComponent={SelectDropdownIcon}
 							input={<Input disableUnderline />}
 						>

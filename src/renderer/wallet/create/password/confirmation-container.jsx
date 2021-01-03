@@ -5,6 +5,7 @@ import { handlePassword } from './password-util';
 import { createWalletSelectors, createWalletOperations } from 'common/create-wallet';
 import { push } from 'connected-react-router';
 import { connect } from 'react-redux';
+import { appSelectors, appOperations } from 'common/app';
 
 import { getGlobalContext } from 'common/context';
 import PasswordConfirmation from './confirmation-component';
@@ -31,7 +32,16 @@ class PasswordConfirmationContainer extends PureComponent {
 		e && e.preventDefault();
 		if (this.props.firstPassword === this.state.password) {
 			if (featureIsEnabled('hdWallet')) {
-				await this.props.dispatch(push('/backupHDWallet'));
+				if (this.props.app.selectedPrivateKey) {
+					this.props.dispatch(
+						appOperations.unlockWalletWithPrivateKeyOperation(
+							this.props.app.selectedPrivateKey,
+							this.state.password
+						)
+					);
+				} else {
+					await this.props.dispatch(push('/backupHDWallet'));
+				}
 				return;
 			}
 			getGlobalContext().matomoService.trackEvent(
@@ -62,6 +72,7 @@ class PasswordConfirmationContainer extends PureComponent {
 
 const mapStateToProps = state => {
 	return {
+		app: appSelectors.selectApp(state),
 		firstPassword: createWalletSelectors.selectCreateWallet(state).password
 	};
 };

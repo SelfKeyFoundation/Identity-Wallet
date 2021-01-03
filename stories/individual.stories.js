@@ -11,8 +11,15 @@ import { IndividualOverviewTab } from '../src/renderer/individual/dashboard/over
 import { IndividualApplicationsTab } from '../src/renderer/individual/dashboard/applications-tab';
 import { AttributesTable } from '../src/renderer/individual/common/attributes-table';
 import { DocumentsTable } from '../src/renderer/individual/common/documents-table';
+import SelfKeyIdCreateAbout from '../src/renderer/individual/common/about';
+import AttributeHistory from '../src/renderer/individual/common/attribute-history';
+import SelfKeyIdCreateDisclaimer from '../src/renderer/individual/common/disclaimer';
 
-import { dummyProfile, dummyProfileWithoutDid } from './__fixtures__/individual-data';
+import {
+	dummyProfile,
+	dummyProfileWithoutDid,
+	attributeHistory
+} from './__fixtures__/individual-data';
 
 storiesOf('Individual Profile', module).add('Dashboard', () => (
 	<div style={{ width: '1140px' }}>
@@ -123,4 +130,7 @@ storiesOf('Individual Profile/Components', module)
 			onEditAttribute={action('on edit attribute')}
 			onDeleteAttribute={action('on delete attribute')}
 		/>
-	));
+	))
+	.add('Attributes History', () => <AttributeHistory attributeHistory={attributeHistory} />)
+	.add('About', () => <SelfKeyIdCreateAbout />)
+	.add('Disclaimer', () => <SelfKeyIdCreateDisclaimer />);

@@ -59,6 +59,8 @@ import { TransactionProcessingContainer } from '../../contract/allowance-editor/
 import { TransactionErrorContainer } from '../../contract/allowance-editor/transaction-error-container';
 import { walletConnectSelectors } from '../../../common/wallet-connect';
 import { push } from 'connected-react-router';
+import MoonPayAuthRouter from '../../moonpay/auth-router';
+import MoonPayLoadingContainer from '../../moonpay/moonpay-loading-container';
 
 const styles = theme => ({
 	headerSection: {
@@ -288,6 +290,36 @@ class Main extends PureComponent {
 							path={`${match.path}/allowance-transaction-error`}
 							component={TransactionErrorContainer}
 						/>
+
+						<Route
+							path={`${match.path}/moonpay/loading`}
+							component={MoonPayLoadingContainer}
+						/>
+
+						<Route path={`${match.path}/moonpay/auth`} component={MoonPayAuthRouter} />
+
+						{/*
+
+						<Route path={`${match.path}/moonpay/terms`} />
+						<Route path={`${match.path}/moonpay/auth`} />
+						<Route path={`${match.path}/moonpay/auth-failed`} />
+						<Route path={`${match.path}/moonpay/auth-success`} />
+						<Route path={`${match.path}/moonpay/service-not-available`} />
+						<Route path={`${match.path}/moonpay/kyc-checklist`} />
+						<Route path={`${match.path}/moonpay/kyc-status`} />
+						<Route path={`${match.path}/moonpay/payment-methods`} />
+						<Route path={`${match.path}/moonpay/payment-method/add/card`} />
+						<Route path={`${match.path}/moonpay/payment-method/add/country`} />
+						<Route path={`${match.path}/moonpay/payment-method/add/address`} />
+						<Route path={`${match.path}/moonpay/payment-method/add/status`} />
+
+						<Route path={`${match.path}/moonpay/transaction/create`} />
+						<Route path={`${match.path}/moonpay/transaction/:id`} />
+						<Route path={`${match.path}/moonpay/transaction/3d-secure-success`} />
+						<Route path={`${match.path}/moonpay/transaction/3d-secure-error`} />
+
+						*/}
+
 						{isExportable && (
 							<Route
 								path={`${match.path}/export-wallet/warning`}

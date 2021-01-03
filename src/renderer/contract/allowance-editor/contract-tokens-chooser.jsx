@@ -4,7 +4,14 @@ import { Typography, Grid } from '@material-ui/core';
 
 import { TokenSelector } from '../../tokens/token-selector';
 import { PropTypes } from 'prop-types';
-const styles = theme => ({});
+const styles = theme => ({
+	horizontalRow: {
+		display: 'flex',
+		'& > h6': {
+			marginRight: '5px'
+		}
+	}
+});
 
 export const ContractTokensChooser = withStyles(styles)(
 	({ classes, title, tokens, selected, fixed, onTokenChange }) => {
@@ -13,9 +20,19 @@ export const ContractTokensChooser = withStyles(styles)(
 		};
 		if (fixed && selected) {
 			return (
-				<Typography variant="body1">
-					For Token: <b>{selected.symbol}</b> ({selected.address})
-				</Typography>
+				<React.Fragment>
+					<div className={classes.horizontalRow}>
+						<Typography variant="subtitle2" color="secondary">
+							For Token:
+						</Typography>
+						<Typography variant="subtitle2" color="white">
+							({selected.address})
+						</Typography>
+					</div>
+					<Typography variant="body1">
+						<b>{selected.symbol}</b>
+					</Typography>
+				</React.Fragment>
 			);
 		}
 		return (
@@ -30,9 +47,12 @@ export const ContractTokensChooser = withStyles(styles)(
 				</Grid>
 				{selected && (
 					<Grid item>
-						<Typography variant="subtitle1">
-							Token Address: {selected.address}
-						</Typography>
+						<div className={classes.horizontalRow}>
+							<Typography variant="subtitle2" color="secondary">
+								Token Address:
+							</Typography>
+							<Typography variant="subtitle2">{selected.address}</Typography>
+						</div>
 					</Grid>
 				)}
 			</Grid>
