@@ -183,7 +183,7 @@ class TransactionSendBoxContainer extends PureComponent {
 			const max =
 				this.props.balance -
 				EthUnits.toEther(this.props.gasPrice * this.props.gasLimit, 'gwei');
-			if (this.state.amount > max) {
+			if (this.state.amount > max && max >= 0) {
 				this.setState({ amount: max });
 				this.props.dispatch(transactionOperations.setAmount(max));
 			}
