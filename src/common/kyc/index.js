@@ -344,13 +344,15 @@ export const kycSelectors = {
 			return acc;
 		}, {});
 
-		const identity = identitySelectors.selectIdentity(
-			state,
-			identityId ? { identityId } : null
-		);
+		let identity = null;
+		if (identityId) {
+			identity = identitySelectors.selectIdentity(state, { identityId });
+		} else {
+			identity = identitySelectors.selectIdentity(state);
+		}
 
 		const walletAttributes = identitySelectors
-			.selectFullIdAttributesByIds(state, { identityId: identity.id })
+			.selectFullIdAttributesByIds(state, { identityId: identity ? identity.id : null })
 			.reduce((acc, curr) => {
 				if (!curr || !curr.type || !curr.type.url) return acc;
 				if (!acc.hasOwnProperty(curr.type.url)) return acc;

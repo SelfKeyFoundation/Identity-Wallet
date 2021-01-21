@@ -173,7 +173,7 @@ class TransactionSendBoxContainer extends PureComponent {
 				EthUnits.toEther(this.props.gasPrice * this.props.gasLimit, 'gwei');
 			value = String(value);
 		}
-
+		value = value < 0 ? 0 : value;
 		this.setState({ amount: value });
 		this.props.dispatch(transactionOperations.setAmount(value));
 	};
@@ -183,7 +183,7 @@ class TransactionSendBoxContainer extends PureComponent {
 			const max =
 				this.props.balance -
 				EthUnits.toEther(this.props.gasPrice * this.props.gasLimit, 'gwei');
-			if (this.state.amount > max) {
+			if (this.state.amount > max && max >= 0) {
 				this.setState({ amount: max });
 				this.props.dispatch(transactionOperations.setAmount(max));
 			}
@@ -208,6 +208,7 @@ class TransactionSendBoxContainer extends PureComponent {
 		if (Number(value) > this.props.balance) {
 			value = String(this.props.balance);
 		}
+		value = value < 0 ? 0 : value;
 		this.setState({
 			...this.state,
 			amount: value

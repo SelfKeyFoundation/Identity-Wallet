@@ -11,6 +11,7 @@ import { GlobalError } from './global-error';
 // Pages
 import Home from './home';
 import CreateWallet from './wallet/create';
+import SaveWallet from './wallet/create/save';
 import CreatePassword from './wallet/create/password';
 import NoConnection from './no-connection';
 import PasswordConfirmation from './wallet/create/password/confirmation-container';
@@ -69,6 +70,7 @@ class AppContainerComponent extends PureComponent {
 					<Route exact path="/home" component={Home} />
 					<Route path="/no-connection" component={NoConnection} />
 					<Route path="/createWallet" component={CreateWallet} />
+					<Route path="/saveWallet" component={SaveWallet} />
 					<Route path="/createPassword" component={CreatePassword} />
 					<Route path="/createPasswordConfirmation" component={PasswordConfirmation} />
 					<Route path="/backupAddress" component={BackupAddress} />
