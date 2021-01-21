@@ -163,7 +163,8 @@ const common = {
 		keyfi: true,
 		hdWallet: true,
 		deepLinks: true,
-		moonpay: false
+		moonpay: false,
+		moonpayWalletLogin: false
 	}
 };
 
@@ -203,9 +204,10 @@ const dev = {
 		keyfi: true,
 		hdWallet: true,
 		deepLinks: true,
-		moonpay: true
+		moonpay: true,
+		moonpayWalletLogin: true
 	},
-	moonPayApiKey: 'pk_test_WLWaG0mO6kbetXr3tOODlXGsnzs3HR',
+	moonPayApiKey: 'pk_test_oMn5N1gYzf5eufwrs4AJUKhlZHBjVD',
 	moonPayApiEndpoint: 'https://api.moonpay.com/v3',
 	testWalletAddress: '0x23d233933c86f93b74705cf0d236b39f474249f8',
 	testDidAddress: '0xee10a3335f48e10b444e299cf017d57879109c1e32cec3e31103ceca7718d0ec',
@@ -248,10 +250,11 @@ const prod = {
 		keyfi: true,
 		hdWallet: true,
 		deepLinks: true,
-		moonpay: false
+		moonpay: false,
+		moonpayWalletLogin: false
 	},
 	// TODO: change to prod before release
-	moonPayApiKey: 'pk_test_WLWaG0mO6kbetXr3tOODlXGsnzs3HR',
+	moonPayApiKey: 'pk_test_oMn5N1gYzf5eufwrs4AJUKhlZHBjVD',
 	moonPayApiEndpoint: 'https://api.moonpay.com/v3',
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'
 };
