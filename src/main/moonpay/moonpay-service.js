@@ -1,3 +1,4 @@
+import electron from 'electron';
 import _ from 'lodash';
 import { validate } from 'parameter-validator';
 import { MoonPayApi } from './moonpay-api';
@@ -224,7 +225,7 @@ export class MoonPayService {
 						getImage(value.back, attribute.documents, fieldType.field, 'back')
 					);
 					if (value.selfie) {
-						acc.documents(
+						acc.documents.push(
 							getImage(value.selfie.image, attribute.documents, fieldType.field)
 						);
 					}
@@ -271,13 +272,115 @@ export class MoonPayService {
 		await this.getApi(auth).updateCustomer({ phoneNumber });
 	}
 
-	getQuote(opt) {}
+	async getQuote({ auth, baseCurrencyCode, baseAmount, currencyCode = 'KEY' }) {
+		const quote = await this.getApi(auth).getQuote({
+			baseCurrencyCode,
+			baseCurrencyAmount: baseAmount,
+			currencyCode,
+			areFeesIncluded: true
+		});
+		if (quote.error) {
+			this.handleQuoteError(quote.message);
+			return false;
+		}
+		return quote;
+	}
 
-	getCreditCards() {}
+	handleQuoteError(error) {
+		const { moonPayOperations } = require('common/moonpay');
+		this.store.dispatch(moonPayOperations.quoteErrorOperation(error));
+	}
 
-	addPaymentMethod() {}
+	async getCreditCards({ auth }) {
+		const cards = await this.getApi(auth).listCards();
+		return cards;
+	}
 
-	getTransaction(transactionId) {}
+	async addPaymentMethod({ number, expiryDate, cvc, billingAddress, auth }) {
+		const token = await this.getApi(auth).createToken({
+			number,
+			expiryDate,
+			cvc,
+			billingAddress
+		});
+		const card = await this.getApi(auth).createCard({ tokenId: token.id });
+		return card;
+	}
+
+	async createCardTransaction(opt) {
+		const { auth } = opt;
+		const transaction = await this.getApi(auth).createCardTransaction(opt);
+		if (transaction.error) {
+			this.handleQuoteError(transaction.message);
+			return false;
+		}
+		return transaction;
+	}
+
+	async getTransaction(opt) {
+		const { auth } = opt;
+		const transaction = await this.getApi(auth).getTransaction(opt);
+		if (transaction.error) {
+			this.handleQuoteError(transaction.message);
+			return false;
+		}
+		return transaction;
+	}
+
+	async listTransactions(opt) {
+		const { auth } = opt;
+		const transactions = await this.getApi(auth).listTransactions(opt);
+		if (transactions.error) {
+			this.handleQuoteError(transactions.message);
+			return false;
+		}
+		return transactions;
+	}
+
+	async listCurrencies(opt) {
+		const { auth } = opt;
+		const currencies = await this.getApi(auth).listCurrencies(opt);
+		if (currencies.error) {
+			this.handleQuoteError(currencies.message);
+			return false;
+		}
+		return currencies;
+	}
+
+	redirectTo3dSecure(transaction) {
+		if (
+			!transaction ||
+			!transaction.redirectUrl ||
+			transaction.status !== 'waitingAuthorization'
+		) {
+			return;
+		}
+
+		var authWindow = new electron.BrowserWindow({
+			width: 800,
+			height: 600,
+			show: false,
+			'node-integration': false,
+			'web-security': false
+		});
+
+		authWindow.loadURL(transaction.redirectUrl);
+		authWindow.show();
+		/*
+		// 'will-navigate' is an event emitted when the window.location changes
+		// newUrl should contain the tokens you need
+		authWindow.webContents.on('will-navigate', (event, newUrl) => {
+			const { moonPayOperations } = require('common/moonpay');
+			this.store.dispatch(moonPayOperations.setIsAuthenticating3dSecure(false));
+		});
+		*/
+
+		authWindow.on('closed', () => {
+			authWindow = null;
+			const { moonPayOperations } = require('common/moonpay');
+			this.store.dispatch(moonPayOperations.completed3dSecureOperation());
+		});
+	}
 }
 
 export default MoonPayService;

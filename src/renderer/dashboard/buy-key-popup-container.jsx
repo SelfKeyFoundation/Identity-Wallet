@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { selectListingExchanges } from 'common/exchanges/selectors';
 import { getWallet } from 'common/wallet/selectors';
-
 import BuyKeyModal from './buy-key-popup-modal';
 import { featureIsEnabled } from 'common/feature-flags';
 import { PropTypes } from 'prop-types';
@@ -17,7 +16,7 @@ const BuyKeyPopupComponent = props => {
 		props.dispatch(
 			moonPayOperations.connectFlowOperation({
 				cancel: '/main/dashboard',
-				complete: '/main/dashboard'
+				complete: '/main/moonpay/payment'
 			})
 		);
 	};

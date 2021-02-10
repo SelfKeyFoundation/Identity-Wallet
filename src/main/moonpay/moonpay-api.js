@@ -227,11 +227,13 @@ export class MoonPayApi {
 			]);
 		}
 
-		return this.api.request({
+		const result = await this.api.request({
 			method: 'patch',
 			url: 'customers/me',
 			body: opt
 		});
+
+		return result;
 	}
 
 	async verifyPhone(opt) {
@@ -343,12 +345,17 @@ export class MoonPayApi {
 			qs.areFeesIncluded = areFeesIncluded ? 'true' : 'false';
 		}
 
-		const quote = await this.api.request({
-			method: 'get',
-			url: `currencies/${currencyCode.toLowerCase()}/quote`,
-			qs
-		});
-		return quote;
+		try {
+			const quote = await this.api.request({
+				method: 'get',
+				url: `currencies/${currencyCode.toLowerCase()}/quote`,
+				qs
+			});
+			return quote;
+		} catch (error) {
+			log.error(error);
+			return { error: true, message: error.response.body.message };
+		}
 	}
 
 	async listCountries() {
@@ -664,6 +671,7 @@ export class MoonPayApi {
 
 	async createCardTransaction(opt) {
 		this.verifyLoggedIn();
+
 		const {
 			baseCurrencyAmount,
 			extraFeePercentage,
@@ -680,28 +688,32 @@ export class MoonPayApi {
 			'returnUrl'
 		]);
 
-		const { walletAddressTag, externalTransactionId, cardId, tokenId } = opt;
+		const { cardId, tokenId, areFeesIncluded } = opt;
 
 		if (!cardId && !tokenId) {
 			throw new ParameterValidationError('one of cardId, tokenId is required');
 		}
 
-		return this.api.request({
-			method: 'post',
-			url: 'transactions',
-			body: {
-				baseCurrencyAmount,
-				extraFeePercentage,
-				walletAddress,
-				baseCurrencyCode,
-				currencyCode,
-				returnUrl,
-				walletAddressTag,
-				externalTransactionId,
-				cardId,
-				tokenId
-			}
-		});
+		try {
+			const transaction = await this.api.request({
+				method: 'post',
+				url: 'transactions',
+				body: {
+					baseCurrencyAmount,
+					extraFeePercentage,
+					walletAddress,
+					returnUrl,
+					cardId,
+					baseCurrencyCode,
+					currencyCode,
+					areFeesIncluded
+				}
+			});
+			return transaction;
+		} catch (error) {
+			log.error(error);
+			return { error: true, message: error.response.body.message };
+		}
 	}
 
 	async getTransaction(opt) {

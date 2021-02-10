@@ -1,40 +1,27 @@
 import React from 'react';
 import moment from 'moment';
 import { Grid, Typography, Button, FormControl, Input, CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+// import { makeStyles } from '@material-ui/styles';
 import { Popup, InputTitle } from '../common';
 import { PropTypes } from 'prop-types';
 import { CodeIcon, KeyPicker } from 'selfkey-ui';
 
-const useStyles = makeStyles(theme => ({
-	link: {
-		cursor: 'pointer',
-		color: '#00C0D9',
-		textDecoration: 'none'
-	},
-	resend: {
-		marginTop: 5,
-		textAlign: 'right'
-	},
-	actions: {
-		marginTop: 30
-	}
-}));
+// const useStyles = makeStyles(theme => ({}));
 
 export const AddPaymentMethodModal = ({
 	onCloseClick,
 	onContinueClick,
 	cardNumber,
 	expiryDate,
-	ccv,
+	cvc,
 	onCardNumberChange,
 	onExpiryDateChange,
-	onCCVChange,
+	onCvcChange,
 	loading,
 	disabled,
 	error
 }) => {
-	const classes = useStyles();
+	// const classes = useStyles();
 	const startOfMonth = moment(Date.now()).startOf('month');
 	return (
 		<Popup closeAction={onCloseClick} text="Add a payment method">
@@ -98,8 +85,8 @@ export const AddPaymentMethodModal = ({
 														<Input
 															fullWidth
 															type="text"
-															onChange={onCCVChange}
-															value={ccv}
+															onChange={onCvcChange}
+															value={cvc}
 															placeholder="123"
 														/>
 													</FormControl>
@@ -118,7 +105,7 @@ export const AddPaymentMethodModal = ({
 							</Grid>
 						)}
 						<Grid item>
-							<Grid container direction="row" spacing={2} className={classes.actions}>
+							<Grid container direction="row" spacing={2}>
 								<Grid item>
 									<Button
 										variant="contained"
@@ -150,8 +137,8 @@ AddPaymentMethodModal.propTypes = {
 	cardNumber: PropTypes.string,
 	onExpiryDateChange: PropTypes.func.isRequired,
 	expiryDate: PropTypes.string,
-	onCCVChange: PropTypes.func.isRequired,
-	ccv: PropTypes.string,
+	onCvcChange: PropTypes.func.isRequired,
+	cvc: PropTypes.string,
 	loading: PropTypes.bool,
 	error: PropTypes.string,
 	disabled: PropTypes.bool

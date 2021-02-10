@@ -113,17 +113,24 @@ const isKycSubmitting = createSelector(
 	({ kycSubmitting }) => kycSubmitting
 );
 
+const isKycSubmitted = createSelector(
+	selectSelf,
+	({ KYCSubmitted }) => !!KYCSubmitted
+);
+
 const getKYCChecks = createSelector(
 	getLimits,
 	limits => {
 		const { verificationLevels } = limits;
+		console.log(verificationLevels);
 
-		return verificationLevels.reduce((acc, curr) => {
+		const a = verificationLevels.reduce((acc, curr) => {
 			return curr.requirements.reduce((acc, curr) => {
 				acc[curr.identifier] = curr.completed;
 				return acc;
 			}, acc);
 		}, {});
+		return a;
 	}
 );
 
@@ -474,7 +481,8 @@ const submitKycDocumentsOperation = ops => () => async (dispatch, getState) => {
 		await dispatch(ops.setKYCSubmitted(true));
 	} catch (error) {
 		log.error(error);
-		await dispatch(ops.setKycError(error.message));
+		// await dispatch(ops.setKycError(error.response.body.message));
+		await dispatch(ops.setKycError('Service is not available for your Jurisdiction'));
 	} finally {
 		await dispatch(ops.setKycSubmitting(false));
 	}
@@ -491,7 +499,9 @@ const connectFlowOperation = ops => ({ cancel, complete }) => async (dispatch, g
 		await dispatch(push('/main/selfkeyId'));
 		return;
 	}
+
 	await dispatch(ops.setAuthError(null));
+
 	await dispatch(
 		navigationFlowOperations.startFlowOperation({
 			name: 'moonpay-connect',
@@ -611,12 +621,16 @@ const connectFlowNextStepOperation = ops => opt => async (dispatch, getState) =>
 	await dispatch(ops.loadCustomerOperation());
 
 	const kycRequired = isKycRequired(getState());
+	const kycSubmitted = isKycSubmitted(getState());
+	const customer = getCustomer(getState());
 
-	if (kycRequired) {
+	// TODO: check if KYCCed or not
+
+	if (kycRequired && !kycSubmitted && !customer.dateOfBirth) {
 		await dispatch(
 			navigationFlowOperations.navigateToStepOperation({
 				current: '/main/moonpay/auth/kyc',
-				next: null
+				next: '/main/moonpay/loading'
 			})
 		);
 		return;
@@ -626,13 +640,13 @@ const connectFlowNextStepOperation = ops => opt => async (dispatch, getState) =>
 		await dispatch(
 			navigationFlowOperations.navigateToStepOperation({
 				current: '/main/moonpay/auth/verify-phone',
-				next: null
+				next: '/main/moonpay/loading'
 			})
 		);
 		return;
 	}
 
-	await dispatch(navigationFlowOperations.navigateContinueOperation());
+	await dispatch(navigationFlowOperations.navigateCompleteOperation());
 };
 
 const loadCustomerOperation = ops => () => async (dispatch, getState) => {
