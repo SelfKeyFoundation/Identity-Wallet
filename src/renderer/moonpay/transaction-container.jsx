@@ -33,7 +33,7 @@ export const MoonPayTransactionContainer = withNavFlow(
 		const locale = useSelector(getLocale);
 		const quote = useSelector(moonPaySelectors.getQuote);
 		const error = useSelector(moonPaySelectors.getQuoteError);
-		const transaction = useSelector(moonPaySelectors.getTransaction);
+		// const transaction = useSelector(moonPaySelectors.getTransaction);
 		const currencies = useSelector(moonPaySelectors.getSupportedFiat);
 		const currencyCode = config.dev ? 'ETH' : 'KEY';
 
