@@ -2,6 +2,7 @@ import React from 'react';
 import { withNavFlow } from '../navigation/with-flow-hoc';
 import { useSelector } from 'react-redux';
 import MoonPayTransactionResultModal from './transaction-result-modal';
+import { moonPaySelectors } from '../../common/moonpay';
 
 export const MoonPayTransactionFailedContainer = withNavFlow(
 	props => {
