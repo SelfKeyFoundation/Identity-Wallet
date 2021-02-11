@@ -1658,7 +1658,8 @@ describe('MoonPayApi', () => {
 				baseCurrencyCode: 'eur',
 				currencyCode: 'eth',
 				returnUrl: 'https://buy.moonpay.com',
-				tokenId: 'fc33e149-1f18-4cc9-841e-0d28c13410bf'
+				cardId: 'fc33e149-1f18-4cc9-841e-0d28c13410bf',
+				areFeesIncluded: false
 			};
 
 			it('should create card transaction', async () => {
@@ -1687,7 +1688,7 @@ describe('MoonPayApi', () => {
 			testInvalidParam(
 				'no tokenId or cardId',
 				'createCardTransaction',
-				_.omit(payload, ['tokenId'])
+				_.omit(payload, ['tokenId', 'cardId'])
 			);
 		});
 

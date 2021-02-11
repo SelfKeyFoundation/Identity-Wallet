@@ -688,11 +688,14 @@ export class MoonPayApi {
 			'returnUrl'
 		]);
 
-		const { cardId, tokenId, areFeesIncluded } = opt;
+		const { cardId, tokenId } = opt;
+		let { areFeesIncluded } = opt;
 
 		if (!cardId && !tokenId) {
 			throw new ParameterValidationError('one of cardId, tokenId is required');
 		}
+
+		areFeesIncluded = !!areFeesIncluded;
 
 		try {
 			const transaction = await this.api.request({
