@@ -481,7 +481,6 @@ const submitKycDocumentsOperation = ops => () => async (dispatch, getState) => {
 		await dispatch(ops.setKYCSubmitted(true));
 	} catch (error) {
 		log.error(error);
-		// await dispatch(ops.setKycError(error.response.body.message));
 		await dispatch(ops.setKycError('Service is not available for your Jurisdiction'));
 	} finally {
 		await dispatch(ops.setKycSubmitting(false));

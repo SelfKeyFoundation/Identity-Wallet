@@ -32,14 +32,10 @@ export const MoonPayTransactionContainer = withNavFlow(
 
 		const locale = useSelector(getLocale);
 		const quote = useSelector(moonPaySelectors.getQuote);
-		const error = useSelector(moonPaySelectors.getQuoteError);
-		// const transaction = useSelector(moonPaySelectors.getTransaction);
 		const currencies = useSelector(moonPaySelectors.getSupportedFiat);
-		const currencyCode = config.dev ? 'ETH' : 'KEY';
 
-		// console.log('quote', quote);
-		// console.log('error', error);
-		// console.log('transaction', transaction);
+		// Moonpay test mode only supports ETH
+		const currencyCode = config.dev ? 'ETH' : 'KEY';
 
 		const [baseCurrencyCode, setBaseCurrencyCode] = useState(
 			useSelector(moonPaySelectors.getBaseCurrencyCode)
@@ -83,7 +79,6 @@ export const MoonPayTransactionContainer = withNavFlow(
 				})
 			);
 		};
-
 		const handleLinkClick = e => {
 			window.openExternal(e, e.target.href || e.currentTarget.href);
 		};
