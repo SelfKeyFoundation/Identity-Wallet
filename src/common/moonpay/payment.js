@@ -218,8 +218,15 @@ const paymentFlowNextStepOperation = ops => opt => async (dispatch, getState) =>
 	const card = getSelectedCard(getState());
 	const transaction = getTransaction(getState());
 
-	// const transactions = getTransactions(getState());
-	// console.log(transactions);
+	if (!card && !transaction) {
+		await dispatch(
+			navigationFlowOperations.navigateToStepOperation({
+				current: '/main/moonpay/payment/select-card',
+				next: '/main/moonpay/loading/payment-flow'
+			})
+		);
+		return;
+	}
 
 	if (card && !transaction) {
 		await dispatch(
@@ -286,7 +293,6 @@ const addPaymentMethod = ops => ({ cardNumber, cvc, expiryDate }) => async (disp
 		billingAddress: customer.address,
 		auth
 	});
-
 	if (card) {
 		await dispatch(ops.setSelectedCard(card));
 	}
