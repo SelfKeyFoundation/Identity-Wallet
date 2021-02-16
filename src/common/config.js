@@ -164,7 +164,8 @@ const common = {
 		hdWallet: true,
 		deepLinks: true,
 		moonpay: false,
-		moonpayWalletLogin: false
+		moonpayWalletLogin: false,
+		walletSync: false
 	}
 };
 
@@ -205,7 +206,8 @@ const dev = {
 		hdWallet: true,
 		deepLinks: true,
 		moonpay: true,
-		moonpayWalletLogin: true
+		moonpayWalletLogin: true,
+		walletSync: true
 	},
 	moonPayApiKey: 'pk_test_oMn5N1gYzf5eufwrs4AJUKhlZHBjVD',
 	moonPayApiEndpoint: 'https://api.moonpay.com/v3',

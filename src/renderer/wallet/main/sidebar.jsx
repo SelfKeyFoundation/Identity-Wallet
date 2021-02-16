@@ -25,13 +25,14 @@ import {
 	PowerIcon,
 	// KeyTooltip,
 	// TooltipArrow,
-	// MenuAffiliateIcon,
+	MenuAffiliateIcon,
 	MenuStakingIcon,
 	MenuExportIcon,
 	// InfoTooltip,
 	primary
 } from 'selfkey-ui';
 // import { KeyboardArrowDown } from '@material-ui/icons';
+import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({
 	list: {
@@ -197,6 +198,9 @@ const addressBook = React.forwardRef((props, ref) => (
 	<Link to="/main/addressBook" {...props} ref={ref} />
 ));
 const switchAccount = React.forwardRef((props, ref) => <Link to="/home" {...props} ref={ref} />);
+const syncWallet = React.forwardRef((props, ref) => (
+	<Link to="/sync-wallet" {...props} ref={ref} />
+));
 const exportAccount = React.forwardRef((props, ref) => (
 	<Link to="/main/export-wallet/warning" {...props} ref={ref} />
 ));
@@ -402,6 +406,21 @@ class Sidebar extends PureComponent {
 						</Select>
 					</Grid> */}
 					<List className={classes.paddingLeft}>
+						{featureIsEnabled('walletSync') && (
+							<ListItem
+								className={classes.listItem}
+								component={syncWallet}
+								key="switchAccount"
+								title="Sync Wallet"
+							>
+								<ListItemIcon className={classes.listItemIcon}>
+									<MenuAffiliateIcon />
+								</ListItemIcon>
+								<Typography variant="body2" color="secondary">
+									Sync Wallet
+								</Typography>
+							</ListItem>
+						)}
 						<ListItem
 							className={classes.listItem}
 							onClick={e => {

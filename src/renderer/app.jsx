@@ -35,6 +35,7 @@ import AutoUpdateProgress from './auto-update/auto-update-progress-contatiner';
 import ApproveSessionContainer from './wallet-connect/approve-session-container';
 import SignMessageContainer from './wallet-connect/sign-message-container';
 import TransactionContainer from './wallet-connect/transaction-container';
+import { SyncWallet } from './sync-wallet';
 
 const log = new Logger('AppComponent');
 
@@ -68,6 +69,7 @@ class AppContainerComponent extends PureComponent {
 				<Switch>
 					<Route exact path="/" component={Loading} />
 					<Route exact path="/home" component={Home} />
+					<Route exact path="/sync-wallet" component={SyncWallet} />
 					<Route path="/no-connection" component={NoConnection} />
 					<Route path="/createWallet" component={CreateWallet} />
 					<Route path="/saveWallet" component={SaveWallet} />
