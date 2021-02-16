@@ -121,6 +121,17 @@ const navigateToStepOperation = ops => (opt = {}) => async (dispatch, getState) 
 	}
 };
 
+const navigateContinueOperation = ops => (opt = {}) => async (dispatch, getState) => {
+	try {
+		await dispatch(ops.setStep(opt));
+		if (opt.current) {
+			await dispatch(push(opt.current));
+		}
+	} catch (error) {
+		log.error(error);
+	}
+};
+
 export const createSlice = (state = initialState) => {
 	return createAliasedSlice({
 		name: SLICE_NAME,
@@ -168,7 +179,8 @@ export const createSlice = (state = initialState) => {
 			navigateCancelOperation,
 			navigateCompleteOperation,
 			startFlowOperation,
-			navigateToStepOperation
+			navigateToStepOperation,
+			navigateContinueOperation
 		}
 	});
 };

@@ -3,8 +3,8 @@ import _ from 'lodash';
 import { setGlobalContext } from '../context';
 import { identitySelectors, initialState as identityInitialState } from '../identity';
 import { kycActions, kycTypes, reducers, initialState, kycSelectors, testExports } from './index';
-import templates from './__fixtures__/templates';
-import expectedMemberRequirements from './__fixtures__/expected-member-requirements';
+// import templates from './__fixtures__/templates';
+// import expectedMemberRequirements from './__fixtures__/expected-member-requirements';
 
 describe('KYC Duck', () => {
 	let kycApplicationService = {
@@ -81,6 +81,7 @@ describe('KYC Duck', () => {
 			it('selectApplications', () => {
 				expect(kycSelectors.selectApplications(state)).toEqual(testApplications);
 			});
+			/*
 			describe('selectMemberRequirementsForTemplate', () => {
 				let identity = null;
 				let template = {};
@@ -124,6 +125,7 @@ describe('KYC Duck', () => {
 					).toEqual(expectedMemberRequirements);
 				});
 			});
+			*/
 		});
 	});
 });
