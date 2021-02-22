@@ -1,15 +1,10 @@
-// import { Logger } from 'common/logger';
 import { getGlobalContext } from 'common/context';
 import { getWallet } from '../wallet/selectors';
 import { createSelector } from 'reselect';
 import { createAliasedSlice } from '../utils/duck';
-// import { hardwareWalletOperations } from '../hardware-wallet';
 import { navigationFlowOperations } from '../navigation/flow';
-// import { validate } from 'parameter-validator';
-// import { sleep } from '../utils/async';
 import { selectIdentity } from '../identity/selectors';
 import { push } from 'connected-react-router';
-// const log = new Logger('MoonpayPaymentDuck');
 
 import { selectors as authSelectors } from './auth';
 

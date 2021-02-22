@@ -481,7 +481,14 @@ const submitKycDocumentsOperation = ops => () => async (dispatch, getState) => {
 		await dispatch(ops.setKYCSubmitted(true));
 	} catch (error) {
 		log.error(error);
-		await dispatch(ops.setKycError('Service is not available for your Jurisdiction'));
+		let errorMessage = 'KYC validation failed';
+		if (error.body.message === `Invalid body, check 'errors' property for more info.`) {
+			errorMessage += `: `;
+			for (let key in error.body.errors[0].constraints) {
+				errorMessage += error.body.errors[0].constraints[key] + ' ';
+			}
+		}
+		await dispatch(ops.setKycError(errorMessage));
 	} finally {
 		await dispatch(ops.setKycSubmitting(false));
 	}
