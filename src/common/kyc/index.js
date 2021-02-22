@@ -137,10 +137,12 @@ export const kycSelectors = {
 		maxDepth = 3
 	) {
 		const template = this.oneTemplateSelector(state, rpName, templateId);
-		const identity = identitySelectors.selectIdentity(
-			state,
-			identityId ? { identityId } : null
-		);
+		let identity = null;
+		if (identityId) {
+			identity = identitySelectors.selectIdentity(state, { identityId });
+		} else {
+			identity = identitySelectors.selectIdentity(state);
+		}
 		if (
 			!identity ||
 			identity.type !== 'corporate' ||
