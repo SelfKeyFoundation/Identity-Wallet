@@ -549,21 +549,33 @@ export class MoonPayApi {
 			body.billingAddress.state = state;
 		}
 
-		return this.api.request({
-			method: 'post',
-			url: 'tokens',
-			body
-		});
+		try {
+			const token = await this.api.request({
+				method: 'post',
+				url: 'tokens',
+				body
+			});
+			return token;
+		} catch (error) {
+			log.error(error);
+			return { error: true, message: error.response.body.message };
+		}
 	}
 
 	async createCard(opt) {
 		this.verifyLoggedIn();
 		opt = validate(opt, ['tokenId']);
-		return this.api.request({
-			method: 'post',
-			url: 'cards',
-			body: opt
-		});
+		try {
+			const card = await this.api.request({
+				method: 'post',
+				url: 'cards',
+				body: opt
+			});
+			return card;
+		} catch (error) {
+			log.error(error);
+			return { error: true, message: error.response.body.message };
+		}
 	}
 
 	async listCards() {

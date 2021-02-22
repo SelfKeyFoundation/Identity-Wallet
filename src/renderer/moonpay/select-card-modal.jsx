@@ -58,6 +58,7 @@ export const MoonPaySelectCardModal = ({
 	selectedCard,
 	disabled,
 	error,
+	moonpayError,
 	onAddNewCard,
 	onCardSelected
 }) => {
@@ -135,6 +136,13 @@ export const MoonPaySelectCardModal = ({
 								</Typography>
 							</Grid>
 						)}
+						{moonpayError && (
+							<Grid item>
+								<Typography variant="subtitle2" color="error" gutterBottom>
+									{moonpayError}
+								</Typography>
+							</Grid>
+						)}
 						<Grid item>
 							<Grid container direction="row" spacing={2}>
 								<Grid item>
@@ -169,7 +177,8 @@ MoonPaySelectCardModal.propTypes = {
 	onCardSelected: PropTypes.func.isRequired,
 	loading: PropTypes.boolean,
 	disabled: PropTypes.boolean,
-	error: PropTypes.string
+	error: PropTypes.string,
+	moonpayError: PropTypes.string
 };
 
 MoonPaySelectCardModal.defaultProps = {};

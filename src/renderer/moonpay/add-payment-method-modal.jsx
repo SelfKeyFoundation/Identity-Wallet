@@ -19,7 +19,8 @@ export const AddPaymentMethodModal = ({
 	onCvcChange,
 	loading,
 	disabled,
-	error
+	error,
+	moonpayError
 }) => {
 	// const classes = useStyles();
 	const startOfMonth = moment(Date.now()).startOf('month');
@@ -104,6 +105,13 @@ export const AddPaymentMethodModal = ({
 								</Typography>
 							</Grid>
 						)}
+						{moonpayError && (
+							<Grid item>
+								<Typography variant="subtitle2" color="error" gutterBottom>
+									{moonpayError}
+								</Typography>
+							</Grid>
+						)}
 						<Grid item>
 							<Grid container direction="row" spacing={2}>
 								<Grid item>
@@ -141,6 +149,7 @@ AddPaymentMethodModal.propTypes = {
 	cvc: PropTypes.string,
 	loading: PropTypes.bool,
 	error: PropTypes.string,
+	moonpayError: PropTypes.string,
 	disabled: PropTypes.bool
 };
 
