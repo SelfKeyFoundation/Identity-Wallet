@@ -227,13 +227,17 @@ export class MoonPayApi {
 			]);
 		}
 
-		const result = await this.api.request({
-			method: 'patch',
-			url: 'customers/me',
-			body: opt
-		});
-
-		return result;
+		try {
+			const customer = await this.api.request({
+				method: 'patch',
+				url: 'customers/me',
+				body: opt
+			});
+			return customer;
+		} catch (error) {
+			log.error(error);
+			throw error.response;
+		}
 	}
 
 	async verifyPhone(opt) {
