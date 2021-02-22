@@ -9,6 +9,7 @@ export const MoonPaySelectCardContainer = withNavFlow(
 	props => {
 		const { onNext, onCancel, onStepUpdate, ...otherProps } = props;
 		const cards = useSelector(moonPaySelectors.getCards);
+		const moonpayError = useSelector(moonPaySelectors.getQuoteError);
 		const dispatch = useDispatch();
 
 		const [selectedCard, setSelectedCard] = useState();
@@ -83,8 +84,6 @@ export const MoonPaySelectCardContainer = withNavFlow(
 			);
 		};
 
-		console.log(cards);
-
 		if (addNewCard) {
 			return (
 				<AddPaymentMethodModal
@@ -98,6 +97,7 @@ export const MoonPaySelectCardContainer = withNavFlow(
 					onCvcChange={handleCvcChange}
 					cvc={cvc}
 					error={error}
+					moonpayError={moonpayError}
 				/>
 			);
 		} else {
@@ -110,6 +110,7 @@ export const MoonPaySelectCardContainer = withNavFlow(
 					onCardSelected={handleSelectedCardChange}
 					onAddNewCard={handleChangetoAddNewCard}
 					selectedCard={selectedCard}
+					moonpayError={moonpayError}
 				/>
 			);
 		}

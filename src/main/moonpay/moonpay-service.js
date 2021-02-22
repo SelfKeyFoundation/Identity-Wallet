@@ -303,7 +303,15 @@ export class MoonPayService {
 			cvc,
 			billingAddress
 		});
+		if (token.error) {
+			this.handleQuoteError(token.message);
+			return false;
+		}
 		const card = await this.getApi(auth).createCard({ tokenId: token.id });
+		if (card.error) {
+			this.handleQuoteError(card.message);
+			return false;
+		}
 		return card;
 	}
 
