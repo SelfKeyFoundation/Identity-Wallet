@@ -71,10 +71,7 @@ export const MoonPayTransactionModal = ({
 				<Grid item xs>
 					<Grid container direction="column" spacing={4}>
 						<Grid item>
-							<Typography variant="h1">Add payment information</Typography>
-						</Grid>
-						<Grid item>
-							<Typography variant="body1">
+							<Typography variant="h1">
 								Indicate amount of {currencyCode} to buy with your credit card
 							</Typography>
 						</Grid>
@@ -164,15 +161,6 @@ export const MoonPayTransactionModal = ({
 													</Typography>
 												</div>
 											)}
-											{error && (
-												<Typography
-													variant="subtitle2"
-													color="error"
-													gutterBottom
-												>
-													{error}
-												</Typography>
-											)}
 										</Grid>
 										<Grid item>
 											<FormControl variant="filled">
@@ -196,6 +184,17 @@ export const MoonPayTransactionModal = ({
 											</FormControl>
 										</Grid>
 									</Grid>
+									{error && (
+										<Grid item>
+											<Typography
+												variant="subtitle2"
+												color="error"
+												gutterBottom
+											>
+												{error}
+											</Typography>
+										</Grid>
+									)}
 								</Grid>
 							</React.Fragment>
 						)}
