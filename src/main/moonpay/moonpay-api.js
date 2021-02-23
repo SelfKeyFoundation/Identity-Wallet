@@ -723,8 +723,8 @@ export class MoonPayApi {
 					walletAddress,
 					returnUrl,
 					cardId,
-					baseCurrencyCode,
-					currencyCode,
+					baseCurrencyCode: baseCurrencyCode.toLowerCase(),
+					currencyCode: currencyCode.toLowerCase(),
 					areFeesIncluded
 				}
 			});

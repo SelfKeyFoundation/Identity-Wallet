@@ -30,10 +30,11 @@ export const MoonPaySelectCardContainer = withNavFlow(
 		const handleCvcChange = evt => setCvc(evt.target.value);
 
 		const validate = () => {
+			const cnumber = cardNumber.replace(/\s+/g, '');
 			let error = false;
 			if (
-				!cardNumber ||
-				!cardNumber.match(
+				!cnumber ||
+				!cnumber.match(
 					/^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\\d{3})\\d{11})|(5018|5020|5038|6304|6759|6761|6763)[0-9]{8,15}$/
 				)
 			) {
@@ -67,7 +68,7 @@ export const MoonPaySelectCardContainer = withNavFlow(
 				onNext();
 				dispatch(
 					moonPayOperations.addPaymentMethod({
-						cardNumber,
+						cardNumber: cardNumber.replace(/\s+/g, ''),
 						expiryDate,
 						cvc
 					})

@@ -294,6 +294,8 @@ const addPaymentMethod = ops => ({ cardNumber, cvc, expiryDate }) => async (disp
 };
 
 const selectCard = ops => ({ card }) => async (dispatch, getState) => {
+	await dispatch(ops.setQuoteError(false));
+	await dispatch(ops.setTransaction(false));
 	await dispatch(ops.setSelectedCard(card));
 };
 
@@ -334,7 +336,7 @@ const transactionOperation = ops => ({ baseAmount, baseCurrencyCode, currencyCod
 	const transaction = await moonPayService.createCardTransaction({
 		auth,
 		baseCurrencyAmount: +baseAmount,
-		baseCurrencyCode: baseCurrencyCode ? 'usd' : 'USD',
+		baseCurrencyCode,
 		currencyCode,
 		extraFeePercentage: 0,
 		areFeesIncluded: true,
@@ -342,7 +344,6 @@ const transactionOperation = ops => ({ baseAmount, baseCurrencyCode, currencyCod
 		cardId: card.id,
 		returnUrl: 'http://localhost/whatever'
 	});
-
 	if (transaction && transaction.status === 'waitingAuthorization' && transaction.redirectUrl) {
 		await dispatch(ops.setIsAuthenticating3dSecure(true));
 		await moonPayService.redirectTo3dSecure(transaction);
