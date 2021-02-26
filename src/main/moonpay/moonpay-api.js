@@ -527,10 +527,11 @@ export class MoonPayApi {
 
 	async listFiles() {
 		this.verifyLoggedIn();
-		return this.api.request({
+		const files = await this.api.request({
 			method: 'get',
 			url: 'files'
 		});
+		return files;
 	}
 
 	async createToken(opt) {
@@ -736,7 +737,7 @@ export class MoonPayApi {
 	}
 
 	async getTransaction(opt) {
-		this.verifyLoggedIn();
+		// this.verifyLoggedIn();
 		const { transactionId } = validate(opt, ['transactionId']);
 
 		return this.api.request({

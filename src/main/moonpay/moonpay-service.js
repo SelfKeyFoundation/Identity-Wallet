@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import electron from 'electron';
 import _ from 'lodash';
 import { validate } from 'parameter-validator';
@@ -59,6 +60,14 @@ export class MoonPayService {
 			endpoint: this.endpoint,
 			apiKey: this.apiKey,
 			loginInfo,
+			authServiceCb: this.handleAuthError.bind(this)
+		});
+	}
+
+	getWidgetApi() {
+		return new MoonPayApi({
+			endpoint: this.config.moonPayWidgetApiEndpoint,
+			apiKey: this.apiKey,
 			authServiceCb: this.handleAuthError.bind(this)
 		});
 	}
@@ -159,6 +168,14 @@ export class MoonPayService {
 		'http://platform.selfkey.org/schema/attribute/drivers-license.json': {
 			field: 'driving_licence',
 			isDocument: true
+		},
+		'http://platform.selfkey.org/schema/attribute/utility-bill.json': {
+			field: 'proof_of_address',
+			isDocument: true
+		},
+		'http://platform.selfkey.org/schema/attribute/bank-statement.json': {
+			field: 'proof_of_address',
+			isDocument: true
 		}
 	};
 
@@ -166,6 +183,7 @@ export class MoonPayService {
 		const { customerInfo, documents } = kyc.reduce(
 			(acc, curr) => {
 				const { attribute } = curr;
+
 				if (!attribute.type) {
 					return acc;
 				}
@@ -240,8 +258,23 @@ export class MoonPayService {
 					}
 					return acc;
 				}
+				if (fieldType.field === 'passport') {
+					acc.documents.push(getImage(value.image, attribute.documents, fieldType.field));
+					if (value.selfie) {
+						acc.documents.push(
+							getImage(value.selfie.image, attribute.documents, 'selfie')
+						);
+					}
+					return acc;
+				}
+				if (fieldType.field === 'proof_of_address') {
+					console.log(value);
+					acc.documents.push(
+						getImage(value.images[0], attribute.documents, fieldType.field)
+					);
+					return acc;
+				}
 			},
-
 			{
 				customerInfo: {},
 				documents: []
@@ -257,6 +290,10 @@ export class MoonPayService {
 
 	async getLimits(auth) {
 		return this.getApi(auth).getLimits();
+	}
+
+	async listFiles(auth) {
+		return this.getApi(auth).listFiles();
 	}
 
 	loadCustomer(auth) {
@@ -326,8 +363,7 @@ export class MoonPayService {
 	}
 
 	async getTransaction(opt) {
-		const { auth } = opt;
-		const transaction = await this.getApi(auth).getTransaction(opt);
+		const transaction = await this.getWidgetApi().getTransaction(opt);
 		if (transaction.error) {
 			this.handleQuoteError(transaction.message);
 			return false;
@@ -387,6 +423,88 @@ export class MoonPayService {
 			authWindow = null;
 			const { moonPayOperations } = require('common/moonpay');
 			this.store.dispatch(moonPayOperations.completed3dSecureOperation());
+		});
+	}
+
+	openWidget({ address, email, key, secret }) {
+		const { moonPayOperations } = require('common/moonpay');
+		var widgetWindow = new electron.BrowserWindow({
+			width: 800,
+			height: 700,
+			show: false,
+			'node-integration': false,
+			'web-security': true
+		});
+
+		const url = `https://buy-staging.moonpay.com?apiKey=${key}&currencyCode=eth&email=${encodeURIComponent(
+			email
+		)}&walletAddress=${address}&showWalletAddressForm=true&redirectURL=${encodeURIComponent(
+			`https://localhost`
+		)}`;
+
+		const signature = crypto
+			.createHmac('sha256', secret)
+			.update(new URL(url).search)
+			.digest('base64');
+
+		const urlWithSignature = `${url}&signature=${encodeURIComponent(signature)}`;
+
+		widgetWindow.loadURL(urlWithSignature);
+		widgetWindow.show();
+
+		const loadTransactionFromUrl = url => {
+			const urlObject = new URL(url);
+			const searchParams = new URLSearchParams(urlObject.search);
+			if (searchParams.has('transactionId')) {
+				const transactionId = searchParams.get('transactionId');
+				// Load transaction
+				moonPayOperations.loadTransaction(transactionId);
+			}
+		};
+
+		widgetWindow.webContents.on('will-navigate', (event, url) => {
+			if (url.startsWith('https://localhost')) {
+				loadTransactionFromUrl(url);
+			}
+			event.preventDefault();
+			widgetWindow.close();
+		});
+
+		widgetWindow.webContents.on(
+			'new-window',
+			(
+				event,
+				url,
+				frameName,
+				disposition,
+				options,
+				additionalFeatures,
+				referrer,
+				postBody
+			) => {
+				if (url.startsWith('https://localhost')) {
+					loadTransactionFromUrl(url);
+					widgetWindow.close();
+				} else {
+					require('electron').shell.openExternal(url);
+				}
+				event.preventDefault();
+			}
+		);
+
+		widgetWindow.webContents.on('will-redirect', (event, url) => {
+			if (url.startsWith('https://localhost')) {
+				loadTransactionFromUrl(url);
+				widgetWindow.close();
+			} else {
+				require('electron').shell.openExternal(url);
+			}
+			event.preventDefault();
+			widgetWindow.close();
+		});
+
+		widgetWindow.on('closed', () => {
+			widgetWindow = null;
 		});
 	}
 }

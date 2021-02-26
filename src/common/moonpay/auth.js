@@ -1,3 +1,4 @@
+import config from 'common/config';
 import { Logger } from 'common/logger';
 import _ from 'lodash';
 import { getGlobalContext } from 'common/context';
@@ -48,7 +49,8 @@ const initialState = {
 	kycSubmitting: false,
 	kycError: null,
 	KYCSubmitted: null,
-	customer: null
+	customer: null,
+	files: []
 };
 
 const selectSelf = state => state[SLICE_NAME];
@@ -113,17 +115,17 @@ const isKycSubmitting = createSelector(
 	({ kycSubmitting }) => kycSubmitting
 );
 
+/*
 const isKycSubmitted = createSelector(
 	selectSelf,
 	({ KYCSubmitted }) => !!KYCSubmitted
 );
+*/
 
 const getKYCChecks = createSelector(
 	getLimits,
 	limits => {
 		const { verificationLevels } = limits;
-		console.log(verificationLevels);
-
 		const a = verificationLevels.reduce((acc, curr) => {
 			return curr.requirements.reduce((acc, curr) => {
 				acc[curr.identifier] = curr.completed;
@@ -139,9 +141,16 @@ const getCustomer = createSelector(
 	({ customer }) => customer
 );
 
+/*
+const getFiles = createSelector(
+	selectSelf,
+	({ files }) => files
+);
+*/
+
 const isPhoneVerificationRequired = createSelector(
 	getCustomer,
-	customer => customer.phoneNumber && !customer.isPhoneNumberVerified
+	customer => !!customer.phoneNumber && !customer.isPhoneNumberVerified
 );
 
 const isKycRequired = createSelector(
@@ -149,6 +158,7 @@ const isKycRequired = createSelector(
 	checks =>
 		(checks.hasOwnProperty('identity_verification') && !checks['identity_verification']) ||
 		(checks.hasOwnProperty('document_verification') && !checks['document_verification']) ||
+		(checks.hasOwnProperty('address_verification') && !checks['address_verification']) ||
 		(checks.hasOwnProperty('face_match_verification') && !checks['face_match_verification'])
 );
 
@@ -158,9 +168,12 @@ const getSelectedAttributes = createSelector(
 );
 
 const getSelectedCountry = createSelector(
-	getSelectedAttributes,
+	// getSelectedAttributes,
 	selectServiceCheck,
-	(selected, serviceCheck) => {
+	// (selected, serviceCheck) => {
+	serviceCheck => {
+		return serviceCheck.customerCountries[0];
+		/*
 		let country = Object.keys(selected).find(uiId => {
 			return selected[uiId].type.url === COUNTRY_ATTRIBUTE;
 		});
@@ -171,6 +184,7 @@ const getSelectedCountry = createSelector(
 			);
 		}
 		return country;
+		*/
 	}
 );
 
@@ -191,7 +205,9 @@ const getKYCRequirements = createSelector(
 				'http://platform.selfkey.org/schema/attribute/date-of-birth.json',
 				'http://platform.selfkey.org/schema/attribute/passport.json',
 				'http://platform.selfkey.org/schema/attribute/national-id.json',
-				'http://platform.selfkey.org/schema/attribute/drivers-license.json'
+				'http://platform.selfkey.org/schema/attribute/drivers-license.json',
+				'http://platform.selfkey.org/schema/attribute/utility-bill.json',
+				'http://platform.selfkey.org/schema/attribute/bank-statement.json'
 			]
 		}),
 	state =>
@@ -205,7 +221,9 @@ const getKYCRequirements = createSelector(
 				'http://platform.selfkey.org/schema/attribute/date-of-birth.json',
 				'http://platform.selfkey.org/schema/attribute/passport.json',
 				'http://platform.selfkey.org/schema/attribute/national-id.json',
-				'http://platform.selfkey.org/schema/attribute/drivers-license.json'
+				'http://platform.selfkey.org/schema/attribute/drivers-license.json',
+				'http://platform.selfkey.org/schema/attribute/utility-bill.json',
+				'http://platform.selfkey.org/schema/attribute/bank-statement.json'
 			]
 		}),
 	(checks, country, idTypes, attributesByUrl) => {
@@ -281,6 +299,15 @@ const getKYCRequirements = createSelector(
 			}
 		}
 
+		if (checks.hasOwnProperty('address_verification')) {
+			const types = [];
+
+			types.push('http://platform.selfkey.org/schema/attribute/utility-bill.json');
+			types.push('http://platform.selfkey.org/schema/attribute/bank-statement.json');
+
+			requirements.push(createRequirement(types, 'Proof of Address', 'proof_of_address'));
+		}
+
 		return requirements;
 	}
 );
@@ -323,6 +350,28 @@ const areKycRequirementsValid = createSelector(
 	}
 );
 
+const isAddressValid = createSelector(
+	selectFilledKycRequirements,
+	requirements => {
+		let isValid = false;
+		requirements.forEach(req => {
+			if (
+				req.schemaId ===
+				'http://platform.selfkey.org/schema/attribute/physical-address.json'
+			) {
+				if (
+					req.attribute.data.value.city &&
+					req.attribute.data.value.postalcode &&
+					req.attribute.data.value.province
+				) {
+					isValid = true;
+				}
+			}
+		});
+		return isValid;
+	}
+);
+
 const getKycError = createSelector(
 	selectSelf,
 	({ kycError }) => kycError
@@ -351,6 +400,7 @@ const selectors = {
 	isKycRequired,
 	isKycSubmitting,
 	areKycRequirementsValid,
+	isAddressValid,
 	getKycError,
 	isEmailVerificationRequired,
 	isPhoneVerificationRequired,
@@ -465,9 +515,19 @@ const loadLimitsOperation = ops => () => async (dispatch, getState) => {
 	await dispatch(ops.setLimits(limits));
 };
 
+const loadFilesOperation = ops => () => async (dispatch, getState) => {
+	const authInfo = selectAuthInfo(getState());
+	const { moonPayService } = getGlobalContext();
+	const files = await moonPayService.listFiles(authInfo);
+	await dispatch(ops.setFiles(files));
+};
+
 const submitKycDocumentsOperation = ops => () => async (dispatch, getState) => {
 	try {
 		await dispatch(ops.setKycError(null));
+		if (!isAddressValid(getState())) {
+			throw new Error('Your Address appears to be incomplete, please re-check');
+		}
 		if (!areKycRequirementsValid(getState())) {
 			throw new Error('Please fill all required attributes');
 		}
@@ -481,8 +541,11 @@ const submitKycDocumentsOperation = ops => () => async (dispatch, getState) => {
 		await dispatch(ops.setKYCSubmitted(true));
 	} catch (error) {
 		log.error(error);
-		let errorMessage = 'KYC validation failed';
-		if (error.body.message === `Invalid body, check 'errors' property for more info.`) {
+		let errorMessage = error.message;
+		if (
+			error.body &&
+			error.body.message === `Invalid body, check 'errors' property for more info.`
+		) {
 			errorMessage += `: `;
 			for (let key in error.body.errors[0].constraints) {
 				errorMessage += error.body.errors[0].constraints[key] + ' ';
@@ -523,52 +586,85 @@ const connectFlowNextStepOperation = ops => opt => async (dispatch, getState) =>
 		await dispatch(ops.loadSettingsOperation());
 	}
 
-	const serviceCheck = selectServiceCheck(getState());
+	if (!config.moonPayWidgetMode) {
+		const serviceCheck = selectServiceCheck(getState());
 
-	if (!serviceCheck.ipCheck) {
-		await dispatch(ops.checkServiceAllowedOperation());
-	}
+		if (!serviceCheck.ipCheck) {
+			await dispatch(ops.checkServiceAllowedOperation());
+		}
 
-	if (!isServiceAllowed(getState())) {
-		await dispatch(
-			navigationFlowOperations.navigateToStepOperation({
-				current: '/main/moonpay/auth/not-allowed',
-				next: null
-			})
-		);
-		return;
-	}
-
-	const agreedToTerms = hasAgreedToTerms(getState());
-
-	if (!agreedToTerms) {
-		await dispatch(
-			navigationFlowOperations.navigateToStepOperation({
-				current: '/main/moonpay/auth/terms',
-				next: '/main/moonpay/loading'
-			})
-		);
-		return;
-	}
-
-	const authenticated = isAuthenticated(getState());
-
-	if (!authenticated) {
-		const loginEmail = getLoginEmail(getState());
-		const authInProgress = isAuthInProgress(getState());
-
-		if (!loginEmail) {
+		if (!isServiceAllowed(getState())) {
 			await dispatch(
 				navigationFlowOperations.navigateToStepOperation({
-					current: '/main/moonpay/auth/choose-email',
+					current: '/main/moonpay/auth/not-allowed',
+					next: null
+				})
+			);
+			return;
+		}
+
+		const agreedToTerms = hasAgreedToTerms(getState());
+
+		if (!agreedToTerms) {
+			await dispatch(
+				navigationFlowOperations.navigateToStepOperation({
+					current: '/main/moonpay/auth/terms',
 					next: '/main/moonpay/loading'
 				})
 			);
 			return;
 		}
-		if (authInProgress) {
-			while (isAuthInProgress(getState())) {
-				await sleep(500);
+
+		const authenticated = isAuthenticated(getState());
+
+		if (!authenticated) {
+			const loginEmail = getLoginEmail(getState());
+			const authInProgress = isAuthInProgress(getState());
+
+			if (!loginEmail) {
+				await dispatch(
+					navigationFlowOperations.navigateToStepOperation({
+						current: '/main/moonpay/auth/choose-email',
+						next: '/main/moonpay/loading'
+					})
+				);
+				return;
+			}
+			if (authInProgress) {
+				while (isAuthInProgress(getState())) {
+					await sleep(500);
+				}
+
+				if (isEmailVerificationRequired(getState())) {
+					await dispatch(
+						navigationFlowOperations.navigateToStepOperation({
+							current: '/main/moonpay/auth/verify-email',
+							next: '/main/moonpay/loading'
+						})
+					);
+					return;
+				}
+
+				if (!isAuthenticated(getState())) {
+					await dispatch(
+						navigationFlowOperations.navigateToStepOperation({
+							current: '/main/moonpay/auth/error',
+							next: '/main/moonpay/auth'
+						})
+					);
+					return;
+				}
+				await dispatch(navigationFlowOperations.navigateCompleteOperation());
+				return;
+			}
+			if (getAuthError(getState())) {
+				await dispatch(
+					navigationFlowOperations.navigateToStepOperation({
+						current: '/main/moonpay/auth/error',
+						next: '/main/moonpay/auth'
+					})
+				);
+				return;
 			}
 
 			if (isEmailVerificationRequired(getState())) {
@@ -581,75 +677,65 @@ const connectFlowNextStepOperation = ops => opt => async (dispatch, getState) =>
 				return;
 			}
 
-			if (!isAuthenticated(getState())) {
-				await dispatch(
-					navigationFlowOperations.navigateToStepOperation({
-						current: '/main/moonpay/auth/error',
-						next: '/main/moonpay/auth'
-					})
-				);
-				return;
-			}
-			await dispatch(navigationFlowOperations.navigateCompleteOperation());
-			return;
-		}
-		if (getAuthError(getState())) {
 			await dispatch(
 				navigationFlowOperations.navigateToStepOperation({
-					current: '/main/moonpay/auth/error',
-					next: '/main/moonpay/auth'
+					current: '/main/moonpay/auth',
+					next: '/main/moonpay/loading'
 				})
 			);
+
 			return;
 		}
+		await dispatch(ops.loadLimitsOperation());
+		await dispatch(ops.loadCustomerOperation());
+		await dispatch(ops.loadFilesOperation());
 
-		if (isEmailVerificationRequired(getState())) {
+		const kycChecks = getKYCChecks(getState());
+		const kycRequired = isKycRequired(getState());
+		// const kycSubmitted = isKycSubmitted(getState());
+		// const customer = getCustomer(getState());
+		// const files = getFiles(getState());
+		// const phoneVerificationRequired = isPhoneVerificationRequired(getState());
+		// const b = getSelectedCountry(getState());
+		// const a = getKYCRequirements(getState());
+
+		const kycSent = Object.keys(kycChecks).reduce((acc, el) => {
+			acc = acc && kycChecks[el];
+			return acc;
+		}, true);
+
+		// if (kycRequired && !kycSubmitted && !customer.dateOfBirth) {
+		if (kycRequired && !kycSent) {
 			await dispatch(
 				navigationFlowOperations.navigateToStepOperation({
-					current: '/main/moonpay/auth/verify-email',
+					current: '/main/moonpay/auth/kyc',
 					next: '/main/moonpay/loading'
 				})
 			);
 			return;
 		}
 
-		await dispatch(
-			navigationFlowOperations.navigateToStepOperation({
-				current: '/main/moonpay/auth',
-				next: '/main/moonpay/loading'
-			})
-		);
+		if (isPhoneVerificationRequired(getState())) {
+			await dispatch(
+				navigationFlowOperations.navigateToStepOperation({
+					current: '/main/moonpay/auth/verify-phone',
+					next: '/main/moonpay/loading'
+				})
+			);
+			return;
+		}
+	} else {
+		const loginEmail = getLoginEmail(getState());
 
-		return;
-	}
-
-	await dispatch(ops.loadLimitsOperation());
-	await dispatch(ops.loadCustomerOperation());
-
-	const kycRequired = isKycRequired(getState());
-	const kycSubmitted = isKycSubmitted(getState());
-	const customer = getCustomer(getState());
-
-	// TODO: check if KYCCed or not
-
-	if (kycRequired && !kycSubmitted && !customer.dateOfBirth) {
-		await dispatch(
-			navigationFlowOperations.navigateToStepOperation({
-				current: '/main/moonpay/auth/kyc',
-				next: '/main/moonpay/loading'
-			})
-		);
-		return;
-	}
-
-	if (isPhoneVerificationRequired(getState())) {
-		await dispatch(
-			navigationFlowOperations.navigateToStepOperation({
-				current: '/main/moonpay/auth/verify-phone',
-				next: '/main/moonpay/loading'
-			})
-		);
-		return;
+		if (!loginEmail) {
+			await dispatch(
+				navigationFlowOperations.navigateToStepOperation({
+					current: '/main/moonpay/auth/choose-email',
+					next: '/main/moonpay/loading'
+				})
+			);
+			return;
+		}
 	}
 
 	await dispatch(navigationFlowOperations.navigateCompleteOperation());
@@ -741,6 +827,9 @@ const moonPayAuthSlice = createAliasedSlice({
 		},
 		setCustomer(state, action) {
 			state.customer = action.payload;
+		},
+		setFiles(state, action) {
+			state.files = action.payload;
 		}
 	},
 	aliasedOperations: {
@@ -748,6 +837,7 @@ const moonPayAuthSlice = createAliasedSlice({
 		agreeToTermsOperation,
 		loginEmailChosenOperation,
 		loadLimitsOperation,
+		loadFilesOperation,
 		connectFlowOperation,
 		connectFlowNextStepOperation,
 		loadSettingsOperation,
