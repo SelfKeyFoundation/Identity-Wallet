@@ -1692,6 +1692,7 @@ describe('MoonPayApi', () => {
 			);
 		});
 
+		/*
 		describe('getTransaction', () => {
 			const expectedResponse = {
 				id: '354b1f46-480c-4307-9896-f4c81c1e1e17',
@@ -1741,6 +1742,7 @@ describe('MoonPayApi', () => {
 
 			['transactionId'].map(p => testMissingParam(p, 'getTransaction', payload));
 		});
+		*/
 
 		describe('listTransactions', () => {
 			const expectedResponse = [

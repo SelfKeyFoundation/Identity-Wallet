@@ -1,11 +1,13 @@
+import config from 'common/config';
 import { getGlobalContext } from 'common/context';
 import { getWallet } from '../wallet/selectors';
+import { marketplaceSelectors } from 'common/marketplace';
 import { createSelector } from 'reselect';
 import { createAliasedSlice } from '../utils/duck';
 import { navigationFlowOperations } from '../navigation/flow';
 import { selectIdentity } from '../identity/selectors';
 import { push } from 'connected-react-router';
-
+import { walletSelectors } from 'common/wallet';
 import { selectors as authSelectors } from './auth';
 
 const SLICE_NAME = 'moonPayPayment';
@@ -182,84 +184,137 @@ const paymentFlowOperation = ops => ({ cancel, complete }) => async (dispatch, g
 
 	await dispatch(ops.setIsAuthenticating3dSecure(false));
 
-	await dispatch(ops.loadUserCards());
+	if (!config.moonPayWidgetMode) {
+		await dispatch(ops.loadUserCards());
+		await dispatch(ops.loadTransactions());
+		await dispatch(ops.loadCurrencies());
 
-	await dispatch(ops.loadTransactions());
-
-	await dispatch(ops.loadCurrencies());
-
-	await dispatch(
-		navigationFlowOperations.startFlowOperation({
-			name: 'moonpay-payment',
-			current: '/main/moonpay/payment/select-card',
-			cancel,
-			complete
-		})
-	);
+		await dispatch(
+			navigationFlowOperations.startFlowOperation({
+				name: 'moonpay-payment',
+				current: '/main/moonpay/payment/select-card',
+				cancel,
+				complete
+			})
+		);
+	} else {
+		await dispatch(
+			navigationFlowOperations.startFlowOperation({
+				name: 'moonpay-payment',
+				current: '/main/moonpay/payment/start-widget',
+				cancel,
+				complete
+			})
+		);
+	}
 };
 
 const paymentFlowNextStepOperation = ops => opt => async (dispatch, getState) => {
-	const authenticated = authSelectors.isAuthenticated(getState());
+	if (!config.moonPayWidgetMode) {
+		const authenticated = authSelectors.isAuthenticated(getState());
 
-	if (!authenticated) {
-		const loginEmail = authSelectors.getLoginEmail(getState());
-		const authInProgress = authSelectors.isAuthInProgress(getState());
-		console.log(loginEmail, authInProgress);
+		if (!authenticated) {
+			// const loginEmail = authSelectors.getLoginEmail(getState());
+			// const authInProgress = authSelectors.isAuthInProgress(getState());
 
-		await dispatch(navigationFlowOperations.navigateCompleteOperation());
-		return;
-	}
+			await dispatch(navigationFlowOperations.navigateCompleteOperation());
+			return;
+		}
 
-	const card = getSelectedCard(getState());
-	const transaction = getTransaction(getState());
+		const card = getSelectedCard(getState());
+		const transaction = getTransaction(getState());
 
-	if (!card && !transaction) {
-		await dispatch(
-			navigationFlowOperations.navigateToStepOperation({
-				current: '/main/moonpay/payment/select-card',
-				next: '/main/moonpay/loading/payment-flow'
-			})
-		);
-		return;
-	}
+		if (!card && !transaction) {
+			await dispatch(
+				navigationFlowOperations.navigateToStepOperation({
+					current: '/main/moonpay/payment/select-card',
+					next: '/main/moonpay/loading/payment-flow'
+				})
+			);
+			return;
+		}
 
-	if (card && !transaction) {
-		await dispatch(
-			navigationFlowOperations.navigateToStepOperation({
-				current: '/main/moonpay/payment/transaction',
-				next: '/main/moonpay/loading/payment-flow'
-			})
-		);
-		return;
-	}
+		if (card && !transaction) {
+			await dispatch(
+				navigationFlowOperations.navigateToStepOperation({
+					current: '/main/moonpay/payment/transaction',
+					next: '/main/moonpay/loading/payment-flow'
+				})
+			);
+			return;
+		}
 
-	if (
-		transaction &&
-		['waitingPayment', 'pending', 'waitingAuthorization'].includes(transaction.status)
-	) {
+		if (
+			transaction &&
+			['waitingPayment', 'pending', 'waitingAuthorization'].includes(transaction.status)
+		) {
+			await dispatch(
+				navigationFlowOperations.navigateToStepOperation({
+					current: '/main/moonpay/payment/check',
+					next: '/main/moonpay/loading/payment-flow'
+				})
+			);
+			return;
+		}
+
+		if (transaction && ['failed'].includes(transaction.status)) {
+			await dispatch(
+				navigationFlowOperations.navigateToStepOperation({
+					current: '/main/moonpay/payment/failed',
+					next: '/main/moonpay/loading/payment-flow'
+				})
+			);
+			return;
+		}
+
+		if (transaction && ['completed'].includes(transaction.status)) {
+			await dispatch(
+				navigationFlowOperations.navigateToStepOperation({
+					current: '/main/moonpay/payment/completed',
+					next: '/main/moonpay/loading/payment-flow'
+				})
+			);
+			return;
+		}
+	} else {
+		const transaction = getTransaction(getState());
+
+		if (
+			transaction &&
+			['waitingPayment', 'pending', 'waitingAuthorization'].includes(transaction.status)
+		) {
+			await dispatch(
+				navigationFlowOperations.navigateToStepOperation({
+					current: '/main/moonpay/payment/check',
+					next: '/main/moonpay/loading/payment-flow'
+				})
+			);
+			return;
+		}
+
+		if (transaction && ['failed'].includes(transaction.status)) {
+			await dispatch(
+				navigationFlowOperations.navigateToStepOperation({
+					current: '/main/moonpay/payment/failed',
+					next: '/main/moonpay/loading/payment-flow'
+				})
+			);
+			return;
+		}
+
+		if (transaction && ['completed'].includes(transaction.status)) {
+			await dispatch(
+				navigationFlowOperations.navigateToStepOperation({
+					current: '/main/moonpay/payment/completed',
+					next: '/main/moonpay/loading/payment-flow'
+				})
+			);
+			return;
+		}
+
 		await dispatch(
 			navigationFlowOperations.navigateToStepOperation({
 				current: '/main/moonpay/payment/check',
-				next: '/main/moonpay/loading/payment-flow'
-			})
-		);
-		return;
-	}
-
-	if (transaction && ['failed'].includes(transaction.status)) {
-		await dispatch(
-			navigationFlowOperations.navigateToStepOperation({
-				current: '/main/moonpay/payment/failed',
-				next: '/main/moonpay/loading/payment-flow'
-			})
-		);
-		return;
-	}
-
-	if (transaction && ['completed'].includes(transaction.status)) {
-		await dispatch(
-			navigationFlowOperations.navigateToStepOperation({
-				current: '/main/moonpay/payment/completed',
 				next: '/main/moonpay/loading/payment-flow'
 			})
 		);
@@ -386,6 +441,14 @@ const loadTransactions = ops => () => async (dispatch, getState) => {
 	}
 };
 
+const loadTransaction = ops => transactionId => async (dispatch, getState) => {
+	const { moonPayService } = getGlobalContext();
+	const transaction = await moonPayService.getTransaction({ transactionId });
+	if (transaction) {
+		await dispatch(ops.setTransaction(transaction));
+	}
+};
+
 const loadCurrencies = ops => () => async (dispatch, getState) => {
 	const state = getState();
 	const { moonPayService } = getGlobalContext();
@@ -394,6 +457,21 @@ const loadCurrencies = ops => () => async (dispatch, getState) => {
 	if (currencies) {
 		await dispatch(ops.setCurrencies(currencies));
 	}
+};
+
+const openWidget = ops => () => async (dispatch, getState) => {
+	const state = getState();
+	const loginEmail = authSelectors.getLoginEmail(getState());
+	const wallet = walletSelectors.getWallet(state);
+	const { moonPayService } = getGlobalContext();
+	// const auth = authSelectors.selectAuthInfo(state);
+	const vendor = marketplaceSelectors.selectVendorById(getState(), 'moonpay');
+	await moonPayService.openWidget({
+		email: loginEmail,
+		address: wallet.address,
+		key: vendor.relyingPartyConfig.key,
+		secret: vendor.relyingPartyConfig.secret
+	});
 };
 
 const moonPayPaymentSlice = createAliasedSlice({
@@ -453,7 +531,9 @@ const moonPayPaymentSlice = createAliasedSlice({
 		refreshTransactionOperation,
 		completed3dSecureOperation,
 		loadTransactions,
-		loadCurrencies
+		loadTransaction,
+		loadCurrencies,
+		openWidget
 	}
 });
 

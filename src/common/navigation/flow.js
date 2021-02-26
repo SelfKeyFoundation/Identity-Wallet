@@ -93,7 +93,6 @@ const navigateCompleteOperation = ops => opt => async (dispatch, getState) => {
 		}
 		return;
 	}
-
 	let { complete } = flow;
 	await dispatch(ops.completeFlow());
 	await dispatch(push(complete));

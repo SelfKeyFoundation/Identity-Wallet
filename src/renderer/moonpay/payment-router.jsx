@@ -6,6 +6,7 @@ import MoonPaySelectCardContainer from './select-card-container';
 import MoonPayTransactionFailedContainer from './transaction-failed-container';
 import MoonPayTransactionCompletedContainer from './transaction-completed-container';
 import MoonPayTransactionCheckContainer from './transaction-check-container';
+import MoonPayStartWidgetContainer from './start-widget-container';
 
 export const MoonPayPaymentRouter = props => {
 	const { match } = props;
@@ -41,6 +42,12 @@ export const MoonPayPaymentRouter = props => {
 				exact
 				path={`${match.path}/check`}
 				component={MoonPayTransactionCheckContainer}
+			/>
+
+			<Route
+				exact
+				path={`${match.path}/start-widget`}
+				component={MoonPayStartWidgetContainer}
 			/>
 		</Switch>
 	);
