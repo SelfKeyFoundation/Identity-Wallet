@@ -14,10 +14,13 @@ const useStyles = makeStyles(theme => ({
 	actionSection: {
 		width: 60,
 		borderLeft: '1px solid #384656',
-		padding: '15px 10px 0px 15px'
+		padding: '10px'
 	},
 	bodySection: {
-		padding: '10px 20px'
+		padding: '10px 20px',
+		display: 'flex',
+		alignItems: 'center',
+		flexWrap: 'wrap'
 	},
 	option: {
 		borderColor: '#384656',

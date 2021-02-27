@@ -32,7 +32,7 @@ export const MoonpayAuthModal = ({ onCancel, onNext, onChooseEmail, email }) => 
 						</Grid>
 						{onChooseEmail && (
 							<Grid item>
-								<Button onClick={onChooseEmail} variant="outlined" size="large">
+								<Button onClick={onChooseEmail} variant="outlined" size="small">
 									Change Address
 								</Button>
 							</Grid>
