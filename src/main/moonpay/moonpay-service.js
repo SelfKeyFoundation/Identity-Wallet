@@ -18,6 +18,7 @@ export class MoonPayService {
 		this.config = config;
 		this.walletService = walletService;
 		this.endpoint = config.moonPayApiEndpoint;
+		this.widgetUrl = config.moonPayWidgetUrl;
 		this.apiKey = config.moonPayApiKey;
 		this.store = store;
 	}
@@ -436,7 +437,7 @@ export class MoonPayService {
 			'web-security': true
 		});
 
-		const url = `https://buy-staging.moonpay.com?apiKey=${key}&currencyCode=eth&email=${encodeURIComponent(
+		const url = `${this.widgetUrl}?apiKey=${key}&currencyCode=eth&email=${encodeURIComponent(
 			email
 		)}&walletAddress=${address}&showWalletAddressForm=true&redirectURL=${encodeURIComponent(
 			`https://localhost`
@@ -457,8 +458,7 @@ export class MoonPayService {
 			const searchParams = new URLSearchParams(urlObject.search);
 			if (searchParams.has('transactionId')) {
 				const transactionId = searchParams.get('transactionId');
-				// Load transaction
-				moonPayOperations.loadTransaction(transactionId);
+				this.store.dispatch(moonPayOperations.loadTransaction(transactionId));
 			}
 		};
 
@@ -503,7 +503,7 @@ export class MoonPayService {
 			widgetWindow.close();
 		});
 
-		widgetWindow.on('closed', () => {
+		widgetWindow.on('closed', e => {
 			widgetWindow = null;
 		});
 	}
