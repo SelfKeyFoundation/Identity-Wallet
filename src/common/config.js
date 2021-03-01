@@ -211,6 +211,7 @@ const dev = {
 	moonPayApiEndpoint: 'https://api.moonpay.com/v3',
 	moonPayWidgetApiEndpoint: 'https://api.moonpay.com/v1',
 	moonPayWidgetMode: true,
+	moonPayWidgetUrl: 'https://buy-staging.moonpay.com',
 	testWalletAddress: '0x23d233933c86f93b74705cf0d236b39f474249f8',
 	testDidAddress: '0xee10a3335f48e10b444e299cf017d57879109c1e32cec3e31103ceca7718d0ec',
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'development'
@@ -258,7 +259,9 @@ const prod = {
 	// TODO: change to prod before release
 	moonPayApiKey: 'pk_test_oMn5N1gYzf5eufwrs4AJUKhlZHBjVD',
 	moonPayApiEndpoint: 'https://api.moonpay.com/v3',
+	moonPayWidgetApiEndpoint: 'https://api.moonpay.com/v1',
 	moonPayWidgetMode: true,
+	moonPayWidgetUrl: 'https://buy.moonpay.com',
 	attributeTypeSource: ATTRIBUTE_TYPE_SOURCE_OVERRIDE || 'production'
 };
 

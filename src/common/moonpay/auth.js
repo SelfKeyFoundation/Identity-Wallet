@@ -586,6 +586,17 @@ const connectFlowNextStepOperation = ops => opt => async (dispatch, getState) =>
 		await dispatch(ops.loadSettingsOperation());
 	}
 
+	const agreedToTerms = hasAgreedToTerms(getState());
+	if (!agreedToTerms) {
+		await dispatch(
+			navigationFlowOperations.navigateToStepOperation({
+				current: '/main/moonpay/auth/terms',
+				next: '/main/moonpay/loading'
+			})
+		);
+		return;
+	}
+
 	if (!config.moonPayWidgetMode) {
 		const serviceCheck = selectServiceCheck(getState());
 
@@ -598,18 +609,6 @@ const connectFlowNextStepOperation = ops => opt => async (dispatch, getState) =>
 				navigationFlowOperations.navigateToStepOperation({
 					current: '/main/moonpay/auth/not-allowed',
 					next: null
-				})
-			);
-			return;
-		}
-
-		const agreedToTerms = hasAgreedToTerms(getState());
-
-		if (!agreedToTerms) {
-			await dispatch(
-				navigationFlowOperations.navigateToStepOperation({
-					current: '/main/moonpay/auth/terms',
-					next: '/main/moonpay/loading'
 				})
 			);
 			return;
