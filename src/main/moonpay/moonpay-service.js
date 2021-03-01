@@ -463,7 +463,6 @@ export class MoonPayService {
 		};
 
 		widgetWindow.webContents.on('will-navigate', (event, url) => {
-			console.log(url);
 			if (url.startsWith('https://localhost')) {
 				loadTransactionFromUrl(url);
 			}
@@ -483,8 +482,6 @@ export class MoonPayService {
 				referrer,
 				postBody
 			) => {
-				console.log('2');
-				console.log(url);
 				if (url.startsWith('https://localhost')) {
 					loadTransactionFromUrl(url);
 					widgetWindow.close();
@@ -496,8 +493,6 @@ export class MoonPayService {
 		);
 
 		widgetWindow.webContents.on('will-redirect', (event, url) => {
-			console.log('3');
-			console.log(url);
 			if (url.startsWith('https://localhost')) {
 				loadTransactionFromUrl(url);
 				widgetWindow.close();
