@@ -10,11 +10,12 @@ const log = new Logger('WalletConnectService');
 export class WalletConnectService {
 	HANDLER_NAME = 'wallet-connect';
 
-	constructor({ config, store, mainWindow, web3Service }) {
+	constructor({ config, store, mainWindow, web3Service, ethGasStationService }) {
 		this.config = config;
 		this.store = store;
 		this.mainWindow = mainWindow;
 		this.web3Service = web3Service;
+		this.ethGasStationService = ethGasStationService;
 	}
 
 	focusWindow() {
@@ -128,9 +129,10 @@ export class WalletConnectService {
 	async handleTransaction({ id, method, params }) {
 		const rawTx = params[0];
 		rawTx.nonce = await this.web3Service.getNextNonce(rawTx.from);
+		const gasStationInfo = await this.ethGasStationService.getInfo();
 		const tx = { ...rawTx };
 		tx.gas = EthUtils.hexToDecimal(tx.gas);
-		tx.gasPrice = EthUtils.hexToDecimal(tx.gasPrice);
+		tx.gasPrice = gasStationInfo.avarage;
 		if (tx.value) tx.value = EthUtils.hexToDecimal(tx.value);
 		this.focusWindow();
 		this.store.dispatch(
