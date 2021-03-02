@@ -129,9 +129,10 @@ export class WalletConnectService {
 	async handleTransaction({ id, method, params }) {
 		const rawTx = params[0];
 		rawTx.nonce = await this.web3Service.getNextNonce(rawTx.from);
-		const gasStationInfo = await this.ethGasStationService.getInfo();
 		const tx = { ...rawTx };
 		tx.gas = EthUtils.hexToDecimal(tx.gas);
+		// TODO: Workaround for gasPrice, ideally we should not override gasPrice
+		const gasStationInfo = await this.ethGasStationService.getInfo();
 		tx.gasPrice = gasStationInfo.avarage;
 		if (tx.value) tx.value = EthUtils.hexToDecimal(tx.value);
 		this.focusWindow();
