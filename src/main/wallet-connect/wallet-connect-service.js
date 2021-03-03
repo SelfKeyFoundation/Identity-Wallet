@@ -133,7 +133,7 @@ export class WalletConnectService {
 		tx.gas = EthUtils.hexToDecimal(tx.gas);
 		// TODO: Workaround for gasPrice, ideally we should not override gasPrice
 		const gasStationInfo = await this.ethGasStationService.getInfo();
-		tx.gasPrice = gasStationInfo.avarage;
+		tx.gasPrice = gasStationInfo.average;
 		if (tx.value) tx.value = EthUtils.hexToDecimal(tx.value);
 		this.focusWindow();
 		this.store.dispatch(
