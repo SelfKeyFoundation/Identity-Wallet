@@ -16,11 +16,13 @@ export const dataEndpoints = {
 	incorporations: `${config.airtableBaseUrl}Incorporations${isDevMode() ? 'Dev' : ''}`,
 	banking: `${config.airtableBaseUrl}Banking${isDevMode() ? 'Dev' : ''}`,
 	notaries: `${config.airtableBaseUrl}Notaries${isDevMode() ? 'Dev' : ''}`,
-	loans: `${config.airtableBaseUrl}Loans${isDevMode() ? 'Dev' : ''}`
+	loans: `${config.airtableBaseUrl}Loans${isDevMode() ? 'Dev' : ''}`,
+	passports: `${config.airtableBaseUrl}Passports${isDevMode() ? 'Dev' : ''}`
 };
 
 export const FT_INCORPORATIONS_ENDPOINT = config.incorporationApiUrl;
 export const FT_BANKING_ENDPOINT = config.bankAccountsApiUrl;
+export const FT_PASSPORTS_ENDPOINT = config.passportsApiUrl;
 
 export class InventoryService {
 	constructor() {
@@ -36,6 +38,7 @@ export class InventoryService {
 		this.addFetcher(new SelfkeyInventoryFetcher());
 		this.addFetcher(new FlagtheoryIncorporationsInventoryFetcher());
 		this.addFetcher(new FlagtheoryBankingInventoryFetcher());
+		this.addFetcher(new FlagtheoryPassportsInventoryFetcher());
 	}
 	addFetcher(fetcher) {
 		this.fetchers[fetcher.getName()] = fetcher;
@@ -249,6 +252,44 @@ export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
 
 					return itm;
 				});
+			return items;
+		} catch (error) {
+			log.error(error);
+			throw error;
+		}
+	}
+}
+
+export class FlagtheoryPassportsInventoryFetcher extends InventoryFetcher {
+	constructor() {
+		super('flagtheory_passports');
+	}
+	async fetch() {
+		try {
+			let fetched = await request.get({ url: FT_PASSPORTS_ENDPOINT, json: true });
+			let items = fetched.Data.map(itm => {
+				const data = _.mapKeys(itm.data.fields, (value, key) => _.camelCase(key));
+				data.countryCode = ('' + data.countryCode || null).trim();
+				data.programCode = ('' + data.programCode || null).trim();
+				const sku = `FT-PASS-${data.programCode}`;
+				let name = `${data.programName} in ${data.country}`;
+				return {
+					sku,
+					name,
+					status: data.templateId && data.showInWallet ? 'active' : 'inactive',
+					price:
+						data.activeTestPrice && data.testPrice
+							? data.testPrice
+							: data.walletPrice || null,
+					priceCurrency: 'USD',
+					category: 'passports',
+					vendorId: 'flagtheory_passports',
+					entityType: 'individual',
+					data: {
+						...data
+					}
+				};
+			});
 			return items;
 		} catch (error) {
 			log.error(error);
