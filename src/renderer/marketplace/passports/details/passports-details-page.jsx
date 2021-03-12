@@ -1,0 +1,198 @@
+import React from 'react';
+import { withStyles } from '@material-ui/styles';
+import { Grid, Button, Typography } from '@material-ui/core';
+import { ApplicationStatusBar } from '../../../kyc/application/application-status';
+import { CertificateIcon, BackButton } from 'selfkey-ui';
+// import { FlagCountryName, ResumeBox, ProgramPrice, MarketplaceKycRequirements } from '../../common';
+import { FlagCountryName, ProgramPrice, MarketplaceKycRequirements } from '../../common';
+import { PassportsDetailsTabs } from './passports-details-tabs';
+
+const styles = theme => ({
+	container: {
+		width: '100%',
+		margin: '50px auto 0',
+		maxWidth: '960px'
+	},
+	title: {
+		padding: '22px 30px',
+		background: '#2A3540',
+		'& div': {
+			display: 'inline-block',
+			color: '#FFF'
+		},
+		'& .region': {
+			marginLeft: '1em',
+			marginTop: '0.25em',
+			marginBottom: '0',
+			fontSize: '24px'
+		}
+	},
+	contentContainer: {
+		border: '1px solid #303C49',
+		borderRadius: '4px'
+	},
+	content: {
+		background: '#262F39',
+		padding: '45px 30px 50px',
+		width: '100%',
+		justifyContent: 'space-between',
+		boxSizing: 'border-box',
+		margin: 0
+	},
+	applyButton: {
+		maxWidth: '270px',
+		textAlign: 'right',
+		'& button': {
+			width: '100%',
+			marginBottom: '1em'
+		},
+		'& div.price': {
+			fontFamily: 'Lato, arial, sans-serif',
+			fontSize: '16px',
+			fontWeight: 'bold',
+			color: '#00C0D9'
+		},
+		'& span.price-key': {
+			color: '#93B0C1',
+			fontFamily: 'Lato, arial, sans-serif',
+			fontSize: '12px',
+			display: 'block',
+			fontWeight: 'normal',
+			marginTop: '5px'
+		}
+	},
+	contentHeader: {
+		marginBottom: '40px'
+	},
+	barStyle: {
+		padding: '25px 30px 0'
+	}
+});
+
+const buttonStyles = theme => ({
+	certificateIcon: {
+		marginRight: '18px'
+	}
+});
+
+export const PassportsApplicationButton = withStyles(buttonStyles)(
+	({ classes, canApply, startApplication, loading }) => (
+		<React.Fragment>
+			{canApply && !loading && (
+				<Button variant="contained" size="large" onClick={startApplication}>
+					<CertificateIcon className={classes.certificateIcon} />
+					Apply Now
+				</Button>
+			)}
+
+			{canApply && loading && (
+				<Button variant="contained" size="large" disabled>
+					Loading ...
+				</Button>
+			)}
+		</React.Fragment>
+	)
+);
+
+export const PassportsDetailsPage = withStyles(styles)(props => {
+	const {
+		classes,
+		applicationStatus,
+		countryCode,
+		contact,
+		program,
+		onStatusAction,
+		onBack,
+		loading,
+		canApply,
+		startApplication,
+		keyRate,
+		price,
+		tab,
+		kycRequirements,
+		templateId,
+		onTabChange
+	} = props;
+	return (
+		<Grid container>
+			<Grid item>
+				<BackButton onclick={onBack} />
+			</Grid>
+			<Grid item className={classes.container}>
+				<Grid
+					id="passportsDetails"
+					container
+					justify="flex-start"
+					alignItems="flex-start"
+					className={classes.title}
+				>
+					<div>
+						<FlagCountryName code={countryCode} />
+					</div>
+					<Typography variant="body2" gutterBottom className="region">
+						{program.data.country} - {program.data.description.programName}
+					</Typography>
+				</Grid>
+				<Grid container className={classes.contentContainer}>
+					<ApplicationStatusBar
+						status={applicationStatus}
+						contact={contact}
+						statusAction={onStatusAction}
+						loading={loading}
+						barStyle={classes.barStyle}
+					/>
+					<Grid
+						container
+						direction="column"
+						justify="flex-start"
+						alignItems="stretch"
+						spacing={5}
+						className={classes.content}
+					>
+						<Grid
+							container
+							direction="row"
+							justify="space-between"
+							alignItems="flex-start"
+							className={classes.contentHeader}
+						>
+							<Grid item>
+								<Typography variant="body1" gutterBottom className="region">
+									{program.data.description.programName}
+								</Typography>
+								<Typography variant="body2" gutterBottom className="region">
+									{program.data.description.programIntroduction}
+								</Typography>
+							</Grid>
+							<Grid item className={classes.applyButton}>
+								<PassportsApplicationButton
+									canApply={canApply}
+									price={price}
+									loading={loading}
+									startApplication={startApplication}
+									keyRate={keyRate}
+								/>
+								<ProgramPrice
+									id="fees"
+									price={price}
+									rate={keyRate}
+									label="Pricing: $"
+								/>
+							</Grid>
+						</Grid>
+						<PassportsDetailsTabs {...props} tab={tab} onTabChange={onTabChange} />
+
+						<MarketplaceKycRequirements
+							requirements={kycRequirements}
+							loading={loading}
+							templateId={templateId}
+							title="KYC Requirements and Forms"
+						/>
+					</Grid>
+				</Grid>
+			</Grid>
+		</Grid>
+	);
+});
+
+export default PassportsDetailsPage;

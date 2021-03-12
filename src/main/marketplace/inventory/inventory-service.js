@@ -267,29 +267,38 @@ export class FlagtheoryPassportsInventoryFetcher extends InventoryFetcher {
 	async fetch() {
 		try {
 			let fetched = await request.get({ url: FT_PASSPORTS_ENDPOINT, json: true });
-			let items = fetched.Data.map(itm => {
-				const data = _.mapKeys(itm.data.fields, (value, key) => _.camelCase(key));
-				data.countryCode = ('' + data.countryCode || null).trim();
-				data.programCode = ('' + data.programCode || null).trim();
-				const sku = `FT-PASS-${data.programCode}`;
-				let name = `${data.programName} in ${data.country}`;
-				return {
-					sku,
-					name,
-					status: data.templateId && data.showInWallet ? 'active' : 'inactive',
-					price:
-						data.activeTestPrice && data.testPrice
-							? data.testPrice
-							: data.walletPrice || null,
-					priceCurrency: 'USD',
-					category: 'passports',
-					vendorId: 'flagtheory_passports',
-					entityType: 'individual',
-					data: {
-						...data
-					}
-				};
-			});
+			const mapData = field => (acc, curr) => {
+				const details = _.mapKeys(curr.data.fields, (value, key) => _.camelCase(key));
+				return { ...acc, [details[field]]: details };
+			};
+			const programDescription = fetched.EN.reduce(mapData('programCode'), {});
+			const items = fetched.Data.map(itm =>
+				_.mapKeys(itm.data.fields, (value, key) => _.camelCase(key))
+			)
+				.filter(itm => itm.programCode && itm.countryCode)
+				.map(itm => {
+					itm.countryCode = ('' + itm.countryCode || null).trim();
+					itm.programCode = ('' + itm.programCode || null).trim();
+					const sku = `FT-PASS-${itm.programCode}`;
+					let name = `${itm.programName} in ${itm.country}`;
+					return {
+						sku,
+						name,
+						status: itm.templateId && itm.showInWallet ? 'active' : 'inactive',
+						price:
+							itm.activeTestPrice && itm.testPrice
+								? itm.testPrice
+								: itm.walletPrice || null,
+						priceCurrency: 'USD',
+						category: 'passports',
+						vendorId: 'flagtheory_passports',
+						entityType: 'individual',
+						data: {
+							...itm,
+							description: programDescription[itm.programCode] || {}
+						}
+					};
+				});
 			return items;
 		} catch (error) {
 			log.error(error);
