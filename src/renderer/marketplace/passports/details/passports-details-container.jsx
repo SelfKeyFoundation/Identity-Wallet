@@ -15,7 +15,7 @@ const styles = theme => ({});
 
 class PassportsDetailsContainerComponent extends MarketplacePassportsComponent {
 	state = {
-		tab: 'whatyouget',
+		tab: 'description',
 		loading: false
 	};
 
@@ -29,7 +29,56 @@ class PassportsDetailsContainerComponent extends MarketplacePassportsComponent {
 	onTabChange = tab => this.setState({ tab });
 
 	buildResumeData = data => {
-		return [];
+		return [
+			[
+				{
+					name: 'Dual Citizenship',
+					value: data.dualCitizenship ? data.dualCitizenship : 'No',
+					highlighted: true
+				},
+				{
+					name: 'Personal Visit',
+					value: data.personalVisitRequired ? data.personalVisitRequired : 'No',
+					highlighted: true
+				}
+			],
+			[
+				{
+					name: 'Interview Required',
+					value: data.interviewRequired ? data.interviewRequired : 'No',
+					highlighted: true
+				},
+				{
+					name: 'Visa Free Countrys',
+					value: data.visaFree,
+					highlighted: true
+				}
+			],
+			[
+				{
+					name: 'Min Income',
+					value: data.minimumAnnualIncome,
+					highlighted: true
+				},
+				{
+					name: 'Years to Citizenship',
+					value: data.timeToCitizenship,
+					highlighted: true
+				}
+			],
+			[
+				{
+					name: 'Investment Single',
+					value: data.investmentAmountSingleApplicant,
+					highlighted: true
+				},
+				{
+					name: 'Investment Family',
+					value: data.investmentAmount4MemberFamily,
+					highlighted: true
+				}
+			]
+		];
 	};
 
 	// Status bar component allows for an action button on the right

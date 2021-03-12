@@ -3,8 +3,7 @@ import { withStyles } from '@material-ui/styles';
 import { Grid, Button, Typography } from '@material-ui/core';
 import { ApplicationStatusBar } from '../../../kyc/application/application-status';
 import { CertificateIcon, BackButton } from 'selfkey-ui';
-// import { FlagCountryName, ResumeBox, ProgramPrice, MarketplaceKycRequirements } from '../../common';
-import { FlagCountryName, ProgramPrice, MarketplaceKycRequirements } from '../../common';
+import { FlagCountryName, ResumeBox, ProgramPrice, MarketplaceKycRequirements } from '../../common';
 import { PassportsDetailsTabs } from './passports-details-tabs';
 
 const styles = theme => ({
@@ -102,6 +101,7 @@ export const PassportsDetailsPage = withStyles(styles)(props => {
 		contact,
 		program,
 		onStatusAction,
+		resume,
 		onBack,
 		loading,
 		canApply,
@@ -157,12 +157,7 @@ export const PassportsDetailsPage = withStyles(styles)(props => {
 							className={classes.contentHeader}
 						>
 							<Grid item>
-								<Typography variant="body1" gutterBottom className="region">
-									{program.data.description.programName}
-								</Typography>
-								<Typography variant="body2" gutterBottom className="region">
-									{program.data.description.programIntroduction}
-								</Typography>
+								<ResumeBox itemSets={resume} />
 							</Grid>
 							<Grid item className={classes.applyButton}>
 								<PassportsApplicationButton

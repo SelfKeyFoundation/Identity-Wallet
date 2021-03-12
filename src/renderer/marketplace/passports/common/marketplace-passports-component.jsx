@@ -3,6 +3,8 @@ import { MarketplaceComponent } from '../../common/marketplace-component';
 const MARKETPLACE_PASSPORTS_ROOT_PATH = '/main/marketplace/passports';
 
 export default class MarketplacePassportsComponent extends MarketplaceComponent {
+	rootPath = () => MARKETPLACE_PASSPORTS_ROOT_PATH;
+
 	processStartedRoute = () => {
 		const { programCode, countryCode, templateId, vendorId } = this.props.match.params;
 		return `${MARKETPLACE_PASSPORTS_ROOT_PATH}/process-started/${programCode}/${countryCode}/${templateId}/${vendorId}`;
