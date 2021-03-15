@@ -54,12 +54,16 @@ const PassportsDescriptionTab = withStyles(styles)(({ classes, program }) => (
 				__html: sanitize(program.data.description.investmentDescription)
 			}}
 		/>
-		<h1>Restricted Nationalities</h1>
-		<ul>
-			{program.data.restrictedNationalities.map(n => (
-				<li key={n}>{n}</li>
-			))}
-		</ul>
+		{program.data.restrictedNationalities && (
+			<>
+				<h1>Restricted Nationalities</h1>
+				<ul>
+					{program.data.restrictedNationalities.map(n => (
+						<li key={n}>{n}</li>
+					))}
+				</ul>
+			</>
+		)}
 	</div>
 ));
 

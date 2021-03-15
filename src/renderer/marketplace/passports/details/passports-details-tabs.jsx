@@ -21,7 +21,7 @@ export const PassportsDetailsTabs = withStyles(styles)(
 					<Tab id="proceduresButton" value="procedures" label="Procedures" />
 					<Tab id="benefitsButton" value="benefits" label="Benefits" />
 					<Tab id="countryButton" value="country" label="Country Details" />
-					<Tab id="visaFreeButton" value="visaFree" label="Visa Free" />
+					{/* <Tab id="visaFreeButton" value="visaFree" label="Visa Free" /> */}
 					<Tab id="taxesButton" value="taxes" label="Taxes" />
 				</Tabs>
 				{tab === 'whatyouget' && <WhatYouGetTab id="whatyouget" {...tabProps} />}

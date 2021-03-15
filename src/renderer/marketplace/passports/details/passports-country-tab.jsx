@@ -7,7 +7,7 @@ import { primary } from 'selfkey-ui';
 
 const styles = theme => ({
 	countryName: {
-		textAlign: 'center',
+		textAlign: 'left',
 		marginBottom: '2em'
 	},
 	details: {
@@ -55,7 +55,7 @@ const styles = theme => ({
 		'& ul': {
 			listStyle: 'outside',
 			lineHeight: '1.4em',
-			marginLeft: '1.5em',
+			marginLeft: '0',
 			marginBottom: '1.5em'
 		},
 		'& ul li': {
@@ -138,13 +138,9 @@ const PassportsCountryTab = withStyles(styles)(({ classes, country, program }) =
 				</Grid>
 				{program && (
 					<div className={classes.countryInfo}>
-						<div
+						<p
 							dangerouslySetInnerHTML={{
-								__html: sanitize(
-									program.data.en
-										? program.data.en.countryDetails
-										: program.data.countryDescription
-								)
+								__html: sanitize(program.data.description.countryDetails)
 							}}
 						/>
 					</div>

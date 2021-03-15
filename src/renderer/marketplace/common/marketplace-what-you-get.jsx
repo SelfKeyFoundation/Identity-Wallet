@@ -70,7 +70,7 @@ const WhatYouGet = withStyles(styles)(({ classes, description, timeToForm, whatY
 					}}
 				/>
 				<div className={classes.descriptionHelp}>
-					<p>Time to form: {timeToForm} week(s).</p>
+					{timeToForm && <p>Time to form: {timeToForm} week(s).</p>}
 					<p>{whatYouGet}</p>
 				</div>
 			</Grid>

@@ -9,7 +9,6 @@ import { pricesSelectors } from 'common/prices';
 import { marketplaceSelectors } from 'common/marketplace';
 import { ordersOperations } from 'common/marketplace/orders';
 import { MarketplacePassportsComponent } from '../common/marketplace-passports-component';
-import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
 
@@ -24,20 +23,20 @@ class PassportsPaymentContainerComponent extends MarketplacePassportsComponent {
 	};
 
 	async createOrder() {
-		const { jurisdiction, accountCode, vendorId, vendor } = this.props;
+		const { program, programCode, vendorId, vendor } = this.props;
 		const application = this.getLastApplication();
-		const price = this.priceInKEY(jurisdiction.price);
-		const walletAddress = jurisdiction.walletAddress;
-		const vendorDID = jurisdiction.didAddress;
+		const price = this.priceInKEY(program.price);
+		const walletAddress = program.walletAddress;
+		const vendorDID = program.didAddress;
 		const vendorName = vendor.name;
 
 		this.props.dispatch(
 			ordersOperations.startOrderOperation({
-				productInfo: `Passport/Residency application for ${jurisdiction.data.region}`,
+				productInfo: `Passport/Residency application for ${program.data.country}`,
 				applicationId: application.id,
 				amount: price,
 				vendorId,
-				itemId: accountCode,
+				itemId: programCode,
 				vendorDID,
 				vendorName,
 				backUrl: this.cancelRoute(),
@@ -55,19 +54,18 @@ class PassportsPaymentContainerComponent extends MarketplacePassportsComponent {
 }
 
 const mapStateToProps = (state, props) => {
-	const { accountCode, templateId, vendorId } = props.match.params;
+	const { programCode, templateId, vendorId } = props.match.params;
 	const authenticated = true;
-	const identity = identitySelectors.selectIdentity(state);
+	const program = marketplaceSelectors.selectPassportsByFilter(
+		state,
+		c => c.data.programCode === programCode
+	);
 	return {
-		accountCode,
+		programCode,
 		templateId,
 		vendorId,
 		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
-		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(
-			state,
-			accountCode,
-			identity.type
-		),
+		program,
 		address: getWallet(state).address,
 		keyRate: pricesSelectors.getRate(state, 'KEY', 'USD'),
 		currentApplication: kycSelectors.selectCurrentApplication(state),

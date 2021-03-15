@@ -20,7 +20,7 @@ class PassportsProcessStartedContainerComponent extends PureComponent {
 		const body = (
 			<React.Fragment>
 				<Typography variant="h1" className="title">
-					Bank Account Process Started
+					Passport/Residency Application Process Started
 				</Typography>
 				<Typography variant="body1" gutterBottom>
 					Thank you for payment!

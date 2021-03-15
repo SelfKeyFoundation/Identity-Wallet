@@ -25,10 +25,8 @@ class PassportsListContainerComponent extends MarketplacePassportsComponent {
 	onTypeChange = type => this.setState({ type });
 
 	onDetailsClick = program => {
-		console.log(program);
 		const { programCode, countryCode } = program.data;
 		const { templateId, vendorId } = program;
-		console.log({ programCode, countryCode, templateId, vendorId });
 		this.props.dispatch(
 			push(this.detailsRoute({ programCode, countryCode, templateId, vendorId }))
 		);
@@ -38,16 +36,8 @@ class PassportsListContainerComponent extends MarketplacePassportsComponent {
 		const { isLoading, keyRate, vendors, inventory } = this.props;
 		let { type } = this.state;
 
-		const passports = inventory.filter(
-			bank =>
-				bank.data.programTypeResidencyVsCitizenshipOnly &&
-				bank.data.programTypeResidencyVsCitizenshipOnly.includes('Citizenship')
-		);
-		const residencies = inventory.filter(
-			bank =>
-				bank.data.programTypeResidencyVsCitizenshipOnly &&
-				!bank.data.programTypeResidencyVsCitizenshipOnly.includes('Citizenship')
-		);
+		const passports = inventory.filter(p => p.data.showInPassportApp);
+		const residencies = inventory.filter(p => p.data.showInResidencyApp);
 
 		return (
 			<PassportsListPage

@@ -68,7 +68,7 @@ const styles = theme => ({
 		paddingBottom: '15px',
 		whiteSpace: 'normal',
 		lineHeight: '19px',
-		maxWidth: '245px'
+		maxWidth: '200px'
 	},
 	flagCell: {
 		width: '10px'
@@ -96,6 +96,13 @@ const styles = theme => ({
 		padding: '20px',
 		whiteSpace: 'normal'
 	},
+	programCell: {
+		'& h6': {
+			fontSize: '14px',
+			color: '#EEE'
+		},
+		width: '200px'
+	},
 	minDepositCell: {
 		width: '85px'
 	},
@@ -122,8 +129,8 @@ const ProgramRow = withStyles(styles)(({ classes, program, onDetails, keyRate })
 			<TableCell className={classes.regionCell}>
 				<Typography variant="h6">{data.country}</Typography>
 			</TableCell>
-			<TableCell>
-				<Typography variant="h6">{'hh'}</Typography>
+			<TableCell className={classes.programCell}>
+				<Typography variant="h6">{data.programName}</Typography>
 			</TableCell>
 			<TagTableCell className={classes.goodForCell}>
 				<Grid container>
@@ -133,12 +140,7 @@ const ProgramRow = withStyles(styles)(({ classes, program, onDetails, keyRate })
 						))}
 				</Grid>
 			</TagTableCell>
-			<TagTableCell className={classes.goodForCell}>
-				<Grid container>
-					{data.visaFreeRelevantCountries &&
-						data.visaFreeRelevantCountries.map(tag => <Tag key={tag}>{tag}</Tag>)}
-				</Grid>
-			</TagTableCell>
+			<TagTableCell className={classes.goodForCell}>{data.visaFree}</TagTableCell>
 			<TableCell>
 				<Typography variant="h6">{data.investmentAmountSingleApplicant}</Typography>
 			</TableCell>
@@ -165,7 +167,7 @@ const PassportsListTable = withStyles(styles)(
 						<TableCell className={classes.regionCell}>
 							<Typography variant="overline">Country</Typography>
 						</TableCell>
-						<TableCell className={classes.eligibilityCell}>
+						<TableCell className={classes.goodForCell}>
 							<Typography variant="overline">Program</Typography>
 						</TableCell>
 						<TableCell className={classes.minDepositCell}>

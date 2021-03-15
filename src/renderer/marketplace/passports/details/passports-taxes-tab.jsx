@@ -39,64 +39,18 @@ const styles = theme => ({
 
 const TAX_COLUMNS = [
 	[
-		{
-			id: 'offshoreIncomeTaxExemption',
-			label: 'Offshore Income Tax Exemption',
-			boolean: true
-		},
-		{
-			id: 'offshoreCapitalGainsTaxExemption',
-			label: 'Offshore capital gains tax exemption',
-			boolean: true
-		},
-		{
-			id: 'offshoreDividendsTaxExemption',
-			label: 'Offshore dividends tax exemption',
-			boolean: true
-		},
-		{ id: 'cfcRules', label: 'CFC Rules', boolean: true },
-		{ id: 'thinCapitalisationRules', label: 'Thin Capitalisation Rules', boolean: true },
-		{ id: 'patentBox', label: 'Patent Box', boolean: true },
-		{ id: 'taxIncentivesCredits', label: 'Tax Incentives & Credits', boolean: true },
 		{ id: 'propertyTax', label: 'Property Tax', boolean: true },
-		{ id: 'wealthTax', label: 'Wealth Tax', boolean: true },
-		{ id: 'EstateInheritanceTax', label: 'Estate inheritance tax', boolean: true },
-		{ id: 'transferTax', label: 'Transfer tax', boolean: true },
-		{ id: 'capitalDuties', label: 'Capital Duties', boolean: true }
+		{ id: 'transferTax', label: 'Transfer Tax', boolean: true },
+		{ id: 'inheritanceTax', label: 'Inheritance Tax', boolean: true },
+		{ id: 'netWorthTax', label: 'Net Worth Tax', boolean: true },
+		{ id: 'cfcRules', label: 'CFC Law', boolean: true }
 	],
 	[
-		{ id: 'offshoreIncomeTaxRate', label: 'Offshore Income Tax Rate', boolean: false },
-
-		{ id: 'corporateTaxRate', label: 'Corporate Tax Rate', boolean: false },
-		{ id: 'capitalGainsTaxRate', label: 'Capital Gains Tax Rate', boolean: false },
-		{ id: 'dividendsReceived', label: 'Dividends Received', boolean: false },
-		{
-			id: 'dividendsWithholdingTaxRate',
-			label: 'Dividends Withholding Tax Rate',
-			boolean: false
-		},
-		{
-			id: 'interestsWithholdingTaxRate',
-			label: 'Interests Withholding Tax Rate',
-			boolean: false
-		},
-		{
-			id: 'royaltiesWithholdingTaxRate',
-			label: 'Royalties Withholding Tax Rate',
-			boolean: false
-		},
-		{ id: 'lossesCarrybackYears', label: 'Losses carryback (years)', boolean: false },
-		{ id: 'lossesCarryforwardYears', label: 'Losses carryforward (years)', boolean: false }
-	],
-	[
-		{ id: 'personalIncomeTaxRate', label: 'Personal Income Tax Rate', boolean: false },
-		{ id: 'vatRate', label: 'VAT Rate', boolean: false },
-		{ id: 'inventoryMethodsPermitted', label: 'Inventory methods permitted', boolean: false },
-		{ id: 'taxTimeHours', label: 'Tax time (hours)', boolean: false },
-		{ id: 'taxPaymentsPerYear', label: 'Tax payments per year', boolean: false },
-		{ id: 'totalTaxRate', label: 'Total Corporation Tax Burden', boolean: false },
-		{ id: 'socialSecurityEmployee', label: 'Social Security Employee', boolean: false },
-		{ id: 'socialSecurityEmployer', label: 'Social Security Employer', boolean: false }
+		{ id: 'taxResidency', label: 'Tax Residency Days', boolean: false },
+		{ id: 'pitRate', label: 'Personal Income tax rate', boolean: false },
+		{ id: 'capitalGainsTaxRate', label: 'Capital Gains tax rate', boolean: false },
+		{ id: 'InvestmentIncomeTaxRate', label: 'Investment Income tax rate', boolean: false },
+		{ id: 'territorialTaxation', label: 'Territorial Taxation', boolean: true }
 	]
 ];
 

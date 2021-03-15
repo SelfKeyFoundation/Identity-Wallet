@@ -19,22 +19,22 @@ class PassportsPaymentCompleteContainerComponent extends MarketplacePassportsCom
 	}
 
 	async componentDidMount() {
-		const { order, jurisdiction, vendorId } = this.props;
+		const { order, program, vendorId } = this.props;
 
 		this.saveTransactionHash();
 		this.clearRelyingParty();
 
 		this.trackEcommerceTransaction({
 			transactionHash: order.paymentHash,
-			price: jurisdiction.price,
-			code: jurisdiction.data.accountCode,
-			jurisdiction: jurisdiction.data.region,
+			price: program.price,
+			code: program.data.programCode,
+			jurisdiction: program.data.country,
 			rpName: vendorId
 		});
 	}
 
 	saveTransactionHash = async () => {
-		const { order, transaction, jurisdiction, vendorId } = this.props;
+		const { order, transaction, program, vendorId } = this.props;
 		const application = this.getLastApplication();
 		const transactionHash = order ? order.paymentHash : transaction.transactionHash;
 		const amountKey = order ? order.amount : transaction.amount;
@@ -52,7 +52,7 @@ class PassportsPaymentCompleteContainerComponent extends MarketplacePassportsCom
 				kycOperations.updateApplicationsOperation({
 					id: application.id,
 					payments: {
-						amount: jurisdiction.price,
+						amount: program.price,
 						amountKey,
 						transactionHash,
 						date: Date.now(),
@@ -68,8 +68,7 @@ class PassportsPaymentCompleteContainerComponent extends MarketplacePassportsCom
 	};
 
 	getNextRoute = () => {
-		// INFO: should we check if bank is already selected ?
-		return this.selectBankRoute();
+		return this.processStartedRoute();
 	};
 
 	onBackClick = () => this.props.dispatch(push(this.cancelRoute()));
@@ -90,20 +89,20 @@ class PassportsPaymentCompleteContainerComponent extends MarketplacePassportsCom
 }
 
 const mapStateToProps = (state, props) => {
-	const { accountCode, vendorId, templateId, orderId } = props.match.params;
+	const { programCode, vendorId, templateId, orderId } = props.match.params;
 	const authenticated = true;
 	const identity = identitySelectors.selectIdentity(state);
+	const program = marketplaceSelectors.selectPassportsByFilter(
+		state,
+		c => c.data.programCode === programCode
+	);
 	return {
 		identity,
-		accountCode,
+		programCode,
 		templateId,
 		vendorId,
 		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
-		jurisdiction: marketplaceSelectors.selectBankJurisdictionByAccountCode(
-			state,
-			accountCode,
-			identity.type
-		),
+		program,
 		transaction: transactionSelectors.getTransaction(state),
 		address: getWallet(state).address,
 		currentApplication: kycSelectors.selectCurrentApplication(state),

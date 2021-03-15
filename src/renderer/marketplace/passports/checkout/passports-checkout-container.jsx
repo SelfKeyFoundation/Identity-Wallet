@@ -16,7 +16,6 @@ import { kycSelectors, kycOperations } from 'common/kyc';
 import { marketplaceSelectors } from 'common/marketplace';
 import { PaymentCheckout } from '../../common/payment-checkout';
 import { MarketplacePassportsComponent } from '../common/marketplace-passports-component';
-import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
 const CRYPTOCURRENCY = config.constants.primaryToken;
@@ -30,15 +29,15 @@ class PassportsCheckoutContainerComponent extends MarketplacePassportsComponent 
 	}
 
 	checkIfUserCanApply = async () => {
-		if (!this.canApply(this.props.jurisdiction.price)) {
+		if (!this.canApply(this.props.program.price)) {
 			this.props.dispatch(push(this.cancelRoute()));
 		}
 	};
 
 	getPaymentParameters() {
-		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency, jurisdiction } = this.props;
+		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency, program } = this.props;
 		const gasPrice = ethGasStationInfo.fast;
-		const price = jurisdiction.price;
+		const price = program.price;
 		const keyAmount = price / keyRate;
 		const gasLimit = FIXED_GAS_LIMIT_PRICE;
 		const ethFee = EthUnits.toEther(gasPrice * gasLimit, 'gwei');
@@ -61,10 +60,10 @@ class PassportsCheckoutContainerComponent extends MarketplacePassportsComponent 
 	keyAvailable = () => new BigNumber(this.props.cryptoValue);
 
 	onStartClick = async () => {
-		const { jurisdiction, templateId, vendorId, vendor } = this.props;
-		const { country } = jurisdiction.data;
+		const { program, templateId, vendorId, vendor } = this.props;
+		const { country } = program.data;
 
-		const keyPrice = this.priceInKEY(jurisdiction.price);
+		const keyPrice = this.priceInKEY(program.price);
 		const keyAvailable = this.keyAvailable();
 		const transactionNoKeyError = `/main/transaction-no-key-error/${keyPrice}`;
 
@@ -94,23 +93,24 @@ class PassportsCheckoutContainerComponent extends MarketplacePassportsComponent 
 	onBackClick = () => this.props.dispatch(push(this.cancelRoute()));
 
 	render() {
-		const { jurisdiction, countryCode } = this.props;
-		const { region, walletDescription, checkoutOptions } = jurisdiction.data;
+		const { program, countryCode } = this.props;
+		const { country, checkoutOptions, whatYouGet } = program.data;
+		const { price } = program;
 
 		return (
 			<PaymentCheckout
-				title={`Banking Application Fee: ${region}`}
-				description={walletDescription}
+				title={`Passport/Residency Application Fee: ${country}`}
+				description={`- Consulting Services for obtaining a Passport/Residency in ${country}`}
 				timeToForm={''}
-				program={jurisdiction}
+				program={program}
 				countryCode={countryCode}
 				{...this.getPaymentParameters()}
-				price={jurisdiction.price}
+				price={price}
 				options={checkoutOptions}
 				initialDocsText={`You will be required to provide a few basic information about yourself like full name and email. This will be done through SelfKey ID Wallet.`}
 				kycProcessText={`You will undergo a standard KYC process and our team will get in touch with you to make sure we have all the information needed.`}
-				getFinalDocsText={`Once the account opening process is done you will receive all the relevant documents, access codes in persion/via courier or on your email.`}
-				whatYouGet={jurisdiction.whatYouGet}
+				getFinalDocsText={`We will help you with the application and investment needed.`}
+				whatYouGet={whatYouGet}
 				onBackClick={this.onBackClick}
 				onStartClick={this.onStartClick}
 				startButtonText={'Start Application'}
@@ -120,20 +120,19 @@ class PassportsCheckoutContainerComponent extends MarketplacePassportsComponent 
 }
 
 const mapStateToProps = (state, props) => {
-	const { accountCode, vendorId, countryCode, templateId } = props.match.params;
+	const { programCode, vendorId, countryCode, templateId } = props.match.params;
 	const authenticated = true;
-	const identity = identitySelectors.selectIdentity(state);
 	const primaryToken = { ...props, cryptoCurrency: config.constants.primaryToken };
+	const program = marketplaceSelectors.selectPassportsByFilter(
+		state,
+		c => c.data.programCode === programCode
+	);
 	return {
 		countryCode,
 		templateId,
 		vendorId,
 		vendor: marketplaceSelectors.selectVendorById(state, vendorId),
-		jurisdiction: marketplaceSelectors.selectPassportProgramByCode(
-			state,
-			accountCode,
-			identity.type
-		),
+		program,
 		...getLocale(state),
 		...getFiatCurrency(state),
 		...ethGasStationInfoSelectors.getEthGasStationInfo(state),

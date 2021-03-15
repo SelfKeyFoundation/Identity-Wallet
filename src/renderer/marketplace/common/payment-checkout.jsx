@@ -134,27 +134,28 @@ const PaymentCheckout = withStyles(styles)(
 					</Typography>
 
 					<div className={classes.priceTable}>
-						{options.map(option => (
-							<div key={option.id} className={classes.priceRow}>
-								<Grid
-									container
-									direction="row"
-									justify="flex-start"
-									alignItems="center"
-									spacing={0}
-								>
-									<div className="rowItem">{option.description}</div>
-									<div className="rowItem time">{option.notes}</div>
-									<div className="rowItem price">
-										{option.price && (
-											<React.Fragment>
-												${option.price.toLocaleString()}
-											</React.Fragment>
-										)}
-									</div>
-								</Grid>
-							</div>
-						))}
+						{options &&
+							options.map(option => (
+								<div key={option.id} className={classes.priceRow}>
+									<Grid
+										container
+										direction="row"
+										justify="flex-start"
+										alignItems="center"
+										spacing={0}
+									>
+										<div className="rowItem">{option.description}</div>
+										<div className="rowItem time">{option.notes}</div>
+										<div className="rowItem price">
+											{option.price && (
+												<React.Fragment>
+													${option.price.toLocaleString()}
+												</React.Fragment>
+											)}
+										</div>
+									</Grid>
+								</div>
+							))}
 						<div className={classes.rowSeparator} />
 						<div className={classes.priceRow}>
 							<Grid

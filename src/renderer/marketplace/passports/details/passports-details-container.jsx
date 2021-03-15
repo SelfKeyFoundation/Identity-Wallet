@@ -49,7 +49,7 @@ class PassportsDetailsContainerComponent extends MarketplacePassportsComponent {
 					highlighted: true
 				},
 				{
-					name: 'Visa Free Countrys',
+					name: 'Visa Free Travel',
 					value: data.visaFree,
 					highlighted: true
 				}
@@ -132,8 +132,16 @@ class PassportsDetailsContainerComponent extends MarketplacePassportsComponent {
 	};
 
 	render() {
-		const { program, keyRate, kycRequirements, treaties, templateId, countryCode } = this.props;
-		const { price, country } = program;
+		const {
+			program,
+			keyRate,
+			kycRequirements,
+			treaties,
+			templateId,
+			countryCode,
+			country
+		} = this.props;
+		const { price } = program;
 		/*
 		const description = program.data.walletDescription
 			? program.data.walletDescription
@@ -141,8 +149,6 @@ class PassportsDetailsContainerComponent extends MarketplacePassportsComponent {
 		*/
 		const description = '';
 
-		console.log(price);
-		console.log(program);
 		return (
 			<PassportsDetailsPage
 				applicationStatus={this.getApplicationStatus()}
@@ -188,8 +194,6 @@ const mapStateToProps = (state, props) => {
 		state,
 		c => c.data.programCode === programCode
 	);
-	console.log(programCode);
-	console.log(program);
 	return {
 		programCode,
 		countryCode,
