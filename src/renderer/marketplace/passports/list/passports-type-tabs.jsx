@@ -23,7 +23,10 @@ const PassportsTypeTabs = withStyles(styles)(({ classes, type, onTypeChange }) =
 					color="secondary"
 					className={classes.tabContent}
 				>
-					Passport description
+					Apply and get approved for Citizenship in the following countries through
+					investment programs. Invest a standard amount according to the country’s
+					policies and pay a standard fee for the service. Pay the service fee in KEY
+					tokens.
 				</Typography>
 			)}
 			{type === 'residency' && (
@@ -33,7 +36,9 @@ const PassportsTypeTabs = withStyles(styles)(({ classes, type, onTypeChange }) =
 					color="secondary"
 					className={classes.tabContent}
 				>
-					Residency description
+					Apply and get approved for permanent or temporary residence in the following
+					countries. Invest a standard amount according to the country’s policies and pay
+					a standard fee for the service. Pay the service fee in KEY tokens
 				</Typography>
 			)}
 		</React.Fragment>
