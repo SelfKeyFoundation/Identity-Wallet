@@ -28,7 +28,7 @@ export default [
 		description:
 			'Build your life internationally by getting a second residency, which opens a myriad of opportunities that will let you grow both personally and professionally.',
 		entityType: 'individual',
-		active: false,
+		active: true,
 		svgIcon: 'https://dl.airtable.com/U6ZlerC2SLWaly8rRk3Q_icon-exchange-passports.svg.png'
 	},
 	{

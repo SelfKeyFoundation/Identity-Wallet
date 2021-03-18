@@ -39,6 +39,10 @@ const INCORPORATION_TREATIES_URL = process.env.INCORPORATION_TREATIES_URL;
 const BANKACCOUNTS_TEMPLATE_OVERRIDE = process.env.BANKACCOUNTS_TEMPLATE_OVERRIDE;
 const BANKACCOUNTS_PRICE_OVERRIDE = process.env.BANKACCOUNTS_PRICE_OVERRIDE;
 const BANKACCOUNTS_API_URL = process.env.BANKACCOUNTS_API_URL;
+// Passports ENV variables
+const PASSPORTS_TEMPLATE_OVERRIDE = process.env.PASSPORTS_TEMPLATE_OVERRIDE;
+const PASSPORTS_PRICE_OVERRIDE = process.env.PASSPORTS_PRICE_OVERRIDE;
+const PASSPORTS_API_URL = process.env.PASSPORTS_API_URL;
 
 const COUNTRY_INFO_URL = process.env.COUNTRY_INFO_URL;
 const ALL_COUNTRIES_INFO_URL = process.env.ALL_COUNTRIES_INFO_URL;
@@ -74,6 +78,9 @@ const common = {
 	bankAccountsPriceOverride: BANKACCOUNTS_PRICE_OVERRIDE,
 	bankAccountsTemplateOverride: BANKACCOUNTS_TEMPLATE_OVERRIDE,
 	bankAccountsApiUrl: BANKACCOUNTS_API_URL || 'https://api.bankaccounts.io/api/bank-accounts',
+	passportsPriceOverride: PASSPORTS_PRICE_OVERRIDE,
+	passportsTemplateOverride: PASSPORTS_TEMPLATE_OVERRIDE,
+	passportsApiUrl: PASSPORTS_API_URL || 'https://passports.io/api/passports',
 	depositPriceOverride: DEPOSIT_PRICE_OVERRIDE,
 
 	relyingPartyInfo: {

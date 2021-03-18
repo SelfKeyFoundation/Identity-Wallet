@@ -269,7 +269,6 @@ export class MoonPayService {
 					return acc;
 				}
 				if (fieldType.field === 'proof_of_address') {
-					console.log(value);
 					acc.documents.push(
 						getImage(value.images[0], attribute.documents, fieldType.field)
 					);
