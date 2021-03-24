@@ -12,7 +12,7 @@ import MarketplaceNotariesComponent from '../common/marketplace-notaries-compone
 import RequestNotarizationPage from './request-notarization-page';
 import { CreateAttributeContainer } from '../../../attributes';
 
-const FIXED_GAS_LIMIT_PRICE = 450000;
+const FIXED_GAS_LIMIT_PRICE = 45000;
 
 const styles = theme => ({});
 
