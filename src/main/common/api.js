@@ -10,16 +10,37 @@ export class Api {
 
 	async request(opt) {
 		let { url, method } = validate(opt, ['url', 'method']);
-		let { headers = {}, qs = {}, body, formData, json = true } = opt;
+		let {
+			headers = {},
+			qs = {},
+			body,
+			formData,
+			json = true,
+			simple = true,
+			resolveWithFullResponse = false
+		} = opt;
 
 		qs = { ...this.opt.qs, ...qs };
 		headers = { ...this.opt.headers, ...headers };
+
+		for (let key in headers) {
+			if (headers[key] === null) {
+				delete headers[key];
+			}
+		}
+
+		for (let key in qs) {
+			if (qs[key] === null) {
+				delete qs[key];
+			}
+		}
+
 		if (!url.startsWith('https://') && !url.startsWith('http://')) {
 			url = urljoin(this.opt.endpoint, url);
 		}
 		method = method.toUpperCase();
 
-		const rpOpt = { url, method, json, headers, qs };
+		const rpOpt = { url, method, json, headers, qs, simple, resolveWithFullResponse };
 
 		if (body) {
 			rpOpt.body = body;

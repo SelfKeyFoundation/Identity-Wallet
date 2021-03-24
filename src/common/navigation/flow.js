@@ -93,7 +93,6 @@ const navigateCompleteOperation = ops => opt => async (dispatch, getState) => {
 		}
 		return;
 	}
-
 	let { complete } = flow;
 	await dispatch(ops.completeFlow());
 	await dispatch(push(complete));
@@ -111,6 +110,17 @@ const startFlowOperation = ops => (opt = {}) => async (dispatch, getState) => {
 };
 
 const navigateToStepOperation = ops => (opt = {}) => async (dispatch, getState) => {
+	try {
+		await dispatch(ops.setStep(opt));
+		if (opt.current) {
+			await dispatch(push(opt.current));
+		}
+	} catch (error) {
+		log.error(error);
+	}
+};
+
+const navigateContinueOperation = ops => (opt = {}) => async (dispatch, getState) => {
 	try {
 		await dispatch(ops.setStep(opt));
 		if (opt.current) {
@@ -168,7 +178,8 @@ export const createSlice = (state = initialState) => {
 			navigateCancelOperation,
 			navigateCompleteOperation,
 			startFlowOperation,
-			navigateToStepOperation
+			navigateToStepOperation,
+			navigateContinueOperation
 		}
 	});
 };

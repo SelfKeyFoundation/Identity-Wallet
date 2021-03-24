@@ -1,7 +1,7 @@
 {
 	"name": "selfkey-identity-wallet",
 	"productName": "SelfKey Identity Wallet",
-	"version": "1.9.1",
+	"version": "1.9.2",
 	"description": "The Official SelfKey Identity Wallet for Desktop",
 	"browser": [
 		"chrome"
@@ -120,6 +120,7 @@
 		"normalizr": "3.6.0",
 		"objection": "1.6.8",
 		"parameter-validator": "1.0.5",
+		"payment-icons": "^1.2.1",
 		"prop-types": "15.7.2",
 		"qrcode-generator": "1.4.3",
 		"qrcode.react": "1.0.0",

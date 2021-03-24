@@ -63,7 +63,6 @@ class MarketplaceComponent extends PureComponent {
 				break;
 			}
 		}
-
 		return application;
 	};
 

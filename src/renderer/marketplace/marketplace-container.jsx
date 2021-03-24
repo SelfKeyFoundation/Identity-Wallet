@@ -15,7 +15,8 @@ import {
 	MarketplaceOrdersPage,
 	MarketplaceNotariesPage,
 	MarketplaceLoansPage,
-	MarketplaceKeyFi
+	MarketplaceKeyFi,
+	MarketplacePassports
 } from '../marketplace';
 import { MarketplaceCorporatePreviewContainer } from './corporate-preview-container';
 import { inventorySelectors } from '../../common/marketplace/inventory/index';
@@ -56,31 +57,43 @@ class MarketplaceContainerComponent extends PureComponent {
 					path={`${match.path}`}
 					component={MarketplaceCategoriesContainer}
 				/>
+
 				<Route
 					path={`${match.path}/categories`}
 					component={MarketplaceCategoriesContainer}
 				/>
+
 				<Route
 					path={`${match.path}/selfkey-id-required`}
 					component={MarketplaceSelfkeyIdRequired}
 				/>
+
 				<Route
 					path={`${match.path}/selfkey-did-required`}
 					component={MarketplaceSelfkeyDIDRequiredContainer}
 				/>
+
 				<Route path={`${match.path}/exchanges`} component={MarketplaceExchangesContainer} />
+
 				<Route
 					path={`${match.path}/incorporation`}
 					component={MarketplaceIncorporationPage}
 				/>
+
 				<Route
 					path={`${match.path}/bank-accounts`}
 					component={MarketplaceBankAccountsPage}
 				/>
+
 				<Route path={`${match.path}/orders`} component={MarketplaceOrdersPage} />
+
 				<Route path={`${match.path}/notaries`} component={MarketplaceNotariesPage} />
+
 				<Route path={`${match.path}/loans`} component={MarketplaceLoansPage} />
+
 				<Route path={`${match.path}/keyfi`} component={MarketplaceKeyFi} />
+
+				<Route path={`${match.path}/passports`} component={MarketplacePassports} />
 			</Switch>
 		);
 	}

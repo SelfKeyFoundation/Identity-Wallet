@@ -38,7 +38,8 @@ const styles = theme => ({
 		color: '#fff'
 	},
 	highlightedText: {
-		color: primary
+		color: primary,
+		textTransform: 'capitalize'
 	}
 });
 

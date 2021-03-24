@@ -42,7 +42,7 @@ const styles = theme => ({
 		}
 	},
 	exchanges: {
-		columnCount: 2,
+		columnCount: 3,
 		marginBottom: '30px',
 		marginLeft: '-15px'
 	},
@@ -98,7 +98,7 @@ export const BuyKeyModal = withStyles(styles)(
 						{onMoonpayClick && (
 							<React.Fragment>
 								<Grid item className={classes.bottomSpace}>
-									<Typography variant="body1">
+									<Typography variant="body2">
 										You can purchase KEY tokens with Credit Card directly in the
 										wallet using the MoonPay service.
 									</Typography>
@@ -113,7 +113,7 @@ export const BuyKeyModal = withStyles(styles)(
 									</Button>
 								</Grid>
 								<Grid item>
-									<Typography variant="body1">Alternatively:</Typography>
+									<Typography variant="body2">Alternatively:</Typography>
 								</Grid>
 							</React.Fragment>
 						)}
@@ -124,7 +124,7 @@ export const BuyKeyModal = withStyles(styles)(
 								justify="flex-start"
 								alignItems="flex-start"
 							>
-								<Typography variant="body1" className={classes.bottomSpace}>
+								<Typography variant="body2" className={classes.bottomSpace}>
 									You can buy KEY tokens, to use in the wallet, from one of the
 									many exchanges worldwide.
 								</Typography>
@@ -133,11 +133,11 @@ export const BuyKeyModal = withStyles(styles)(
 								</List>
 								{address && (
 									<Grid container>
-										<Typography variant="body1" color="secondary">
+										<Typography variant="body2" color="secondary">
 											Your Address to receive KEY:
 										</Typography>
 										<Grid container alignItems="center">
-											<Typography className={classes.address} variant="body1">
+											<Typography className={classes.address} variant="body2">
 												{address}
 											</Typography>
 											<Copy text={address} />

@@ -9,6 +9,7 @@ const styles = theme => ({
 		margin: '2em 0',
 		color: '#FFF',
 		background: '#313D49',
+		minHeight: '260px',
 		'& header h4': {
 			display: 'inline-block',
 			marginLeft: '0.5em',

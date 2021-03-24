@@ -32,7 +32,7 @@ export const PhoneVerificationModal = ({
 }) => {
 	const classes = useStyles();
 	return (
-		<Popup closeAction={onCloseClick} text="Verify Phone Number">
+		<Popup closeAction={onCloseClick} text="Phone number verification">
 			<Grid container direction="row" spacing={4}>
 				<Grid item xs={2}>
 					<CodeIcon />
@@ -40,7 +40,7 @@ export const PhoneVerificationModal = ({
 				<Grid item xs>
 					<Grid container direction="column" spacing={4}>
 						<Grid item>
-							<Typography variant="h1">Verification Code</Typography>
+							<Typography variant="h1">Verify your phone with MoonPay</Typography>
 						</Grid>
 						{loading && (
 							<Grid item>
@@ -51,11 +51,12 @@ export const PhoneVerificationModal = ({
 							<React.Fragment>
 								<Grid item>
 									<Typography variant="body1">
-										We’ve sent a verification code to {phone}. Please enter it
-										below:
+										We’ve sent a verification code to {phone}.
 									</Typography>
 								</Grid>
-
+								<Grid item>
+									<Typography variant="body1">Please enter it below:</Typography>
+								</Grid>
 								<Grid item>
 									<FormControl variant="filled" fullWidth>
 										<InputTitle title="Verification Code" />

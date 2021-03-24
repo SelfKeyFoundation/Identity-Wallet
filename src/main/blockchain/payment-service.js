@@ -48,7 +48,7 @@ export class PaymentService {
 	}
 
 	async getGasLimit() {
-		return 450000;
+		return 45000;
 	}
 }
 
