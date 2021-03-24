@@ -3,6 +3,7 @@ import { Tabs, Tab } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 import { IndividualOverviewTab } from './overview-tab';
 import { IndividualApplicationsTab } from './applications-tab';
+// import { CreditCardTab } from './credit-card-tab';
 
 const styles = theme => ({
 	dashboardTabs: {
@@ -26,6 +27,7 @@ export const IndividualDashboardTabs = withStyles(styles)(
 			>
 				<Tab id="overview" value="overview" label="Overview" />
 				<Tab id="applications" value="applications" label="Marketplace Applications" />
+				{/* <Tab id="moonpay" value="moonpay" label="Credit Card Transactions" /> */}
 
 				{/* <Tab label="Companies" /> */}
 				{/* <Tab label="History" /> */}
@@ -38,6 +40,16 @@ export const IndividualDashboardTabs = withStyles(styles)(
 					loading={tabProps.applicationProcessing}
 				/>
 			)}
+			{/*
+			{tab === 'moonpay' && (
+				<CreditCardTab
+					id="moonpayTabTab"
+					{...tabProps}
+					loading={tabProps.applicationProcessing}
+				/>
+
+			)}
+			*/}
 		</div>
 	)
 );

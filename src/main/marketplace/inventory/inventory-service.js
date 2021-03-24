@@ -16,11 +16,13 @@ export const dataEndpoints = {
 	incorporations: `${config.airtableBaseUrl}Incorporations${isDevMode() ? 'Dev' : ''}`,
 	banking: `${config.airtableBaseUrl}Banking${isDevMode() ? 'Dev' : ''}`,
 	notaries: `${config.airtableBaseUrl}Notaries${isDevMode() ? 'Dev' : ''}`,
-	loans: `${config.airtableBaseUrl}Loans${isDevMode() ? 'Dev' : ''}`
+	loans: `${config.airtableBaseUrl}Loans${isDevMode() ? 'Dev' : ''}`,
+	passports: `${config.airtableBaseUrl}Passports${isDevMode() ? 'Dev' : ''}`
 };
 
 export const FT_INCORPORATIONS_ENDPOINT = config.incorporationApiUrl;
 export const FT_BANKING_ENDPOINT = config.bankAccountsApiUrl;
+export const FT_PASSPORTS_ENDPOINT = config.passportsApiUrl;
 
 export class InventoryService {
 	constructor() {
@@ -36,6 +38,7 @@ export class InventoryService {
 		this.addFetcher(new SelfkeyInventoryFetcher());
 		this.addFetcher(new FlagtheoryIncorporationsInventoryFetcher());
 		this.addFetcher(new FlagtheoryBankingInventoryFetcher());
+		this.addFetcher(new FlagtheoryPassportsInventoryFetcher());
 	}
 	addFetcher(fetcher) {
 		this.fetchers[fetcher.getName()] = fetcher;
@@ -248,6 +251,53 @@ export class FlagtheoryBankingInventoryFetcher extends InventoryFetcher {
 					itm.entityType = itm.data.type === 'business' ? 'corporate' : 'individual';
 
 					return itm;
+				});
+			return items;
+		} catch (error) {
+			log.error(error);
+			throw error;
+		}
+	}
+}
+
+export class FlagtheoryPassportsInventoryFetcher extends InventoryFetcher {
+	constructor() {
+		super('flagtheory_passports');
+	}
+	async fetch() {
+		try {
+			let fetched = await request.get({ url: FT_PASSPORTS_ENDPOINT, json: true });
+			const mapData = field => (acc, curr) => {
+				const details = _.mapKeys(curr.data.fields, (value, key) => _.camelCase(key));
+				return { ...acc, [details[field]]: details };
+			};
+			const programDescription = fetched.EN.reduce(mapData('programCode'), {});
+			const items = fetched.Data.map(itm =>
+				_.mapKeys(itm.data.fields, (value, key) => _.camelCase(key))
+			)
+				.filter(itm => itm.programCode && itm.countryCode)
+				.map(itm => {
+					itm.countryCode = ('' + itm.countryCode || null).trim();
+					itm.programCode = ('' + itm.programCode || null).trim();
+					const sku = `FT-PASS-${itm.programCode}`;
+					let name = `${itm.programName} in ${itm.country}`;
+					return {
+						sku,
+						name,
+						status: itm.templateId && itm.showInWallet ? 'active' : 'inactive',
+						price:
+							itm.activeTestPrice && itm.testPrice
+								? itm.testPrice
+								: itm.walletPrice || null,
+						priceCurrency: 'USD',
+						category: 'passports',
+						vendorId: 'flagtheory_passports',
+						entityType: 'individual',
+						data: {
+							...itm,
+							description: programDescription[itm.programCode] || {}
+						}
+					};
 				});
 			return items;
 		} catch (error) {

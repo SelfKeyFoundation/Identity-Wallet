@@ -6,7 +6,7 @@ import { moonPayOperations, moonPaySelectors } from '../../common/moonpay';
 
 export const MoonPayAuthContainer = withNavFlow(
 	props => {
-		const { match, onNext, onStepUpdate, ...otherProps } = props;
+		const { onNext, onStepUpdate, ...otherProps } = props;
 
 		const email = useSelector(moonPaySelectors.getLoginEmail);
 

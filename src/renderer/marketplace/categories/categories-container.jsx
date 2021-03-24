@@ -18,7 +18,8 @@ class MarketplaceCategoriesContainer extends PureComponent {
 		bank_accounts: () => this.props.dispatch(push('/main/marketplace/bank-accounts')),
 		notaries: () => this.props.dispatch(push('/main/marketplace/notaries')),
 		loans: () => this.props.dispatch(push('/main/marketplace/loans')),
-		keyfi: () => this.props.dispatch(push('/main/marketplace/keyfi'))
+		keyfi: () => this.props.dispatch(push('/main/marketplace/keyfi')),
+		passports: () => this.props.dispatch(push('/main/marketplace/passports'))
 	};
 
 	render() {

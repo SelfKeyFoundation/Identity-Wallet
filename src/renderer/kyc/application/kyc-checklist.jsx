@@ -105,6 +105,11 @@ const styles = {
 		borderRight: '1px solid #303C49',
 		overflow: 'visible',
 		maxHeight: '450px'
+	},
+	informationSubtitle: {
+		maxWidth: '125px',
+		whiteSpace: 'normal',
+		wordBreak: 'break-word'
 	}
 };
 
@@ -123,7 +128,7 @@ export const KycChecklistItemLabel = withStyles(styles)(
 		if (!options || options.length <= 1) {
 			return (
 				<Typography variant="subtitle1" className={className}>
-					{options.length ? options[0].name : '...'}
+					{options && options.length ? options[0].name : '...'}
 					{item.duplicateType && <br />}
 					{item.duplicateType && (
 						<Button
@@ -195,6 +200,15 @@ export const KycChecklistItem = withStyles(styles)(
 			: item.type && item.type.content
 			? item.type.content.title
 			: item.schemaId;
+		let typeSubtitle = null;
+
+		if (Array.isArray(item.type)) {
+			if (item.type.length === 1) {
+				typeSubtitle = item.type[0].content.title;
+			} else {
+				typeSubtitle = `One of ${item.type.map(t => t.content.title).join(', ')}`;
+			}
+		}
 		const itemEmpty = !item.options || !item.options.length;
 		const warning = item.required && itemEmpty;
 
@@ -212,6 +226,15 @@ export const KycChecklistItem = withStyles(styles)(
 					<Typography variant="subtitle1" className={warningClassname}>
 						{type}
 					</Typography>
+					{typeSubtitle && (
+						<Typography
+							variant="subtitle2"
+							color="secondary"
+							className={classes.informationSubtitle}
+						>
+							{typeSubtitle}
+						</Typography>
+					)}
 				</SmallTableCell>
 				<SmallTableCell className={classes.labelColumn}>
 					<KycChecklistItemLabel

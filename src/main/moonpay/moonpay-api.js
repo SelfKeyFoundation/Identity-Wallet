@@ -8,7 +8,13 @@ const log = new Logger('MoonPayApi');
 export class MoonPayApi {
 	static PAYMENT_METHODS = ['credit_debit_card', 'sepa_bank_transfer', 'gbp_bank_transfer'];
 	static DEFAULT_PAYMENT_METHOD = 'credit_debit_card';
-	static FILE_TYPES = ['passport', 'national_identity_card', 'driving_licence', 'selfie'];
+	static FILE_TYPES = [
+		'passport',
+		'national_identity_card',
+		'driving_licence',
+		'selfie',
+		'residence_permit'
+	];
 	static FILE_SIDES = ['front', 'back'];
 	static FILES_REQUIRING_SIDE = ['national_identity_card', 'driving_licence'];
 	static COUNTRIES_REQUIRING_STATE = ['USA'];
@@ -90,6 +96,7 @@ export class MoonPayApi {
 			qs: { apiKey },
 			onRequestError: this.handleRequestError.bind(this)
 		};
+		this.authErrorCb = opt.authErrorCb;
 		this.api = new Api(apiOpt);
 
 		this.setLoginInfo(loginInfo);
@@ -99,8 +106,46 @@ export class MoonPayApi {
 		log.error('Request error %s', error);
 		if (error.statusCode === 401) {
 			this.setLoginInfo(null);
+			if (this.authErrorCb) {
+				return this.authErrorCb(error);
+			}
 		}
 		throw error;
+	}
+
+	async loginWithEmail(data) {
+		const body = validate(data, ['email']);
+
+		if (data.securityCode) {
+			body.securityCode = data.securityCode;
+		}
+
+		const res = await this.api.request({
+			method: 'post',
+			url: '/customers/email_login',
+			body,
+			resolveWithFullResponse: true
+		});
+
+		const authInfo = res.body;
+		if (body.securityCode) {
+			authInfo.token = this.getTokenFromResponse(res);
+		}
+
+		if (body.securityCode) {
+			this.setLoginInfo(authInfo);
+		}
+		return authInfo;
+	}
+
+	getTokenFromResponse(res) {
+		const match = (res.headers['set-cookie'] || [])
+			.map((c = '') => c.match(/customerToken=([^;]*)/))
+			.find(m => m !== null);
+		if (match) {
+			return match[1];
+		}
+		return null;
 	}
 
 	async getChallenge(data) {
@@ -124,9 +169,15 @@ export class MoonPayApi {
 			const resp = await this.api.request({
 				method: 'post',
 				url: '/customers/wallet_address_login',
-				body: _.pick(data, ['email', 'walletAddress', 'signature'])
+				body: _.pick(data, ['email', 'walletAddress', 'signature']),
+				resolveWithFullResponse: true
 			});
-			return resp;
+
+			const authInfo = resp.body;
+
+			authInfo.token = this.getTokenFromResponse(resp);
+
+			return resp.body;
 		} catch (error) {
 			log.error(error);
 			throw error;
@@ -176,11 +227,17 @@ export class MoonPayApi {
 			]);
 		}
 
-		return this.api.request({
-			method: 'patch',
-			url: 'customers/me',
-			body: opt
-		});
+		try {
+			const customer = await this.api.request({
+				method: 'patch',
+				url: 'customers/me',
+				body: opt
+			});
+			return customer;
+		} catch (error) {
+			log.error(error);
+			throw error.response;
+		}
 	}
 
 	async verifyPhone(opt) {
@@ -292,12 +349,17 @@ export class MoonPayApi {
 			qs.areFeesIncluded = areFeesIncluded ? 'true' : 'false';
 		}
 
-		const quote = await this.api.request({
-			method: 'get',
-			url: `currencies/${currencyCode.toLowerCase()}/quote`,
-			qs
-		});
-		return quote;
+		try {
+			const quote = await this.api.request({
+				method: 'get',
+				url: `currencies/${currencyCode.toLowerCase()}/quote`,
+				qs
+			});
+			return quote;
+		} catch (error) {
+			log.error(error);
+			return { error: true, message: error.response.body.message };
+		}
 	}
 
 	async listCountries() {
@@ -339,11 +401,12 @@ export class MoonPayApi {
 		const res = await this.api.request({
 			method: 'put',
 			url: signedRequest,
-			formData: {
-				document: {
-					value: file
-				}
-			}
+			headers: {
+				Authorization: null,
+				'Content-Type': null
+			},
+			qs: { apiKey: null },
+			body: file
 		});
 
 		return res;
@@ -351,8 +414,8 @@ export class MoonPayApi {
 
 	async _createFile(opt) {
 		this.verifyLoggedIn();
-		const { key, type, country } = validate(opt, ['key', 'type', 'country']);
-		const { side } = opt;
+		const { type, country } = validate(opt, ['type', 'country']);
+		const { side, key, file } = opt;
 
 		if (!this.constructor.FILE_TYPES.includes(type)) {
 			throw new ParameterValidationError(
@@ -375,7 +438,6 @@ export class MoonPayApi {
 		}
 
 		const body = {
-			key,
 			type,
 			country
 		};
@@ -384,12 +446,25 @@ export class MoonPayApi {
 			body.side = side;
 		}
 
-		this.verifyLoggedIn();
+		if (key) {
+			body.key = key;
+		}
+
+		if (file) {
+			body.file = {
+				value: file,
+				options: {
+					contentType: null,
+					filename: 'image'
+				}
+			};
+		}
 
 		const res = await this.api.request({
 			method: 'post',
 			url: 'files',
-			body
+			body: body.key ? body : undefined,
+			formData: body.file ? body : undefined
 		});
 
 		return res;
@@ -430,15 +505,18 @@ export class MoonPayApi {
 			throw new ParameterValidationError(`File of type ${type} requires a side`);
 		}
 
-		const signedRequest = await this._genS3SignedRequest({ fileType });
+		// const signedRequest = await this._genS3SignedRequest({ fileType });
 
-		await this._uploadToS3({
-			file,
-			signedRequest: signedRequest.signedRequest
-		});
+		// await this._uploadToS3({
+		// 	file,
+		// 	fileType,
+		// 	signedRequest: signedRequest.signedRequest
+		// });
 
 		const res = await this._createFile({
-			key: signedRequest.key,
+			// key: signedRequest.key,
+			file,
+			fileType,
 			type,
 			country,
 			side
@@ -449,10 +527,11 @@ export class MoonPayApi {
 
 	async listFiles() {
 		this.verifyLoggedIn();
-		return this.api.request({
+		const files = await this.api.request({
 			method: 'get',
 			url: 'files'
 		});
+		return files;
 	}
 
 	async createToken(opt) {
@@ -475,21 +554,33 @@ export class MoonPayApi {
 			body.billingAddress.state = state;
 		}
 
-		return this.api.request({
-			method: 'post',
-			url: 'tokens',
-			body
-		});
+		try {
+			const token = await this.api.request({
+				method: 'post',
+				url: 'tokens',
+				body
+			});
+			return token;
+		} catch (error) {
+			log.error(error);
+			return { error: true, message: error.response.body.message };
+		}
 	}
 
 	async createCard(opt) {
 		this.verifyLoggedIn();
 		opt = validate(opt, ['tokenId']);
-		return this.api.request({
-			method: 'post',
-			url: 'cards',
-			body: opt
-		});
+		try {
+			const card = await this.api.request({
+				method: 'post',
+				url: 'cards',
+				body: opt
+			});
+			return card;
+		} catch (error) {
+			log.error(error);
+			return { error: true, message: error.response.body.message };
+		}
 	}
 
 	async listCards() {
@@ -597,6 +688,7 @@ export class MoonPayApi {
 
 	async createCardTransaction(opt) {
 		this.verifyLoggedIn();
+
 		const {
 			baseCurrencyAmount,
 			extraFeePercentage,
@@ -613,32 +705,39 @@ export class MoonPayApi {
 			'returnUrl'
 		]);
 
-		const { walletAddressTag, externalTransactionId, cardId, tokenId } = opt;
+		const { cardId, tokenId } = opt;
+		let { areFeesIncluded } = opt;
 
 		if (!cardId && !tokenId) {
 			throw new ParameterValidationError('one of cardId, tokenId is required');
 		}
 
-		return this.api.request({
-			method: 'post',
-			url: 'transactions',
-			body: {
-				baseCurrencyAmount,
-				extraFeePercentage,
-				walletAddress,
-				baseCurrencyCode,
-				currencyCode,
-				returnUrl,
-				walletAddressTag,
-				externalTransactionId,
-				cardId,
-				tokenId
-			}
-		});
+		areFeesIncluded = !!areFeesIncluded;
+
+		try {
+			const transaction = await this.api.request({
+				method: 'post',
+				url: 'transactions',
+				body: {
+					baseCurrencyAmount,
+					extraFeePercentage,
+					walletAddress,
+					returnUrl,
+					cardId,
+					baseCurrencyCode: baseCurrencyCode.toLowerCase(),
+					currencyCode: currencyCode.toLowerCase(),
+					areFeesIncluded
+				}
+			});
+			return transaction;
+		} catch (error) {
+			log.error(error);
+			return { error: true, message: error.response.body.message };
+		}
 	}
 
 	async getTransaction(opt) {
-		this.verifyLoggedIn();
+		// this.verifyLoggedIn();
 		const { transactionId } = validate(opt, ['transactionId']);
 
 		return this.api.request({
