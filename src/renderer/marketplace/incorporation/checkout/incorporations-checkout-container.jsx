@@ -19,7 +19,7 @@ import { MarketplaceIncorporationsComponent } from '../common/marketplace-incorp
 
 const styles = theme => ({});
 const CRYPTOCURRENCY = config.constants.primaryToken;
-const FIXED_GAS_LIMIT_PRICE = 21000;
+const FIXED_GAS_LIMIT_PRICE = 45000;
 
 class IncorporationsCheckoutContainer extends MarketplaceIncorporationsComponent {
 	async componentDidMount() {

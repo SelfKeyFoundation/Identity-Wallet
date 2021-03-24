@@ -285,7 +285,7 @@ export class RelyingPartyRest {
 		if (!ctx.token) {
 			throw new Error('Session is not established');
 		}
-
+		log.debug(`[addAdditionalTemplateRequirements] POST ${url}`);
 		attributes.forEach(attr =>
 			request.post({
 				url,

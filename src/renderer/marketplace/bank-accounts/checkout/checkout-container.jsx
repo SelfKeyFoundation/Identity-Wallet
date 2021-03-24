@@ -20,7 +20,7 @@ import { identitySelectors } from 'common/identity';
 
 const styles = theme => ({});
 const CRYPTOCURRENCY = config.constants.primaryToken;
-const FIXED_GAS_LIMIT_PRICE = 21000;
+const FIXED_GAS_LIMIT_PRICE = 45000;
 
 class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 	async componentDidMount() {

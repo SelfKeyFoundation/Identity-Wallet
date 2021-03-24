@@ -45,7 +45,6 @@ export default class MarketplacePassportsComponent extends MarketplaceComponent 
 			if (this.applicationCompleted()) return 'completed';
 			if (this.applicationWasRejected()) return 'rejected';
 			if (!this.userHasPaid()) return 'unpaid';
-			if (!this.userHasSelectedBankPreference()) return 'additionalRequirements';
 			if (this.applicationRequiresAdditionalDocuments()) return 'additionalRequirements';
 
 			return 'progress';

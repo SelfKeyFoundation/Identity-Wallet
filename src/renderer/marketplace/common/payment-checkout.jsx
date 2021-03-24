@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/styles';
 import { Grid, Typography, Button } from '@material-ui/core';
+import { NumberFormat } from 'selfkey-ui';
 import { FlagCountryName } from '.';
 import { WhatYouGet } from './marketplace-what-you-get';
 import { HowServiceWorks } from './marketplace-how-service-works';
@@ -66,6 +67,11 @@ const styles = theme => ({
 		width: '100%',
 		paddingBottom: '30px',
 		marginBottom: '30px'
+	},
+	currency: {
+		'& > div': {
+			display: 'inline-block'
+		}
 	}
 });
 
@@ -186,7 +192,16 @@ const PaymentCheckout = withStyles(styles)(
 								</div>
 								<div className="rowItem time" />
 								<div className="rowItem price">
-									${usdFee.toLocaleString()}
+									<div className={classes.currency}>
+										$
+										<NumberFormat
+											locale={'en'}
+											currency={'USD'}
+											style="currency"
+											value={usdFee}
+											className={classes.currency}
+										/>
+									</div>
 									<div className="time">{ethFee.toLocaleString()} ETH</div>
 								</div>
 							</Grid>
