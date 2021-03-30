@@ -31,6 +31,7 @@ import walletConnect from '../wallet-connect';
 import { moonPayAuth, moonPayPayment } from '../moonpay';
 import hardwareWallet from '../hardware-wallet';
 import navigationFlow from '../navigation/flow';
+import walletSync from '../wallet-sync';
 
 export const createReducers = (scope = 'main') => {
 	let scopedReducers = {};
@@ -69,6 +70,7 @@ export const createReducers = (scope = 'main') => {
 		moonPayPayment,
 		hardwareWallet,
 		navigationFlow,
+		walletSync,
 		...scopedReducers
 	});
 
