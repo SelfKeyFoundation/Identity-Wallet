@@ -42,19 +42,23 @@ const styles = theme => ({
 
 const PassportsDescriptionTab = withStyles(styles)(({ classes, program }) => (
 	<div className={classes.tabContainer}>
-		<h1>{program.data.description.programName}</h1>
-		<p
-			dangerouslySetInnerHTML={{
-				__html: sanitize(program.data.description.programIntroduction)
-			}}
-		/>
-		<h1>{program.data.description.investmentOptionTitle}</h1>
-		<p
-			dangerouslySetInnerHTML={{
-				__html: sanitize(program.data.description.investmentDescription)
-			}}
-		/>
-		{program.data.restrictedNationalities && (
+		{program && program.data && program.data.description && (
+			<>
+				<h1>{program.data.description.programName}</h1>
+				<p
+					dangerouslySetInnerHTML={{
+						__html: sanitize(program.data.description.programIntroduction)
+					}}
+				/>
+				<h1>{program.data.description.investmentOptionTitle}</h1>
+				<p
+					dangerouslySetInnerHTML={{
+						__html: sanitize(program.data.description.investmentDescription)
+					}}
+				/>
+			</>
+		)}
+		{program && program.data && program.data.restrictedNationalities && (
 			<>
 				<h1>Restricted Nationalities</h1>
 				<ul>
