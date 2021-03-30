@@ -44,9 +44,8 @@ const PassportsBenefitsTab = withStyles(styles)(({ classes, program }) => (
 	<div className={classes.tabContainer}>
 		<h1>Citizenship Benefits</h1>
 		<ul>
-			{program.data.benefitsCitizenship.map(n => (
-				<li key={n}>{n}</li>
-			))}
+			{program.data.benefitsCitizenship &&
+				program.data.benefitsCitizenship.map(n => <li key={n}>{n}</li>)}
 		</ul>
 	</div>
 ));
