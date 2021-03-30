@@ -233,7 +233,7 @@ export const NotarizationDetailsPage = withStyles(styles)(props => {
 								<div className={classes.applyButton}>
 									<NotarizeApplicationButton
 										canNotarizeApplication={true}
-										loading={loading}
+										loading={loading || !kycRequirements}
 										startNotarize={startNotarize}
 									/>
 									<ProgramPrice
