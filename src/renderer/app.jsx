@@ -35,6 +35,7 @@ import AutoUpdateProgress from './auto-update/auto-update-progress-contatiner';
 import ApproveSessionContainer from './wallet-connect/approve-session-container';
 import SignMessageContainer from './wallet-connect/sign-message-container';
 import TransactionContainer from './wallet-connect/transaction-container';
+import WcConnectContainer from './wallet-connect/wc-connect-container';
 
 const log = new Logger('AppComponent');
 
@@ -89,6 +90,7 @@ class AppContainerComponent extends PureComponent {
 					<Route path="/selfkeyIdForm" component={SelfKeyIdCreateForm} />
 					<Route path="/auto-update" component={AutoUpdate} />
 					<Route path="/auto-update-progress" component={AutoUpdateProgress} />
+					<Route path="/wallet-connect/connect" component={WcConnectContainer} />
 					<Route
 						path="/wallet-connect/approve-session"
 						component={ApproveSessionContainer}

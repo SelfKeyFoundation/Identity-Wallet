@@ -29,6 +29,7 @@ import {
 	MenuStakingIcon,
 	MenuExportIcon,
 	// InfoTooltip,
+	WalletConnectIcon,
 	primary
 } from 'selfkey-ui';
 // import { KeyboardArrowDown } from '@material-ui/icons';
@@ -179,7 +180,7 @@ const styles = theme => ({
 		padding: '50px 0 0 !important'
 	},
 	secondaryMenuItemsWrap: {
-		padding: '50px 0 20px !important'
+		padding: '50px 0 0 !important'
 	},
 	paddingLeft: {
 		paddingLeft: '10px'
@@ -195,6 +196,9 @@ const marketplace = React.forwardRef((props, ref) => (
 ));
 const addressBook = React.forwardRef((props, ref) => (
 	<Link to="/main/addressBook" {...props} ref={ref} />
+));
+const walletConnectOptions = React.forwardRef((props, ref) => (
+	<Link to="/wallet-connect/connect" {...props} ref={ref} />
 ));
 const switchAccount = React.forwardRef((props, ref) => <Link to="/home" {...props} ref={ref} />);
 const exportAccount = React.forwardRef((props, ref) => (
@@ -436,6 +440,20 @@ class Sidebar extends PureComponent {
 
 						<ListItem
 							className={classes.listItem}
+							component={walletConnectOptions}
+							key="walletConnect"
+							title="Wallet Connect"
+						>
+							<ListItemIcon className={classes.listItemIcon}>
+								<WalletConnectIcon width="19" />
+							</ListItemIcon>
+							<Typography variant="body2" color="secondary">
+								Wallet Connect
+							</Typography>
+						</ListItem>
+
+						<ListItem
+							className={classes.listItem}
 							component={switchAccount}
 							key="switchAccount"
 							title="Switch Wallet"
@@ -447,6 +465,7 @@ class Sidebar extends PureComponent {
 								Switch Wallet
 							</Typography>
 						</ListItem>
+
 						<ListItem
 							className={classes.listItem}
 							key="quit"
