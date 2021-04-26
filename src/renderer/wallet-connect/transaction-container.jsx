@@ -27,8 +27,8 @@ export const TransactionContainer = () => {
 
 	const { peerMeta, tx, method } = useSelector(walletConnectSelectors.selectWalletConnect);
 
-	// console.log(tx);
-	// console.log(tokens);
+	console.log(tx);
+	console.log(tokens);
 
 	const wallet = useSelector(getWallet);
 	const address = wallet ? wallet.address : undefined;
