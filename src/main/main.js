@@ -207,7 +207,7 @@ function onWindowAllClosed() {
 	return () => {
 		log.debug('all windows closed, quitting');
 		const ctx = getGlobalContext();
-		ctx.walletConnectService.killSession();
+		ctx.walletConnectService.killSessions();
 		return electron.app.quit();
 	};
 }

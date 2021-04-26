@@ -12,6 +12,9 @@ const useStyles = makeStyles({
 	},
 	actions: {
 		marginTop: 20
+	},
+	gridItem: {
+		textAlign: 'center'
 	}
 });
 
@@ -26,32 +29,38 @@ export const ApproveSessionComponent = ({
 	const { name, description, url, icons = [] } = peerMeta;
 	const [icon] = icons;
 	return (
-		<Popup closeAction={onCancel} text="WalletConnect connection request">
+		<Popup closeAction={onCancel} text="WalletConnect Connection Request">
 			<Grid container direction="column" alignItems="center" spacing={2}>
 				{icon && (
 					<Grid item>
 						<img src={icon} className={classes.icon} />
 					</Grid>
 				)}
-				<Grid item>
+				<Grid item className={classes.gridItem}>
 					<Typography variant="body1">
 						{name || 'An application'} is requesting permission to connect to your
 						wallet
 					</Typography>
+					{description && (
+						<Typography variant="subtitle1" color="secondary">
+							{description}
+						</Typography>
+					)}
 				</Grid>
-				{description && (
-					<Grid item>
-						<Typography variant="body1">{description}</Typography>
-					</Grid>
-				)}
+
 				{url && (
-					<Grid item>
+					<Grid item className={classes.gridItem}>
 						<Typography variant="body1">{url}</Typography>
 					</Grid>
 				)}
 				{address && (
-					<Grid item>
-						<Typography variant="body1">Current address is {address}</Typography>
+					<Grid item className={classes.gridItem}>
+						<Typography variant="subtitle1" color="secondary">
+							Wallet address is:
+						</Typography>
+						<div style={{ marginTop: '5px' }}>
+							<Typography variant="subtitle">{address}</Typography>
+						</div>
 					</Grid>
 				)}
 				<Grid item className={classes.actions}>

@@ -36,6 +36,8 @@ import ApproveSessionContainer from './wallet-connect/approve-session-container'
 import SignMessageContainer from './wallet-connect/sign-message-container';
 import TransactionContainer from './wallet-connect/transaction-container';
 import WcConnectContainer from './wallet-connect/wc-connect-container';
+import WcPasteQRCodeContainer from './wallet-connect/wc-paste-qr-code-container';
+import WcSessionsContainer from './wallet-connect/wc-sessions-container';
 
 const log = new Logger('AppComponent');
 
@@ -90,6 +92,7 @@ class AppContainerComponent extends PureComponent {
 					<Route path="/selfkeyIdForm" component={SelfKeyIdCreateForm} />
 					<Route path="/auto-update" component={AutoUpdate} />
 					<Route path="/auto-update-progress" component={AutoUpdateProgress} />
+					<Route path="/wallet-connect/sessions" component={WcSessionsContainer} />
 					<Route path="/wallet-connect/connect" component={WcConnectContainer} />
 					<Route
 						path="/wallet-connect/approve-session"
@@ -97,6 +100,11 @@ class AppContainerComponent extends PureComponent {
 					/>
 					<Route path="/wallet-connect/sign-message" component={SignMessageContainer} />
 					<Route path="/wallet-connect/transaction" component={TransactionContainer} />
+
+					<Route
+						path="/wallet-connect/paste-qr-code-option"
+						component={WcPasteQRCodeContainer}
+					/>
 				</Switch>
 			</ConnectedRouter>
 		);
