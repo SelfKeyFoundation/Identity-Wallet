@@ -140,6 +140,7 @@ export class WalletConnectService {
 
 			switch (payload.method) {
 				case 'personal_sign':
+				case 'eth_sign':
 					return this.handlePersonalSignRequest(payload);
 				case 'eth_sendTransaction':
 				case 'eth_signTransaction':
@@ -161,12 +162,10 @@ export class WalletConnectService {
 			log.info('disconnect');
 		});
 
-		if (this.connectors[key].session) {
-			try {
-				await this.connectors[key].createSession();
-			} catch (err) {
-				console.error('create session:' + err);
-			}
+		try {
+			await this.connectors[key].createSession();
+		} catch (err) {
+			console.error('create session:' + err);
 		}
 	}
 
@@ -207,11 +206,12 @@ export class WalletConnectService {
 		}
 	}
 
-	handlePersonalSignRequest({ id, method, params }) {
+	handlePersonalSignRequest({ id, method, params, peerMeta, peerId }) {
+		console.log(params);
 		const [message] = params;
 		this.focusWindow();
 		this.store.dispatch(
-			walletConnectOperations.signMessageOperation(id, this.peerMeta, this.peerId, message)
+			walletConnectOperations.signMessageOperation(id, peerMeta, peerId, message)
 		);
 	}
 
@@ -220,10 +220,7 @@ export class WalletConnectService {
 		rawTx.nonce = await this.web3Service.getNextNonce(rawTx.from);
 		const tx = { ...rawTx };
 		tx.gas = EthUtils.hexToDecimal(tx.gas);
-		// TODO: Workaround for gasPrice, ideally we should not override gasPrice
-		const gasStationInfo = await this.ethGasStationService.getInfo();
-		tx.gasPrice = gasStationInfo.average;
-		if (tx.value) tx.value = EthUtils.hexToDecimal(tx.value);
+
 		this.focusWindow();
 		this.store.dispatch(
 			walletConnectOperations.transactionOperation(id, peerMeta, peerId, tx, method, rawTx)

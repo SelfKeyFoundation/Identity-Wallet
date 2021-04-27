@@ -11,6 +11,12 @@ const useStyles = makeStyles({
 	gridItem: {
 		textAlign: 'center'
 	},
+	gridItemLeft: {
+		textAlign: 'left',
+		display: 'flex',
+		alignItems: 'center',
+		gap: '10px'
+	},
 	icon: {
 		width: 30,
 		height: 30,
@@ -18,7 +24,11 @@ const useStyles = makeStyles({
 	},
 	data: {
 		width: 300,
-		overflowWrap: 'break-word'
+		overflowWrap: 'break-word',
+		fontFamily: 'monospace',
+		padding: '5px',
+		border: '1px solid #384656',
+		marginTop: '5px'
 	},
 	actions: {
 		marginTop: 20
@@ -53,6 +63,16 @@ const useStyles = makeStyles({
 	}
 });
 
+const getFeeInEth = (gasPrice, gasLimit, digits) => {
+	let ethFee = EthUnits.toEther(gasPrice * gasLimit, 'gwei');
+	return digits ? Number.parseFloat(ethFee).toFixed(digits) : ethFee;
+};
+
+const getFeeUsd = (ethRate, gasPrice, gasLimit, digits) => {
+	const ethFee = getFeeInEth(gasPrice, gasLimit, digits);
+	return ethFee * ethRate;
+};
+
 export const TransactionComponent = ({
 	onCancel,
 	peerMeta,
@@ -68,6 +88,8 @@ export const TransactionComponent = ({
 	handleGasPriceChange,
 	reloadEthGasStationInfoAction,
 	handleNonceChange,
+	gasPrice,
+	gasLimit,
 	nonce = '',
 	cryptoCurrency = 'ETH',
 	amount = 0,
@@ -81,24 +103,23 @@ export const TransactionComponent = ({
 	const action = method === 'eth_signTransaction' ? 'sign' : 'send';
 
 	return (
-		<Popup closeAction={onCancel} text={`WalletConnect ${action} transaction request`}>
+		<Popup closeAction={onCancel} text={`WalletConnect request from ${name}`}>
 			<Grid container direction="column" alignItems="center" spacing={2}>
-				{icon && (
-					<Grid item>
-						<Grid container direction="row" spacing={2} alignItems="center">
+				<Grid item>
+					<Grid container direction="row" spacing={2} alignItems="center">
+						{icon && (
 							<Grid item>
 								<img src={icon} className={classes.icon} />
 							</Grid>
-							<Grid item>
-								<Typography variant="body2">{url}</Typography>
-							</Grid>
+						)}
+						<Grid item>
+							{name || 'An application'} is requesting to {action} a transaction
+							<br />
+							<Typography variant="subtitle2" color="secondary">
+								{url}
+							</Typography>
 						</Grid>
 					</Grid>
-				)}
-				<Grid item className={classes.gridItem}>
-					<Typography variant="body2">
-						{name || 'An application'} is requesting to {action} a transaction
-					</Typography>
 				</Grid>
 
 				<Divider className={classes.divider} />
@@ -113,7 +134,7 @@ export const TransactionComponent = ({
 					</div>
 				</Grid>
 				*/}
-				<Grid item className={classes.gridItem}>
+				<Grid item className={classes.gridItemLeft}>
 					<Typography variant="subtitle1" color="secondary">
 						From
 					</Typography>
@@ -121,7 +142,7 @@ export const TransactionComponent = ({
 						<Typography variant="body2">{tx.from}</Typography>
 					</div>
 				</Grid>
-				<Grid item className={classes.gridItem}>
+				<Grid item className={classes.gridItemLeft}>
 					<Typography variant="subtitle1" color="secondary">
 						To
 					</Typography>
@@ -129,38 +150,65 @@ export const TransactionComponent = ({
 						<Typography variant="body2">{tx.to}</Typography>
 					</div>
 				</Grid>
+				{tx.value && (
+					<Grid item className={classes.gridItem}>
+						<Typography variant="subtitle1" color="secondary">
+							Amount
+						</Typography>
+						<div>
+							<Typography variant="body2">
+								{EthUnits.unitToUnit(tx.value, 'wei', 'ether')} ETH
+							</Typography>
+						</div>
+
+						<div>
+							<div className={classes.fiatPrice}>
+								<Typography
+									variant="subtitle2"
+									color="secondary"
+									style={{ marginRight: '3px' }}
+								>
+									<NumberFormat
+										locale={locale}
+										priceStyle="currency"
+										currency={fiatCurrency}
+										value={
+											EthUnits.unitToUnit(tx.value, 'wei', 'ether') * ethRate
+										}
+										fractionDigits={2}
+									/>
+								</Typography>
+								<Typography variant="subtitle2" color="secondary">
+									USD
+								</Typography>
+							</div>
+						</div>
+					</Grid>
+				)}
+				{!!tx.data && (
+					<Grid item className={classes.gridItem}>
+						<Typography variant="subtitle1" color="secondary">
+							Data:
+						</Typography>
+						<Typography variant="subtitle1" className={classes.data}>
+							{tx.data}
+						</Typography>
+					</Grid>
+				)}
+
+				<Divider className={classes.divider} />
+
 				<Grid item className={classes.gridItem}>
 					<Typography variant="subtitle1" color="secondary">
-						Amount
+						Gas Fee
 					</Typography>
 					<div>
 						<Typography variant="body2">
-							{EthUnits.unitToUnit(tx.value, 'wei', 'ether')}
+							{getFeeInEth(gasPrice, gasLimit)} ETH
 						</Typography>
 					</div>
 
 					<div className={classes.bottomSpace}>
-						{/*
-						<div style={{ marginBottom: '3px' }}>
-							<Typography variant="subtitle2" color="secondary">
-								Balance:
-								<span className={classes.balance}>
-									{parseFloat(balance).toFixed(5)}{' '}
-									{cryptoCurrency !== 'custom' ? cryptoCurrency : ''}
-								</span>
-							</Typography>
-						</div>
-						<div className={classes.tokenMax}>
-							<Input
-								type="text"
-								value={`${amount}`}
-								placeholder="0.00"
-								className={classes.amount}
-								fullWidth
-							/>
-						</div>
-						*/}
-
 						<div className={classes.fiatPrice}>
 							<Typography
 								variant="subtitle2"
@@ -171,7 +219,7 @@ export const TransactionComponent = ({
 									locale={locale}
 									priceStyle="currency"
 									currency={fiatCurrency}
-									value={amountUsd}
+									value={getFeeUsd(ethRate, gasPrice, gasLimit)}
 									fractionDigits={2}
 								/>
 							</Typography>
@@ -182,16 +230,14 @@ export const TransactionComponent = ({
 					</div>
 				</Grid>
 
-				<Divider className={classes.divider} />
-
 				<TransactionFeeBox
 					showAdvanced={false}
 					ethGasStationInfo={ethGasStationInfo}
 					fiatCurrency={fiatCurrency}
 					locale={locale}
-					gasLimit={tx.gas}
-					gasPrice={tx.gasPrice}
-					nonce={tx.nonce}
+					gasLimit={gasLimit}
+					gasPrice={gasPrice}
+					nonce={nonce}
 					ethRate={ethRate}
 					changeGasLimitAction={handleGasLimitChange}
 					changeGasPriceAction={handleGasPriceChange}
