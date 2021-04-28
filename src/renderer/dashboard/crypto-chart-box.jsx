@@ -42,6 +42,7 @@ const styles = () => ({
 		margin: 0,
 		padding: 0,
 		width: 'auto',
+		fontWeight: 'bold',
 		'& >div': {
 			paddingRight: '0 !important'
 		}
@@ -86,6 +87,7 @@ const styles = () => ({
 	},
 	smallText: {
 		marginTop: '-2px !important',
+		color: '#93B0C1',
 		'& >div': {
 			fontSize: '14px'
 		}
@@ -390,7 +392,7 @@ export class CryptoChartBoxComponent extends React.Component {
 									locale={locale}
 									style="decimal"
 									currency={token.symbol}
-									fractionDigits={token.decimal}
+									fractionDigits={4}
 									className={classes.prices}
 									valueClass={classes.texts}
 									value={token.balance}
