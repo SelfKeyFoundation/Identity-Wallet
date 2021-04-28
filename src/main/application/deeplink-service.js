@@ -22,11 +22,11 @@ export class DeepLinksService {
 
 	handleOpenLink = async url => {
 		try {
-			log.info('incoming deep link %s', url);
+			log.info('Incoming deep link %s', url);
 			const urlRegexp = /^[^:/]*:\/\/([^/]*)\/(.*)$/;
 			const match = (url || '').match(urlRegexp);
 			if (!match || match.length !== 3) {
-				log.info('invalid deep link format');
+				log.error('invalid deep link format');
 				return;
 			}
 			if (!this.handlers[match[1]]) {
@@ -34,7 +34,7 @@ export class DeepLinksService {
 				return;
 			}
 
-			await this.handlers[match[1]].handleUrlCommand(match[2]);
+			await this.handlers[match[1]].handleSession(match[2]);
 		} catch (error) {
 			log.error(error);
 		}

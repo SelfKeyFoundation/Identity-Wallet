@@ -8,6 +8,13 @@ const log = new Logger('WalletConnectDuck');
 let hardwalletConfirmationTimeout = null;
 
 export const walletConnectInitialState = {
+	confirmConnection: null,
+	uri: null,
+	isLoading: false,
+	pendingUri: null,
+	unlocked: false,
+	sessions: [],
+
 	hasSessionRequest: false,
 	hasSignRequest: false,
 	hasTxRequest: false,
@@ -21,6 +28,7 @@ export const walletConnectInitialState = {
 };
 
 export const walletConnectTypes = {
+	WALLET_CONNECT_HANDLE_URI_OPERATION: 'wallet-connect/session/operation/HANDLE_URI',
 	WALLET_CONNECT_SESSION_REQUEST_OPERATION: 'wallet-connect/session/operation/REQUEST',
 	WALLET_CONNECT_SESSION_REQUEST_APPROVE_OPERATION:
 		'wallet-connect/session/operation/REQUEST_APPROVE',
@@ -32,7 +40,13 @@ export const walletConnectTypes = {
 	WALLET_CONNECT_TRANSACTION_DENY_OPERATION: 'wallet-connect/transaction/operation/DENY',
 	WALLET_CONNECT_TRANSACTION_APPROVE_OPERATION: 'wallet-connect/transaction/operation/APPROVE',
 	WALLET_CONNECT_SESSION_SET: 'wallet-connect/session/SET',
-	WALLET_CONNECT_SESSION_RESET: 'wallet-connect/session/RESET'
+	WALLET_CONNECT_SESSION_RESET: 'wallet-connect/session/RESET',
+	WALLET_CONNECT_URI_SET: 'wallet-connect/uri/SET',
+	WALLET_CONNECT_CONFIRM_CONNECTION_SET: 'wallet-connect/confirm/connection/SET',
+	WALLET_CONNECT_SESSIONS_LOAD_OPERATION: 'wallet-connect/sessions/operation/LOAD',
+	WALLET_CONNECT_SESSIONS_SET: 'wallet-connect/sessions/SET',
+	WALLET_CONNECT_SESSION_DELETE_OPERATION: 'wallet-connet/session/DELETE',
+	WALLET_CONNECT_SCAN_QR_CODE_OPERATION: 'wallet-connect/session/qr-code/SCAN'
 };
 
 export const walletConnectActions = {
@@ -43,6 +57,18 @@ export const walletConnectActions = {
 	resetSessionAction: payload => ({
 		type: walletConnectTypes.WALLET_CONNECT_SESSION_RESET,
 		payload
+	}),
+	setUri: payload => ({
+		type: walletConnectTypes.WALLET_CONNECT_URI_SET,
+		payload
+	}),
+	setConfirmConnection: payload => ({
+		type: walletConnectTypes.WALLET_CONNECT_CONFIRM_CONNECTION_SET,
+		payload
+	}),
+	setSessions: payload => ({
+		type: walletConnectTypes.WALLET_CONNECT_SESSIONS_SET,
+		payload
 	})
 };
 
@@ -52,18 +78,52 @@ export const reducers = {
 	},
 	resetSessionReducer: () => {
 		return { ...walletConnectInitialState };
+	},
+	setUriReducer: (state, action) => {
+		return { ...state, uri: action.payload };
+	},
+	setConfirmConnectionReducer: (state, action) => {
+		return { ...state, confirmConnection: action.payload };
+	},
+	setSessionsReducer: (state, action) => {
+		return { ...state, sessions: action.payload };
 	}
 };
 
 export const operations = {
 	...walletConnectActions,
-	sessionRequestOperation: (peerId, peerMeta) => async (dispatch, getState) => {
+
+	handleUri: uri => async (dispatch, getState) => {
+		// const wallet = getWallet(getState());
+		const { walletConnectService } = getGlobalContext();
+		await dispatch(operations.setSessionAction({ isLoading: true }));
+		await walletConnectService.handleSession(uri);
+	},
+	loadSessions: () => async (dispatch, getState) => {
+		const { walletConnectService } = getGlobalContext();
+		const sessions = await walletConnectService.getSessions();
+		dispatch(walletConnectActions.setSessions(sessions));
+	},
+	deleteSession: session => async (dispatch, getState) => {
+		const { walletConnectService } = getGlobalContext();
+		if (!session || !session.id) throw new Error('No session id found');
+		await walletConnectService.killSession(session.id);
+		console.log(session.id);
+		dispatch(operations.loadSessions);
+	},
+	sessionRequestOperation: (peerId, peerMeta, uri, confirmConnection) => async (
+		dispatch,
+		getState
+	) => {
 		await dispatch(operations.resetSessionAction());
 		await dispatch(
 			operations.setSessionAction({
 				hasSessionRequest: true,
 				peerId,
-				peerMeta
+				peerMeta,
+				uri,
+				confirmConnection,
+				isLoading: false
 			})
 		);
 		await dispatch(push('/wallet-connect/approve-session'));
@@ -71,20 +131,37 @@ export const operations = {
 	sessionRequestDenyOperation: () => async (dispatch, getState) => {
 		const wallet = getWallet(getState());
 		const { walletConnectService } = getGlobalContext();
+		if (!wallet) throw new Error('No wallet selected');
 
-		walletConnectService.rejectSession();
+		const { uri } = walletConnectSelectors.selectWalletConnect(getState());
+		if (!uri) throw new Error('No wc URI detected');
+
+		await walletConnectService.rejectSession(uri);
 		await dispatch(operations.resetSessionAction());
 		if (wallet && wallet.address) {
 			return dispatch(push('/main/dashboard'));
 		}
-
 		return dispatch(push('/home'));
 	},
 	sessionRequestApproveOperation: () => async (dispatch, getState) => {
 		const { walletConnectService } = getGlobalContext();
 		const wallet = getWallet(getState());
 		if (!wallet) throw new Error('No wallet selected');
-		walletConnectService.approveSession(wallet.address);
+
+		const { peerMeta, uri, confirmConnection } = walletConnectSelectors.selectWalletConnect(
+			getState()
+		);
+		if (!confirmConnection) throw new Error('No wc confirm connection detected');
+		if (!uri) throw new Error('No wc URI detected');
+
+		const session = await walletConnectService.approveSession(
+			wallet.address,
+			uri,
+			confirmConnection,
+			peerMeta
+		);
+		if (!session) throw new Error('WalletConnect session not detected');
+
 		await dispatch(operations.resetSessionAction());
 		return dispatch(push('/main/dashboard'));
 	},
@@ -256,11 +333,28 @@ export const operations = {
 			log.error(error);
 			throw error;
 		}
+	},
+	scanQRCode: () => async (dispatch, getState) => {
+		try {
+			const { walletConnectService } = getGlobalContext();
+			walletConnectService.scanQrCode();
+		} catch (error) {
+			log.error(error);
+			throw error;
+		}
 	}
 };
 
 export const walletConnectOperations = {
 	...walletConnectActions,
+	handleUriOperation: createAliasedAction(
+		walletConnectTypes.WALLET_CONNECT_HANDLE_URI_OPERATION,
+		operations.handleUri
+	),
+	loadSessionsOperation: createAliasedAction(
+		walletConnectTypes.WALLET_CONNECT_SESSIONS_LOAD_OPERATION,
+		operations.loadSessions
+	),
 	sessionRequestOperation: createAliasedAction(
 		walletConnectTypes.WALLET_CONNECT_SESSION_REQUEST_OPERATION,
 		operations.sessionRequestOperation
@@ -296,11 +390,22 @@ export const walletConnectOperations = {
 	transactionApproveOperation: createAliasedAction(
 		walletConnectTypes.WALLET_CONNECT_TRANSACTION_APPROVE_OPERATION,
 		operations.transactionApproveOperation
+	),
+	deleteSessionOperation: createAliasedAction(
+		walletConnectTypes.WALLET_CONNECT_SESSION_DELETE_OPERATION,
+		operations.deleteSession
+	),
+	scanQRCodeOperation: createAliasedAction(
+		walletConnectTypes.WALLET_CONNECT_SCAN_QR_CODE_OPERATION,
+		operations.scanQRCode
 	)
 };
 
 export const walletConnectSelectors = {
 	selectWalletConnect: state => state.walletConnect,
+	selectUri: state => walletConnectSelectors.selectWalletConnect(state).uri,
+	selectConfirmConnection: state =>
+		walletConnectSelectors.selectWalletConnect(state).confirmConnection,
 	hasSessionRequest: state => walletConnectSelectors.selectWalletConnect(state).hasSessionRequest,
 	hasSignMessageRequest: state =>
 		walletConnectSelectors.selectWalletConnect(state).hasSignMessageRequest
@@ -312,6 +417,12 @@ export const walletConnectReducer = (state = walletConnectInitialState, action) 
 			return reducers.setSessionRequestReducer(state, action);
 		case walletConnectTypes.WALLET_CONNECT_SESSION_RESET:
 			return reducers.resetSessionReducer(state, action);
+		case walletConnectTypes.WALLET_CONNECT_URI_SET:
+			return reducers.setUriReducer(state, action);
+		case walletConnectTypes.WALLET_CONNECT_CONFIRM_CONNECTION_SET:
+			return reducers.setConfirmConnectionReducer(state, action);
+		case walletConnectTypes.WALLET_CONNECT_SESSIONS_SET:
+			return reducers.setSessionsReducer(state, action);
 	}
 	return state;
 };

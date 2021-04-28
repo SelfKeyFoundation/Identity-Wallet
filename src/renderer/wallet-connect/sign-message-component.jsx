@@ -1,59 +1,111 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Popup } from '../common/popup';
-import { Typography, Grid, Button } from '@material-ui/core';
+import { Typography, Grid, Button, Divider } from '@material-ui/core';
 import { PropTypes } from 'prop-types';
 
 const useStyles = makeStyles({
+	gridItem: {
+		textAlign: 'center'
+	},
+	gridItemLeft: {
+		textAlign: 'left',
+		display: 'flex',
+		alignItems: 'center',
+		gap: '10px'
+	},
 	icon: {
-		width: 50,
-		height: 50,
+		width: 30,
+		height: 30,
 		background: 'transparent'
 	},
-	message: {
+	data: {
 		width: 300,
-		overflowWrap: 'break-word'
+		overflowWrap: 'break-word',
+		fontFamily: 'monospace',
+		padding: '5px',
+		border: '1px solid #384656',
+		marginTop: '5px'
 	},
 	actions: {
 		marginTop: 20
+	},
+	divider: {
+		margin: '20px 0'
+	},
+	balance: {
+		color: '#fff',
+		fontWeight: 'bold',
+		marginLeft: '.5em'
+	},
+	bottomSpace: {
+		marginBottom: '20px'
+	},
+	tokenMax: {
+		display: 'flex',
+		flexWrap: 'nowrap',
+		marginBottom: '5px'
+	},
+	tokenBottomSpace: {
+		marginBottom: '30px'
+	},
+	flexColumn: {
+		flexDirection: 'column'
+	},
+	fiatPrice: {
+		display: 'flex'
+	},
+	amount: {
+		marginRight: '20px'
 	}
 });
 
 export const SignMessageComponent = ({ onCancel, peerMeta, message, address, onSignMessage }) => {
 	const classes = useStyles();
-	const { name, description, url, icons = [] } = peerMeta;
+	const { name, url, icons = [] } = peerMeta;
 	const [icon] = icons;
 	return (
-		<Popup closeAction={onCancel} text="WalletConnect sign message request">
+		<Popup closeAction={onCancel} text="WalletConnect Sign message request">
 			<Grid container direction="column" alignItems="center" spacing={2}>
-				{icon && (
-					<Grid item>
-						<img src={icon} className={classes.icon} />
-					</Grid>
-				)}
 				<Grid item>
-					<Typography variant="body1">
-						{name || 'An application'} is requesting to sign a message
+					<Grid container direction="row" spacing={2} alignItems="center">
+						{icon && (
+							<Grid item>
+								<img src={icon} className={classes.icon} />
+							</Grid>
+						)}
+						<Grid item>
+							{name || 'An application'} is requesting to Sign a Message
+							<br />
+							<Typography variant="subtitle2" color="secondary">
+								{url}
+							</Typography>
+						</Grid>
+					</Grid>
+				</Grid>
+
+				<Divider className={classes.divider} />
+
+				<Grid item className={classes.gridItem}>
+					<Typography variant="subtitle1" color="secondary">
+						Current Wallet Address
 					</Typography>
-				</Grid>
-				{description && (
-					<Grid item>
-						<Typography variant="body1">{description}</Typography>
-					</Grid>
-				)}
-				{url && (
-					<Grid item>
-						<Typography variant="body1">{url}</Typography>
-					</Grid>
-				)}
-
-				<Grid item>
-					<Typography variant="body1">Current address is {address}</Typography>
+					<div>
+						<Typography variant="body2" style={{ fontFamily: 'monospace' }}>
+							{address}
+						</Typography>
+					</div>
 				</Grid>
 
-				<Grid item className={classes.message}>
-					<Typography variant="h3">Message:</Typography>
-					<Typography variant="body1">{message}</Typography>
+				<Grid item className={classes.gridItem}>
+					<Typography variant="subtitle1" color="secondary">
+						Message
+					</Typography>
+					<div>
+						<Typography variant="body2" style={{ fontFamily: 'monospace' }}>
+							{message}
+						</Typography>
+					</div>
 				</Grid>
 
 				<Grid item className={classes.actions}>
