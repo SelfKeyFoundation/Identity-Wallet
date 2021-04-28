@@ -220,6 +220,8 @@ export class WalletConnectService {
 		rawTx.nonce = await this.web3Service.getNextNonce(rawTx.from);
 		const tx = { ...rawTx };
 		tx.gas = EthUtils.hexToDecimal(tx.gas);
+		const gasPrice = EthUtils.hexToDecimal(tx.gasPrice);
+		tx.gasPrice = gasPrice < 5000 ? gasPrice : 100;
 
 		this.focusWindow();
 		this.store.dispatch(
