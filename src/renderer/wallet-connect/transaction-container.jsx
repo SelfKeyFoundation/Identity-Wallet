@@ -3,6 +3,7 @@ import EthUtils from 'common/utils/eth-utils';
 import { useSelector, useDispatch } from 'react-redux';
 import { walletConnectOperations, walletConnectSelectors } from '../../common/wallet-connect';
 import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/eth-gas-station';
+
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { pricesSelectors } from 'common/prices';
 import { getLocale } from 'common/locale/selectors';
@@ -20,11 +21,15 @@ export const TransactionContainer = () => {
 	const { fiatCurrency = 'USD' } = useSelector(getFiatCurrency);
 	const locale = useSelector(getLocale);
 	const ethRate = useSelector(state => pricesSelectors.getRate(state, 'ETH', fiatCurrency));
-	const { peerMeta, tx, method, rawTx } = useSelector(walletConnectSelectors.selectWalletConnect);
+	const { peerMeta, tx, method, rawTx, nonce: defaultNonce } = useSelector(
+		walletConnectSelectors.selectWalletConnect
+	);
+
+	console.log(tx);
 
 	const [gasPrice, setGasPrice] = useState(tx.gasPrice);
 	const [gasLimit, setGasLimit] = useState(tx.gas);
-	const [nonce, setNonce] = useState(tx.nonce);
+	const [nonce, setNonce] = useState(tx.nonce ? tx.nonce : defaultNonce);
 
 	const wallet = useSelector(getWallet);
 	const address = wallet ? wallet.address : undefined;

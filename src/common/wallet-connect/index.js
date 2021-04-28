@@ -2,6 +2,7 @@ import { getGlobalContext } from '../context';
 import { createAliasedAction } from 'electron-redux';
 import { push } from 'connected-react-router';
 import { getWallet } from '../wallet/selectors';
+import { getTransactionCount } from 'common/transaction/operations';
 import { Logger } from 'common/logger';
 const log = new Logger('WalletConnectDuck');
 
@@ -14,7 +15,7 @@ export const walletConnectInitialState = {
 	pendingUri: null,
 	unlocked: false,
 	sessions: [],
-
+	nonce: null,
 	hasSessionRequest: false,
 	hasSignRequest: false,
 	hasTxRequest: false,
@@ -248,6 +249,7 @@ export const operations = {
 		if (!wallet || !wallet.address) {
 			throw new Error('Cannot sign message without wallet');
 		}
+		const nonce = await getTransactionCount(wallet.address);
 		await dispatch(operations.resetSessionAction());
 		await dispatch(
 			operations.setSessionAction({
@@ -257,7 +259,8 @@ export const operations = {
 				peerId,
 				tx,
 				method,
-				rawTx
+				rawTx,
+				nonce
 			})
 		);
 		await dispatch(push('/wallet-connect/transaction'));
