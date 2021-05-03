@@ -46,7 +46,7 @@ export class ScanQrCodeService {
 	}
 
 	openWindow() {
-		const qrWindow = new electron.BrowserWindow({
+		let windowOptions = {
 			title: 'SelfKey Identity Wallet QR Code Scanner',
 			name: 'selfkey-scan-qr-code',
 			width: 700,
@@ -55,7 +55,14 @@ export class ScanQrCodeService {
 			webPreferences: {
 				nodeIntegration: true
 			}
-		});
+		};
+
+		if (process.platform === 'win32' || process.platform === 'linux') {
+			windowOptions = Object.assign({}, windowOptions, {
+				frame: false
+			});
+		}
+		const qrWindow = new electron.BrowserWindow(windowOptions);
 
 		qrWindow.webContents.session.setPreloads([
 			path.join(__static, '/assets/libs/preload-get-display-media-polyfill.js')
