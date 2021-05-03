@@ -28,6 +28,8 @@ const REWARD_TOKEN = process.env.REWARD_TOKEN_OVERRIDE
 	? process.env.REWARD_TOKEN_OVERRIDE.toUpperCase()
 	: null;
 
+const SAFE_GAS_MULTIPLIER = +process.env.SAFE_GAS_MULTIPLIER;
+
 // KYCC ENV variables
 const KYCC_API_OVERRIDE = process.env.KYCC_API_OVERRIDE;
 // Incorporations ENV variables
@@ -43,7 +45,6 @@ const BANKACCOUNTS_API_URL = process.env.BANKACCOUNTS_API_URL;
 const PASSPORTS_TEMPLATE_OVERRIDE = process.env.PASSPORTS_TEMPLATE_OVERRIDE;
 const PASSPORTS_PRICE_OVERRIDE = process.env.PASSPORTS_PRICE_OVERRIDE;
 const PASSPORTS_API_URL = process.env.PASSPORTS_API_URL;
-
 const COUNTRY_INFO_URL = process.env.COUNTRY_INFO_URL;
 const ALL_COUNTRIES_INFO_URL = process.env.ALL_COUNTRIES_INFO_URL;
 const MATOMO_SITE = process.env.MATOMO_SITE;
@@ -64,6 +65,7 @@ const common = {
 	defaultLanguage: 'en',
 	forceUpdateAttributes: process.env.FORCE_UPDATE_ATTRIBUTES === 'true' && !isTestMode(),
 	userAgent: `SelfKeyIDW/${pkg.version}`,
+	safeGasMultiplier: SAFE_GAS_MULTIPLIER || 1.5,
 	airtableBaseUrl: 'https://airtable.selfkey.org/airtable?tableName=',
 
 	exchangeRateApiUrl: 'https://api.exchangeratesapi.io',
