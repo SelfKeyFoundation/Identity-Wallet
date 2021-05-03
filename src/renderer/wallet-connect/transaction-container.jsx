@@ -25,8 +25,6 @@ export const TransactionContainer = () => {
 		walletConnectSelectors.selectWalletConnect
 	);
 
-	console.log(tx);
-
 	const [gasPrice, setGasPrice] = useState(tx.gasPrice);
 	const [gasLimit, setGasLimit] = useState(tx.gas);
 	const [nonce, setNonce] = useState(tx.nonce ? tx.nonce : defaultNonce);
