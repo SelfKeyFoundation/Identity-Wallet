@@ -180,7 +180,7 @@ const styles = theme => ({
 		padding: '50px 0 0 !important'
 	},
 	secondaryMenuItemsWrap: {
-		padding: '50px 0 0 !important'
+		padding: '20px 0 0 !important'
 	},
 	paddingLeft: {
 		paddingLeft: '10px'
