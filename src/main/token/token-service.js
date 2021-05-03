@@ -1,4 +1,5 @@
 'use strict';
+import config from 'common/config';
 import Token from './token';
 import { getGlobalContext } from 'common/context';
 import { BigNumber } from 'bignumber.js';
@@ -51,6 +52,15 @@ export class TokenService {
 		};
 	}
 
+	/**
+	 *
+	 * @param {*} contractAddress
+	 * @param {*} address
+	 * @param {*} amount
+	 * @param {*} decimal
+	 * @param {*} fromAddress
+	 * @returns
+	 */
 	async getGasLimit(contractAddress, address, amount, decimal, fromAddress) {
 		const tokenContract = new this.web3Service.web3.eth.Contract(
 			this.contractABI,
@@ -63,7 +73,7 @@ export class TokenService {
 		const estimate = await tokenContract.methods
 			.transfer(address, amountWithDecimals)
 			.estimateGas({ from: fromAddress });
-		return Math.round(Math.min(estimate * 1.1, MAX_GAS));
+		return Math.round(Math.min(estimate * config.safeGasMultiplier, MAX_GAS));
 	}
 }
 

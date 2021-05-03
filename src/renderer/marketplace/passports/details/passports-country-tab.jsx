@@ -136,7 +136,7 @@ const PassportsCountryTab = withStyles(styles)(({ classes, country, program }) =
 						/>
 					</div>
 				</Grid>
-				{program && (
+				{program && program.data && program.data.description && (
 					<div className={classes.countryInfo}>
 						<p
 							dangerouslySetInnerHTML={{

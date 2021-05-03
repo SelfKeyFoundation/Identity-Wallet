@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<head>
+	<style>
+		body {
+			background: rgba(0, 0, 0, 0.2);
+		}
+		#top-left {
+			position: absolute;
+			left: 10px;
+			top: 10px;
+			width: 50px;
+			height: 50px;
+			border-left: 5px solid red;
+			border-top: 5px solid red;
+		}
+		#top-right {
+			position: absolute;
+			right: 10px;
+			top: 10px;
+			width: 50px;
+			height: 50px;
+			border-right: 5px solid red;
+			border-top: 5px solid red;
+		}
+		#bottom-right {
+			position: absolute;
+			right: 10px;
+			bottom: 10px;
+			width: 50px;
+			height: 50px;
+			border-right: 5px solid red;
+			border-bottom: 5px solid red;
+		}
+		#bottom-left {
+			position: absolute;
+			left: 10px;
+			bottom: 10px;
+			width: 50px;
+			height: 50px;
+			border-left: 5px solid red;
+			border-bottom: 5px solid red;
+		}
+	</style>
+	<script src="assets/libs/jsqr.min.js"></script>
+	<script src="assets/libs/stream-display.min.js"></script>
+</head>
+<body>
+	<div id="top-left"></div>
+	<div id="top-right"></div>
+	<div id="bottom-right"></div>
+	<div id="bottom-left"></div>
+	<script>
+		'use strict';
+		const { desktopCapturer } = require('electron');
+		const { ipcRenderer } = require('electron');
+
+		let capture;
+
+		async function startCapture() {
+			try {
+				await capture.startCapture();
+			} catch (err) {
+				console.error('Error: ' + err);
+			}
+		}
+		function stopCapture() {
+			capture.stopCapture();
+		}
+		const scanVideoStream = imageData => {
+			//console.log('scanning!', Date.now());
+			const code = jsQR(imageData.data, imageData.width, imageData.height);
+			if (code) {
+				if (code.data.startsWith('wc:')) {
+					stopCapture();
+					ipcRenderer.send('qr-code-found', code.data);
+					window.close();
+				}
+			}
+		};
+		document.addEventListener('DOMContentLoaded', () => {
+			capture = new StreamDisplay(scanVideoStream);
+			startCapture();
+		});
+	</script>
+</body>
