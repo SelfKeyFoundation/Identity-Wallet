@@ -57,11 +57,13 @@ const TAX_COLUMNS = [
 const PassportsTaxesTab = withStyles(styles)(({ classes, program }) => (
 	<div className={classes.tabContainer}>
 		<IncorporationsDataPanel sections={TAX_COLUMNS} data={program.data} />
-		<p
-			dangerouslySetInnerHTML={{
-				__html: sanitize(program.data.description.taxes)
-			}}
-		/>
+		{program && program.data && program.data.description && (
+			<p
+				dangerouslySetInnerHTML={{
+					__html: sanitize(program.data.description.taxes)
+				}}
+			/>
+		)}
 	</div>
 ));
 

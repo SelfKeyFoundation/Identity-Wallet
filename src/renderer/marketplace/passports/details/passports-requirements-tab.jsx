@@ -42,18 +42,26 @@ const styles = theme => ({
 
 const PassportsRequirementsTab = withStyles(styles)(({ classes, program }) => (
 	<div className={classes.tabContainer}>
-		<h1>Requirements</h1>
-		<p
-			dangerouslySetInnerHTML={{
-				__html: sanitize(program.data.description.requirements)
-			}}
-		/>
-		<h1>KYC details</h1>
-		<ul>
-			{program.data.kyc.map(n => (
-				<li key={n}>{n}</li>
-			))}
-		</ul>
+		{program && program.data && program.data.description && (
+			<>
+				<h1>Requirements</h1>
+				<p
+					dangerouslySetInnerHTML={{
+						__html: sanitize(program.data.description.requirements)
+					}}
+				/>
+			</>
+		)}
+		{program && program.data && program.data.kyc && (
+			<>
+				<h1>KYC details</h1>
+				<ul>
+					{program.data.kyc.map(n => (
+						<li key={n}>{n}</li>
+					))}
+				</ul>
+			</>
+		)}
 	</div>
 ));
 

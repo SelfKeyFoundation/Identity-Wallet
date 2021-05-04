@@ -94,7 +94,7 @@ export class TransactionFeeBoxComponent extends PureComponent {
 
 	getFeeInEth(type, digits = false) {
 		const gasPrice = this.getFee(type);
-		const gasLimit = this.props.gasLimit || DEFAULT_ETH_GAS_LIMIT;
+		const gasLimit = this.props.gasLimit ? this.props.gasLimit : DEFAULT_ETH_GAS_LIMIT;
 		const ethFee = EthUnits.toEther(gasPrice * gasLimit, 'gwei');
 		return digits ? Number.parseFloat(ethFee).toFixed(digits) : ethFee;
 	}

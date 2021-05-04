@@ -11,6 +11,9 @@ export const SignMessageContainer = () => {
 	const wallet = useSelector(getWallet);
 	const address = wallet ? wallet.address : undefined;
 
+	console.log(peerMeta);
+	console.log(message);
+
 	const handleCancel = () => {
 		dispatch(walletConnectOperations.signMessageDenyOperation());
 	};

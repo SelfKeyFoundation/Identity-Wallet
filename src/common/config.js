@@ -28,6 +28,8 @@ const REWARD_TOKEN = process.env.REWARD_TOKEN_OVERRIDE
 	? process.env.REWARD_TOKEN_OVERRIDE.toUpperCase()
 	: null;
 
+const SAFE_GAS_MULTIPLIER = +process.env.SAFE_GAS_MULTIPLIER;
+
 // KYCC ENV variables
 const KYCC_API_OVERRIDE = process.env.KYCC_API_OVERRIDE;
 // Incorporations ENV variables
@@ -64,6 +66,7 @@ const common = {
 	defaultLanguage: 'en',
 	forceUpdateAttributes: process.env.FORCE_UPDATE_ATTRIBUTES === 'true' && !isTestMode(),
 	userAgent: `SelfKeyIDW/${pkg.version}`,
+	safeGasMultiplier: SAFE_GAS_MULTIPLIER || 1.5,
 	airtableBaseUrl: 'https://airtable.selfkey.org/airtable?tableName=',
 
 	exchangeRateApiUrl: 'https://api.exchangeratesapi.io',

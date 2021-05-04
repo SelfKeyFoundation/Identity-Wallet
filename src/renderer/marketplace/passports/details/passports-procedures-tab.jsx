@@ -42,12 +42,16 @@ const styles = theme => ({
 
 const PassportsProceduresTab = withStyles(styles)(({ classes, program }) => (
 	<div className={classes.tabContainer}>
-		<h1>Procedures</h1>
-		<p
-			dangerouslySetInnerHTML={{
-				__html: sanitize(program.data.description.procedures)
-			}}
-		/>
+		{program && program.data && program.data.description && (
+			<>
+				<h1>Procedures</h1>
+				<p
+					dangerouslySetInnerHTML={{
+						__html: sanitize(program.data.description.procedures)
+					}}
+				/>
+			</>
+		)}
 	</div>
 ));
 
