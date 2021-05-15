@@ -22,8 +22,10 @@ import {
 	FIRST_NAME_ATTRIBUTE,
 	LAST_NAME_ATTRIBUTE,
 	PHONE_ATTRIBUTE,
-	ADDRESS_ATTRIBUTE
-} from '../identity/constants';
+	ADDRESS_ATTRIBUTE,
+	RESIDENCY_ATTRIBUTE,
+	NATIONALITY_ATTRIBUTE
+} from 'common/identity/constants';
 import { push } from 'connected-react-router';
 import { featureIsEnabled } from 'common/feature-flags';
 
@@ -566,6 +568,26 @@ const connectFlowOperation = ops => ({ cancel, complete }) => async (dispatch, g
 
 	if (!identity.isSetupFinished) {
 		await dispatch(push('/main/selfkeyId'));
+		return;
+	}
+
+	const residencyAndNationalityAttributes = identitySelectors.selectAttributesByUrl(getState(), {
+		identityId: identity.id,
+		attributeTypeUrls: [NATIONALITY_ATTRIBUTE, RESIDENCY_ATTRIBUTE]
+	});
+
+	const missingProfileAttributes = residencyAndNationalityAttributes.length !== 2;
+	if (missingProfileAttributes) {
+		await dispatch(push('/main/moonpay/country-not-allowed'));
+		return;
+	}
+
+	// TODO: blocked jurisdictions should be a config setting
+	const isBlockedJurisdiction = residencyAndNationalityAttributes.some(
+		attr => attr.data.value.country === 'US'
+	);
+	if (isBlockedJurisdiction) {
+		await dispatch(push('/main/moonpay/country-not-allowed'));
 		return;
 	}
 

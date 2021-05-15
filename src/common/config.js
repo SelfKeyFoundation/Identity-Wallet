@@ -173,7 +173,7 @@ const common = {
 		keyfi: true,
 		hdWallet: true,
 		deepLinks: true,
-		moonpay: false,
+		moonpay: true,
 		moonpayWalletLogin: false,
 		networkToggle: false
 	}
@@ -265,7 +265,7 @@ const prod = {
 		keyfi: true,
 		hdWallet: true,
 		deepLinks: true,
-		moonpay: false,
+		moonpay: true,
 		moonpayWalletLogin: false,
 		networkToggle: false
 	},
