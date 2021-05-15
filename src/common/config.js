@@ -45,9 +45,9 @@ const BANKACCOUNTS_API_URL = process.env.BANKACCOUNTS_API_URL;
 const PASSPORTS_TEMPLATE_OVERRIDE = process.env.PASSPORTS_TEMPLATE_OVERRIDE;
 const PASSPORTS_PRICE_OVERRIDE = process.env.PASSPORTS_PRICE_OVERRIDE;
 const PASSPORTS_API_URL = process.env.PASSPORTS_API_URL;
-
 const COUNTRY_INFO_URL = process.env.COUNTRY_INFO_URL;
 const ALL_COUNTRIES_INFO_URL = process.env.ALL_COUNTRIES_INFO_URL;
+
 const MATOMO_SITE = process.env.MATOMO_SITE;
 const DEPOSIT_PRICE_OVERRIDE = process.env.DEPOSIT_PRICE_OVERRIDE;
 const SWAP_MAX_VALUE = +process.env.SWAP_MAX_VALUE;
@@ -173,8 +173,9 @@ const common = {
 		keyfi: true,
 		hdWallet: true,
 		deepLinks: true,
-		moonpay: false,
-		moonpayWalletLogin: false
+		moonpay: true,
+		moonpayWalletLogin: false,
+		networkToggle: false
 	}
 };
 
@@ -210,12 +211,13 @@ const dev = {
 		swapTokens: false,
 		contract: true,
 		exchangesMarketplace: false,
-		rewardToken: true,
+		rewardToken: false,
 		keyfi: true,
 		hdWallet: true,
 		deepLinks: true,
 		moonpay: true,
-		moonpayWalletLogin: true
+		moonpayWalletLogin: true,
+		networkToggle: true
 	},
 	moonPayApiKey: 'pk_test_oMn5N1gYzf5eufwrs4AJUKhlZHBjVD',
 	moonPayApiEndpoint: 'https://api.moonpay.com/v3',
@@ -263,8 +265,9 @@ const prod = {
 		keyfi: true,
 		hdWallet: true,
 		deepLinks: true,
-		moonpay: false,
-		moonpayWalletLogin: false
+		moonpay: true,
+		moonpayWalletLogin: false,
+		networkToggle: false
 	},
 	// TODO: change to prod before release
 	moonPayApiKey: 'pk_test_oMn5N1gYzf5eufwrs4AJUKhlZHBjVD',
