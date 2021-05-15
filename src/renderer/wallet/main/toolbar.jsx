@@ -392,6 +392,17 @@ class Toolbar extends PureComponent {
 							<div>
 								<PriceBox cryptoCurrency="ETH" />
 							</div>
+							{featureIsEnabled('networkToggle') && (
+								<>
+									<div className={classes.sepVert} />
+									<div style={{ paddingLeft: '1.25em' }}>
+										Ethereum MainNet
+										<Typography variant="subtitle1" color="secondary">
+											Wallet address
+										</Typography>
+									</div>
+								</>
+							)}
 						</Grid>
 					</Grid>
 					<Grid item xs={2} className={classes.maxWidth}>

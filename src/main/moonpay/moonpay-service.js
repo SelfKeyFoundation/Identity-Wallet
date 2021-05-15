@@ -12,7 +12,8 @@ import {
 	LAST_NAME_ATTRIBUTE,
 	PHONE_ATTRIBUTE,
 	ADDRESS_ATTRIBUTE
-} from '../../common/identity/constants';
+} from 'common/identity/constants';
+
 export class MoonPayService {
 	constructor({ config, walletService, store }) {
 		this.config = config;
@@ -436,7 +437,7 @@ export class MoonPayService {
 			'web-security': true
 		});
 
-		const url = `${this.widgetUrl}?apiKey=${key}&currencyCode=eth&email=${encodeURIComponent(
+		const url = `${this.widgetUrl}?apiKey=${key}&currencyCode=key&email=${encodeURIComponent(
 			email
 		)}&walletAddress=${address}&showWalletAddressForm=true&redirectURL=${encodeURIComponent(
 			`https://localhost`

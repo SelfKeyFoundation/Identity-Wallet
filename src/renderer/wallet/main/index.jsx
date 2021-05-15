@@ -62,6 +62,7 @@ import { push } from 'connected-react-router';
 import MoonPayAuthRouter from '../../moonpay/auth-router';
 import MoonPayPaymentRouter from '../../moonpay/payment-router';
 import MoonPayLoadingContainer from '../../moonpay/moonpay-loading-container';
+import MoonPayCountryNotAllowedContainer from '../../moonpay/country-not-allowed-container';
 
 const styles = theme => ({
 	headerSection: {
@@ -298,6 +299,11 @@ class Main extends PureComponent {
 						/>
 
 						<Route path={`${match.path}/moonpay/auth`} component={MoonPayAuthRouter} />
+
+						<Route
+							path={`${match.path}/moonpay/country-not-allowed`}
+							component={MoonPayCountryNotAllowedContainer}
+						/>
 
 						<Route
 							path={`${match.path}/moonpay/payment`}

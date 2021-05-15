@@ -122,7 +122,7 @@ MoonPayEmailVerificationModal.propTypes = {
 	onContinueClick: PropTypes.func.isRequired,
 	onCloseClick: PropTypes.func.isRequired,
 	onResendClick: PropTypes.func.isRequired,
-	email: PropTypes.string.isRequired,
+	email: PropTypes.string,
 	code: PropTypes.string,
 	onCodeChange: PropTypes.func.isRequired,
 	loading: PropTypes.bool,
