@@ -176,7 +176,6 @@ const common = {
 		moonpay: true,
 		moonpayWalletLogin: false,
 		networkToggle: false
-
 	}
 };
 
