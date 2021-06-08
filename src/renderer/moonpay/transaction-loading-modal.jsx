@@ -24,12 +24,11 @@ export const TransactionLoadingModal = ({ onCloseClick, title, onStatusClick, tr
 				<Grid item>
 					<Typography variant="body2" color="secondary" className={classes.body}>
 						Transactions normally take between a few minutes and half an hour to
-						complete, but may take longer if we need to run additional checks. For
-						example, if it{"'"}s your first-ever purchase, or your first purchase with a
-						particular payment card.
+						complete. However, some situations may take longer, such as a first-time
+						purchase.
 					</Typography>
 					<Typography variant="body2" color="secondary" className={classes.body}>
-						You will be notified by email when transaction completes, you can safely
+						You will be notified by email when transaction completes. You may now safely
 						close this window.
 					</Typography>
 				</Grid>

@@ -6,10 +6,12 @@ import ListAttributeChooser from '../attributes/choosers/list-attribute-chooser'
 
 export const MoonpayChooseLoginEmailModal = ({ onCancel, onNext, selected, ...chooserProps }) => {
 	return (
-		<Popup closeAction={onCancel} text="MoonPay Choose Login Email">
+		<Popup closeAction={onCancel} text="Connecting with MoonPay">
 			<Grid container direction="column" spacing={4}>
 				<Grid item>
-					<Typography variant="body1">Please choose email or create a new one</Typography>
+					<Typography variant="body1">
+						Choose which email address to use with MoonPay
+					</Typography>
 				</Grid>
 				<Grid item>
 					<Divider />
