@@ -1,7 +1,7 @@
 import React from 'react';
-import { Grid, List, ListItem, Typography, Divider, Button } from '@material-ui/core';
+import { Grid, Typography, Divider, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
-import { PaymentIcon, Copy, primary } from 'selfkey-ui';
+import { ExchangeSmallIcon, CardsIcon, Copy, primary } from 'selfkey-ui';
 import { Popup } from '../common';
 import { PropTypes } from 'prop-types';
 
@@ -56,6 +56,7 @@ const styles = theme => ({
 	}
 });
 
+/*
 const getExchanges = (exchanges, classes, onLinkClick) => {
 	return exchanges.map(exchange => {
 		return (
@@ -74,10 +75,53 @@ const getExchanges = (exchanges, classes, onLinkClick) => {
 		);
 	});
 };
+*/
 
 export const BuyKeyModal = withStyles(styles)(
 	({ classes, address, onMoonpayClick, onLinkClick, exchanges, onCloseClick }) => (
 		<Popup closeAction={onCloseClick} text="Buy KEY">
+			{onMoonpayClick && (
+				<Grid
+					container
+					direction="row"
+					justify="flex-start"
+					alignItems="flex-start"
+					wrap="nowrap"
+				>
+					<Grid item className={classes.icon}>
+						<CardsIcon />
+					</Grid>
+					<Grid item>
+						<Grid
+							container
+							direction="column"
+							justify="flex-start"
+							alignItems="flex-start"
+						>
+							<Grid item id="header">
+								<Typography variant="h1" gutterBottom>
+									Buy KEY with a Credit Card
+								</Typography>
+							</Grid>
+
+							<Grid item className={classes.bottomSpace}>
+								<Typography variant="body2">
+									You can purchase KEY using a Credit Card by connecting your
+									wallet with MoonPay.
+								</Typography>
+							</Grid>
+							<Grid item className={classes.bottomSpace}>
+								<Button size="large" variant="contained" onClick={onMoonpayClick}>
+									Connect With MoonPay
+								</Button>
+							</Grid>
+						</Grid>
+					</Grid>
+				</Grid>
+			)}
+			<Grid item>
+				<Divider className={classes.divider} />
+			</Grid>
 			<Grid
 				container
 				direction="row"
@@ -86,82 +130,60 @@ export const BuyKeyModal = withStyles(styles)(
 				wrap="nowrap"
 			>
 				<Grid item className={classes.icon}>
-					<PaymentIcon />
+					<ExchangeSmallIcon />
 				</Grid>
-				<Grid item>
+				<Grid item id="body" className={classes.body}>
+					<Grid item id="header">
+						<Typography variant="h1" gutterBottom>
+							Buy KEY on an External Exchange
+						</Typography>
+					</Grid>
+
 					<Grid container direction="column" justify="flex-start" alignItems="flex-start">
-						<Grid item id="header">
-							<Typography variant="h1" gutterBottom>
-								Get KEY Tokens
-							</Typography>
-						</Grid>
-						{onMoonpayClick && (
-							<React.Fragment>
-								<Grid item className={classes.bottomSpace}>
-									<Typography variant="body2">
-										You can purchase KEY tokens with Credit Card directly in the
-										wallet using the MoonPay service.
-									</Typography>
-								</Grid>
-								<Grid item className={classes.bottomSpace}>
-									<Button
-										size="large"
-										variant="contained"
-										onClick={onMoonpayClick}
-									>
-										Connect With MoonPay
-									</Button>
-								</Grid>
-								<Grid item>
-									<Typography variant="body2">Alternatively:</Typography>
-								</Grid>
-							</React.Fragment>
-						)}
-						<Grid item id="body" className={classes.body}>
-							<Grid
-								container
-								direction="column"
-								justify="flex-start"
-								alignItems="flex-start"
+						<Typography variant="body2" className={classes.bottomSpace}>
+							You may purchase KEY on many Exchanges worldwide and then transfer them
+							to this wallet. KEY is availabe on{' '}
+							<a
+								className={classes.link}
+								target="_blank"
+								rel="noopener noreferrer"
+								onClick={onLinkClick}
+								href="https://www.coingecko.com/en/coins/selfkey#markets"
 							>
-								<Typography variant="body2" className={classes.bottomSpace}>
-									You can buy KEY tokens, to use in the wallet, from one of the
-									many exchanges worldwide.
+								these markets
+							</a>
+							.
+						</Typography>
+						{address && (
+							<Grid container>
+								<Typography variant="body2" color="secondary">
+									After purchasing KEY on an external Exchange, transfer them to
+									your wallet address:
 								</Typography>
-								<List className={classes.exchanges}>
-									{getExchanges(exchanges, classes, onLinkClick)}
-								</List>
-								{address && (
-									<Grid container>
-										<Typography variant="body2" color="secondary">
-											Your Address to receive KEY:
-										</Typography>
-										<Grid container alignItems="center">
-											<Typography className={classes.address} variant="body2">
-												{address}
-											</Typography>
-											<Copy text={address} />
-										</Grid>
-										<Divider className={classes.divider} />
-										<Typography variant="subtitle2" color="secondary">
-											KEY is the main token used in the SelfKey Wallet, and
-											it’s used when accessing services in the marketplace.
-											ETH is needed for the network transaction fee{' '}
-											<a
-												className={classes.link}
-												target="_blank"
-												rel="noopener noreferrer"
-												onClick={onLinkClick}
-												href="https://help.selfkey.org/article/128-how-to-pay-for-marketplace-products-services-with-key"
-											>
-												(what’s this?)
-											</a>
-											.
-										</Typography>
-									</Grid>
-								)}
+								<Grid container alignItems="center">
+									<Typography className={classes.address} variant="body2">
+										{address}
+									</Typography>
+									<Copy text={address} />
+								</Grid>
+								<Divider className={classes.divider} />
+								<Typography variant="subtitle2" color="secondary">
+									KEY is the main token used in the SelfKey Wallet, and it’s used
+									when accessing services in the marketplace. ETH is needed for
+									the network transaction fee{' '}
+									<a
+										className={classes.link}
+										target="_blank"
+										rel="noopener noreferrer"
+										onClick={onLinkClick}
+										href="https://help.selfkey.org/article/128-how-to-pay-for-marketplace-products-services-with-key"
+									>
+										(what’s this?)
+									</a>
+									.
+								</Typography>
 							</Grid>
-						</Grid>
+						)}
 					</Grid>
 				</Grid>
 			</Grid>

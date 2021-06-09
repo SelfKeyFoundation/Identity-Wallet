@@ -562,10 +562,12 @@ const submitKycDocumentsOperation = ops => () => async (dispatch, getState) => {
 const connectFlowOperation = ops => ({ cancel, complete }) => async (dispatch, getState) => {
 	const identity = selectIdentity(getState());
 
+	// A selfkey identity is needed for Moonpay
 	if (!identity) {
 		return;
 	}
 
+	// A completed selfkey identity is needed for Moonpay
 	if (!identity.isSetupFinished) {
 		await dispatch(push('/main/selfkeyId'));
 		return;
@@ -608,6 +610,7 @@ const connectFlowNextStepOperation = ops => opt => async (dispatch, getState) =>
 		await dispatch(ops.loadSettingsOperation());
 	}
 
+	/*
 	const agreedToTerms = hasAgreedToTerms(getState());
 	if (!agreedToTerms) {
 		await dispatch(
@@ -618,6 +621,7 @@ const connectFlowNextStepOperation = ops => opt => async (dispatch, getState) =>
 		);
 		return;
 	}
+	*/
 
 	if (!config.moonPayWidgetMode) {
 		const serviceCheck = selectServiceCheck(getState());
