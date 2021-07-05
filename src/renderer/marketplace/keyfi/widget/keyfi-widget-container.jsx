@@ -12,6 +12,11 @@ import { KeyFiWidget } from './keyfi-widget';
 const styles = theme => ({});
 
 class KeyFiWidgetContainerComponent extends MarketplaceKeyFiComponent {
+	componentDidMount() {
+		if (this.props.active) {
+			this.loadRelyingParty({ rp: 'keyfi', authenticated: false, forceUpdate: true });
+		}
+	}
 	render() {
 		return this.props.active ? (
 			<KeyFiWidget

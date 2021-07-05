@@ -26,9 +26,10 @@ class MarketplaceComponent extends PureComponent {
 		authenticated = false,
 		nextRoute,
 		cancelRoute,
-		background = false
+		background = false,
+		forceUpdate = false
 	}) => {
-		if (this.props.rpShouldUpdate) {
+		if (this.props.rpShouldUpdate || forceUpdate) {
 			await this.props.dispatch(
 				kycOperations.loadRelyingParty(
 					rp,
