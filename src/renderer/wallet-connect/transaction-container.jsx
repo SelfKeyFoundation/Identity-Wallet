@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import EthUtils from 'common/utils/eth-utils';
+import EthUnits from 'common/utils/eth-units';
 import { useSelector, useDispatch } from 'react-redux';
 import { walletConnectOperations, walletConnectSelectors } from '../../common/wallet-connect';
 import { ethGasStationInfoOperations, ethGasStationInfoSelectors } from 'common/eth-gas-station';
-
 import { getFiatCurrency } from 'common/fiatCurrency/selectors';
 import { pricesSelectors } from 'common/prices';
 import { getLocale } from 'common/locale/selectors';
@@ -47,7 +47,8 @@ export const TransactionContainer = () => {
 			newTx.gas = EthUtils.sanitizeHex(EthUtils.decimalToHex(gasLimit));
 		}
 		if (gasPrice) {
-			newTx.gasPrice = EthUtils.sanitizeHex(EthUtils.decimalToHex(gasPrice));
+			const gasPriceInWei = EthUnits.unitToUnit(gasPrice, 'gwei', 'wei');
+			newTx.gasPrice = EthUtils.sanitizeHex(EthUtils.decimalToHex(gasPriceInWei));
 		}
 		if (nonce) {
 			newTx.nonce = nonce;
