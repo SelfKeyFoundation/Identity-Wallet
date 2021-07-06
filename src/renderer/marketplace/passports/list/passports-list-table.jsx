@@ -140,6 +140,14 @@ const ProgramRow = withStyles(styles)(({ classes, program, onDetails, keyRate })
 						))}
 				</Grid>
 			</TagTableCell>
+			<TagTableCell className={classes.goodForCell}>
+				<Grid container>
+					{data.typeOfCategoryDonationRealEstateInvestmentBondsBusinessAnnualLevyPension &&
+						data.typeOfCategoryDonationRealEstateInvestmentBondsBusinessAnnualLevyPension.map(
+							tag => <Tag key={tag}>{tag}</Tag>
+						)}
+				</Grid>
+			</TagTableCell>
 			<TagTableCell className={classes.goodForCell}>{data.visaFree}</TagTableCell>
 			<TableCell>
 				<Typography variant="h6">{data.investmentAmountSingleApplicant}</Typography>
@@ -172,6 +180,9 @@ const PassportsListTable = withStyles(styles)(
 						</TableCell>
 						<TableCell className={classes.minDepositCell}>
 							<Typography variant="overline">Type</Typography>
+						</TableCell>
+						<TableCell className={classes.costCell}>
+							<Typography variant="overline">Investment Type</Typography>
 						</TableCell>
 						<TableCell className={classes.goodForCell}>
 							<Typography variant="overline">Visa Free Travel</Typography>
