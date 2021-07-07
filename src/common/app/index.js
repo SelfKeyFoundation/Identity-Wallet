@@ -759,6 +759,10 @@ const selectAutoUpdateDownloaded = state => {
 
 const selectCanExportWallet = state => {
 	const wallet = walletSelectors.getWallet(state);
+	const keystore = selectKeystoreValue(state);
+	if (!keystore) {
+		return false;
+	}
 	return (
 		featureIsEnabled('walletExport') &&
 		!!(wallet && wallet.profile === 'local' && wallet.keystoreFilePath)
