@@ -18,11 +18,9 @@ const DEBUG_REQUEST = process.env.DEBUG_REQUEST === '1' && !isStorybook();
 if (DEBUG_REQUEST) {
 	require('request').debug = true;
 }
-const CHAIN_ID = process.env.CHAIN_ID_OVERRIDE;
+const CHAIN_ID = 3;
 const NODE = process.env.NODE_OVERRIDE;
-const PRIMARY_TOKEN = process.env.PRIMARY_TOKEN_OVERRIDE
-	? process.env.PRIMARY_TOKEN_OVERRIDE.toUpperCase()
-	: null;
+const PRIMARY_TOKEN = 'KI';
 
 const REWARD_TOKEN = process.env.REWARD_TOKEN_OVERRIDE
 	? process.env.REWARD_TOKEN_OVERRIDE.toUpperCase()
