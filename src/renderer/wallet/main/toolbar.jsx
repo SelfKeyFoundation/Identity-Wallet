@@ -395,11 +395,32 @@ class Toolbar extends PureComponent {
 							{featureIsEnabled('networkToggle') && (
 								<>
 									<div className={classes.sepVert} />
-									<div style={{ paddingLeft: '1.25em' }}>
-										Ethereum MainNet
-										<Typography variant="subtitle1" color="secondary">
-											Wallet address
-										</Typography>
+									<div
+										style={{
+											paddingLeft: '1.25em',
+											display: 'grid',
+											gridTemplateColumns: '1fr 30px',
+											alignItems: 'center'
+										}}
+									>
+										<div style={{ paddingRight: '30px' }}>
+											MainNet
+											<Typography
+												variant="subtitle1"
+												color="secondary"
+												style={{ marginTop: '0.3em' }}
+											>
+												{wallet.address.substring(0, 6)}...
+												{wallet.address.substr(wallet.address.length - 4)}
+											</Typography>
+										</div>
+										<div>
+											<DropdownIcon
+												className={`${classes.menuIcon} ${
+													classes.closedProfile
+												}`}
+											/>
+										</div>
 									</div>
 								</>
 							)}

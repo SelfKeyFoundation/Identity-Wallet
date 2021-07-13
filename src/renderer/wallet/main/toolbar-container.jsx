@@ -82,6 +82,7 @@ const defaultIdentityName = ({ type }, walletName) =>
 	type === 'individual' ? walletName || 'New individual' : 'New company';
 
 export default connect(state => {
+	console.log(state);
 	const profiles = identitySelectors.selectIdentities(state) || [];
 	const wallet = walletSelectors.getWallet(state);
 	const profileNames = profiles.reduce(

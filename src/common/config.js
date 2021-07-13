@@ -323,11 +323,29 @@ if (NODE) {
 	conf.node = NODE;
 }
 
+const chains = {
+	1: {
+		name: 'MainNet',
+		etherscanURL: 'https://api.etherscan.io/api',
+		txHistoryURL: 'https://etherscan.io/tx',
+		infura: 'wss://mainnet.infura.io/ws/v3/2e5fb5cf42714929a7f61a1617ef1ffd',
+		primaryToken: 'KEY'
+	},
+	3: {
+		name: 'Ropsten',
+		etherscanURL: 'http://api-ropsten.etherscan.io/api',
+		txHistoryURL: 'https://ropsten.etherscan.io/tx',
+		infura: 'wss://ropsten.infura.io/ws/v3/2e5fb5cf42714929a7f61a1617ef1ffd',
+		primaryToken: 'KI'
+	}
+};
+
 module.exports = {
 	common,
 	...common,
 	db,
 	...conf,
 	userDataDirectoryPath,
-	walletsDirectoryPath
+	walletsDirectoryPath,
+	chains
 };
