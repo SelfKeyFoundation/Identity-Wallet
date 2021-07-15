@@ -175,7 +175,8 @@ const common = {
 		deepLinks: true,
 		moonpay: true,
 		moonpayWalletLogin: false,
-		networkToggle: false
+		networkToggle: false,
+		customChains: false
 	}
 };
 
@@ -217,7 +218,8 @@ const dev = {
 		deepLinks: true,
 		moonpay: true,
 		moonpayWalletLogin: true,
-		networkToggle: true
+		networkToggle: true,
+		customChains: true
 	},
 	moonPayApiKey: 'pk_test_oMn5N1gYzf5eufwrs4AJUKhlZHBjVD',
 	moonPayApiEndpoint: 'https://api.moonpay.com/v3',
@@ -267,7 +269,8 @@ const prod = {
 		deepLinks: true,
 		moonpay: true,
 		moonpayWalletLogin: false,
-		networkToggle: false
+		networkToggle: false,
+		customChains: false
 	},
 	// TODO: change to prod before release
 	moonPayApiKey: 'pk_test_oMn5N1gYzf5eufwrs4AJUKhlZHBjVD',
@@ -326,17 +329,21 @@ if (NODE) {
 const chains = {
 	1: {
 		name: 'MainNet',
-		etherscanURL: 'https://api.etherscan.io/api',
-		txHistoryURL: 'https://etherscan.io/tx',
-		infura: 'wss://mainnet.infura.io/ws/v3/2e5fb5cf42714929a7f61a1617ef1ffd',
-		primaryToken: 'KEY'
+		fullName: 'Ethereum MainNet',
+		etherscanUrl: 'https://api.etherscan.io/api',
+		txHistoryUrl: 'https://etherscan.io/tx',
+		rpcUrl: 'wss://mainnet.infura.io/ws/v3/2e5fb5cf42714929a7f61a1617ef1ffd',
+		primaryToken: 'KEY',
+		chainId: 1
 	},
 	3: {
 		name: 'Ropsten',
-		etherscanURL: 'http://api-ropsten.etherscan.io/api',
-		txHistoryURL: 'https://ropsten.etherscan.io/tx',
-		infura: 'wss://ropsten.infura.io/ws/v3/2e5fb5cf42714929a7f61a1617ef1ffd',
-		primaryToken: 'KI'
+		fullName: 'Ropsten Test Network',
+		etherscanUrl: 'http://api-ropsten.etherscan.io/api',
+		txHistoryUrl: 'https://ropsten.etherscan.io/tx',
+		rpcUrl: 'wss://ropsten.infura.io/ws/v3/2e5fb5cf42714929a7f61a1617ef1ffd',
+		primaryToken: 'KI',
+		chainId: 3
 	}
 };
 

@@ -26,7 +26,6 @@ import gas from '../gas';
 import scheduler from '../scheduler';
 import marketplace from '../marketplace';
 import tokenSwap from '../token-swap';
-import chains from '../chains';
 import contracts from '../contract';
 import walletConnect from '../wallet-connect';
 import { moonPayAuth, moonPayPayment } from '../moonpay';
@@ -70,7 +69,6 @@ export const createReducers = (scope = 'main') => {
 		moonPayPayment,
 		hardwareWallet,
 		navigationFlow,
-		chains,
 		...scopedReducers
 	});
 

@@ -279,6 +279,10 @@ export class WalletService {
 		return this._getWallets(page, accountsQuantity, 'trezor');
 	}
 
+	async switchNetwork(chain) {
+		await this.web3Service.switchNetwork(chain);
+	}
+
 	generateSeedPhrase() {
 		return HDWallet.generateMnemonic();
 	}

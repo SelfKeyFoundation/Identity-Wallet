@@ -7,7 +7,8 @@ import {
 	SmallRoundCompany,
 	SmallRoundPerson,
 	RoundCompany,
-	RoundPerson
+	RoundPerson,
+	ShareIcon
 } from 'selfkey-ui';
 import PriceBox from '../../price-box';
 import Sidebar from './sidebar';
@@ -94,6 +95,12 @@ const styles = theme => ({
 			left: '-43px'
 		}
 	},
+	chainsContainer: {
+		position: 'fixed',
+		top: '63px',
+		width: '100%',
+		zIndex: '999'
+	},
 	openedProfile: {
 		transform: 'scaleY(-1)',
 		'-webkit-transform': 'scaleY(-1)'
@@ -170,6 +177,73 @@ const profileStyle = theme =>
 			'&:first-child': {
 				marginTop: '5px'
 			}
+		},
+		profileName: {
+			paddingLeft: '15px',
+			'& h6:first-child': {
+				marginBottom: '5px'
+			}
+		},
+		button: {
+			width: '189px'
+		},
+		smallButton: {
+			fontSize: '10px',
+			letterSpacing: '0.4px',
+			width: '100%'
+		},
+		profileListAvatar: {
+			width: '28px',
+			height: '28px',
+			margin: 0
+		}
+	});
+
+const chainDropDownStyle = theme =>
+	createStyles({
+		chain: {
+			minWidth: '258px',
+			maxWidth: '258px',
+			float: 'right',
+			borderRadius: '4px',
+			backgroundColor: '#1E262E',
+			border: 'solid 1px #303c49',
+			'& svg': {
+				width: '25px !important',
+				height: '25px !important'
+			}
+		},
+		profileFooter: {
+			bottom: '7px',
+			marginTop: '0px',
+			padding: '0 15px'
+		},
+		horizontalDivider: {
+			height: '1px',
+			backgroundColor: '#303c49'
+		},
+		profilePersonal: {
+			padding: '20px 0px 4px 6px',
+			display: 'flex',
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center'
+		},
+		profileCorporate: {
+			padding: '20px 15px 14px',
+			display: 'flex',
+			flexDirection: 'row',
+			alignItems: 'center',
+			justifyContent: 'center'
+		},
+		profileDetail: {
+			cursor: 'pointer',
+			padding: '10px 15px 10px 15px',
+			width: '258px',
+			'&:hover': {
+				backgroundColor: '#313D49'
+			},
+			alignItems: 'center'
 		},
 		profileName: {
 			paddingLeft: '15px',
@@ -335,6 +409,93 @@ const Profile = withStyles(styles)(
 	)
 );
 
+const Chain = withStyles(styles)(({ classes, wallet, isOpen, selectedChain, onChainsClick }) => (
+	<>
+		<div className={classes.sepVert} />
+		<div
+			style={{
+				paddingLeft: '1.25em',
+				display: 'grid',
+				gridTemplateColumns: '1fr 30px',
+				alignItems: 'center'
+			}}
+		>
+			<div style={{ paddingRight: '30px' }}>
+				{selectedChain.name}
+				<Typography variant="subtitle1" color="secondary" style={{ marginTop: '0.3em' }}>
+					{wallet.address.substring(0, 6)}...
+					{wallet.address.substr(wallet.address.length - 4)}
+				</Typography>
+			</div>
+			<div onClick={onChainsClick}>
+				<DropdownIcon
+					className={`${classes.menuIcon} ${
+						isOpen ? classes.openedProfile : classes.closedProfile
+					}`}
+				/>
+			</div>
+		</div>
+	</>
+));
+
+const ChainList = withStyles(chainDropDownStyle)(
+	({
+		classes,
+		chains = ['MainNet', 'Ropsten Test Network'],
+		isOpen,
+		selectedChain,
+		onChainSelect,
+		onClickNewChain,
+		onClose
+	}) => {
+		return (
+			isOpen && (
+				<ClickAwayListener onClickAway={onClose}>
+					<div className={classes.chain}>
+						{chains &&
+							Object.keys(chains).map(index => (
+								<Grid
+									container
+									key={index}
+									className={classes.profileDetail}
+									onClick={() => onChainSelect(chains[index].chainId)}
+								>
+									<Grid item sm={2}>
+										<ShareIcon />
+									</Grid>
+									<Grid item sm={8} className={classes.profileName}>
+										<Typography variant="subtitle1">
+											{chains[index].fullName}
+										</Typography>
+									</Grid>
+								</Grid>
+							))}
+						{featureIsEnabled('customChains') && (
+							<React.Fragment>
+								<Grid className={classes.profileFooter}>
+									<div className={classes.horizontalDivider} />
+								</Grid>
+								<Grid container className={classes.profileCorporate}>
+									<Grid item xs={12}>
+										<Button
+											variant="outlined"
+											size="small"
+											onClick={onClickNewChain}
+											className={classes.smallButton}
+										>
+											New BlockChain
+										</Button>
+									</Grid>
+								</Grid>
+							</React.Fragment>
+						)}
+					</div>
+				</ClickAwayListener>
+			)
+		);
+	}
+);
+
 class Toolbar extends PureComponent {
 	render() {
 		const {
@@ -355,7 +516,14 @@ class Toolbar extends PureComponent {
 			rewardToken,
 			showCorporate,
 			isExportableAccount,
-			showStaking
+			showStaking,
+			isChainsOpen,
+			onChainsClick,
+			onChainSelect,
+			onCloseChainsDropDown,
+			onClickNewChain,
+			chains,
+			selectedChain
 		} = this.props;
 		return (
 			<div>
@@ -394,33 +562,22 @@ class Toolbar extends PureComponent {
 							</div>
 							{featureIsEnabled('networkToggle') && (
 								<>
-									<div className={classes.sepVert} />
-									<div
-										style={{
-											paddingLeft: '1.25em',
-											display: 'grid',
-											gridTemplateColumns: '1fr 30px',
-											alignItems: 'center'
-										}}
-									>
-										<div style={{ paddingRight: '30px' }}>
-											MainNet
-											<Typography
-												variant="subtitle1"
-												color="secondary"
-												style={{ marginTop: '0.3em' }}
-											>
-												{wallet.address.substring(0, 6)}...
-												{wallet.address.substr(wallet.address.length - 4)}
-											</Typography>
-										</div>
-										<div>
-											<DropdownIcon
-												className={`${classes.menuIcon} ${
-													classes.closedProfile
-												}`}
-											/>
-										</div>
+									<Chain
+										wallet={wallet}
+										isOpen={isChainsOpen}
+										selectedChain={selectedChain}
+										onChainsClick={onChainsClick}
+									/>
+									<div id="chains" className={classes.chainsContainer}>
+										<ChainList
+											wallet={wallet}
+											chains={chains}
+											selectedChain={selectedChain}
+											isOpen={isChainsOpen}
+											onChainSelect={onChainSelect}
+											onClose={onCloseChainsDropDown}
+											onClickNewChain={onClickNewChain}
+										/>
 									</div>
 								</>
 							)}

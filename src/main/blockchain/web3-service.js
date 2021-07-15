@@ -35,6 +35,8 @@ export class Web3Service extends EventEmitter {
 		this.q = new AsyncTaskQueue(this.handleTicket.bind(this), REQUEST_INTERVAL_DELAY);
 		this.nonce = 0;
 		this.abi = ABI;
+
+		console.log(this.store);
 	}
 
 	getWalletEthTxSubprovider() {
@@ -65,6 +67,27 @@ export class Web3Service extends EventEmitter {
 
 		engine.addProvider(this.getWalletEthTxSubprovider());
 		engine.addProvider(new WebsocketProvider({ rpcUrl: SELECTED_SERVER_URL }));
+		engine.on('error', error => {
+			log.error('Web3Service provider error %s', error);
+		});
+		this.web3 = new Web3(engine);
+		engine.on('start', async () => {
+			await this.web3.eth.getBlockNumber();
+		});
+		engine.on('block', block => this.emit('block', block));
+		engine.start();
+
+		this.web3.transactionConfirmationBlocks = 1;
+	}
+
+	async switchNetwork(chain) {
+		if (this.web3 && this.web3.currentProvider) {
+			this.web3.currentProvider.stop();
+		}
+		const engine = new ProviderEngine();
+
+		engine.addProvider(this.getWalletEthTxSubprovider());
+		engine.addProvider(new WebsocketProvider({ rpcUrl: chain.rpcUrl }));
 		engine.on('error', error => {
 			log.error('Web3Service provider error %s', error);
 		});

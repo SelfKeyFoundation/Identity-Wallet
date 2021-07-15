@@ -1,3 +1,4 @@
+import config from 'common/config';
 import { getGlobalContext } from 'common/context';
 import _ from 'lodash';
 import crypto from 'crypto';
@@ -27,6 +28,7 @@ const transformErrorMessage = msg => {
 };
 
 const initialState = {
+	chainId: config.chainId,
 	walletsLoading: false,
 	wallets: [],
 	seed: null,
@@ -82,7 +84,9 @@ const appTypes = {
 	APP_SEED_UNLOCK_START: 'app/seed/unlock',
 	APP_SEED_GENERATE: 'app/seed/generate',
 	APP_RESET: 'app/reset',
-	APP_SET_SELECTED_PK: 'app/set/selected/private-key'
+	APP_SET_SELECTED_PK: 'app/set/selected/private-key',
+	APP_SWITCH_NETWORK: 'app/switch/network',
+	APP_CHAIN_SET: 'app/chain/SET'
 };
 
 const appActions = {
@@ -149,7 +153,17 @@ const appActions = {
 	setSelectedPrivateKeyAction: key => ({
 		type: appTypes.APP_SET_SELECTED_PK,
 		payload: key
+	}),
+	setChain: chainId => ({
+		type: appTypes.APP_CHAIN_SET,
+		payload: chainId
 	})
+};
+
+const setChainOperation = chainId => async (dispatch, getState) => {
+	// TODO: check chainId
+	await dispatch(appActions.setChain(chainId));
+	await dispatch(appOperations.switchNetwork());
 };
 
 const loadWallets = () => async dispatch => {
@@ -341,6 +355,27 @@ const loadHDWalletsOperation = (page = 0) => async (dispatch, getState) => {
 	}
 };
 
+const switchNetwork = () => async (dispatch, getState) => {
+	const walletService = getGlobalContext().walletService;
+	const wallet = walletSelectors.getWallet(getState());
+	const walletType = selectApp(getState()).walletType;
+	const chain = selectChain(getState());
+	console.log(chain);
+	// const walletType = selectApp(getState()).walletType;
+	try {
+		walletService.switchNetwork(chain);
+		await dispatch(walletOperations.updateWalletWithBalance(wallet));
+		await dispatch(identityOperations.loadIdentitiesOperation(wallet.id));
+		await dispatch(identityOperations.unlockIdentityOperation());
+		if (walletType) {
+			await dispatch(appActions.setWalletType(walletType));
+		}
+		await dispatch(push('/main/dashboard'));
+	} catch (error) {
+		log.error(error);
+	}
+};
+
 const loadLedgerWallets = (page = 0) => async dispatch => {
 	const walletService = getGlobalContext().walletService;
 	try {
@@ -505,6 +540,7 @@ const operations = {
 	unlockWalletWithNewFile,
 	unlockWalletWithPrivateKey,
 	unlockWalletWithPublicKey,
+	switchNetwork,
 	loadLedgerWallets,
 	loadTrezorWallets,
 	enterTrezorPin,
@@ -519,7 +555,8 @@ const operations = {
 	unlockWalletOperation,
 	loadKeystoreValue,
 	startSeedUnlockOperation,
-	generateSeedPhraseOperation
+	generateSeedPhraseOperation,
+	setChainOperation
 };
 
 const appOperations = {
@@ -541,6 +578,7 @@ const appOperations = {
 		appTypes.APP_UNLOCK_WALLET_WITH_PUBLIC_KEY,
 		operations.unlockWalletWithPublicKey
 	),
+	switchNetwork: createAliasedAction(appTypes.APP_SWITCH_NETWORK, operations.switchNetwork),
 	loadLedgerWalletsOperation: createAliasedAction(
 		appTypes.APP_LOAD_LEDGER_WALLETS,
 		operations.loadLedgerWallets
@@ -597,7 +635,8 @@ const appOperations = {
 	generateSeedPhraseOperation: createAliasedAction(
 		appTypes.APP_SEED_GENERATE,
 		operations.generateSeedPhraseOperation
-	)
+	),
+	setChainOperation: createAliasedAction(appTypes.APP_CHAIN_SET, operations.setChainOperation)
 };
 
 const setWalletsReducer = (state, action) => {
@@ -664,6 +703,10 @@ const appSelectedPrivateKeyReducer = (state, action) => {
 	return { ...state, selectedPrivateKey: action.payload };
 };
 
+const setChainReducer = (state, action) => {
+	return { ...state, chainId: action.payload };
+};
+
 const appReducers = {
 	setWalletsReducer,
 	setWalletsLoadingReducer,
@@ -680,7 +723,8 @@ const appReducers = {
 	setKeystoreValueReducer,
 	setSeedReducer,
 	appResetReducer,
-	appSelectedPrivateKeyReducer
+	appSelectedPrivateKeyReducer,
+	setChainReducer
 };
 
 const reducer = (state = initialState, action) => {
@@ -717,6 +761,8 @@ const reducer = (state = initialState, action) => {
 			return appReducers.appResetReducer(state, action);
 		case appTypes.APP_SET_SELECTED_PK:
 			return appReducers.appSelectedPrivateKeyReducer(state, action);
+		case appTypes.APP_CHAIN_SET:
+			return appReducers.setChainReducer(state, action);
 	}
 	return state;
 };
@@ -773,6 +819,26 @@ const selectKeystoreValue = state => selectApp(state).keyStoreValue;
 
 const selectSeed = state => selectApp(state).seed;
 
+const selectChainId = state => selectApp(state).chainId;
+
+const selectChain = state => {
+	const chainId = selectChainId(state);
+	return config.chains[chainId];
+};
+
+const selectAvailableChains = state => {
+	return config.chains;
+};
+
+const selectChainById = (state, chainId) => {
+	const chains = selectAvailableChains(state);
+	const chain = Object.keys(chains).find(idx => {
+		const c = chains[idx];
+		return c.chainId === chainId;
+	});
+	return chain;
+};
+
 _.merge(appSelectors, {
 	selectApp,
 	hasConnected,
@@ -785,7 +851,11 @@ _.merge(appSelectors, {
 	selectAutoUpdateDownloaded,
 	selectCanExportWallet,
 	selectKeystoreValue,
-	selectSeed
+	selectSeed,
+	selectChainId,
+	selectChain,
+	selectAvailableChains,
+	selectChainById
 });
 
 export { appReducers, appActions, appOperations, appTypes, initialState };
