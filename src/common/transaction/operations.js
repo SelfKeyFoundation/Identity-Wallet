@@ -205,6 +205,7 @@ const setNonce = nonce => async dispatch => {
 			nonce
 		})
 	);
+	dispatch(setLocked(false));
 };
 
 const generateContractData = (toAddress, value, decimal) => {
