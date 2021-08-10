@@ -18,7 +18,10 @@ const styles = theme => ({
 		fontSize: '14px',
 		color: '#00C0D9',
 		margin: '2em auto 2em auto',
-		textAlign: 'center'
+		textAlign: 'center',
+		'& *': {
+			userSelect: 'none'
+		}
 	},
 	icon: {
 		border: 'solid #00C0D9',
@@ -33,13 +36,29 @@ const styles = theme => ({
 	},
 	downIcon: {
 		transform: 'rotate(45deg)',
-		'-webkit-transform': 'rotate(45deg)'
+		'-webkit-transform': 'rotate(45deg)',
+		position: 'relative',
+		top: '-2px'
+	},
+	transactionFeeTitle: {
+		textAlign: 'center',
+		marginBottom: '1em'
 	},
 	transactionFeeContainer: {
 		display: 'grid',
-		gridTemplateColumns: '180px 1fr',
+		gridTemplateColumns: '1fr',
 		alignItems: 'center',
-		columnGap: '1em'
+		columnGap: '1em',
+		margin: '0 2em'
+	},
+	transactionFeeOptionTitle: {
+		marginBottom: '5px'
+	},
+	transactionExpectedTiming: {
+		marginTop: '1em',
+		'& *': {
+			color: '#4dda4d'
+		}
 	},
 	fiatPrice: {
 		display: 'flex'
@@ -80,6 +99,40 @@ const styles = theme => ({
 		'& div.price:last-child': {
 			textAlign: 'right'
 		}
+	},
+	customForm: {
+		display: 'grid',
+		gridTemplateColumns: '1fr 1fr 1fr',
+		gridGap: '5px',
+		margin: '0 2em'
+	},
+	formGroup: {
+		display: 'flex',
+		flexDirection: 'column',
+		'&& label': {
+			fontSize: '12px',
+			fontWeight: '600',
+			marginBottom: '10px',
+			lineHeight: '15px',
+			color: '#93A4AF',
+			marginLeft: '5px'
+		}
+	},
+	formControl: {
+		paddingLeft: '12px',
+		boxSizing: 'border-box',
+		height: '46px',
+		width: '100%',
+		border: '1px solid #384656',
+		borderRadius: '4px',
+		backgroundColor: '#1E262E',
+		color: '#FFFFFF',
+		fontSize: '14px',
+		lineHeight: '14px',
+		'&:focus': {
+			outline: 'none',
+			boxShadow: '0 0 5px rgba(81, 203, 238, 1)'
+		}
 	}
 });
 
@@ -89,7 +142,14 @@ export class TransactionFeeBoxComponent extends PureComponent {
 	};
 
 	getFee(type) {
-		return this.props.ethGasStationInfo[type];
+		if (!this.props.ethGasStationInfo || !this.props.ethGasStationInfo[type]) {
+			return;
+		}
+		if (this.props.eip1559) {
+			return this.props.ethGasStationInfo[type].suggestedMaxFeePerGas;
+		} else {
+			return this.props.ethGasStationInfo[type];
+		}
 	}
 
 	getFeeInEth(type, digits = false) {
@@ -103,6 +163,14 @@ export class TransactionFeeBoxComponent extends PureComponent {
 		const { ethRate } = this.props;
 		const ethFee = this.getFeeInEth(type);
 		return ethFee * ethRate;
+	}
+
+	getTransactionTiming(data) {
+		if (data && data.maxWaitTimeEstimate) {
+			return `Likely in < ${Math.ceil(data.maxWaitTimeEstimate / 1000 / 60)} min`;
+		} else {
+			return '';
+		}
 	}
 
 	toggleShowAdvanced() {
@@ -131,15 +199,212 @@ export class TransactionFeeBoxComponent extends PureComponent {
 		}
 	};
 
-	selectPreDefinedGas = (type = 'average') => {
+	selectPreDefinedGas = type => {
 		const { changeGasPriceAction } = this.props;
-		const gasPrice = this.props.ethGasStationInfo[type];
+
+		if (!this.props.ethGasStationInfo || !this.props.ethGasStationInfo[type]) {
+			return;
+		}
+
+		const gasPrice = this.props.eip1559
+			? this.props.ethGasStationInfo[type].suggestedMaxFeePerGas
+			: this.props.ethGasStationInfo[type];
 		if (changeGasPriceAction) {
 			changeGasPriceAction(gasPrice);
 		}
 	};
 
-	render() {
+	showEip1559() {
+		const {
+			classes,
+			ethGasStationInfo,
+			locale,
+			fiatCurrency,
+			gasPrice,
+			gasLimit,
+			nonce
+		} = this.props;
+		const { showAdvanced } = this.state;
+		return (
+			<React.Fragment>
+				<div className={classes.transactionFeeTitle}>
+					<span className={classes.networkTransactionFeeTitle}>Transaction Fee:</span>
+				</div>
+				<div className={classes.transactionFeeContainer}>
+					<div className={classes.transactionFee}>
+						<div
+							className={`${
+								this.props.gasPrice === this.getFee('low') ? 'selected' : ''
+							}`}
+							onClick={() => this.selectPreDefinedGas('low')}
+						>
+							<Typography
+								variant="body1"
+								color="primary"
+								className={classes.transactionFeeOptionTitle}
+							>
+								<strong>Slow</strong>
+							</Typography>
+							<div className={classes.fiatPrice}>
+								<Typography variant="subtitle2">
+									{this.getFeeInEth('low', 8)} ETH
+								</Typography>
+							</div>
+							<div className={classes.fiatPrice}>
+								<Typography
+									variant="subtitle2"
+									color="secondary"
+									style={{ marginRight: '3px' }}
+								>
+									<NumberFormat
+										locale={locale}
+										priceStyle="currency"
+										currency={fiatCurrency}
+										value={this.getFeeUsd('low')}
+										fractionDigits={2}
+										showCurrency={true}
+									/>
+								</Typography>
+							</div>
+							<div className={classes.transactionExpectedTiming}>
+								<Typography variant="subtitle2" color="success">
+									{this.getTransactionTiming(ethGasStationInfo.low)}
+								</Typography>
+							</div>
+						</div>
+						<div
+							className={`${
+								this.props.gasPrice === this.getFee('medium') ? 'selected' : ''
+							}`}
+							onClick={() => this.selectPreDefinedGas('medium')}
+						>
+							<Typography
+								variant="body1"
+								color="primary"
+								className={classes.transactionFeeOptionTitle}
+							>
+								<strong>Medium</strong>
+							</Typography>
+							<div className={classes.fiatPrice}>
+								<Typography variant="subtitle2">
+									{this.getFeeInEth('medium', 8)} ETH
+								</Typography>
+							</div>
+							<div className={classes.fiatPrice}>
+								<Typography
+									variant="subtitle2"
+									color="secondary"
+									style={{ marginRight: '3px' }}
+								>
+									<NumberFormat
+										locale={locale}
+										priceStyle="currency"
+										currency={fiatCurrency}
+										value={this.getFeeUsd('medium')}
+										fractionDigits={2}
+										showCurrency={true}
+									/>
+								</Typography>
+							</div>
+							<div className={classes.transactionExpectedTiming}>
+								<Typography variant="subtitle2" color="success">
+									{this.getTransactionTiming(ethGasStationInfo.medium)}
+								</Typography>
+							</div>
+						</div>
+						<div
+							className={`${
+								this.props.gasPrice === this.getFee('high') ? 'selected' : ''
+							}`}
+							onClick={() => this.selectPreDefinedGas('high')}
+						>
+							<Typography
+								variant="body2"
+								color="primary"
+								className={classes.transactionFeeOptionTitle}
+							>
+								<strong>Fast</strong>
+							</Typography>
+							<div className={classes.fiatPrice}>
+								<Typography variant="subtitle2">
+									{this.getFeeInEth('high', 8)} ETH
+								</Typography>
+							</div>
+							<div className={classes.fiatPrice}>
+								<Typography
+									variant="subtitle2"
+									color="secondary"
+									style={{ marginRight: '3px' }}
+								>
+									<NumberFormat
+										locale={locale}
+										priceStyle="currency"
+										currency={fiatCurrency}
+										value={this.getFeeUsd('high')}
+										fractionDigits={2}
+										showCurrency={true}
+									/>
+								</Typography>
+							</div>
+							<div className={classes.transactionExpectedTiming}>
+								<Typography variant="subtitle2" color="success">
+									{this.getTransactionTiming(ethGasStationInfo.high)}
+								</Typography>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div
+					className={classes.showAdvancedContainer}
+					onClick={() => this.toggleShowAdvanced()}
+				>
+					<span> Advanced </span>
+					{!showAdvanced ? (
+						<i className={`${classes.icon} ${classes.downIcon}`}> </i>
+					) : (
+						<i className={`${classes.icon} ${classes.upIcon}`}> </i>
+					)}
+				</div>
+
+				{showAdvanced && (
+					<React.Fragment>
+						<div className={classes.customForm}>
+							<div className={classes.formGroup}>
+								<label>Fee (Gwei)</label>
+								<input
+									type="text"
+									className={classes.formControl}
+									value={gasPrice}
+									onChange={e => this.setGasPrice(e)}
+								/>
+							</div>
+							<div className={classes.formGroup}>
+								<label>Max Fee</label>
+								<input
+									type="text"
+									value={gasLimit}
+									onChange={e => this.setGasLimit(e)}
+									className={classes.formControl}
+								/>
+							</div>
+							<div className={classes.formGroup}>
+								<label>Nonce</label>
+								<input
+									type="text"
+									value={nonce}
+									onChange={e => this.setNonce(e)}
+									className={classes.formControl}
+								/>
+							</div>
+						</div>
+					</React.Fragment>
+				)}
+			</React.Fragment>
+		);
+	}
+
+	showDefault() {
 		const {
 			classes,
 			ethGasStationInfo,
@@ -151,6 +416,7 @@ export class TransactionFeeBoxComponent extends PureComponent {
 			gasLimit
 		} = this.props;
 		const { showAdvanced } = this.state;
+
 		return (
 			<React.Fragment>
 				<div className={classes.transactionFeeContainer}>
@@ -164,11 +430,9 @@ export class TransactionFeeBoxComponent extends PureComponent {
 							}`}
 							onClick={() => this.selectPreDefinedGas('safeLow')}
 						>
-							<Typography variant="body2" color="white">
-								Slow
-							</Typography>
+							<Typography variant="body2">Slow</Typography>
 							<div className={classes.fiatPrice}>
-								<Typography variant="subtitle2" color="white">
+								<Typography variant="subtitle2">
 									{this.getFeeInEth('safeLow', 5)} ETH
 								</Typography>
 							</div>
@@ -195,11 +459,9 @@ export class TransactionFeeBoxComponent extends PureComponent {
 							}`}
 							onClick={() => this.selectPreDefinedGas('average')}
 						>
-							<Typography variant="body2" color="white">
-								Average
-							</Typography>
+							<Typography variant="body2">Average</Typography>
 							<div className={classes.fiatPrice}>
-								<Typography variant="subtitle2" color="white">
+								<Typography variant="subtitle2">
 									{this.getFeeInEth('average', 5)} ETH
 								</Typography>
 							</div>
@@ -226,11 +488,9 @@ export class TransactionFeeBoxComponent extends PureComponent {
 							}`}
 							onClick={() => this.selectPreDefinedGas('fast')}
 						>
-							<Typography variant="body2" color="white">
-								Fast
-							</Typography>
+							<Typography variant="body2">Fast</Typography>
 							<div className={classes.fiatPrice}>
-								<Typography variant="subtitle2" color="white">
+								<Typography variant="subtitle2">
 									{this.getFeeInEth('fast', 5)} ETH
 								</Typography>
 							</div>
@@ -278,6 +538,13 @@ export class TransactionFeeBoxComponent extends PureComponent {
 				)}
 			</React.Fragment>
 		);
+	}
+
+	render() {
+		if (!this.props.eip1559) {
+			return this.showDefault();
+		}
+		return this.showEip1559();
 	}
 }
 

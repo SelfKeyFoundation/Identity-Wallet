@@ -1,3 +1,4 @@
+import { featureIsEnabled } from 'common/feature-flags';
 import * as actions from './actions';
 import * as types from './types';
 import { createAliasedAction } from 'electron-redux';
@@ -111,7 +112,9 @@ export const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimi
 
 		dispatch(setLocked(true));
 
-		let gasPrice = state.ethGasStationInfo.ethGasStationInfo.average;
+		let gasPrice = featureIsEnabled('eip_1559')
+			? state.ethGasStationInfo.ethGasStationInfo.medium.suggestedMaxFeePerGas
+			: state.ethGasStationInfo.ethGasStationInfo.average;
 		if (newGasPrice) {
 			gasPrice = newGasPrice;
 		} else if (transaction.gasPrice) {

@@ -5,15 +5,19 @@ const initialState = {
 };
 
 const update = data => {
-	let result = {
-		safeLow: data.safeLow,
-		average: data.average,
-		fast: data.fast
-	};
-	Object.keys(result).forEach(key => {
-		result[key] = result[key] / 10;
-	});
-	return result;
+	if (data.safeLow) {
+		let result = {
+			safeLow: data.safeLow,
+			average: data.average,
+			fast: data.fast
+		};
+		Object.keys(result).forEach(key => {
+			result[key] = result[key] / 10;
+		});
+		return result;
+	}
+
+	return data;
 };
 
 const ethGasStationInfoReducer = (state = initialState, action) => {

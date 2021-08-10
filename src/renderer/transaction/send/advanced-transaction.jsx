@@ -1,3 +1,4 @@
+import { featureIsEnabled } from 'common/feature-flags';
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import EthUnits from 'common/utils/eth-units';
@@ -305,6 +306,7 @@ class TransactionSendBoxContainer extends PureComponent {
 								handleConfirm={this.handleConfirm}
 								handleCancel={this.handleCancel}
 								handleSend={this.handleSend}
+								eip1559={featureIsEnabled('eip_1559')}
 							/>
 						)}
 						{this.state.tab === 'receive' && (

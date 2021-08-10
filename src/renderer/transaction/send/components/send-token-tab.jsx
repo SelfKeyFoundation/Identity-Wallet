@@ -71,7 +71,8 @@ export const SendTokenTab = ({
 	locked,
 	handleSend,
 	handleCancel,
-	handleConfirm
+	handleConfirm,
+	eip1559 = false
 }) => {
 	const classes = useStyles();
 	const labelInputClass = `${addressError ? classes.errorColor : ''}`;
@@ -166,6 +167,7 @@ export const SendTokenTab = ({
 						cryptoCurrency={cryptoCurrency}
 						address={address}
 						amount={amount}
+						eip1559={eip1559}
 					/>
 
 					<Divider className={classes.divider} />
@@ -219,7 +221,7 @@ export const SendTokenTab = ({
 };
 
 SendTokenTab.propTypes = {
-	balance: PropTypes.string,
+	balance: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	cryptoCurrency: PropTypes.string,
 	amountUsd: PropTypes.number,
 	fiatCurrency: PropTypes.string,

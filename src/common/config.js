@@ -175,7 +175,8 @@ const common = {
 		deepLinks: true,
 		moonpay: true,
 		moonpayWalletLogin: false,
-		networkToggle: false
+		networkToggle: false,
+		eip_1559: true
 	}
 };
 
@@ -217,7 +218,8 @@ const dev = {
 		deepLinks: true,
 		moonpay: true,
 		moonpayWalletLogin: true,
-		networkToggle: true
+		networkToggle: true,
+		eip_1559: true
 	},
 	moonPayApiKey: 'pk_test_oMn5N1gYzf5eufwrs4AJUKhlZHBjVD',
 	moonPayApiEndpoint: 'https://api.moonpay.com/v3',
@@ -267,7 +269,8 @@ const prod = {
 		deepLinks: true,
 		moonpay: true,
 		moonpayWalletLogin: false,
-		networkToggle: false
+		networkToggle: false,
+		eip_1559: true
 	},
 	// TODO: change to prod before release
 	moonPayApiKey: 'pk_test_oMn5N1gYzf5eufwrs4AJUKhlZHBjVD',
