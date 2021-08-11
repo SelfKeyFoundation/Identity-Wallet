@@ -11,7 +11,6 @@ export const getAmountUsd = (state, amount, cryptoCurrency) => {
 
 export const getTransaction = state => {
 	const transaction = state.transaction;
-	console.log(transaction);
 	const { cryptoCurrency } = transaction;
 	transaction.amountUsd = getAmountUsd(state, transaction.amount, cryptoCurrency);
 	transaction.usdFee = getAmountUsd(state, transaction.ethFee, 'ETH');

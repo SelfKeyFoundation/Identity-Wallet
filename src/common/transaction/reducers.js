@@ -8,6 +8,7 @@ const initialState = {
 	gasPrice: 0,
 	gasLimit: 0,
 	nonce: 0,
+	maxPriorityFee: 0,
 	signedHex: '',
 	transactionHash: '',
 	addressError: false,

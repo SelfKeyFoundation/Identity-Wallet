@@ -60,6 +60,7 @@ export const SendTokenTab = ({
 	handleGasPriceChange,
 	handleNonceChange,
 	handleAllAmountClick,
+	handleMaxPriorityFeeChange,
 	ethGasStationInfo,
 	reloadEthGasStationInfoAction,
 	gasLimit,
@@ -67,6 +68,7 @@ export const SendTokenTab = ({
 	nonce,
 	ethFee,
 	ethRate,
+	maxPriorityFee,
 	sending,
 	locked,
 	handleSend,
@@ -168,6 +170,8 @@ export const SendTokenTab = ({
 						address={address}
 						amount={amount}
 						eip1559={eip1559}
+						maxPriorityFee={maxPriorityFee}
+						changeMaxPriorityFeeAction={handleMaxPriorityFeeChange}
 					/>
 
 					<Divider className={classes.divider} />

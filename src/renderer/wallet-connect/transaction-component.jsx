@@ -86,15 +86,18 @@ export const TransactionComponent = ({
 	ethRate,
 	handleGasLimitChange,
 	handleGasPriceChange,
+	handleMaxPriorityFeeChange,
 	reloadEthGasStationInfoAction,
 	handleNonceChange,
 	gasPrice,
 	gasLimit,
 	nonce = '',
+	maxPriorityFee,
 	cryptoCurrency = 'ETH',
 	amount = 0,
 	balance = 0,
-	amountUsd = 0
+	amountUsd = 0,
+	eip1559 = true
 }) => {
 	const classes = useStyles();
 	const { name, url, icons = [] } = peerMeta;
@@ -246,6 +249,9 @@ export const TransactionComponent = ({
 					cryptoCurrency={cryptoCurrency}
 					address={address}
 					amount={tx.value}
+					eip1559={eip1559}
+					maxPriorityFee={maxPriorityFee}
+					changeMaxPriorityFeeAction={handleMaxPriorityFeeChange}
 				/>
 				{/*
 				<Grid item>

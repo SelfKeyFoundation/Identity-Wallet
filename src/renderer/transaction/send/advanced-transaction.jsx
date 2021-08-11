@@ -148,6 +148,11 @@ class TransactionSendBoxContainer extends PureComponent {
 		TransactionSendBoxContainer.UPDATE_DELAY
 	);
 
+	handleMaxPriorityFeeChange = debounce(
+		value => this.props.dispatch(transactionOperations.setMaxPriorityFee(value)),
+		TransactionSendBoxContainer.UPDATE_DELAY
+	);
+
 	lockTransaction = () => this.props.dispatch(transactionOperations.setLocked(true));
 
 	withLock = targetFunction => over([this.lockTransaction, targetFunction]);
@@ -301,6 +306,9 @@ class TransactionSendBoxContainer extends PureComponent {
 								handleGasLimitChange={this.withLock(this.handleGasLimitChange)}
 								handleGasPriceChange={this.withLock(this.handleGasPriceChange)}
 								handleNonceChange={this.withLock(this.handleNonceChange)}
+								handleMaxPriorityFeeChange={this.withLock(
+									this.handleMaxPriorityFeeChange
+								)}
 								reloadEthGasStationInfoAction={this.loadData}
 								handleAllAmountClick={this.handleAllAmountClick}
 								handleConfirm={this.handleConfirm}

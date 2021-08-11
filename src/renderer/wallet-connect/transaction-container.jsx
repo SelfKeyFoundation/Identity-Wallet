@@ -1,3 +1,4 @@
+import { featureIsEnabled } from 'common/feature-flags';
 import React, { useEffect, useState } from 'react';
 import EthUtils from 'common/utils/eth-utils';
 import EthUnits from 'common/utils/eth-units';
@@ -28,6 +29,7 @@ export const TransactionContainer = () => {
 	const [gasPrice, setGasPrice] = useState(tx.gasPrice);
 	const [gasLimit, setGasLimit] = useState(tx.gas);
 	const [nonce, setNonce] = useState(tx.nonce ? tx.nonce : defaultNonce);
+	const [maxPriorityFee, setMaxPriorityFee] = useState(tx.maxPriorityFee);
 
 	const wallet = useSelector(getWallet);
 	const address = wallet ? wallet.address : undefined;
@@ -35,6 +37,7 @@ export const TransactionContainer = () => {
 	const handleGasLimitChange = value => setGasLimit(value);
 	const handleGasPriceChange = value => setGasPrice(value);
 	const handleNonceChange = value => setNonce(value);
+	const handleMaxPriorityFeeChange = value => setMaxPriorityFee(value);
 	const handleReloadGasStation = () => dispatch(ethGasStationInfoOperations.loadData());
 
 	const handleCancel = () => {
@@ -49,6 +52,13 @@ export const TransactionContainer = () => {
 		if (gasPrice) {
 			const gasPriceInWei = EthUnits.unitToUnit(gasPrice, 'gwei', 'wei');
 			newTx.gasPrice = EthUtils.sanitizeHex(EthUtils.decimalToHex(gasPriceInWei));
+			if (featureIsEnabled('eip_1559')) {
+				const maxPriorityFeeinWei = EthUnits.unitToUnit(maxPriorityFee, 'gwei', 'wei');
+				newTx.maxPriorityFee = EthUtils.sanitizeHex(
+					EthUtils.decimalToHex(maxPriorityFeeinWei)
+				);
+				newTx.maxFeePerGas = newTx.gasPrice;
+			}
 		}
 		if (nonce) {
 			newTx.nonce = nonce;
@@ -72,10 +82,13 @@ export const TransactionContainer = () => {
 			handleGasLimitChange={handleGasLimitChange}
 			handleGasPriceChange={handleGasPriceChange}
 			handleNonceChange={handleNonceChange}
+			handleMaxPriorityFeeChange={handleMaxPriorityFeeChange}
 			reloadEthGasStationInfoAction={handleReloadGasStation}
 			gasPrice={gasPrice}
 			gasLimit={gasLimit}
 			nonce={nonce}
+			maxPriorityFee={maxPriorityFee}
+			eip1559={featureIsEnabled('eip_1559')}
 		/>
 	);
 };

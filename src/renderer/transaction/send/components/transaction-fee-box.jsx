@@ -102,7 +102,7 @@ const styles = theme => ({
 	},
 	customForm: {
 		display: 'grid',
-		gridTemplateColumns: '1fr 1fr 1fr',
+		gridTemplateColumns: '1fr 1fr 1fr 1fr',
 		gridGap: '5px',
 		margin: '0 2em'
 	},
@@ -173,6 +173,12 @@ export class TransactionFeeBoxComponent extends PureComponent {
 		}
 	}
 
+	getMaxPriorityFee(data) {
+		if (data && data.maxPriorityFee) {
+			return data.maxPriorityFee;
+		}
+	}
+
 	toggleShowAdvanced() {
 		const { showAdvanced } = this.state;
 		this.setState({ ...this.state, showAdvanced: !showAdvanced });
@@ -199,16 +205,34 @@ export class TransactionFeeBoxComponent extends PureComponent {
 		}
 	};
 
+	setMaxPriorityFee = event => {
+		const value = event.target.value;
+		if (this.props.changeMaxPriorityFeeAction) {
+			this.props.changeMaxPriorityFeeAction(value);
+		}
+	};
+
 	selectPreDefinedGas = type => {
-		const { changeGasPriceAction } = this.props;
+		const { changeGasPriceAction, changeMaxPriorityFeeAction } = this.props;
 
 		if (!this.props.ethGasStationInfo || !this.props.ethGasStationInfo[type]) {
 			return;
 		}
 
+		console.log(this.props.ethGasStationInfo[type]);
+
 		const gasPrice = this.props.eip1559
 			? this.props.ethGasStationInfo[type].suggestedMaxFeePerGas
 			: this.props.ethGasStationInfo[type];
+
+		const maxPriorityFee = this.props.eip1559
+			? this.props.ethGasStationInfo[type].suggestedMaxPriorityFeePerGas
+			: 0;
+
+		if (changeMaxPriorityFeeAction) {
+			changeMaxPriorityFeeAction(maxPriorityFee);
+		}
+
 		if (changeGasPriceAction) {
 			changeGasPriceAction(gasPrice);
 		}
@@ -222,7 +246,8 @@ export class TransactionFeeBoxComponent extends PureComponent {
 			fiatCurrency,
 			gasPrice,
 			gasLimit,
-			nonce
+			nonce,
+			maxPriorityFee
 		} = this.props;
 		const { showAdvanced } = this.state;
 		return (
@@ -371,16 +396,7 @@ export class TransactionFeeBoxComponent extends PureComponent {
 					<React.Fragment>
 						<div className={classes.customForm}>
 							<div className={classes.formGroup}>
-								<label>Fee (Gwei)</label>
-								<input
-									type="text"
-									className={classes.formControl}
-									value={gasPrice}
-									onChange={e => this.setGasPrice(e)}
-								/>
-							</div>
-							<div className={classes.formGroup}>
-								<label>Max Fee</label>
+								<label>Gas Limit</label>
 								<input
 									type="text"
 									value={gasLimit}
@@ -388,6 +404,27 @@ export class TransactionFeeBoxComponent extends PureComponent {
 									className={classes.formControl}
 								/>
 							</div>
+
+							<div className={classes.formGroup}>
+								<label>Max Priority Fee (Gwei)</label>
+								<input
+									type="text"
+									className={classes.formControl}
+									value={maxPriorityFee}
+									onChange={e => this.setMaxPriorityFee(e)}
+								/>
+							</div>
+
+							<div className={classes.formGroup}>
+								<label>Max Fee (Gwei)</label>
+								<input
+									type="text"
+									className={classes.formControl}
+									value={gasPrice}
+									onChange={e => this.setGasPrice(e)}
+								/>
+							</div>
+
 							<div className={classes.formGroup}>
 								<label>Nonce</label>
 								<input
