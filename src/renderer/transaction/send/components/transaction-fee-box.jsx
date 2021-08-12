@@ -219,8 +219,6 @@ export class TransactionFeeBoxComponent extends PureComponent {
 			return;
 		}
 
-		console.log(this.props.ethGasStationInfo[type]);
-
 		const gasPrice = this.props.eip1559
 			? this.props.ethGasStationInfo[type].suggestedMaxFeePerGas
 			: this.props.ethGasStationInfo[type];

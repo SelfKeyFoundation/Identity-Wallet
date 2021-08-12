@@ -218,7 +218,7 @@ const dev = {
 		deepLinks: true,
 		moonpay: true,
 		moonpayWalletLogin: true,
-		networkToggle: true,
+		networkToggle: false,
 		eip_1559: true
 	},
 	moonPayApiKey: 'pk_test_oMn5N1gYzf5eufwrs4AJUKhlZHBjVD',

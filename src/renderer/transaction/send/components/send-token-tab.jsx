@@ -232,7 +232,7 @@ SendTokenTab.propTypes = {
 	locale: PropTypes.string,
 	addressError: PropTypes.bool,
 	address: PropTypes.string,
-	amount: PropTypes.number,
+	amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	handleAddressChange: PropTypes.func,
 	handleAmountChange: PropTypes.func,
 	handleGasLimitChange: PropTypes.func,

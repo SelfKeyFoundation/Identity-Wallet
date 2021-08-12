@@ -19,7 +19,6 @@ export class EthGasStationService {
 					log.error(error);
 					reject(error);
 				}
-				console.log(response);
 				resolve(response);
 			});
 		});

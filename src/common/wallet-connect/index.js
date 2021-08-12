@@ -109,7 +109,6 @@ export const operations = {
 		const { walletConnectService } = getGlobalContext();
 		if (!session || !session.id) throw new Error('No session id found');
 		await walletConnectService.killSession(session.id);
-		console.log(session.id);
 		dispatch(operations.loadSessions);
 	},
 	sessionRequestOperation: (peerId, peerMeta, uri, confirmConnection) => async (
