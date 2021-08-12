@@ -1,3 +1,4 @@
+import { featureIsEnabled } from 'common/feature-flags';
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import EthUnits from 'common/utils/eth-units';
@@ -144,6 +145,11 @@ class TransactionSendBoxContainer extends PureComponent {
 
 	handleNonceChange = debounce(
 		value => this.props.dispatch(transactionOperations.setNonce(value)),
+		TransactionSendBoxContainer.UPDATE_DELAY
+	);
+
+	handleMaxPriorityFeeChange = debounce(
+		value => this.props.dispatch(transactionOperations.setMaxPriorityFee(value)),
 		TransactionSendBoxContainer.UPDATE_DELAY
 	);
 
@@ -300,11 +306,15 @@ class TransactionSendBoxContainer extends PureComponent {
 								handleGasLimitChange={this.withLock(this.handleGasLimitChange)}
 								handleGasPriceChange={this.withLock(this.handleGasPriceChange)}
 								handleNonceChange={this.withLock(this.handleNonceChange)}
+								handleMaxPriorityFeeChange={this.withLock(
+									this.handleMaxPriorityFeeChange
+								)}
 								reloadEthGasStationInfoAction={this.loadData}
 								handleAllAmountClick={this.handleAllAmountClick}
 								handleConfirm={this.handleConfirm}
 								handleCancel={this.handleCancel}
 								handleSend={this.handleSend}
+								eip1559={featureIsEnabled('eip_1559')}
 							/>
 						)}
 						{this.state.tab === 'receive' && (

@@ -16,6 +16,7 @@ const SWAP = 'app/transactions/swap';
 const CRYPTO_CURRENCY_SET = 'app/transaction/cryptoCurrency/SET';
 const LOCKED_SET = 'app/transaction/locked/SET';
 const NONCE_SET = 'app/transaction/nonce/SET';
+const MAX_PRIORITY_FEE_SET = 'app/transaction/maxPriorityFee/SET';
 
 export {
 	TRANSACTION_UPDATE,
@@ -34,5 +35,6 @@ export {
 	CRYPTO_CURRENCY_SET,
 	LOCKED_SET,
 	SWAP,
-	NONCE_SET
+	NONCE_SET,
+	MAX_PRIORITY_FEE_SET
 };

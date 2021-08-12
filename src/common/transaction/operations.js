@@ -1,3 +1,4 @@
+import { featureIsEnabled } from 'common/feature-flags';
 import * as actions from './actions';
 import * as types from './types';
 import { createAliasedAction } from 'electron-redux';
@@ -35,6 +36,7 @@ const init = args => async dispatch => {
 			usdFee: 0,
 			gasPrice: 0,
 			gasLimit: 0,
+			maxPriorityFee: 0,
 			nonce: 0,
 			signedHex: '',
 			transactionHash: '',
@@ -111,7 +113,20 @@ export const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimi
 
 		dispatch(setLocked(true));
 
-		let gasPrice = state.ethGasStationInfo.ethGasStationInfo.average;
+		let gasPrice = featureIsEnabled('eip_1559')
+			? state.ethGasStationInfo.ethGasStationInfo.medium.suggestedMaxFeePerGas
+			: state.ethGasStationInfo.ethGasStationInfo.average;
+
+		let maxPriorityFee = 0;
+		if (featureIsEnabled('eip_1559')) {
+			if (!transaction.maxPriorityFee) {
+				maxPriorityFee =
+					state.ethGasStationInfo.ethGasStationInfo.medium.suggestedMaxFeePerGas;
+			} else {
+				maxPriorityFee = transaction.maxPriorityFee;
+			}
+		}
+
 		if (newGasPrice) {
 			gasPrice = newGasPrice;
 		} else if (transaction.gasPrice) {
@@ -156,6 +171,7 @@ export const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimi
 					gasPrice: gasPrice,
 					gasLimit,
 					gasLimitUpdated,
+					maxPriorityFee,
 					nonce
 				})
 			);
@@ -208,6 +224,15 @@ const setNonce = nonce => async dispatch => {
 	dispatch(setLocked(false));
 };
 
+const setMaxPriorityFee = maxPriorityFee => async dispatch => {
+	await dispatch(
+		actions.updateTransaction({
+			maxPriorityFee
+		})
+	);
+	dispatch(setLocked(false));
+};
+
 const generateContractData = (toAddress, value, decimal) => {
 	value = EthUtils.padLeft(
 		new BigNumber(value).times(new BigNumber(10).pow(decimal)).toString(16),
@@ -223,11 +248,22 @@ const confirmSend = () => async (dispatch, getState) => {
 	const transaction = getTransaction(state);
 	const { cryptoCurrency } = transaction;
 
-	const transactionObject = {
+	let transactionObject = {
 		nonce: transaction.nonce,
-		gasPrice: EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei'),
+		// gasPrice: EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei'),
 		gas: transaction.gasLimit
 	};
+
+	if (featureIsEnabled('eip_1559')) {
+		transactionObject.maxFeePerGas = EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei');
+		transactionObject.maxPriorityFee = EthUnits.unitToUnit(
+			transaction.maxPriorityFee,
+			'gwei',
+			'wei'
+		);
+	} else {
+		transactionObject.gasPrice = EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei');
+	}
 
 	if (cryptoCurrency === 'ETH') {
 		transactionObject.to = EthUtils.sanitizeHex(transaction.address);
@@ -315,11 +351,20 @@ const marketplaceSend = ({ onReceipt, onTransactionHash, onTransactionError }) =
 	const transaction = getTransaction(state);
 	const { cryptoCurrency } = transaction;
 
-	const transactionObject = {
+	let transactionObject = {
 		nonce: transaction.nonce,
 		gasPrice: EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei'),
 		gas: transaction.gasLimit
 	};
+
+	if (featureIsEnabled('eip_1559')) {
+		transactionObject.maxFeePerGas = transactionObject.gasPrice;
+		transactionObject.maxPriorityFee = EthUnits.unitToUnit(
+			transaction.maxPriorityFee,
+			'gwei',
+			'wei'
+		);
+	}
 
 	if (cryptoCurrency === 'ETH') {
 		transactionObject.to = EthUtils.sanitizeHex(transaction.address);
@@ -363,11 +408,20 @@ const incorporationSend = (companyCode, countryCode) => async (dispatch, getStat
 	const transaction = getTransaction(state);
 	const { cryptoCurrency } = transaction;
 
-	const transactionObject = {
+	let transactionObject = {
 		nonce: transaction.nonce,
 		gasPrice: EthUnits.unitToUnit(transaction.gasPrice, 'gwei', 'wei'),
 		gas: transaction.gasLimit
 	};
+
+	if (featureIsEnabled('eip_1559')) {
+		transactionObject.maxFeePerGas = transactionObject.gasPrice;
+		transactionObject.maxPriorityFee = EthUnits.unitToUnit(
+			transaction.maxPriorityFee,
+			'gwei',
+			'wei'
+		);
+	}
 
 	if (cryptoCurrency === 'ETH') {
 		transactionObject.to = EthUtils.sanitizeHex(transaction.address);
@@ -565,6 +619,7 @@ export default {
 	setGasPrice: createAliasedAction(types.GAS_PRICE_SET, setGasPrice),
 	setLimitPrice: createAliasedAction(types.LIMIT_PRICE_SET, setLimitPrice),
 	setNonce: createAliasedAction(types.NONCE_SET, setNonce),
+	setMaxPriorityFee: createAliasedAction(types.MAX_PRIORITY_FEE_SET, setMaxPriorityFee),
 	init: createAliasedAction(types.INIT, init),
 	setTransactionFee: createAliasedAction(types.TRANSACTION_FEE_SET, setTransactionFee),
 	confirmSend: createAliasedAction(types.CONFIRM_SEND, confirmSend),

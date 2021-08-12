@@ -60,7 +60,10 @@ const getStoreMock = (transaction = {}) =>
 		},
 		ethGasStationInfo: {
 			ethGasStationInfo: {
-				average: 123
+				average: 123,
+				medium: {
+					suggestedMaxFeePerGas: 4
+				}
 			}
 		}
 	});
@@ -197,9 +200,11 @@ describe('operations', () => {
 			expect(dispatch).toBeCalledWith(
 				actions.updateTransaction({
 					ethFee: 1,
-					gasPrice: 123,
+					gasPrice: 4,
 					gasLimit: MOCK_GAST_LIMIT,
 					gasLimitUpdated: undefined,
+					maxPriorityFee: store.getState().ethGasStationInfo.ethGasStationInfo.medium
+						.suggestedMaxFeePerGas,
 					nonce: 1
 				})
 			);
@@ -226,6 +231,8 @@ describe('operations', () => {
 					gasPrice: newGasPrice,
 					gasLimit: MOCK_GAST_LIMIT,
 					gasLimitUpdated: undefined,
+					maxPriorityFee: store.getState().ethGasStationInfo.ethGasStationInfo.medium
+						.suggestedMaxFeePerGas,
 					nonce: 1
 				})
 			);
@@ -251,7 +258,10 @@ describe('operations', () => {
 			expect(dispatch).toBeCalledWith(
 				actions.updateTransaction({
 					ethFee: 1,
-					gasPrice: store.getState().ethGasStationInfo.ethGasStationInfo.average,
+					gasPrice: store.getState().ethGasStationInfo.ethGasStationInfo.medium
+						.suggestedMaxFeePerGas,
+					maxPriorityFee: store.getState().ethGasStationInfo.ethGasStationInfo.medium
+						.suggestedMaxFeePerGas,
 					gasLimit: MOCK_GAST_LIMIT,
 					gasLimitUpdated: undefined,
 					nonce: 1
@@ -285,6 +295,8 @@ describe('operations', () => {
 					ethFee: 1,
 					gasPrice: newGasPrice,
 					gasLimit: manualGasLimit,
+					maxPriorityFee: store.getState().ethGasStationInfo.ethGasStationInfo.medium
+						.suggestedMaxFeePerGas,
 					gasLimitUpdated: true,
 					nonce: 1
 				})

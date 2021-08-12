@@ -153,7 +153,7 @@ export const CustomTransactionSettings = ({
 CustomTransactionSettings.propTypes = {
 	ethGasStationInfo: PropTypes.object,
 	reloadEthGasStationInfoAction: PropTypes.func,
-	nonce: PropTypes.string,
+	nonce: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	gasPrice: PropTypes.number,
 	gasLimit: PropTypes.number,
 	setNonce: PropTypes.func,
