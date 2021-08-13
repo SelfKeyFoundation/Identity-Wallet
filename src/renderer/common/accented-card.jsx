@@ -42,7 +42,6 @@ const useStyles = makeStyles(theme => {
 				if (!img) {
 					return undefined;
 				}
-				console.log(`url(${img}) ${position}/${size} ${repeat} ${origin}`);
 				return `url(${img}) ${position}/${size} ${repeat} ${origin}`;
 			}
 		}

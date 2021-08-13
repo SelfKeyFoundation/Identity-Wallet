@@ -48,7 +48,6 @@ export class WalletConnectService {
 	async init() {
 		log.info('init wallet connect service');
 		const sessions = await this.getSessions();
-		console.log(sessions);
 		sessions.forEach(c => this.handleSession(null, c.session, c.id));
 	}
 
@@ -86,7 +85,6 @@ export class WalletConnectService {
 		this.connectors[key] = connector;
 		this.connectors[key].dbId = dbId;
 		if (session) {
-			console.log(session);
 			this.connectors[key].peerMeta = session.peerMeta;
 			this.connectors[key].peerId = session.peerId;
 		}

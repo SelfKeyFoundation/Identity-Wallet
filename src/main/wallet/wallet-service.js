@@ -304,6 +304,7 @@ export class WalletService {
 	}
 
 	sendTransaction(transactionObject) {
+		// console.log(transactionObject);
 		return this.web3Service.web3.eth.sendTransaction(transactionObject);
 	}
 

@@ -60,6 +60,7 @@ export const SendTokenTab = ({
 	handleGasPriceChange,
 	handleNonceChange,
 	handleAllAmountClick,
+	handleMaxPriorityFeeChange,
 	ethGasStationInfo,
 	reloadEthGasStationInfoAction,
 	gasLimit,
@@ -67,11 +68,13 @@ export const SendTokenTab = ({
 	nonce,
 	ethFee,
 	ethRate,
+	maxPriorityFee,
 	sending,
 	locked,
 	handleSend,
 	handleCancel,
-	handleConfirm
+	handleConfirm,
+	eip1559 = false
 }) => {
 	const classes = useStyles();
 	const labelInputClass = `${addressError ? classes.errorColor : ''}`;
@@ -166,6 +169,9 @@ export const SendTokenTab = ({
 						cryptoCurrency={cryptoCurrency}
 						address={address}
 						amount={amount}
+						eip1559={eip1559}
+						maxPriorityFee={maxPriorityFee}
+						changeMaxPriorityFeeAction={handleMaxPriorityFeeChange}
 					/>
 
 					<Divider className={classes.divider} />
@@ -219,14 +225,14 @@ export const SendTokenTab = ({
 };
 
 SendTokenTab.propTypes = {
-	balance: PropTypes.string,
+	balance: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	cryptoCurrency: PropTypes.string,
 	amountUsd: PropTypes.number,
 	fiatCurrency: PropTypes.string,
 	locale: PropTypes.string,
 	addressError: PropTypes.bool,
 	address: PropTypes.string,
-	amount: PropTypes.number,
+	amount: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	handleAddressChange: PropTypes.func,
 	handleAmountChange: PropTypes.func,
 	handleGasLimitChange: PropTypes.func,
@@ -235,11 +241,6 @@ SendTokenTab.propTypes = {
 	handleAllAmountClick: PropTypes.func,
 	ethGasStationInfo: PropTypes.object,
 	reloadEthGasStationInfoAction: PropTypes.func,
-	gasLimit: PropTypes.number,
-	gasPrice: PropTypes.number,
-	nonce: PropTypes.number,
-	ethFee: PropTypes.number,
-	ethRate: PropTypes.number,
 	sending: PropTypes.bool,
 	locked: PropTypes.bool,
 	handleSend: PropTypes.func,

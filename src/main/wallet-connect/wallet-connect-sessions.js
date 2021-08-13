@@ -26,7 +26,6 @@ export class WalletConnectSessions extends BaseModel {
 	}
 
 	static create(data) {
-		console.log(data);
 		return this.query().insertAndFetch(data);
 	}
 
