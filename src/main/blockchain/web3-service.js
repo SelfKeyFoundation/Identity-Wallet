@@ -9,6 +9,7 @@ import ProviderEngine from 'web3-provider-engine';
 import WebsocketProvider from 'web3-provider-engine/subproviders/websocket';
 import HookedWalletEthTxSubprovider from 'web3-provider-engine/subproviders/hooked-wallet-ethtx';
 import SubscriptionSubprovider from 'web3-provider-engine/subproviders/subscriptions';
+// import FetchSubprovider from 'web3-provider-engine/subproviders/fetch';
 import HWTransportNodeHid from '@ledgerhq/hw-transport-node-hid';
 import Web3SubProvider from '@ledgerhq/web3-subprovider';
 import TrezorWalletSubProviderFactory from 'trezor-wallet-provider';
@@ -21,9 +22,18 @@ export const REQUEST_INTERVAL_DELAY = 500;
 export const SERVER_CONFIG = {
 	infura: {
 		1: { url: 'wss://mainnet.infura.io/ws/v3/2e5fb5cf42714929a7f61a1617ef1ffd' },
-		3: { url: 'wss://ropsten.infura.io/ws/v3/2e5fb5cf42714929a7f61a1617ef1ffd' }
+		3: { url: 'wss://ropsten.infura.io/ws/v3/39ee901210ff4dabbe18e296d9a7a366' }
 	}
 };
+
+/*
+export const SERVER_CONFIG = {
+	infura: {
+		1: { url: 'https://ropsten.infura.io/v3/39ee901210ff4dabbe18e296d9a7a366' },
+		3: { url: 'https://ropsten.infura.io/v3/39ee901210ff4dabbe18e296d9a7a366' }
+	}
+};
+*/
 
 export const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].url;
 
@@ -61,20 +71,20 @@ export class Web3Service extends EventEmitter {
 		if (this.web3 && this.web3.currentProvider) {
 			this.web3.currentProvider.stop();
 		}
-		const engine = new ProviderEngine();
+		const engine = new ProviderEngine({ pollingInterval: 2000000 });
 
 		engine.addProvider(this.getWalletEthTxSubprovider());
 		engine.addProvider(new WebsocketProvider({ rpcUrl: SELECTED_SERVER_URL }));
 		engine.on('error', error => {
 			log.error('Web3Service provider error %s', error);
 		});
-		this.web3 = new Web3(engine);
 		engine.on('start', async () => {
 			await this.web3.eth.getBlockNumber();
 		});
 		engine.on('block', block => this.emit('block', block));
 		engine.start();
 
+		this.web3 = new Web3(engine);
 		this.web3.transactionConfirmationBlocks = 1;
 	}
 
@@ -82,7 +92,7 @@ export class Web3Service extends EventEmitter {
 		if (this.web3 && this.web3.currentProvider) {
 			this.web3.currentProvider.stop();
 		}
-		const engine = new ProviderEngine();
+		const engine = new ProviderEngine({ pollingInterval: 2000000 });
 		this.getLedgerTransport = () => HWTransportNodeHid.create();
 		// ledger firmware 1.6 changed the path derivation scheme to be "44'/60'/x'/0/0"
 		// to support legacy accounts, we will also search accounts in previous path scheme "44'/60'/0'/x"
@@ -147,7 +157,7 @@ export class Web3Service extends EventEmitter {
 			accountsQuantity,
 			eventEmitter
 		);
-		const engine = new ProviderEngine();
+		const engine = new ProviderEngine({ pollingInterval: 2000000 });
 
 		const subscriptionSubprovider = new SubscriptionSubprovider();
 
