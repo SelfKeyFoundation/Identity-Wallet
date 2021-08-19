@@ -1,7 +1,7 @@
 {
 	"name": "selfkey-identity-wallet",
 	"productName": "SelfKey Identity Wallet",
-	"version": "1.9.9",
+	"version": "1.9.10",
 	"description": "The Official SelfKey Identity Wallet for Desktop",
 	"browser": [
 		"chrome"
