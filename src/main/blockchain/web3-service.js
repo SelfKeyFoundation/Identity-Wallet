@@ -26,15 +26,6 @@ export const SERVER_CONFIG = {
 	}
 };
 
-/*
-export const SERVER_CONFIG = {
-	infura: {
-		1: { url: 'https://ropsten.infura.io/v3/39ee901210ff4dabbe18e296d9a7a366' },
-		3: { url: 'https://ropsten.infura.io/v3/39ee901210ff4dabbe18e296d9a7a366' }
-	}
-};
-*/
-
 export const SELECTED_SERVER_URL = SERVER_CONFIG[CONFIG.node][CONFIG.chainId].url;
 
 export class Web3Service extends EventEmitter {
