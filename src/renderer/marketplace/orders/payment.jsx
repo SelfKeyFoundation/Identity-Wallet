@@ -171,10 +171,13 @@ export const MarketplacePayment = withStyles(styles)(
 											color="primary"
 											className={classes.bold}
 										>
-											$ {Number.parseFloat(feeUSD).toLocaleString()}
+											${' '}
+											{Number.parseFloat(feeUSD)
+												.toFixed(2)
+												.toLocaleString()}
 										</Typography>
 										<Typography variant="subtitle2" color="secondary">
-											{feeETH} ETH
+											{Number.parseFloat(feeETH).toFixed(8)} ETH
 										</Typography>
 									</Grid>
 								</Grid>

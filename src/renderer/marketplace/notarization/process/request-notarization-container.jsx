@@ -96,7 +96,7 @@ class RequestNotarizationContainer extends MarketplaceNotariesComponent {
 
 	getPaymentParameters() {
 		const { ethRate, ethGasStationInfo } = this.props;
-		const gasPrice = ethGasStationInfo.average;
+		const gasPrice = ethGasStationInfo.medium.suggestedMaxFeePerGas;
 		const gasLimit = FIXED_GAS_LIMIT_PRICE;
 		const gasEthFee = EthUnits.toEther(gasPrice * gasLimit, 'gwei');
 		const gasUsdFee = gasEthFee * ethRate;
@@ -147,7 +147,6 @@ class RequestNotarizationContainer extends MarketplaceNotariesComponent {
 const mapStateToProps = (state, props) => {
 	const { templateId, vendorId, productId } = props.match.params;
 	const identity = identitySelectors.selectIdentity(state);
-
 	return {
 		templateId,
 		vendorId,

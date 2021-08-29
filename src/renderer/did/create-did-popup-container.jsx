@@ -29,7 +29,7 @@ class CreateDIDPopupContainerComponent extends PureComponent {
 
 	getPaymentParameters = _ => {
 		const { ethRate, ethGasStationInfo, cryptoCurrency, gasLimit } = this.props;
-		const gasPrice = ethGasStationInfo.fast;
+		const gasPrice = ethGasStationInfo.medium.suggestedMaxFeePerGas;
 		const ethFee = EthUnits.toEther(gasPrice * gasLimit, 'gwei');
 		const usdFee = ethFee * ethRate;
 

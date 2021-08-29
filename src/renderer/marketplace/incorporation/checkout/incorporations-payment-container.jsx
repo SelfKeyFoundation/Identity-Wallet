@@ -32,7 +32,7 @@ class IncorporationsPaymentContainer extends MarketplaceIncorporationsComponent 
 
 		this.props.dispatch(
 			ordersOperations.startOrderOperation({
-				productInfo: `Incorporate in ${program.Region}`,
+				productInfo: `Incorporate in ${program.data.region}`,
 				applicationId: application.id,
 				amount: price,
 				vendorId,

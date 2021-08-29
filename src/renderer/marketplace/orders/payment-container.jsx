@@ -4,6 +4,7 @@ import { MarketplacePayment } from './payment';
 import { ordersSelectors, ordersOperations } from '../../../common/marketplace/orders';
 import { identitySelectors } from '../../../common/identity';
 import { featureIsEnabled } from 'common/feature-flags';
+import config from 'common/config';
 
 const LEARN_HOW_URL = 'https://help.selfkey.org';
 
@@ -26,6 +27,9 @@ class MarketplacePaymentContainer extends PureComponent {
 		window.openExternal(e, LEARN_HOW_URL);
 	};
 	render() {
+		const cryptoCurrency = this.props.order.cryptoCurrency
+			? this.props.order.cryptoCurrency
+			: config.constants.primaryToken;
 		return (
 			<MarketplacePayment
 				onBackClick={this.handleBackClick}
@@ -37,7 +41,7 @@ class MarketplacePaymentContainer extends PureComponent {
 				did={this.props.identity.did}
 				vendorName={this.props.order.vendorName}
 				onLearnHowClick={this.handleLearnHowClick}
-				cryptoCurrency={this.props.order.cryptoCurrency}
+				cryptoCurrency={cryptoCurrency}
 			/>
 		);
 	}

@@ -49,7 +49,12 @@ export const marketplacesSelectors = {
 		let fiat = fiatCurrencySelectors.getFiatCurrency(state);
 		let fiatRate = pricesSelectors.getRate(state, 'ETH', fiat.fiatCurrency);
 		let tx = this.marketplacesSelector(state).currentTransaction;
-		if (!tx) tx = { action: 'none', gasLimit: 0, gasPrice: gasPriceEstimates.average };
+		if (!tx)
+			tx = {
+				action: 'none',
+				gasLimit: 0,
+				gasPrice: gasPriceEstimates.medium
+			};
 		let fee = new BN(tx.gasPrice || 0).multipliedBy(tx.gasLimit || 0).toString();
 		let feeFiat = new BN(fee).multipliedBy(fiatRate).toString();
 		return { ...tx, gasPriceEstimates, fiat, fiatRate, fee, feeFiat };
