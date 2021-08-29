@@ -36,7 +36,7 @@ class PassportsCheckoutContainerComponent extends MarketplacePassportsComponent 
 
 	getPaymentParameters() {
 		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency, program } = this.props;
-		const gasPrice = ethGasStationInfo.fast;
+		const gasPrice = ethGasStationInfo.medium.suggestedMaxFeePerGas;
 		const price = program.price;
 		const keyAmount = price / keyRate;
 		const gasLimit = FIXED_GAS_LIMIT_PRICE;

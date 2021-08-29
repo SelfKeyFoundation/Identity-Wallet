@@ -73,10 +73,10 @@ export class Web3Service extends EventEmitter {
 			await this.web3.eth.getBlockNumber();
 		});
 		engine.on('block', block => this.emit('block', block));
-		engine.start();
 
 		this.web3 = new Web3(engine);
 		this.web3.transactionConfirmationBlocks = 1;
+		engine.start();
 	}
 
 	async switchToLedgerWallet(accountsOffset = 0, accountsQuantity = 6) {

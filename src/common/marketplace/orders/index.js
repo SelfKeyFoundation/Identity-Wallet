@@ -317,7 +317,7 @@ const preapproveCurrentOrderOperation = () => async (dispatch, getState) => {
 			config.paymentSplitterAddress,
 			amount,
 			allowanceGas,
-			gasPriceEstimates.average,
+			gasPriceEstimates.medium,
 			onTransactionHash
 		);
 		order = ordersSelectors.getOrder(getState(), orderId);
@@ -357,7 +357,9 @@ const directPayCurrentOrderOperation = ({ trezorAccountIndex }) => async (dispat
 		getState()
 	);
 	let order = ordersSelectors.getOrder(getState(), orderId);
-	const cryptoCurrency = order.cryptoCurrency;
+	const cryptoCurrency = order.cryptoCurrency
+		? order.cryptoCurrency
+		: config.constants.primaryToken;
 	const { ethGasStationInfo } = ethGasStationInfoSelectors.getEthGasStationInfo(getState());
 	const amount = new BN(order.amount).toFixed(18);
 
@@ -460,7 +462,7 @@ const payCurrentOrderOperation = () => async (dispatch, getState) => {
 			0,
 			0,
 			paymentGas,
-			gasPriceEstimates.average,
+			gasPriceEstimates.medium,
 			onTransactionHash
 		);
 		order = ordersSelectors.getOrder(getState(), orderId);
@@ -654,7 +656,7 @@ const ordersSelectors = {
 	getCurrentPaymentFeeEth: state => {
 		let gasPriceEstimates = ethGasStationInfoSelectors.getEthGasStationInfoWEI(state);
 		const { paymentGas } = ordersSelectors.getCurrentOrder(state) || {};
-		return new BN(gasPriceEstimates.average)
+		return new BN(gasPriceEstimates.medium)
 			.dividedBy(1000000000000000000)
 			.multipliedBy(paymentGas || 0)
 			.toString();
@@ -669,7 +671,7 @@ const ordersSelectors = {
 	getCurrentAllowanceFeeEth: state => {
 		let gasPriceEstimates = ethGasStationInfoSelectors.getEthGasStationInfoWEI(state);
 		const { allowanceGas } = ordersSelectors.getCurrentOrder(state) || {};
-		return new BN(gasPriceEstimates.average)
+		return new BN(gasPriceEstimates.medium)
 			.dividedBy(1000000000000000000)
 			.multipliedBy(allowanceGas || 0)
 			.toString();

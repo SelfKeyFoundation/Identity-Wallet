@@ -200,9 +200,12 @@ const PaymentCheckout = withStyles(styles)(
 											style="currency"
 											value={usdFee}
 											className={classes.currency}
+											fractionDigits={2}
 										/>
 									</div>
-									<div className="time">{ethFee.toLocaleString()} ETH</div>
+									<div className="time">
+										{Number.parseFloat(ethFee).toFixed(8)} ETH{' '}
+									</div>
 								</div>
 							</Grid>
 						</div>

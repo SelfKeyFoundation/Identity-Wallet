@@ -92,7 +92,7 @@ export const startStakeTransactionOperation = (serviceOwner, serviceId, amount) 
 	let tx = {
 		action: 'placeStake',
 		gasLimit,
-		gasPrice: currentTransaction.gasPriceEstimates.average,
+		gasPrice: currentTransaction.gasPriceEstimates.medium,
 		serviceOwner,
 		serviceId,
 		amount
@@ -126,7 +126,7 @@ export const startWithdrawTransactionOperation = (serviceOwner, serviceId) => as
 	let tx = {
 		action: 'withdrawStake',
 		gasLimit,
-		gasPrice: currentTransaction.gasPriceEstimates.average,
+		gasPrice: currentTransaction.gasPriceEstimates.medium,
 		serviceOwner,
 		serviceId
 	};

@@ -82,7 +82,7 @@ export const NotariesServiceCost = withStyles(style)(
 							$ {gasUsdFee.toLocaleString(undefined, { maximumFractionDigits: 2 })}
 						</Typography>
 						<Typography variant="subtitle2" color="secondary">
-							{gasEthFee} ETH
+							{Number.parseFloat(gasEthFee).toFixed(8)} ETH
 						</Typography>
 					</div>
 				</div>
