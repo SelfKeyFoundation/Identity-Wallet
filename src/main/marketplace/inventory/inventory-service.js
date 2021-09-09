@@ -127,8 +127,11 @@ export class SelfkeyInventoryFetcher extends InventoryFetcher {
 		}
 	}
 	async fetchData(category) {
+		if (category === 'other' || !category) {
+			return;
+		}
 		if (!dataEndpoints[category]) {
-			throw new Error('unknown_data_category');
+			throw new Error(`unknown_data_category ${category}`);
 		}
 		try {
 			let fetched = await request.get({ url: dataEndpoints[category], json: true });
