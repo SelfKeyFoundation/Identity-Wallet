@@ -39,7 +39,11 @@ class MarketplaceKeyFiCheckoutContainerComponent extends MarketplaceKeyFiCompone
 
 	getPaymentParameters() {
 		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency, product } = this.props;
-		const gasPrice = ethGasStationInfo.medium.suggestedMaxFeePerGas;
+		console.log(ethGasStationInfo);
+		const gasPrice =
+			ethGasStationInfo && ethGasStationInfo.medium
+				? ethGasStationInfo.medium.suggestedMaxFeePerGas
+				: 0;
 		const price = product.price;
 		const ethPrice = price;
 		const keyPrice = price * 0.8;
