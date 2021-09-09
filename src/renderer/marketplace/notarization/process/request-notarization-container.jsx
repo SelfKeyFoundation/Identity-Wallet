@@ -96,7 +96,10 @@ class RequestNotarizationContainer extends MarketplaceNotariesComponent {
 
 	getPaymentParameters() {
 		const { ethRate, ethGasStationInfo } = this.props;
-		const gasPrice = ethGasStationInfo.medium.suggestedMaxFeePerGas;
+		const gasPrice =
+			ethGasStationInfo && ethGasStationInfo.medium
+				? ethGasStationInfo.medium.suggestedMaxFeePerGas
+				: 0;
 		const gasLimit = FIXED_GAS_LIMIT_PRICE;
 		const gasEthFee = EthUnits.toEther(gasPrice * gasLimit, 'gwei');
 		const gasUsdFee = gasEthFee * ethRate;
