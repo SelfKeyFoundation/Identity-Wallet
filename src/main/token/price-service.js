@@ -31,14 +31,14 @@ export class PriceService extends EventEmitter {
 
 		if (!json) {
 			log.error('Unable to fetch price data');
-			setTimeout(this.loadPriceData, PRICE_UPDATE_INTERVAL);
+			setTimeout(this.loadPriceData.bind(this), PRICE_UPDATE_INTERVAL);
 			return;
 		}
 
 		let data = json.data;
 		if (!data || !data.length) {
 			log.error('Unable to fetch price data');
-			setTimeout(this.loadPriceData, PRICE_UPDATE_INTERVAL);
+			setTimeout(this.loadPriceData.bind(this), PRICE_UPDATE_INTERVAL);
 			return;
 		}
 

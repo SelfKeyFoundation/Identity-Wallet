@@ -176,8 +176,10 @@ const operations = {
 			let gasPrice = afterUpdate.gasPrice;
 			if (!gasPrice) {
 				gasPrice = ethGasStationInfoSelectors.getEthGasStationInfo(getState())
-					.ethGasStationInfo.medium.suggestedMaxFeePerGas;
+					.ethGasStationInfo.average;
 			}
+
+			// TODO: suggestedMaxFeePerGas
 
 			await dispatch(
 				contractActions.updateEditorAction({

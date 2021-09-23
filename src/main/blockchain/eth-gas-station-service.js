@@ -14,9 +14,28 @@ const EIP1559_URL =
 
 export class EthGasStationService {
 	getInfo() {
-		const url = featureIsEnabled('eip_1559') ? EIP1559_URL : URL;
+		return new Promise(async (resolve, reject) => {
+			let fees = false;
+			if (featureIsEnabled('eip_1559')) {
+				fees = await this.getFees();
+			}
+
+			request.get({ url: URL, json: true }, (error, httpResponse, response) => {
+				if (error) {
+					log.error(error);
+					reject(error);
+				}
+				if (featureIsEnabled('eip_1559')) {
+					response.fees = fees;
+				}
+				resolve(response);
+			});
+		});
+	}
+
+	getFees() {
 		return new Promise((resolve, reject) => {
-			request.get({ url, json: true }, (error, httpResponse, response) => {
+			request.get({ url: EIP1559_URL, json: true }, (error, httpResponse, response) => {
 				if (error) {
 					log.error(error);
 					reject(error);
