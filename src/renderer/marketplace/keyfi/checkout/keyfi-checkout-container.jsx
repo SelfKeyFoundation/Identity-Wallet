@@ -39,17 +39,18 @@ class MarketplaceKeyFiCheckoutContainerComponent extends MarketplaceKeyFiCompone
 
 	getPaymentParameters() {
 		const { keyRate, ethRate, ethGasStationInfo, cryptoCurrency, product } = this.props;
-		const gasPrice =
-			ethGasStationInfo && ethGasStationInfo.medium
-				? ethGasStationInfo.medium.suggestedMaxFeePerGas
-				: 0;
+		const gasPrice = ethGasStationInfo ? ethGasStationInfo.average : 50;
+		const maxPriorityFee =
+			ethGasStationInfo && ethGasStationInfo.fees && ethGasStationInfo.fees.medium
+				? ethGasStationInfo.fees.medium.suggestedMaxFeePerGas
+				: 1;
 		const price = product.price;
 		const ethPrice = price;
 		const keyPrice = price * 0.8;
 		const keyAmount = keyPrice / keyRate;
 		const ethAmount = ethPrice / ethRate;
 		const gasLimit = FIXED_GAS_LIMIT_PRICE;
-		const ethFee = EthUnits.toEther(gasPrice * gasLimit, 'gwei');
+		const ethFee = EthUnits.toEther((gasPrice + maxPriorityFee) * gasLimit, 'gwei');
 		const usdFee = ethFee * ethRate;
 
 		return {

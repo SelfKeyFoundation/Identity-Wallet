@@ -22,16 +22,23 @@ export class PriceService extends EventEmitter {
 	async loadPriceData() {
 		log.debug('fetching price data');
 		const response = await fetch('https://api.coincap.io/v2/assets?limit=2000');
-		const json = await response.json();
+		let json = null;
+		try {
+			json = await response.json();
+		} catch (error) {
+			log.error('Unable to fetch coincap price data');
+		}
 
 		if (!json) {
 			log.error('Unable to fetch price data');
+			setTimeout(this.loadPriceData.bind(this), PRICE_UPDATE_INTERVAL);
 			return;
 		}
 
 		let data = json.data;
 		if (!data || !data.length) {
 			log.error('Unable to fetch price data');
+			setTimeout(this.loadPriceData.bind(this), PRICE_UPDATE_INTERVAL);
 			return;
 		}
 
