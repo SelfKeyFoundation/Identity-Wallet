@@ -46,6 +46,7 @@ export const marketplacesSelectors = {
 	},
 	currentTransactionSelector(state) {
 		let gasPriceEstimates = ethGasStationInfoSelectors.getEthGasStationInfoWEI(state);
+		let feePriceEstimates = ethGasStationInfoSelectors.getEthFeeInfoWEI(state);
 		let fiat = fiatCurrencySelectors.getFiatCurrency(state);
 		let fiatRate = pricesSelectors.getRate(state, 'ETH', fiat.fiatCurrency);
 		let tx = this.marketplacesSelector(state).currentTransaction;
@@ -53,11 +54,12 @@ export const marketplacesSelectors = {
 			tx = {
 				action: 'none',
 				gasLimit: 0,
-				gasPrice: gasPriceEstimates.medium
+				gasPrice: gasPriceEstimates.average,
+				maxPriorityFee: feePriceEstimates.medium
 			};
 		let fee = new BN(tx.gasPrice || 0).multipliedBy(tx.gasLimit || 0).toString();
 		let feeFiat = new BN(fee).multipliedBy(fiatRate).toString();
-		return { ...tx, gasPriceEstimates, fiat, fiatRate, fee, feeFiat };
+		return { ...tx, gasPriceEstimates, feePriceEstimates, fiat, fiatRate, fee, feeFiat };
 	},
 	displayedPopupSelector(state) {
 		return this.marketplacesSelector(state).displayedPopup;

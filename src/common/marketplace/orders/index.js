@@ -317,7 +317,7 @@ const preapproveCurrentOrderOperation = () => async (dispatch, getState) => {
 			config.paymentSplitterAddress,
 			amount,
 			allowanceGas,
-			gasPriceEstimates.medium,
+			gasPriceEstimates.average,
 			onTransactionHash
 		);
 		order = ordersSelectors.getOrder(getState(), orderId);
@@ -462,7 +462,7 @@ const payCurrentOrderOperation = () => async (dispatch, getState) => {
 			0,
 			0,
 			paymentGas,
-			gasPriceEstimates.medium,
+			gasPriceEstimates.average,
 			onTransactionHash
 		);
 		order = ordersSelectors.getOrder(getState(), orderId);
@@ -656,7 +656,7 @@ const ordersSelectors = {
 	getCurrentPaymentFeeEth: state => {
 		let gasPriceEstimates = ethGasStationInfoSelectors.getEthGasStationInfoWEI(state);
 		const { paymentGas } = ordersSelectors.getCurrentOrder(state) || {};
-		return new BN(gasPriceEstimates.medium)
+		return new BN(gasPriceEstimates.average)
 			.dividedBy(1000000000000000000)
 			.multipliedBy(paymentGas || 0)
 			.toString();
@@ -671,7 +671,7 @@ const ordersSelectors = {
 	getCurrentAllowanceFeeEth: state => {
 		let gasPriceEstimates = ethGasStationInfoSelectors.getEthGasStationInfoWEI(state);
 		const { allowanceGas } = ordersSelectors.getCurrentOrder(state) || {};
-		return new BN(gasPriceEstimates.medium)
+		return new BN(gasPriceEstimates.average)
 			.dividedBy(1000000000000000000)
 			.multipliedBy(allowanceGas || 0)
 			.toString();

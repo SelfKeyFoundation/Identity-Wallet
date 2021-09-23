@@ -141,12 +141,23 @@ export class TransactionFeeBoxComponent extends PureComponent {
 		showAdvanced: this.props.showAdvanced || false
 	};
 
+	typeTranslation(type) {
+		switch (type) {
+			case 'safeLow':
+				return 'low';
+			case 'average':
+				return 'medium';
+			case 'fast':
+				return 'high';
+		}
+	}
+
 	getFee(type) {
 		if (!this.props.ethGasStationInfo || !this.props.ethGasStationInfo[type]) {
 			return;
 		}
 		if (this.props.eip1559) {
-			return this.props.ethGasStationInfo[type].suggestedMaxFeePerGas;
+			return this.props.ethGasStationInfo[type];
 		} else {
 			return this.props.ethGasStationInfo[type];
 		}
@@ -155,7 +166,10 @@ export class TransactionFeeBoxComponent extends PureComponent {
 	getFeeInEth(type, digits = false) {
 		const gasPrice = this.getFee(type);
 		const gasLimit = this.props.gasLimit ? this.props.gasLimit : DEFAULT_ETH_GAS_LIMIT;
-		const ethFee = EthUnits.toEther(gasPrice * gasLimit, 'gwei');
+
+		const maxFee = this.props.ethGasStationInfo.fees[this.typeTranslation(type)]
+			.suggestedMaxFeePerGas;
+		const ethFee = EthUnits.toEther((gasPrice + maxFee) * gasLimit, 'gwei');
 		return digits ? Number.parseFloat(ethFee).toFixed(digits) : ethFee;
 	}
 
@@ -219,13 +233,9 @@ export class TransactionFeeBoxComponent extends PureComponent {
 			return;
 		}
 
-		const gasPrice = this.props.eip1559
-			? this.props.ethGasStationInfo[type].suggestedMaxFeePerGas
-			: this.props.ethGasStationInfo[type];
-
-		const maxPriorityFee = this.props.eip1559
-			? this.props.ethGasStationInfo[type].suggestedMaxPriorityFeePerGas
-			: 0;
+		const gasPrice = this.props.ethGasStationInfo[type];
+		const maxPriorityFee = this.props.ethGasStationInfo.fees[this.typeTranslation(type)]
+			.suggestedMaxPriorityFeePerGas;
 
 		if (changeMaxPriorityFeeAction) {
 			changeMaxPriorityFeeAction(maxPriorityFee);
@@ -257,9 +267,9 @@ export class TransactionFeeBoxComponent extends PureComponent {
 					<div className={classes.transactionFee}>
 						<div
 							className={`${
-								this.props.gasPrice === this.getFee('low') ? 'selected' : ''
+								this.props.gasPrice === this.getFee('safeLow') ? 'selected' : ''
 							}`}
-							onClick={() => this.selectPreDefinedGas('low')}
+							onClick={() => this.selectPreDefinedGas('safeLow')}
 						>
 							<Typography
 								variant="body1"
@@ -270,7 +280,7 @@ export class TransactionFeeBoxComponent extends PureComponent {
 							</Typography>
 							<div className={classes.fiatPrice}>
 								<Typography variant="subtitle2">
-									{this.getFeeInEth('low', 8)} ETH
+									{this.getFeeInEth('safeLow', 8)} ETH
 								</Typography>
 							</div>
 							<div className={classes.fiatPrice}>
@@ -283,7 +293,7 @@ export class TransactionFeeBoxComponent extends PureComponent {
 										locale={locale}
 										priceStyle="currency"
 										currency={fiatCurrency}
-										value={this.getFeeUsd('low')}
+										value={this.getFeeUsd('safeLow')}
 										fractionDigits={2}
 										showCurrency={true}
 									/>
@@ -291,15 +301,15 @@ export class TransactionFeeBoxComponent extends PureComponent {
 							</div>
 							<div className={classes.transactionExpectedTiming}>
 								<Typography variant="subtitle2" color="success">
-									{this.getTransactionTiming(ethGasStationInfo.low)}
+									{this.getTransactionTiming(ethGasStationInfo.fees.low)}
 								</Typography>
 							</div>
 						</div>
 						<div
 							className={`${
-								this.props.gasPrice === this.getFee('medium') ? 'selected' : ''
+								this.props.gasPrice === this.getFee('average') ? 'selected' : ''
 							}`}
-							onClick={() => this.selectPreDefinedGas('medium')}
+							onClick={() => this.selectPreDefinedGas('average')}
 						>
 							<Typography
 								variant="body1"
@@ -310,7 +320,7 @@ export class TransactionFeeBoxComponent extends PureComponent {
 							</Typography>
 							<div className={classes.fiatPrice}>
 								<Typography variant="subtitle2">
-									{this.getFeeInEth('medium', 8)} ETH
+									{this.getFeeInEth('average', 8)} ETH
 								</Typography>
 							</div>
 							<div className={classes.fiatPrice}>
@@ -323,7 +333,7 @@ export class TransactionFeeBoxComponent extends PureComponent {
 										locale={locale}
 										priceStyle="currency"
 										currency={fiatCurrency}
-										value={this.getFeeUsd('medium')}
+										value={this.getFeeUsd('average')}
 										fractionDigits={2}
 										showCurrency={true}
 									/>
@@ -331,15 +341,15 @@ export class TransactionFeeBoxComponent extends PureComponent {
 							</div>
 							<div className={classes.transactionExpectedTiming}>
 								<Typography variant="subtitle2" color="success">
-									{this.getTransactionTiming(ethGasStationInfo.medium)}
+									{this.getTransactionTiming(ethGasStationInfo.fees.medium)}
 								</Typography>
 							</div>
 						</div>
 						<div
 							className={`${
-								this.props.gasPrice === this.getFee('high') ? 'selected' : ''
+								this.props.gasPrice === this.getFee('fast') ? 'selected' : ''
 							}`}
-							onClick={() => this.selectPreDefinedGas('high')}
+							onClick={() => this.selectPreDefinedGas('fast')}
 						>
 							<Typography
 								variant="body2"
@@ -350,7 +360,7 @@ export class TransactionFeeBoxComponent extends PureComponent {
 							</Typography>
 							<div className={classes.fiatPrice}>
 								<Typography variant="subtitle2">
-									{this.getFeeInEth('high', 8)} ETH
+									{this.getFeeInEth('fast', 8)} ETH
 								</Typography>
 							</div>
 							<div className={classes.fiatPrice}>
@@ -363,7 +373,7 @@ export class TransactionFeeBoxComponent extends PureComponent {
 										locale={locale}
 										priceStyle="currency"
 										currency={fiatCurrency}
-										value={this.getFeeUsd('high')}
+										value={this.getFeeUsd('fast')}
 										fractionDigits={2}
 										showCurrency={true}
 									/>
@@ -371,7 +381,7 @@ export class TransactionFeeBoxComponent extends PureComponent {
 							</div>
 							<div className={classes.transactionExpectedTiming}>
 								<Typography variant="subtitle2" color="success">
-									{this.getTransactionTiming(ethGasStationInfo.high)}
+									{this.getTransactionTiming(ethGasStationInfo.fees.high)}
 								</Typography>
 							</div>
 						</div>
@@ -408,13 +418,13 @@ export class TransactionFeeBoxComponent extends PureComponent {
 								<input
 									type="text"
 									className={classes.formControl}
-									value={maxPriorityFee}
+									value={Number.parseFloat(maxPriorityFee).toFixed(2)}
 									onChange={e => this.setMaxPriorityFee(e)}
 								/>
 							</div>
 
 							<div className={classes.formGroup}>
-								<label>Max Fee (Gwei)</label>
+								<label>Base Fee (Gwei)</label>
 								<input
 									type="text"
 									className={classes.formControl}

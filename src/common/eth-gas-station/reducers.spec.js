@@ -11,7 +11,8 @@ describe('eth-gas-station reducer', () => {
 		const data = {
 			safeLow: 10.0,
 			average: 8.0,
-			fast: 1.0
+			fast: 1.0,
+			fees: null
 		};
 		expect(
 			reducer(undefined, {
@@ -20,7 +21,7 @@ describe('eth-gas-station reducer', () => {
 			})
 		).toEqual({
 			ethGasStationInfo: Object.keys(data).reduce((prev, currentKey) => {
-				prev[currentKey] = data[currentKey] / 10;
+				prev[currentKey] = currentKey === 'fees' ? data[currentKey] : data[currentKey] / 10;
 				return prev;
 			}, {})
 		});
