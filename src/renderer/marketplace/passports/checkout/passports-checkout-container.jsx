@@ -39,7 +39,7 @@ class PassportsCheckoutContainerComponent extends MarketplacePassportsComponent 
 		const gasPrice = ethGasStationInfo ? ethGasStationInfo.average : 50;
 		const maxPriorityFee =
 			ethGasStationInfo && ethGasStationInfo.fees && ethGasStationInfo.fees.medium
-				? ethGasStationInfo.fees.medium.suggestedMaxFeePerGas
+				? parseFloat(ethGasStationInfo.fees.medium.suggestedMaxFeePerGas)
 				: 1;
 
 		const price = program.price;
