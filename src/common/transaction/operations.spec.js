@@ -64,9 +64,9 @@ const getStoreMock = (transaction = {}) =>
 				average: 200,
 				fast: 300,
 				fees: {
-					low: { suggestedMaxFeePerGas: 1 },
-					medium: { suggestedMaxFeePerGas: 2 },
-					high: { suggestedMaxFeePerGas: 3 }
+					low: { suggestedMaxPriorityFeePerGas: 1 },
+					medium: { suggestedMaxPriorityFeePerGas: 2 },
+					high: { suggestedMaxPriorityFeePerGas: 3 }
 				}
 			}
 		}
