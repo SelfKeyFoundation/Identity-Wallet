@@ -40,7 +40,7 @@ class BankAccountsCheckoutContainer extends MarketplaceBankAccountsComponent {
 		const gasPrice = ethGasStationInfo ? ethGasStationInfo.average : 50;
 		const maxPriorityFee =
 			ethGasStationInfo && ethGasStationInfo.fees && ethGasStationInfo.fees.medium
-				? ethGasStationInfo.fees.medium.suggestedMaxFeePerGas
+				? parseFloat(ethGasStationInfo.fees.medium.suggestedMaxFeePerGas)
 				: 1;
 		const price = jurisdiction.price;
 		const keyAmount = price / keyRate;
