@@ -136,6 +136,17 @@ const styles = theme => ({
 	}
 });
 
+const SECOND_CUTOFF = 90;
+
+// Shows "seconds" as unit of time if under SECOND_CUTOFF, otherwise "minutes"
+const toHumanReadableTime = (milliseconds = 1) => {
+	const seconds = Math.ceil(milliseconds / 1000);
+	if (seconds <= SECOND_CUTOFF) {
+		return 'Likely in < ' + seconds + ' sec';
+	}
+	return 'Likely in < ' + Math.ceil(seconds / 60) + ' min';
+};
+
 export class TransactionFeeBoxComponent extends PureComponent {
 	state = {
 		showAdvanced: this.props.showAdvanced || false
@@ -156,19 +167,31 @@ export class TransactionFeeBoxComponent extends PureComponent {
 		if (!this.props.ethGasStationInfo || !this.props.ethGasStationInfo[type]) {
 			return;
 		}
-		if (this.props.eip1559) {
-			return this.props.ethGasStationInfo[type];
-		} else {
-			return this.props.ethGasStationInfo[type];
+		return this.props.ethGasStationInfo[type];
+	}
+
+	getMaxPriorityFee(type) {
+		if (
+			!this.props.ethGasStationInfo ||
+			!this.props.ethGasStationInfo[type] ||
+			!this.props.ethGasStationInfo.fees
+		) {
+			return;
 		}
+		const maxPriorityFee = parseFloat(
+			this.props.ethGasStationInfo.fees[this.typeTranslation(type)].suggestedMaxFeePerGas
+		).toFixed(2);
+		return maxPriorityFee;
 	}
 
 	getFeeInEth(type, digits = false) {
 		const gasPrice = this.getFee(type);
 		const gasLimit = this.props.gasLimit ? this.props.gasLimit : DEFAULT_ETH_GAS_LIMIT;
 
-		const maxFee = this.props.ethGasStationInfo.fees[this.typeTranslation(type)]
-			.suggestedMaxFeePerGas;
+		const maxFee = parseFloat(
+			this.props.ethGasStationInfo.fees[this.typeTranslation(type)].suggestedMaxFeePerGas
+		);
+
 		const ethFee = EthUnits.toEther((gasPrice + maxFee) * gasLimit, 'gwei');
 		return digits ? Number.parseFloat(ethFee).toFixed(digits) : ethFee;
 	}
@@ -179,17 +202,11 @@ export class TransactionFeeBoxComponent extends PureComponent {
 		return ethFee * ethRate;
 	}
 
-	getTransactionTiming(data) {
+	getTransactionTiming(data, what) {
 		if (data && data.maxWaitTimeEstimate) {
-			return `Likely in < ${Math.ceil(data.maxWaitTimeEstimate / 1000 / 60)} min`;
+			return toHumanReadableTime(data.maxWaitTimeEstimate);
 		} else {
 			return '';
-		}
-	}
-
-	getMaxPriorityFee(data) {
-		if (data && data.maxPriorityFee) {
-			return data.maxPriorityFee;
 		}
 	}
 
@@ -221,6 +238,7 @@ export class TransactionFeeBoxComponent extends PureComponent {
 
 	setMaxPriorityFee = event => {
 		const value = event.target.value;
+
 		if (this.props.changeMaxPriorityFeeAction) {
 			this.props.changeMaxPriorityFeeAction(value);
 		}
@@ -234,8 +252,10 @@ export class TransactionFeeBoxComponent extends PureComponent {
 		}
 
 		const gasPrice = this.props.ethGasStationInfo[type];
-		const maxPriorityFee = this.props.ethGasStationInfo.fees[this.typeTranslation(type)]
-			.suggestedMaxPriorityFeePerGas;
+		const maxPriorityFee = parseFloat(
+			this.props.ethGasStationInfo.fees[this.typeTranslation(type)]
+				.suggestedMaxPriorityFeePerGas
+		);
 
 		if (changeMaxPriorityFeeAction) {
 			changeMaxPriorityFeeAction(maxPriorityFee);
@@ -267,7 +287,11 @@ export class TransactionFeeBoxComponent extends PureComponent {
 					<div className={classes.transactionFee}>
 						<div
 							className={`${
-								this.props.gasPrice === this.getFee('safeLow') ? 'selected' : ''
+								gasPrice === this.getFee('safeLow') &&
+								parseFloat(maxPriorityFee).toFixed(2) ===
+									this.getMaxPriorityFee('safeLow')
+									? 'selected'
+									: ''
 							}`}
 							onClick={() => this.selectPreDefinedGas('safeLow')}
 						>
@@ -301,13 +325,17 @@ export class TransactionFeeBoxComponent extends PureComponent {
 							</div>
 							<div className={classes.transactionExpectedTiming}>
 								<Typography variant="subtitle2" color="success">
-									{this.getTransactionTiming(ethGasStationInfo.fees.low)}
+									{this.getTransactionTiming(ethGasStationInfo.fees.high, 'low')}
 								</Typography>
 							</div>
 						</div>
 						<div
 							className={`${
-								this.props.gasPrice === this.getFee('average') ? 'selected' : ''
+								this.props.gasPrice === this.getFee('average') &&
+								parseFloat(maxPriorityFee).toFixed(2) ===
+									this.getMaxPriorityFee('average')
+									? 'selected'
+									: ''
 							}`}
 							onClick={() => this.selectPreDefinedGas('average')}
 						>
@@ -341,13 +369,20 @@ export class TransactionFeeBoxComponent extends PureComponent {
 							</div>
 							<div className={classes.transactionExpectedTiming}>
 								<Typography variant="subtitle2" color="success">
-									{this.getTransactionTiming(ethGasStationInfo.fees.medium)}
+									{this.getTransactionTiming(
+										ethGasStationInfo.fees.medium,
+										'medium'
+									)}
 								</Typography>
 							</div>
 						</div>
 						<div
 							className={`${
-								this.props.gasPrice === this.getFee('fast') ? 'selected' : ''
+								this.props.gasPrice === this.getFee('fast') &&
+								parseFloat(maxPriorityFee).toFixed(2) ===
+									this.getMaxPriorityFee('fast')
+									? 'selected'
+									: ''
 							}`}
 							onClick={() => this.selectPreDefinedGas('fast')}
 						>
@@ -381,7 +416,7 @@ export class TransactionFeeBoxComponent extends PureComponent {
 							</div>
 							<div className={classes.transactionExpectedTiming}>
 								<Typography variant="subtitle2" color="success">
-									{this.getTransactionTiming(ethGasStationInfo.fees.high)}
+									{this.getTransactionTiming(ethGasStationInfo.fees.low, 'high')}
 								</Typography>
 							</div>
 						</div>
@@ -418,7 +453,7 @@ export class TransactionFeeBoxComponent extends PureComponent {
 								<input
 									type="text"
 									className={classes.formControl}
-									value={Number.parseFloat(maxPriorityFee).toFixed(2)}
+									value={maxPriorityFee}
 									onChange={e => this.setMaxPriorityFee(e)}
 								/>
 							</div>

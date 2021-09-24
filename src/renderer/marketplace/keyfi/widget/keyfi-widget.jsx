@@ -48,7 +48,10 @@ const styles = theme => ({
 	},
 	actions: {
 		textAlign: 'center',
-		marginTop: '24px'
+		marginTop: '24px',
+		'& span': {
+			marginLeft: '10px'
+		}
 	},
 	ctabutton: {
 		backgroundColor: '#1E262E',
