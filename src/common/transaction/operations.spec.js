@@ -207,7 +207,7 @@ describe('operations', () => {
 					gasPrice: 200,
 					gasLimit: MOCK_GAST_LIMIT,
 					gasLimitUpdated: undefined,
-					maxPriorityFee: 2,
+					maxPriorityFee: '2.00',
 					nonce: 1
 				})
 			);
@@ -234,7 +234,7 @@ describe('operations', () => {
 					gasPrice: newGasPrice,
 					gasLimit: MOCK_GAST_LIMIT,
 					gasLimitUpdated: undefined,
-					maxPriorityFee: 2,
+					maxPriorityFee: '2.00',
 					nonce: 1
 				})
 			);
@@ -261,7 +261,7 @@ describe('operations', () => {
 				actions.updateTransaction({
 					ethFee: 1,
 					gasPrice: 200,
-					maxPriorityFee: 2,
+					maxPriorityFee: '2.00',
 					gasLimit: MOCK_GAST_LIMIT,
 					gasLimitUpdated: undefined,
 					nonce: 1
@@ -295,7 +295,7 @@ describe('operations', () => {
 					ethFee: 1,
 					gasPrice: newGasPrice,
 					gasLimit: manualGasLimit,
-					maxPriorityFee: 2,
+					maxPriorityFee: '2.00',
 					gasLimitUpdated: true,
 					nonce: 1
 				})
