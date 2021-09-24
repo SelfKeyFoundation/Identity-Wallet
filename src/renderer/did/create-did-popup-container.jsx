@@ -32,7 +32,7 @@ class CreateDIDPopupContainerComponent extends PureComponent {
 		const gasPrice = ethGasStationInfo ? ethGasStationInfo.average : 50;
 		const maxPriorityFee =
 			ethGasStationInfo && ethGasStationInfo.fees && ethGasStationInfo.fees.medium
-				? parseFloat(ethGasStationInfo.fees.medium.suggestedMaxFeePerGas)
+				? parseFloat(ethGasStationInfo.fees.medium.suggestedMaxPriorityFeePerGas)
 				: 1;
 		const ethFee = EthUnits.toEther((gasPrice + maxPriorityFee) * gasLimit, 'gwei');
 		const usdFee = ethFee * ethRate;

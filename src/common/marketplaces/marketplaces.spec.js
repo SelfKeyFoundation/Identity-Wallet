@@ -47,9 +47,9 @@ describe('marketplace selectors', () => {
 			fast: 7000,
 			safeLow: 2000,
 			fees: {
-				low: { suggestedMaxFeePerGas: 1 },
-				medium: { suggestedMaxFeePerGas: 2 },
-				high: { suggestedMaxFeePerGas: 3 }
+				low: { suggestedMaxPriorityFeePerGas: 1 },
+				medium: { suggestedMaxPriorityFeePerGas: 2 },
+				high: { suggestedMaxPriorityFeePerGas: 3 }
 			}
 		},
 		feePriceEstimates: {
@@ -57,9 +57,9 @@ describe('marketplace selectors', () => {
 			fast: 7000,
 			safeLow: 2000,
 			fees: {
-				low: { suggestedMaxFeePerGas: 1 },
-				medium: { suggestedMaxFeePerGas: 2 },
-				high: { suggestedMaxFeePerGas: 3 }
+				low: { suggestedMaxPriorityFeePerGas: 1 },
+				medium: { suggestedMaxPriorityFeePerGas: 2 },
+				high: { suggestedMaxPriorityFeePerGas: 3 }
 			}
 		},
 		gasPrice: 3000,
@@ -134,9 +134,9 @@ describe('marketplace selectors', () => {
 			fast: 7000,
 			safeLow: 2000,
 			fees: {
-				low: { suggestedMaxFeePerGas: 1 },
-				medium: { suggestedMaxFeePerGas: 2 },
-				high: { suggestedMaxFeePerGas: 3 }
+				low: { suggestedMaxPriorityFeePerGas: 1 },
+				medium: { suggestedMaxPriorityFeePerGas: 2 },
+				high: { suggestedMaxPriorityFeePerGas: 3 }
 			}
 		});
 		sinon.stub(ethGasStationInfoSelectors, 'getEthFeeInfoWEI').returns({
@@ -144,9 +144,9 @@ describe('marketplace selectors', () => {
 			fast: 7000,
 			safeLow: 2000,
 			fees: {
-				low: { suggestedMaxFeePerGas: 1 },
-				medium: { suggestedMaxFeePerGas: 2 },
-				high: { suggestedMaxFeePerGas: 3 }
+				low: { suggestedMaxPriorityFeePerGas: 1 },
+				medium: { suggestedMaxPriorityFeePerGas: 2 },
+				high: { suggestedMaxPriorityFeePerGas: 3 }
 			}
 		});
 		sinon.stub(fiatCurrencySelectors, 'getFiatCurrency').returns('USD');

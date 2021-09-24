@@ -11,8 +11,9 @@ export const getEthGasStationInfoWEI = ({ ethGasStationInfo }) => {
 export const getEthFeeInfo = ({ ethGasStationInfo }) => ethGasStationInfo.ethGasStationInfo.fees;
 export const getEthFeeInfoWEI = ({ ethGasStationInfo }) => {
 	return {
-		medium: ethGasStationInfo.ethGasStationInfo.fees.medium.suggestedMaxFeePerGas * GWEI,
-		high: ethGasStationInfo.ethGasStationInfo.fees.high.suggestedMaxFeePerGas * GWEI,
-		low: ethGasStationInfo.ethGasStationInfo.fees.low.suggestedMaxFeePerGas * GWEI
+		medium:
+			ethGasStationInfo.ethGasStationInfo.fees.medium.suggestedMaxPriorityFeePerGas * GWEI,
+		high: ethGasStationInfo.ethGasStationInfo.fees.high.suggestedMaxPriorityFeePerGas * GWEI,
+		low: ethGasStationInfo.ethGasStationInfo.fees.low.suggestedMaxPriorityFeePerGas * GWEI
 	};
 };

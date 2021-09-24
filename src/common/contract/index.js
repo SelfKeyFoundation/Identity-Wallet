@@ -179,7 +179,7 @@ const operations = {
 					.ethGasStationInfo.average;
 			}
 
-			// TODO: suggestedMaxFeePerGas
+			// TODO: suggestedMaxPriorityFeePerGas
 
 			await dispatch(
 				contractActions.updateEditorAction({

@@ -179,7 +179,8 @@ export class TransactionFeeBoxComponent extends PureComponent {
 			return;
 		}
 		const maxPriorityFee = parseFloat(
-			this.props.ethGasStationInfo.fees[this.typeTranslation(type)].suggestedMaxFeePerGas
+			this.props.ethGasStationInfo.fees[this.typeTranslation(type)]
+				.suggestedMaxPriorityFeePerGas
 		).toFixed(2);
 		return maxPriorityFee;
 	}
@@ -189,7 +190,8 @@ export class TransactionFeeBoxComponent extends PureComponent {
 		const gasLimit = this.props.gasLimit ? this.props.gasLimit : DEFAULT_ETH_GAS_LIMIT;
 
 		const maxFee = parseFloat(
-			this.props.ethGasStationInfo.fees[this.typeTranslation(type)].suggestedMaxFeePerGas
+			this.props.ethGasStationInfo.fees[this.typeTranslation(type)]
+				.suggestedMaxPriorityFeePerGas
 		);
 
 		const ethFee = EthUnits.toEther((gasPrice + maxFee) * gasLimit, 'gwei');
@@ -252,9 +254,11 @@ export class TransactionFeeBoxComponent extends PureComponent {
 		}
 
 		const gasPrice = this.props.ethGasStationInfo[type];
-		const maxPriorityFee = parseFloat(
-			this.props.ethGasStationInfo.fees[this.typeTranslation(type)]
-				.suggestedMaxPriorityFeePerGas
+		const maxPriorityFee = Number(
+			parseFloat(
+				this.props.ethGasStationInfo.fees[this.typeTranslation(type)]
+					.suggestedMaxPriorityFeePerGas
+			).toFixed(2)
 		);
 
 		if (changeMaxPriorityFeeAction) {

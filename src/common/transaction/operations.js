@@ -120,7 +120,8 @@ export const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimi
 			if (!transaction.maxPriorityFee) {
 				maxPriorityFee = Number(
 					parseFloat(
-						state.ethGasStationInfo.ethGasStationInfo.fees.medium.suggestedMaxFeePerGas
+						state.ethGasStationInfo.ethGasStationInfo.fees.medium
+							.suggestedMaxPriorityFeePerGas
 					).toFixed(2)
 				);
 			} else {
