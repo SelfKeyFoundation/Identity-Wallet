@@ -118,9 +118,11 @@ export const setTransactionFee = (newAddress, newAmount, newGasPrice, newGasLimi
 		let maxPriorityFee = 0;
 		if (featureIsEnabled('eip_1559')) {
 			if (!transaction.maxPriorityFee) {
-				maxPriorityFee = parseFloat(
-					state.ethGasStationInfo.ethGasStationInfo.fees.medium.suggestedMaxFeePerGas
-				).toFixed(2);
+				maxPriorityFee = Number(
+					parseFloat(
+						state.ethGasStationInfo.ethGasStationInfo.fees.medium.suggestedMaxFeePerGas
+					).toFixed(2)
+				);
 			} else {
 				maxPriorityFee = parseFloat(transaction.maxPriorityFee);
 			}
