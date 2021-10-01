@@ -189,10 +189,16 @@ export class TransactionFeeBoxComponent extends PureComponent {
 		const gasPrice = this.getFee(type);
 		const gasLimit = this.props.gasLimit ? this.props.gasLimit : DEFAULT_ETH_GAS_LIMIT;
 
-		const maxFee = parseFloat(
-			this.props.ethGasStationInfo.fees[this.typeTranslation(type)]
-				.suggestedMaxPriorityFeePerGas
-		);
+		if (!this.props.ethGasStationInfo.fees) {
+			return;
+		}
+		const maxFee =
+			this.props.ethGasStationInfo.fees && this.props.ethGasStationInfo.fees
+				? parseFloat(
+						this.props.ethGasStationInfo.fees[this.typeTranslation(type)]
+							.suggestedMaxPriorityFeePerGas
+				  )
+				: 1;
 
 		const ethFee = EthUnits.toEther((gasPrice + maxFee) * gasLimit, 'gwei');
 		return digits ? Number.parseFloat(ethFee).toFixed(digits) : ethFee;
