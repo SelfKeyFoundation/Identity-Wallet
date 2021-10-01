@@ -38,9 +38,31 @@ export class EthGasStationService {
 			request.get({ url: EIP1559_URL, json: true }, (error, httpResponse, response) => {
 				if (error) {
 					log.error(error);
-					reject(error);
+					const fallback = {
+						low: {
+							suggestedMaxPriorityFeePerGas: '1.16099754192',
+							suggestedMaxFeePerGas: '77.871680564',
+							minWaitTimeEstimate: 15000,
+							maxWaitTimeEstimate: 30000
+						},
+						medium: {
+							suggestedMaxPriorityFeePerGas: '1.5',
+							suggestedMaxFeePerGas: '84.603239941',
+							minWaitTimeEstimate: 15000,
+							maxWaitTimeEstimate: 45000
+						},
+						high: {
+							suggestedMaxPriorityFeePerGas: '2',
+							suggestedMaxFeePerGas: '91.495796859',
+							minWaitTimeEstimate: 15000,
+							maxWaitTimeEstimate: 60000
+						},
+						estimatedBaseFee: '63.925569185'
+					};
+					resolve(fallback);
+				} else {
+					resolve(response);
 				}
-				resolve(response);
 			});
 		});
 	}
