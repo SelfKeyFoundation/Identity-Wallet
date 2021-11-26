@@ -124,6 +124,15 @@ export class RelyingPartyRest {
 	static getAuthorizationHeader(token) {
 		return `Bearer ${token}`;
 	}
+	static isSecure(url) {
+		if (
+			url.startsWith('https://credentials.keyfi.com') ||
+			url.startsWith('https://korporatio.instance.kyc-chain.com')
+		) {
+			return false;
+		}
+		return true;
+	}
 	static async getChallenge(ctx) {
 		let url = ctx.getEndpoint(CHALLENGE_ENDPOINT_NAME);
 		const did = ctx.supportsDID()
@@ -133,7 +142,8 @@ export class RelyingPartyRest {
 		return request.get({
 			url,
 			headers: { 'User-Agent': this.userAgent, Origin: ctx.getOrigin() },
-			json: true
+			json: true,
+			rejectUnauthorized: this.isSecure(url)
 		});
 	}
 	static postChallengeReply(ctx, challenge, signature, keyId) {
@@ -154,7 +164,8 @@ export class RelyingPartyRest {
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
-			json: true
+			json: true,
+			rejectUnauthorized: this.isSecure(url)
 		});
 	}
 	static getUserToken(ctx, meta) {
@@ -173,7 +184,8 @@ export class RelyingPartyRest {
 				Origin: ctx.getOrigin()
 			},
 			qs,
-			json: true
+			json: true,
+			rejectUnauthorized: this.isSecure(url)
 		});
 	}
 	static async uploadUserFile(ctx, doc) {
@@ -196,7 +208,8 @@ export class RelyingPartyRest {
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
-			json: true
+			json: true,
+			rejectUnauthorized: this.isSecure(url)
 		});
 	}
 	static async createUser(ctx, attributes, documents = [], meta = {}) {
@@ -211,7 +224,8 @@ export class RelyingPartyRest {
 					'User-Agent': this.userAgent,
 					Origin: ctx.getOrigin()
 				},
-				json: true
+				json: true,
+				rejectUnauthorized: this.isSecure(url)
 			});
 		}
 		let formData = documents.reduce((acc, curr) => {
@@ -252,7 +266,8 @@ export class RelyingPartyRest {
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
-			json: true
+			json: true,
+			rejectUnauthorized: this.isSecure(url)
 		});
 	}
 	static getKYCTemplate(ctx, id) {
@@ -265,7 +280,8 @@ export class RelyingPartyRest {
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
-			json: true
+			json: true,
+			rejectUnauthorized: this.isSecure(url)
 		});
 	}
 
@@ -295,7 +311,8 @@ export class RelyingPartyRest {
 					'User-Agent': this.userAgent,
 					Origin: ctx.getOrigin()
 				},
-				json: true
+				json: true,
+				rejectUnauthorized: this.isSecure(url)
 			})
 		);
 	}
@@ -312,7 +329,8 @@ export class RelyingPartyRest {
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
-			json: true
+			json: true,
+			rejectUnauthorized: this.isSecure(url)
 		});
 	}
 
@@ -341,7 +359,8 @@ export class RelyingPartyRest {
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
-			json: true
+			json: true,
+			rejectUnauthorized: this.isSecure(url)
 		});
 	}
 
@@ -359,7 +378,8 @@ export class RelyingPartyRest {
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
-			json: true
+			json: true,
+			rejectUnauthorized: this.isSecure(url)
 		});
 	}
 	static updateKYCApplicationPayment(ctx, applicationId, transactionHash) {
@@ -375,7 +395,8 @@ export class RelyingPartyRest {
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
-			json: true
+			json: true,
+			rejectUnauthorized: this.isSecure(url)
 		});
 	}
 
@@ -389,7 +410,8 @@ export class RelyingPartyRest {
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
-			json: true
+			json: true,
+			rejectUnauthorized: this.isSecure(url)
 		});
 		return chatResponse;
 	}
@@ -406,7 +428,8 @@ export class RelyingPartyRest {
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
-			json: true
+			json: true,
+			rejectUnauthorized: this.isSecure(url)
 		});
 	}
 
@@ -429,7 +452,8 @@ export class RelyingPartyRest {
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
-			json: true
+			json: true,
+			rejectUnauthorized: this.isSecure(url)
 		});
 	}
 
@@ -445,7 +469,8 @@ export class RelyingPartyRest {
 					'User-Agent': this.userAgent,
 					Origin: ctx.getOrigin()
 				},
-				json: true
+				json: true,
+				rejectUnauthorized: this.isSecure(url)
 			});
 			return applications;
 		} catch (error) {
@@ -467,7 +492,8 @@ export class RelyingPartyRest {
 					'User-Agent': this.userAgent,
 					Origin: ctx.getOrigin()
 				},
-				json: true
+				json: true,
+				rejectUnauthorized: this.isSecure(url)
 			});
 			return user;
 		} catch (error) {
@@ -489,7 +515,8 @@ export class RelyingPartyRest {
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
-			json: true
+			json: true,
+			rejectUnauthorized: this.isSecure(url)
 		});
 	}
 
@@ -504,7 +531,8 @@ export class RelyingPartyRest {
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
-			json: true
+			json: true,
+			rejectUnauthorized: this.isSecure(url)
 		});
 	}
 
@@ -528,7 +556,8 @@ export class RelyingPartyRest {
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
-			json: true
+			json: true,
+			rejectUnauthorized: this.isSecure(url)
 		});
 	}
 	static getAccessToken(ctx) {
@@ -541,7 +570,8 @@ export class RelyingPartyRest {
 				'User-Agent': this.userAgent,
 				Origin: ctx.getOrigin()
 			},
-			json: true
+			json: true,
+			rejectUnauthorized: this.isSecure(url)
 		});
 	}
 }
