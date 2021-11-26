@@ -125,7 +125,10 @@ export class RelyingPartyRest {
 		return `Bearer ${token}`;
 	}
 	static isSecure(url) {
-		if (url.startsWith('https://credentials.keyfi.com')) {
+		if (
+			url.startsWith('https://credentials.keyfi.com') ||
+			url.startsWith('https://korporatio.instance.kyc-chain.com')
+		) {
 			return false;
 		}
 		return true;

@@ -65,7 +65,28 @@ describe('RelyingPartyRest', () => {
 				{
 					url: `${testEndpoint}/did:eth:0xtest`,
 					headers: { 'User-Agent': RelyingPartyRest.userAgent, Origin: 'test' },
-					json: true
+					json: true,
+					rejectUnauthorized: true
+				}
+			]);
+			expect(res).toBe(testChallnage);
+		});
+		it('should throw on call failure', () => {});
+	});
+	describe('getChallengeBypassSecure', () => {
+		it('should return challenge on successfull request bypassing secure connection', async () => {
+			const testEndpoint = 'https://korporatio.instance.kyc-chain.com';
+			const testChallnage = 'testChallenge';
+			sinon.stub(request, 'get').resolves(testChallnage);
+			sinon.stub(ctx, 'getEndpoint').returns(testEndpoint);
+			let res = await RelyingPartyRest.getChallenge(ctx);
+			expect(ctx.getEndpoint.calledOnceWith('/auth/challenge')).toBeTruthy();
+			expect(request.get.getCall(0).args).toEqual([
+				{
+					url: `${testEndpoint}/did:eth:0xtest`,
+					headers: { 'User-Agent': RelyingPartyRest.userAgent, Origin: 'test' },
+					json: true,
+					rejectUnauthorized: false
 				}
 			]);
 			expect(res).toBe(testChallnage);
@@ -97,7 +118,8 @@ describe('RelyingPartyRest', () => {
 						'User-Agent': RelyingPartyRest.userAgent,
 						Origin: 'test'
 					},
-					json: true
+					json: true,
+					rejectUnauthorized: true
 				}
 			]);
 			expect(res).toBe(testToken);
@@ -128,7 +150,8 @@ describe('RelyingPartyRest', () => {
 						'User-Agent': RelyingPartyRest.userAgent,
 						Origin: 'test'
 					},
-					json: true
+					json: true,
+					rejectUnauthorized: true
 				}
 			]);
 		});
@@ -166,6 +189,7 @@ describe('RelyingPartyRest', () => {
 						Origin: 'test'
 					},
 					json: true,
+					rejectUnauthorized: true,
 					formData: {
 						document: {
 							value: doc.buffer,
@@ -295,6 +319,7 @@ describe('RelyingPartyRest', () => {
 						Origin: 'test'
 					},
 					json: true,
+					rejectUnauthorized: true,
 					body: { attributes, meta: {} }
 				}
 			]);
@@ -322,7 +347,8 @@ describe('RelyingPartyRest', () => {
 						'User-Agent': RelyingPartyRest.userAgent,
 						Origin: 'test'
 					},
-					json: true
+					json: true,
+					rejectUnauthorized: true
 				}
 			]);
 			expect(res).toEqual('ok');
@@ -349,7 +375,8 @@ describe('RelyingPartyRest', () => {
 						'User-Agent': RelyingPartyRest.userAgent,
 						Origin: 'test'
 					},
-					json: true
+					json: true,
+					rejectUnauthorized: true
 				}
 			]);
 			expect(res).toEqual('ok');
@@ -373,7 +400,8 @@ describe('RelyingPartyRest', () => {
 						'User-Agent': RelyingPartyRest.userAgent,
 						Origin: 'test'
 					},
-					json: true
+					json: true,
+					rejectUnauthorized: true
 				}
 			]);
 			expect(res).toEqual('ok');
@@ -398,7 +426,8 @@ describe('RelyingPartyRest', () => {
 						'User-Agent': RelyingPartyRest.userAgent,
 						Origin: 'test'
 					},
-					json: true
+					json: true,
+					rejectUnauthorized: true
 				}
 			]);
 			expect(res).toEqual('ok');
@@ -437,7 +466,8 @@ describe('RelyingPartyRest', () => {
 						Origin: 'test'
 					},
 					body: { templateId, attributes },
-					json: true
+					json: true,
+					rejectUnauthorized: true
 				}
 			]);
 		});
@@ -477,7 +507,8 @@ describe('RelyingPartyRest', () => {
 						Origin: 'test'
 					},
 					body: application,
-					json: true
+					json: true,
+					rejectUnauthorized: true
 				}
 			]);
 		});
@@ -501,7 +532,8 @@ describe('RelyingPartyRest', () => {
 						'User-Agent': RelyingPartyRest.userAgent,
 						Origin: 'test'
 					},
-					json: true
+					json: true,
+					rejectUnauthorized: true
 				}
 			]);
 			expect(res).toEqual('ok');
@@ -527,7 +559,8 @@ describe('RelyingPartyRest', () => {
 						'User-Agent': RelyingPartyRest.userAgent,
 						Origin: 'test'
 					},
-					json: true
+					json: true,
+					rejectUnauthorized: true
 				}
 			]);
 			expect(res).toEqual('ok');
@@ -563,7 +596,8 @@ describe('RelyingPartyRest', () => {
 							}
 						}
 					},
-					json: true
+					json: true,
+					rejectUnauthorized: true
 				}
 			]);
 		});
@@ -601,7 +635,8 @@ describe('RelyingPartyRest', () => {
 						'User-Agent': RelyingPartyRest.userAgent,
 						Origin: 'test'
 					},
-					json: true
+					json: true,
+					rejectUnauthorized: true
 				}
 			]);
 		});
