@@ -13,7 +13,7 @@ module.exports = {
 	testEnvironment: 'jsdom',
 	testURL: 'http://localhost/',
 	collectCoverageFrom: ['src/{main,common}/**/*.js'],
-	coverageReporters: ['json', 'lcov', 'text'],
+	coverageReporters: ['lcov'],
 	coveragePathIgnorePatterns: ['src/main/(seed|assets|migrations)'],
 	coverageDirectory: 'dist/coverage',
 	coverageThreshold: {},
