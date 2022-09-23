@@ -235,7 +235,9 @@ jobs:
                   at: /tmp/mac
             - run:
                   name: Deploy mac to staging
-                  command: bash deploy.sh "$(git log --format=%B -n 1 $CIRCLE_SHA1)"
+                  command: |
+                      echo ${GCP_KEY} > gcp_key.json 
+                      bash deploy.sh "$(git log --format=%B -n 1 $CIRCLE_SHA1)"
                   environment:
                       OSENV: mac
 
@@ -248,7 +250,9 @@ jobs:
                   at: /tmp/linux
             - run:
                   name: Deploy linux to staging
-                  command: bash deploy.sh "$(git log --format=%B -n 1 $CIRCLE_SHA1)"
+                  command: |
+                      echo ${GCP_KEY} > gcp_key.json 
+                      bash deploy.sh "$(git log --format=%B -n 1 $CIRCLE_SHA1)"
                   environment:
                       OSENV: linux
 
@@ -430,6 +434,7 @@ workflows:
                       # - e2e-linux
                       - build-linux
                       # - build-linux-arm
+                  context: google-container-registry
                   filters:
                       branches:
                           only:
@@ -451,6 +456,7 @@ workflows:
                   requires:
                       # - e2e-mac
                       - build-mac
+                  context: google-container-registry
                   filters:
                       branches:
                           only:
