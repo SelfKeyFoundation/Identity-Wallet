@@ -236,7 +236,8 @@ jobs:
             - run:
                   name: Deploy mac to staging
                   command: |
-                      echo ${GCP_KEY} > gcp_key.json 
+                      echo ${GCP_KEY} > gcp_key.json
+                      export MATTERMOST_TOKEN=${MATTERMOST_TOKEN}
                       bash deploy.sh "$(git log --format=%B -n 1 $CIRCLE_SHA1)"
                   environment:
                       OSENV: mac
@@ -251,7 +252,8 @@ jobs:
             - run:
                   name: Deploy linux to staging
                   command: |
-                      echo ${GCP_KEY} > gcp_key.json 
+                      echo ${GCP_KEY} > gcp_key.json
+                      export MATTERMOST_TOKEN=${MATTERMOST_TOKEN}
                       bash deploy.sh "$(git log --format=%B -n 1 $CIRCLE_SHA1)"
                   environment:
                       OSENV: linux
