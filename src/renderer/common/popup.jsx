@@ -15,7 +15,7 @@ const styles = theme => ({
 	modal: {
 		overflow: 'auto',
 		'& > div:nth-of-type(1)': {
-			background: `linear-gradient(135deg, rgba(43, 53, 64, 0.9) 0%, rgba(30, 38, 46, 0.9) 100%)`
+			background: `linear-gradient(180deg, #111111 0%, #13212e 100%)`
 		}
 	},
 	header: {
