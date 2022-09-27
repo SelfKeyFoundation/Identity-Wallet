@@ -66,9 +66,9 @@ deploy_script:
 
     - if defined _tempvar for /f "tokens=2 delims==" %%I in ('wmic os get localdatetime /format:list') do set datetime=%%I
     - if defined _tempvar set datetime=%datetime:~0,4%.%datetime:~4,2%.%datetime:~6,2%.%datetime:~8,2%
-    # - if defined _tempvar C:\OpenSSL-Win64\bin\openssl aes-256-cbc -K "%encryptedkey%" -iv "%encryptediv%" -in client-secret.json.enc -out client-secret.json -d
-    - if defined _tempvar ECHO "%encryptedkey2%" > client-secret.json
-    - if defined _tempvar gcloud auth activate-service-account --key-file client-secret.json
+    - if defined _tempvar C:\OpenSSL-Win64\bin\openssl aes-256-cbc -K "%encryptedkey%" -iv "%encryptediv%" -in client-secret.json.enc -out client-secret.json -d
+    - if defined _tempvar ECHO %encryptedkey2% > client-secret2.json
+    - if defined _tempvar gcloud auth activate-service-account --key-file client-secret2.json
     - if defined _tempvar gsutil cp dist/*.exe gs://sk-builds/%APPVEYOR_REPO_BRANCH%/%datetime%/
 after_deploy:
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[master] yarn publish-build
