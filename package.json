@@ -265,7 +265,7 @@
 		"react": "16.13.1",
 		"react-dom": "16.13.1",
 		"react-jsonschema-form-material-theme": "https://github.com/SelfKeyFoundation/react-jsonschema-form-material-theme.git#e8356d2037b527f7b0a8433f20c476b6e501d70e",
-		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#5e1fae23177a5d03435a761749cdd92582842549",
+		"selfkey-ui": "https://github.com/SelfKeyFoundation/selfkey-ui.git#7215e35acc7a15c48e97b2a45a902ac5a9f489df",
 		"@material-ui/styles": "4.9.6",
 		"@material-ui/core": "4.9.10"
 	},

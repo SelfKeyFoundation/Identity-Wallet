@@ -22228,9 +22228,9 @@ select@^1.1.2:
     react-truncate "2.4.0"
     snyk "1.193.2"
 
-"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#e2b4e63c8062ae8606070ee6738b772a073eb9f4":
+"selfkey-ui@https://github.com/SelfKeyFoundation/selfkey-ui.git#7215e35acc7a15c48e97b2a45a902ac5a9f489df":
   version "1.0.0"
-  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#e2b4e63c8062ae8606070ee6738b772a073eb9f4"
+  resolved "https://github.com/SelfKeyFoundation/selfkey-ui.git#7215e35acc7a15c48e97b2a45a902ac5a9f489df"
   dependencies:
     "@material-ui/core" "4.9.10"
     "@material-ui/icons" "4.9.1"
