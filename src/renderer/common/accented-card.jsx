@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => {
 			boxShadow: props =>
 				props.elevation ? theme.shadows[props.elevation] : theme.shadows[0],
 			background: props =>
-				props.gradient ? 'linear-gradient(157.35deg, #2E3945 0%, #222B34 100%)' : undefined
+				props.gradient ? 'linear-gradient(157.35deg, #121B21 0%, #121B21 100%)' : undefined
 		},
 		innerContainer: {
 			width: '100%',
