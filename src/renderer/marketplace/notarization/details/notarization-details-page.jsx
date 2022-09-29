@@ -67,7 +67,7 @@ const styles = theme => ({
 	},
 	content: {
 		alignItems: 'stretch',
-		background: '#262F39',
+		background: '#131F2A',
 		border: '1px solid #303C49',
 		borderRadius: '4px',
 		boxSizing: 'border-box',

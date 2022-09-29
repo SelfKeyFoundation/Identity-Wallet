@@ -122,7 +122,7 @@ const styles = theme => ({
 		borderRadius: '4px'
 	},
 	content: {
-		background: '#262F39',
+		background: '#131F2A',
 		borderRadius: '0 0 4px 4px',
 		boxSizing: 'border-box',
 		justifyContent: 'flex-start',

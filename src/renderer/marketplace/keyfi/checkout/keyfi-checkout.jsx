@@ -30,7 +30,7 @@ const styles = theme => ({
 		borderRadius: '4px'
 	},
 	content: {
-		background: '#262F39',
+		background: '#131F2A',
 		padding: '45px 30px 50px',
 		width: '100%',
 		justifyContent: 'space-between',
@@ -80,7 +80,7 @@ const styles = theme => ({
 			'& .amount-in-crypto': {
 				marginTop: '5px'
 			},
-			border: '1px solid #262F39',
+			border: '1px solid #131F2A',
 			borderRadius: '5px',
 			cursor: 'pointer',
 			'&:hover': {
@@ -136,7 +136,7 @@ const styles = theme => ({
 	},
 	status: {
 		alignItems: 'center',
-		backgroundColor: '#262F39',
+		backgroundColor: '#131F2A',
 		'& p': {
 			display: 'inline-block'
 		},

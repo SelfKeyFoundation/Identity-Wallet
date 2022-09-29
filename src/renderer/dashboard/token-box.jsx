@@ -8,7 +8,7 @@ import { AddressShortener } from '../common/address-shortener';
 
 const styles = theme => ({
 	paper: {
-		backgroundColor: '#262F39',
+		backgroundColor: '#131F2A',
 		boxShadow: 'none',
 		padding: 20,
 		maxWidth: 350

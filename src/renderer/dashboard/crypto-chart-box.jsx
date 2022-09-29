@@ -14,7 +14,7 @@ import { ExpandMore, ExpandLess } from '@material-ui/icons';
 
 const styles = () => ({
 	paper: {
-		backgroundColor: '#262F39',
+		backgroundColor: '#131F2A',
 		boxShadow: 'none',
 		boxSizing: 'border-box',
 		height: '100%',

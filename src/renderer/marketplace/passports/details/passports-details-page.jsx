@@ -31,7 +31,7 @@ const styles = theme => ({
 		borderRadius: '4px'
 	},
 	content: {
-		background: '#262F39',
+		background: '#131F2A',
 		padding: '45px 30px 50px',
 		width: '100%',
 		justifyContent: 'space-between',

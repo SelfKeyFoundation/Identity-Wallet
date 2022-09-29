@@ -46,7 +46,7 @@ class WalletExportQRCodeComponent extends PureComponent {
 						{keystore && keystore.length ? (
 							<QRCode
 								size={500}
-								bgColor={'#262f39'}
+								bgColor={'#131F2A'}
 								fgColor={'#ffffff'}
 								includeMargin={true}
 								renderAs={'svg'}

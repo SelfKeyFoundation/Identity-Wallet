@@ -5,7 +5,7 @@ import { DefiIcon } from 'selfkey-ui';
 
 const styles = theme => ({
 	container: {
-		backgroundColor: '#262F39',
+		backgroundColor: '#131F2A',
 		border: '1px solid #43505B',
 		borderRadius: '4px',
 		boxSizing: 'border-box',

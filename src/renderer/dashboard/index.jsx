@@ -78,6 +78,7 @@ const Dashboard = connect(mapStateToProps)(
 				justify="flex-start"
 				alignItems="center"
 				spacing={4}
+				style={{ background: '#111111' }}
 			>
 				{props.info && props.info.version && (
 					<Grid item style={{ width: '100%' }}>

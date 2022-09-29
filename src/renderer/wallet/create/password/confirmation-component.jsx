@@ -19,7 +19,7 @@ const styles = theme => ({
 		zIndex: 1
 	},
 	maskElement: {
-		backgroundColor: '#262F39',
+		backgroundColor: '#131F2A',
 		height: '10px',
 		width: '8px'
 	},

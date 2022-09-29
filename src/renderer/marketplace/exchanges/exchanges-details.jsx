@@ -36,7 +36,7 @@ const styles = theme => ({
 	},
 
 	body: {
-		backgroundColor: '#262F39',
+		backgroundColor: '#131F2A',
 		border: '1px solid #303C49',
 		borderRadius: '0 0 4px 4px',
 		borderTop: 0,

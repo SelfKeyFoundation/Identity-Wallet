@@ -33,7 +33,7 @@ const styles = theme => ({
 		},
 		'& .MuiSlider-markLabelActive': {
 			top: '26px',
-			background: '#262f39',
+			background: '#131F2A',
 			zIndex: '1'
 		}
 	},

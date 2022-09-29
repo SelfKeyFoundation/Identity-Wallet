@@ -6,7 +6,7 @@ import { Alert } from '../../common';
 const styles = theme => ({
 	status: {
 		alignItems: 'center',
-		backgroundColor: '#262F39',
+		backgroundColor: '#131F2A',
 		'& p': {
 			display: 'inline-block'
 		},

@@ -11,7 +11,7 @@ const styles = theme => ({
 		border: 'solid 1px #303c49',
 		borderRadius: '4px',
 		fontFamily: 'Lato, arial, sans-serif',
-		backgroundColor: '#262F39'
+		backgroundColor: '#131F2A'
 	},
 
 	title: {
