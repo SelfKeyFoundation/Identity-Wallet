@@ -75,6 +75,9 @@ export const theme = createMuiTheme({
 				borderRadius: '10px',
 				backgroundColor: '#191919'
 			}
+		},
+		'#app': {
+			background: '#111111'
 		}
 	},
 	// Theme

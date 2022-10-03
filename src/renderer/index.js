@@ -60,6 +60,8 @@ const initReact = App => {
 		</Provider>,
 		document.getElementById('app')
 	);
+
+	document.getElementById('app').style.background = '#111';
 };
 
 const initHotReload = () => {
