@@ -3,7 +3,7 @@ import { Logger } from 'common/logger';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter, push } from 'connected-react-router';
-import { SelfkeyDarkTheme } from 'selfkey-ui';
+import { SelfkeyDarkTheme } from '../theme/selfkey-dark-theme';
 import { appOperations } from 'common/app';
 import { schedulerOperations } from 'common/scheduler';
 
