@@ -137,7 +137,7 @@ class Home extends PureComponent {
 									component={createWalletLink}
 									size="large"
 								>
-									CREATE NEW WALLET (3)
+									CREATE NEW WALLET
 								</Button>
 							</Grid>
 							<Grid item>

@@ -16,7 +16,8 @@ import { featureIsEnabled } from 'common/feature-flags';
 
 const styles = theme => ({
 	wrapper: {
-		backgroundColor: '#27333D',
+		// backgroundColor: '#27333D',
+		backgroundColor: 'linear-gradient(180deg, #161A1F 39.84%, #14202D 100%)',
 		boxShadow:
 			'inset 0 -1px 0 0 #475768, 1px 0 0 0 rgba(118,128,147,0.2), 2px 0 2px 0 rgba(0,0,0,0.2)',
 		height: '78px',
