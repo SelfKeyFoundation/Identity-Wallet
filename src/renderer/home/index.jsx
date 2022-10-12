@@ -115,7 +115,7 @@ class Home extends PureComponent {
 							className={classes.scrollFix}
 						>
 							<Grid item>
-								<SKLogo />
+								<img src={SKLogo} />
 							</Grid>
 							{/* <Grid item>
 								<Typography variant="h2" className={classes.primaryTintText}>
