@@ -38,6 +38,11 @@ process.on('unhandledRejection', err => {
 	log.error('unhandled rejection, %s', err);
 });
 
+process.on('uncaughtException', err => {
+	log.error('uncaught rejection, %s', err);
+	console.error(err);
+});
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
 	log.debug('missing: electron-squirrel-startup');
