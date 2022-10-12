@@ -1,13 +1,15 @@
 import React, { PureComponent } from 'react';
-import { Grid, Typography, Paper, Button } from '@material-ui/core';
-import { primary, HelpIcon, QuitIcon, SelfkeyLogoTemp } from 'selfkey-ui';
+import { Grid, Paper, Button } from '@material-ui/core';
+import { primary, HelpIcon, QuitIcon } from 'selfkey-ui';
 import { tokensOperations } from 'common/tokens';
-import backgroundImage from '../../../static/assets/images/bgs/background.jpg';
+// import backgroundImage from '../../../static/assets/images/bgs/background.jpg';
 import { withStyles } from '@material-ui/styles';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { appOperations } from 'common/app';
 import { getGlobalContext } from 'common/context';
+import SKLogo from './logo.png';
+import backgroundImage from './welcome-screen.png';
 
 const styles = theme => ({
 	container: {
@@ -113,13 +115,13 @@ class Home extends PureComponent {
 							className={classes.scrollFix}
 						>
 							<Grid item>
-								<SelfkeyLogoTemp />
+								<SKLogo />
 							</Grid>
-							<Grid item>
+							{/* <Grid item>
 								<Typography variant="h2" className={classes.primaryTintText}>
 									IDENTITY WALLET
 								</Typography>
-							</Grid>
+							</Grid> */}
 						</Grid>
 						<Grid
 							container
