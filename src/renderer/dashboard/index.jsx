@@ -37,12 +37,12 @@ const styles = theme => ({
 		padding: '20px 30px 30px'
 	},
 	trading: {
-		backgroundColor: '#161A1F',
+		background: 'linear-gradient(180deg, #161A1F 39.84%, #14202D 100%)',
 		marginBottom: '15px',
 		maxHeight: '236px'
 	},
 	transactions: {
-		backgroundColor: '#161A1F'
+		background: 'linear-gradient(180deg, #161A1F 39.84%, #14202D 100%)'
 	},
 	title: {
 		fontSize: '20px',

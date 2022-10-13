@@ -105,7 +105,7 @@ class AddressBookContainer extends PureComponent {
 				</Grid>
 				<Grid container item xs={9}>
 					<Table>
-						<TableHead>
+						<TableHead style={{ background: '#1E262E' }}>
 							<SmallTableHeadRow>
 								<TableCell>
 									<Typography variant="overline">Label</Typography>

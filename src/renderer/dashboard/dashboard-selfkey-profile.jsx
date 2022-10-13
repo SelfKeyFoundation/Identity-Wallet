@@ -22,7 +22,7 @@ const styles = theme => ({
 		marginBottom: '16px'
 	},
 	dspWrap: {
-		backgroundColor: '#131F2A',
+		background: 'linear-gradient(180deg, #161A1F 39.84%, #14202D 100%)',
 		border: '1px solid #43505B',
 		borderRadius: '4px',
 		boxSizing: 'border-box',

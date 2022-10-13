@@ -46,7 +46,7 @@ const gotBackHome = React.forwardRef((props, ref) => <Link to="/home" {...props}
 
 const unlockOptionStyle = theme => ({
 	box: {
-		backgroundColor: '#293743',
+		backgroundColor: '#1B2229',
 		boxShadow: 'none',
 		borderColor: '#1D505F',
 		display: 'flex',

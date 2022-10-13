@@ -14,7 +14,7 @@ import { ExpandMore, ExpandLess } from '@material-ui/icons';
 
 const styles = () => ({
 	paper: {
-		backgroundColor: '#131F2A',
+		background: 'linear-gradient(180deg, #161A1F 39.84%, #14202D 100%)',
 		boxShadow: 'none',
 		boxSizing: 'border-box',
 		height: '100%',
@@ -51,7 +51,7 @@ const styles = () => ({
 		fontSize: '18px'
 	},
 	active: {
-		backgroundColor: '#313D49',
+		background: 'linear-gradient(180deg, #161A1F 39.84%, #14202D 100%)',
 		borderRadius: '4px',
 		outlineWidth: 0,
 		border: 'none',
