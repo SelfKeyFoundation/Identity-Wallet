@@ -730,7 +730,7 @@ export const theme = createMuiTheme({
 				textOverflow: 'ellipsis'
 			},
 			head: {
-				backgroundColor: baseDark,
+				backgroundColor: '#1E262E',
 				borderBottom: 0
 			},
 			body: {
