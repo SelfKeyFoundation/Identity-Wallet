@@ -1,2 +1,2 @@
-import img from './icon-marketplace-loans.png';
+import img from './icon-marketplace-loans.svg';
 export const IconMarketplaceLoans = img;

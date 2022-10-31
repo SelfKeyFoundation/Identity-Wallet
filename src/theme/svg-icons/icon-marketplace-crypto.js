@@ -1,2 +1,2 @@
-import img from './icon-marketplace-crypto.png';
+import img from './icon-marketplace-crypto.svg';
 export const IconMarketplaceCrypto = img;

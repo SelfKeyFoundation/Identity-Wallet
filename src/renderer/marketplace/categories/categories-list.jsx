@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 // import { MarketplaceIcon } from 'selfkey-ui';
-import MarketplaceIcon from '../../../theme/svg-icons/icon-marketplace.png';
+// import MarketplaceIcon from '../../../theme/svg-icons/icon-marketplace.png';
 import { MarketplaceCategory } from './category';
 
 const styles = theme => ({
@@ -60,7 +60,7 @@ export const MarketplaceCategoriesList = withStyles(styles)(({ classes, children
 	>
 		<Grid container item className={classes.header} xs={12} direction="row" alignItems="center">
 			<Grid item>
-				<img className={classes.headerIcon} src={MarketplaceIcon} />
+				<img className={classes.headerIcon} src={'assets/svg-icons/icon-marketplace.svg'} />
 			</Grid>
 			<Grid item>
 				<Typography variant="h1">SelfKey Marketplace</Typography>
