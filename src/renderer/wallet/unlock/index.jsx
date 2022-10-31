@@ -2,15 +2,7 @@ import React, { PureComponent } from 'react';
 import { Grid, Typography, Paper, Divider } from '@material-ui/core';
 import { appOperations, appSelectors } from 'common/app';
 import { Subject as SubjectIcon } from '@material-ui/icons';
-import {
-	ExistingAddressIcon,
-	primaryTint,
-	NewAddressIcon,
-	KeyIcon,
-	LedgerIcon,
-	TrezorIcon,
-	primary
-} from 'selfkey-ui';
+import { primaryTint, primary } from 'selfkey-ui';
 import { withStyles } from '@material-ui/styles';
 import { Link, Route, Redirect, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -161,7 +153,9 @@ class Unlock extends PureComponent {
 								<Grid item>
 									<UnlockOptionWrapped
 										selected={selected === 0}
-										icon={<ExistingAddressIcon />}
+										icon={
+											<img src="/assets/svg-icons/icon-existing-address.svg" />
+										}
 										title="Existing Address"
 										subtitle="Keystore File"
 										onClick={this.switchUnlockOptions(
@@ -176,7 +170,7 @@ class Unlock extends PureComponent {
 							<Grid item>
 								<UnlockOptionWrapped
 									selected={selected === 1}
-									icon={<NewAddressIcon />}
+									icon={<img src="/assets/svg-icons/icon-import-address.svg" />}
 									title="New Address"
 									subtitle="Keystore File"
 									onClick={this.switchUnlockOptions(
@@ -189,7 +183,7 @@ class Unlock extends PureComponent {
 							<Grid item id="privateKey">
 								<UnlockOptionWrapped
 									selected={selected === 2}
-									icon={<KeyIcon />}
+									icon={<img src="/assets/svg-icons/icon-key.svg" />}
 									title="Private Key"
 									onClick={this.switchUnlockOptions(
 										'/unlockWallet/privateKey',
@@ -215,7 +209,7 @@ class Unlock extends PureComponent {
 							<Grid item>
 								<UnlockOptionWrapped
 									selected={selected === 3}
-									icon={<LedgerIcon />}
+									icon={<img src="/assets/svg-icons/icon-ledger.svg" />}
 									title="Ledger"
 									onClick={this.switchUnlockOptions('/unlockWallet/ledger', 3)}
 								/>
@@ -223,7 +217,7 @@ class Unlock extends PureComponent {
 							<Grid item>
 								<UnlockOptionWrapped
 									selected={selected === 4}
-									icon={<TrezorIcon />}
+									icon={<img src="/assets/svg-icons/icon-trezor.svg" />}
 									title="Trezor"
 									onClick={this.switchUnlockOptions('/unlockWallet/trezor', 4)}
 								/>

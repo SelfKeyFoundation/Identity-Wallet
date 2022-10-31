@@ -29,7 +29,7 @@ import {
 	MenuStakingIcon,
 	MenuExportIcon,
 	// InfoTooltip,
-	WalletConnectIcon,
+	// WalletConnectIcon,
 	primary
 } from 'selfkey-ui';
 // import { KeyboardArrowDown } from '@material-ui/icons';
@@ -201,9 +201,9 @@ const marketplace = React.forwardRef((props, ref) => (
 const addressBook = React.forwardRef((props, ref) => (
 	<Link to="/main/addressBook" {...props} ref={ref} />
 ));
-const walletConnectOptions = React.forwardRef((props, ref) => (
-	<Link to="/wallet-connect/connect" {...props} ref={ref} />
-));
+// const walletConnectOptions = React.forwardRef((props, ref) => (
+// 	<Link to="/wallet-connect/connect" {...props} ref={ref} />
+// ));
 const switchAccount = React.forwardRef((props, ref) => <Link to="/home" {...props} ref={ref} />);
 const exportAccount = React.forwardRef((props, ref) => (
 	<Link to="/main/export-wallet/warning" {...props} ref={ref} />
@@ -442,7 +442,7 @@ class Sidebar extends PureComponent {
 							</ListItem>
 						)}
 
-						<ListItem
+						{/* <ListItem
 							className={classes.listItem}
 							component={walletConnectOptions}
 							key="walletConnect"
@@ -454,7 +454,7 @@ class Sidebar extends PureComponent {
 							<Typography variant="body2" color="secondary">
 								Wallet Connect
 							</Typography>
-						</ListItem>
+						</ListItem> */}
 
 						<ListItem
 							className={classes.listItem}
