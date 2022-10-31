@@ -1,4 +1,8 @@
 import { featureIsEnabled } from '../feature-flags';
+import { IconMarketplaceCrypto } from '../../theme/svg-icons/icon-marketplace-crypto.js';
+import { IconMarketplaceIncorporations } from '../../theme/svg-icons/icon-marketplace-incorporations';
+import { IconMarketplaceNotaries } from '../../theme/svg-icons/icon-marketplace-notaries';
+import { IconMarketplaceLoans } from '../../theme/svg-icons/icon-marketplace-loans';
 
 export default [
 	{
@@ -9,7 +13,8 @@ export default [
 			'Compare exchange accounts and instantly sign up for a verified account without waiting for limits. Includes data on supported countries, fiat currencies, trading pairs, fees, and more.',
 		entityType: 'individual',
 		active: true,
-		svgIcon: 'https://dl.airtable.com/ugGbCqEQSKhS3ZPOhGMH_icon-exchange-crypto.svg'
+		svgIcon: IconMarketplaceCrypto
+		// 'https://dl.airtable.com/ugGbCqEQSKhS3ZPOhGMH_icon-exchange-crypto.svg'
 	},
 	{
 		id: 'incorporation_individual',
@@ -19,7 +24,8 @@ export default [
 			'Find the best jurisdiction to set up your business. Filter by corporate ownership, minimum shareholders, accounting requirements, privacy, tax rates, offshore tax laws, and more.',
 		entityType: 'individual',
 		active: true,
-		svgIcon: 'https://dl.airtable.com/dt74JnTkRhae2c9zvrgW_icon-exchange-incorporations.svg.png'
+		svgIcon: IconMarketplaceIncorporations
+		// svgIcon: 'https://dl.airtable.com/dt74JnTkRhae2c9zvrgW_icon-exchange-incorporations.svg.png'
 	},
 	{
 		id: 'passports_individual',
@@ -49,7 +55,7 @@ export default [
 			'Verify and attest the authenticity of your legal or personal documents so that they have official credibility under law.',
 		entityType: 'individual',
 		active: featureIsEnabled('notaries'),
-		svgIcon: 'https://dl.airtable.com/cQcRdsGeQSeM3ekJFo3E_icon-exchange-notaries.svg.png'
+		svgIcon: IconMarketplaceNotaries
 	},
 	{
 		id: 'loans_individual',
@@ -59,8 +65,7 @@ export default [
 			'Start earning interest on your cryptocurrency or get a cash loan with your crypto assets as collaterals.',
 		entityType: 'individual',
 		active: true,
-		svgIcon:
-			'https://dl.airtable.com/.attachments/f3f557d642883b0fb004c49dfe3b89aa/6547f314/icon-marketplace-loans.svg'
+		svgIcon: IconMarketplaceLoans
 	},
 	{
 		id: 'keyfi_individual',
@@ -90,7 +95,7 @@ export default [
 			'Find the best jurisdiction to set up your business. Filter by corporate ownership, minimum shareholders, accounting requirements, privacy, tax rates, offshore tax laws, and more.',
 		entityType: 'corporate',
 		active: true,
-		svgIcon: 'https://dl.airtable.com/dt74JnTkRhae2c9zvrgW_icon-exchange-incorporations.svg.png'
+		svgIcon: IconMarketplaceIncorporations
 	},
 	{
 		id: 'passports_corporate',
@@ -120,7 +125,7 @@ export default [
 			'Verify and attest the authenticity of your legal or personal documents so that they have official credibility under law.',
 		entityType: 'corporate',
 		active: false,
-		svgIcon: 'https://dl.airtable.com/cQcRdsGeQSeM3ekJFo3E_icon-exchange-notaries.svg.png'
+		svgIcon: IconMarketplaceNotaries
 	},
 	{
 		id: 'loans_corporate',
@@ -130,8 +135,7 @@ export default [
 			'Start earning interest on your cryptocurrency or get a cash loan with your crypto assets as collaterals.',
 		entityType: 'corporate',
 		active: false,
-		svgIcon:
-			'https://dl.airtable.com/.attachments/f3f557d642883b0fb004c49dfe3b89aa/6547f314/icon-marketplace-loans.svg'
+		svgIcon: IconMarketplaceLoans
 	},
 	{
 		id: 'keyfi_corporate',
