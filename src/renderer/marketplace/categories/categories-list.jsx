@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/styles';
 // import { MarketplaceIcon } from 'selfkey-ui';
 // import MarketplaceIcon from '../../../theme/svg-icons/icon-marketplace.png';
 import { MarketplaceCategory } from './category';
+import { resolveAsset } from '../../utils';
 
 const styles = theme => ({
 	header: {
@@ -43,7 +44,7 @@ const getItems = items => {
 				title={item.title}
 				description={item.description}
 				active={item.active}
-				svgIcon={item.svgIcon}
+				svgIcon={item.svgIcon && resolveAsset(item.svgIcon)}
 				learnMoreAction={item.learnMoreAction}
 			/>
 		);
@@ -60,7 +61,10 @@ export const MarketplaceCategoriesList = withStyles(styles)(({ classes, children
 	>
 		<Grid container item className={classes.header} xs={12} direction="row" alignItems="center">
 			<Grid item>
-				<img className={classes.headerIcon} src={'assets/svg-icons/icon-marketplace.svg'} />
+				<img
+					className={classes.headerIcon}
+					src={resolveAsset('assets/svg-icons/icon-marketplace.svg')}
+				/>
 			</Grid>
 			<Grid item>
 				<Typography variant="h1">SelfKey Marketplace</Typography>

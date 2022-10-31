@@ -15,6 +15,7 @@ import Ledger from './ledger';
 import Trezor from './trezor';
 import { Popup } from '../../common';
 import { featureIsEnabled } from 'common/feature-flags';
+import { resolveAsset } from '../../utils';
 
 const styles = theme => ({
 	divider: {
@@ -154,7 +155,11 @@ class Unlock extends PureComponent {
 									<UnlockOptionWrapped
 										selected={selected === 0}
 										icon={
-											<img src="/assets/svg-icons/icon-existing-address.svg" />
+											<img
+												src={resolveAsset(
+													'/assets/svg-icons/icon-existing-address.svg'
+												)}
+											/>
 										}
 										title="Existing Address"
 										subtitle="Keystore File"
@@ -170,7 +175,13 @@ class Unlock extends PureComponent {
 							<Grid item>
 								<UnlockOptionWrapped
 									selected={selected === 1}
-									icon={<img src="/assets/svg-icons/icon-import-address.svg" />}
+									icon={
+										<img
+											src={resolveAsset(
+												'/assets/svg-icons/icon-import-address.svg'
+											)}
+										/>
+									}
 									title="New Address"
 									subtitle="Keystore File"
 									onClick={this.switchUnlockOptions(
@@ -183,7 +194,9 @@ class Unlock extends PureComponent {
 							<Grid item id="privateKey">
 								<UnlockOptionWrapped
 									selected={selected === 2}
-									icon={<img src="/assets/svg-icons/icon-key.svg" />}
+									icon={
+										<img src={resolveAsset('/assets/svg-icons/icon-key.svg')} />
+									}
 									title="Private Key"
 									onClick={this.switchUnlockOptions(
 										'/unlockWallet/privateKey',
