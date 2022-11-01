@@ -157,7 +157,7 @@ class Unlock extends PureComponent {
 										icon={
 											<img
 												src={resolveAsset(
-													'/assets/svg-icons/icon-existing-address.svg'
+													'assets/svg-icons/icon-existing-address.svg'
 												)}
 											/>
 										}
@@ -178,7 +178,7 @@ class Unlock extends PureComponent {
 									icon={
 										<img
 											src={resolveAsset(
-												'/assets/svg-icons/icon-import-address.svg'
+												'assets/svg-icons/icon-import-address.svg'
 											)}
 										/>
 									}
@@ -195,7 +195,7 @@ class Unlock extends PureComponent {
 								<UnlockOptionWrapped
 									selected={selected === 2}
 									icon={
-										<img src={resolveAsset('/assets/svg-icons/icon-key.svg')} />
+										<img src={resolveAsset('assets/svg-icons/icon-key.svg')} />
 									}
 									title="Private Key"
 									onClick={this.switchUnlockOptions(
@@ -222,7 +222,11 @@ class Unlock extends PureComponent {
 							<Grid item>
 								<UnlockOptionWrapped
 									selected={selected === 3}
-									icon={<img src="/assets/svg-icons/icon-ledger.svg" />}
+									icon={
+										<img
+											src={resolveAsset('assets/svg-icons/icon-ledger.svg')}
+										/>
+									}
 									title="Ledger"
 									onClick={this.switchUnlockOptions('/unlockWallet/ledger', 3)}
 								/>
@@ -230,7 +234,11 @@ class Unlock extends PureComponent {
 							<Grid item>
 								<UnlockOptionWrapped
 									selected={selected === 4}
-									icon={<img src="/assets/svg-icons/icon-trezor.svg" />}
+									icon={
+										<img
+											src={resolveAsset('assets/svg-icons/icon-trezor.svg')}
+										/>
+									}
 									title="Trezor"
 									onClick={this.switchUnlockOptions('/unlockWallet/trezor', 4)}
 								/>
