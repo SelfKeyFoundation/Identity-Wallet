@@ -114,7 +114,7 @@ const Dashboard = connect(mapStateToProps)(
 					</Grid>
 				</Grid>
 
-				{featureIsEnabled('keyfi') && (
+				{false && featureIsEnabled('keyfi') && (
 					<Grid
 						container
 						justify="space-between"
