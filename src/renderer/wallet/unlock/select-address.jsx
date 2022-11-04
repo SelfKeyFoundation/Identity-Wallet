@@ -75,7 +75,7 @@ const styles = theme => ({
 		paddingBottom: '0 !important'
 	},
 	popupClass: {
-		left: 'calc(50% - 480px)',
+		// left: 'calc(50% - 480px)',
 		width: '960px'
 	},
 	closeBtn: {
