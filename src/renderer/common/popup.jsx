@@ -64,7 +64,8 @@ const styles = theme => ({
 		margin: '0 auto 80px'
 	},
 	paper: {
-		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
+		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)',
+		borderRadius: '16px'
 	},
 	popup: {
 		position: 'relative'
