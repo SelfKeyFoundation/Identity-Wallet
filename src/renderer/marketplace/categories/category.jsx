@@ -21,9 +21,8 @@ const styles = theme => ({
 	icon: {
 		marginLeft: '20px'
 	},
-
 	header: {
-		backgroundColor: '#2a3540',
+		background: 'linear-gradient(180deg, #1E262E 0%, #2a3540 100%)',
 		borderRadius: '3px 3px 0 0',
 		height: '76px',
 		width: '338px'
