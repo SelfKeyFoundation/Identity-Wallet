@@ -251,7 +251,7 @@ class IndividualApplicationsTabComponent extends PureComponent {
 
 		if (!loading && applications && applications.length === 0) {
 			return (
-				<Grid container spacing={4} style={{ minHeight: '600px' }}>
+				<Grid container spacing={4} style={{ minHeight: '100vh' }}>
 					<Grid item xs={12}>
 						<Card>
 							<Grid container direction="row" className={classes.cardHeader}>
