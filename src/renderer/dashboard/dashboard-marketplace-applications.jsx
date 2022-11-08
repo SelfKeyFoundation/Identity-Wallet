@@ -90,7 +90,12 @@ const EmptyState = ({ classes, route }) => (
 		<Typography variant="body2" className={classes.bottomSpace}>
 			You {"haven't"} applied for any service in the Marketplace
 		</Typography>
-		<Button variant="outlined" size="large" onClick={route}>
+		<Button
+			variant="outlined"
+			size="large"
+			onClick={route}
+			style={{ borderColor: '#2DA1F8', backgroundColor: 'transparent' }}
+		>
 			Discover the marketplace
 		</Button>
 		<div className={classes.bgIcon}>

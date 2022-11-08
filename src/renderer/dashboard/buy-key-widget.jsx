@@ -1,8 +1,9 @@
 import React from 'react';
 import { Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import { CustomIcon, CoinsIcon, ExchangeSmallIcon } from 'selfkey-ui';
+import { CoinsIcon, ExchangeSmallIcon } from 'selfkey-ui';
 import { PropTypes } from 'prop-types';
+import { resolveAsset } from '../utils';
 
 const useStyles = makeStyles(theme => ({
 	bgIcon: {
@@ -26,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 		padding: '20px 30px 30px'
 	},
 	ctabutton: {
-		backgroundColor: '#1E262E',
+		backgroundColor: 'transparent',
 		display: 'flex',
 		justifyContent: 'space-between',
 		maxWidth: '100%',
@@ -34,6 +35,7 @@ const useStyles = makeStyles(theme => ({
 		marginRight: '0',
 		marginBottom: '1em',
 		position: 'relative',
+		border: '1px solid #2DA1F8 !important',
 		width: '100%',
 		zIndex: 1,
 		'& span': {
@@ -69,7 +71,7 @@ export const BuyKeyWidget = props => {
 				className={classes.ctabutton}
 				onClick={onBuyClick}
 			>
-				<CustomIcon width="24px" height="24px" />
+				<img src={resolveAsset('assets/svg-icons/icon-tokens.svg')} />
 				<span>Buy KEY</span>
 			</Button>
 

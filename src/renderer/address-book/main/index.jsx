@@ -3,13 +3,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { addressBookSelectors, addressBookOperations } from 'common/address-book';
-import {
-	CopyIcon,
-	DeleteIcon,
-	EditTransparentIcon,
-	AddressBookIcon,
-	SmallTableHeadRow
-} from 'selfkey-ui';
+import { CopyIcon, DeleteIcon, EditTransparentIcon, SmallTableHeadRow } from 'selfkey-ui';
 import { withStyles } from '@material-ui/styles';
 import {
 	Grid,
@@ -22,7 +16,7 @@ import {
 	TableBody,
 	IconButton
 } from '@material-ui/core';
-
+import { resolveAsset } from '../../utils';
 import { push } from 'connected-react-router';
 
 const styles = theme => ({
@@ -81,7 +75,7 @@ class AddressBookContainer extends PureComponent {
 				spacing={4}
 			>
 				<Grid item>
-					<AddressBookIcon />
+					<img src={resolveAsset('assets/svg-icons/icon-address-book-large.svg')} />
 				</Grid>
 				<Grid item>
 					<Typography variant="h1">Address Book</Typography>
@@ -99,6 +93,7 @@ class AddressBookContainer extends PureComponent {
 						size="large"
 						variant="outlined"
 						onClick={this.handleAdd}
+						style={{ borderColor: '#2DA1F8', backgroundColor: 'transparent' }}
 					>
 						ADD ADDRESS
 					</Button>

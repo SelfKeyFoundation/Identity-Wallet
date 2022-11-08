@@ -178,7 +178,12 @@ class DashboardSelfkeyProfile extends PureComponent {
 					<Content classes={this.props.classes} profileData={profile} />
 				)}
 
-				<Button variant="outlined" size="large" onClick={this.handleProfileNavigate}>
+				<Button
+					variant="outlined"
+					size="large"
+					onClick={this.handleProfileNavigate}
+					style={{ borderColor: '#2DA1F8', backgroundColor: 'transparent' }}
+				>
 					Go to My Profile
 				</Button>
 				<div className={bgIconClass}>

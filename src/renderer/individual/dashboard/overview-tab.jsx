@@ -1,12 +1,12 @@
 import React from 'react';
 import { Grid, CardHeader, Card, CardContent, Typography, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
-import { BookIcon, IdCardIcon } from 'selfkey-ui';
 import { HexagonAvatar } from '../common/hexagon-avatar';
 import backgroundImage from '../../../../static/assets/images/icons/icon-marketplace.png';
 import { AttributesTable } from '../common/attributes-table';
 import { DocumentsTable } from '../common/documents-table';
 import { featureIsEnabled } from 'common/feature-flags';
+import { resolveAsset } from '../../utils';
 
 const styles = theme => ({
 	hr: {
@@ -133,7 +133,11 @@ const IndividualOverviewTab = withStyles(styles)(
 											className={classes.info}
 										>
 											<Grid item>
-												<IdCardIcon />
+												<img
+													src={resolveAsset(
+														'assets/svg-icons/icon-id-card.svg'
+													)}
+												/>
 											</Grid>
 
 											<Grid item>
@@ -181,7 +185,11 @@ const IndividualOverviewTab = withStyles(styles)(
 											className={classes.info}
 										>
 											<Grid item>
-												<BookIcon />
+												<img
+													src={resolveAsset(
+														'assets/svg-icons/icon-book.svg'
+													)}
+												/>
 											</Grid>
 											<Typography variant="subtitle2" color="secondary">
 												Additional information. This will be used for the
