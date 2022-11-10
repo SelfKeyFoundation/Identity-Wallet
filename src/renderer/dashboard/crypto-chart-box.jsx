@@ -104,7 +104,7 @@ const styles = () => ({
 			backgroundColor: '#1F2830',
 			border: '1px solid #43505B',
 			boxShadow: 'none',
-			top: '40px !important',
+			top: '-80px !important',
 			'& .google-visualization-tooltip-item span': {
 				fontSize: '13px !important'
 			},
