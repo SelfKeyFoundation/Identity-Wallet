@@ -256,6 +256,7 @@ class TransactionSendBoxContainer extends PureComponent {
 		const { classes, sendingAddress } = this.props;
 		const { cryptoCurrency, sending, tab } = this.state;
 		const title = 'Send/Receive ERC-20 Tokens';
+
 		return (
 			<TransactionBox closeAction={this.handleCancelAction} title={title}>
 				<div className={classes.tokenBottomSpace}>

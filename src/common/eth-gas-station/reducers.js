@@ -6,15 +6,13 @@ const initialState = {
 
 const update = data => {
 	let result = {
-		safeLow: data.safeLow,
-		average: data.average,
-		fast: data.fast
+		safeLow: data.safeLow || parseInt(data.fees.low.suggestedMaxFeePerGas),
+		average: data.average || parseInt(data.fees.medium.suggestedMaxFeePerGas),
+		fast: data.fast || parseInt(data.fees.high.suggestedMaxFeePerGas)
 	};
-	Object.keys(result).forEach(key => {
-		result[key] = result[key] / 10;
-	});
 
 	result.fees = data.fees ? data.fees : null;
+
 	return result;
 };
 

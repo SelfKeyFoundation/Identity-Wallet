@@ -12,12 +12,16 @@ const URL = 'https://ethgasstation.info/json/ethgasAPI.json';
 const EIP1559_URL =
 	'https://gas-api.metaswap.codefi.network/networks/' + chainId + '/suggestedGasFees';
 
+const eip1559Enabled = true;
 export class EthGasStationService {
 	getInfo() {
 		return new Promise(async (resolve, reject) => {
 			let fees = false;
-			if (featureIsEnabled('eip_1559')) {
+			if (featureIsEnabled('eip_1559') || eip1559Enabled) {
 				fees = await this.getFees();
+				resolve({
+					fees
+				});
 			}
 
 			request.get({ url: URL, json: true }, (error, httpResponse, response) => {

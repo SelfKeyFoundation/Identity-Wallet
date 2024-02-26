@@ -38,6 +38,7 @@ import TransactionContainer from './wallet-connect/transaction-container';
 import WcConnectContainer from './wallet-connect/wc-connect-container';
 import WcPasteQRCodeContainer from './wallet-connect/wc-paste-qr-code-container';
 import WcSessionsContainer from './wallet-connect/wc-sessions-container';
+import { ethGasStationInfoOperations } from 'common/eth-gas-station';
 
 const log = new Logger('AppComponent');
 
@@ -57,6 +58,7 @@ class AppContainerComponent extends PureComponent {
 	componentDidMount() {
 		this.props.dispatch(appOperations.loadWalletsOperation());
 		this.props.dispatch(schedulerOperations.startSchedulerOperation());
+		this.props.dispatch(ethGasStationInfoOperations.loadData());
 	}
 	componentWillUnmount() {
 		this.props.dispatch(schedulerOperations.stopSchedulerOperation());

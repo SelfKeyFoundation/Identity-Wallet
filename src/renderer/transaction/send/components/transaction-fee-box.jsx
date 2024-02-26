@@ -186,12 +186,13 @@ export class TransactionFeeBoxComponent extends PureComponent {
 	}
 
 	getFeeInEth(type, digits = false) {
-		const gasPrice = this.getFee(type);
+		let gasPrice = this.getFee(type);
 		const gasLimit = this.props.gasLimit ? this.props.gasLimit : DEFAULT_ETH_GAS_LIMIT;
 
 		if (!this.props.ethGasStationInfo.fees) {
 			return;
 		}
+
 		const maxFee =
 			this.props.ethGasStationInfo.fees && this.props.ethGasStationInfo.fees
 				? parseFloat(
@@ -199,6 +200,12 @@ export class TransactionFeeBoxComponent extends PureComponent {
 							.suggestedMaxPriorityFeePerGas
 				  )
 				: 1;
+
+		if (!gasPrice) {
+			gasPrice = parseFloat(
+				this.props.ethGasStationInfo.fees[this.typeTranslation(type)].suggestedMaxFeePerGas
+			);
+		}
 
 		const ethFee = EthUnits.toEther((gasPrice + maxFee) * gasLimit, 'gwei');
 		return digits ? Number.parseFloat(ethFee).toFixed(digits) : ethFee;
@@ -288,6 +295,7 @@ export class TransactionFeeBoxComponent extends PureComponent {
 			maxPriorityFee
 		} = this.props;
 		const { showAdvanced } = this.state;
+
 		return (
 			<React.Fragment>
 				<div className={classes.transactionFeeTitle}>
@@ -335,7 +343,11 @@ export class TransactionFeeBoxComponent extends PureComponent {
 							</div>
 							<div className={classes.transactionExpectedTiming}>
 								<Typography variant="subtitle2" color="success">
-									{this.getTransactionTiming(ethGasStationInfo.fees.high, 'low')}
+									{ethGasStationInfo.fees &&
+										this.getTransactionTiming(
+											ethGasStationInfo.fees.high,
+											'low'
+										)}
 								</Typography>
 							</div>
 						</div>
@@ -379,10 +391,11 @@ export class TransactionFeeBoxComponent extends PureComponent {
 							</div>
 							<div className={classes.transactionExpectedTiming}>
 								<Typography variant="subtitle2" color="success">
-									{this.getTransactionTiming(
-										ethGasStationInfo.fees.medium,
-										'medium'
-									)}
+									{ethGasStationInfo.fees &&
+										this.getTransactionTiming(
+											ethGasStationInfo.fees.medium,
+											'medium'
+										)}
 								</Typography>
 							</div>
 						</div>
@@ -426,7 +439,11 @@ export class TransactionFeeBoxComponent extends PureComponent {
 							</div>
 							<div className={classes.transactionExpectedTiming}>
 								<Typography variant="subtitle2" color="success">
-									{this.getTransactionTiming(ethGasStationInfo.fees.low, 'high')}
+									{ethGasStationInfo.fees &&
+										this.getTransactionTiming(
+											ethGasStationInfo.fees.low,
+											'high'
+										)}
 								</Typography>
 							</div>
 						</div>
