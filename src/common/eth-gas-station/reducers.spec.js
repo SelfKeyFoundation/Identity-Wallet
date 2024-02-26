@@ -21,7 +21,7 @@ describe('eth-gas-station reducer', () => {
 			})
 		).toEqual({
 			ethGasStationInfo: Object.keys(data).reduce((prev, currentKey) => {
-				prev[currentKey] = currentKey === 'fees' ? data[currentKey] : data[currentKey] / 10;
+				prev[currentKey] = data[currentKey];
 				return prev;
 			}, {})
 		});
