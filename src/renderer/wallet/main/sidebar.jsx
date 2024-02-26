@@ -19,7 +19,7 @@ import {
 	MarketplaceMenuIcon,
 	SelfkeyIDMenuIcon,
 	AddressBookMenuIcon,
-	SelfkeyLogo,
+	// SelfkeyLogo,
 	MenuHelpIcon,
 	SwitchAccountsIcon,
 	PowerIcon,
@@ -29,10 +29,11 @@ import {
 	MenuStakingIcon,
 	MenuExportIcon,
 	// InfoTooltip,
-	WalletConnectIcon,
+	// WalletConnectIcon,
 	primary
 } from 'selfkey-ui';
 // import { KeyboardArrowDown } from '@material-ui/icons';
+import SelfkeyLogo from './logo.png';
 
 const styles = theme => ({
 	list: {
@@ -164,8 +165,9 @@ const styles = theme => ({
 		textDecoration: 'none'
 	},
 	skLogo: {
-		flexGrow: 0,
-		padding: '21px 0 !important'
+		padding: '20px 0 !important',
+		background: 'linear-gradient(180deg, #161A1F 39.84%, #14202D 100%)',
+		width: '100%'
 	},
 	skLogoContainer: {
 		paddingLeft: '13px'
@@ -177,7 +179,9 @@ const styles = theme => ({
 	},
 	mainMenuItemsWrap: {
 		flexGrow: 1,
-		padding: '50px 0 0 !important'
+		padding: '50px 0 0 !important',
+		background: 'linear-gradient(180deg, #161A1F 39.84%, #14202D 100%)',
+		width: '100%'
 	},
 	secondaryMenuItemsWrap: {
 		padding: '20px 0 0 !important'
@@ -197,9 +201,9 @@ const marketplace = React.forwardRef((props, ref) => (
 const addressBook = React.forwardRef((props, ref) => (
 	<Link to="/main/addressBook" {...props} ref={ref} />
 ));
-const walletConnectOptions = React.forwardRef((props, ref) => (
-	<Link to="/wallet-connect/connect" {...props} ref={ref} />
-));
+// const walletConnectOptions = React.forwardRef((props, ref) => (
+// 	<Link to="/wallet-connect/connect" {...props} ref={ref} />
+// ));
 const switchAccount = React.forwardRef((props, ref) => <Link to="/home" {...props} ref={ref} />);
 const exportAccount = React.forwardRef((props, ref) => (
 	<Link to="/main/export-wallet/warning" {...props} ref={ref} />
@@ -248,7 +252,7 @@ class Sidebar extends PureComponent {
 						className={classes.skLogoContainer}
 					>
 						<Link to="/main/dashboard" className={classes.link}>
-							<SelfkeyLogo width="30px" height="34px" />
+							<img width="32px" height="36px" src={SelfkeyLogo} />
 							<Typography variant="h1" className={classes.logoText}>
 								SELFKEY
 							</Typography>
@@ -438,7 +442,7 @@ class Sidebar extends PureComponent {
 							</ListItem>
 						)}
 
-						<ListItem
+						{/* <ListItem
 							className={classes.listItem}
 							component={walletConnectOptions}
 							key="walletConnect"
@@ -450,7 +454,7 @@ class Sidebar extends PureComponent {
 							<Typography variant="body2" color="secondary">
 								Wallet Connect
 							</Typography>
-						</ListItem>
+						</ListItem> */}
 
 						<ListItem
 							className={classes.listItem}

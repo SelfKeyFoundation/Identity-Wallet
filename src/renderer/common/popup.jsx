@@ -1,19 +1,47 @@
 import React from 'react';
 import { Modal, Typography, Grid, Paper } from '@material-ui/core';
-import { withStyles } from '@material-ui/styles';
+import { createStyles, withStyles } from '@material-ui/styles';
 import { PropTypes } from 'prop-types';
-import {
-	ModalWrap,
-	ModalCloseButton,
-	ModalCloseIcon,
-	ModalHeader,
-	ModalBody,
-	SelfkeyLogoTemp
-} from 'selfkey-ui';
+import { ModalWrap, ModalCloseButton, ModalCloseIcon, SelfkeyLogoTemp } from 'selfkey-ui';
+
+const ModalBody = withStyles(
+	createStyles({
+		root: {
+			background: 'linear-gradient(180deg, #161A1F 39.84%, #14202D 100%)',
+			border: 'none',
+			borderRadius: '0 0 16px 16px',
+			boxShadow: 'none',
+			boxSizing: 'border-box',
+			minHeight: '200px',
+			padding: '32px 40px 56px',
+			width: '100%'
+		}
+	})
+)(Paper);
+
+const ModalHeader = withStyles(
+	createStyles({
+		root: {
+			alignItems: 'center',
+			background: 'linear-gradient(180deg, #161A1F 39.84%, #14202D 100%);',
+			border: 'none',
+			borderBottom: '1px solid #303C49',
+			borderRadius: '16px 16px 0 0',
+			boxShadow: 'none',
+			boxSizing: 'border-box',
+			display: 'flex',
+			height: '65px',
+			justifyContent: 'space-between',
+			padding: '16px 32px',
+			width: '100%'
+		}
+	})
+)(Paper);
 
 const styles = theme => ({
 	modal: {
 		overflow: 'auto',
+		border: 'none',
 		'& > div:nth-of-type(1)': {
 			background: `linear-gradient(180deg, #111111 0%, #13212e 100%)`
 		}
@@ -36,7 +64,8 @@ const styles = theme => ({
 		margin: '0 auto 80px'
 	},
 	paper: {
-		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)'
+		boxShadow: '0 7px 15px 0 rgba(0, 0, 0, 0.2)',
+		borderRadius: '16px'
 	},
 	popup: {
 		position: 'relative'

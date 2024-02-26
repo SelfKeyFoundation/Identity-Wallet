@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Grid, Typography, Input, LinearProgress, Button } from '@material-ui/core';
-import { PasswordConfirmIcon } from 'selfkey-ui';
+// import { PasswordConfirmIcon } from 'selfkey-ui';
+import PasswordConfirmIcon from '../../../../theme/svg-icons/icon-password-confirm.png';
 import { withStyles } from '@material-ui/styles';
 import { renderPasswordStrength } from './password-util';
 import { Popup } from '../../../common';
@@ -66,7 +67,7 @@ class PasswordConfirmationComponent extends PureComponent {
 					wrap="nowrap"
 				>
 					<Grid item className={classes.icon}>
-						<PasswordConfirmIcon />
+						<img src={PasswordConfirmIcon} />
 					</Grid>
 					<Grid item>
 						<Typography variant="body1" gutterBottom>

@@ -24,7 +24,6 @@ import {
 	SimpleHourglassIcon,
 	AttributeAlertLargeIcon,
 	NewRefreshIcon,
-	MarketplaceIcon,
 	DropdownIcon,
 	success,
 	warning,
@@ -33,6 +32,7 @@ import {
 } from 'selfkey-ui';
 import HeaderIcon from '../../common/header-icon';
 import { ApplicationMessages } from './applications-messages';
+import { resolveAsset } from '../../utils';
 
 const styles = theme => ({
 	statusIcon: {
@@ -251,7 +251,7 @@ class IndividualApplicationsTabComponent extends PureComponent {
 
 		if (!loading && applications && applications.length === 0) {
 			return (
-				<Grid container spacing={4}>
+				<Grid container spacing={4} style={{ minHeight: '100vh' }}>
 					<Grid item xs={12}>
 						<Card>
 							<Grid container direction="row" className={classes.cardHeader}>
@@ -260,7 +260,12 @@ class IndividualApplicationsTabComponent extends PureComponent {
 									xs={2}
 									className={`${classes.cardItem} ${classes.marketplaceIcon}`}
 								>
-									<MarketplaceIcon />
+									{/* <MarketplaceIcon /> */}
+									<img
+										src={resolveAsset(
+											'assets/svg-icons/icon-marketplace_2.svg'
+										)}
+									/>
 								</Grid>
 								<Grid item xs={10}>
 									<Typography variant="h1" gutterBottom>

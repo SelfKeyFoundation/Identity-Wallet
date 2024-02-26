@@ -1,0 +1,9 @@
+<svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path id="icon-ledger" fill-rule="evenodd" clip-rule="evenodd" d="M4.01003 0H5.93358V5.93358H0V4.01003C0 1.76065 1.84837 0 4.01003 0ZM9.45489 0H20.9211C23.0827 0 24.8496 1.84211 24.8434 4.00376L24.8434 15.3885H9.45489V0ZM0 9.53634H5.93358V15.4699H0V9.53634ZM20.8396 24.9248H18.916V18.9975H24.8496V20.9148C24.8496 23.1642 23.0013 24.9248 20.8396 24.9248ZM9.45489 18.9975H15.3885V24.9311H9.45489V18.9975ZM0 20.9211V18.9975H5.93358V24.9311H4.01003C1.76065 24.9311 0 23.0827 0 20.9211Z" fill="url(#paint0_linear_0_1148)"/>
+<defs>
+<linearGradient id="paint0_linear_0_1148" x1="0" y1="0" x2="29.733" y2="9.27307" gradientUnits="userSpaceOnUse">
+<stop stop-color="#00E0FF"/>
+<stop offset="1" stop-color="#2DA1F8"/>
+</linearGradient>
+</defs>
+</svg>

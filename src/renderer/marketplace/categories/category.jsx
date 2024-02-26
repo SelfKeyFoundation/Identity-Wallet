@@ -11,9 +11,9 @@ const styles = theme => ({
 		border: 'solid 1px #303c49',
 		borderRadius: '4px',
 		fontFamily: 'Lato, arial, sans-serif',
-		backgroundColor: '#131F2A'
+		// backgroundColor: '#131F2A'
+		background: 'linear-gradient(180deg, #161A1F 39.84%, #14202D 100%)'
 	},
-
 	title: {
 		margin: '20px'
 	},
@@ -21,9 +21,9 @@ const styles = theme => ({
 	icon: {
 		marginLeft: '20px'
 	},
-
 	header: {
-		backgroundColor: '#2a3540',
+		background: 'linear-gradient(180deg, #161A1F 39.84%, #14202D 100%)',
+		// borderBottom: '1px solid #303C49',
 		borderRadius: '3px 3px 0 0',
 		height: '76px',
 		width: '338px'

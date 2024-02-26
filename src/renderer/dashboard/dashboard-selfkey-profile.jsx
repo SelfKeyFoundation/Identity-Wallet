@@ -22,7 +22,7 @@ const styles = theme => ({
 		marginBottom: '16px'
 	},
 	dspWrap: {
-		backgroundColor: '#131F2A',
+		background: 'linear-gradient(180deg, #161A1F 39.84%, #14202D 100%)',
 		border: '1px solid #43505B',
 		borderRadius: '4px',
 		boxSizing: 'border-box',
@@ -178,7 +178,12 @@ class DashboardSelfkeyProfile extends PureComponent {
 					<Content classes={this.props.classes} profileData={profile} />
 				)}
 
-				<Button variant="outlined" size="large" onClick={this.handleProfileNavigate}>
+				<Button
+					variant="outlined"
+					size="large"
+					onClick={this.handleProfileNavigate}
+					style={{ borderColor: '#2DA1F8', backgroundColor: 'transparent' }}
+				>
 					Go to My Profile
 				</Button>
 				<div className={bgIconClass}>

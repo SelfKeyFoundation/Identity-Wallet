@@ -20,7 +20,8 @@ import { LoansCalculatorLendTable } from './lend-table';
 const styles = theme => ({
 	container: {
 		padding: '30px',
-		border: '1px solid #303C49'
+		border: '1px solid #303C49',
+		background: '#262F39'
 	},
 	gridCell: {
 		width: '470px',
@@ -33,13 +34,14 @@ const styles = theme => ({
 		},
 		'& .MuiSlider-markLabelActive': {
 			top: '26px',
-			background: '#131F2A',
+			background: 'transparent',
 			zIndex: '1'
 		}
 	},
 	selectTokens: {
 		minWidth: '11em',
-		float: 'right'
+		float: 'right',
+		background: '#1E262E'
 	},
 	resultsTableContainer: {
 		marginTop: '20px',
@@ -72,7 +74,8 @@ const styles = theme => ({
 	amountInput: {
 		borderTopRightRadius: '0',
 		borderBottomRightRadius: '0',
-		borderRight: '0'
+		borderRight: '0',
+		background: '#1E262E'
 	},
 	slider: {
 		marginLeft: '5px',
