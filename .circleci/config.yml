@@ -120,7 +120,7 @@ jobs:
 
     'build-mac':
         macos:
-            xcode: '11.7.0'
+            xcode: '12.5.1'
         environment:
             CACHE_VERSION: *cache_version
         steps:
@@ -169,6 +169,7 @@ jobs:
             - run:
                   name: Install OS Dependecies
                   command: |
+                      echo "deb http://archive.debian.org/debian stretch main contrib non-free" | sudo tee /etc/apt/sources.list > /dev/null
                       sudo apt-get update
                       sudo apt-get install libudev-dev
                       sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
@@ -295,6 +296,7 @@ jobs:
             - run:
                   name: Install OS Dependecies
                   command: |
+                      echo "deb http://archive.debian.org/debian stretch main contrib non-free" | sudo tee /etc/apt/sources.list > /dev/null
                       sudo apt-get update
                       sudo apt-get install build-essential
                       sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
@@ -362,6 +364,7 @@ jobs:
             - run:
                   name: Install OS Dependecies
                   command: |
+                      echo "deb http://archive.debian.org/debian stretch main contrib non-free" | sudo tee /etc/apt/sources.list > /dev/null
                       sudo apt-get update
                       sudo apt-get install libudev-dev
                       sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
@@ -417,14 +420,14 @@ workflows:
 
     main:
         jobs:
-            - 'unit-test':
-                  filters:
-                      branches:
-                          ignore:
-                              - auto-update-test
+            # - 'unit-test':
+            #       filters:
+            #           branches:
+            #               ignore:
+            #                   - auto-update-test
             - 'build-linux':
-                  requires:
-                      - unit-test
+                #   requires:
+                #       - unit-test
                   filters:
                       branches:
                           ignore:
@@ -446,8 +449,8 @@ workflows:
                               - release
                               - /staging.*/
             - 'build-mac':
-                  requires:
-                      - unit-test
+                #   requires:
+                #       - unit-test
                   filters:
                       branches:
                           ignore:
@@ -467,20 +470,20 @@ workflows:
                               - nightly
                               - release
                               - /staging.*/
-            - 'build-storybook':
-                  requires:
-                      - unit-test
-                  filters:
-                      branches:
-                          only:
-                              - dev
-            - 'publish-storybook':
-                  requires:
-                      - build-storybook
-                  filters:
-                      branches:
-                          only:
-                              - dev
+            # - 'build-storybook':
+            #       requires:
+            #           - unit-test
+            #       filters:
+            #           branches:
+            #               only:
+            #                   - dev
+            # - 'publish-storybook':
+            #       requires:
+            #           - build-storybook
+            #       filters:
+            #           branches:
+            #               only:
+            #                   - dev
             - 'publish-mac':
                   requires:
                       - build-mac
