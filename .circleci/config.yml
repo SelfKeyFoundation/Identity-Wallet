@@ -63,7 +63,7 @@ jobs:
             - run:
                   name: Install OS Dependecies
                   command: |
-                      echo "deb http://archive.debian.org/debian stretch main contrib non-free" > /etc/apt/sources.list
+                      sudo echo "deb http://archive.debian.org/debian stretch main contrib non-free" > /etc/apt/sources.list
                       sudo apt-get update
                       sudo apt-get install build-essential
                       sudo apt-get install libusb-1.0-0 libusb-1.0-0-dev libudev-dev
