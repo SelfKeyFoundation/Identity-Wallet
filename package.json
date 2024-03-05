@@ -280,7 +280,6 @@
 		"appId": "org.selfkey.wallet",
 		"buildDependenciesFromSource": true,
 		"generateUpdatesFilesForAllChannels": true,
-		"afterSign": "scripts/notarize.js",
 		"asar": true,
 		"files": [
 			"dist/main",
