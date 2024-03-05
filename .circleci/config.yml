@@ -263,7 +263,7 @@ jobs:
 
     'publish-mac':
         macos:
-            xcode: '11.7.0'
+            xcode: '12.5.1'
         environment:
             CACHE_VERSION: *cache_version
         steps:
