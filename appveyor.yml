@@ -55,6 +55,7 @@ on_finish:
           }
 deploy_script:
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[dev] set _tempvar=1
+    - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[master] set _tempvar=1
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[release] set _tempvar=1
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[nightly] set _tempvar=1
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[auto-update-test] set _tempvar=1
@@ -65,6 +66,6 @@ deploy_script:
     - if defined _tempvar C:\OpenSSL-Win64\bin\openssl aes-256-cbc -K "%encryptedkey%" -iv "%encryptediv%" -in client-secret.json.enc -out client-secret.json -d
     - if defined _tempvar ECHO %encryptedkey2% > client-secret2.json
     - if defined _tempvar gcloud auth activate-service-account --key-file client-secret2.json
-    - gsutil cp dist/*.exe gs://sk-builds/%APPVEYOR_REPO_BRANCH%/%datetime%/
+    - if defined _tempvar gsutil cp dist/*.exe gs://sk-builds/%APPVEYOR_REPO_BRANCH%/%datetime%/
 after_deploy:
     - if [%APPVEYOR_PULL_REQUEST_NUMBER%]==[] if [%APPVEYOR_REPO_BRANCH%]==[master] yarn publish-build
