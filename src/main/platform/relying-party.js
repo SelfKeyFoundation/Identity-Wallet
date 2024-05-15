@@ -470,7 +470,7 @@ export class RelyingPartyRest {
 					Origin: ctx.getOrigin()
 				},
 				json: true,
-				rejectUnauthorized: false,
+				rejectUnauthorized: false
 			});
 			return applications;
 		} catch (error) {
