@@ -143,7 +143,7 @@ export class RelyingPartyRest {
 			url,
 			headers: { 'User-Agent': this.userAgent, Origin: ctx.getOrigin() },
 			json: true,
-			rejectUnauthorized: this.isSecure(url)
+			rejectUnauthorized: false
 		});
 	}
 	static postChallengeReply(ctx, challenge, signature, keyId) {
@@ -165,7 +165,7 @@ export class RelyingPartyRest {
 				Origin: ctx.getOrigin()
 			},
 			json: true,
-			rejectUnauthorized: this.isSecure(url)
+			rejectUnauthorized: false
 		});
 	}
 	static getUserToken(ctx, meta) {
@@ -185,7 +185,7 @@ export class RelyingPartyRest {
 			},
 			qs,
 			json: true,
-			rejectUnauthorized: this.isSecure(url)
+			rejectUnauthorized: false
 		});
 	}
 	static async uploadUserFile(ctx, doc) {
@@ -209,7 +209,7 @@ export class RelyingPartyRest {
 				Origin: ctx.getOrigin()
 			},
 			json: true,
-			rejectUnauthorized: this.isSecure(url)
+			rejectUnauthorized: false
 		});
 	}
 	static async createUser(ctx, attributes, documents = [], meta = {}) {
@@ -225,7 +225,7 @@ export class RelyingPartyRest {
 					Origin: ctx.getOrigin()
 				},
 				json: true,
-				rejectUnauthorized: this.isSecure(url)
+				rejectUnauthorized: false
 			});
 		}
 		let formData = documents.reduce((acc, curr) => {
@@ -267,7 +267,7 @@ export class RelyingPartyRest {
 				Origin: ctx.getOrigin()
 			},
 			json: true,
-			rejectUnauthorized: this.isSecure(url)
+			rejectUnauthorized: false
 		});
 	}
 	static getKYCTemplate(ctx, id) {
@@ -281,7 +281,7 @@ export class RelyingPartyRest {
 				Origin: ctx.getOrigin()
 			},
 			json: true,
-			rejectUnauthorized: this.isSecure(url)
+			rejectUnauthorized: false
 		});
 	}
 
@@ -312,7 +312,7 @@ export class RelyingPartyRest {
 					Origin: ctx.getOrigin()
 				},
 				json: true,
-				rejectUnauthorized: this.isSecure(url)
+				rejectUnauthorized: false
 			})
 		);
 	}
@@ -330,7 +330,7 @@ export class RelyingPartyRest {
 				Origin: ctx.getOrigin()
 			},
 			json: true,
-			rejectUnauthorized: this.isSecure(url)
+			rejectUnauthorized: false
 		});
 	}
 
@@ -360,7 +360,7 @@ export class RelyingPartyRest {
 				Origin: ctx.getOrigin()
 			},
 			json: true,
-			rejectUnauthorized: this.isSecure(url)
+			rejectUnauthorized: false
 		});
 	}
 
@@ -379,7 +379,7 @@ export class RelyingPartyRest {
 				Origin: ctx.getOrigin()
 			},
 			json: true,
-			rejectUnauthorized: this.isSecure(url)
+			rejectUnauthorized: false
 		});
 	}
 	static updateKYCApplicationPayment(ctx, applicationId, transactionHash) {
@@ -396,7 +396,7 @@ export class RelyingPartyRest {
 				Origin: ctx.getOrigin()
 			},
 			json: true,
-			rejectUnauthorized: this.isSecure(url)
+			rejectUnauthorized: false
 		});
 	}
 
@@ -411,7 +411,7 @@ export class RelyingPartyRest {
 				Origin: ctx.getOrigin()
 			},
 			json: true,
-			rejectUnauthorized: this.isSecure(url)
+			rejectUnauthorized: false
 		});
 		return chatResponse;
 	}
@@ -429,7 +429,7 @@ export class RelyingPartyRest {
 				Origin: ctx.getOrigin()
 			},
 			json: true,
-			rejectUnauthorized: this.isSecure(url)
+			rejectUnauthorized: false
 		});
 	}
 
@@ -453,7 +453,7 @@ export class RelyingPartyRest {
 				Origin: ctx.getOrigin()
 			},
 			json: true,
-			rejectUnauthorized: this.isSecure(url)
+			rejectUnauthorized: false
 		});
 	}
 
@@ -470,7 +470,7 @@ export class RelyingPartyRest {
 					Origin: ctx.getOrigin()
 				},
 				json: true,
-				rejectUnauthorized: this.isSecure(url)
+				rejectUnauthorized: false,
 			});
 			return applications;
 		} catch (error) {
@@ -493,7 +493,7 @@ export class RelyingPartyRest {
 					Origin: ctx.getOrigin()
 				},
 				json: true,
-				rejectUnauthorized: this.isSecure(url)
+				rejectUnauthorized: false
 			});
 			return user;
 		} catch (error) {
@@ -516,7 +516,7 @@ export class RelyingPartyRest {
 				Origin: ctx.getOrigin()
 			},
 			json: true,
-			rejectUnauthorized: this.isSecure(url)
+			rejectUnauthorized: false
 		});
 	}
 
@@ -532,7 +532,7 @@ export class RelyingPartyRest {
 				Origin: ctx.getOrigin()
 			},
 			json: true,
-			rejectUnauthorized: this.isSecure(url)
+			rejectUnauthorized: false
 		});
 	}
 
@@ -557,7 +557,7 @@ export class RelyingPartyRest {
 				Origin: ctx.getOrigin()
 			},
 			json: true,
-			rejectUnauthorized: this.isSecure(url)
+			rejectUnauthorized: false
 		});
 	}
 	static getAccessToken(ctx) {
@@ -571,7 +571,7 @@ export class RelyingPartyRest {
 				Origin: ctx.getOrigin()
 			},
 			json: true,
-			rejectUnauthorized: this.isSecure(url)
+			rejectUnauthorized: false
 		});
 	}
 }
