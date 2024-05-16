@@ -186,11 +186,11 @@ const dev = {
 	qa: true,
 	updateEndpoint: 'http://localhost:5000',
 	kycApiEndpoint: 'https://token-sale-demo-api.kyc-chain.com/',
-	chainId: 3,
+	chainId: 11155111,
 	node: 'infura',
 	constants: {
-		primaryToken: PRIMARY_TOKEN || 'KI',
-		rewardToken: REWARD_TOKEN || 'LOCK'
+		primaryToken: PRIMARY_TOKEN || 'KEY',
+		rewardToken: REWARD_TOKEN || 'SELF'
 	},
 	matomoSite: 2,
 	ledgerAddress: '0x27332286A2CEaE458b82A1235f7E2a3Aa8945cAB',

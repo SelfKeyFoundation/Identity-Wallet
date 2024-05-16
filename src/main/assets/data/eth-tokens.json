@@ -7,6 +7,13 @@
 		"type": "erc-20"
 	},
 	{
+		"address": "0x6BAB57951dABD55EC55D6d76CB86843CDA82CfE0",
+		"symbol": "KEY",
+		"decimal": 18,
+		"networkId": 11155111,
+		"type": "erc-20"
+	},
+	{
 		"address": "0xcfec6722f119240b97effd5afe04c8a97caa02ee",
 		"symbol": "KI",
 		"decimal": 18,

@@ -22,7 +22,8 @@ export const REQUEST_INTERVAL_DELAY = 500;
 export const SERVER_CONFIG = {
 	infura: {
 		1: { url: 'wss://mainnet.infura.io/ws/v3/2e5fb5cf42714929a7f61a1617ef1ffd' },
-		3: { url: 'wss://mainnet.infura.io/ws/v3/2e5fb5cf42714929a7f61a1617ef1ffd' }
+		3: { url: 'wss://mainnet.infura.io/ws/v3/2e5fb5cf42714929a7f61a1617ef1ffd' },
+		11155111: { url: 'wss://sepolia.infura.io/ws/v3/2e5fb5cf42714929a7f61a1617ef1ffd' }
 	}
 };
 

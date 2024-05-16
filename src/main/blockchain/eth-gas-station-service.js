@@ -7,7 +7,7 @@ import { Logger } from 'common/logger';
 const log = new Logger('eth-gas-station-service');
 
 // TODO: move URLs to config
-const chainId = config.chainId || 3;
+const chainId = config.chainId || 11155111;
 const URL = 'https://ethgasstation.info/json/ethgasAPI.json';
 const EIP1559_URL =
 	'https://gas-api.metaswap.codefi.network/networks/' + chainId + '/suggestedGasFees';

@@ -19,7 +19,7 @@ import { Logger } from 'common/logger';
 
 const log = new Logger('transaction-duck');
 
-const chainId = config.chainId || 3;
+const chainId = config.chainId || 11155111;
 
 const transferHex = '0xa9059cbb';
 

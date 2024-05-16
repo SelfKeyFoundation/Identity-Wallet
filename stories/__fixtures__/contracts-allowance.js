@@ -14,5 +14,5 @@ export const contractAllowance = [
 		tokenAddress: '0xcfec6722f119240b97effd5afe04c8a97caa02ee',
 		contractAddress: '0x78472c97c994d62fe47c9fc95abe65c22e46765d',
 		allowanceAmount: '100000000'
-	}
+	},
 ];

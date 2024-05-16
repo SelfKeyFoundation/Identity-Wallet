@@ -347,6 +347,8 @@ export class CryptoChartBoxComponent extends React.Component {
 				return <EthereumIcon className={classes.iconRightSpace} />;
 			case 'Selfkey':
 				return <SelfkeyIcon className={classes.iconRightSpace} />;
+			case 'SelfKey':
+				return <SelfkeyIcon className={classes.iconRightSpace} />;
 			default:
 				return (
 					<div

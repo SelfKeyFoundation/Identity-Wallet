@@ -17,14 +17,16 @@ export const REQUEST_INTERVAL_DELAY = 100; // millis
 export const ETH_BALANCE_DIVIDER = new BigNumber(10 ** 18);
 export const ENDPOINT_CONFIG = {
 	1: { url: 'https://api.etherscan.io/api' },
-	3: { url: 'http://api-ropsten.etherscan.io/api' }
+	3: { url: 'http://api-ropsten.etherscan.io/api' },
+	11155111: { url: 'https://api-sepolia.etherscan.io/api' }
 };
 export const API_ENDPOINT = ENDPOINT_CONFIG[config.chainId].url;
 export const API_KEY = 'QA2JBTDK2VRFV769EARR8X684M85UFGCBU';
 
 export const TX_HISTORY_ENDPOINT_CONFIG = {
 	1: { url: 'https://etherscan.io/tx' },
-	3: { url: 'https://ropsten.etherscan.io/tx' }
+	3: { url: 'https://sepolia.etherscan.io/tx' },
+	11155111: { url: 'https://sepolia.etherscan.io/tx' }
 };
 export const TX_HISTORY_API_ENDPOINT = TX_HISTORY_ENDPOINT_CONFIG[config.chainId].url;
 
