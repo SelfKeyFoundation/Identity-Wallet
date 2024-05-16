@@ -15,7 +15,8 @@ const mapStateToProps = state => {
 			'',
 			'0x4cc19356f2d37338b9802aa8e8fc58b0373296e7',
 			'0xcfec6722f119240b97effd5afe04c8a97caa02ee',
-			'0xe8348b237dee32a8e087932cde1786983d91a6e6'
+			'0xe8348b237dee32a8e087932cde1786983d91a6e6',
+			'0x6BAB57951dABD55EC55D6d76CB86843CDA82CfE0'
 		]
 	};
 };
